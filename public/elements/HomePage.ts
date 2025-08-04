@@ -27,12 +27,13 @@ export class HomePage extends Element {
 		<img src="${logoUrl.href}" alt="Lume logo" />
 		<img src="${logoUrlDark.href}" alt="Lume logo" class="dark" />
 
-		<h1>Meteor Lume Template</h1>
+		<h1>Drippy</h1>
 
 		<nav>
-			<a href="/sample">Sample - See a 3D scene made with Lume</a>
 			<a href="/stats">Stats - View page visits and number of users</a>
 			<a href="/profile">Profile - View and edit your username</a>
+			<a href="/sample">Sample - See a 3D scene made with Lume</a>
+			<a href="/app">App - New app WIP</a>
 		</nav>
 
 		<login-ui
@@ -90,6 +91,7 @@ export class HomePage extends Element {
 		nav {
 			display: flex;
 			flex-direction: column;
+			align-items: center;
 
 			& > * {
 				display: block;

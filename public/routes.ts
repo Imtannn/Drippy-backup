@@ -4,7 +4,7 @@ import {Meteor} from 'meteor/meteor'
 import {effect} from './meteor-signals.js'
 
 // We'll keep the title up to date once we add routing. For now it is constant.
-let appName = 'Meteor Lume Template'
+let appName = 'Drippy'
 const _appTitle = new ReactiveVar(appName)
 export const appTitle = () => _appTitle.get()
 
