@@ -1,6 +1,8 @@
 import {html, Element, element, css, signal, onCleanup} from 'lume'
 
 const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
+const bodiceUrl = new URL('../models/bodice-207.gltf', import.meta.url)
+const skirtUrl = new URL('../models/skirt-168.gltf', import.meta.url)
 
 @element
 export class DrippyScene extends Element {
@@ -24,26 +26,10 @@ export class DrippyScene extends Element {
 
 	template = () => html`
 		<lume-scene webgl>
-			<lume-point-light
-				position="500 -500 500"
-				intensity="2000"
-				prop:color=${() => (this.isDark ? 'cyan' : 'white')}
-			></lume-point-light>
-			<lume-point-light
-				position="-500 500 -500"
-				intensity="2000"
-				prop:color=${() => (this.isDark ? 'deeppink' : 'white')}
-			></lume-point-light>
-			<lume-point-light
-				position="500 -500 -500"
-				intensity="2000"
-				prop:color=${() => (this.isDark ? 'royalblue' : 'white')}
-			></lume-point-light>
-			<lume-point-light
-				position="-500 500 500"
-				intensity="2000"
-				prop:color=${() => (this.isDark ? 'orange' : 'white')}
-			></lume-point-light>
+			<lume-point-light position="500 -500 500" intensity="2000"></lume-point-light>
+			<lume-point-light position="-500 500 -500" intensity="2000"></lume-point-light>
+			<lume-point-light position="500 -500 -500" intensity="2000"></lume-point-light>
+			<lume-point-light position="-500 500 500" intensity="2000"></lume-point-light>
 
 			<lume-camera-rig
 				min-distance="1.5"
@@ -64,6 +50,8 @@ export class DrippyScene extends Element {
 			></lume-box>
 
 			<lume-gltf-model src=${femaleAvatar.href}></lume-gltf-model>
+			<lume-gltf-model src=${bodiceUrl.href}></lume-gltf-model>
+			<lume-gltf-model src=${skirtUrl.href}></lume-gltf-model>
 		</lume-scene>
 	`
 

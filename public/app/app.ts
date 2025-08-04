@@ -1,4 +1,4 @@
-import {html, Element, element, css, signal, onCleanup} from 'lume'
+import {html, Element, element, css} from 'lume'
 import '../routes.js' // track page visits
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
