@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"bierner.lit-html",
+		"bierner.comment-tagged-templates",
+		"editorconfig.editorconfig",
+		"esbenp.prettier-vscode"
+	]
+}
