@@ -1,8 +1,19 @@
-import {html, Element, element, css} from 'lume'
-import '../routes.js' // track page visits
+import {css, Element, element, html} from 'lume'
+import {createSignal} from 'solid-js'
+import '../elements/PreviewPage.js'
+import '../elements/SpacesPage.js'
 import '../elements/login-ui.js'
+import {sharedUIStyles} from '../elements/shared-ui-styles.js'
+import '../elements/show-when.js'
 import '../elements/theme-switch.js'
+import '../routes.js' // track page visits
 import './drippy-scene.js'
+
+// Simple signal for view switching
+const [view, setView] = createSignal('avatar')
+
+// Make it global for testing in browser console
+;(window as any).setView = setView
 
 const avatarThumb = new URL('../images/avatar-female-tmp.png', import.meta.url)
 
@@ -16,26 +27,37 @@ export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
 
 	template = () => html`
-		<drippy-scene></drippy-scene>
+		<!-- show-when conditionals -->
+		<show-when condition=${() => view() === 'preview'} content=${() => html`<preview-page></preview-page>`}></show-when>
 
-		<section id="panel">
-			<div class="genders">
-				<button class="female selected">Women</button>
-				<button class="male">Men</button>
-			</div>
+		<show-when condition=${() => view() === 'space'} content=${() => html`<spaces-page></spaces-page>`}></show-when>
 
-			<div class="grid">
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-			</div>
-		</section>
+		<show-when
+			condition=${() => view() === 'avatar'}
+			content=${() => html`
+				<drippy-scene></drippy-scene>
+				<section id="panel">
+					<div class="genders">
+						<button class="female selected">Women</button>
+						<button class="male">Men</button>
+					</div>
+
+					<div class="grid">
+						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+					</div>
+				</section>
+			`}
+		></show-when>
 	`
 
-	css = css/*css*/ `
+	css = css`
+		${sharedUIStyles}
+
 		* {
 			box-sizing: border-box;
 		}
@@ -52,42 +74,6 @@ export class DrippyApp extends Element {
 			background: #ccc;
 			:host-context([data-theme='dark']) & {
 				background: #333;
-			}
-		}
-
-		#panel {
-			overflow: auto;
-
-			padding: var(--uiSpacing);
-
-			border-radius: 15px;
-			position: absolute;
-
-			top: var(--uiSpacing);
-			left: var(--uiSpacing);
-			bottom: var(--uiSpacing);
-
-			--panelWidth: 300px;
-			width: var(--panelWidth);
-
-			@media (width < 720px) {
-				--panelWidth: calc(100vw - 2 * var(--uiSpacing));
-
-				top: unset;
-				left: var(--uiSpacing);
-				right: var(--uiSpacing);
-				bottom: 0;
-
-				width: unset;
-				height: 400px;
-
-				border-bottom-right-radius: 0;
-				border-bottom-left-radius: 0;
-			}
-
-			background: var(--appBackground);
-			:host-context([data-theme='dark']) & {
-				background: var(--appBackgroundDark);
 			}
 		}
 
