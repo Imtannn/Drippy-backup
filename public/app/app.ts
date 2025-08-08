@@ -1,7 +1,14 @@
 import {html, Element, element, css, signal, For} from 'lume'
 import '../routes.js' // track page visits
+import {createSignal} from 'solid-js'
+import '../elements/PreviewMeasurementPage.js'
+import '../elements/PreviewPage.js'
+import '../elements/SpacesPage.js'
 import '../elements/login-ui.js'
+import {sharedUIStyles} from '../elements/shared-ui-styles.js'
+import '../elements/show-when.js'
 import '../elements/theme-switch.js'
+import '../routes.js' // track page visits
 import './drippy-scene.js'
 import '../elements/bottom-sheet.js'
 import '../elements/tabs.js'
@@ -38,6 +45,11 @@ const blocks = [
 		description: 'Block 6 description',
 	},
 ]
+// Simple signal for view switching
+const [view, setView] = createSignal('preview-measurement')
+
+// Make it global for testing in browser console
+;(window as any).setView = setView
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
@@ -51,75 +63,91 @@ export class DrippyApp extends Element {
 	@signal selectedTab = 'blocks'
 
 	template = () => html`
-		<drippy-scene></drippy-scene>
+		<!-- show-when conditionals -->
+		<show-when
+			condition=${() => view() === 'preview-measurement'}
+			content=${() => html`<preview-measurement-page></preview-measurement-page>`}
+		></show-when>
+		<show-when condition=${() => view() === 'preview'} content=${() => html`<preview-page></preview-page>`}></show-when>
 
-		<bottom-sheet>
-			<tabs-provider
-				default-value=${() => this.selectedTab}
-				ontabchange=${(e: CustomEvent) => {
-					console.log('onchange', e)
-					this.selectedTab = e.detail.value
-				}}
-			>
-				<div class="tabs-container">
-					<tabs-list>
-						<tabs-trigger selected-value="blocks">Blocks</tabs-trigger>
-						<tabs-trigger selected-value="fabrics">Fabrics</tabs-trigger>
-						<tabs-trigger selected-value="accessories">Accessories</tabs-trigger>
-					</tabs-list>
-				</div>
+		<show-when condition=${() => view() === 'space'} content=${() => html`<spaces-page></spaces-page>`}></show-when>
 
-				<div class="divider"></div>
-
-				<div class="tabs-content-container">
-					<tabs-content selected-value="blocks">
-						<div class="category-tabs">
-							<button class="category-tab active">Bodice</button>
-							<button class="category-tab">Skirt</button>
-							<button class="category-tab">Sleeves</button>
-						</div>
-						<div class="items-grid">
-							<${For} each=${() => blocks}>
-							${(block: (typeof blocks)[number]) => html`
-								<div class="item-card">
-									<div class="item-preview">
-										<img class="item-thumb" src=${block.thumb} alt=${block.name} />
+		<show-when
+			condition=${() => view() === 'avatar'}
+			content=${() => html`
+				<drippy-scene></drippy-scene>
+				
+				<bottom-sheet>
+				<tabs-provider
+					default-value=${() => this.selectedTab}
+					ontabchange=${(e: CustomEvent) => {
+						console.log('onchange', e)
+						this.selectedTab = e.detail.value
+					}}
+				>
+					<div class="tabs-container">
+						<tabs-list>
+							<tabs-trigger selected-value="blocks">Blocks</tabs-trigger>
+							<tabs-trigger selected-value="fabrics">Fabrics</tabs-trigger>
+							<tabs-trigger selected-value="accessories">Accessories</tabs-trigger>
+						</tabs-list>
+					</div>
+	
+					<div class="divider"></div>
+	
+					<div class="tabs-content-container">
+						<tabs-content selected-value="blocks">
+							<div class="category-tabs">
+								<button class="category-tab active">Bodice</button>
+								<button class="category-tab">Skirt</button>
+								<button class="category-tab">Sleeves</button>
+							</div>
+							<div class="items-grid">
+								<${For} each=${() => blocks}>
+								${(block: (typeof blocks)[number]) => html`
+									<div class="item-card">
+										<div class="item-preview">
+											<img class="item-thumb" src=${block.thumb} alt=${block.name} />
+										</div>
 									</div>
-								</div>
-							`}
-							</>
+								`}
+								</>
+						</tabs-content>
+					</div>
+	
+					<tabs-content selected-value="fabrics">
+						<div class="items-grid">
+							<div class="item-card">
+								<div class="item-preview fabric"></div>
+							</div>
+							<div class="item-card">
+								<div class="item-preview fabric"></div>
+							</div>
+							<div class="item-card">
+								<div class="item-preview fabric"></div>
+							</div>
+						</div>
 					</tabs-content>
-				</div>
-
-				<tabs-content selected-value="fabrics">
-					<div class="items-grid">
-						<div class="item-card">
-							<div class="item-preview fabric"></div>
+	
+					<tabs-content selected-value="accessories">
+						<div class="items-grid">
+							<div class="item-card">
+								<div class="item-preview accessory"></div>
+							</div>
+							<div class="item-card">
+								<div class="item-preview accessory"></div>
+							</div>
 						</div>
-						<div class="item-card">
-							<div class="item-preview fabric"></div>
-						</div>
-						<div class="item-card">
-							<div class="item-preview fabric"></div>
-						</div>
-					</div>
-				</tabs-content>
-
-				<tabs-content selected-value="accessories">
-					<div class="items-grid">
-						<div class="item-card">
-							<div class="item-preview accessory"></div>
-						</div>
-						<div class="item-card">
-							<div class="item-preview accessory"></div>
-						</div>
-					</div>
-				</tabs-content>
-			</tabs-provider>
-		</bottom-sheet>
+					</tabs-content>
+				</tabs-provider>
+			</bottom-sheet>
+			`}
+		></show-when>
 	`
 
-	css = css/*css*/ `
+	css = css`
+		${sharedUIStyles}
+
 		* {
 			box-sizing: border-box;
 		}
