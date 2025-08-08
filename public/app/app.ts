@@ -1,5 +1,6 @@
 import {css, Element, element, html} from 'lume'
 import {createSignal} from 'solid-js'
+import '../elements/PreviewMeasurementPage.js'
 import '../elements/PreviewPage.js'
 import '../elements/SpacesPage.js'
 import '../elements/login-ui.js'
@@ -10,7 +11,7 @@ import '../routes.js' // track page visits
 import './drippy-scene.js'
 
 // Simple signal for view switching
-const [view, setView] = createSignal('avatar')
+const [view, setView] = createSignal('preview-measurement')
 
 // Make it global for testing in browser console
 ;(window as any).setView = setView
@@ -28,6 +29,10 @@ export class DrippyApp extends Element {
 
 	template = () => html`
 		<!-- show-when conditionals -->
+		<show-when
+			condition=${() => view() === 'preview-measurement'}
+			content=${() => html`<preview-measurement-page></preview-measurement-page>`}
+		></show-when>
 		<show-when condition=${() => view() === 'preview'} content=${() => html`<preview-page></preview-page>`}></show-when>
 
 		<show-when condition=${() => view() === 'space'} content=${() => html`<spaces-page></spaces-page>`}></show-when>
