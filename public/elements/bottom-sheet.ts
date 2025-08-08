@@ -214,10 +214,6 @@ export class BottomSheet extends Element {
 			flex-direction: column;
 		}
 
-		:host-context([data-theme='dark']) .bottom-sheet {
-			background: var(--appBackgroundDark);
-		}
-
 		.bottom-sheet.is-open {
 			transform: translateY(0);
 		}

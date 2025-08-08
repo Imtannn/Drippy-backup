@@ -53,9 +53,9 @@ export class DrippyScene extends Element {
 
 			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
 				${(item: Block) => html`
-					<lume-gltf-model src=${item.modelFile.href}></lume-gltf-model>
+					<lume-gltf-model src=${() => item.modelFile.href}></lume-gltf-model>
 					${item.category === 'Sleeves'
-						? html`<lume-gltf-model src=${item.modelFile.href} scale="-1 1 1"></lume-gltf-model>`
+						? html`<lume-gltf-model src=${() => item.modelFile.href} scale="-1 1 1"></lume-gltf-model>`
 						: ''}
 				`}
 			</>
