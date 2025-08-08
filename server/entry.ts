@@ -107,13 +107,32 @@ WebApp.rawHandlers.use(
 
 		// Continue as usual for files with extensions (Meteor serves those). We're only checking
 		// extensionless extensionless paths like /foo
-		if (pathParts[pathParts.length - 1].includes('.')) return next()
+		if (pathParts[pathParts.length - 1].includes('.')) {
+			// Set correct MIME type for .js files
+			if (req.url?.endsWith('.js')) {
+				res.setHeader('Content-Type', 'application/javascript')
+			}
+			return next()
+		}
 
 		// Location in the Meteor-specific build output (not relative to the
 		// entry file's location in source code, but relative to
 		// ./.meteor/local/build/programs/server/ from the project root.).
 		const publicDir = path.resolve('..', 'web.browser', 'app')
 
+		// First, try to find the exact path with index.html (for subfolders)
+		const exactPath = path.resolve(publicDir, ...pathParts)
+		const exactIndexPath = exactPath + '/index.html'
+
+		try {
+			const exists = (await fs.promises.stat(exactIndexPath)).isFile()
+			if (exists) {
+				console.log('Serving exact path:', exactIndexPath)
+				return sendOk(res, await fs.promises.readFile(exactIndexPath))
+			}
+		} catch (e) {}
+
+		// Then try the original logic for partial paths
 		let searchPath = []
 		for (const part of pathParts) {
 			searchPath.push(part)
