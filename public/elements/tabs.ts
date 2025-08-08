@@ -53,13 +53,10 @@ export class TabsProvider extends Element {
 	}
 
 	registerTrigger(trigger: TabsTrigger) {
-		console.log('registerTrigger', trigger)
 		this.triggers.push(trigger)
-		console.log('triggers', this.triggers)
 	}
 
 	unregisterTrigger(trigger: TabsTrigger) {
-		console.log('unregisterTrigger', trigger)
 		this.triggers = this.triggers.filter(t => t !== trigger)
 	}
 
