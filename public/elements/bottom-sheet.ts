@@ -259,17 +259,27 @@ export class BottomSheet extends Element {
 
 		/* Desktop styles: floating panel on the left, always full viewport height */
 		@media (min-width: 768px) {
+			:host {
+				top: 0;
+				height: 100vh;
+				height: 100dvh;
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				padding-left: 1.5rem;
+			}
+
 			.bottom-sheet {
-				top: 1.5rem;
-				bottom: 1.5rem;
-				left: 1.5rem;
+				position: relative;
+				top: auto;
+				bottom: auto;
+				left: auto;
 				right: auto;
 				border-radius: 1rem;
 				border: 1px solid #e5e7eb;
 				width: 24rem;
 				padding-top: var(--bottom-sheet-handle-height);
 				max-width: calc(100vw - 3rem);
-				transform: none;
 				height: 50rem;
 				max-height: calc(100vh - 3rem);
 				max-height: calc(100dvh - 3rem);
