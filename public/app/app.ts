@@ -3,8 +3,8 @@ import {createSignal} from 'solid-js'
 import '../elements/PreviewMeasurementPage.js'
 import '../elements/PreviewPage.js'
 import '../elements/SpacesPage.js'
-import '../elements/bottom-sheet.js'
 import '../elements/SuccessPage.js'
+import '../elements/bottom-sheet.js'
 import '../elements/login-ui.js'
 import {sharedUIStyles} from '../elements/shared-ui-styles.js'
 import '../elements/show-when.js'
@@ -18,6 +18,7 @@ import {store} from './store.js'
 
 // Background image for the drippy scene
 const sceneBackground = new URL('../images/background-1.jpeg', import.meta.url)
+const avatarThumb = new URL('../images/avatar-female-tmp.png', import.meta.url)
 
 const blocks: Block[] = [
 	{
@@ -98,9 +99,30 @@ export class DrippyApp extends Element {
 		<show-when condition=${() => view() === 'space'} content=${() => html`<spaces-page></spaces-page>`}></show-when>
 
 		<show-when condition=${() => view() === 'success'} content=${() => html`<success-page></success-page>`}></show-when>
-
 		<show-when
 			condition=${() => view() === 'avatar'}
+			content=${() =>
+				html`<drippy-scene></drippy-scene>
+
+					<section id="panel">
+						<div class="genders">
+							<button class="female selected">Women</button>
+							<button class="male">Men</button>
+						</div>
+
+						<div class="grid">
+							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+						</div>
+					</section>`}
+		></show-when>
+
+		<show-when
+			condition=${() => view() === 'blocks'}
 			content=${() => html`
 				<drippy-scene
 					id="drippy-scene"

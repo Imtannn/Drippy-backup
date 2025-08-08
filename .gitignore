@@ -6,7 +6,7 @@ node_modules
 public/docs
 
 # editor files
-.vscode/
+# .vscode/
 
 *.log
 
