@@ -5,7 +5,6 @@ import '../elements/theme-switch.js'
 import './drippy-scene.js'
 import '../elements/bottom-sheet.js'
 import '../elements/tabs.js'
-import '../elements/for-each.js'
 
 const blocks = [
 	{
