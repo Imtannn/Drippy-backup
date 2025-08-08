@@ -1,7 +1,7 @@
-import {attribute, booleanAttribute, createEffect, css, Element, element, type ElementAttributes, html} from 'lume'
+import {attribute, booleanAttribute, css, Element, element, type ElementAttributes, html} from 'lume'
 
 // Define snap points in percentages of viewport height
-const SNAP_POINTS = [0.3, 0.55, 0.9]
+const SNAP_POINTS = [0.41, 0.6, 0.9]
 
 type BottomSheetAttributes = 'defaultSnap'
 
@@ -24,18 +24,10 @@ export class BottomSheet extends Element {
 		super.connectedCallback()
 		this.checkDesktop()
 		this.addEventListeners()
-		this.createEffect(() => {
-			if (!this.sheetRef) return
 
-			createEffect(() => {
-				if (!this.isDesktop) {
-					const viewportHeight = window.innerHeight
-					const snapFraction = this.#resolveDefaultSnapFraction()
-					this.sheetHeight = snapFraction * viewportHeight
-					this.sheetRef!.style.height = `${this.sheetHeight}px`
-				} else {
-					this.sheetRef!.style.height = '50rem'
-				}
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				this.handleResize()
 			})
 		})
 	}
@@ -54,6 +46,19 @@ export class BottomSheet extends Element {
 			if (this.isDesktop) {
 				this.isDesktop = false
 			}
+		}
+	}
+
+	private handleResize = () => {
+		this.checkDesktop()
+		if (!this.sheetRef) return
+		if (!this.isDesktop) {
+			const viewportHeight = window.innerHeight
+			const snapFraction = this.#resolveDefaultSnapFraction()
+			this.sheetHeight = snapFraction * viewportHeight
+			this.sheetRef!.style.height = `${this.sheetHeight}px`
+		} else {
+			this.sheetRef!.style.height = '50rem'
 		}
 	}
 
@@ -138,7 +143,7 @@ export class BottomSheet extends Element {
 		document.addEventListener('touchmove', this.handleDragMove, {passive: false})
 		document.addEventListener('mouseup', this.handleDragEnd)
 		document.addEventListener('touchend', this.handleDragEnd)
-		window.addEventListener('resize', this.checkDesktop)
+		window.addEventListener('resize', this.handleResize)
 	}
 
 	private removeEventListeners() {
@@ -146,7 +151,7 @@ export class BottomSheet extends Element {
 		document.removeEventListener('touchmove', this.handleDragMove)
 		document.removeEventListener('mouseup', this.handleDragEnd)
 		document.removeEventListener('touchend', this.handleDragEnd)
-		window.removeEventListener('resize', this.checkDesktop)
+		window.removeEventListener('resize', this.handleResize)
 		this.dragState.isDragging = false
 		document.body.classList.remove('is-dragging')
 	}
@@ -209,6 +214,7 @@ export class BottomSheet extends Element {
 				height 0.3s ease-out;
 			will-change: transform, height;
 			max-height: 95vh;
+			max-height: 95dvh;
 			pointer-events: auto;
 			display: flex;
 			flex-direction: column;
@@ -266,6 +272,7 @@ export class BottomSheet extends Element {
 				transform: none;
 				height: 50rem;
 				max-height: calc(100vh - 3rem);
+				max-height: calc(100dvh - 3rem);
 				opacity: 0;
 				transform: translateY(1.25rem);
 				transition:
