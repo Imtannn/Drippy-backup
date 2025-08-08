@@ -4,6 +4,7 @@ import '../elements/PreviewMeasurementPage.js'
 import '../elements/PreviewPage.js'
 import '../elements/SpacesPage.js'
 import '../elements/bottom-sheet.js'
+import '../elements/SuccessPage.js'
 import '../elements/login-ui.js'
 import {sharedUIStyles} from '../elements/shared-ui-styles.js'
 import '../elements/show-when.js'
@@ -91,6 +92,8 @@ export class DrippyApp extends Element {
 		<show-when condition=${() => view() === 'preview'} content=${() => html`<preview-page></preview-page>`}></show-when>
 
 		<show-when condition=${() => view() === 'space'} content=${() => html`<spaces-page></spaces-page>`}></show-when>
+
+		<show-when condition=${() => view() === 'success'} content=${() => html`<success-page></success-page>`}></show-when>
 
 		<show-when
 			condition=${() => view() === 'avatar'}
