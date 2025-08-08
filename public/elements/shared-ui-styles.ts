@@ -172,6 +172,10 @@ export const sharedUIStyles = css`
 		font-weight: 600;
 		color: #000;
 		margin: 0;
+
+		:host-context([data-theme='dark']) & {
+			color: #fff;
+		}
 	}
 
 	/* Layout and Field Styles */
@@ -206,6 +210,11 @@ export const sharedUIStyles = css`
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
+		:host-context([data-theme='dark']) & {
+			background: #fff;
+			color: #000;
+		}
 	}
 
 	.order-button {
@@ -218,5 +227,9 @@ export const sharedUIStyles = css`
 		font-weight: 600;
 		color: #000;
 		margin: 0 0 15px 0;
+
+		:host-context([data-theme='dark']) & {
+			color: #fff;
+		}
 	}
 `

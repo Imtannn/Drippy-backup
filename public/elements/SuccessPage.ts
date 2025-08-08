@@ -91,6 +91,11 @@ export class SuccessPage extends Element {
 			margin-top: 80px;
 			border-radius: 20px 0 0 0;
 			box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+
+			:host-context([data-theme='dark']) & {
+				background-color: var(--appBackgroundDark);
+				box-shadow: -10px 0 30px rgba(255, 255, 255, 0.1);
+			}
 		}
 
 		.panel-content {
@@ -111,6 +116,10 @@ export class SuccessPage extends Element {
 			font-weight: 600;
 			color: #000;
 			margin: 0 0 10px 0;
+
+			:host-context([data-theme='dark']) & {
+				color: #fff;
+			}
 		}
 
 		.success-message {
@@ -119,6 +128,10 @@ export class SuccessPage extends Element {
 			color: #000000;
 			margin: 0;
 			line-height: 1.4;
+
+			:host-context([data-theme='dark']) & {
+				color: #ccc;
+			}
 		}
 
 		/* Success Button */
@@ -136,6 +149,11 @@ export class SuccessPage extends Element {
 			align-items: center;
 			justify-content: center;
 			margin-bottom: 30px;
+
+			:host-context([data-theme='dark']) & {
+				background: #fff;
+				color: #000;
+			}
 		}
 
 		/* Rating Section */
@@ -163,6 +181,10 @@ export class SuccessPage extends Element {
 			cursor: pointer;
 			transition: all 0.2s ease;
 			position: relative;
+
+			:host-context([data-theme='dark']) & {
+				background: #2a2a2a;
+			}
 		}
 
 		.star-box::before {
@@ -180,8 +202,18 @@ export class SuccessPage extends Element {
 			transition: filter 0.2s ease;
 		}
 
+		/* Dark mode initial star color */
+		:host-context([data-theme='dark']) .star-box::before {
+			filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%)
+				contrast(100%);
+		}
+
 		.star-box:hover {
 			background: var(--Lighter-grey, #e0e0e0);
+
+			:host-context([data-theme='dark']) & {
+				background: #3a3a3a;
+			}
 		}
 
 		/* Fill all stars up to the selected one */
@@ -204,11 +236,35 @@ export class SuccessPage extends Element {
 				contrast(100%);
 		}
 
+		/* Dark mode star colors */
+		:host-context([data-theme='dark']) #star1:checked ~ .star-box.star1::before,
+		:host-context([data-theme='dark']) #star2:checked ~ .star-box.star1::before,
+		:host-context([data-theme='dark']) #star2:checked ~ .star-box.star2::before,
+		:host-context([data-theme='dark']) #star3:checked ~ .star-box.star1::before,
+		:host-context([data-theme='dark']) #star3:checked ~ .star-box.star2::before,
+		:host-context([data-theme='dark']) #star3:checked ~ .star-box.star3::before,
+		:host-context([data-theme='dark']) #star4:checked ~ .star-box.star1::before,
+		:host-context([data-theme='dark']) #star4:checked ~ .star-box.star2::before,
+		:host-context([data-theme='dark']) #star4:checked ~ .star-box.star3::before,
+		:host-context([data-theme='dark']) #star4:checked ~ .star-box.star4::before,
+		:host-context([data-theme='dark']) #star5:checked ~ .star-box.star1::before,
+		:host-context([data-theme='dark']) #star5:checked ~ .star-box.star2::before,
+		:host-context([data-theme='dark']) #star5:checked ~ .star-box.star3::before,
+		:host-context([data-theme='dark']) #star5:checked ~ .star-box.star4::before,
+		:host-context([data-theme='dark']) #star5:checked ~ .star-box.star5::before {
+			filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%)
+				contrast(100%);
+		}
+
 		.rating-text {
 			font-size: 12px;
 			font-weight: 400;
 			color: #8b8b8b;
 			margin: 0;
+
+			:host-context([data-theme='dark']) & {
+				color: #aaa;
+			}
 		}
 
 		/* Mobile Layout */

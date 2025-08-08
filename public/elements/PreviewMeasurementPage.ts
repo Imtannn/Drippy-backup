@@ -127,6 +127,10 @@ export class PreviewMeasurementPage extends Element {
 
 		.back-icon svg {
 			color: #000;
+
+			:host-context([data-theme='dark']) & {
+				color: #fff;
+			}
 		}
 
 		.measurement-fields {
@@ -148,6 +152,10 @@ export class PreviewMeasurementPage extends Element {
 			width: 400px;
 			position: static;
 			margin-top: 80px;
+
+			:host-context([data-theme='dark']) & {
+				background-color: var(--appBackgroundDark);
+			}
 		}
 
 		.panel-content {
