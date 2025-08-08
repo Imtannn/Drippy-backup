@@ -127,10 +127,14 @@ export class PreviewMeasurementPage extends Element {
 
 		.back-icon svg {
 			color: #000;
+		}
 
-			:host-context([data-theme='dark']) & {
-				color: #fff;
-			}
+		.back-icon svg path {
+			fill: #000;
+		}
+
+		:host-context([data-theme='dark']) .back-icon svg path {
+			fill: #fff;
 		}
 
 		.measurement-fields {
