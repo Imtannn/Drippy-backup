@@ -3,6 +3,7 @@ import {createSignal} from 'solid-js'
 import '../elements/PreviewMeasurementPage.js'
 import '../elements/PreviewPage.js'
 import '../elements/SpacesPage.js'
+import '../elements/SuccessPage.js'
 import '../elements/login-ui.js'
 import {sharedUIStyles} from '../elements/shared-ui-styles.js'
 import '../elements/show-when.js'
@@ -11,7 +12,7 @@ import '../routes.js' // track page visits
 import './drippy-scene.js'
 
 // Simple signal for view switching
-const [view, setView] = createSignal('preview-measurement')
+const [view, setView] = createSignal('success')
 
 // Make it global for testing in browser console
 ;(window as any).setView = setView
@@ -36,6 +37,8 @@ export class DrippyApp extends Element {
 		<show-when condition=${() => view() === 'preview'} content=${() => html`<preview-page></preview-page>`}></show-when>
 
 		<show-when condition=${() => view() === 'space'} content=${() => html`<spaces-page></spaces-page>`}></show-when>
+
+		<show-when condition=${() => view() === 'success'} content=${() => html`<success-page></success-page>`}></show-when>
 
 		<show-when
 			condition=${() => view() === 'avatar'}
