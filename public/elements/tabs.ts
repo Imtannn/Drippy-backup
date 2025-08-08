@@ -258,10 +258,6 @@ export class TabsList extends Element {
 			background: #121316;
 		}
 
-		:host-context([data-theme='dark']) .active-indicator {
-			background: #666;
-		}
-
 		.hover-indicator {
 			background: rgba(255, 255, 255, 0.1);
 			opacity: 0;
@@ -397,10 +393,6 @@ export class TabsTrigger extends Element {
 			background: #e9e9ea;
 		}
 
-		:host-context([data-theme='dark']) .tab.active {
-			color: #fff;
-		}
-
 		.tab.disabled {
 			opacity: 0.5;
 			cursor: not-allowed;
@@ -502,19 +494,9 @@ export class TabsContent extends Element {
 			transition: all 0.2s ease;
 		}
 
-		:host-context([data-theme='dark']) .tab-panel ::slotted(.category-tab) {
-			background: #2a2a2a;
-			color: #999;
-		}
-
 		.tab-panel ::slotted(.category-tab.active) {
 			background: #000;
 			color: #fff;
-		}
-
-		:host-context([data-theme='dark']) .tab-panel ::slotted(.category-tab.active) {
-			background: #fff;
-			color: #000;
 		}
 
 		.tab-panel ::slotted(.items-grid) {
@@ -531,10 +513,6 @@ export class TabsContent extends Element {
 			cursor: pointer;
 			transition: transform 0.2s ease;
 			border: 2px solid transparent;
-		}
-
-		:host-context([data-theme='dark']) .tab-panel ::slotted(.item-card) {
-			background: #2a2a2a;
 		}
 
 		.tab-panel ::slotted(.item-card:hover) {
@@ -554,10 +532,6 @@ export class TabsContent extends Element {
 			align-items: center;
 			justify-content: center;
 			position: relative;
-		}
-
-		:host-context([data-theme='dark']) .tab-panel ::slotted(.item-preview) {
-			background: #1a1a1a;
 		}
 
 		.tab-panel ::slotted(.item-preview.fabric) {
