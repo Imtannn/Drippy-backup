@@ -10,6 +10,7 @@ import {sharedUIStyles} from '../elements/shared-ui-styles.js'
 import '../elements/show-when.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch.js'
+import '../elements/back-button.js'
 import '../routes.js' // track page visits
 import type {Block} from '../types/block.js'
 import './drippy-scene.js'
