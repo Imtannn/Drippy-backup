@@ -15,6 +15,9 @@ import type {Block} from '../types/block.js'
 import './drippy-scene.js'
 import {store} from './store.js'
 
+// Background image for the drippy scene
+const sceneBackground = new URL('../images/background-1.jpeg', import.meta.url)
+
 const blocks: Block[] = [
 	{
 		_id: '1',
@@ -58,7 +61,7 @@ const blocks: Block[] = [
 	},
 	{
 		_id: '7',
-		thumb: new URL('../images/piece_6.png', import.meta.url),
+		thumb: new URL('../images/piece_1.png', import.meta.url),
 		modelFile: new URL('../models/Sleeves 399.gltf', import.meta.url),
 		blockName: 'Sleeves 399',
 		avatar: 'Female',
@@ -98,7 +101,10 @@ export class DrippyApp extends Element {
 		<show-when
 			condition=${() => view() === 'avatar'}
 			content=${() => html`
-				<drippy-scene></drippy-scene>
+				<drippy-scene
+					id="drippy-scene"
+					style=${`background: url(${sceneBackground.href}) center / cover no-repeat`}
+				></drippy-scene>
 				
 				<bottom-sheet>
 				<tabs-provider
@@ -138,7 +144,7 @@ export class DrippyApp extends Element {
 										}}
 									>
 										<div class="item-preview">
-											<img class="item-thumb" src=${block.thumb} alt=${block.blockName} />
+											<img class="item-thumb" src=${() => block.thumb} alt=${() => block.blockName} />
 										</div>
 									</div>
 								`}
@@ -413,6 +419,16 @@ export class DrippyApp extends Element {
 
 			.item-card {
 				border-radius: 10px;
+			}
+		}
+
+		#drippy-scene {
+			transition: transform 0.2s ease-in-out;
+		}
+
+		@media (max-width: 768px) {
+			#drippy-scene {
+				transform: translateY(-120px);
 			}
 		}
 	`
