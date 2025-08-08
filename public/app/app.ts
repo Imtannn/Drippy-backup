@@ -1,4 +1,5 @@
-import {css, Element, element, html} from 'lume'
+import {html, Element, element, css, signal, For} from 'lume'
+import '../routes.js' // track page visits
 import {createSignal} from 'solid-js'
 import '../elements/PreviewMeasurementPage.js'
 import '../elements/PreviewPage.js'
@@ -8,16 +9,47 @@ import '../elements/login-ui.js'
 import {sharedUIStyles} from '../elements/shared-ui-styles.js'
 import '../elements/show-when.js'
 import '../elements/theme-switch.js'
-import '../routes.js' // track page visits
 import './drippy-scene.js'
+import '../elements/bottom-sheet.js'
+import '../elements/tabs.js'
 
+const blocks = [
+	{
+		thumb: new URL('../images/piece_1.png', import.meta.url),
+		name: 'Block 1',
+		description: 'Block 1 description',
+	},
+	{
+		thumb: new URL('../images/piece_2.png', import.meta.url),
+		name: 'Block 2',
+		description: 'Block 2 description',
+	},
+	{
+		thumb: new URL('../images/piece_3.png', import.meta.url),
+		name: 'Block 3',
+		description: 'Block 3 description',
+	},
+	{
+		thumb: new URL('../images/piece_4.png', import.meta.url),
+		name: 'Block 4',
+		description: 'Block 4 description',
+	},
+	{
+		thumb: new URL('../images/piece_5.png', import.meta.url),
+		name: 'Block 5',
+		description: 'Block 5 description',
+	},
+	{
+		thumb: new URL('../images/piece_6.png', import.meta.url),
+		name: 'Block 6',
+		description: 'Block 6 description',
+	},
+]
 // Simple signal for view switching
 const [view, setView] = createSignal('success')
 
 // Make it global for testing in browser console
 ;(window as any).setView = setView
-
-const avatarThumb = new URL('../images/avatar-female-tmp.png', import.meta.url)
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
@@ -27,6 +59,8 @@ loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
 @element
 export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
+
+	@signal selectedTab = 'blocks'
 
 	template = () => html`
 		<!-- show-when conditionals -->
@@ -44,21 +78,71 @@ export class DrippyApp extends Element {
 			condition=${() => view() === 'avatar'}
 			content=${() => html`
 				<drippy-scene></drippy-scene>
-				<section id="panel">
-					<div class="genders">
-						<button class="female selected">Women</button>
-						<button class="male">Men</button>
+				
+				<bottom-sheet>
+				<tabs-provider
+					default-value=${() => this.selectedTab}
+					ontabchange=${(e: CustomEvent) => {
+						console.log('onchange', e)
+						this.selectedTab = e.detail.value
+					}}
+				>
+					<div class="tabs-container">
+						<tabs-list>
+							<tabs-trigger selected-value="blocks">Blocks</tabs-trigger>
+							<tabs-trigger selected-value="fabrics">Fabrics</tabs-trigger>
+							<tabs-trigger selected-value="accessories">Accessories</tabs-trigger>
+						</tabs-list>
 					</div>
-
-					<div class="grid">
-						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-						<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
+	
+					<div class="divider"></div>
+	
+					<div class="tabs-content-container">
+						<tabs-content selected-value="blocks">
+							<div class="category-tabs">
+								<button class="category-tab active">Bodice</button>
+								<button class="category-tab">Skirt</button>
+								<button class="category-tab">Sleeves</button>
+							</div>
+							<div class="items-grid">
+								<${For} each=${() => blocks}>
+								${(block: (typeof blocks)[number]) => html`
+									<div class="item-card">
+										<div class="item-preview">
+											<img class="item-thumb" src=${block.thumb} alt=${block.name} />
+										</div>
+									</div>
+								`}
+								</>
+						</tabs-content>
 					</div>
-				</section>
+	
+					<tabs-content selected-value="fabrics">
+						<div class="items-grid">
+							<div class="item-card">
+								<div class="item-preview fabric"></div>
+							</div>
+							<div class="item-card">
+								<div class="item-preview fabric"></div>
+							</div>
+							<div class="item-card">
+								<div class="item-preview fabric"></div>
+							</div>
+						</div>
+					</tabs-content>
+	
+					<tabs-content selected-value="accessories">
+						<div class="items-grid">
+							<div class="item-card">
+								<div class="item-preview accessory"></div>
+							</div>
+							<div class="item-card">
+								<div class="item-preview accessory"></div>
+							</div>
+						</div>
+					</tabs-content>
+				</tabs-provider>
+			</bottom-sheet>
 			`}
 		></show-when>
 	`
@@ -83,6 +167,56 @@ export class DrippyApp extends Element {
 			:host-context([data-theme='dark']) & {
 				background: #333;
 			}
+		}
+
+		#panel {
+			overflow: auto;
+
+			padding: var(--uiSpacing);
+
+			border-radius: 15px;
+			position: absolute;
+
+			top: var(--uiSpacing);
+			left: var(--uiSpacing);
+			bottom: var(--uiSpacing);
+
+			--panelWidth: 300px;
+			width: var(--panelWidth);
+
+			@media (width < 720px) {
+				--panelWidth: calc(100vw - 2 * var(--uiSpacing));
+
+				top: unset;
+				left: var(--uiSpacing);
+				right: var(--uiSpacing);
+				bottom: 0;
+
+				width: unset;
+				height: 400px;
+
+				border-bottom-right-radius: 0;
+				border-bottom-left-radius: 0;
+			}
+
+			background: var(--appBackground);
+			:host-context([data-theme='dark']) & {
+				background: var(--appBackgroundDark);
+			}
+		}
+
+		.divider {
+			border-top: 1px solid #e0e1e4;
+		}
+
+		.tabs-container {
+			padding: 20px;
+			padding-top: 0;
+		}
+
+		.tabs-content-container {
+			padding: 20px;
+			padding-top: 0;
 		}
 
 		.genders {
@@ -156,6 +290,101 @@ export class DrippyApp extends Element {
 					width: 200%;
 					height: auto;
 				}
+			}
+		}
+
+		.container {
+			max-width: 600px;
+			margin: 0 auto;
+			background: white;
+			padding: 20px;
+			border-radius: 16px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		}
+
+		.category-tabs {
+			display: flex;
+			gap: 15px;
+			margin-bottom: 16px;
+		}
+
+		.category-tab {
+			background: transparent;
+			padding: 0;
+			border: none;
+			border-radius: 12px;
+			font-size: 14px;
+			color: #99999a;
+			cursor: pointer;
+			transition: all 0.2s ease;
+		}
+
+		.category-tab.active {
+			color: #121316;
+			font-weight: 600;
+		}
+
+		.items-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 10px;
+		}
+
+		.item-card {
+			aspect-ratio: 1;
+			/* Two-layer background: inner fill on padding-box, gradient border on border-box */
+			background:
+				linear-gradient(#f8f8f8, #f8f8f8) padding-box,
+				var(--item-card-border, linear-gradient(#0000, #0000)) border-box;
+			border-radius: 12px;
+			overflow: hidden;
+			cursor: pointer;
+			border: 1px solid transparent; /* needed so the border-box layer shows */
+			transition:
+				transform 0.2s ease,
+				background 0.2s ease;
+		}
+
+		.item-card:hover {
+			transform: scale(1.02);
+			--item-card-border: linear-gradient(136.36deg, #e56be8 1.67%, #495cff 100.68%);
+		}
+
+		.item-card:first-child {
+			--item-card-border: linear-gradient(136.36deg, #e56be8 1.67%, #495cff 100.68%);
+		}
+
+		.item-preview {
+			width: 100%;
+			height: 100%;
+			background: #e0e0e0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+
+		.item-preview.fabric {
+			background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+		}
+
+		.item-preview.accessory {
+			background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+		}
+
+		@media (max-width: 768px) {
+			.category-tab {
+				font-size: 12px;
+			}
+
+			.item-card {
+				border-radius: 10px;
 			}
 		}
 	`
