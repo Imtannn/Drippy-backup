@@ -60,21 +60,17 @@ export class SuccessPage extends Element {
 						<!-- Rating Section -->
 						<div class="rating-section">
 							<div class="stars">
-								<div class="star-box">
-									<img src="../images/star-icon.svg" alt="Star" />
-								</div>
-								<div class="star-box">
-									<img src="../images/star-icon.svg" alt="Star" />
-								</div>
-								<div class="star-box">
-									<img src="../images/star-icon.svg" alt="Star" />
-								</div>
-								<div class="star-box">
-									<img src="../images/star-icon.svg" alt="Star" />
-								</div>
-								<div class="star-box">
-									<img src="../images/star-icon.svg" alt="Star" />
-								</div>
+								<input type="radio" name="rating" value="1" id="star1" class="rating-input" />
+								<input type="radio" name="rating" value="2" id="star2" class="rating-input" />
+								<input type="radio" name="rating" value="3" id="star3" class="rating-input" />
+								<input type="radio" name="rating" value="4" id="star4" class="rating-input" />
+								<input type="radio" name="rating" value="5" id="star5" class="rating-input" />
+
+								<label for="star1" class="star-box star1"></label>
+								<label for="star2" class="star-box star2"></label>
+								<label for="star3" class="star-box star3"></label>
+								<label for="star4" class="star-box star4"></label>
+								<label for="star5" class="star-box star5"></label>
 							</div>
 							<p class="rating-text">Rate your experience</p>
 						</div>
@@ -155,21 +151,57 @@ export class SuccessPage extends Element {
 			gap: 10px;
 		}
 
-		.star-box {
-			display: flex;
-			width: 30px;
-			height: 30px;
-			justify-content: center;
-			align-items: center;
-			gap: 10px;
-			aspect-ratio: 1/1;
-			border-radius: 5px;
-			background: var(--Lighter-grey, #f6f6f6);
+		.rating-input {
+			display: none;
 		}
 
-		.star-box img {
+		.star-box {
+			width: 30px;
+			height: 30px;
+			border-radius: 5px;
+			background: var(--Lighter-grey, #f6f6f6);
+			cursor: pointer;
+			transition: all 0.2s ease;
+			position: relative;
+		}
+
+		.star-box::before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
 			width: 21px;
 			height: 20px;
+			background-image: url('../images/star-icon.svg');
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: center;
+			transition: filter 0.2s ease;
+		}
+
+		.star-box:hover {
+			background: var(--Lighter-grey, #e0e0e0);
+		}
+
+		/* Fill all stars up to the selected one */
+		#star1:checked ~ .star-box.star1::before,
+		#star2:checked ~ .star-box.star1::before,
+		#star2:checked ~ .star-box.star2::before,
+		#star3:checked ~ .star-box.star1::before,
+		#star3:checked ~ .star-box.star2::before,
+		#star3:checked ~ .star-box.star3::before,
+		#star4:checked ~ .star-box.star1::before,
+		#star4:checked ~ .star-box.star2::before,
+		#star4:checked ~ .star-box.star3::before,
+		#star4:checked ~ .star-box.star4::before,
+		#star5:checked ~ .star-box.star1::before,
+		#star5:checked ~ .star-box.star2::before,
+		#star5:checked ~ .star-box.star3::before,
+		#star5:checked ~ .star-box.star4::before,
+		#star5:checked ~ .star-box.star5::before {
+			filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%)
+				contrast(100%);
 		}
 
 		.rating-text {
