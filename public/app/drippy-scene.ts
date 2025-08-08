@@ -1,8 +1,8 @@
-import {html, Element, element, css, signal, onCleanup} from 'lume'
+import {html, Element, element, css, signal, onCleanup, For} from 'lume'
+import {store} from './store.js'
+import type {Block} from '../types/block.js'
 
 const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
-const bodiceUrl = new URL('../models/bodice-207.gltf', import.meta.url)
-const skirtUrl = new URL('../models/skirt-168.gltf', import.meta.url)
 
 @element
 export class DrippyScene extends Element {
@@ -50,8 +50,15 @@ export class DrippyScene extends Element {
 			></lume-box>
 
 			<lume-gltf-model src=${femaleAvatar.href}></lume-gltf-model>
-			<lume-gltf-model src=${bodiceUrl.href}></lume-gltf-model>
-			<lume-gltf-model src=${skirtUrl.href}></lume-gltf-model>
+
+			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
+				${(item: Block) => html`
+					<lume-gltf-model src=${item.modelFile.href}></lume-gltf-model>
+					${item.category === 'Sleeves'
+						? html`<lume-gltf-model src=${item.modelFile.href} scale="-1 1 1"></lume-gltf-model>`
+						: ''}
+				`}
+			</>
 		</lume-scene>
 	`
 
