@@ -164,6 +164,11 @@ export class PreviewPage extends Element {
 			margin-top: 80px;
 			border-radius: 20px 0 0 0;
 			box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+
+			:host-context([data-theme='dark']) & {
+				background-color: var(--appBackgroundDark);
+				box-shadow: -10px 0 30px rgba(255, 255, 255, 0.1);
+			}
 		}
 
 		.panel-content {
@@ -199,6 +204,10 @@ export class PreviewPage extends Element {
 			font-weight: 600;
 			color: #000;
 			margin: 0 0 5px 0;
+
+			:host-context([data-theme='dark']) & {
+				color: #fff;
+			}
 		}
 
 		.product-price {
@@ -206,6 +215,10 @@ export class PreviewPage extends Element {
 			font-weight: 400;
 			color: #666;
 			margin: 0;
+
+			:host-context([data-theme='dark']) & {
+				color: #ccc;
+			}
 		}
 
 		.quantity-controls {
@@ -217,6 +230,10 @@ export class PreviewPage extends Element {
 			background: #f5f5f5;
 			border-radius: 1000px;
 			padding: 0 12px;
+
+			:host-context([data-theme='dark']) & {
+				background: #2a2a2a;
+			}
 		}
 
 		.quantity-btn {
@@ -228,6 +245,11 @@ export class PreviewPage extends Element {
 			font-weight: 500;
 			transition: all 0.2s;
 			user-select: none;
+			color: #000;
+
+			:host-context([data-theme='dark']) & {
+				color: #fff;
+			}
 		}
 
 		.quantity-btn:hover {
@@ -244,6 +266,11 @@ export class PreviewPage extends Element {
 			text-align: center;
 			user-select: none;
 			flex: 1;
+			color: #000;
+
+			:host-context([data-theme='dark']) & {
+				color: #fff;
+			}
 		}
 
 		.size-section {
@@ -265,17 +292,35 @@ export class PreviewPage extends Element {
 			font-size: 10px;
 			font-weight: 400;
 			transition: all 0.2s;
+			color: #000;
+
+			:host-context([data-theme='dark']) & {
+				background: #2a2a2a;
+				border-color: #444;
+				color: #fff;
+			}
 		}
 
 		.size-btn:hover:not(.selected) {
 			background: #f5f5f5;
 			border-color: #bbb;
+
+			:host-context([data-theme='dark']) & {
+				background: #3a3a3a;
+				border-color: #555;
+			}
 		}
 
 		.size-btn.selected {
 			background: #000;
 			color: white;
 			border-color: #000;
+
+			:host-context([data-theme='dark']) & {
+				background: #fff;
+				color: #000;
+				border-color: #fff;
+			}
 		}
 
 		.size-btn.custom {
@@ -298,6 +343,14 @@ export class PreviewPage extends Element {
 
 		.shipping-section {
 			margin-bottom: 30px;
+		}
+
+		/* Dark mode for order button */
+		.order-button {
+			:host-context([data-theme='dark']) & {
+				background: #fff;
+				color: #000;
+			}
 		}
 
 		.quantity-btn {
