@@ -1,10 +1,78 @@
-import {html, Element, element, css} from 'lume'
-import '../routes.js' // track page visits
+import {Element, For, css, element, html, signal} from 'lume'
+import {createSignal} from 'solid-js'
+import '../elements/PreviewMeasurementPage.js'
+import '../elements/PreviewPage.js'
+import '../elements/SpacesPage.js'
+import '../elements/bottom-sheet.js'
+import '../elements/SuccessPage.js'
 import '../elements/login-ui.js'
+import {sharedUIStyles} from '../elements/shared-ui-styles.js'
+import '../elements/show-when.js'
+import '../elements/tabs.js'
 import '../elements/theme-switch.js'
+import '../routes.js' // track page visits
+import type {Block} from '../types/block.js'
 import './drippy-scene.js'
+import {store} from './store.js'
 
-const avatarThumb = new URL('../images/avatar-female-tmp.png', import.meta.url)
+// Background image for the drippy scene
+const sceneBackground = new URL('../images/background-1.jpeg', import.meta.url)
+
+const blocks: Block[] = [
+	{
+		_id: '1',
+		thumb: new URL('../images/piece_1.png', import.meta.url),
+		modelFile: new URL('../models/Bodice 228.gltf', import.meta.url),
+		blockName: 'Bodice 228',
+		avatar: 'Female',
+		category: 'Bodice',
+	},
+	{
+		_id: '2',
+		thumb: new URL('../images/piece_2.png', import.meta.url),
+		modelFile: new URL('../models/Bodice 350.gltf', import.meta.url),
+		blockName: 'Bodice 350',
+		avatar: 'Female',
+		category: 'Bodice',
+	},
+	{
+		_id: '3',
+		thumb: new URL('../images/piece_3.png', import.meta.url),
+		modelFile: new URL('../models/skirt-168.gltf', import.meta.url),
+		blockName: 'skirt168',
+		avatar: 'Female',
+		category: 'Skirt',
+	},
+	{
+		_id: '4',
+		thumb: new URL('../images/piece_4.png', import.meta.url),
+		modelFile: new URL('../models/Bodice 358.gltf', import.meta.url),
+		blockName: 'Bodice 358',
+		avatar: 'Female',
+		category: 'Bodice',
+	},
+	{
+		_id: '6',
+		thumb: new URL('../images/piece_6.png', import.meta.url),
+		modelFile: new URL('../models/Skirt 351.gltf', import.meta.url),
+		blockName: 'Skirt 351',
+		avatar: 'Female',
+		category: 'Skirt',
+	},
+	{
+		_id: '7',
+		thumb: new URL('../images/piece_1.png', import.meta.url),
+		modelFile: new URL('../models/Sleeves 399.gltf', import.meta.url),
+		blockName: 'Sleeves 399',
+		avatar: 'Female',
+		category: 'Sleeves',
+	},
+]
+// Simple signal for view switching
+const [view, setView] = createSignal('avatar')
+
+// Make it global for testing in browser console
+;(window as any).setView = setView
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
@@ -15,27 +83,108 @@ loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
 export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
 
+	@signal selectedTab = 'blocks'
+	@signal selectedCategory = 'Bodice'
+
 	template = () => html`
-		<drippy-scene></drippy-scene>
+		<!-- show-when conditionals -->
+		<show-when
+			condition=${() => view() === 'preview-measurement'}
+			content=${() => html`<preview-measurement-page></preview-measurement-page>`}
+		></show-when>
+		<show-when condition=${() => view() === 'preview'} content=${() => html`<preview-page></preview-page>`}></show-when>
 
-		<section id="panel">
-			<div class="genders">
-				<button class="female selected">Women</button>
-				<button class="male">Men</button>
-			</div>
+		<show-when condition=${() => view() === 'space'} content=${() => html`<spaces-page></spaces-page>`}></show-when>
 
-			<div class="grid">
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-				<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-			</div>
-		</section>
+		<show-when condition=${() => view() === 'success'} content=${() => html`<success-page></success-page>`}></show-when>
+
+		<show-when
+			condition=${() => view() === 'avatar'}
+			content=${() => html`
+				<drippy-scene
+					id="drippy-scene"
+					style=${`background: url(${sceneBackground.href}) center / cover no-repeat`}
+				></drippy-scene>
+				
+				<bottom-sheet>
+				<tabs-provider
+					default-value=${() => this.selectedTab}
+					ontabchange=${(e: CustomEvent) => {
+						console.log('onchange', e)
+						this.selectedTab = e.detail.value
+					}}
+				>
+					<div class="tabs-container">
+						<tabs-list>
+							<tabs-trigger selected-value="blocks">Blocks</tabs-trigger>
+							<tabs-trigger selected-value="fabrics">Fabrics</tabs-trigger>
+							<tabs-trigger selected-value="accessories">Accessories</tabs-trigger>
+						</tabs-list>
+					</div>
+	
+					<div class="divider"></div>
+	
+					<div class="tabs-content-container">
+						<tabs-content selected-value="blocks">
+							<div class="category-tabs">
+								<button class="category-tab" classList=${() => ({active: this.selectedCategory === 'Bodice'})} onclick=${() => (this.selectedCategory = 'Bodice')}>Bodice</button>
+								<button class="category-tab" classList=${() => ({active: this.selectedCategory === 'Skirt'})} onclick=${() => (this.selectedCategory = 'Skirt')}>Skirt</button>
+								<button class="category-tab" classList=${() => ({active: this.selectedCategory === 'Sleeves'})} onclick=${() => (this.selectedCategory = 'Sleeves')}>Sleeves</button>
+							</div>
+							<div class="items-grid">
+								<${For} each=${() => blocks.filter(block => block.category === this.selectedCategory)}>
+								${(block: (typeof blocks)[number]) => html`
+									<div
+										class="item-card"
+										classList=${() => ({
+											active: store.selectedBlocks.get(block.category)?._id === block._id,
+										})}
+										onclick=${() => {
+											store.setSelectedBlocks = block
+										}}
+									>
+										<div class="item-preview">
+											<img class="item-thumb" src=${() => block.thumb} alt=${() => block.blockName} />
+										</div>
+									</div>
+								`}
+								</>
+						</tabs-content>
+					</div>
+	
+					<tabs-content selected-value="fabrics">
+						<div class="items-grid">
+							<div class="item-card">
+								<div class="item-preview fabric"></div>
+							</div>
+							<div class="item-card">
+								<div class="item-preview fabric"></div>
+							</div>
+							<div class="item-card">
+								<div class="item-preview fabric"></div>
+							</div>
+						</div>
+					</tabs-content>
+	
+					<tabs-content selected-value="accessories">
+						<div class="items-grid">
+							<div class="item-card">
+								<div class="item-preview accessory"></div>
+							</div>
+							<div class="item-card">
+								<div class="item-preview accessory"></div>
+							</div>
+						</div>
+					</tabs-content>
+				</tabs-provider>
+			</bottom-sheet>
+			`}
+		></show-when>
 	`
 
-	css = css/*css*/ `
+	css = css`
+		${sharedUIStyles}
+
 		* {
 			box-sizing: border-box;
 		}
@@ -89,6 +238,20 @@ export class DrippyApp extends Element {
 			:host-context([data-theme='dark']) & {
 				background: var(--appBackgroundDark);
 			}
+		}
+
+		.divider {
+			border-top: 1px solid #e0e1e4;
+		}
+
+		.tabs-container {
+			padding: 20px;
+			padding-top: 0;
+		}
+
+		.tabs-content-container {
+			padding: 20px;
+			padding-top: 0;
 		}
 
 		.genders {
@@ -162,6 +325,110 @@ export class DrippyApp extends Element {
 					width: 200%;
 					height: auto;
 				}
+			}
+		}
+
+		.container {
+			max-width: 600px;
+			margin: 0 auto;
+			background: white;
+			padding: 20px;
+			border-radius: 16px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		}
+
+		.category-tabs {
+			display: flex;
+			gap: 15px;
+			margin-bottom: 16px;
+		}
+
+		.category-tab {
+			background: transparent;
+			padding: 0;
+			border: none;
+			border-radius: 12px;
+			font-size: 14px;
+			color: #99999a;
+			cursor: pointer;
+			transition: all 0.2s ease;
+		}
+
+		.category-tab.active {
+			color: #121316;
+		}
+
+		.items-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 10px;
+		}
+
+		.item-card {
+			aspect-ratio: 1;
+			/* Two-layer background: inner fill on padding-box, gradient border on border-box */
+			background:
+				linear-gradient(#f8f8f8, #f8f8f8) padding-box,
+				var(--item-card-border, linear-gradient(#0000, #0000)) border-box;
+			border-radius: 12px;
+			overflow: hidden;
+			cursor: pointer;
+			border: 1px solid transparent; /* needed so the border-box layer shows */
+			transition:
+				transform 0.2s ease,
+				background 0.2s ease;
+		}
+
+		.item-card:hover {
+			transform: scale(1.02);
+			--item-card-border: linear-gradient(136.36deg, #e56be8 1.67%, #495cff 100.68%);
+		}
+
+		.item-card.active {
+			--item-card-border: linear-gradient(136.36deg, #e56be8 1.67%, #495cff 100.68%);
+		}
+
+		.item-preview {
+			width: 100%;
+			height: 100%;
+			background: #e0e0e0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+
+		.item-preview.fabric {
+			background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+		}
+
+		.item-preview.accessory {
+			background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+		}
+
+		@media (max-width: 768px) {
+			.category-tab {
+				font-size: 12px;
+			}
+
+			.item-card {
+				border-radius: 10px;
+			}
+		}
+
+		#drippy-scene {
+			transition: transform 0.2s ease-in-out;
+		}
+
+		@media (max-width: 768px) {
+			#drippy-scene {
+				transform: translateY(-120px);
 			}
 		}
 	`
