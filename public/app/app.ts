@@ -8,7 +8,6 @@ import '../elements/login-ui.js'
 import {sharedUIStyles} from '../elements/shared-ui-styles.js'
 import '../elements/show-when.js'
 import '../elements/theme-switch.js'
-import '../routes.js' // track page visits
 import './drippy-scene.js'
 import '../elements/bottom-sheet.js'
 import '../elements/tabs.js'
