@@ -1,51 +1,71 @@
-import {html, Element, element, css, signal, For} from 'lume'
-import '../routes.js' // track page visits
+import {Element, For, css, element, html, signal} from 'lume'
 import {createSignal} from 'solid-js'
 import '../elements/PreviewMeasurementPage.js'
 import '../elements/PreviewPage.js'
 import '../elements/SpacesPage.js'
+import '../elements/bottom-sheet.js'
 import '../elements/login-ui.js'
 import {sharedUIStyles} from '../elements/shared-ui-styles.js'
 import '../elements/show-when.js'
-import '../elements/theme-switch.js'
-import './drippy-scene.js'
-import '../elements/bottom-sheet.js'
 import '../elements/tabs.js'
+import '../elements/theme-switch.js'
+import '../routes.js' // track page visits
+import type {Block} from '../types/block.js'
+import './drippy-scene.js'
+import {store} from './store.js'
 
-const blocks = [
+const blocks: Block[] = [
 	{
+		_id: '1',
 		thumb: new URL('../images/piece_1.png', import.meta.url),
-		name: 'Block 1',
-		description: 'Block 1 description',
+		modelFile: new URL('../models/Bodice 228.gltf', import.meta.url),
+		blockName: 'Bodice 228',
+		avatar: 'Female',
+		category: 'Bodice',
 	},
 	{
+		_id: '2',
 		thumb: new URL('../images/piece_2.png', import.meta.url),
-		name: 'Block 2',
-		description: 'Block 2 description',
+		modelFile: new URL('../models/Bodice 350.gltf', import.meta.url),
+		blockName: 'Bodice 350',
+		avatar: 'Female',
+		category: 'Bodice',
 	},
 	{
+		_id: '3',
 		thumb: new URL('../images/piece_3.png', import.meta.url),
-		name: 'Block 3',
-		description: 'Block 3 description',
+		modelFile: new URL('../models/skirt-168.gltf', import.meta.url),
+		blockName: 'skirt168',
+		avatar: 'Female',
+		category: 'Skirt',
 	},
 	{
+		_id: '4',
 		thumb: new URL('../images/piece_4.png', import.meta.url),
-		name: 'Block 4',
-		description: 'Block 4 description',
+		modelFile: new URL('../models/Bodice 358.gltf', import.meta.url),
+		blockName: 'Bodice 358',
+		avatar: 'Female',
+		category: 'Bodice',
 	},
 	{
-		thumb: new URL('../images/piece_5.png', import.meta.url),
-		name: 'Block 5',
-		description: 'Block 5 description',
-	},
-	{
+		_id: '6',
 		thumb: new URL('../images/piece_6.png', import.meta.url),
-		name: 'Block 6',
-		description: 'Block 6 description',
+		modelFile: new URL('../models/Skirt 351.gltf', import.meta.url),
+		blockName: 'Skirt 351',
+		avatar: 'Female',
+		category: 'Skirt',
+	},
+	{
+		_id: '7',
+		thumb: new URL('../images/piece_6.png', import.meta.url),
+		modelFile: new URL('../models/Sleeves 399.gltf', import.meta.url),
+		blockName: 'Sleeves 399',
+		avatar: 'Female',
+		category: 'Sleeves',
 	},
 ]
 // Simple signal for view switching
-const [view, setView] = createSignal('preview-measurement')
+const [view, setView] = createSignal('avatar')
 
 // Make it global for testing in browser console
 ;(window as any).setView = setView
@@ -60,6 +80,7 @@ export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
 
 	@signal selectedTab = 'blocks'
+	@signal selectedCategory = 'Bodice'
 
 	template = () => html`
 		<!-- show-when conditionals -->
@@ -97,16 +118,24 @@ export class DrippyApp extends Element {
 					<div class="tabs-content-container">
 						<tabs-content selected-value="blocks">
 							<div class="category-tabs">
-								<button class="category-tab active">Bodice</button>
-								<button class="category-tab">Skirt</button>
-								<button class="category-tab">Sleeves</button>
+								<button class="category-tab" classList=${() => ({active: this.selectedCategory === 'Bodice'})} onclick=${() => (this.selectedCategory = 'Bodice')}>Bodice</button>
+								<button class="category-tab" classList=${() => ({active: this.selectedCategory === 'Skirt'})} onclick=${() => (this.selectedCategory = 'Skirt')}>Skirt</button>
+								<button class="category-tab" classList=${() => ({active: this.selectedCategory === 'Sleeves'})} onclick=${() => (this.selectedCategory = 'Sleeves')}>Sleeves</button>
 							</div>
 							<div class="items-grid">
-								<${For} each=${() => blocks}>
+								<${For} each=${() => blocks.filter(block => block.category === this.selectedCategory)}>
 								${(block: (typeof blocks)[number]) => html`
-									<div class="item-card">
+									<div
+										class="item-card"
+										classList=${() => ({
+											active: store.selectedBlocks.get(block.category)?._id === block._id,
+										})}
+										onclick=${() => {
+											store.setSelectedBlocks = block
+										}}
+									>
 										<div class="item-preview">
-											<img class="item-thumb" src=${block.thumb} alt=${block.name} />
+											<img class="item-thumb" src=${block.thumb} alt=${block.blockName} />
 										</div>
 									</div>
 								`}
@@ -318,7 +347,6 @@ export class DrippyApp extends Element {
 
 		.category-tab.active {
 			color: #121316;
-			font-weight: 600;
 		}
 
 		.items-grid {
@@ -347,7 +375,7 @@ export class DrippyApp extends Element {
 			--item-card-border: linear-gradient(136.36deg, #e56be8 1.67%, #495cff 100.68%);
 		}
 
-		.item-card:first-child {
+		.item-card.active {
 			--item-card-border: linear-gradient(136.36deg, #e56be8 1.67%, #495cff 100.68%);
 		}
 
