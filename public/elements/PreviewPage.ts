@@ -156,78 +156,6 @@ export class PreviewPage extends Element {
 	css = css/*css*/ `
 		${sharedUIStyles}
 
-		/* Preview-specific styles */
-		.preview-container {
-			width: 100%;
-			height: 100vh;
-			position: relative;
-			overflow: hidden;
-			background-image: url('../images/background.jpg');
-			background-size: cover;
-			background-position: center;
-			background-attachment: fixed;
-		}
-
-		.top-nav {
-			position: absolute;
-			top: 20px;
-			left: 20px;
-			right: 20px;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			z-index: 1000;
-		}
-
-		.nav-left {
-			display: flex;
-			gap: 10px;
-		}
-
-		.nav-button {
-			width: 50px;
-			height: 50px;
-			border-radius: 50%;
-			background: rgba(0, 0, 0, 0.5);
-			border: none;
-			color: white;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.logo-circle {
-			width: 50px;
-			height: 50px;
-			border-radius: 50%;
-			background: #000;
-			color: white;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 10px;
-			font-weight: 600;
-		}
-
-		.logo-positioned {
-			position: absolute;
-			top: 20px;
-			right: 400px; /* Aligns with the left edge of the 400px panel */
-			z-index: 1000;
-		}
-
-		.content-wrapper {
-			display: flex;
-			height: 100vh;
-			position: relative;
-		}
-
-		.scene-area {
-			flex: 1;
-			background: transparent;
-		}
-
 		/* Override panel styles for preview layout */
 		#panel {
 			background-color: white;
@@ -318,13 +246,6 @@ export class PreviewPage extends Element {
 			flex: 1;
 		}
 
-		.section-title {
-			font-size: 12px;
-			font-weight: 600;
-			color: #000;
-			margin: 0 0 15px 0;
-		}
-
 		.size-section {
 			margin-bottom: 30px;
 		}
@@ -407,95 +328,17 @@ export class PreviewPage extends Element {
 			margin-bottom: 30px;
 		}
 
-		.form-fields {
-			display: flex;
-			flex-direction: column;
-			gap: 7px;
-		}
-
-		.field-group {
-			position: relative;
-		}
-
-		.form-input {
-			width: 100%;
-			padding: 12px 15px;
-			padding-top: 18px;
-			border: 1px solid #ddd;
-			border-radius: 8px;
-			font-size: 10px;
-			font-weight: 500;
-			box-sizing: border-box;
-			background-color: #f5f5f5;
-			transition: border-color 0.2s ease;
-		}
-
-		.form-input:focus {
-			border-color: #e56be8;
-			outline: none;
-		}
-
-		.floating-label {
-			position: absolute;
-			top: 12px;
-			left: 15px;
-			font-size: 12px;
-			font-weight: 400;
-			color: #999;
-			transition: all 0.2s ease;
-			pointer-events: none;
-		}
-
-		.form-input:focus + .floating-label,
-		.form-input:not(:placeholder-shown) + .floating-label {
-			top: 6px;
-			font-size: 7px;
-			color: #666;
-		}
-
-		.order-button {
-			width: 100%;
-			background: #000;
-			color: white;
-			border: none;
-			border-radius: 25px;
-			padding: 15px 20px;
-			font-size: 12px;
-			font-weight: 600;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 10px;
-		}
-
 		/* Mobile Layout */
-		@media (max-width: 768px) {
-			.content-wrapper {
-				flex-direction: column;
-			}
-
-			.scene-area {
-				height: 50vh;
-			}
-
+		@media (width < 720px) {
 			#panel {
 				width: 100%;
 				height: 50vh;
 				margin-top: 0;
 				border-radius: 20px 20px 0 0;
 				position: static;
-			}
-
-			.top-nav {
-				top: 30px;
-				left: 30px;
-				right: 100px; /* Make room for logo */
-			}
-
-			.logo-positioned {
-				top: 30px;
-				right: 30px; /* On mobile, keep it at the far right since panel is full width */
+				padding: 0;
+				left: unset;
+				right: unset;
 			}
 
 			.panel-content {
