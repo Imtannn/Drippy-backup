@@ -23,7 +23,6 @@ export class BottomSheet extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 		this.checkDesktop()
-		window.addEventListener('resize', this.checkDesktop)
 		this.addEventListeners()
 		this.createEffect(() => {
 			if (!this.sheetRef) return
@@ -43,7 +42,6 @@ export class BottomSheet extends Element {
 
 	disconnectedCallback() {
 		super.disconnectedCallback()
-		window.removeEventListener('resize', this.checkDesktop)
 		this.removeEventListeners()
 	}
 
@@ -140,6 +138,7 @@ export class BottomSheet extends Element {
 		document.addEventListener('touchmove', this.handleDragMove, {passive: false})
 		document.addEventListener('mouseup', this.handleDragEnd)
 		document.addEventListener('touchend', this.handleDragEnd)
+		window.addEventListener('resize', this.checkDesktop)
 	}
 
 	private removeEventListeners() {
@@ -147,6 +146,7 @@ export class BottomSheet extends Element {
 		document.removeEventListener('touchmove', this.handleDragMove)
 		document.removeEventListener('mouseup', this.handleDragEnd)
 		document.removeEventListener('touchend', this.handleDragEnd)
+		window.removeEventListener('resize', this.checkDesktop)
 		this.dragState.isDragging = false
 		document.body.classList.remove('is-dragging')
 	}
