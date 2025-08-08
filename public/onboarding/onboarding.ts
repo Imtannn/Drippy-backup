@@ -2,7 +2,6 @@ import {html} from 'lume'
 import '../routes.js' // track page visits
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
-import {createDatePicker} from '../elements/simple-date-picker-v3.js'
 
 const createAccountImg = new URL('../images/create-account.png', import.meta.url)
 const step3Img = new URL('../images/step3.png', import.meta.url)
@@ -69,16 +68,7 @@ function getStepContent(step: number) {
 							oninput=${(e: any) => handleUsernameInput(e)}
 						/>
 
-						<!-- Using simple date picker -->
-						${createDatePicker({
-							id: 'onboarding-dob',
-							placeholder: 'Date of birth',
-							min: '1900-01-01',
-							max: '2010-12-31',
-							onChange: value => {
-								console.log('Date selected:', value)
-							},
-						})}
+						<input type="date" class="form-input" onchange=${(e: any) => handleDateInput(e)} />
 
 						<p class="privacy-note">Don't worry, we won't tell about it. 😉</p>
 					</div>
@@ -154,15 +144,19 @@ function handleUsernameInput(e: any) {
 	console.log('Username:', e.target.value)
 }
 
+function handleDateInput(e: any) {
+	// Date of birth is handled directly in handleStep2Submit
+	console.log('Date of birth:', e.target.value)
+}
+
 function handleStep2Submit() {
-	const usernameInput = document.querySelector('.form-input') as HTMLInputElement
-	const dateOfBirthElement = document.querySelector('#onboarding-dob .date-text') as HTMLElement
-	const dateOfBirth = dateOfBirthElement?.textContent
+	const usernameInput = document.querySelector('input[type="text"]') as HTMLInputElement
+	const dateInput = document.querySelector('input[type="date"]') as HTMLInputElement
 
 	const username = usernameInput?.value
-	const hasValidDate = dateOfBirth && dateOfBirth !== 'Date of birth'
+	const dateOfBirth = dateInput?.value
 
-	if (username && hasValidDate) {
+	if (username && dateOfBirth) {
 		localStorage.setItem('onboarding_username', username)
 		localStorage.setItem('onboarding_dob', dateOfBirth)
 		nextStep()
@@ -253,8 +247,10 @@ style.textContent = `
 
 	.email-input:focus, .form-input:focus {
 		outline: none;
-		border-color: #495CFF;
-		box-shadow: 0 0 0 3px rgba(73, 92, 255, 0.1);
+		border: 1px solid transparent;
+		background: linear-gradient(white, white) padding-box,
+					linear-gradient(45deg, #E56BE8, #495CFF) border-box;
+
 	}
 
 	.email-input::placeholder, .form-input::placeholder {
