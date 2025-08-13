@@ -22,7 +22,7 @@ const sceneBackground = new URL('../images/background-1.jpeg', import.meta.url)
 const avatarThumb = new URL('../images/avatar-female-tmp.png', import.meta.url)
 
 // Simple signal for view switching
-const [view, setView] = createSignal('avatar')
+const [view, setView] = createSignal('blocks')
 
 // Make it global for testing in browser console
 ;(window as any).setView = setView

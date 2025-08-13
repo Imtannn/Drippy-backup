@@ -1,4 +1,5 @@
 import {html, Element, element, css, signal, onCleanup, For, Motor} from 'lume'
+import type {Texture} from 'three'
 import {store} from './store.js'
 import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -14,13 +15,11 @@ export class DrippyScene extends Element {
 	// Cache for textures per URL so we don't reload repeatedly
 	#textureCache = new Map<string, any>()
 
-	async #getTexture(url: string) {
-		if (this.#textureCache.has(url)) return this.#textureCache.get(url)
-		const {TextureLoader} = await import('three')
-		const loader = new TextureLoader()
-		const texture = await new Promise<any>((resolve, reject) => {
-			loader.load(url, resolve, undefined, reject)
-		})
+	async #getTexture(url: string, repete: [number, number], coef: number, offset: [number, number], rotate: number) {
+		if (this.#textureCache.has(url)) return this.#textureCache.get(url) as Texture
+
+		const texture = await this.#createTexture(url, repete, coef, offset, rotate)
+		if (!texture) return undefined
 		this.#textureCache.set(url, texture)
 		return texture
 	}
@@ -28,18 +27,24 @@ export class DrippyScene extends Element {
 	async #applyFabricToThreeObject(root: any, fabric: Fabric | null) {
 		if (!fabric || !root) return
 		const [{SRGBColorSpace, RepeatWrapping}] = await Promise.all([import('three')])
+		const repete: [number, number] = [60 / 19, 60 / 19]
+		const offset: [number, number] = [0, 0]
+		const rotate = 0
+		const coef = 1000
+
 		const [baseColorTex, normalTex, displacementTex, roughnessTex] = await Promise.all([
-			this.#getTexture(fabric.baseColor),
-			this.#getTexture(fabric.normal),
-			this.#getTexture(fabric.displacement),
-			this.#getTexture(fabric.roughness),
+			this.#getTexture(fabric.baseColor, repete, coef, offset, rotate),
+			this.#getTexture(fabric.normal, repete, coef, offset, rotate),
+			this.#getTexture(fabric.displacement, repete, coef, offset, rotate),
+			this.#getTexture(fabric.roughness, repete, coef, offset, rotate),
 		])
 
 		// Configure textures
-		baseColorTex.colorSpace = SRGBColorSpace as any
+		if (baseColorTex) baseColorTex.colorSpace = SRGBColorSpace as any
 		for (const tex of [baseColorTex, normalTex, displacementTex, roughnessTex]) {
-			tex.wrapS = RepeatWrapping as any
-			tex.wrapT = RepeatWrapping as any
+			if (!tex) continue
+			tex.wrapS = RepeatWrapping
+			tex.wrapT = RepeatWrapping
 		}
 
 		const group = root.children?.[0] ?? root
@@ -66,6 +71,82 @@ export class DrippyScene extends Element {
 		for (const el of models) {
 			el.needsUpdate?.()
 			el.scene?.needsRender?.()
+		}
+	}
+
+	async #createTexture(
+		image: string | undefined,
+		repeat: [number, number],
+		coef?: number,
+		offset?: [number, number],
+		rotate?: number,
+	): Promise<Texture | null> {
+		const {TextureLoader, RepeatWrapping} = await import('three')
+		const {LinearMipmapLinearFilter, LinearFilter, RGBAFormat} = await import('three')
+		return new Promise<Texture | null>((resolve, reject) => {
+			if (!image) {
+				resolve(null)
+			} else {
+				const loader = new TextureLoader()
+
+				loader.load(
+					this.#uncacheImage(image),
+					(texture: any) => {
+						texture.needsUpdate = true
+						texture.wrapS = RepeatWrapping
+						texture.wrapT = RepeatWrapping
+						texture.flipY = false
+						if (offset) {
+							texture.offset.set(offset[0], offset[1])
+						}
+						if (rotate) {
+							texture.rotation = rotate
+						}
+
+						// Calculate repeat based on the texture's aspect ratio
+						const aspectRatio = texture.image.width / texture.image.height
+						let repeatX = repeat[0]
+						let repeatY = repeat[1]
+
+						if (coef) {
+							repeatX /= coef
+							repeatY /= coef
+						}
+
+						// Adjust for aspect ratio
+						if (aspectRatio > 1) {
+							repeatY /= aspectRatio
+						} else {
+							repeatX *= aspectRatio
+						}
+
+						// Update texture repeat
+						texture.repeat.set(repeatX, repeatY)
+
+						// Optional: mipmapping for better performance and quality
+						texture.generateMipmaps = true
+						texture.minFilter = LinearMipmapLinearFilter
+						texture.magFilter = LinearFilter
+						texture.format = RGBAFormat
+						resolve(texture)
+					},
+					undefined,
+					err => {
+						console.error('An error happened while loading the texture:', err)
+						reject(null)
+					},
+				)
+			}
+		})
+	}
+
+	#uncacheImage(img: string) {
+		try {
+			const url = new URL(img)
+			url.searchParams.set('v', new Date().getTime().toString())
+			return url.toString()
+		} catch (e) {
+			return img
 		}
 	}
 
