@@ -7,8 +7,8 @@ import {
 	booleanAttribute,
 } from '@lume/element'
 import html from 'solid-js/html'
-// @ts-expect-error - Show is used in template literals but TypeScript doesn't recognize it
-import {createSignal, Show} from 'solid-js'
+import {createSignal} from 'solid-js'
+import '../elements/show-when.js'
 type OnboardingFlowAttributes = 'step' | 'disabled'
 
 @element('onboarding-flow')
@@ -132,16 +132,20 @@ export class OnboardingFlow extends LumeElement {
 		return html`
 			<div class="onboarding-step">
 				<header>
-					<Show when=${config.showBackButton}>
-						<div class="back-btn-container">
-							<button class="back-btn" onclick=${this.#goBack}>←</button>
-						</div>
-					</Show>
+					<show-when
+						condition=${config.showBackButton}
+						content=${() => html`
+							<div class="back-btn-container">
+								<button class="back-btn" onclick=${this.#goBack}>←</button>
+							</div>
+						`}
+					></show-when>
 
 					<h1 class="title">${config.title}</h1>
-					<Show when=${config.subtitle}>
-						<p class="sub-title">${config.subtitle}</p>
-					</Show>
+					<show-when
+						condition=${config.subtitle}
+						content=${() => html`<p class="sub-title">${config.subtitle}</p>`}
+					></show-when>
 				</header>
 
 				${() => this.#renderStepContent(config)}
@@ -152,7 +156,13 @@ export class OnboardingFlow extends LumeElement {
 	#renderStepContent = (config: any) => {
 		const stepContent = this.#getStepContent(config)
 
-		return html` <Show when=${stepContent} fallback=${html`<div>Invalid step</div>`}> ${() => stepContent} </Show> `
+		return html`
+			<show-when
+				condition=${stepContent}
+				content=${() => stepContent}
+				fallback=${() => html`<div>Invalid step</div>`}
+			></show-when>
+		`
 	}
 
 	#getStepContent = (config: any) => {
