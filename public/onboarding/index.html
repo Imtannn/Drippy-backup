@@ -62,6 +62,20 @@
 			}
 		</style>
 
-		<script type="module" src="./onboarding.js"></script>
+		<script type="module" src="../routes.js"></script>
+		<script type="module" src="../elements/theme-switch.js"></script>
+		<script type="module" src="../elements/login-ui.js"></script>
+		<script type="module" src="./OnboardingFlow.js"></script>
+
+		<script>
+			// Hide the loading cover
+			const loadingCover = document.getElementById('loadingCover')
+			if (loadingCover) {
+				loadingCover.classList.add('invisible')
+				loadingCover.addEventListener('transitionend', () => loadingCover.remove())
+			}
+		</script>
+
+		<onboarding-flow step="1"></onboarding-flow>
 	</body>
 </html>
