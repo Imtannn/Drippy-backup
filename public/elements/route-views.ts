@@ -1,4 +1,4 @@
-import {css, element, Element, html, signal} from 'lume'
+import {attribute, css, element, Element, html, signal} from 'lume'
 
 export interface RouteViews {
 	nextStep(): void
@@ -20,7 +20,7 @@ export class RouteViews extends Element {
 	static readonly elementName = 'route-views'
 
 	@signal config: RouteViewsConfig = {steps: []}
-	@signal currentStep: string = ''
+	@attribute currentStep: string = ''
 
 	template = () => {
 		return html`<div class="route-content">

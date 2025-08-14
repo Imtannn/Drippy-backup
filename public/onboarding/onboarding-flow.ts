@@ -94,13 +94,6 @@ export class OnboardingFlow extends Element {
 		const currentIndex = steps.indexOf(this.currentStep)
 		if (currentIndex !== -1 && currentIndex < steps.length - 1) {
 			this.currentStep = steps[currentIndex + 1]
-
-			// Force attribute update by directly setting it on the route-views element
-			const routeViews = this.querySelector('route-views')
-			if (routeViews) {
-				console.log('Setting current-step attribute manually to:', this.currentStep)
-				routeViews.setAttribute('current-step', this.currentStep)
-			}
 		}
 	}
 
