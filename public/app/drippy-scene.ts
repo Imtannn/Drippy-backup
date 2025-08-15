@@ -17,12 +17,38 @@ export class DrippyScene extends Element {
 	#textureCache = new Map<string, any>()
 
 	async #getTexture(url: string, repete: [number, number], coef: number, offset: [number, number], rotate: number) {
-		if (this.#textureCache.has(url)) return this.#textureCache.get(url) as THREE.Texture
+		const key = `${url}-${repete[0]}-${repete[1]}-${coef}-${offset[0]}-${offset[1]}-${rotate}`
+		if (this.#textureCache.has(key)) return this.#textureCache.get(key) as THREE.Texture
 
 		const texture = await this.#createTexture(url, repete, coef, offset, rotate)
 		if (!texture) return undefined
-		this.#textureCache.set(url, texture)
+		this.#textureCache.set(key, texture)
 		return texture
+	}
+
+	#extractMeshesFromObj(obj: THREE.Object3D): THREE.Mesh[] {
+		const meshes: THREE.Mesh[] = []
+
+		// Recursive function to traverse the scene graph
+		const traverse = (node: THREE.Object3D) => {
+			if (node instanceof THREE.Mesh) {
+				meshes.push(node)
+			}
+
+			if (node.children?.length > 0) {
+				node.children.forEach(child => traverse(child))
+			}
+		}
+
+		// Start traversal from the root node of the GLTF scene
+		traverse(obj)
+
+		return meshes
+	}
+
+	#getCoef(arr: number[]) {
+		const max = Math.max(...arr)
+		return max > 1 ? 1000 : 1
 	}
 
 	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, cancelApply: () => boolean) {
@@ -30,7 +56,11 @@ export class DrippyScene extends Element {
 		const repete: [number, number] = [60 / 19, 60 / 19]
 		const offset: [number, number] = [0, 0]
 		const rotate = 0
-		const coef = 1000
+		const meshes = this.#extractMeshesFromObj(root)
+		const arr = Array.from(meshes[0]?.geometry?.attributes?.uv?.array)
+			.slice(0, 5)
+			.map((el: any) => Math.abs(el))
+		const coef = arr.length > 0 ? this.#getCoef(arr) : 1
 
 		const [baseColorTex, normalTex, displacementTex, roughnessTex] = await Promise.all([
 			this.#getTexture(fabric.baseColor, repete, coef, offset, rotate),
