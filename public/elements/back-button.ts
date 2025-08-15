@@ -1,4 +1,5 @@
-import {booleanAttribute, css, element, Element, html, type ElementAttributes} from 'lume'
+import {booleanAttribute, element, Element, html, type ElementAttributes} from 'lume'
+import './icon-button.js'
 
 type BackButtonAttributes = 'disabled'
 
@@ -17,31 +18,7 @@ export class BackButton extends Element {
 		</svg>
 	`
 
-	template = () => html`
-		<button class="back-button" disabled=${() => this.disabled}>
-			<div class="back-button-icon">${() => this.arrow()}</div>
-		</button>
-	`
-
-	css = css/*css*/ `
-		.back-button {
-			border-radius: 9999px;
-			background-color: #12131680;
-			backdrop-filter: blur(50px);
-			padding: 0.5rem 0.75rem;
-			width: 2rem;
-			height: 2rem;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-			transition: background-color 0.2s ease-in-out;
-			user-select: none;
-			pointer-events: auto;
-			will-change: background-color;
-			border: none;
-		}
-	`
+	template = () => html`<icon-button disabled=${() => this.disabled}>${() => this.arrow()}</icon-button>`
 }
 
 declare module 'solid-js' {

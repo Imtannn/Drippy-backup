@@ -58,7 +58,8 @@ export class BottomSheet extends Element {
 			this.sheetHeight = snapFraction * viewportHeight
 			this.sheetRef!.style.height = `${this.sheetHeight}px`
 		} else {
-			this.sheetRef!.style.height = '50rem'
+			this.sheetRef!.style.height = '100vh'
+			this.sheetRef!.style.height = '100dvh'
 		}
 	}
 
@@ -266,7 +267,7 @@ export class BottomSheet extends Element {
 				display: flex;
 				align-items: center;
 				justify-content: flex-start;
-				padding-left: 1.5rem;
+				padding-left: 0;
 			}
 
 			.bottom-sheet {
@@ -280,7 +281,8 @@ export class BottomSheet extends Element {
 				width: 24rem;
 				padding-top: var(--bottom-sheet-handle-height);
 				max-width: calc(100vw - 3rem);
-				height: 50rem;
+				height: 100vh;
+				height: 100dvh;
 				max-height: calc(100vh - 3rem);
 				max-height: calc(100dvh - 3rem);
 				opacity: 0;

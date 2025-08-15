@@ -1,10 +1,11 @@
-import {html, Element, element, css, signal, onCleanup, For, Motor} from 'lume'
-import type {Texture} from 'three'
-import {store} from './store.js'
+import {createSignal, css, Element, element, For, html, Motor, onCleanup, signal} from 'lume'
+import * as THREE from 'three'
 import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
+import {store} from './store.js'
 
-const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
+// const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
+const maleAvatar = new URL('../models/ANH-Male.glb', import.meta.url)
 
 @element
 export class DrippyScene extends Element {
@@ -16,7 +17,7 @@ export class DrippyScene extends Element {
 	#textureCache = new Map<string, any>()
 
 	async #getTexture(url: string, repete: [number, number], coef: number, offset: [number, number], rotate: number) {
-		if (this.#textureCache.has(url)) return this.#textureCache.get(url) as Texture
+		if (this.#textureCache.has(url)) return this.#textureCache.get(url) as THREE.Texture
 
 		const texture = await this.#createTexture(url, repete, coef, offset, rotate)
 		if (!texture) return undefined
@@ -24,9 +25,8 @@ export class DrippyScene extends Element {
 		return texture
 	}
 
-	async #applyFabricToThreeObject(root: any, fabric: Fabric | null) {
+	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, cancelApply: () => boolean) {
 		if (!fabric || !root) return
-		const [{SRGBColorSpace, RepeatWrapping}] = await Promise.all([import('three')])
 		const repete: [number, number] = [60 / 19, 60 / 19]
 		const offset: [number, number] = [0, 0]
 		const rotate = 0
@@ -39,12 +39,14 @@ export class DrippyScene extends Element {
 			this.#getTexture(fabric.roughness, repete, coef, offset, rotate),
 		])
 
+		if (cancelApply()) return
+
 		// Configure textures
-		if (baseColorTex) baseColorTex.colorSpace = SRGBColorSpace as any
+		if (baseColorTex) baseColorTex.colorSpace = THREE.SRGBColorSpace as any
 		for (const tex of [baseColorTex, normalTex, displacementTex, roughnessTex]) {
 			if (!tex) continue
-			tex.wrapS = RepeatWrapping
-			tex.wrapT = RepeatWrapping
+			tex.wrapS = THREE.RepeatWrapping
+			tex.wrapT = THREE.RepeatWrapping
 		}
 
 		const group = root.children?.[0] ?? root
@@ -80,21 +82,19 @@ export class DrippyScene extends Element {
 		coef?: number,
 		offset?: [number, number],
 		rotate?: number,
-	): Promise<Texture | null> {
-		const {TextureLoader, RepeatWrapping} = await import('three')
-		const {LinearMipmapLinearFilter, LinearFilter, RGBAFormat} = await import('three')
-		return new Promise<Texture | null>((resolve, reject) => {
+	): Promise<THREE.Texture | null> {
+		return new Promise<THREE.Texture | null>((resolve, reject) => {
 			if (!image) {
 				resolve(null)
 			} else {
-				const loader = new TextureLoader()
+				const loader = new THREE.TextureLoader()
 
 				loader.load(
 					this.#uncacheImage(image),
 					(texture: any) => {
 						texture.needsUpdate = true
-						texture.wrapS = RepeatWrapping
-						texture.wrapT = RepeatWrapping
+						texture.wrapS = THREE.RepeatWrapping
+						texture.wrapT = THREE.RepeatWrapping
 						texture.flipY = false
 						if (offset) {
 							texture.offset.set(offset[0], offset[1])
@@ -125,9 +125,9 @@ export class DrippyScene extends Element {
 
 						// Optional: mipmapping for better performance and quality
 						texture.generateMipmaps = true
-						texture.minFilter = LinearMipmapLinearFilter
-						texture.magFilter = LinearFilter
-						texture.format = RGBAFormat
+						texture.minFilter = THREE.LinearMipmapLinearFilter
+						texture.magFilter = THREE.LinearFilter
+						texture.format = THREE.RGBAFormat
 						resolve(texture)
 					},
 					undefined,
@@ -167,28 +167,37 @@ export class DrippyScene extends Element {
 		this.createEffect(() => {
 			const fabric = store.selectedFabric
 			// Cause reactive re-run when the number of blocks changes
-			if (store.selectedBlocks.size === 0) {
+			const blockCount = store.selectedBlocks.size
+
+			if (blockCount === 0) {
 				// nothing to bind
 				return
 			}
 
+			const [cancelApply, setCancelApply] = createSignal(false)
 			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
 			const handlers: Array<{el: any; fn: () => void}> = []
 
 			for (const el of models) {
 				const apply = () => {
-					this.#applyFabricToThreeObject((el as any).three, fabric)
+					if (!cancelApply()) {
+						this.#applyFabricToThreeObject((el as any).three, fabric, cancelApply)
+					}
 				}
 				const behavior = el.behaviors?.get?.('gltf-model')
-				if (behavior?.model || el.three) apply()
-				else {
+				if (behavior?.model || el.three) {
+					apply()
+				} else {
 					el.on?.('MODEL_LOAD', apply)
 					handlers.push({el, fn: apply})
 				}
 			}
 
 			onCleanup(() => {
-				for (const {el, fn} of handlers) el.off?.('MODEL_LOAD', fn)
+				setCancelApply(true)
+				for (const {el, fn} of handlers) {
+					el.off?.('MODEL_LOAD', fn)
+				}
 			})
 		})
 
@@ -203,10 +212,9 @@ export class DrippyScene extends Element {
 
 	template = () => html`
 		<lume-scene webgl>
-			<lume-point-light position="500 -500 500" intensity="2000"></lume-point-light>
-			<lume-point-light position="-500 500 -500" intensity="2000"></lume-point-light>
-			<lume-point-light position="500 -500 -500" intensity="2000"></lume-point-light>
-			<lume-point-light position="-500 500 500" intensity="2000"></lume-point-light>
+			<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
+			<lume-directional-light position="5 5 5"></lume-directional-light>
+			<lume-directional-light position="-5 -5 -5"></lume-directional-light>
 
 			<lume-camera-rig
 				min-distance="1.5"
@@ -226,7 +234,7 @@ export class DrippyScene extends Element {
 				mount-point="0.5 0.5 0.5"
 			></lume-box>
 
-			<lume-gltf-model src=${femaleAvatar.href}></lume-gltf-model>
+			<lume-gltf-model src=${maleAvatar.href}></lume-gltf-model>
 
 			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
 				${(item: Block) => html`
@@ -245,6 +253,17 @@ export class DrippyScene extends Element {
 			height: 400px;
 
 			touch-action: none;
+		}
+
+		lume-scene {
+			transform: translateX(10rem);
+			transition: transform 0.2s ease-in-out;
+		}
+
+		@media (max-width: 768px) {
+			lume-scene {
+				transform: translateX(0);
+			}
 		}
 	`
 }

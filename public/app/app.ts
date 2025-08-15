@@ -1,24 +1,29 @@
-import {Element, For, css, element, html, signal} from 'lume'
-import {createSignal} from 'solid-js'
+import {css, Element, element, html, signal} from 'lume'
+import {createSignal, Index} from 'solid-js'
+import {blocks} from '../consts/blocks.js'
+import {fabrics} from '../consts/fabrics.js'
 import '../elements/PreviewMeasurementPage.js'
 import '../elements/PreviewPage.js'
 import '../elements/SpacesPage.js'
 import '../elements/SuccessPage.js'
+import '../elements/back-button.js'
 import '../elements/bottom-sheet.js'
+import '../elements/cube-button.js'
 import '../elements/login-ui.js'
+import '../elements/person-button.js'
+import '../elements/redo-button.js'
+import '../elements/refresh-button.js'
 import {sharedUIStyles} from '../elements/shared-ui-styles.js'
 import '../elements/show-when.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch.js'
-import '../elements/back-button.js'
+import '../elements/undo-button.js'
 import '../routes.js' // track page visits
-import {blocks} from '../consts/blocks.js'
-import {fabrics} from '../consts/fabrics.js'
 import './drippy-scene.js'
 import {store} from './store.js'
 
 // Background image for the drippy scene
-const sceneBackground = new URL('../images/background-1.jpeg', import.meta.url)
+const sceneBackground = new URL('../images/background-2.jpeg', import.meta.url)
 const avatarThumb = new URL('../images/avatar-female-tmp.png', import.meta.url)
 
 // Simple signal for view switching
@@ -39,6 +44,16 @@ export class DrippyApp extends Element {
 	@signal selectedTab = 'blocks'
 	@signal selectedBlockCategory = 'Bodice'
 	@signal selectedFabricCategory = 'Cotton'
+
+	private defaultCollection = 'speed'
+
+	@signal blocksCategories: string[] = []
+
+	connectedCallback() {
+		super.connectedCallback()
+		// Parse through blocks and get a set of all categories
+		this.blocksCategories = [...new Set(blocks[this.defaultCollection].map(block => block.category))]
+	}
 
 	template = () => html`
 		<!-- show-when conditionals -->
@@ -76,9 +91,22 @@ export class DrippyApp extends Element {
 		<show-when
 			condition=${() => view() === 'blocks'}
 			content=${() => html`
+				<div id="app-container">
+				<div class="app-buttons">
+					<div class="app-buttons-group">
+						<undo-button disabled></undo-button>
+						<redo-button disabled></redo-button>
+						<refresh-button disabled></refresh-button>
+					</div>
+					<div class="app-buttons-group">
+						<person-button></person-button>
+						<cube-button></cube-button>
+					</div>
+				</div>
+
 				<drippy-scene
 					id="drippy-scene"
-					style=${`background: url(${sceneBackground.href}) center / cover no-repeat`}
+					style=${`background: url(${sceneBackground.href}) center bottom / cover no-repeat`}
 				></drippy-scene>
 				<bottom-sheet>
 				<tabs-provider
@@ -99,24 +127,33 @@ export class DrippyApp extends Element {
 					<div class="tabs-content-container">
 						<tabs-content selected-value="blocks">
 							<div class="category-tabs">
-								<button class="category-tab" classList=${() => ({active: this.selectedBlockCategory === 'Bodice'})} onclick=${() => (this.selectedBlockCategory = 'Bodice')}>Bodice</button>
-								<button class="category-tab" classList=${() => ({active: this.selectedBlockCategory === 'Skirt'})} onclick=${() => (this.selectedBlockCategory = 'Skirt')}>Skirt</button>
-								<button class="category-tab" classList=${() => ({active: this.selectedBlockCategory === 'Sleeves'})} onclick=${() => (this.selectedBlockCategory = 'Sleeves')}>Sleeves</button>
+								<${Index} each=${() => this.blocksCategories}>
+								${(category: () => string) => html`
+									<button
+										class="category-tab"
+										classList=${() => ({active: this.selectedBlockCategory === category()})}
+										onclick=${() => (this.selectedBlockCategory = category())}
+									>
+										${category()}
+									</button>
+								`}
+								</>
 							</div>
 							<div class="items-grid">
-								<${For} each=${() => blocks.filter(block => block.category === this.selectedBlockCategory)}>
-								${(block: (typeof blocks)[number]) => html`
+								<${Index} each=${() => blocks[this.defaultCollection].filter(block => block.category === this.selectedBlockCategory)}>
+								${(block: () => (typeof blocks)[typeof this.defaultCollection][number], index: number) => html`
 									<div
+										data-index=${index}
 										class="item-card"
 										classList=${() => ({
-											active: store.selectedBlocks.get(block.category)?._id === block._id,
+											active: store.selectedBlocks.get(block().category)?._id === block()._id,
 										})}
 										onclick=${() => {
-											store.setSelectedBlocks = block
+											store.setSelectedBlocks = block()
 										}}
 									>
 										<div class="item-preview">
-											<img class="item-thumb" src=${() => block.thumb} alt=${() => block.blockName} />
+											<img class="item-thumb" src=${() => block().thumb} alt=${() => block().blockName} />
 										</div>
 									</div>
 								`}
@@ -131,19 +168,20 @@ export class DrippyApp extends Element {
 					<button class="category-tab" classList=${() => ({active: this.selectedFabricCategory === 'Spantex'})} onclick=${() => (this.selectedFabricCategory = 'Spantex')}>Spantex</button>
 				</div>
 						<div class="items-grid">
-							<${For} each=${() => fabrics.filter(fabric => fabric.category === this.selectedFabricCategory)}>
-							${(fabric: (typeof fabrics)[number]) => html`
+							<${Index} each=${() => fabrics[this.defaultCollection].filter(fabric => fabric.category === this.selectedFabricCategory)}>
+							${(fabric: () => (typeof fabrics)[typeof this.defaultCollection][number], index: number) => html`
 								<div
+									data-index=${index}
 									class="item-card"
 									classList=${() => ({
-										active: store.selectedFabric?._id === fabric._id,
+										active: store.selectedFabric?._id === fabric()._id,
 									})}
 									onclick=${() => {
-										store.setSelectedFabrics = fabric
+										store.setSelectedFabrics = fabric()
 									}}
 								>
 									<div class="item-preview">
-										<img class="item-thumb" src=${() => fabric.thumb} alt=${() => fabric.materialName} />
+										<img class="item-thumb" src=${() => fabric().thumb} alt=${() => fabric().materialName} />
 									</div>
 								</div>
 							`}
@@ -162,6 +200,7 @@ export class DrippyApp extends Element {
 					</tabs-content>
 				</tabs-provider>
 			</bottom-sheet>
+			</div>
 			`}
 		></show-when>
 	`
@@ -186,6 +225,29 @@ export class DrippyApp extends Element {
 			:host-context([data-theme='dark']) & {
 				background: #333;
 			}
+		}
+
+		#app-container {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+
+		.app-buttons {
+			position: absolute;
+			z-index: 1;
+			top: 135px;
+			right: 1.5rem;
+			display: flex;
+			flex-direction: column;
+			gap: 25px;
+		}
+
+		.app-buttons-group {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
 		}
 
 		#panel {
@@ -366,6 +428,12 @@ export class DrippyApp extends Element {
 		.item-card:hover {
 			transform: scale(1.02);
 			--item-card-border: linear-gradient(136.36deg, #e56be8 1.67%, #495cff 100.68%);
+		}
+
+		@media (max-width: 768px) {
+			.item-card:hover {
+				transform: none;
+			}
 		}
 
 		.item-card.active {
