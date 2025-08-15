@@ -1,5 +1,6 @@
-import {attribute, css, element, Element, html, signal} from 'lume'
-
+import {attribute, css, element, Element, html} from 'lume'
+import {appStyles} from './app-styles.js'
+import {onboardingStyles} from './onboarding-styles.js'
 export interface RouteViews {
 	nextStep(): void
 	previousStep(): void
@@ -19,7 +20,7 @@ export interface RouteViewsConfig {
 export class RouteViews extends Element {
 	static readonly elementName = 'route-views'
 
-	@signal config: RouteViewsConfig = {steps: []}
+	config: RouteViewsConfig = {steps: []}
 	@attribute currentStep: string = ''
 
 	template = () => {
@@ -38,10 +39,6 @@ export class RouteViews extends Element {
 
 				if (!currentStepConfig) {
 					return html`<div>Step "${currentStep}" not found. Available: ${config.steps.map(s => s.id).join(', ')}</div>`
-				}
-
-				if (config.css) {
-					this.applyCustomCSS(config.css)
 				}
 
 				return currentStepConfig.template(this)
@@ -69,21 +66,10 @@ export class RouteViews extends Element {
 		)
 	}
 
-	private applyCustomCSS(cssString: string) {
-		const existingStyle = this.shadowRoot?.querySelector('style[data-custom-css]')
-		if (existingStyle) {
-			existingStyle.remove()
-		}
-
-		if (this.shadowRoot) {
-			const style = document.createElement('style')
-			style.setAttribute('data-custom-css', 'true')
-			style.textContent = cssString
-			this.shadowRoot.appendChild(style)
-		}
-	}
-
 	css = css`
+		${onboardingStyles}
+		${appStyles}
+
 		:host {
 			display: block;
 			width: 100%;
