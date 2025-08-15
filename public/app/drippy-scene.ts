@@ -51,6 +51,7 @@ export class DrippyScene extends Element {
 		return max > 1 ? 1000 : 1
 	}
 
+	// TODO: If the same fabric with same key is already fetching, wait for it to finish and use the same texture
 	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, cancelApply: () => boolean) {
 		if (!fabric || !root) return
 		const repete: [number, number] = [60 / 19, 60 / 19]
@@ -233,6 +234,13 @@ export class DrippyScene extends Element {
 
 		// Force update the scene when the fabric changes
 		Motor?.addRenderTask(this.#renderTask)
+
+		/**
+		 * TODO: FIX: This is causing errors, when click on another component (which is unrelated to the scene) onCleanUp is getting called
+		 */
+		// onCleanup(() => {
+		// 	Motor?.removeRenderTask(this.#renderTask)
+		// })
 	}
 
 	disconnectedCallback() {
