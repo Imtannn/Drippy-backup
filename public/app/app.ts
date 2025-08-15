@@ -433,6 +433,7 @@ export class DrippyApp extends Element {
 		@media (max-width: 768px) {
 			.item-card:hover {
 				transform: none;
+				--item-card-border: none;
 			}
 		}
 
