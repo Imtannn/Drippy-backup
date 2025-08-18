@@ -12,6 +12,12 @@ A template for making Meteor apps with Lume
   - with Solid signals for performance and clean code organization
   - with Solid templating
 
+## After forking this
+
+After forking this, ensure that `server/entry.ts` contains proper values for
+`primaryTLD`, `remoteOrigins`, and `localhostOrigins` based on your app domain
+name(s) and local dev ports.
+
 # drippy-app
 
 This repository is dedicated to managing all tasks for all repos, as well as

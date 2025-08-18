@@ -10,10 +10,11 @@ import type {ServerResponse} from 'http'
 // Meteor's AI "How to set up TypeScript", there's some good docs.)
 WebApp.addHtmlAttributeHook(() => ({lang: 'en', prefix: 'og: http://ogp.me/ns#'}))
 
-// TODO update this with the app domain.
-const TLD = 'example.com'
+// TODO update this with the primary app domain name. This should be the domain
+// under which the Meteor app is served.
+const primaryTLD = 'example.com'
 
-const appOrigin = (sub?: string) => `https://${sub ? sub + '.' : ''}${TLD}`
+const appOrigin = (sub?: string, TLD = primaryTLD) => `https://${sub ? sub + '.' : ''}${TLD}`
 
 const localhost = (port: string | number) => [
 	`http://localhost:${port}`,
@@ -21,13 +22,12 @@ const localhost = (port: string | number) => [
 	`http://0.0.0.0:${port}`,
 ]
 
-const allowedOrigins = [
-	appOrigin(),
-	appOrigin('docs'),
-
-	// the app on localhost
-	...localhost(3000),
-]
+// Origins that are allowed to access the app domain (CORS). Only authorized
+// domains will be able to fetch certain assets or authenticate using the app
+// domain via iframe.
+const remoteOrigins = [appOrigin(), appOrigin('example-sub-domain'), appOrigin('sub-domain', 'some-other-domain.com')]
+const localhostOrigins = [...localhost(3000), ...localhost(4000)]
+const allowedOrigins = [...remoteOrigins, ...localhostOrigins]
 
 // Allow only certain domains to access content from the server (for example
 // domains that we have not authorized will not be able to authenticate using
@@ -77,12 +77,14 @@ WebApp.rawHandlers.use(
 			// images, etc).
 			res.setHeader(
 				'Content-Security-Policy',
-				`frame-ancestors 'self' ${Meteor.isDevelopment ? localhost('*').join(' ') : appOrigin('*')}`,
+				`frame-ancestors 'self' ${Meteor.isDevelopment ? localhostOrigins.join(' ') : remoteOrigins.join(' ')}`,
 			)
 		} else return getCoffee(res)
 
-		if (req.url !== req.originalUrl)
+		if (req.url !== req.originalUrl) {
 			console.error('url and originalUrl do not match, needs handling:', req.url, req.originalUrl)
+			process.exit(1)
+		}
 
 		///////////////////////////////////////////////////////////////////////////
 		// Implement custom request path handling such that a path like `/foo`
@@ -91,7 +93,9 @@ WebApp.rawHandlers.use(
 		// without using a special backend router, only the existence of HTML
 		// files.
 
-		const url = new URL(appOrigin() + req.url)
+		// We use "https://dummy" as the base URL because we only need the URL
+		// pathname or anything after the pathname.
+		const url = new URL(req.url ?? '', 'https://dummy')
 
 		// Continue as usual for / (Meteor serves that after building client/entry.html).
 		if (url.pathname === '/') return next()
@@ -105,62 +109,51 @@ WebApp.rawHandlers.use(
 		pathname = pathname.replace(/\/$/g, '')
 		const pathParts = pathname.split('/')
 
-		// Continue as usual for files with extensions (Meteor serves those). We're only checking
-		// extensionless extensionless paths like /foo
-		if (pathParts[pathParts.length - 1].includes('.')) {
-			// Set correct MIME type for .js files
-			if (req.url?.endsWith('.js')) {
-				res.setHeader('Content-Type', 'application/javascript')
-			}
-			return next()
-		}
+		// Continue as usual for files with extensions (Meteor serves those).
+		// We're only checking extensionless paths like /foo to serve /foo.html
+		// or /foo/index.html.
+		if (pathParts[pathParts.length - 1].includes('.')) return next()
 
 		// Location in the Meteor-specific build output (not relative to the
 		// entry file's location in source code, but relative to
 		// ./.meteor/local/build/programs/server/ from the project root.).
 		const publicDir = path.resolve('..', 'web.browser', 'app')
 
-		// First, try to find the exact path with index.html (for subfolders)
-		const exactPath = path.resolve(publicDir, ...pathParts)
-		const exactIndexPath = exactPath + '/index.html'
+		// Search upward for .html files. For example, if the path is
+		// /foo/bar/baz, we will try /foo/bar/baz.html, /foo/bar/baz/index.html,
+		// /foo/bar.html, /foo/bar/index.html, /foo.html, and /foo/index.html.
+		while (pathParts.length) {
+			const givenPath = path.resolve(publicDir, ...pathParts)
+			const pathsToTry = [givenPath + '.html', givenPath + '/index.html']
 
-		try {
-			const exists = (await fs.promises.stat(exactIndexPath)).isFile()
-			if (exists) {
-				console.log('Serving exact path:', exactIndexPath)
-				return sendOk(res, await fs.promises.readFile(exactIndexPath))
-			}
-		} catch (e) {}
+			for (const filePath of pathsToTry) if (await sendFile(res, filePath)) return
 
-		// Then try the original logic for partial paths
-		let searchPath = []
-		for (const part of pathParts) {
-			searchPath.push(part)
-
-			const fullPath = path.resolve(publicDir, ...searchPath)
-			const filePaths = [fullPath + '.html', fullPath + '/index.html']
-
-			for (const filePath of filePaths) {
-				let exists = false
-
-				try {
-					exists = (await fs.promises.stat(filePath)).isFile()
-				} catch (e) {}
-
-				if (exists) {
-					try {
-						return sendOk(res, await fs.promises.readFile(filePath))
-					} catch (e) {
-						return failure(res, 'Failed to read and serve file: ', filePath)
-					}
-				}
-			}
+			pathParts.pop()
 		}
 
-		// Continue as usual if for /foo we didn't find /foo.html or /foo/index.html
+		// Continue as usual (serve entry.html) if for /foo we didn't find /foo.html or /foo/index.html
 		return next()
 	},
 )
+
+/** Returns true if the file was found and sent, false otherwise. */
+async function sendFile(res: ServerResponse, filePath: string) {
+	let exists = false
+
+	try {
+		exists = (await fs.promises.stat(filePath)).isFile()
+	} catch (e) {}
+
+	if (!exists) return
+
+	try {
+		sendOk(res, await fs.promises.readFile(filePath))
+		return true
+	} catch (e) {
+		failure(res, 'Failed to read and serve file: ', filePath)
+		return true
+	}
+}
 
 function getCoffee(res: ServerResponse) {
 	res.statusCode = 418 // see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/418
