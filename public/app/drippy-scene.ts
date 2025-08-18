@@ -1,4 +1,4 @@
-import {createSignal, css, Element, element, For, html, Motor, onCleanup, signal} from 'lume'
+import {createSignal, css, Element, element, For, html, Motor, onCleanup, signal, untrack} from 'lume'
 import * as THREE from 'three'
 import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -70,7 +70,7 @@ export class DrippyScene extends Element {
 			this.#getTexture(fabric.roughness, repete, coef, offset, rotate),
 		])
 
-		if (cancelApply()) return
+		if (untrack(cancelApply)) return
 
 		// Configure textures
 		if (baseColorTex) baseColorTex.colorSpace = THREE.SRGBColorSpace as any
@@ -205,22 +205,28 @@ export class DrippyScene extends Element {
 				return
 			}
 
+			if (!fabric) {
+				// nothing to bind
+				return
+			}
+
 			const [cancelApply, setCancelApply] = createSignal(false)
 			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
 			const handlers: Array<{el: any; fn: () => void}> = []
 
 			for (const el of models) {
 				const apply = () => {
-					if (!cancelApply()) {
+					const isCanceled = untrack(cancelApply)
+					if (!isCanceled) {
 						this.#applyFabricToThreeObject((el as any).three, fabric, cancelApply)
 					}
 				}
 				const behavior = el.behaviors?.get?.('gltf-model')
-				if (behavior?.model || el.three) {
-					apply()
-				} else {
+				if (!behavior?.model || !el.three) {
 					el.on?.('MODEL_LOAD', apply)
 					handlers.push({el, fn: apply})
+				} else {
+					apply()
 				}
 			}
 
@@ -275,12 +281,11 @@ export class DrippyScene extends Element {
 			<lume-gltf-model src=${maleAvatar.href}></lume-gltf-model>
 
 			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
-				${(item: Block) => html`
-					<lume-gltf-model data-cloth src=${() => item.modelFile.href}></lume-gltf-model>
-					${item.category === 'Sleeves'
-						? html`<lume-gltf-model data-cloth src=${() => item.modelFile.href} scale="-1 1 1"></lume-gltf-model>`
-						: ''}
-				`}
+				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile}></lume-gltf-model> `}
+			</>
+
+			<${For} each=${() => Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Sleeves')}>
+				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile} scale="-1 1 1"></lume-gltf-model> `}
 			</>
 		</lume-scene>
 	`
@@ -298,7 +303,7 @@ export class DrippyScene extends Element {
 			transition: transform 0.2s ease-in-out;
 		}
 
-		@media (max-width: 768px) {
+		@media (max-width: 767px) {
 			lume-scene {
 				transform: translateX(0);
 			}

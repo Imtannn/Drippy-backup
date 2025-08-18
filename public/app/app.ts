@@ -112,10 +112,10 @@ export class DrippyApp extends Element {
 				<tabs-provider
 					default-value=${() => this.selectedTab}
 					ontabchange=${(e: CustomEvent) => {
-						console.log('onchange', e)
 						this.selectedTab = e.detail.value
 					}}
 				>
+				<div class="bottom-sheet-header">
 					<div class="tabs-container">
 						<tabs-list>
 							<tabs-trigger selected-value="blocks">Blocks</tabs-trigger>
@@ -123,7 +123,7 @@ export class DrippyApp extends Element {
 							<tabs-trigger selected-value="accessories">Accessories</tabs-trigger>
 						</tabs-list>
 					</div>
-					<div class="divider"></div>
+					</div>
 					<div class="tabs-content-container">
 						<tabs-content selected-value="blocks">
 							<div class="category-tabs">
@@ -158,8 +158,9 @@ export class DrippyApp extends Element {
 									</div>
 								`}
 								</>
-						</tabs-content>
 					</div>
+
+						</tabs-content>
 					<tabs-content selected-value="fabrics">
 					<div class="category-tabs">
 					<button class="category-tab" classList=${() => ({active: this.selectedFabricCategory === 'Cotton'})} onclick=${() => (this.selectedFabricCategory = 'Cotton')}>Cotton</button>
@@ -286,13 +287,17 @@ export class DrippyApp extends Element {
 			}
 		}
 
-		.divider {
-			border-top: 1px solid #e0e1e4;
-		}
-
 		.tabs-container {
 			padding: 20px;
 			padding-top: 0;
+		}
+
+		.bottom-sheet-header {
+			position: sticky;
+			top: 0;
+			background: var(--appBackground);
+			z-index: 10;
+			border-bottom: 1px solid #e0e1e4;
 		}
 
 		.tabs-content-container {
@@ -479,7 +484,7 @@ export class DrippyApp extends Element {
 			transition: transform 0.2s ease-in-out;
 		}
 
-		@media (max-width: 768px) {
+		@media (max-width: 767px) {
 			#drippy-scene {
 				transform: translateY(-120px);
 			}

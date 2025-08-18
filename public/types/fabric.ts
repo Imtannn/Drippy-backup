@@ -1,6 +1,6 @@
 export type Fabric = {
 	_id: string
-	thumb: URL
+	thumb: string
 	normal: string
 	baseColor: string
 	displacement: string
