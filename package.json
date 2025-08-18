@@ -15,7 +15,8 @@
 		"_clean:windows": "Get-ChildItem -r -i client | Where{$_.Name -Match '*.\\.js*.'} | rm -r -fo && Get-ChildItem -r -i public | Where{$_.Name -Match '*.\\.js*.'} | rm -r -fo && Get-ChildItem -r -i server | Where{$_.Name -Match '*.\\.js*.'} | rm -r -fo",
 		"publish": "...TODO...",
 		"typecheck": "lume typecheck",
-		"typecheck:watch": "lume typecheckWatch"
+		"typecheck:watch": "lume typecheckWatch",
+		"fetch-blocks": "node scripts/fetch-drive-blocks.js"
 	},
 	"overrides": {
 		"@lume/element": "$@lume/element"
