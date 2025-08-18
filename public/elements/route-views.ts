@@ -1,20 +1,18 @@
-import {attribute, css, element, Element, html} from 'lume'
+import {attribute, css, element, Element, html, type ElementAttributes} from 'lume'
 import {appStyles} from './app-styles.js'
 import {onboardingStyles} from './onboarding-styles.js'
-export interface RouteViews {
-	nextStep(): void
-	previousStep(): void
-}
 
-export interface StepConfig {
+export type StepConfig = {
 	id: string
 	template: (routeViews: RouteViews) => Node | Node[]
 }
 
-export interface RouteViewsConfig {
+export type RouteViewsConfig = {
 	steps: StepConfig[]
 	css?: string
 }
+
+type RouteViewsAttributes = 'currentStep'
 
 @element
 export class RouteViews extends Element {
@@ -26,28 +24,29 @@ export class RouteViews extends Element {
 	template = () => {
 		return html`<div class="route-content">
 			${() => {
-				const config = this.config
+				const configData = this.config
 				const currentStep = this.currentStep
 
-				console.log('RouteViews reactive template - config:', config, 'currentStep:', currentStep)
+				console.log('RouteViews reactive template - config:', configData, 'currentStep:', currentStep)
 
-				if (!config || !config.steps.length) {
+				if (!configData || !configData.steps.length) {
 					return html`<div>Loading...</div>`
 				}
 
-				const currentStepConfig = config.steps.find(s => s.id === currentStep)
+				const currentStepConfig = configData.steps.find(s => s.id === currentStep)
 
 				if (!currentStepConfig) {
-					return html`<div>Step "${currentStep}" not found. Available: ${config.steps.map(s => s.id).join(', ')}</div>`
+					return html`<div>
+						Step "${currentStep}" not found. Available: ${configData.steps.map(s => s.id).join(', ')}
+					</div>`
 				}
 
 				return currentStepConfig.template(this)
 			}}
-		</div>`
+		</div> `
 	}
 
 	nextStep() {
-		console.log('RouteViews nextStep() called - dispatching next-step event')
 		this.dispatchEvent(
 			new CustomEvent('next-step', {
 				bubbles: true,
@@ -57,7 +56,6 @@ export class RouteViews extends Element {
 	}
 
 	previousStep() {
-		console.log('RouteViews previousStep() called - dispatching back-step event')
 		this.dispatchEvent(
 			new CustomEvent('back-step', {
 				bubbles: true,
@@ -70,7 +68,7 @@ export class RouteViews extends Element {
 		${onboardingStyles}
 		${appStyles}
 
-		:host {
+	:host {
 			display: block;
 			width: 100%;
 			height: 100vh;
@@ -82,6 +80,15 @@ export class RouteViews extends Element {
 		}
 	`
 }
+
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'route-views': ElementAttributes<RouteViews, RouteViewsAttributes>
+		}
+	}
+}
+
 declare global {
 	interface HTMLElementTagNameMap {
 		'route-views': RouteViews
