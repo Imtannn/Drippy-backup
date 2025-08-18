@@ -25,7 +25,8 @@ const localhost = (port: string | number) => [
 // Origins that are allowed to access the app domain (CORS). Only authorized
 // domains will be able to fetch certain assets or authenticate using the app
 // domain via iframe.
-const remoteOrigins = [appOrigin(), appOrigin('example-sub-domain'), appOrigin('sub-domain', 'some-other-domain.com')]
+const remoteOrigins = [appOrigin('drippy', 'meteorapp.com'), appOrigin('drippy-test', 'meteorapp.com')]
+// List multiple localhost origins to test multiple apps authenticating with the main app locally.
 const localhostOrigins = [...localhost(3000), ...localhost(4000)]
 const allowedOrigins = [...remoteOrigins, ...localhostOrigins]
 
