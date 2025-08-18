@@ -5,14 +5,14 @@
 // domains and the primary domain's UI is not needed in that case).
 const renderHomePage = location.pathname === '/'
 
-import type {HomePage} from './elements/HomePage.js'
+import type {HomePage} from './elements/home-page.js'
 
 if (renderHomePage) {
 	// import './await-startup.js'
 	await import('./imports/collections/Visits.js')
 	const {appTitle} = await import('./routes.js')
 	const {effect} = await import('./meteor-signals.js')
-	await import('./elements/HomePage.js')
+	await import('./elements/home-page.js')
 
 	effect(() => (document.title = appTitle()))
 
