@@ -75,6 +75,7 @@
 				top: 30px;
 				left: 1.5rem;
 				z-index: 1;
+				transform: translateX(0);
 			}
 
 			.logo-button {
@@ -96,6 +97,12 @@
 				user-select: none;
 				pointer-events: auto;
 				will-change: background-color;
+			}
+
+			@media (min-width: 768px) {
+				back-button {
+					transform: translateX(24rem);
+				}
 			}
 		</style>
 

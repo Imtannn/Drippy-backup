@@ -1,9 +1,11 @@
 import {createMutable} from 'solid-js/store'
 import type {Block} from '../types/block.js'
+import type {Fabric} from '../types/fabric.js'
 
 export const store = createMutable({
 	// key is the block category, value is the block
 	selectedBlocks: new Map<string, Block>(),
+	selectedFabric: null as Fabric | null,
 	set setSelectedBlocks(blocks: Block[] | Block) {
 		if (!Array.isArray(blocks)) {
 			blocks = [blocks]
@@ -24,5 +26,8 @@ export const store = createMutable({
 			}
 		}
 		this.selectedBlocks = newBlocks
+	},
+	set setSelectedFabrics(fabric: Fabric) {
+		this.selectedFabric = fabric
 	},
 })
