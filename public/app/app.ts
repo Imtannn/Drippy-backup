@@ -1,17 +1,31 @@
 import {css, Element, element, html, signal} from 'lume'
+
 import '../elements/avatar-page.js'
 import '../elements/back-button.js'
 import '../elements/blocks-page.js'
+
+import '../elements/back-button.js'
+import '../elements/preview-measurement-page.js'
+import '../elements/preview-page.js'
+import '../elements/spaces-page.js'
+import '../elements/success-page.js'
+
 import '../elements/bottom-sheet.js'
+import '../elements/cube-button.js'
 import '../elements/login-ui.js'
-import '../elements/PreviewMeasurementPage.js'
-import '../elements/PreviewPage.js'
+
 import {RouteViews, type RouteViewsConfig} from '../elements/route-views.js'
+
+import '../elements/person-button.js'
+import '../elements/redo-button.js'
+import '../elements/refresh-button.js'
+
 import '../elements/show-when.js'
-import '../elements/SpacesPage.js'
-import '../elements/SuccessPage.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch.js'
+
+import '../elements/undo-button.js'
+
 import '../routes.js' // track page visits
 import './drippy-scene.js'
 
@@ -29,7 +43,7 @@ const appStepFlow = (
 	},
 	content: any,
 	_onBack: () => void,
-) => html` <div class="app-step">${content}</div> `
+) => html` <div class="app-step">${content}</div>`
 
 @element
 export class DrippyApp extends Element {
