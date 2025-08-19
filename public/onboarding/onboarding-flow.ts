@@ -1,5 +1,4 @@
-import {element, Element, html, signal} from 'lume'
-import {createSignal} from 'solid-js'
+import {element, Element, html, signal, type ElementAttributes} from 'lume'
 import {onboardingStyles} from '../elements/onboarding-styles.js'
 import {RouteViews, type RouteViewsConfig} from '../elements/route-views.js'
 
@@ -33,6 +32,8 @@ const stepConfigs = {
 		image: step4Img,
 	},
 }
+
+type OnboardingFlowAttributes = keyof {}
 
 const onboardingHeader = (
 	config: {
@@ -71,9 +72,9 @@ const onboardingStepFlow = (
 export class OnboardingFlow extends Element {
 	static readonly elementName = 'onboarding-flow'
 
-	#email = createSignal('')
-	#username = createSignal('')
-	#dateOfBirth = createSignal('')
+	@signal email = ''
+	@signal username = ''
+	@signal dateOfBirth = ''
 
 	@signal currentStep = 'step1'
 
@@ -91,7 +92,7 @@ export class OnboardingFlow extends Element {
 	}
 
 	#handleNextStep = () => {
-		const steps = this.onboardingConfig.steps.map(s => s.id)
+		const steps = this.#onboardingConfig.steps.map(s => s.id)
 		const currentIndex = steps.indexOf(this.currentStep)
 		if (currentIndex !== -1 && currentIndex < steps.length - 1) {
 			this.currentStep = steps[currentIndex + 1]
@@ -99,123 +100,128 @@ export class OnboardingFlow extends Element {
 	}
 
 	#handleBackStep = () => {
-		const steps = this.onboardingConfig.steps.map(s => s.id)
+		const steps = this.#onboardingConfig.steps.map(s => s.id)
 		const currentIndex = steps.indexOf(this.currentStep)
 		if (currentIndex !== -1 && currentIndex > 0) {
 			this.currentStep = steps[currentIndex - 1]
 		}
 	}
 
-	get onboardingConfig(): RouteViewsConfig {
-		const [email, setEmail] = this.#email
-		const [username, setUsername] = this.#username
-		const [dateOfBirth, setDateOfBirth] = this.#dateOfBirth
-		const handleStep1Submit = (routeViews: RouteViews) => {
-			if (email()?.includes('@')) {
-				routeViews.nextStep()
-			} else {
-				alert('Please enter a valid email address')
-			}
+	#handleStep1Submit = (routeViews: RouteViews) => {
+		if (this.email.includes('@')) {
+			routeViews.nextStep()
+		} else {
+			alert('Please enter a valid email address')
 		}
-		const handleStep2Submit = (routeViews: RouteViews) => {
-			if (username() && dateOfBirth()) {
-				routeViews.nextStep()
-			} else {
-				alert('Please enter both username and date of birth')
-			}
-		}
+	}
 
-		return {
-			steps: [
-				{
-					id: 'step1',
-					template: (routeViews: RouteViews) =>
-						onboardingStepFlow(
-							stepConfigs.step1,
-							html`
-								<div class="email-section">
-									<input
-										type="email"
-										placeholder="Enter your email"
-										class="form-input"
-										oninput=${(e: InputEvent) => setEmail((e.target as HTMLInputElement).value)}
-										value=${() => email()}
-									/>
-									<button class="btn btn-primary" onclick=${() => handleStep1Submit(routeViews)}>Count me in 🔥</button>
-								</div>
-								<img src=${stepConfigs.step1.image} alt="Create Account" />
-							`,
-							() => {},
-						),
-				},
-				{
-					id: 'step2',
-					template: (routeViews: RouteViews) =>
-						onboardingStepFlow(
-							stepConfigs.step2,
-							html`
-								<div class="form-section">
-									<input
-										type="text"
-										placeholder="@username"
-										class="form-input"
-										oninput=${(e: InputEvent) => setUsername((e.target as HTMLInputElement).value)}
-										value=${() => username()}
-									/>
-									<input
-										type="date"
-										class="form-input"
-										onchange=${(e: Event) => setDateOfBirth((e.target as HTMLInputElement).value)}
-										value=${() => dateOfBirth()}
-									/>
-									<p class="privacy-note">Don't worry, we won't tell about it. 😉</p>
-								</div>
-								<button class="btn btn-primary" onclick=${() => handleStep2Submit(routeViews)}>OK!</button>
-							`,
-							() => routeViews.previousStep(),
-						),
-				},
-				{
-					id: 'step3',
-					template: (routeViews: RouteViews) =>
-						onboardingStepFlow(
-							stepConfigs.step3,
-							html`
-								<div class="action-section">
-									<button class="btn btn-primary" onclick=${() => routeViews.nextStep()}>Yesss!</button>
-								</div>
-								<img src=${stepConfigs.step3.image} alt="Step 3" />
-							`,
-							() => routeViews.previousStep(),
-						),
-				},
-				{
-					id: 'step4',
-					template: (routeViews: RouteViews) =>
-						onboardingStepFlow(
-							stepConfigs.step4,
-							html`
-								<div class="action-section">
-									<button class="btn btn-primary" onclick=${() => (window.location.href = '/app')}>Let's Go!</button>
-								</div>
-								<img src=${stepConfigs.step4.image} alt="Step 4" />
-							`,
-							() => routeViews.previousStep(),
-						),
-				},
-			],
+	#handleStep2Submit = (routeViews: RouteViews) => {
+		if (this.username && this.dateOfBirth) {
+			routeViews.nextStep()
+		} else {
+			alert('Please enter both username and date of birth')
 		}
+	}
+	#onboardingConfig: RouteViewsConfig = {
+		steps: [
+			{
+				id: 'step1',
+				template: (routeViews: RouteViews) =>
+					onboardingStepFlow(
+						stepConfigs.step1,
+						html`
+							<div class="email-section">
+								<input
+									type="email"
+									placeholder="Enter your email"
+									class="form-input"
+									oninput=${(e: InputEvent) => (this.email = (e.target as HTMLInputElement).value)}
+									value=${() => this.email}
+								/>
+								<button class="btn btn-primary" onclick=${() => this.#handleStep1Submit(routeViews)}>
+									Count me in 🔥
+								</button>
+							</div>
+							<img src=${stepConfigs.step1.image} alt="Create Account" />
+						`,
+						() => {},
+					),
+			},
+			{
+				id: 'step2',
+				template: (routeViews: RouteViews) =>
+					onboardingStepFlow(
+						stepConfigs.step2,
+						html`
+							<div class="form-section">
+								<input
+									type="text"
+									placeholder="@username"
+									class="form-input"
+									oninput=${(e: InputEvent) => (this.username = (e.target as HTMLInputElement).value)}
+									value=${() => this.username}
+								/>
+								<input
+									type="date"
+									class="form-input"
+									onchange=${(e: Event) => (this.dateOfBirth = (e.target as HTMLInputElement).value)}
+									value=${() => this.dateOfBirth}
+								/>
+								<p class="privacy-note">Don't worry, we won't tell about it. 😉</p>
+							</div>
+							<button class="btn btn-primary" onclick=${() => this.#handleStep2Submit(routeViews)}>OK!</button>
+						`,
+						() => routeViews.previousStep(),
+					),
+			},
+			{
+				id: 'step3',
+				template: (routeViews: RouteViews) =>
+					onboardingStepFlow(
+						stepConfigs.step3,
+						html`
+							<div class="action-section">
+								<button class="btn btn-primary" onclick=${() => routeViews.nextStep()}>Yesss!</button>
+							</div>
+							<img src=${stepConfigs.step3.image} alt="Step 3" />
+						`,
+						() => routeViews.previousStep(),
+					),
+			},
+			{
+				id: 'step4',
+				template: (routeViews: RouteViews) =>
+					onboardingStepFlow(
+						stepConfigs.step4,
+						html`
+							<div class="action-section">
+								<button class="btn btn-primary" onclick=${() => (window.location.href = '/app')}>Let's Go!</button>
+							</div>
+							<img src=${stepConfigs.step4.image} alt="Step 4" />
+						`,
+						() => routeViews.previousStep(),
+					),
+			},
+		],
 	}
 
 	template = () => {
 		return html`
 			<div class="onboarding-flow">
-				<route-views config=${() => this.onboardingConfig} current-step=${() => this.currentStep}></route-views>
+				<route-views config=${this.#onboardingConfig} current-step=${() => this.currentStep}></route-views>
 			</div>
 		`
 	}
 
 	css = onboardingStyles
+}
+
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'onboarding-flow': ElementAttributes<OnboardingFlow, OnboardingFlowAttributes>
+		}
+	}
 }
 declare global {
 	interface HTMLElementTagNameMap {
