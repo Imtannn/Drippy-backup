@@ -1,6 +1,5 @@
 import {css, Element, element, html} from 'lume'
-import {sharedUIStyles} from './shared-ui-styles.js'
-
+import {appStyles} from './app-styles.js'
 @element
 export class SuccessPage extends Element {
 	static elementName = 'success-page'
@@ -35,68 +34,43 @@ export class SuccessPage extends Element {
 				</div>
 			</div>
 
-			<!-- Logo positioned separately -->
 			<div class="logo-circle logo-positioned">Logo</div>
 
-			<!-- Main Content Area -->
-			<section class="content-wrapper">
-				<!-- 3D Scene Area -->
-				<div class="scene-area">
-					<!-- This would contain the 3D scene -->
-				</div>
-
-				<!-- Success Panel -->
-				<section id="panel">
-					<div class="panel-content">
-						<!-- Success Header -->
-						<div class="success-header">
-							<h2 class="success-title">Boom — it's in!</h2>
-							<p class="success-message"><strong>LOGO</strong> just got your order. You? Iconic. 😎</p>
-						</div>
-
-						<!-- Action Button -->
-						<button class="success-button">Drip another design</button>
-
-						<!-- Rating Section -->
-						<div class="rating-section">
-							<div class="stars">
-								<input type="radio" name="rating" value="1" id="star1" class="rating-input" />
-								<input type="radio" name="rating" value="2" id="star2" class="rating-input" />
-								<input type="radio" name="rating" value="3" id="star3" class="rating-input" />
-								<input type="radio" name="rating" value="4" id="star4" class="rating-input" />
-								<input type="radio" name="rating" value="5" id="star5" class="rating-input" />
-
-								<label for="star1" class="star-box star1"></label>
-								<label for="star2" class="star-box star2"></label>
-								<label for="star3" class="star-box star3"></label>
-								<label for="star4" class="star-box star4"></label>
-								<label for="star5" class="star-box star5"></label>
-							</div>
-							<p class="rating-text">Rate your experience</p>
-						</div>
+			<section id="panel" class="panel-right">
+				<div class="panel-content">
+					<!-- Success Header -->
+					<div class="success-header">
+						<h2 class="success-title">Boom — it's in!</h2>
+						<p class="success-message"><strong>LOGO</strong> just got your order. You? Iconic. 😎</p>
 					</div>
-				</section>
+
+					<!-- Action Button -->
+					<button class="success-button">Drip another design</button>
+
+					<!-- Rating Section -->
+					<div class="rating-section">
+						<div class="stars">
+							<input type="radio" name="rating" value="1" id="star1" class="rating-input" />
+							<input type="radio" name="rating" value="2" id="star2" class="rating-input" />
+							<input type="radio" name="rating" value="3" id="star3" class="rating-input" />
+							<input type="radio" name="rating" value="4" id="star4" class="rating-input" />
+							<input type="radio" name="rating" value="5" id="star5" class="rating-input" />
+
+							<label for="star1" class="star-box star1"></label>
+							<label for="star2" class="star-box star2"></label>
+							<label for="star3" class="star-box star3"></label>
+							<label for="star4" class="star-box star4"></label>
+							<label for="star5" class="star-box star5"></label>
+						</div>
+						<p class="rating-text">Rate your experience</p>
+					</div>
+				</div>
 			</section>
 		</div>
 	`
 
 	css = css/*css*/ `
-		${sharedUIStyles}
-
-		/* Override panel styles for success layout */
-		#panel {
-			background-color: white;
-			width: 400px;
-			position: static;
-			margin-top: 80px;
-			border-radius: 20px 0 0 0;
-			box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
-
-			:host-context([data-theme='dark']) & {
-				background-color: var(--appBackgroundDark);
-				box-shadow: -10px 0 30px rgba(255, 255, 255, 0.1);
-			}
-		}
+		${appStyles}
 
 		.panel-content {
 			padding: 20px;
@@ -264,25 +238,6 @@ export class SuccessPage extends Element {
 
 			:host-context([data-theme='dark']) & {
 				color: #aaa;
-			}
-		}
-
-		/* Mobile Layout */
-		@media (width < 720px) {
-			#panel {
-				width: 100%;
-				height: 30vh;
-				margin-top: 0;
-				border-radius: 20px 20px 0 0;
-				position: static;
-				padding: 0;
-				left: unset;
-				right: unset;
-			}
-
-			.panel-content {
-				height: calc(30vh - 40px);
-				overflow-y: auto;
 			}
 		}
 	`

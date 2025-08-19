@@ -1,6 +1,6 @@
-import {html, Element, element, css, signal, onCleanup, For} from 'lume'
-import {store} from './store.js'
+import {css, Element, element, For, html, onCleanup, signal} from 'lume'
 import type {Block} from '../types/block.js'
+import {store} from './store.js'
 
 const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
 

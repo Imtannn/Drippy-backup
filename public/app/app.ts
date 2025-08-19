@@ -1,4 +1,4 @@
-import {Element, element, html, signal} from 'lume'
+import {css, Element, element, html, signal} from 'lume'
 import '../elements/avatar-page.js'
 import '../elements/back-button.js'
 import '../elements/blocks-page.js'
@@ -74,9 +74,7 @@ export class DrippyApp extends Element {
 				template: (routeViews: RouteViews) =>
 					appStepFlow(
 						{showBackButton: false},
-						html`<drippy-scene></drippy-scene>
-
-							<avatar-page></avatar-page>
+						html` <avatar-page></avatar-page>
 							<div class="">
 								<button class="save-btn" onClick=${() => routeViews.nextStep()}>Save</button>
 							</div>`,
@@ -102,11 +100,6 @@ export class DrippyApp extends Element {
 					appStepFlow(
 						{showBackButton: true},
 						html`
-							<drippy-scene
-								id="drippy-scene"
-								style=${`background: url(${sceneBackground.href}) center / cover no-repeat`}
-							></drippy-scene>
-
 							<div class="step-header">
 								<back-button onclick=${() => routeViews.previousStep()}></back-button>
 								<button class="preview-btn" onClick=${() => routeViews.nextStep()}>Preview</button>
@@ -158,5 +151,29 @@ export class DrippyApp extends Element {
 		],
 	}
 
-	template = () => html`<route-views config=${this.#appConfig} current-step=${() => this.currentStep}></route-views>`
+	template = () => html`
+		<drippy-scene style=${`background: url(${sceneBackground.href}) center / cover no-repeat`}></drippy-scene>
+		<route-views config=${this.#appConfig} current-step=${() => this.currentStep}></route-views>
+	`
+
+	css = css`
+		:host {
+			display: grid;
+			grid-template-areas: 'stack';
+			width: 100vw;
+			height: 100vh;
+		}
+
+		drippy-scene {
+			grid-area: stack;
+			width: 100%;
+			height: 100%;
+		}
+
+		route-views {
+			grid-area: stack;
+			width: 100%;
+			height: 100%;
+		}
+	`
 }
