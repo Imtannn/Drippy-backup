@@ -3,7 +3,7 @@ import {attribute, booleanAttribute, css, Element, element, type ElementAttribut
 // Define snap points in percentages of viewport height
 const SNAP_POINTS = [0.41, 0.6, 0.9]
 
-type BottomSheetAttributes = 'defaultSnap'
+type BottomSheetAttributes = 'defaultSnap' | 'defaultSheetHeight' | 'animateOnEnter' | 'animateOnExit'
 
 @element
 export class BottomSheet extends Element {
@@ -18,7 +18,11 @@ export class BottomSheet extends Element {
 		startHeight: 0,
 	}
 	@booleanAttribute isDesktop = false
+	@booleanAttribute animateOnEnter = true
+	@booleanAttribute animateOnExit = true
+	@attribute defaultSheetHeight: string = ''
 	private sheetRef: HTMLElement | null = null
+	private isVisible = false
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -28,6 +32,11 @@ export class BottomSheet extends Element {
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => {
 				this.handleResize()
+				if (this.animateOnEnter) {
+					this.animateIn()
+				} else {
+					this.isVisible = true
+				}
 			})
 		})
 	}
@@ -54,8 +63,13 @@ export class BottomSheet extends Element {
 		if (!this.sheetRef) return
 		if (!this.isDesktop) {
 			const viewportHeight = window.innerHeight
-			const snapFraction = this.#resolveDefaultSnapFraction()
-			this.sheetHeight = snapFraction * viewportHeight
+			const defaultHeight = this.#resolveDefaultSheetHeight()
+			if (defaultHeight) {
+				this.sheetHeight = defaultHeight
+			} else {
+				const snapFraction = this.#resolveDefaultSnapFraction()
+				this.sheetHeight = snapFraction * viewportHeight
+			}
 			this.sheetRef!.style.height = `${this.sheetHeight}px`
 		} else {
 			this.sheetRef!.style.height = '100vh'
@@ -84,6 +98,31 @@ export class BottomSheet extends Element {
 			return Math.max(0, Math.min(1, fraction))
 		}
 		return SNAP_POINTS[0]
+	}
+
+	#resolveDefaultSheetHeight(): number | null {
+		const raw = (this.defaultSheetHeight ?? '').toString().trim()
+		if (!raw) return null
+
+		// Support pixel values (e.g., "400px" or "400")
+		const pxMatch = raw.match(/^(\d+)(?:px)?$/)
+		if (pxMatch) {
+			return parseInt(pxMatch[1], 10)
+		}
+
+		// Support viewport height (e.g., "50vh")
+		const vhMatch = raw.match(/^(\d+(?:\.\d+)?)vh$/)
+		if (vhMatch) {
+			return (parseFloat(vhMatch[1]) / 100) * window.innerHeight
+		}
+
+		// Support percent (e.g., "50%")
+		const percentMatch = raw.match(/^(\d+(?:\.\d+)?)%$/)
+		if (percentMatch) {
+			return (parseFloat(percentMatch[1]) / 100) * window.innerHeight
+		}
+
+		return null
 	}
 
 	private getClosestSnapPoint(height: number) {
@@ -157,6 +196,51 @@ export class BottomSheet extends Element {
 		document.body.classList.remove('is-dragging')
 	}
 
+	private animateIn() {
+		if (!this.sheetRef) return
+
+		this.isVisible = false
+		this.sheetRef.classList.remove('is-open')
+
+		// Force a reflow to ensure the transform is applied
+		this.sheetRef.offsetHeight
+
+		requestAnimationFrame(() => {
+			this.isVisible = true
+			this.sheetRef!.classList.add('is-open')
+		})
+	}
+
+	public animateOut(callback?: () => void) {
+		if (!this.sheetRef || !this.animateOnExit) {
+			if (callback) callback()
+			return
+		}
+
+		this.isVisible = false
+		this.sheetRef.classList.remove('is-open')
+
+		// Wait for animation to complete
+		setTimeout(() => {
+			if (callback) callback()
+		}, 300) // Match the CSS transition duration
+	}
+
+	public hide() {
+		this.animateOut()
+	}
+
+	public show() {
+		if (this.animateOnEnter) {
+			this.animateIn()
+		} else {
+			this.isVisible = true
+			if (this.sheetRef) {
+				this.sheetRef.classList.add('is-open')
+			}
+		}
+	}
+
 	private handleDragHandleStart = (e: Event) => {
 		this.handleDragStart(e as MouseEvent | TouchEvent)
 	}
@@ -164,7 +248,10 @@ export class BottomSheet extends Element {
 	template = () => {
 		return html`
 			<div
-				class="bottom-sheet is-open"
+				class="bottom-sheet"
+				classList=${{
+					'is-open': this.isVisible,
+				}}
 				ref="${(el: HTMLElement) => (this.sheetRef = el)}"
 				style="${!this.isDesktop && this.sheetHeight ? `height: ${this.sheetHeight}px` : ''}"
 			>
