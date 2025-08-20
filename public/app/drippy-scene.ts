@@ -4,6 +4,12 @@ import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import {store} from './store.js'
 
+import '../elements/cube-button.js'
+import '../elements/person-button.js'
+import '../elements/redo-button.js'
+import '../elements/refresh-button.js'
+import '../elements/undo-button.js'
+
 // const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Male.glb', import.meta.url)
 
@@ -255,6 +261,17 @@ export class DrippyScene extends Element {
 	}
 
 	template = () => html`
+		<div class="app-buttons">
+			<div class="app-buttons-group">
+				<undo-button disabled></undo-button>
+				<redo-button disabled></redo-button>
+				<refresh-button disabled></refresh-button>
+			</div>
+			<div class="app-buttons-group">
+				<person-button></person-button>
+				<cube-button></cube-button>
+			</div>
+		</div>
 		<lume-scene webgl>
 			<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
 			<lume-directional-light position="5 5 5"></lume-directional-light>
@@ -294,8 +311,24 @@ export class DrippyScene extends Element {
 		:host {
 			width: 600px;
 			height: 400px;
-
 			touch-action: none;
+			position: relative;
+		}
+
+		.app-buttons {
+			position: absolute;
+			z-index: 1;
+			top: 135px;
+			right: 1.5rem;
+			display: flex;
+			flex-direction: column;
+			gap: 25px;
+		}
+
+		.app-buttons-group {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
 		}
 
 		lume-scene {
