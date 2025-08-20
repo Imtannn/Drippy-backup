@@ -168,14 +168,17 @@ export class DrippyApp extends Element {
 		:host {
 			display: block;
 			position: relative;
-			width: 100vw;
-			height: 100vh;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+			box-sizing: border-box;
 		}
 
 		.app-layout {
 			position: relative;
 			width: 100%;
 			height: 100%;
+			overflow: hidden;
 		}
 
 		drippy-scene {
@@ -199,11 +202,15 @@ export class DrippyApp extends Element {
 			height: 100%;
 			z-index: 2;
 			pointer-events: none;
+			overflow: hidden;
 		}
 
 		route-views.full-screen {
-			width: 100%;
-			height: 100%;
+			width: 100vw;
+			height: 100vh;
+			left: 0;
+			top: 0;
+			overflow: hidden;
 		}
 
 		.button-overlay {
