@@ -45,7 +45,7 @@ const appStepFlow = (
 export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
 
-	@signal currentStep = 'avatar'
+	@signal currentStep = 'blocks'
 
 	connectedCallback() {
 		super.connectedCallback()

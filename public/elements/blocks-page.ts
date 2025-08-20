@@ -140,22 +140,6 @@ export class BlocksPage extends Element {
 			overflow: hidden;
 		}
 
-		.app-buttons {
-			position: absolute;
-			z-index: 1;
-			top: 135px;
-			right: 1.5rem;
-			display: flex;
-			flex-direction: column;
-			gap: 25px;
-		}
-
-		.app-buttons-group {
-			display: flex;
-			flex-direction: column;
-			gap: 5px;
-		}
-
 		#panel {
 			overflow: auto;
 
