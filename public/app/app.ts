@@ -16,10 +16,6 @@ import '../elements/login-ui.js'
 
 import {RouteViews, type RouteViewsConfig} from '../elements/route-views.js'
 
-import '../elements/person-button.js'
-import '../elements/redo-button.js'
-import '../elements/refresh-button.js'
-
 import '../elements/show-when.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch.js'
