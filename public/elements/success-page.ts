@@ -5,68 +5,36 @@ export class SuccessPage extends Element {
 	static elementName = 'success-page'
 
 	template = () => html`
-		<div class="preview-container">
-			<!-- Top Navigation -->
-			<div class="top-nav">
-				<div class="nav-left">
-					<button class="nav-button back-button">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-							<path
-								d="M19 12H5M12 19L5 12L12 5"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
-					</button>
-					<button class="nav-button home-button">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-							<path
-								d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
-					</button>
+		<section id="panel" class="panel-right">
+			<div class="panel-content">
+				<!-- Success Header -->
+				<div class="success-header">
+					<h2 class="success-title">Boom — it's in!</h2>
+					<p class="success-message"><strong>LOGO</strong> just got your order. You? Iconic. 😎</p>
+				</div>
+
+				<!-- Action Button -->
+				<button class="success-button">Drip another design</button>
+
+				<!-- Rating Section -->
+				<div class="rating-section">
+					<div class="stars">
+						<input type="radio" name="rating" value="1" id="star1" class="rating-input" />
+						<input type="radio" name="rating" value="2" id="star2" class="rating-input" />
+						<input type="radio" name="rating" value="3" id="star3" class="rating-input" />
+						<input type="radio" name="rating" value="4" id="star4" class="rating-input" />
+						<input type="radio" name="rating" value="5" id="star5" class="rating-input" />
+
+						<label for="star1" class="star-box star1"></label>
+						<label for="star2" class="star-box star2"></label>
+						<label for="star3" class="star-box star3"></label>
+						<label for="star4" class="star-box star4"></label>
+						<label for="star5" class="star-box star5"></label>
+					</div>
+					<p class="rating-text">Rate your experience</p>
 				</div>
 			</div>
-
-			<div class="logo-circle logo-positioned">Logo</div>
-
-			<section id="panel" class="panel-right">
-				<div class="panel-content">
-					<!-- Success Header -->
-					<div class="success-header">
-						<h2 class="success-title">Boom — it's in!</h2>
-						<p class="success-message"><strong>LOGO</strong> just got your order. You? Iconic. 😎</p>
-					</div>
-
-					<!-- Action Button -->
-					<button class="success-button">Drip another design</button>
-
-					<!-- Rating Section -->
-					<div class="rating-section">
-						<div class="stars">
-							<input type="radio" name="rating" value="1" id="star1" class="rating-input" />
-							<input type="radio" name="rating" value="2" id="star2" class="rating-input" />
-							<input type="radio" name="rating" value="3" id="star3" class="rating-input" />
-							<input type="radio" name="rating" value="4" id="star4" class="rating-input" />
-							<input type="radio" name="rating" value="5" id="star5" class="rating-input" />
-
-							<label for="star1" class="star-box star1"></label>
-							<label for="star2" class="star-box star2"></label>
-							<label for="star3" class="star-box star3"></label>
-							<label for="star4" class="star-box star4"></label>
-							<label for="star5" class="star-box star5"></label>
-						</div>
-						<p class="rating-text">Rate your experience</p>
-					</div>
-				</div>
-			</section>
-		</div>
+		</section>
 	`
 
 	css = css/*css*/ `
