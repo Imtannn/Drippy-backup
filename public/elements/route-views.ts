@@ -68,10 +68,8 @@ export class RouteViews extends Element {
 		${onboardingStyles}
 		${appStyles}
 
-	:host {
+		:host {
 			display: block;
-			width: 100%;
-			height: 100vh;
 		}
 
 		.route-content {

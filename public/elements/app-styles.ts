@@ -1,11 +1,6 @@
 import {css} from 'lume'
 
 export const appStyles = css`
-	/* Re-enable pointer events for UI elements */
-	route-views * {
-		pointer-events: auto;
-	}
-
 	/* Navigation */
 	.top-nav {
 		position: absolute;
