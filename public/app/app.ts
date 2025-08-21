@@ -1,4 +1,4 @@
-import {css, Element, element, html, onCleanup, signal} from 'lume'
+import {css, Element, element, html, signal} from 'lume'
 import '../elements/login-ui.js'
 import '../elements/show-when.js'
 import '../routes.js' // track page visits
@@ -13,14 +13,6 @@ import './success-view.js'
 import '../elements/theme-switch.js'
 import {store, type Avatar, type Scene} from './store.js'
 
-const scenes = [
-	{
-		name: 'bloom realms',
-		description: 'One million roses',
-		image: new URL('../images/background-2.jpeg', import.meta.url),
-	},
-]
-
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
 loadingCover?.classList.add('invisible')
@@ -31,48 +23,9 @@ export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
 
 	@signal appLoaded = false
-	@signal sceneUrl = ''
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		this.createEffect(() => {
-			console.log('store.view', store.view)
-			const scene = this.shadowRoot?.getElementById('drippy-scene')
-			if (scene) {
-				if (store.view === 'preview') {
-					scene.style.setProperty('--scene-transform', 'translateY(0)')
-				} else {
-					scene.style.setProperty('--scene-transform', 'translateY(-120px)')
-				}
-			} else {
-				const setProperty = () => {
-					const scene = this.shadowRoot?.getElementById('drippy-scene')
-					if (scene) {
-						if (store.view === 'preview') {
-							scene.style.setProperty('--scene-transform', 'translateY(0)')
-						} else {
-							scene.style.setProperty('--scene-transform', 'translateY(-120px)')
-						}
-					} else {
-						setTimeout(setProperty, 100)
-					}
-				}
-				setProperty()
-				this.shadowRoot?.addEventListener('DOMContentLoaded', setProperty)
-				onCleanup(() => this.shadowRoot?.removeEventListener('DOMContentLoaded', setProperty))
-			}
-		})
-
-		this.createEffect(() => {
-			console.log('store.selectedScene', store.selectedScene)
-			if (store.selectedScene) {
-				const scene = scenes.find(scene => scene.name === store.selectedScene)
-				if (scene) {
-					this.sceneUrl = scene.image.href
-				}
-			}
-		})
 
 		this.createEffect(() => {
 			try {
@@ -122,10 +75,7 @@ export class DrippyApp extends Element {
 			fallback=${() => html`<div class="loading">Loading...</div>`}
 			content=${() => html`
 				<div id="app-container">
-					<drippy-scene
-						id="drippy-scene"
-						style=${() => `background: url(${this.sceneUrl}) center bottom / cover no-repeat`}
-					></drippy-scene>
+					<drippy-scene id="drippy-scene"></drippy-scene>
 
 					<show-when
 						condition=${() => store.view === 'avatar'}
@@ -174,10 +124,6 @@ export class DrippyApp extends Element {
 		}
 
 		:host {
-			--scene-transform: translateY(-120px);
-		}
-
-		:host {
 			width: 600px;
 			height: 400px;
 		}
@@ -194,16 +140,6 @@ export class DrippyApp extends Element {
 			width: 100%;
 			height: 100%;
 			overflow: hidden;
-		}
-
-		#drippy-scene {
-			transition: transform 0.2s ease-in-out;
-		}
-
-		@media (max-width: 767px) {
-			#drippy-scene {
-				transform: var(--scene-transform);
-			}
 		}
 	`
 }

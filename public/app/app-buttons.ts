@@ -4,11 +4,15 @@ import {store} from './store.js'
 // ============================================================================
 // APP BUTTONS LEFT - Left side of the app buttons
 // ============================================================================
-type AppButtonsLeftAttributes = keyof {}
+type AppButtonsLeftAttributes = 'layout'
+
+type AppButtonsLeftLayout = 'top' | 'bottom'
 
 @element
 export class AppButtonsLeft extends Element {
 	static readonly elementName = 'app-buttons-left'
+
+	@attribute layout: AppButtonsLeftLayout = 'top'
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -31,7 +35,14 @@ export class AppButtonsLeft extends Element {
 	}
 
 	template = () => html`
-		<div id="app-buttons-left" class="app-buttons-left">
+		<div
+			id="app-buttons-left"
+			class="app-buttons-left"
+			classList=${() => ({
+				top: this.layout === 'top',
+				bottom: this.layout === 'bottom',
+			})}
+		>
 			<slot></slot>
 		</div>
 	`
@@ -43,13 +54,26 @@ export class AppButtonsLeft extends Element {
 
 		.app-buttons-left {
 			position: absolute;
-			top: 30px;
 			left: 1.5rem;
 			z-index: 1;
 			transform: translateX(0);
 		}
 
-		@media (min-width: 768px) {
+		.top {
+			top: 30px;
+		}
+
+		.bottom {
+			bottom: calc(100dvh * 0.41 + 30px);
+		}
+
+		@media (min-width: 767px) {
+			.bottom {
+				bottom: unset;
+				top: 30px;
+				left: 5rem;
+			}
+
 			.app-buttons-left {
 				transform: var(--app-buttons-left-transform);
 			}
