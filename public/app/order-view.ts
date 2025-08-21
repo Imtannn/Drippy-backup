@@ -4,7 +4,7 @@ import '../elements/back-button.js'
 import '../elements/home-button.js'
 import '../elements/theme-switch-button.js'
 import '../elements/logo-button.js'
-import {sharedUIStyles} from '../elements/shared-ui-styles.js'
+import {appStyles} from '../elements/app-style.js'
 
 type OrderViewAttributes = 'onclick'
 
@@ -153,10 +153,10 @@ export class OrderView extends Element {
 	`
 
 	css = css/*css*/ `
-		${sharedUIStyles}
+		${appStyles}
 
 		.order-container {
-			padding: 10px;
+			padding: 20px;
 			padding-top: 0;
 		}
 

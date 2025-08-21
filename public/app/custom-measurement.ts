@@ -6,7 +6,7 @@ import '../elements/logo-button.js'
 import '../elements/bottom-sheet.js'
 import './app-buttons.js'
 import {store} from './store.js'
-import {sharedUIStyles} from '../elements/shared-ui-styles.js'
+import {appStyles} from '../elements/app-style.js'
 
 @element
 export class CustomMeasurement extends Element {
@@ -140,11 +140,11 @@ export class CustomMeasurement extends Element {
 	`
 
 	css = css/*css*/ `
-		${sharedUIStyles}
+		${appStyles}
 
 		/* Measurement page specific styles */
 		.measurement-container {
-			padding: 10px;
+			padding: 20px;
 			padding-top: 0;
 		}
 

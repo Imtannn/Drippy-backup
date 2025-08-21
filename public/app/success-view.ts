@@ -1,5 +1,5 @@
 import {css, Element, element, html} from 'lume'
-import {sharedUIStyles} from '../elements/shared-ui-styles.js'
+import {appStyles} from '../elements/app-style.js'
 import {store} from './store.js'
 
 @element
@@ -46,10 +46,10 @@ export class SuccessView extends Element {
 	`
 
 	css = css/*css*/ `
-		${sharedUIStyles}
+		${appStyles}
 
 		.success-container {
-			padding: 10px;
+			padding: 20px;
 			padding-top: 0;
 		}
 
