@@ -1,6 +1,6 @@
-import {css, Element, element, For, html, Index, signal} from 'lume'
-import {store} from './store.js'
+import {css, Element, element, html, Index, signal} from 'lume'
 import type {Accessor} from 'solid-js'
+import {store} from './store.js'
 
 const SPACES = [
 	{
