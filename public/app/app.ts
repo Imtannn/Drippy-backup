@@ -1,216 +1,180 @@
-import {css, Element, element, html, signal} from 'lume'
-import {createSignal, Index} from 'solid-js'
-import {blocks} from '../consts/blocks.js'
-import {fabrics} from '../consts/fabrics.js'
-import '../elements/preview-measurement-page.js'
-import '../elements/preview-page.js'
-import '../elements/spaces-page.js'
-import '../elements/success-page.js'
-import '../elements/back-button.js'
-import '../elements/bottom-sheet.js'
-import '../elements/cube-button.js'
+import {css, Element, element, html, onCleanup, signal} from 'lume'
 import '../elements/login-ui.js'
-import '../elements/person-button.js'
-import '../elements/redo-button.js'
-import '../elements/refresh-button.js'
-import {sharedUIStyles} from '../elements/shared-ui-styles.js'
 import '../elements/show-when.js'
-import '../elements/tabs.js'
-import '../elements/theme-switch.js'
-import '../elements/undo-button.js'
 import '../routes.js' // track page visits
+import './avatar-selection.js'
+import './blocks-selection.js'
 import './drippy-scene.js'
-import {store} from './store.js'
+import './spaces-selection.js'
+import './outfit-preview.js'
+import './order-view.js'
+import './custom-measurement.js'
+import './success-view.js'
+import '../elements/theme-switch.js'
+import {store, type Avatar, type Scene} from './store.js'
 
-// Background image for the drippy scene
-const sceneBackground = new URL('../images/background-2.jpeg', import.meta.url)
-const avatarThumb = new URL('../images/avatar-female-tmp.png', import.meta.url)
-
-// Simple signal for view switching
-const [view, setView] = createSignal('blocks')
-
-// Make it global for testing in browser console
-;(window as any).setView = setView
+const scenes = [
+	{
+		name: 'bloom realms',
+		description: 'One million roses',
+		image: new URL('../images/background-2.jpeg', import.meta.url),
+	},
+]
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
 loadingCover?.classList.add('invisible')
 loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
-
 @element
 export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
 
-	@signal selectedTab = 'blocks'
-	@signal selectedBlockCategory = 'Bodice'
-	@signal selectedFabricCategory = 'Cotton'
-
-	private defaultCollection = 'speed'
-
-	@signal blocksCategories: string[] = []
+	@signal appLoaded = false
+	@signal sceneUrl = ''
 
 	connectedCallback() {
 		super.connectedCallback()
-		// Parse through blocks and get a set of all categories
-		this.blocksCategories = [...new Set(blocks[this.defaultCollection].map(block => block.category))]
+
+		this.createEffect(() => {
+			console.log('store.view', store.view)
+			const scene = this.shadowRoot?.getElementById('drippy-scene')
+			if (scene) {
+				if (store.view === 'preview') {
+					scene.style.setProperty('--scene-transform', 'translateY(0)')
+				} else {
+					scene.style.setProperty('--scene-transform', 'translateY(-120px)')
+				}
+			} else {
+				const setProperty = () => {
+					const scene = this.shadowRoot?.getElementById('drippy-scene')
+					if (scene) {
+						if (store.view === 'preview') {
+							scene.style.setProperty('--scene-transform', 'translateY(0)')
+						} else {
+							scene.style.setProperty('--scene-transform', 'translateY(-120px)')
+						}
+					} else {
+						setTimeout(setProperty, 100)
+					}
+				}
+				setProperty()
+				this.shadowRoot?.addEventListener('DOMContentLoaded', setProperty)
+				onCleanup(() => this.shadowRoot?.removeEventListener('DOMContentLoaded', setProperty))
+			}
+		})
+
+		this.createEffect(() => {
+			console.log('store.selectedScene', store.selectedScene)
+			if (store.selectedScene) {
+				const scene = scenes.find(scene => scene.name === store.selectedScene)
+				if (scene) {
+					this.sceneUrl = scene.image.href
+				}
+			}
+		})
+
+		this.createEffect(() => {
+			try {
+				const searchParams = new URLSearchParams(window.location.search)
+				const avatar = searchParams.get('avatar')
+				const scene = searchParams.get('scene')
+				const isPreview = searchParams.get('isPreview')
+
+				// If no avatar is selected and no avatar is provided in search params, navigate to avatar selection. Else, use the provided avatar.
+				if (!store.selectedAvatar) {
+					if (avatar) {
+						store.selectAvatar = avatar as Avatar
+					} else {
+						store.navigateTo = 'avatar'
+						return
+					}
+				}
+
+				// If no scene is selected and no scene is provided in search params, navigate to scene selection. Else, use the provided scene.
+				if (!store.selectedScene) {
+					console.log('scene', scene, store.selectedScene)
+					if (scene) {
+						store.selectScene = scene as Scene
+					} else {
+						store.navigateTo = 'scene'
+						return
+					}
+				}
+
+				if (store.isPreview || isPreview === 'true') {
+					store.navigateTo = 'preview'
+					return
+				}
+
+				// If both avatar and scene are selected, navigate to blocks.
+				store.navigateTo = 'blocks'
+			} catch (error) {
+				console.error('Error loading app', error)
+			} finally {
+				this.appLoaded = true
+			}
+		})
 	}
 
 	template = () => html`
-		<!-- show-when conditionals -->
 		<show-when
-			condition=${() => view() === 'preview-measurement'}
-			content=${() => html`<preview-measurement-page></preview-measurement-page>`}
-		></show-when>
-		<show-when condition=${() => view() === 'preview'} content=${() => html`<preview-page></preview-page>`}></show-when>
-
-		<show-when condition=${() => view() === 'space'} content=${() => html`<spaces-page></spaces-page>`}></show-when>
-
-		<show-when condition=${() => view() === 'success'} content=${() => html`<success-page></success-page>`}></show-when>
-		<show-when
-			condition=${() => view() === 'avatar'}
-			content=${() =>
-				html`<drippy-scene></drippy-scene>
-
-					<section id="panel">
-						<div class="genders">
-							<button class="female selected">Women</button>
-							<button class="male">Men</button>
-						</div>
-
-						<div class="grid">
-							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-							<div class="block"><img src=${avatarThumb} alt="Female avatar" /></div>
-						</div>
-					</section>`}
-		></show-when>
-
-		<show-when
-			condition=${() => view() === 'blocks'}
+			condition=${() => this.appLoaded}
+			fallback=${() => html`<div class="loading">Loading...</div>`}
 			content=${() => html`
 				<div id="app-container">
-				<div class="app-buttons">
-					<div class="app-buttons-group">
-						<undo-button disabled></undo-button>
-						<redo-button disabled></redo-button>
-						<refresh-button disabled></refresh-button>
-					</div>
-					<div class="app-buttons-group">
-						<person-button></person-button>
-						<cube-button></cube-button>
-					</div>
-				</div>
+					<drippy-scene
+						id="drippy-scene"
+						style=${() => `background: url(${this.sceneUrl}) center bottom / cover no-repeat`}
+					></drippy-scene>
 
-				<drippy-scene
-					id="drippy-scene"
-					style=${`background: url(${sceneBackground.href}) center bottom / cover no-repeat`}
-				></drippy-scene>
-				<bottom-sheet>
-				<tabs-provider
-					default-value=${() => this.selectedTab}
-					ontabchange=${(e: CustomEvent) => {
-						this.selectedTab = e.detail.value
-					}}
-				>
-				<div class="bottom-sheet-header">
-					<div class="tabs-container">
-						<tabs-list>
-							<tabs-trigger selected-value="blocks">Blocks</tabs-trigger>
-							<tabs-trigger selected-value="fabrics">Fabrics</tabs-trigger>
-							<tabs-trigger selected-value="accessories">Accessories</tabs-trigger>
-						</tabs-list>
-					</div>
-					</div>
-					<div class="tabs-content-container">
-						<tabs-content selected-value="blocks">
-							<div class="category-tabs">
-								<${Index} each=${() => this.blocksCategories}>
-								${(category: () => string) => html`
-									<button
-										class="category-tab"
-										classList=${() => ({active: this.selectedBlockCategory === category()})}
-										onclick=${() => (this.selectedBlockCategory = category())}
-									>
-										${category()}
-									</button>
-								`}
-								</>
-							</div>
-							<div class="items-grid">
-								<${Index} each=${() => blocks[this.defaultCollection].filter(block => block.category === this.selectedBlockCategory)}>
-								${(block: () => (typeof blocks)[typeof this.defaultCollection][number], index: number) => html`
-									<div
-										data-index=${index}
-										class="item-card"
-										classList=${() => ({
-											active: store.selectedBlocks.get(block().category)?._id === block()._id,
-										})}
-										onclick=${() => {
-											store.setSelectedBlocks = block()
-										}}
-									>
-										<div class="item-preview">
-											<img class="item-thumb" src=${() => block().thumb} alt=${() => block().blockName} />
-										</div>
-									</div>
-								`}
-								</>
-					</div>
+					<show-when
+						condition=${() => store.view === 'avatar'}
+						content=${() => html`<avatar-selection></avatar-selection>`}
+					>
+					</show-when>
 
-						</tabs-content>
-					<tabs-content selected-value="fabrics">
-					<div class="category-tabs">
-					<button class="category-tab" classList=${() => ({active: this.selectedFabricCategory === 'Cotton'})} onclick=${() => (this.selectedFabricCategory = 'Cotton')}>Cotton</button>
-					<button class="category-tab" classList=${() => ({active: this.selectedFabricCategory === 'Leather'})} onclick=${() => (this.selectedFabricCategory = 'Leather')}>Leather</button>
-					<button class="category-tab" classList=${() => ({active: this.selectedFabricCategory === 'Denim'})} onclick=${() => (this.selectedFabricCategory = 'Denim')}>Denim</button>
-					<button class="category-tab" classList=${() => ({active: this.selectedFabricCategory === 'Spantex'})} onclick=${() => (this.selectedFabricCategory = 'Spantex')}>Spantex</button>
+					<show-when
+						condition=${() => store.view === 'scene'}
+						content=${() => html`<spaces-selection></spaces-selection>`}
+					>
+					</show-when>
+
+					<show-when
+						condition=${() => store.view === 'blocks'}
+						content=${() => html`<blocks-selection></blocks-selection>`}
+					>
+					</show-when>
+
+					<show-when
+						condition=${() => store.view === 'preview'}
+						content=${() => html`<outfit-preview></outfit-preview>`}
+					>
+					</show-when>
+
+					<show-when condition=${() => store.view === 'order'} content=${() => html`<order-view></order-view>`}>
+					</show-when>
+
+					<show-when
+						condition=${() => store.view === 'custom-measurement'}
+						content=${() => html`<custom-measurement></custom-measurement>`}
+					>
+					</show-when>
+
+					<show-when condition=${() => store.view === 'success'} content=${() => html`<success-view></success-view>`}>
+					</show-when>
 				</div>
-						<div class="items-grid">
-							<${Index} each=${() => fabrics[this.defaultCollection].filter(fabric => fabric.category === this.selectedFabricCategory)}>
-							${(fabric: () => (typeof fabrics)[typeof this.defaultCollection][number], index: number) => html`
-								<div
-									data-index=${index}
-									class="item-card"
-									classList=${() => ({
-										active: store.selectedFabric?._id === fabric()._id,
-									})}
-									onclick=${() => {
-										store.setSelectedFabrics = fabric()
-									}}
-								>
-									<div class="item-preview">
-										<img class="item-thumb" src=${() => fabric().thumb} alt=${() => fabric().materialName} />
-									</div>
-								</div>
-							`}
-							</>
-						</div>
-					</tabs-content>
-					<tabs-content selected-value="accessories">
-						<div class="items-grid">
-							<div class="item-card">
-								<div class="item-preview accessory"></div>
-							</div>
-							<div class="item-card">
-								<div class="item-preview accessory"></div>
-							</div>
-						</div>
-					</tabs-content>
-				</tabs-provider>
-			</bottom-sheet>
-			</div>
 			`}
-		></show-when>
+		>
+		</show-when>
 	`
 
 	css = css`
-		${sharedUIStyles}
-
 		* {
 			box-sizing: border-box;
+		}
+
+		:host {
+			--scene-transform: translateY(-120px);
 		}
 
 		:host {
@@ -486,7 +450,7 @@ export class DrippyApp extends Element {
 
 		@media (max-width: 767px) {
 			#drippy-scene {
-				transform: translateY(-120px);
+				transform: var(--scene-transform);
 			}
 		}
 	`

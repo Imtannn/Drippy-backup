@@ -1,34 +1,71 @@
-import {attribute, booleanAttribute, css, Element, element, type ElementAttributes, html} from 'lume'
+import {attribute, booleanAttribute, css, Element, element, type ElementAttributes, html, onCleanup} from 'lume'
 
 // Define snap points in percentages of viewport height
 const SNAP_POINTS = [0.41, 0.6, 0.9]
 
-type BottomSheetAttributes = 'defaultSnap'
-
+type BottomSheetAttributes =
+	| 'defaultSnap'
+	| 'defaultSheetHeight'
+	| 'animateOnEnter'
+	| 'animateOnExit'
+	| 'floatDirection'
+	| 'maxHeight'
 @element
 export class BottomSheet extends Element {
 	static readonly elementName = 'bottom-sheet'
 
 	// Properties
-	sheetHeight: number | null = null
 	@attribute defaultSnap: string = ''
+	@booleanAttribute isDesktop = false
+	@booleanAttribute animateOnEnter = true
+	@booleanAttribute animateOnExit = true
+	@attribute defaultSheetHeight: string = ''
+	@attribute floatDirection: 'left' | 'right' = 'left'
+	@attribute maxHeight: string | null = null
+
+	private sheetHeight: number | null = null
 	private dragState = {
 		isDragging: false,
 		startY: 0,
 		startHeight: 0,
 	}
-	@booleanAttribute isDesktop = false
 	private sheetRef: HTMLElement | null = null
+	private isVisible = false
 
 	connectedCallback() {
 		super.connectedCallback()
 		this.checkDesktop()
 		this.addEventListeners()
 
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
-				this.handleResize()
+		this.createEffect(() => {
+			const frame = requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
+					this.handleResize()
+					if (this.animateOnEnter) {
+						this.animateIn()
+					} else {
+						this.isVisible = true
+					}
+				})
 			})
+
+			onCleanup(() => cancelAnimationFrame(frame))
+		})
+
+		this.createEffect(() => {
+			if (this.floatDirection === 'right') {
+				this.style.setProperty('--bottom-sheet-float-direction', 'flex-end')
+			} else {
+				this.style.setProperty('--bottom-sheet-float-direction', 'flex-start')
+			}
+		})
+
+		this.createEffect(() => {
+			if (this.maxHeight) {
+				this.style.setProperty('--bottom-sheet-max-height', this.maxHeight)
+			} else {
+				this.style.setProperty('--bottom-sheet-max-height', 'calc(100vh - 3rem)')
+			}
 		})
 	}
 
@@ -54,8 +91,13 @@ export class BottomSheet extends Element {
 		if (!this.sheetRef) return
 		if (!this.isDesktop) {
 			const viewportHeight = window.innerHeight
-			const snapFraction = this.#resolveDefaultSnapFraction()
-			this.sheetHeight = snapFraction * viewportHeight
+			const defaultHeight = this.#resolveDefaultSheetHeight()
+			if (defaultHeight) {
+				this.sheetHeight = defaultHeight
+			} else {
+				const snapFraction = this.#resolveDefaultSnapFraction()
+				this.sheetHeight = snapFraction * viewportHeight
+			}
 			this.sheetRef!.style.height = `${this.sheetHeight}px`
 		} else {
 			this.sheetRef!.style.height = '100vh'
@@ -84,6 +126,31 @@ export class BottomSheet extends Element {
 			return Math.max(0, Math.min(1, fraction))
 		}
 		return SNAP_POINTS[0]
+	}
+
+	#resolveDefaultSheetHeight(): number | null {
+		const raw = (this.defaultSheetHeight ?? '').toString().trim()
+		if (!raw) return null
+
+		// Support pixel values (e.g., "400px" or "400")
+		const pxMatch = raw.match(/^(\d+)(?:px)?$/)
+		if (pxMatch) {
+			return parseInt(pxMatch[1], 10)
+		}
+
+		// Support viewport height (e.g., "50vh")
+		const vhMatch = raw.match(/^(\d+(?:\.\d+)?)vh$/)
+		if (vhMatch) {
+			return (parseFloat(vhMatch[1]) / 100) * window.innerHeight
+		}
+
+		// Support percent (e.g., "50%")
+		const percentMatch = raw.match(/^(\d+(?:\.\d+)?)%$/)
+		if (percentMatch) {
+			return (parseFloat(percentMatch[1]) / 100) * window.innerHeight
+		}
+
+		return null
 	}
 
 	private getClosestSnapPoint(height: number) {
@@ -157,6 +224,51 @@ export class BottomSheet extends Element {
 		document.body.classList.remove('is-dragging')
 	}
 
+	private animateIn() {
+		if (!this.sheetRef) return
+
+		this.isVisible = false
+		this.sheetRef.classList.remove('is-open')
+
+		// Force a reflow to ensure the transform is applied
+		this.sheetRef.offsetHeight
+
+		requestAnimationFrame(() => {
+			this.isVisible = true
+			this.sheetRef!.classList.add('is-open')
+		})
+	}
+
+	public animateOut(callback?: () => void) {
+		if (!this.sheetRef || !this.animateOnExit) {
+			if (callback) callback()
+			return
+		}
+
+		this.isVisible = false
+		this.sheetRef.classList.remove('is-open')
+
+		// Wait for animation to complete
+		setTimeout(() => {
+			if (callback) callback()
+		}, 300) // Match the CSS transition duration
+	}
+
+	public hide() {
+		this.animateOut()
+	}
+
+	public show() {
+		if (this.animateOnEnter) {
+			this.animateIn()
+		} else {
+			this.isVisible = true
+			if (this.sheetRef) {
+				this.sheetRef.classList.add('is-open')
+			}
+		}
+	}
+
 	private handleDragHandleStart = (e: Event) => {
 		this.handleDragStart(e as MouseEvent | TouchEvent)
 	}
@@ -164,7 +276,10 @@ export class BottomSheet extends Element {
 	template = () => {
 		return html`
 			<div
-				class="bottom-sheet is-open"
+				class="bottom-sheet"
+				classList=${{
+					'is-open': this.isVisible,
+				}}
 				ref="${(el: HTMLElement) => (this.sheetRef = el)}"
 				style="${!this.isDesktop && this.sheetHeight ? `height: ${this.sheetHeight}px` : ''}"
 			>
@@ -184,11 +299,16 @@ export class BottomSheet extends Element {
 
 	css = css`
 		:host {
+			--bottom-sheet-float-direction: flex-start;
+			--bottom-sheet-max-height: calc(100vh - 3rem);
+		}
+
+		:host {
 			--bottom-sheet-handle-height: 2rem;
 			position: fixed;
 			bottom: 0;
-			left: 0;
-			right: 0;
+			left: 5px;
+			right: 5px;
 			z-index: 50;
 			pointer-events: none;
 		}
@@ -214,8 +334,7 @@ export class BottomSheet extends Element {
 				transform 0.3s ease-out,
 				height 0.3s ease-out;
 			will-change: transform, height;
-			max-height: 95vh;
-			max-height: 95dvh;
+			max-height: calc(100vh - 5px);
 			pointer-events: auto;
 			display: flex;
 			flex-direction: column;
@@ -266,8 +385,9 @@ export class BottomSheet extends Element {
 				height: 100dvh;
 				display: flex;
 				align-items: center;
-				justify-content: flex-start;
+				justify-content: var(--bottom-sheet-float-direction);
 				padding-left: 0;
+				padding-right: 0;
 			}
 
 			.bottom-sheet {
@@ -282,9 +402,7 @@ export class BottomSheet extends Element {
 				padding-top: var(--bottom-sheet-handle-height);
 				max-width: calc(100vw - 3rem);
 				height: 100vh;
-				height: 100dvh;
-				max-height: calc(100vh - 3rem);
-				max-height: calc(100dvh - 3rem);
+				max-height: var(--bottom-sheet-max-height);
 				opacity: 0;
 				transform: translateY(1.25rem);
 				transition:
@@ -318,10 +436,36 @@ export class BottomSheet extends Element {
 	`
 }
 
+type BottomSheetHeaderAttributes = keyof {}
+// Bottom sheet header
+@element
+export class BottomSheetHeader extends Element {
+	static readonly elementName = 'bottom-sheet-header'
+
+	template = () => {
+		return html`
+			<div class="bottom-sheet-header">
+				<slot></slot>
+			</div>
+		`
+	}
+
+	css = css`
+		:host {
+			position: sticky;
+			top: 0;
+			background: var(--appBackground);
+			z-index: 10;
+			border-bottom: 1px solid #e0e1e4;
+		}
+	`
+}
+
 declare module 'solid-js' {
 	namespace JSX {
 		interface IntrinsicElements {
 			[BottomSheet.elementName]: ElementAttributes<BottomSheet, BottomSheetAttributes>
+			[BottomSheetHeader.elementName]: ElementAttributes<BottomSheetHeader, BottomSheetHeaderAttributes>
 		}
 	}
 }
@@ -329,5 +473,6 @@ declare module 'solid-js' {
 declare global {
 	interface HTMLElementTagNameMap {
 		[BottomSheet.elementName]: BottomSheet
+		[BottomSheetHeader.elementName]: BottomSheetHeader
 	}
 }

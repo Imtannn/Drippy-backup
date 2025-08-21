@@ -184,6 +184,18 @@ export class DrippyScene extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
+		this.createEffect(() => {
+			if (store.view === 'preview') {
+				this.shadowRoot?.querySelector('lume-scene')?.style.setProperty('--scene-transform', 'translateX(0)')
+			} else {
+				if (store.view === 'order' || store.view === 'custom-measurement' || store.view === 'success') {
+					this.shadowRoot?.querySelector('lume-scene')?.style.setProperty('--scene-transform', 'translateX(-10rem)')
+				} else {
+					this.shadowRoot?.querySelector('lume-scene')?.style.setProperty('--scene-transform', 'translateX(10rem)')
+				}
+			}
+		})
+
 		this.isDark = document.documentElement.dataset.theme === 'dark'
 
 		const onThemeChange = () => (this.isDark = document.documentElement.dataset.theme === 'dark')
@@ -292,6 +304,10 @@ export class DrippyScene extends Element {
 
 	css = css/*css*/ `
 		:host {
+			--scene-transform: translateX(0);
+		}
+
+		:host {
 			width: 600px;
 			height: 400px;
 
@@ -299,7 +315,7 @@ export class DrippyScene extends Element {
 		}
 
 		lume-scene {
-			transform: translateX(10rem);
+			transform: var(--scene-transform);
 			transition: transform 0.2s ease-in-out;
 		}
 
