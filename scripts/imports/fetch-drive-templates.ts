@@ -3,11 +3,27 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as https from 'https'
+import * as AWS from 'aws-sdk'
 
 type TODO = any
 
 // Google Drive API Key (you can get this from Google Cloud Console for free)
 const API_KEY = process.env.GOOGLE_API_KEY || 'GOOGLE_API_KEY'
+
+// AWS S3 Configuration
+const S3_BUCKET = process.env.S3_BUCKET || 'your-bucket-name'
+const S3_REGION = process.env.S3_REGION || 'us-east-1'
+const S3_ACCESS_KEY = process.env.AWS_ACCESS_KEY_ID
+const S3_SECRET_KEY = process.env.AWS_SECRET_ACCESS_KEY
+
+// Configure AWS
+AWS.config.update({
+	accessKeyId: S3_ACCESS_KEY,
+	secretAccessKey: S3_SECRET_KEY,
+	region: S3_REGION,
+})
+
+const s3 = new AWS.S3()
 
 const COLLECTIONS = [
 	{
@@ -86,6 +102,61 @@ function getDriveDownloadUrl(fileId: string): string {
 	return `https://drive.google.com/uc?export=download&id=${fileId}`
 }
 
+// Upload buffer to S3 and return the public URL
+async function uploadToS3(buffer: Buffer, key: string, contentType: string): Promise<string> {
+	const params = {
+		Bucket: S3_BUCKET,
+		Key: key,
+		Body: buffer,
+		ContentType: contentType,
+		ACL: 'public-read',
+	}
+
+	try {
+		const result = await s3.upload(params).promise()
+		return result.Location
+	} catch (error) {
+		console.error('Error uploading to S3:', error)
+		throw error
+	}
+}
+
+// Download file to buffer instead of saving locally
+function downloadToBuffer(url: string): Promise<Buffer> {
+	return new Promise((resolve, reject) => {
+		https
+			.get(url, (response: any) => {
+				// Handle redirects
+				if (response.statusCode === 302 || response.statusCode === 301 || response.statusCode === 303) {
+					const location = response.headers.location
+					if (!location) {
+						reject(new Error('Redirect location not provided'))
+						return
+					}
+					return downloadToBuffer(location).then(resolve).catch(reject)
+				}
+
+				if (response.statusCode !== 200) {
+					reject(new Error(`Download failed with status ${response.statusCode}`))
+					return
+				}
+
+				const chunks: Buffer[] = []
+				response.on('data', (chunk: any) => {
+					chunks.push(chunk)
+				})
+
+				response.on('end', () => {
+					const buffer = Buffer.concat(chunks)
+					resolve(buffer)
+				})
+
+				response.on('error', reject)
+			})
+			.on('error', reject)
+	})
+}
+
 async function fetchFolderContents(folderId: string): Promise<TODO[]> {
 	try {
 		const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,parents)&key=${API_KEY}`
@@ -119,27 +190,35 @@ function matchGltfPngPairs(files: TODO[]): TODO[] {
 	return pairs
 }
 
-// Download assets for a collection
+// Download assets for a collection and upload to S3
 async function downloadAssets(collectionName: string, pairs: TODO[]): Promise<TODO[]> {
 	const downloads: TODO[] = []
 
 	for (const {gltf, png, baseName} of pairs) {
-		// Download PNG to images/${collectionName}
-		const pngPath = path.join(__dirname, `../../public/images/${collectionName}/${baseName}.png`)
 		const pngUrl = getDriveDownloadUrl(png.id)
-
-		// Download GLTF to models/${collectionName}
-		const gltfPath = path.join(__dirname, `../../public/models/${collectionName}/${baseName}.gltf`)
 		const gltfUrl = getDriveDownloadUrl(gltf.id)
 
-		console.log(`📥 Downloading ${baseName}...`)
+		console.log(`📥 Downloading and uploading ${baseName}...`)
 
 		try {
-			await Promise.all([downloadFile(pngUrl, pngPath), downloadFile(gltfUrl, gltfPath)])
-			console.log(`✅ Downloaded ${baseName}`)
-			downloads.push({baseName: baseName, collectionName})
+			// Download files to buffers
+			const [pngBuffer, gltfBuffer] = await Promise.all([downloadToBuffer(pngUrl), downloadToBuffer(gltfUrl)])
+
+			// Upload to S3
+			const [pngS3Url, gltfS3Url] = await Promise.all([
+				uploadToS3(pngBuffer, `images/${collectionName}/${baseName}.png`, 'image/png'),
+				uploadToS3(gltfBuffer, `models/${collectionName}/${baseName}.gltf`, 'model/gltf+json'),
+			])
+
+			console.log(`✅ Uploaded ${baseName} to S3`)
+			downloads.push({
+				baseName: baseName,
+				collectionName,
+				thumbUrl: pngS3Url,
+				modelUrl: gltfS3Url,
+			})
 		} catch (error) {
-			console.error(`❌ Failed to download ${baseName}:`, (error as TODO).message)
+			console.error(`❌ Failed to process ${baseName}:`, (error as TODO).message)
 		}
 	}
 
@@ -153,12 +232,12 @@ function generateTemplateData(downloadedAssets: TODO): TODO {
 	// Flatten the object structure to get all assets as an array
 	const allAssets: TODO[] = Object.values(downloadedAssets).flat()
 
-	allAssets.forEach(({baseName, collectionName}: TODO) => {
+	allAssets.forEach(({baseName, collectionName, thumbUrl, modelUrl}: TODO) => {
 		templates[collectionName] = templates[collectionName] || []
 		templates[collectionName].push({
 			_id: idCounter.toString(),
-			thumb: `new URL('../images/${collectionName}/${baseName}.png', import.meta.url).href`,
-			modelFile: `new URL('../models/${collectionName}/${baseName}.gltf', import.meta.url).href`,
+			thumb: thumbUrl,
+			modelFile: modelUrl,
 			name: baseName,
 			avatar: 'Male',
 		})
@@ -176,8 +255,8 @@ function generateTemplatesFileContent(templates: TODO): string {
 			.map(
 				(template: TODO) => `	{
 		_id: '${template._id}',
-		thumb: ${template.thumb},
-		modelFile: ${template.modelFile},
+		thumb: '${template.thumb}',
+		modelFile: '${template.modelFile}',
 		name: '${template.name}',
 		avatar: '${template.avatar}',
 	}`,
@@ -207,13 +286,28 @@ async function updateTemplatesFile(content: string): Promise<void> {
 
 async function main(): Promise<void> {
 	try {
-		console.log('🚀 Fetching templates from Google Drive...')
+		console.log('🚀 Fetching templates from Google Drive and uploading to S3...')
 
 		if (API_KEY === 'GOOGLE_API_KEY') {
-			console.log('⚠️  No API key provided. Set GOOGLE_API_KEY environment variable.')
+			console.log('⚠️  No Google Drive API key provided. Set GOOGLE_API_KEY environment variable.')
 			console.log('   You can get a free API key from Google Cloud Console.')
 			return
 		}
+
+		if (!S3_ACCESS_KEY || !S3_SECRET_KEY) {
+			console.log(
+				'⚠️  AWS credentials not provided. Set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables.',
+			)
+			return
+		}
+
+		if (S3_BUCKET === 'your-bucket-name') {
+			console.log('⚠️  S3 bucket not configured. Set S3_BUCKET environment variable.')
+			return
+		}
+
+		console.log(`📦 Using S3 bucket: ${S3_BUCKET}`)
+		console.log(`🌍 S3 region: ${S3_REGION}`)
 
 		const allDownloadedAssets: TODO = {}
 

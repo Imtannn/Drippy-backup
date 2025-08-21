@@ -1,4 +1,4 @@
-import {css, element, Element, html, Index, signal, type ElementAttributes} from 'lume'
+import {css, element, Element, For, html, Index, signal, type ElementAttributes} from 'lume'
 import {blocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
 import '../elements/back-button.js'
@@ -18,6 +18,8 @@ import '../elements/back-button.js'
 import '../elements/logo-button.js'
 import './app-buttons.js'
 import '../elements/preview-button.js'
+import type {Block} from '../types/block.js'
+import type {Fabric} from '../types/fabric.js'
 
 type BlocksSelectionAttributes = keyof {}
 
@@ -110,13 +112,13 @@ export class BlocksSelection extends Element {
 					</>
 				</div>
 				<div class="items-grid">
-					<${Index} each=${() => blocks[this.defaultCollection].filter(block => block.category === this.selectedBlockCategory)}>
-					${(block: () => (typeof blocks)[typeof this.defaultCollection][number]) => html`
+					<${For} each=${() => blocks[this.defaultCollection].filter(block => block.category === this.selectedBlockCategory)}>
+					${(block: Block) => html`
 						<item-card
-							item-active=${() => store.selectedBlocks.get(block().category)?._id === block()._id}
-							item-src=${() => block().thumb}
-							item-alt=${() => block().blockName}
-							item-value=${() => block()}
+							item-active=${() => store.selectedBlocks.get(block.category)?._id === block._id}
+							item-src=${() => block.thumb}
+							item-alt=${() => block.blockName}
+							item-value=${() => block}
 							oncardselected=${(e: CustomEvent) => {
 								store.setSelectedBlocks = e.detail.itemValue
 							}}
@@ -134,13 +136,13 @@ export class BlocksSelection extends Element {
 				<button class="category-tab" classList=${() => ({active: this.selectedFabricCategory === 'Spantex'})} onclick=${() => (this.selectedFabricCategory = 'Spantex')}>Spantex</button>
 			</div>
 			<div class="items-grid">
-				<${Index} each=${() => fabrics[this.defaultCollection].filter(fabric => fabric.category === this.selectedFabricCategory)}>
-				${(fabric: () => (typeof fabrics)[typeof this.defaultCollection][number]) => html`
+				<${For} each=${() => fabrics[this.defaultCollection].filter(fabric => fabric.category === this.selectedFabricCategory)}>
+				${(fabric: Fabric) => html`
 					<item-card
-						item-active=${() => store.selectedFabric?._id === fabric()._id}
-						item-src=${() => fabric().thumb}
-						item-alt=${() => fabric().materialName}
-						item-value=${() => fabric()}
+						item-active=${() => store.selectedFabric?._id === fabric._id}
+						item-src=${() => fabric.thumb}
+						item-alt=${() => fabric.materialName}
+						item-value=${() => fabric}
 						oncardselected=${(e: CustomEvent) => {
 							store.setSelectedFabrics = e.detail.itemValue
 						}}

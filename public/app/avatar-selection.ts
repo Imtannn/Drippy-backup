@@ -1,10 +1,10 @@
-import {css, Element, element, html, Index, signal, type ElementAttributes} from 'lume'
-import {store} from './store.js'
-import './item-card.js'
+import {css, Element, element, For, html, signal, type ElementAttributes} from 'lume'
 import '../elements/bottom-sheet.js'
-import '../elements/tabs.js'
 import '../elements/save-button.js'
+import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
+import './item-card.js'
+import {store} from './store.js'
 
 type AvatarSelectionAttributes = keyof {}
 
@@ -76,13 +76,13 @@ export class AvatarSelection extends Element {
 			<div class="tabs-content-container">
 				<tabs-content selected-value="male">
 					<div class="items-grid">
-						<${Index} each=${avatars.filter(avatar => avatar.value === 'male')}>
-							${(avatar: () => (typeof avatars)[number]) => html`
+						<${For} each=${avatars.filter(avatar => avatar.value === 'male')}>
+							${(avatar: (typeof avatars)[number]) => html`
 								<item-card
-									item-active=${() => store.tempSelectedAvatar === avatar().value}
-									item-src=${avatar().src}
-									item-alt=${avatar().alt}
-									item-value=${avatar().value}
+									item-active=${() => store.tempSelectedAvatar === avatar.value}
+									item-src=${avatar.src}
+									item-alt=${avatar.alt}
+									item-value=${avatar.value}
 									oncardselected=${this.#onItemClick}
 									object-fit="cover"
 									object-position="top"
@@ -95,13 +95,13 @@ export class AvatarSelection extends Element {
 				</tabs-content>
 				<tabs-content selected-value="female">
 				<div class="items-grid">
-				<${Index} each=${avatars.filter(avatar => avatar.value === 'female')}>
-					${(avatar: () => (typeof avatars)[number]) => html`
+				<${For} each=${avatars.filter(avatar => avatar.value === 'female')}>
+					${(avatar: (typeof avatars)[number]) => html`
 						<item-card
-							item-active=${() => store.tempSelectedAvatar === avatar().value}
-							item-src=${avatar().src}
-							item-alt=${avatar().alt}
-							item-value=${avatar().value}
+							item-active=${() => store.tempSelectedAvatar === avatar.value}
+							item-src=${avatar.src}
+							item-alt=${avatar.alt}
+							item-value=${avatar.value}
 							oncardselected=${this.#onItemClick}
 							object-fit="cover"
 							object-position="top"

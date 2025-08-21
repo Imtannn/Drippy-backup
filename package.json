@@ -16,8 +16,8 @@
 		"publish": "...TODO...",
 		"typecheck": "lume typecheck",
 		"typecheck:watch": "lume typecheckWatch",
-		"fetch-blocks": "tsc scripts/imports/fetch-drive-blocks.ts && node scripts/imports/fetch-drive-blocks.js",
-		"fetch-templates": "tsc scripts/imports/fetch-drive-templates.ts && node scripts/imports/fetch-drive-templates.js"
+		"fetch-blocks": "chmod +x scripts/run-fetch-blocks.sh && ./scripts/run-fetch-blocks.sh",
+		"fetch-templates": "chmod +x scripts/run-fetch-templates.sh && ./scripts/run-fetch-templates.sh"
 	},
 	"overrides": {
 		"@lume/element": "$@lume/element"
@@ -28,6 +28,7 @@
 		"@tweenjs/tween.js": "^18.6.4",
 		"@types/meteor": "^2.9.8",
 		"@types/three": "^0.174.0",
+		"aws-sdk": "^2.1692.0",
 		"jquery": "^3.7.1",
 		"lume": "^0.3.0-alpha.46",
 		"meteor-node-stubs": "^1.0.0",

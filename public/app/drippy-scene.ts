@@ -414,11 +414,10 @@ export class DrippyScene extends Element {
 				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile}></lume-gltf-model> `}
 			</>
 
-			<show-when condition=${() => store.view !== 'template'} content=${() => html`
-				<${For} each=${() => Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Sleeves')}>
-					${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile} scale="-1 1 1"></lume-gltf-model> `}
-				</>
-			`}></show-when>
+			<${For} each=${() => Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Sleeves')}>
+				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile} scale="-1 1 1"></lume-gltf-model> `}
+			</>
+
 			</lume-scene>
 		</div>
 	`
