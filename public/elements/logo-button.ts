@@ -13,6 +13,7 @@ export class LogoButton extends Element {
 	css = css/*css*/ `
 		.logo-button {
 			background-color: #121316;
+			color: #ffffff;
 			width: 2rem;
 			height: 2rem;
 			font-size: 8px;

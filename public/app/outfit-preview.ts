@@ -138,6 +138,7 @@ export class OutfitPreview extends Element {
 
 		.share-button {
 			background: #12131680;
+			color: #ffffff;
 			backdrop-filter: blur(50px);
 		}
 	`
