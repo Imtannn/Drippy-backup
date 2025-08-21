@@ -1,4 +1,4 @@
-import {createSignal, css, Element, element, For, html, Motor, onCleanup, signal, untrack} from 'lume'
+import {createSignal, css, Element, element, For, html, Motor, onCleanup, Show, signal, untrack} from 'lume'
 import * as THREE from 'three'
 import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -414,9 +414,16 @@ export class DrippyScene extends Element {
 				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile}></lume-gltf-model> `}
 			</>
 
-			<${For} each=${() => Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Sleeves')}>
-				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile} scale="-1 1 1"></lume-gltf-model> `}
-			</>
+			<${Show}
+				when=${() => store.selectedBlocks.get('Sleeves')?.modelFile && store.view !== 'template'}
+				>
+							${() =>
+								html`<lume-gltf-model
+									data-cloth
+									src=${() => store.selectedBlocks.get('Sleeves')?.modelFile}
+									scale="-1 1 1"
+								></lume-gltf-model>`}
+						</>
 
 			</lume-scene>
 		</div>
