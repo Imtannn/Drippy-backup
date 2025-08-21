@@ -14,7 +14,7 @@ const scenes = [
 	{
 		name: 'bloom realms',
 		description: 'One million roses',
-		image: new URL('../images/background-2.jpeg', import.meta.url),
+		image: new URL('../images/doina-bg.webp', import.meta.url),
 	},
 ]
 
