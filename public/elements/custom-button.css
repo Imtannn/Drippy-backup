@@ -1,0 +1,127 @@
+/* Custom Button Component Styles - Following Design System */
+
+.custom-button {
+	font-family: 'Poppins', Helvetica;
+	font-weight: 500;
+	font-size: 14px;
+	padding: 10px 20px;
+	border-radius: 100px;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	letter-spacing: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	position: relative;
+	overflow: hidden;
+}
+
+.custom-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+/* Size Variants - Following Design System */
+.custom-button--small {
+	padding: 8px 16px;
+	font-size: 12px;
+}
+
+.custom-button--medium {
+	padding: 10px 20px;
+	font-size: 14px;
+}
+
+.custom-button--large {
+	padding: 12px 24px;
+	font-size: 16px;
+}
+
+/* Style Variants - Following Design System */
+.custom-button--primary {
+	background-color: var(--color-dark);
+	color: var(--color-white);
+}
+
+.custom-button--primary:hover:not(:disabled) {
+	background-color: var(--color-light-purple);
+}
+
+.custom-button--secondary {
+	background-color: transparent;
+	color: var(--color-dark);
+	border: 1px solid var(--color-light-gray);
+}
+
+.custom-button--secondary:hover:not(:disabled) {
+	background-color: var(--color-light-gray);
+}
+
+.custom-button--outline {
+	background-color: transparent;
+	color: var(--color-dark);
+	border: 2px solid var(--color-dark);
+}
+
+.custom-button--outline:hover:not(:disabled) {
+	background-color: var(--color-dark);
+	color: var(--color-white);
+}
+
+.custom-button--ghost {
+	background-color: transparent;
+	color: var(--color-dark);
+}
+
+.custom-button--ghost:hover:not(:disabled) {
+	background-color: var(--color-light-gray);
+}
+
+/* Loading State */
+.custom-button__loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.custom-button__spinner {
+	width: 20px;
+	height: 20px;
+	animation: spin 1s linear infinite;
+}
+
+.custom-button--small .custom-button__spinner {
+	width: 16px;
+	height: 16px;
+}
+
+.custom-button--large .custom-button__spinner {
+	width: 24px;
+	height: 24px;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Content */
+.custom-button__content {
+	display: flex;
+	align-items: center;
+	gap: inherit;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.custom-button--large {
+		padding: 12px 24px;
+		font-size: 16px;
+	}
+}

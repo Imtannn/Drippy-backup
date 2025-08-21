@@ -30,6 +30,7 @@ export class HomePage extends Element {
 		<h1>Drippy</h1>
 
 		<nav>
+			<a href="/landing">Landing Page - Marketing page for Drippy</a>
 			<a href="/onboarding/step1">Onboarding - Get started with Drippy</a>
 			<a href="/stats">Stats - View page visits and number of users</a>
 			<a href="/profile">Profile - View and edit your username</a>
