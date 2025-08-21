@@ -21,7 +21,6 @@ const scenes = [
 	},
 ]
 
-
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
 loadingCover?.classList.add('invisible')
@@ -174,9 +173,7 @@ export class DrippyApp extends Element {
 		* {
 			box-sizing: border-box;
 		}
-	}
 
-	css = css`
 		:host {
 			--scene-transform: translateY(-120px);
 		}

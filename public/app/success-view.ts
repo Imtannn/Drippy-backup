@@ -12,7 +12,31 @@ export class SuccessView extends Element {
 		store.navigateTo = 'avatar'
 	}
 
+	#onBackButtonClick = () => {
+		store.navigateTo = 'order'
+	}
+
+	#onHomeButtonClick = () => {
+		window.history.replaceState({}, '', '')
+		store.resetState()
+		store.navigateTo = 'avatar'
+	}
+
 	template = () => html`
+		<app-buttons-left>
+			<app-buttons-group group-direction="row">
+				<back-button onclick=${this.#onBackButtonClick}></back-button>
+				<home-button onclick=${this.#onHomeButtonClick}></home-button>
+			</app-buttons-group>
+		</app-buttons-left>
+
+		<app-buttons-right>
+			<app-buttons-group>
+				<theme-switch-button></theme-switch-button>
+				<logo-button brand-name="Speed"></logo-button>
+			</app-buttons-group>
+		</app-buttons-right>
+
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-sheet-height="270px">
 			<div class="success-container">
 				<!-- Success Header -->
