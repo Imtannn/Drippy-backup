@@ -5,6 +5,7 @@ import type {Fabric} from '../types/fabric.js'
 import {store} from './store.js'
 import './app-buttons.js'
 import '../elements/loading-indicator.js'
+import '../elements/show-when.js'
 
 const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Male.glb', import.meta.url)
@@ -207,29 +208,22 @@ export class DrippyScene extends Element {
 
 		this.createEffect(() => {
 			if (store.view === 'preview') {
-				this.shadowRoot?.getElementById('lume-scene-container')?.style.setProperty('--scene-transform', 'translateX(0)')
+				this.style.setProperty('--scene-transform', 'translateX(0)')
 			} else {
 				if (store.view === 'order' || store.view === 'custom-measurement' || store.view === 'success') {
-					this.shadowRoot
-						?.getElementById('lume-scene-container')
-						?.style.setProperty('--scene-transform', 'translateX(-10rem)')
+					this.style.setProperty('--scene-transform', 'translateX(-10rem)')
 				} else {
-					this.shadowRoot
-						?.getElementById('lume-scene-container')
-						?.style.setProperty('--scene-transform', 'translateX(10rem)')
+					this.style.setProperty('--scene-transform', 'translateX(10rem)')
 				}
 			}
 		})
 
 		this.createEffect(() => {
+			console.log('store.view', store.view)
 			if (store.view === 'preview') {
-				this.shadowRoot
-					?.getElementById('lume-scene-container')
-					?.style.setProperty('--scene-desktop-transform', 'translateY(0)')
+				this.style.setProperty('--scene-desktop-transform', 'translateY(0)')
 			} else {
-				this.shadowRoot
-					?.getElementById('lume-scene-container')
-					?.style.setProperty('--scene-desktop-transform', 'translateY(-120px)')
+				this.style.setProperty('--scene-desktop-transform', 'translateY(-120px)')
 			}
 		})
 
@@ -369,11 +363,15 @@ export class DrippyScene extends Element {
 	}
 
 	template = () => html`
-		<app-buttons-left layout="bottom">
-			<app-buttons-group>
-				<loading-indicator is-visible=${() => this.loadingBlocks.length > 0 || this.loadingMaterials.length > 0}></loading-indicator>
-			</app-buttons-group>
-		</app-buttons-left>
+		<show-when condition=${() => store.view === 'blocks'} content=${() => html`
+			<app-buttons-left layout="bottom">
+				<app-buttons-group>
+					<loading-indicator
+						is-visible=${() => this.loadingBlocks.length > 0 || this.loadingMaterials.length > 0}
+					></loading-indicator>
+				</app-buttons-group>
+			</app-buttons-left>
+		`}></show-when>
 
 		<div id="lume-scene-container" style=${() => `background: url(${this.sceneUrl}) center bottom / cover no-repeat`}>
 		<lume-scene webgl>
@@ -439,14 +437,20 @@ export class DrippyScene extends Element {
 		#lume-scene-container {
 			width: 100%;
 			height: 100%;
+		}
+
+		lume-scene {
 			transform: var(--scene-transform);
 			transition: transform 0.2s ease-in-out;
 		}
 
 		@media (max-width: 767px) {
 			#lume-scene-container {
-				transform: translateX(0);
 				transform: var(--scene-desktop-transform);
+			}
+
+			lume-scene {
+				transform: translateX(0);
 			}
 		}
 	`
