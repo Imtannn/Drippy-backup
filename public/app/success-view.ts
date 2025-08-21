@@ -7,7 +7,8 @@ export class SuccessView extends Element {
 	static elementName = 'success-view'
 
 	#onDripAnotherDesignClick = () => {
-		window.history.replaceState({}, '', '')
+		const url = new URL(window.location.href)
+		window.history.replaceState({}, '', url.pathname)
 		store.resetState()
 		store.navigateTo = 'avatar'
 	}
@@ -17,7 +18,8 @@ export class SuccessView extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		window.history.replaceState({}, '', '')
+		const url = new URL(window.location.href)
+		window.history.replaceState({}, '', url.pathname)
 		store.resetState()
 		store.navigateTo = 'avatar'
 	}
