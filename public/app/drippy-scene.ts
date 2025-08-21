@@ -363,7 +363,7 @@ export class DrippyScene extends Element {
 	}
 
 	template = () => html`
-		<show-when condition=${() => store.view === 'blocks' || store.view === 'avatar'} content=${() => html`
+		<show-when condition=${() => store.view === 'blocks' || store.view === 'avatar' || store.view === 'template'} content=${() => html`
 			<app-buttons-left layout="bottom">
 				<app-buttons-group>
 					<loading-indicator
@@ -410,13 +410,15 @@ export class DrippyScene extends Element {
 							data-avatar
 			></lume-gltf-model>
 
-			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
+			<${For} each=${() => (store.view === 'template' ? Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Template') : Array.from(store.selectedBlocks.values()).filter(item => item.category !== 'Template'))}>
 				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile}></lume-gltf-model> `}
 			</>
 
-			<${For} each=${() => Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Sleeves')}>
-				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile} scale="-1 1 1"></lume-gltf-model> `}
-			</>
+			<show-when condition=${() => store.view !== 'template'} content=${() => html`
+				<${For} each=${() => Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Sleeves')}>
+					${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile} scale="-1 1 1"></lume-gltf-model> `}
+				</>
+			`}></show-when>
 			</lume-scene>
 		</div>
 	`

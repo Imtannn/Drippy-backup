@@ -39,16 +39,10 @@ export class BlocksSelection extends Element {
 	}
 
 	#onBackButtonClick = () => {
-		console.log('onBackButtonClick')
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.delete('scene')
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
-		store.selectScene = null
-		store.navigateTo = 'scene'
+		store.navigateTo = 'template'
 	}
 
 	#onPreviewButtonClick = () => {
-		console.log('onPreviewButtonClick')
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('isPreview', 'true')
 		store.setIsPreview = true

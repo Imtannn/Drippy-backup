@@ -4,5 +4,5 @@ export type Block = {
 	modelFile: string
 	blockName: string
 	avatar: 'Male' | 'Female'
-	category: 'Bodice' | 'Skirt' | 'Sleeves' | 'Pants'
+	category: 'Bodice' | 'Skirt' | 'Sleeves' | 'Pants' | 'Template'
 }

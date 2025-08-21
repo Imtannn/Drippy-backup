@@ -10,6 +10,7 @@ import './outfit-preview.js'
 import './order-view.js'
 import './custom-measurement.js'
 import './success-view.js'
+import './template-view.js'
 import '../elements/theme-switch.js'
 import {store, type Avatar, type Scene} from './store.js'
 
@@ -60,7 +61,7 @@ export class DrippyApp extends Element {
 				}
 
 				// If both avatar and scene are selected, navigate to blocks.
-				store.navigateTo = 'blocks'
+				store.navigateTo = 'template'
 			} catch (error) {
 				console.error('Error loading app', error)
 			} finally {
@@ -86,6 +87,12 @@ export class DrippyApp extends Element {
 					<show-when
 						condition=${() => store.view === 'scene'}
 						content=${() => html`<spaces-selection></spaces-selection>`}
+					>
+					</show-when>
+
+					<show-when
+						condition=${() => store.view === 'template'}
+						content=${() => html`<template-view></template-view>`}
 					>
 					</show-when>
 

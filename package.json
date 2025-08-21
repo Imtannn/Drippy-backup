@@ -16,7 +16,8 @@
 		"publish": "...TODO...",
 		"typecheck": "lume typecheck",
 		"typecheck:watch": "lume typecheckWatch",
-		"fetch-blocks": "node scripts/fetch-drive-blocks.js"
+		"fetch-blocks": "tsc scripts/imports/fetch-drive-blocks.ts && node scripts/imports/fetch-drive-blocks.js",
+		"fetch-templates": "tsc scripts/imports/fetch-drive-templates.ts && node scripts/imports/fetch-drive-templates.js"
 	},
 	"overrides": {
 		"@lume/element": "$@lume/element"
