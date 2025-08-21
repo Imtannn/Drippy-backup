@@ -18,8 +18,8 @@ export class SuccessView extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		const url = new URL(window.location.href)
-		window.history.replaceState({}, '', url.pathname)
+		const url = window.location.pathname
+		window.history.replaceState({}, '', url)
 		store.resetState()
 		store.navigateTo = 'avatar'
 	}

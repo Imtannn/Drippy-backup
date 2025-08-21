@@ -38,8 +38,6 @@ export class AvatarSelection extends Element {
 	}
 
 	#onSaveClick = () => {
-		const value = store.tempSelectedAvatar
-		console.log(value)
 		// TODO: set the selected avatar. This is a temporary solution.
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('avatar', 'male')
