@@ -23,13 +23,9 @@ export class AppButtonsLeft extends Element {
 				store.view === 'custom-measurement' ||
 				store.view === 'success'
 			) {
-				this.shadowRoot
-					?.getElementById('app-buttons-left')
-					?.style.setProperty('--app-buttons-left-transform', 'translateX(0)')
+				this.style.setProperty('--app-buttons-left-transform', 'translateX(0)')
 			} else {
-				this.shadowRoot
-					?.getElementById('app-buttons-left')
-					?.style.setProperty('--app-buttons-left-transform', 'translateX(24rem)')
+				this.style.setProperty('--app-buttons-left-transform', 'translateX(24rem)')
 			}
 		})
 	}
@@ -150,11 +146,9 @@ export class AppButtonsGroup extends Element {
 		super.connectedCallback()
 		this.createEffect(() => {
 			if (this.groupDirection === 'row') {
-				this.shadowRoot?.getElementById('app-buttons-group')?.style.setProperty('--app-buttons-group-direction', 'row')
+				this.style.setProperty('--app-buttons-group-direction', 'row')
 			} else {
-				this.shadowRoot
-					?.getElementById('app-buttons-group')
-					?.style.setProperty('--app-buttons-group-direction', 'column')
+				this.style.setProperty('--app-buttons-group-direction', 'column')
 			}
 		})
 	}
