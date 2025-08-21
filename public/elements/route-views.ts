@@ -1,6 +1,6 @@
 import {attribute, css, element, Element, html, type ElementAttributes} from 'lume'
-import {appStyles} from './app-styles.js'
-import {onboardingStyles} from './onboarding-styles.js'
+import {appStyles} from '../styles/app-styles.js'
+import {onboardingStyles} from '../styles/onboarding-styles.js'
 
 export type StepConfig = {
 	id: string

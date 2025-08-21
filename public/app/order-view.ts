@@ -1,10 +1,10 @@
 import {css, Element, element, eventAttribute, html, type ElementAttributes} from 'lume'
-import {store} from './store.js'
+import {appStyles} from '../elements/app-style.js'
 import '../elements/back-button.js'
 import '../elements/home-button.js'
-import '../elements/theme-switch-button.js'
 import '../elements/logo-button.js'
-import {appStyles} from '../elements/app-style.js'
+import '../elements/theme-switch-button.js'
+import {store} from './store.js'
 
 type OrderViewAttributes = 'onclick'
 
@@ -35,17 +35,17 @@ export class OrderView extends Element {
 
 	template = () => html`
 	<app-buttons-left>
-	<app-buttons-group group-direction="row">
-		<back-button onclick=${this.#onBackButtonClick}></back-button>
-		<home-button onclick=${this.#onHomeButtonClick}></home-button>
-	</app-buttons-group>
+		<app-buttons-group group-direction="row">
+			<back-button onclick=${this.#onBackButtonClick}></back-button>
+			<home-button onclick=${this.#onHomeButtonClick}></home-button>
+		</app-buttons-group>
 </app-buttons-left>
 
-<app-buttons-right>
-	<app-buttons-group>
-		<!-- <theme-switch-button></theme-switch-button> -->
-		<logo-button brand-name="Speed"></logo-button>
-	</app-buttons-group>
+	<app-buttons-right>
+		<app-buttons-group>
+			<!-- <theme-switch-button></theme-switch-button> -->
+			<logo-button brand-name="Speed"></logo-button>
+		</app-buttons-group>
 	</app-buttons-right>
 
 	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
