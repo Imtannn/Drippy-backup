@@ -208,7 +208,7 @@ export class OrderView extends Element {
 		}
 
 		.product-name {
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 600;
 			color: #000;
 			margin: 0 0 5px 0;
@@ -219,7 +219,7 @@ export class OrderView extends Element {
 		}
 
 		.product-price {
-			font-size: 10px;
+			font-size: 12px;
 			font-weight: 400;
 			color: #666;
 			margin: 0;
@@ -249,7 +249,7 @@ export class OrderView extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 500;
 			transition: all 0.2s;
 			user-select: none;
@@ -269,7 +269,7 @@ export class OrderView extends Element {
 		}
 
 		.quantity {
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 600;
 			text-align: center;
 			user-select: none;
@@ -297,7 +297,7 @@ export class OrderView extends Element {
 			background: #f5f5f5;
 			border-radius: 20px;
 			cursor: pointer;
-			font-size: 10px;
+			font-size: 12px;
 			font-weight: 400;
 			transition: all 0.2s;
 			color: #000;

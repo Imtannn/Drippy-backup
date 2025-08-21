@@ -161,7 +161,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.description {
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 500;
 			color: Eerie black;
 			line-height: 1.5;
@@ -241,7 +241,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.card-title {
-			font-size: 14px;
+			font-size: 16px;
 			font-weight: 600;
 			color: black;
 			margin: 0;
@@ -252,7 +252,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.card-subtitle {
-			font-size: 10px;
+			font-size: 12px;
 			font-weight: 400;
 			color: #666;
 			text-decoration: underline;
@@ -265,7 +265,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.explore-button {
-			font-size: 10px;
+			font-size: 12px;
 			padding: 0.5rem 1rem;
 			background: #121316;
 			border: 2px solid black;

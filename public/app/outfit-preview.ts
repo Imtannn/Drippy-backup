@@ -137,7 +137,7 @@ export class OutfitPreview extends Element {
 			padding: 16px 32px;
 			border-radius: 10px;
 			border: none;
-			font-size: 14px;
+			font-size: 16px;
 			font-weight: 600;
 			cursor: pointer;
 			max-width: 354px;

@@ -51,7 +51,7 @@ export function createDatePicker(options: {
 		width: 100%;
 		padding: 10px;
 		border-radius: 10px;
-		font-size: 14px;
+		font-size: 16px;
 		box-sizing: border-box;
 		background: white;
 		border: 2px solid #E56BE8;
@@ -77,7 +77,7 @@ export function createDatePicker(options: {
 	const arrow = document.createElement('span')
 	arrow.textContent = '▼'
 	arrow.style.cssText = `
-		font-size: 12px;
+		font-size: 14px;
 		color: #666;
 	`
 

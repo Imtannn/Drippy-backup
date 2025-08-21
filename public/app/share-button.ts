@@ -27,7 +27,7 @@ export class ShareButton extends Element {
 			gap: 10px;
 			width: 100%;
 			border: none;
-			font-size: 14px;
+			font-size: 16px;
 			font-weight: 600;
 			text-align: center;
 			width: 32px;

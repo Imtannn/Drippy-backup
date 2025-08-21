@@ -86,7 +86,7 @@ export class BlocksPage extends Element {
 									</div>
 								`}
 								</>
-							
+
 							</div>
 
 						</tabs-content>
@@ -288,7 +288,7 @@ export class BlocksPage extends Element {
 			padding: 0;
 			border: none;
 			border-radius: 12px;
-			font-size: 14px;
+			font-size: 16px;
 			color: #99999a;
 			cursor: pointer;
 			transition: all 0.2s ease;
@@ -361,7 +361,7 @@ export class BlocksPage extends Element {
 
 		@media (max-width: 768px) {
 			.category-tab {
-				font-size: 12px;
+				font-size: 14px;
 			}
 
 			.item-card {

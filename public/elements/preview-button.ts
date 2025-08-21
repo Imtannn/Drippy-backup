@@ -71,7 +71,7 @@ export class PreviewButton extends Element {
 			border: none;
 			outline: none;
 			font-weight: 600;
-			font-size: 12px;
+			font-size: 14px;
 		}
 	`
 }
