@@ -93,7 +93,6 @@ export class DrippyApp extends Element {
 
 				// If no scene is selected and no scene is provided in search params, navigate to scene selection. Else, use the provided scene.
 				if (!store.selectedScene) {
-					console.log('scene', scene, store.selectedScene)
 					if (scene) {
 						store.selectScene = scene as Scene
 					} else {

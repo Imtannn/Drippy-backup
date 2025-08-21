@@ -291,7 +291,14 @@ export class DrippyScene extends Element {
 			></lume-box>
 
 			<lume-gltf-model
-				src=${() => (store.tempSelectedAvatar === 'female' || store.selectedAvatar === 'female' ? femaleAvatar.href : maleAvatar.href)}
+				src=${() =>
+					store.selectedAvatar !== null
+						? store.selectedAvatar === 'female'
+							? femaleAvatar.href
+							: maleAvatar.href
+						: store.tempSelectedAvatar === 'female'
+							? femaleAvatar.href
+							: maleAvatar.href}
 			></lume-gltf-model>
 
 			<${For} each=${() => Array.from(store.selectedBlocks.values())}>

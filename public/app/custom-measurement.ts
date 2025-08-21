@@ -23,7 +23,8 @@ export class CustomMeasurement extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		window.history.replaceState({}, '', '')
+		const url = window.location.pathname
+		window.history.replaceState({}, '', url)
 		store.resetState()
 		store.navigateTo = 'avatar'
 	}
