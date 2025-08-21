@@ -370,7 +370,7 @@ export class TabsTrigger extends Element {
 			background: none;
 			border: none;
 			border-radius: 16px;
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 500;
 			color: #424347;
 			cursor: pointer;
@@ -488,7 +488,7 @@ export class TabsContent extends Element {
 			background: #f5f5f5;
 			border: none;
 			border-radius: 12px;
-			font-size: 12px;
+			font-size: 14px;
 			color: #666;
 			cursor: pointer;
 			transition: all 0.2s ease;

@@ -157,7 +157,7 @@ export class PreviewPage extends Element {
 		}
 
 		.product-name {
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 600;
 			color: #000;
 			margin: 0 0 5px 0;
@@ -198,7 +198,7 @@ export class PreviewPage extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 500;
 			transition: all 0.2s;
 			user-select: none;
@@ -218,7 +218,7 @@ export class PreviewPage extends Element {
 		}
 
 		.quantity {
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 600;
 			text-align: center;
 			user-select: none;

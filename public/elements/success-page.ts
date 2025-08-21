@@ -65,7 +65,7 @@ export class SuccessPage extends Element {
 		}
 
 		.success-message {
-			font-size: 14px;
+			font-size: 16px;
 			font-weight: 400;
 			color: #000000;
 			margin: 0;
@@ -84,7 +84,7 @@ export class SuccessPage extends Element {
 			border: none;
 			border-radius: 25px;
 			padding: 15px 20px;
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 600;
 			cursor: pointer;
 			display: flex;
@@ -199,7 +199,7 @@ export class SuccessPage extends Element {
 		}
 
 		.rating-text {
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 400;
 			color: #8b8b8b;
 			margin: 0;

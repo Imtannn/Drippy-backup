@@ -161,7 +161,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.description {
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 500;
 			color: Eerie black;
 			line-height: 1.5;
@@ -241,7 +241,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.card-title {
-			font-size: 14px;
+			font-size: 16px;
 			font-weight: 600;
 			color: black;
 			margin: 0;
