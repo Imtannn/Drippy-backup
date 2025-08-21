@@ -6,18 +6,16 @@ import '../elements/tabs.js'
 import '../elements/save-button.js'
 import '../elements/theme-switch-button.js'
 
-const avatarThumb = new URL('../images/avatar-female-tmp.png', import.meta.url)
-
 type AvatarSelectionAttributes = keyof {}
 
 const avatars = [
 	{
-		src: avatarThumb,
+		src: new URL('../images/Em_Underwear.png', import.meta.url),
 		alt: 'Female avatar',
 		value: 'female',
 	},
 	{
-		src: avatarThumb,
+		src: new URL('../images/Anh_Underwear.png', import.meta.url),
 		alt: 'Male avatar',
 		value: 'male',
 	},
@@ -39,10 +37,12 @@ export class AvatarSelection extends Element {
 
 	#onSaveClick = () => {
 		// TODO: set the selected avatar. This is a temporary solution.
+		const value = store.tempSelectedAvatar
+		if (!value) return
 		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('avatar', 'male')
+		searchParams.set('avatar', value)
 		window.history.replaceState({}, '', `?${searchParams.toString()}`)
-		store.selectAvatar = 'male'
+		store.selectAvatar = value
 	}
 
 	template = () => html`
@@ -84,7 +84,10 @@ export class AvatarSelection extends Element {
 									item-alt=${avatar().alt}
 									item-value=${avatar().value}
 									oncardselected=${this.#onItemClick}
-									object-fit="contain"
+									object-fit="cover"
+									object-position="top"
+									aspect-ratio="0.79"
+									image-style="position: absolute; scale: 2; top: 42%;"
 								></item-card>
 							`}
 						</>
@@ -100,7 +103,10 @@ export class AvatarSelection extends Element {
 							item-alt=${avatar().alt}
 							item-value=${avatar().value}
 							oncardselected=${this.#onItemClick}
-							object-fit="contain"
+							object-fit="cover"
+							object-position="top"
+							aspect-ratio="0.79"
+							image-style="position: absolute; scale: 2; top: 42%;"
 						></item-card>
 					`}
 				</>

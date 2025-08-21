@@ -10,7 +10,16 @@ import {
 	type ElementAttributes,
 } from 'lume'
 
-type ItemCardAttributes = 'itemValue' | 'itemSrc' | 'itemAlt' | 'itemActive' | 'oncardselected' | 'objectFit'
+type ItemCardAttributes =
+	| 'itemValue'
+	| 'itemSrc'
+	| 'itemAlt'
+	| 'itemActive'
+	| 'oncardselected'
+	| 'objectFit'
+	| 'objectPosition'
+	| 'aspectRatio'
+	| 'imageStyle'
 
 @element
 export class ItemCard extends Element {
@@ -21,10 +30,25 @@ export class ItemCard extends Element {
 	@stringAttribute itemAlt = ''
 	@attribute itemValue = null
 	@attribute objectFit = 'cover'
+	@attribute objectPosition = 'center'
+	@attribute aspectRatio = '1'
 	@eventAttribute oncardselected = null
+	@attribute imageStyle = ''
 
 	connectedCallback() {
 		super.connectedCallback()
+
+		this.createEffect(() => {
+			this.style.setProperty('--aspect-ratio', this.aspectRatio)
+		})
+
+		this.createEffect(() => {
+			this.style.setProperty('--object-position', this.objectPosition)
+		})
+
+		this.createEffect(() => {
+			this.style.setProperty('--object-fit', this.objectFit)
+		})
 	}
 
 	#onClick = () => {
@@ -39,12 +63,7 @@ export class ItemCard extends Element {
 	template = () => html`
 		<div class="item-card" onclick=${this.#onClick} classList=${() => ({active: this.itemActive})}>
 			<div class="item-preview">
-				<img
-					class="item-thumb"
-					src=${() => this.itemSrc}
-					alt=${() => this.itemAlt}
-					classList=${() => ({contain: this.objectFit === 'contain'})}
-				/>
+				<img class="item-thumb" src=${() => this.itemSrc} alt=${() => this.itemAlt} style=${() => this.imageStyle} />
 			</div>
 		</div>
 	`
@@ -52,13 +71,16 @@ export class ItemCard extends Element {
 	css = css/*css*/ `
 		:host {
 			display: contents;
+			--aspect-ratio: 1;
+			--object-position: center;
+			--object-fit: cover;
 		}
 
 		.item-card {
-			aspect-ratio: 1;
+			aspect-ratio: var(--aspect-ratio);
 			/* Two-layer background: inner fill on padding-box, gradient border on border-box */
 			background:
-				linear-gradient(#f8f8f8, #f8f8f8) padding-box,
+				linear-gradient(#ebeced, #ebeced) padding-box,
 				var(--item-card-border, linear-gradient(#0000, #0000)) border-box;
 			border-radius: 12px;
 			overflow: hidden;
@@ -97,12 +119,8 @@ export class ItemCard extends Element {
 			img {
 				width: 100%;
 				height: 100%;
-				object-fit: cover;
-				object-position: center;
-			}
-
-			img.contain {
-				object-fit: contain;
+				object-fit: var(--object-fit);
+				object-position: var(--object-position);
 			}
 		}
 
