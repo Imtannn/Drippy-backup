@@ -28,7 +28,7 @@ const s3 = new AWS.S3()
 const COLLECTIONS = [
 	{
 		name: 'speed',
-		folderId: '1KEoQ9MLJRFsPWdOJJCvb_hYub5gSqlqx',
+		folderId: '1CSBAMYBPyBjfjCbmO6xncnQKBm-Y8MxU',
 	},
 ]
 
@@ -125,7 +125,7 @@ async function uploadToS3(buffer: Buffer, key: string, contentType: string): Pro
 function downloadToBuffer(url: string): Promise<Buffer> {
 	return new Promise((resolve, reject) => {
 		https
-			.get(url, response => {
+			.get(url, (response: any) => {
 				// Handle redirects
 				if (response.statusCode === 302 || response.statusCode === 301 || response.statusCode === 303) {
 					const location = response.headers.location
@@ -142,7 +142,7 @@ function downloadToBuffer(url: string): Promise<Buffer> {
 				}
 
 				const chunks: Buffer[] = []
-				response.on('data', chunk => {
+				response.on('data', (chunk: any) => {
 					chunks.push(chunk)
 				})
 
@@ -169,17 +169,6 @@ async function fetchFolderContents(folderId: string): Promise<TODO[]> {
 	}
 }
 
-async function fetchSubfolderContents(subfolderId: string): Promise<TODO[]> {
-	try {
-		const url = `https://www.googleapis.com/drive/v3/files?q='${subfolderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType)&key=${API_KEY}`
-		const response = await makeRequest<{files: TODO[]}>(url)
-		return response.files || []
-	} catch (error) {
-		console.error('Error fetching subfolder contents:', error)
-		return []
-	}
-}
-
 function matchGltfPngPairs(files: TODO[]): TODO[] {
 	const pairs: TODO[] = []
 	const gltfFiles = files.filter((f: TODO) => f.name.toLowerCase().endsWith('.gltf'))
@@ -201,8 +190,8 @@ function matchGltfPngPairs(files: TODO[]): TODO[] {
 	return pairs
 }
 
-// Download assets for a category and upload to S3
-async function downloadAssets(collectionName: string, category: string, pairs: TODO[]): Promise<TODO[]> {
+// Download assets for a collection and upload to S3
+async function downloadAssets(collectionName: string, pairs: TODO[]): Promise<TODO[]> {
 	const downloads: TODO[] = []
 
 	for (const {gltf, png, baseName} of pairs) {
@@ -224,7 +213,6 @@ async function downloadAssets(collectionName: string, category: string, pairs: T
 			console.log(`✅ Uploaded ${baseName} to S3`)
 			downloads.push({
 				baseName: baseName,
-				category,
 				collectionName,
 				thumbUrl: pngS3Url,
 				modelUrl: gltfS3Url,
@@ -237,77 +225,68 @@ async function downloadAssets(collectionName: string, category: string, pairs: T
 	return downloads
 }
 
-function generateBlockData(downloadedAssets: TODO): TODO {
-	const blocks: TODO = {}
+function generateTemplateData(downloadedAssets: TODO): TODO {
+	const templates: TODO = {}
 	let idCounter = 1
 
 	// Flatten the object structure to get all assets as an array
 	const allAssets: TODO[] = Object.values(downloadedAssets).flat()
 
-	allAssets.forEach(({baseName, category, collectionName, thumbUrl, modelUrl}: TODO) => {
-		blocks[collectionName] = blocks[collectionName] || []
-		blocks[collectionName].push({
+	allAssets.forEach(({baseName, collectionName, thumbUrl, modelUrl}: TODO) => {
+		templates[collectionName] = templates[collectionName] || []
+		templates[collectionName].push({
 			_id: idCounter.toString(),
 			thumb: thumbUrl,
 			modelFile: modelUrl,
-			blockName: baseName,
+			name: baseName,
 			avatar: 'Male',
-			category: category,
 		})
 		idCounter++
 	})
 
-	return blocks
+	return templates
 }
 
-function generateBlocksFileContent(blocks: TODO): string {
-	const finalBlocksContent: TODO = {}
-	for (const collectionName in blocks) {
-		const blocksArray = blocks[collectionName]
-		finalBlocksContent[collectionName] = blocksArray
+function generateTemplatesFileContent(templates: TODO): string {
+	const finalTemplatesContent: TODO = {}
+	for (const collectionName in templates) {
+		const templatesArray = templates[collectionName]
+		finalTemplatesContent[collectionName] = templatesArray
 			.map(
-				(block: TODO) => `	{
-		_id: '${block._id}',
-		thumb: '${block.thumb}',
-		modelFile: '${block.modelFile}',
-		blockName: '${block.blockName}',
-		avatar: '${block.avatar}',
-		category: '${block.category}',
+				(template: TODO) => `	{
+		_id: '${template._id}',
+		thumb: '${template.thumb}',
+		modelFile: '${template.modelFile}',
+		name: '${template.name}',
+		avatar: '${template.avatar}',
 	}`,
 			)
 			.join(',\n')
 	}
 
-	return `import type {Block} from '../types/block'
+	return `import type {Template} from '../types/template'
 
-export const blocks: Record<string, Block[]> = {
-	${Object.entries(finalBlocksContent)
+export const templates: Record<string, Template[]> = {
+	${Object.entries(finalTemplatesContent)
 		.map(
-			([collectionName, blocksArray]) => `
-		${collectionName}: [
-${blocksArray}
-],
-	`,
+			([collectionName, templatesArray]) => `${collectionName}: [
+${templatesArray}
+	]`,
 		)
-		.join(',\n')}
+		.join(',\n\t')}
 }
 `
 }
 
-async function updateBlocksFile(content: string): Promise<void> {
-	const blocksPath = path.join(__dirname, '../../public/consts/blocks.ts')
-	fs.writeFileSync(blocksPath, content, 'utf8')
-	console.log('✅ blocks.ts updated successfully')
-}
-
-function normalizeName(name: string): string {
-	// Remove _ characters in name and trim all spaces
-	return name.replace(/_/g, ' ').trim()
+async function updateTemplatesFile(content: string): Promise<void> {
+	const templatesPath = path.join(__dirname, '../../public/consts/templates.ts')
+	fs.writeFileSync(templatesPath, content, 'utf8')
+	console.log('✅ templates.ts updated successfully')
 }
 
 async function main(): Promise<void> {
 	try {
-		console.log('🚀 Fetching data from Google Drive and uploading to S3...')
+		console.log('🚀 Fetching templates from Google Drive and uploading to S3...')
 
 		if (API_KEY === 'GOOGLE_API_KEY') {
 			console.log('⚠️  No Google Drive API key provided. Set GOOGLE_API_KEY environment variable.')
@@ -337,63 +316,42 @@ async function main(): Promise<void> {
 			console.log(`\n🗂️  Processing collection: ${collection.name}`)
 			console.log(`📁 Folder ID: ${collection.folderId}`)
 
-			// Get main folder contents (should be category folders)
-			const mainFolderContents = await fetchFolderContents(collection.folderId)
-			const categoryFolders = mainFolderContents.filter(item => item.mimeType === 'application/vnd.google-apps.folder')
+			// Get folder contents (direct files, no category folders for templates)
+			const folderContents = await fetchFolderContents(collection.folderId)
+			const files = folderContents.filter(item => item.mimeType !== 'application/vnd.google-apps.folder')
+			const pairs = matchGltfPngPairs(files)
 
-			console.log(`📁 Found ${categoryFolders.length} category folders`)
+			console.log(`   Found ${pairs.length} matching GLTF/PNG pairs`)
 
-			for (const categoryFolder of categoryFolders) {
-				console.log(`📂 Processing category: ${categoryFolder.name}`)
-
-				const subfolderContents = await fetchSubfolderContents(categoryFolder.id)
-				const pairs = matchGltfPngPairs(subfolderContents)
-
-				console.log(`   Found ${pairs.length} matching GLTF/PNG pairs`)
-
-				if (pairs.length > 0) {
-					console.log(`📥 Downloading assets for ${categoryFolder.name}...`)
-					const downloads = await downloadAssets(collection.name, normalizeName(categoryFolder.name), pairs)
-					if (!allDownloadedAssets[collection.name]) {
-						allDownloadedAssets[collection.name] = []
-					}
-					allDownloadedAssets[collection.name].push(...downloads)
+			if (pairs.length > 0) {
+				console.log(`📥 Downloading templates for ${collection.name}...`)
+				const downloads = await downloadAssets(collection.name, pairs)
+				if (!allDownloadedAssets[collection.name]) {
+					allDownloadedAssets[collection.name] = []
 				}
+				allDownloadedAssets[collection.name].push(...downloads)
 			}
 		}
 
-		// Generate blocks data
-		const blocks = generateBlockData(allDownloadedAssets)
-		console.log(`📊 Generated blocks for ${Object.keys(blocks).length} collections`)
+		// Generate templates data
+		const templates = generateTemplateData(allDownloadedAssets)
+		console.log(`📊 Generated templates for ${Object.keys(templates).length} collections`)
 
-		// Generate and write the blocks.ts file
-		const fileContent = generateBlocksFileContent(blocks)
-		await updateBlocksFile(fileContent)
+		// Generate and write the templates.ts file
+		const fileContent = generateTemplatesFileContent(templates)
+		await updateTemplatesFile(fileContent)
 
 		console.log('🎉 Script completed successfully!')
 		console.log('\n📋 Summary:')
 
-		// Group downloads by collection and category for summary
-		const collectionSummary: TODO = {}
+		// Group downloads by collection for summary
 		Object.entries(allDownloadedAssets).forEach(([collectionName, downloadsArray]: [string, TODO]) => {
-			if (!collectionSummary[collectionName]) {
-				collectionSummary[collectionName] = {}
-			}
-			downloadsArray.forEach((download: TODO) => {
-				collectionSummary[collectionName][download.category] =
-					(collectionSummary[collectionName][download.category] || 0) + 1
-			})
-		})
-
-		Object.entries(collectionSummary).forEach(([collectionName, categories]: [string, TODO]) => {
 			console.log(`\n📦 Collection: ${collectionName}`)
-			Object.entries(categories).forEach(([category, count]: [string, TODO]) => {
-				console.log(`   ${category}: ${count} items downloaded`)
-			})
+			console.log(`   Templates: ${downloadsArray.length} items downloaded`)
 		})
 
 		console.log(`\n📁 Assets organized by collection:`)
-		Object.keys(collectionSummary).forEach((collectionName: string) => {
+		Object.keys(allDownloadedAssets).forEach((collectionName: string) => {
 			console.log(`   Images: public/images/${collectionName}/`)
 			console.log(`   Models: public/models/${collectionName}/`)
 		})

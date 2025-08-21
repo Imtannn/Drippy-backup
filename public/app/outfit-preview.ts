@@ -27,9 +27,11 @@ export class OutfitPreview extends Element {
 
 	#onHomeButtonClick = () => {
 		const url = window.location.pathname
-		window.history.replaceState({}, '', url)
+		let search = window.location.search
+		search = search.replace('isPreview=true', '')
+		window.history.replaceState({}, '', `${url}${search}`)
 		store.resetState()
-		store.navigateTo = 'avatar'
+		store.navigateTo = 'template'
 	}
 
 	#onBuyItClick = () => {
@@ -123,8 +125,8 @@ export class OutfitPreview extends Element {
 			flex-direction: column;
 			gap: 5px;
 			z-index: 100;
-			width: 354px;
-			max-width: 90%;
+			width: 90vw;
+			min-width: 254px;
 		}
 
 		.buy-button,
@@ -140,7 +142,6 @@ export class OutfitPreview extends Element {
 			font-size: 16px;
 			font-weight: 600;
 			cursor: pointer;
-			max-width: 354px;
 			text-align: center;
 		}
 
