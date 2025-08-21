@@ -7,8 +7,8 @@ import './app-buttons.js'
 import '../elements/loading-indicator.js'
 import '../elements/show-when.js'
 
-const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
-const maleAvatar = new URL('../models/ANH-Male.glb', import.meta.url)
+const femaleAvatar = new URL('../models/EM-Underwear.glb', import.meta.url)
+const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
 
 const scenes = [
 	{
