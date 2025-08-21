@@ -22,8 +22,8 @@ export class DrippyScene extends Element {
 	static elementName = 'drippy-scene'
 
 	@signal isDark = false
-	@signal isLoadingBlocks = false
-	@signal isLoadingMaterials = false
+	@signal loadingBlocks: string[] = []
+	@signal loadingMaterials: string[] = []
 	@signal sceneUrl = ''
 
 	// Cache for textures per URL so we don't reload repeatedly
@@ -65,10 +65,11 @@ export class DrippyScene extends Element {
 	}
 
 	// TODO: If the same fabric with same key is already fetching, wait for it to finish and use the same texture
-	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, cancelApply: () => boolean) {
+	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, cancelApply: () => boolean, blockId?: string) {
 		if (!fabric || !root) return
 
-		this.isLoadingMaterials = true
+		const loadingId = blockId || `${fabric._id}-${Date.now()}`
+		this.loadingMaterials = [...untrack(() => this.loadingMaterials), loadingId]
 		const repete: [number, number] = [60 / 19, 60 / 19]
 		const offset: [number, number] = [0, 0]
 		const rotate = 0
@@ -86,7 +87,7 @@ export class DrippyScene extends Element {
 		])
 
 		if (untrack(cancelApply)) {
-			this.isLoadingMaterials = false
+			this.loadingMaterials = untrack(() => this.loadingMaterials).filter(id => id !== loadingId)
 			return
 		}
 
@@ -115,7 +116,7 @@ export class DrippyScene extends Element {
 			}
 		})
 
-		this.isLoadingMaterials = false
+		this.loadingMaterials = untrack(() => this.loadingMaterials).filter(id => id !== loadingId)
 	}
 
 	#renderTask = () => {
@@ -251,26 +252,53 @@ export class DrippyScene extends Element {
 			onCleanup(() => mo.disconnect())
 		})
 
+		// Track avatar loading state
+		this.createEffect(() => {
+			const avatar = this.shadowRoot?.querySelector('lume-gltf-model[data-avatar]') as any
+			if (!avatar) return
+
+			const behavior = avatar.behaviors?.get?.('gltf-model')
+			const avatarId = 'avatar'
+
+			if (!behavior?.model && avatar.three) {
+				if (!untrack(() => this.loadingBlocks.includes(avatarId))) {
+					this.loadingBlocks = [...untrack(() => this.loadingBlocks), avatarId]
+				}
+
+				const loaded = () => {
+					this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== avatarId)
+				}
+				avatar.on?.('MODEL_LOAD', loaded)
+				onCleanup(() => {
+					avatar.off?.('MODEL_LOAD', loaded)
+				})
+			}
+		})
+
 		// Track block loading state
 		this.createEffect(() => {
 			const blockCount = store.selectedBlocks.size
 
 			if (blockCount === 0) {
-				this.isLoadingBlocks = false
+				this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== 'avatar')
 				return
 			}
 
 			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
 
-			this.isLoadingBlocks = true
-
-			const loaded = () => {
-				this.isLoadingBlocks = false
-			}
-
-			for (const el of models) {
+			for (const [index, el] of models.entries()) {
 				const behavior = el.behaviors?.get?.('gltf-model')
+				const blockId = `block-${index}`
+
 				if (!behavior?.model && el.three) {
+					if (!untrack(() => this.loadingBlocks.includes(blockId))) {
+						this.loadingBlocks = [...untrack(() => this.loadingBlocks), blockId]
+					}
+
+					const loaded = () => {
+						this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== blockId)
+					}
+
 					el?.on?.('MODEL_LOAD', loaded)
 					onCleanup(() => {
 						el?.off?.('MODEL_LOAD', loaded)
@@ -299,11 +327,12 @@ export class DrippyScene extends Element {
 			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
 			const handlers: Array<{el: any; fn: () => void}> = []
 
-			for (const el of models) {
+			for (const [index, el] of models.entries()) {
+				const blockId = `material-${index}`
 				const apply = () => {
 					const isCanceled = untrack(cancelApply)
 					if (!isCanceled) {
-						this.#applyFabricToThreeObject((el as any).three, fabric, cancelApply)
+						this.#applyFabricToThreeObject((el as any).three, fabric, cancelApply, blockId)
 					}
 				}
 				const behavior = el.behaviors?.get?.('gltf-model')
@@ -342,7 +371,7 @@ export class DrippyScene extends Element {
 	template = () => html`
 		<app-buttons-left layout="bottom">
 			<app-buttons-group>
-				<loading-indicator is-visible=${() => this.isLoadingBlocks || this.isLoadingMaterials}></loading-indicator>
+				<loading-indicator is-visible=${() => this.loadingBlocks.length > 0 || this.loadingMaterials.length > 0}></loading-indicator>
 			</app-buttons-group>
 		</app-buttons-left>
 
@@ -379,6 +408,8 @@ export class DrippyScene extends Element {
 						: store.tempSelectedAvatar === 'female'
 							? femaleAvatar.href
 							: maleAvatar.href}
+
+							data-avatar
 			></lume-gltf-model>
 
 			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
