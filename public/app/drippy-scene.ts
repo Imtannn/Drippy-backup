@@ -251,6 +251,26 @@ export class DrippyScene extends Element {
 			onCleanup(() => mo.disconnect())
 		})
 
+		// Track avatar loading state
+		this.createEffect(() => {
+			const avatar = this.shadowRoot?.querySelector('lume-gltf-model[data-avatar]') as any
+			if (!avatar) return
+
+			const behavior = avatar.behaviors?.get?.('gltf-model')
+
+			if (!behavior?.model && avatar.three) {
+				this.isLoadingBlocks = true
+
+				const loaded = () => {
+					this.isLoadingBlocks = false
+				}
+				avatar.on?.('MODEL_LOAD', loaded)
+				onCleanup(() => {
+					avatar.off?.('MODEL_LOAD', loaded)
+				})
+			}
+		})
+
 		// Track block loading state
 		this.createEffect(() => {
 			const blockCount = store.selectedBlocks.size
@@ -262,8 +282,6 @@ export class DrippyScene extends Element {
 
 			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
 
-			this.isLoadingBlocks = true
-
 			const loaded = () => {
 				this.isLoadingBlocks = false
 			}
@@ -271,6 +289,8 @@ export class DrippyScene extends Element {
 			for (const el of models) {
 				const behavior = el.behaviors?.get?.('gltf-model')
 				if (!behavior?.model && el.three) {
+					this.isLoadingBlocks = true
+
 					el?.on?.('MODEL_LOAD', loaded)
 					onCleanup(() => {
 						el?.off?.('MODEL_LOAD', loaded)
@@ -379,6 +399,8 @@ export class DrippyScene extends Element {
 						: store.tempSelectedAvatar === 'female'
 							? femaleAvatar.href
 							: maleAvatar.href}
+
+							data-avatar
 			></lume-gltf-model>
 
 			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
