@@ -41,7 +41,7 @@ export const appStyles = css`
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 10px;
+		font-size: 12px;
 		font-weight: 600;
 	}
 
@@ -59,7 +59,7 @@ export const appStyles = css`
 		padding-top: 18px;
 		border: 1px solid #ddd;
 		border-radius: 8px;
-		font-size: 10px;
+		font-size: 12px;
 		font-weight: 500;
 		box-sizing: border-box;
 		background-color: #f5f5f5;

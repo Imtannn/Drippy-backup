@@ -405,7 +405,7 @@ export class TabsTrigger extends Element {
 		@media (max-width: 768px) {
 			.tab {
 				padding: 6px 12px;
-				font-size: 10px;
+				font-size: 12px;
 			}
 		}
 	`

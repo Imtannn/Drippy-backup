@@ -168,7 +168,7 @@ export class PreviewPage extends Element {
 		}
 
 		.product-price {
-			font-size: 10px;
+			font-size: 12px;
 			font-weight: 400;
 			color: #666;
 			margin: 0;
@@ -246,7 +246,7 @@ export class PreviewPage extends Element {
 			background: #f5f5f5;
 			border-radius: 20px;
 			cursor: pointer;
-			font-size: 10px;
+			font-size: 12px;
 			font-weight: 400;
 			transition: all 0.2s;
 			color: #000;
