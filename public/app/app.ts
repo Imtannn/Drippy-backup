@@ -1,169 +1,189 @@
-import {css, Element, element, html, signal} from 'lume'
-
-import '../elements/avatar-page.js'
-import '../elements/back-button.js'
-import '../elements/blocks-page.js'
-
-import '../elements/back-button.js'
-import '../elements/preview-measurement-page.js'
-import '../elements/preview-page.js'
-import '../elements/spaces-page.js'
-import '../elements/success-page.js'
-
-import '../elements/bottom-sheet.js'
-import '../elements/cube-button.js'
+import {css, Element, element, html, onCleanup, signal} from 'lume'
 import '../elements/login-ui.js'
-
-import {RouteViews, type RouteViewsConfig} from '../elements/route-views.js'
-
 import '../elements/show-when.js'
-import '../elements/tabs.js'
-import '../elements/theme-switch.js'
-
-import '../elements/undo-button.js'
-
 import '../routes.js' // track page visits
+import './avatar-selection.js'
+import './blocks-selection.js'
 import './drippy-scene.js'
+import './spaces-selection.js'
+import './outfit-preview.js'
+import './order-view.js'
+import './custom-measurement.js'
+import './success-view.js'
+import '../elements/theme-switch.js'
+import {store, type Avatar, type Scene} from './store.js'
 
-const sceneBackground = new URL('../images/background-1.jpeg', import.meta.url)
+const scenes = [
+	{
+		name: 'bloom realms',
+		description: 'One million roses',
+		image: new URL('../images/background-2.jpeg', import.meta.url),
+	},
+]
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
 loadingCover?.classList.add('invisible')
 loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
 
-const appStepFlow = (
-	_config: {
-		// title: string
-		showBackButton: boolean
-	},
-	content: any,
-	_onBack: () => void,
-) => html` <div class="app-step">${content}</div>`
-
 @element
 export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
 
-	@signal currentStep = 'blocks'
+	@signal appLoaded = false
+	@signal sceneUrl = ''
 
 	connectedCallback() {
 		super.connectedCallback()
 
-		// Listen for navigation events from the child component
-		this.addEventListener('next-step', this.#handleNextStep)
-		this.addEventListener('back-step', this.#handleBackStep)
-	}
+		this.createEffect(() => {
+			console.log('store.view', store.view)
+			const scene = this.shadowRoot?.getElementById('drippy-scene')
+			if (scene) {
+				if (store.view === 'preview') {
+					scene.style.setProperty('--scene-transform', 'translateY(0)')
+				} else {
+					scene.style.setProperty('--scene-transform', 'translateY(-120px)')
+				}
+			} else {
+				const setProperty = () => {
+					const scene = this.shadowRoot?.getElementById('drippy-scene')
+					if (scene) {
+						if (store.view === 'preview') {
+							scene.style.setProperty('--scene-transform', 'translateY(0)')
+						} else {
+							scene.style.setProperty('--scene-transform', 'translateY(-120px)')
+						}
+					} else {
+						setTimeout(setProperty, 100)
+					}
+				}
+				setProperty()
+				this.shadowRoot?.addEventListener('DOMContentLoaded', setProperty)
+				onCleanup(() => this.shadowRoot?.removeEventListener('DOMContentLoaded', setProperty))
+			}
+		})
 
-	disconnectedCallback() {
-		super.disconnectedCallback()
-		this.removeEventListener('next-step', this.#handleNextStep)
-		this.removeEventListener('back-step', this.#handleBackStep)
-	}
+		this.createEffect(() => {
+			console.log('store.selectedScene', store.selectedScene)
+			if (store.selectedScene) {
+				const scene = scenes.find(scene => scene.name === store.selectedScene)
+				if (scene) {
+					this.sceneUrl = scene.image.href
+				}
+			}
+		})
 
-	#handleNextStep = () => {
-		const steps = this.#appConfig.steps.map(s => s.id)
-		const currentIndex = steps.indexOf(this.currentStep)
-		if (currentIndex !== -1 && currentIndex < steps.length - 1) {
-			this.currentStep = steps[currentIndex + 1]
-		}
-	}
+		this.createEffect(() => {
+			try {
+				const searchParams = new URLSearchParams(window.location.search)
+				const avatar = searchParams.get('avatar')
+				const scene = searchParams.get('scene')
+				const isPreview = searchParams.get('isPreview')
 
-	#handleBackStep = () => {
-		const steps = this.#appConfig.steps.map(s => s.id)
-		const currentIndex = steps.indexOf(this.currentStep)
-		if (currentIndex !== -1 && currentIndex > 0) {
-			this.currentStep = steps[currentIndex - 1]
-		}
-	}
+				// If no avatar is selected and no avatar is provided in search params, navigate to avatar selection. Else, use the provided avatar.
+				if (!store.selectedAvatar) {
+					if (avatar) {
+						store.selectAvatar = avatar as Avatar
+					} else {
+						store.navigateTo = 'avatar'
+						return
+					}
+				}
 
-	#appConfig: RouteViewsConfig = {
-		steps: [
-			{
-				id: 'avatar',
-				template: (routeViews: RouteViews) =>
-					appStepFlow({showBackButton: false}, html` <avatar-page></avatar-page>`, () => routeViews.previousStep()),
-			},
-			{
-				id: 'space',
-				template: (routeViews: RouteViews) =>
-					appStepFlow({showBackButton: true}, html` <spaces-page></spaces-page>`, () => routeViews.previousStep()),
-			},
-			{
-				id: 'blocks',
-				template: (routeViews: RouteViews) =>
-					appStepFlow({showBackButton: true}, html` <blocks-page></blocks-page> `, () => routeViews.previousStep()),
-			},
-			{
-				id: 'preview',
-				template: (routeViews: RouteViews) =>
-					appStepFlow({showBackButton: true}, html` <preview-page></preview-page>`, () => routeViews.previousStep()),
-			},
-			{
-				id: 'preview-measurement',
-				template: (routeViews: RouteViews) =>
-					appStepFlow({showBackButton: true}, html` <preview-measurement-page></preview-measurement-page>`, () =>
-						routeViews.previousStep(),
-					),
-			},
-			{
-				id: 'success',
-				template: (routeViews: RouteViews) =>
-					appStepFlow({showBackButton: false}, html` <success-page></success-page>`, () => routeViews.previousStep()),
-			},
-		],
+				// If no scene is selected and no scene is provided in search params, navigate to scene selection. Else, use the provided scene.
+				if (!store.selectedScene) {
+					console.log('scene', scene, store.selectedScene)
+					if (scene) {
+						store.selectScene = scene as Scene
+					} else {
+						store.navigateTo = 'scene'
+						return
+					}
+				}
+
+				if (store.isPreview || isPreview === 'true') {
+					store.navigateTo = 'preview'
+					return
+				}
+
+				// If both avatar and scene are selected, navigate to blocks.
+				store.navigateTo = 'blocks'
+			} catch (error) {
+				console.error('Error loading app', error)
+			} finally {
+				this.appLoaded = true
+			}
+		})
 	}
 
 	template = () => html`
-		<div class="app-layout">
-			<drippy-scene
-				class=${() => (this.currentStep === 'space' ? 'hidden' : '')}
-				style=${`background: url(${sceneBackground.href}) center / cover no-repeat`}
-			></drippy-scene>
-			<route-views
-				config=${this.#appConfig}
-				current-step=${() => this.currentStep}
-				class=${() => (this.currentStep === 'space' ? 'full-screen' : '')}
-			></route-views>
-			<div class="button-overlay">${() => this.#renderButtons()}</div>
-		</div>
+		<show-when
+			condition=${() => this.appLoaded}
+			fallback=${() => html`<div class="loading">Loading...</div>`}
+			content=${() => html`
+				<div id="app-container">
+					<drippy-scene
+						id="drippy-scene"
+						style=${() => `background: url(${this.sceneUrl}) center bottom / cover no-repeat`}
+					></drippy-scene>
+
+					<show-when
+						condition=${() => store.view === 'avatar'}
+						content=${() => html`<avatar-selection></avatar-selection>`}
+					>
+					</show-when>
+
+					<show-when
+						condition=${() => store.view === 'scene'}
+						content=${() => html`<spaces-selection></spaces-selection>`}
+					>
+					</show-when>
+
+					<show-when
+						condition=${() => store.view === 'blocks'}
+						content=${() => html`<blocks-selection></blocks-selection>`}
+					>
+					</show-when>
+
+					<show-when
+						condition=${() => store.view === 'preview'}
+						content=${() => html`<outfit-preview></outfit-preview>`}
+					>
+					</show-when>
+
+					<show-when condition=${() => store.view === 'order'} content=${() => html`<order-view></order-view>`}>
+					</show-when>
+
+					<show-when
+						condition=${() => store.view === 'custom-measurement'}
+						content=${() => html`<custom-measurement></custom-measurement>`}
+					>
+					</show-when>
+
+					<show-when condition=${() => store.view === 'success'} content=${() => html`<success-view></success-view>`}>
+					</show-when>
+				</div>
+			`}
+		>
+		</show-when>
 	`
 
-	#renderButtons() {
-		switch (this.currentStep) {
-			case 'avatar':
-				return html`<button class="save-btn" onClick=${() => this.#handleNextStep()}>Save</button>`
-			case 'space':
-				return html`
-					<button class="space-btn-back" onClick=${() => this.#handleBackStep()}>Back</button>
-					<button class="space-btn-next" onClick=${() => this.#handleNextStep()}>Next</button>
-				`
-			case 'blocks':
-				return html`
-					<back-button onclick=${() => this.#handleBackStep()}></back-button>
-					<button class="preview-btn" onClick=${() => this.#handleNextStep()}>Preview</button>
-				`
-			case 'preview':
-				return html`
-					<button class="preview-btn-back" onclick=${() => this.#handleBackStep()}>Back</button>
-					<button class="preview-btn-next" onclick=${() => this.#handleNextStep()}>Next</button>
-				`
-			case 'preview-measurement':
-				return html`
-					<button class="preview-m-btn-back" onclick=${() => this.#handleBackStep()}>Back</button>
-					<button class="preview-m-btn-next" onclick=${() => this.#handleNextStep()}>Next</button>
-				`
-			case 'success':
-				return html`<button class="success-btn-back" onclick=${() => this.#handleBackStep()}>Back</button>`
-			default:
-				return ''
-		}
-	}
-
 	css = css`
+		* {
+			box-sizing: border-box;
+		}
+
 		:host {
-			display: block;
-			position: relative;
+			--scene-transform: translateY(-120px);
+		}
+
+		:host {
+			width: 600px;
+			height: 400px;
+		}
+
+		drippy-scene {
 			width: 100%;
 			height: 100%;
 			overflow: hidden;
@@ -177,50 +197,14 @@ export class DrippyApp extends Element {
 			overflow: hidden;
 		}
 
-		drippy-scene {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			z-index: 1;
+		#drippy-scene {
+			transition: transform 0.2s ease-in-out;
 		}
 
-		drippy-scene.hidden {
-			display: none;
-		}
-
-		route-views {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			z-index: 2;
-			pointer-events: none;
-			overflow: hidden;
-		}
-
-		route-views.full-screen {
-			width: 100vw;
-			height: 100vh;
-			left: 0;
-			top: 0;
-			overflow: hidden;
-		}
-
-		.button-overlay {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			z-index: 3;
-			pointer-events: none;
-		}
-
-		.button-overlay > * {
-			pointer-events: auto;
+		@media (max-width: 767px) {
+			#drippy-scene {
+				transform: var(--scene-transform);
+			}
 		}
 	`
 }

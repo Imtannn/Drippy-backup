@@ -1,8 +1,27 @@
 import {css, Element, element, html} from 'lume'
+import {store} from './store.js'
 
 @element
-export class SpacesPage extends Element {
-	static elementName = 'spaces-page'
+export class SpacesSelection extends Element {
+	static elementName = 'spaces-selection'
+
+	connectedCallback() {
+		super.connectedCallback()
+	}
+
+	fadeOut(callback?: () => void) {
+		this.classList.add('fade-out')
+		setTimeout(() => {
+			callback?.()
+		}, 300) // Match animation duration
+	}
+
+	#onSceneSelected = () => {
+		const searchParams = new URLSearchParams(window.location.search)
+		searchParams.set('scene', 'bloom realms')
+		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		store.selectScene = 'bloom realms'
+	}
 
 	template = () => html`
 		<div class="spaces-container">
@@ -27,7 +46,7 @@ export class SpacesPage extends Element {
 							<h3 class="card-title">Bloom realm</h3>
 							<p class="card-subtitle">One million roses</p>
 						</div>
-						<button class="explore-button">Explore space →</button>
+						<button class="explore-button" onclick=${this.#onSceneSelected}>Explore space →</button>
 					</div>
 				</div>
 
@@ -44,7 +63,7 @@ export class SpacesPage extends Element {
 							<h3 class="card-title">Neon future</h3>
 							<p class="card-subtitle">Neon chic</p>
 						</div>
-						<button class="explore-button">Explore space →</button>
+						<button class="explore-button" onclick=${this.#onSceneSelected}>Explore space →</button>
 					</div>
 				</div>
 			</div>
@@ -52,6 +71,45 @@ export class SpacesPage extends Element {
 	`
 
 	css = css/*css*/ `
+		:host {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: white;
+			z-index: 1000;
+			opacity: 0;
+			animation: fadeIn 0.3s ease-out forwards;
+			overflow-y: auto;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(10px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes fadeOut {
+			from {
+				opacity: 1;
+				transform: translateY(0);
+			}
+			to {
+				opacity: 0;
+				transform: translateY(10px);
+			}
+		}
+
+		:host(.fade-out) {
+			animation: fadeOut 0.3s ease-out forwards;
+		}
+
 		/* SpacesPage-specific styles */
 		.spaces-container {
 			padding: var(--uiSpacing);

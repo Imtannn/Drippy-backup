@@ -4,13 +4,7 @@ import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import {store} from './store.js'
 
-import '../elements/cube-button.js'
-import '../elements/person-button.js'
-import '../elements/redo-button.js'
-import '../elements/refresh-button.js'
-import '../elements/undo-button.js'
-
-// const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
+const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Male.glb', import.meta.url)
 
 @element
@@ -190,6 +184,18 @@ export class DrippyScene extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
+		this.createEffect(() => {
+			if (store.view === 'preview') {
+				this.shadowRoot?.querySelector('lume-scene')?.style.setProperty('--scene-transform', 'translateX(0)')
+			} else {
+				if (store.view === 'order' || store.view === 'custom-measurement' || store.view === 'success') {
+					this.shadowRoot?.querySelector('lume-scene')?.style.setProperty('--scene-transform', 'translateX(-10rem)')
+				} else {
+					this.shadowRoot?.querySelector('lume-scene')?.style.setProperty('--scene-transform', 'translateX(10rem)')
+				}
+			}
+		})
+
 		this.isDark = document.documentElement.dataset.theme === 'dark'
 
 		const onThemeChange = () => (this.isDark = document.documentElement.dataset.theme === 'dark')
@@ -261,17 +267,6 @@ export class DrippyScene extends Element {
 	}
 
 	template = () => html`
-		<div class="app-buttons">
-			<div class="app-buttons-group">
-				<undo-button disabled></undo-button>
-				<redo-button disabled></redo-button>
-				<refresh-button disabled></refresh-button>
-			</div>
-			<div class="app-buttons-group">
-				<person-button></person-button>
-				<cube-button></cube-button>
-			</div>
-		</div>
 		<lume-scene webgl>
 			<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
 			<lume-directional-light position="5 5 5"></lume-directional-light>
@@ -295,7 +290,9 @@ export class DrippyScene extends Element {
 				mount-point="0.5 0.5 0.5"
 			></lume-box>
 
-			<lume-gltf-model src=${maleAvatar.href}></lume-gltf-model>
+			<lume-gltf-model
+				src=${() => (store.tempSelectedAvatar === 'female' || store.selectedAvatar === 'female' ? femaleAvatar.href : maleAvatar.href)}
+			></lume-gltf-model>
 
 			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
 				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile}></lume-gltf-model> `}
@@ -309,30 +306,18 @@ export class DrippyScene extends Element {
 
 	css = css/*css*/ `
 		:host {
+			--scene-transform: translateX(0);
+		}
+
+		:host {
 			width: 600px;
 			height: 400px;
 			touch-action: none;
 			position: relative;
 		}
 
-		.app-buttons {
-			position: absolute;
-			z-index: 1;
-			top: 135px;
-			right: 1.5rem;
-			display: flex;
-			flex-direction: column;
-			gap: 25px;
-		}
-
-		.app-buttons-group {
-			display: flex;
-			flex-direction: column;
-			gap: 5px;
-		}
-
 		lume-scene {
-			transform: translateX(10rem);
+			transform: var(--scene-transform);
 			transition: transform 0.2s ease-in-out;
 		}
 
