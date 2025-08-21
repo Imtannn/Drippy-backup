@@ -23,9 +23,7 @@ export class OutfitPreview extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.delete('isPreview')
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		window.history.replaceState({}, '', '')
 		store.resetState()
 		store.navigateTo = 'avatar'
 	}
