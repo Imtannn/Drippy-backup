@@ -363,7 +363,7 @@ export class DrippyScene extends Element {
 	}
 
 	template = () => html`
-		<show-when condition=${() => store.view === 'blocks'} content=${() => html`
+		<show-when condition=${() => store.view === 'blocks' || store.view === 'avatar'} content=${() => html`
 			<app-buttons-left layout="bottom">
 				<app-buttons-group>
 					<loading-indicator
