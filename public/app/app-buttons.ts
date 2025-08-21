@@ -102,7 +102,7 @@ export class AppButtonsRight extends Element {
 
 		@media (min-width: 767px) {
 			.bottom {
-				bottom: 0;
+				bottom: unset;
 				top: 30px;
 				right: 5rem;
 			}
