@@ -70,6 +70,8 @@ export class PreviewButton extends Element {
 			cursor: pointer;
 			border: none;
 			outline: none;
+			font-weight: 600;
+			font-size: 12px;
 		}
 	`
 }
