@@ -186,7 +186,14 @@ function permRedirect(res: ServerResponse, newPath: string) {
 // the client.
 
 // TODO define admins.
-const admins = ['joe@example.com' /* , ... */]
+const admins = [
+	'joe@lume.io',
+	'tan@drippy3d.com',
+	'ruby@drippy3d.com',
+	'dinhthinh.ng@gmail.com',
+	'ngu.nguyen4616@gmail.com',
+	'thidieuanhle@gmail.com',
+]
 
 Accounts.findUserByEmailTmp = Accounts.findUserByEmail as any
 

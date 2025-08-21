@@ -1,6 +1,6 @@
-import {booleanAttribute, css, element, Element, html, type ElementAttributes} from 'lume'
+import {booleanAttribute, css, element, Element, eventAttribute, html, type ElementAttributes} from 'lume'
 
-type IconButtonAttributes = 'disabled'
+type IconButtonAttributes = 'disabled' | 'onclick'
 
 @element
 export class IconButton extends Element {
@@ -8,8 +8,14 @@ export class IconButton extends Element {
 
 	@booleanAttribute disabled = false
 
+	@eventAttribute onclick = null
+
+	#onClick = () => {
+		this.dispatchEvent(new CustomEvent('click', {bubbles: true}))
+	}
+
 	template = () => html`
-		<button class="icon-button" disabled=${() => this.disabled}>
+		<button class="icon-button" disabled=${() => this.disabled} onclick=${this.#onClick}>
 			<div class="icon-button-icon"><slot></slot></div>
 		</button>
 	`

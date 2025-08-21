@@ -1,13 +1,15 @@
-import {booleanAttribute, element, Element, html, type ElementAttributes} from 'lume'
+import {booleanAttribute, element, Element, eventAttribute, html, type ElementAttributes} from 'lume'
 import './icon-button.js'
 
-type BackButtonAttributes = 'disabled'
+type BackButtonAttributes = 'disabled' | 'onclick'
 
 @element
 export class BackButton extends Element {
 	static readonly elementName = 'back-button'
 
 	@booleanAttribute disabled = false
+
+	@eventAttribute onclick = null
 
 	arrow = () => html`
 		<svg fill="none" height="8" viewBox="0 0 16 8" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -18,7 +20,12 @@ export class BackButton extends Element {
 		</svg>
 	`
 
-	template = () => html`<icon-button disabled=${() => this.disabled}>${() => this.arrow()}</icon-button>`
+	#onClick = () => {
+		this.dispatchEvent(new CustomEvent('click', {bubbles: true}))
+	}
+
+	template = () =>
+		html`<icon-button disabled=${() => this.disabled} onclick=${this.#onClick}>${() => this.arrow()}</icon-button>`
 }
 
 declare module 'solid-js' {

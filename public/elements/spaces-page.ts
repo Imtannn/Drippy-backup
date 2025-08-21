@@ -1,5 +1,4 @@
 import {css, Element, element, html} from 'lume'
-import {sharedUIStyles} from './shared-ui-styles.js'
 
 @element
 export class SpacesPage extends Element {
@@ -53,8 +52,6 @@ export class SpacesPage extends Element {
 	`
 
 	css = css/*css*/ `
-		${sharedUIStyles}
-
 		/* SpacesPage-specific styles */
 		.spaces-container {
 			padding: var(--uiSpacing);

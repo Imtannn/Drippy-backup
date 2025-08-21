@@ -3,15 +3,29 @@ import * as THREE from 'three'
 import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import {store} from './store.js'
+import './app-buttons.js'
+import '../elements/loading-indicator.js'
+import '../elements/show-when.js'
 
-// const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
-const maleAvatar = new URL('../models/ANH-Male.glb', import.meta.url)
+const femaleAvatar = new URL('../models/EM-Underwear.glb', import.meta.url)
+const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
+
+const scenes = [
+	{
+		name: 'bloom realms',
+		description: 'One million roses',
+		image: new URL('../images/doina-bg.webp', import.meta.url),
+	},
+]
 
 @element
 export class DrippyScene extends Element {
 	static elementName = 'drippy-scene'
 
 	@signal isDark = false
+	@signal loadingBlocks: string[] = []
+	@signal loadingMaterials: string[] = []
+	@signal sceneUrl = ''
 
 	// Cache for textures per URL so we don't reload repeatedly
 	#textureCache = new Map<string, any>()
@@ -52,8 +66,11 @@ export class DrippyScene extends Element {
 	}
 
 	// TODO: If the same fabric with same key is already fetching, wait for it to finish and use the same texture
-	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, cancelApply: () => boolean) {
+	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, cancelApply: () => boolean, blockId?: string) {
 		if (!fabric || !root) return
+
+		const loadingId = blockId || `${fabric._id}-${Date.now()}`
+		this.loadingMaterials = [...untrack(() => this.loadingMaterials), loadingId]
 		const repete: [number, number] = [60 / 19, 60 / 19]
 		const offset: [number, number] = [0, 0]
 		const rotate = 0
@@ -70,7 +87,10 @@ export class DrippyScene extends Element {
 			this.#getTexture(fabric.roughness, repete, coef, offset, rotate),
 		])
 
-		if (untrack(cancelApply)) return
+		if (untrack(cancelApply)) {
+			this.loadingMaterials = untrack(() => this.loadingMaterials).filter(id => id !== loadingId)
+			return
+		}
 
 		// Configure textures
 		if (baseColorTex) baseColorTex.colorSpace = THREE.SRGBColorSpace as any
@@ -96,6 +116,8 @@ export class DrippyScene extends Element {
 				material.needsUpdate = true
 			}
 		})
+
+		this.loadingMaterials = untrack(() => this.loadingMaterials).filter(id => id !== loadingId)
 	}
 
 	#renderTask = () => {
@@ -184,6 +206,36 @@ export class DrippyScene extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
+		this.createEffect(() => {
+			if (store.view === 'preview') {
+				this.style.setProperty('--scene-transform', 'translateX(0)')
+			} else {
+				if (store.view === 'order' || store.view === 'custom-measurement' || store.view === 'success') {
+					this.style.setProperty('--scene-transform', 'translateX(-10rem)')
+				} else {
+					this.style.setProperty('--scene-transform', 'translateX(10rem)')
+				}
+			}
+		})
+
+		this.createEffect(() => {
+			console.log('store.view', store.view)
+			if (store.view === 'preview') {
+				this.style.setProperty('--scene-desktop-transform', 'translateY(0)')
+			} else {
+				this.style.setProperty('--scene-desktop-transform', 'translateY(-120px)')
+			}
+		})
+
+		this.createEffect(() => {
+			if (store.selectedScene) {
+				const scene = scenes.find(scene => scene.name === store.selectedScene)
+				if (scene) {
+					this.sceneUrl = scene.image.href
+				}
+			}
+		})
+
 		this.isDark = document.documentElement.dataset.theme === 'dark'
 
 		const onThemeChange = () => (this.isDark = document.documentElement.dataset.theme === 'dark')
@@ -192,6 +244,61 @@ export class DrippyScene extends Element {
 			const mo = new MutationObserver(onThemeChange)
 			mo.observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']})
 			onCleanup(() => mo.disconnect())
+		})
+
+		// Track avatar loading state
+		this.createEffect(() => {
+			const avatar = this.shadowRoot?.querySelector('lume-gltf-model[data-avatar]') as any
+			if (!avatar) return
+
+			const behavior = avatar.behaviors?.get?.('gltf-model')
+			const avatarId = 'avatar'
+
+			if (!behavior?.model && avatar.three) {
+				if (!untrack(() => this.loadingBlocks.includes(avatarId))) {
+					this.loadingBlocks = [...untrack(() => this.loadingBlocks), avatarId]
+				}
+
+				const loaded = () => {
+					this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== avatarId)
+				}
+				avatar.on?.('MODEL_LOAD', loaded)
+				onCleanup(() => {
+					avatar.off?.('MODEL_LOAD', loaded)
+				})
+			}
+		})
+
+		// Track block loading state
+		this.createEffect(() => {
+			const blockCount = store.selectedBlocks.size
+
+			if (blockCount === 0) {
+				this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== 'avatar')
+				return
+			}
+
+			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
+
+			for (const [index, el] of models.entries()) {
+				const behavior = el.behaviors?.get?.('gltf-model')
+				const blockId = `block-${index}`
+
+				if (!behavior?.model && el.three) {
+					if (!untrack(() => this.loadingBlocks.includes(blockId))) {
+						this.loadingBlocks = [...untrack(() => this.loadingBlocks), blockId]
+					}
+
+					const loaded = () => {
+						this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== blockId)
+					}
+
+					el?.on?.('MODEL_LOAD', loaded)
+					onCleanup(() => {
+						el?.off?.('MODEL_LOAD', loaded)
+					})
+				}
+			}
 		})
 
 		// Re-apply materials whenever the selected fabric changes or models mount
@@ -214,11 +321,12 @@ export class DrippyScene extends Element {
 			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
 			const handlers: Array<{el: any; fn: () => void}> = []
 
-			for (const el of models) {
+			for (const [index, el] of models.entries()) {
+				const blockId = `material-${index}`
 				const apply = () => {
 					const isCanceled = untrack(cancelApply)
 					if (!isCanceled) {
-						this.#applyFabricToThreeObject((el as any).three, fabric, cancelApply)
+						this.#applyFabricToThreeObject((el as any).three, fabric, cancelApply, blockId)
 					}
 				}
 				const behavior = el.behaviors?.get?.('gltf-model')
@@ -255,6 +363,17 @@ export class DrippyScene extends Element {
 	}
 
 	template = () => html`
+		<show-when condition=${() => store.view === 'blocks'} content=${() => html`
+			<app-buttons-left layout="bottom">
+				<app-buttons-group>
+					<loading-indicator
+						is-visible=${() => this.loadingBlocks.length > 0 || this.loadingMaterials.length > 0}
+					></loading-indicator>
+				</app-buttons-group>
+			</app-buttons-left>
+		`}></show-when>
+
+		<div id="lume-scene-container" style=${() => `background: url(${this.sceneUrl}) center bottom / cover no-repeat`}>
 		<lume-scene webgl>
 			<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
 			<lume-directional-light position="5 5 5"></lume-directional-light>
@@ -278,7 +397,18 @@ export class DrippyScene extends Element {
 				mount-point="0.5 0.5 0.5"
 			></lume-box>
 
-			<lume-gltf-model src=${maleAvatar.href}></lume-gltf-model>
+			<lume-gltf-model
+				src=${() =>
+					store.selectedAvatar !== null
+						? store.selectedAvatar === 'female'
+							? femaleAvatar.href
+							: maleAvatar.href
+						: store.tempSelectedAvatar === 'female'
+							? femaleAvatar.href
+							: maleAvatar.href}
+
+							data-avatar
+			></lume-gltf-model>
 
 			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
 				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile}></lume-gltf-model> `}
@@ -287,23 +417,39 @@ export class DrippyScene extends Element {
 			<${For} each=${() => Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Sleeves')}>
 				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile} scale="-1 1 1"></lume-gltf-model> `}
 			</>
-		</lume-scene>
+			</lume-scene>
+		</div>
 	`
 
 	css = css/*css*/ `
 		:host {
+			--scene-transform: translateX(0);
+			--scene-desktop-transform: translateY(-120px);
+		}
+
+		:host {
 			width: 600px;
 			height: 400px;
-
 			touch-action: none;
+			position: relative;
+		}
+
+		#lume-scene-container {
+			width: 100%;
+			height: 100%;
+			transition: transform 0.2s ease-in-out;
 		}
 
 		lume-scene {
-			transform: translateX(10rem);
+			transform: var(--scene-transform);
 			transition: transform 0.2s ease-in-out;
 		}
 
 		@media (max-width: 767px) {
+			#lume-scene-container {
+				transform: var(--scene-desktop-transform);
+			}
+
 			lume-scene {
 				transform: translateX(0);
 			}

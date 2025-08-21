@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-const fs = require('fs')
-const path = require('path')
-const https = require('https')
-const crypto = require('crypto')
+import * as fs from 'fs'
+import * as path from 'path'
+import * as https from 'https'
+
+type TODO = any
 
 // Google Drive API Key (you can get this from Google Cloud Console for free)
 const API_KEY = process.env.GOOGLE_API_KEY || 'GOOGLE_API_KEY'
@@ -16,7 +17,7 @@ const COLLECTIONS = [
 ]
 
 // Helper function to make HTTP requests
-function makeRequest(url) {
+function makeRequest<T = unknown>(url: string): Promise<T> {
 	return new Promise((resolve, reject) => {
 		https
 			.get(url, res => {
@@ -37,7 +38,7 @@ function makeRequest(url) {
 }
 
 // Helper function to download files
-function downloadFile(url, outputPath) {
+function downloadFile(url: string, outputPath: string): Promise<TODO> {
 	return new Promise((resolve, reject) => {
 		// Ensure directory exists
 		const dir = path.dirname(outputPath)
@@ -51,7 +52,12 @@ function downloadFile(url, outputPath) {
 			.get(url, response => {
 				// Handle redirects
 				if (response.statusCode === 302 || response.statusCode === 301 || response.statusCode === 303) {
-					return downloadFile(response.headers.location, outputPath).then(resolve).catch(reject)
+					const location = response.headers.location
+					if (!location) {
+						reject(new Error('Redirect location not provided'))
+						return
+					}
+					return downloadFile(location, outputPath).then(resolve).catch(reject)
 				}
 
 				if (response.statusCode !== 200) {
@@ -76,14 +82,14 @@ function downloadFile(url, outputPath) {
 }
 
 // Get Google Drive download URL for a file
-function getDriveDownloadUrl(fileId) {
+function getDriveDownloadUrl(fileId: string): string {
 	return `https://drive.google.com/uc?export=download&id=${fileId}`
 }
 
-async function fetchFolderContents(folderId) {
+async function fetchFolderContents(folderId: string): Promise<TODO[]> {
 	try {
 		const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,parents)&key=${API_KEY}`
-		const response = await makeRequest(url)
+		const response = await makeRequest<{files: TODO[]}>(url)
 		console.log('response', response)
 		return response.files || []
 	} catch (error) {
@@ -92,10 +98,10 @@ async function fetchFolderContents(folderId) {
 	}
 }
 
-async function fetchSubfolderContents(subfolderId) {
+async function fetchSubfolderContents(subfolderId: string): Promise<TODO[]> {
 	try {
 		const url = `https://www.googleapis.com/drive/v3/files?q='${subfolderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType)&key=${API_KEY}`
-		const response = await makeRequest(url)
+		const response = await makeRequest<{files: TODO[]}>(url)
 		return response.files || []
 	} catch (error) {
 		console.error('Error fetching subfolder contents:', error)
@@ -103,14 +109,14 @@ async function fetchSubfolderContents(subfolderId) {
 	}
 }
 
-function matchGltfPngPairs(files) {
-	const pairs = []
-	const gltfFiles = files.filter(f => f.name.toLowerCase().endsWith('.gltf'))
-	const pngFiles = files.filter(f => f.name.toLowerCase().endsWith('.png'))
+function matchGltfPngPairs(files: TODO[]): TODO[] {
+	const pairs: TODO[] = []
+	const gltfFiles = files.filter((f: TODO) => f.name.toLowerCase().endsWith('.gltf'))
+	const pngFiles = files.filter((f: TODO) => f.name.toLowerCase().endsWith('.png'))
 
-	gltfFiles.forEach(gltfFile => {
+	gltfFiles.forEach((gltfFile: TODO) => {
 		const baseName = path.basename(gltfFile.name, '.gltf')
-		const matchingPng = pngFiles.find(png => path.basename(png.name, '.png') === baseName)
+		const matchingPng = pngFiles.find((png: TODO) => path.basename(png.name, '.png') === baseName)
 
 		if (matchingPng) {
 			pairs.push({
@@ -125,8 +131,8 @@ function matchGltfPngPairs(files) {
 }
 
 // Download assets for a category
-async function downloadAssets(collectionName, category, pairs) {
-	const downloads = []
+async function downloadAssets(collectionName: string, category: string, pairs: TODO[]): Promise<TODO[]> {
+	const downloads: TODO[] = []
 
 	for (const {gltf, png, baseName} of pairs) {
 		// Download PNG to images/${collectionName}
@@ -144,21 +150,21 @@ async function downloadAssets(collectionName, category, pairs) {
 			console.log(`✅ Downloaded ${baseName}`)
 			downloads.push({baseName: baseName, category, collectionName})
 		} catch (error) {
-			console.error(`❌ Failed to download ${baseName}:`, error.message)
+			console.error(`❌ Failed to download ${baseName}:`, (error as TODO).message)
 		}
 	}
 
 	return downloads
 }
 
-function generateBlockData(downloadedAssets) {
-	const blocks = {}
+function generateBlockData(downloadedAssets: TODO): TODO {
+	const blocks: TODO = {}
 	let idCounter = 1
 
 	// Flatten the object structure to get all assets as an array
-	const allAssets = Object.values(downloadedAssets).flat()
+	const allAssets: TODO[] = Object.values(downloadedAssets).flat()
 
-	allAssets.forEach(({baseName, category, collectionName}) => {
+	allAssets.forEach(({baseName, category, collectionName}: TODO) => {
 		blocks[collectionName] = blocks[collectionName] || []
 		blocks[collectionName].push({
 			_id: idCounter.toString(),
@@ -174,13 +180,13 @@ function generateBlockData(downloadedAssets) {
 	return blocks
 }
 
-function generateBlocksFileContent(blocks) {
-	const finalBlocksContent = {}
+function generateBlocksFileContent(blocks: TODO): string {
+	const finalBlocksContent: TODO = {}
 	for (const collectionName in blocks) {
 		const blocksArray = blocks[collectionName]
 		finalBlocksContent[collectionName] = blocksArray
 			.map(
-				block => `	{
+				(block: TODO) => `	{
 		_id: '${block._id}',
 		thumb: ${block.thumb},
 		modelFile: ${block.modelFile},
@@ -208,18 +214,18 @@ ${blocksArray}
 `
 }
 
-async function updateBlocksFile(content) {
+async function updateBlocksFile(content: string): Promise<void> {
 	const blocksPath = path.join(__dirname, '../public/consts/blocks.ts')
 	fs.writeFileSync(blocksPath, content, 'utf8')
 	console.log('✅ blocks.ts updated successfully')
 }
 
-function normalizeName(name) {
+function normalizeName(name: string): string {
 	// Remove _ characters in name and trim all spaces
 	return name.replace(/_/g, ' ').trim()
 }
 
-async function main() {
+async function main(): Promise<void> {
 	try {
 		console.log('🚀 Fetching data from Google Drive...')
 
@@ -229,7 +235,7 @@ async function main() {
 			return
 		}
 
-		const allDownloadedAssets = {}
+		const allDownloadedAssets: TODO = {}
 
 		// Process each collection
 		for (const collection of COLLECTIONS) {
@@ -273,26 +279,26 @@ async function main() {
 		console.log('\n📋 Summary:')
 
 		// Group downloads by collection and category for summary
-		const collectionSummary = {}
-		Object.entries(allDownloadedAssets).forEach(([collectionName, downloadsArray]) => {
+		const collectionSummary: TODO = {}
+		Object.entries(allDownloadedAssets).forEach(([collectionName, downloadsArray]: [string, TODO]) => {
 			if (!collectionSummary[collectionName]) {
 				collectionSummary[collectionName] = {}
 			}
-			downloadsArray.forEach(download => {
+			downloadsArray.forEach((download: TODO) => {
 				collectionSummary[collectionName][download.category] =
 					(collectionSummary[collectionName][download.category] || 0) + 1
 			})
 		})
 
-		Object.entries(collectionSummary).forEach(([collectionName, categories]) => {
+		Object.entries(collectionSummary).forEach(([collectionName, categories]: [string, TODO]) => {
 			console.log(`\n📦 Collection: ${collectionName}`)
-			Object.entries(categories).forEach(([category, count]) => {
+			Object.entries(categories).forEach(([category, count]: [string, TODO]) => {
 				console.log(`   ${category}: ${count} items downloaded`)
 			})
 		})
 
 		console.log(`\n📁 Assets organized by collection:`)
-		Object.keys(collectionSummary).forEach(collectionName => {
+		Object.keys(collectionSummary).forEach((collectionName: string) => {
 			console.log(`   Images: public/images/${collectionName}/`)
 			console.log(`   Models: public/models/${collectionName}/`)
 		})

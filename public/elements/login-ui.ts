@@ -10,7 +10,7 @@ import {
 import {onCleanup} from 'solid-js'
 import html from 'solid-js/html'
 import {hasDescendant, querySelectorDeep} from '../utils.js'
-import './BlazeComponent.js'
+import './blaze-component.js'
 
 // Props that the Blaze loginButtons template accepts.
 type LoginButtonProps = {align: 'left' | 'right'}

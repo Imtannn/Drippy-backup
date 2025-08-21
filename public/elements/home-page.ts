@@ -34,7 +34,6 @@ export class HomePage extends Element {
 			<a href="/onboarding/step1">Onboarding - Get started with Drippy</a>
 			<a href="/stats">Stats - View page visits and number of users</a>
 			<a href="/profile">Profile - View and edit your username</a>
-			<a href="/sample">Sample - See a 3D scene made with Lume</a>
 			<a href="/app">App - New app WIP</a>
 		</nav>
 
