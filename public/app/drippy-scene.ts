@@ -4,7 +4,7 @@ import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import {store} from './store.js'
 
-// const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
+const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Male.glb', import.meta.url)
 
 @element
@@ -290,7 +290,9 @@ export class DrippyScene extends Element {
 				mount-point="0.5 0.5 0.5"
 			></lume-box>
 
-			<lume-gltf-model src=${maleAvatar.href}></lume-gltf-model>
+			<lume-gltf-model
+				src=${() => (store.tempSelectedAvatar === 'female' || store.selectedAvatar === 'female' ? femaleAvatar.href : maleAvatar.href)}
+			></lume-gltf-model>
 
 			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
 				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile}></lume-gltf-model> `}

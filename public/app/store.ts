@@ -19,6 +19,7 @@ export type CustomMeasurement = {
 export const store = createMutable({
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
+	tempSelectedAvatar: 'male' as Avatar,
 	selectedAvatar: null as Avatar,
 	selectedScene: null as Scene,
 	isPreview: false,
@@ -51,6 +52,9 @@ export const store = createMutable({
 	},
 	set navigateTo(route: AppRoute) {
 		this.view = route
+	},
+	set setTempSelectedAvatar(avatar: Avatar) {
+		this.tempSelectedAvatar = avatar
 	},
 	set selectAvatar(avatar: Avatar) {
 		this.selectedAvatar = avatar
