@@ -10,7 +10,7 @@ import {
 	type ElementAttributes,
 } from 'lume'
 
-type ItemCardAttributes = 'itemValue' | 'itemSrc' | 'itemAlt' | 'itemActive' | 'oncardselected'
+type ItemCardAttributes = 'itemValue' | 'itemSrc' | 'itemAlt' | 'itemActive' | 'oncardselected' | 'objectFit'
 
 @element
 export class ItemCard extends Element {
@@ -20,7 +20,7 @@ export class ItemCard extends Element {
 	@stringAttribute itemSrc = ''
 	@stringAttribute itemAlt = ''
 	@attribute itemValue = null
-
+	@attribute objectFit = 'cover'
 	@eventAttribute oncardselected = null
 
 	connectedCallback() {
@@ -28,7 +28,6 @@ export class ItemCard extends Element {
 	}
 
 	#onClick = () => {
-		console.log('onClick', this.itemValue)
 		this.dispatchEvent(
 			new CustomEvent('cardselected', {
 				detail: {itemValue: this.itemValue},
@@ -40,7 +39,12 @@ export class ItemCard extends Element {
 	template = () => html`
 		<div class="item-card" onclick=${this.#onClick} classList=${() => ({active: this.itemActive})}>
 			<div class="item-preview">
-				<img class="item-thumb" src=${() => this.itemSrc} alt=${() => this.itemAlt} />
+				<img
+					class="item-thumb"
+					src=${() => this.itemSrc}
+					alt=${() => this.itemAlt}
+					classList=${() => ({contain: this.objectFit === 'contain'})}
+				/>
 			</div>
 		</div>
 	`
@@ -95,6 +99,10 @@ export class ItemCard extends Element {
 				height: 100%;
 				object-fit: cover;
 				object-position: center;
+			}
+
+			img.contain {
+				object-fit: contain;
 			}
 		}
 

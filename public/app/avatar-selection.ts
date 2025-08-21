@@ -1,26 +1,46 @@
-import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {css, Element, element, html, Index, signal, type ElementAttributes} from 'lume'
 import {store} from './store.js'
 import './item-card.js'
 import '../elements/bottom-sheet.js'
 import '../elements/tabs.js'
+import '../elements/save-button.js'
+import '../elements/theme-switch-button.js'
 
 const avatarThumb = new URL('../images/avatar-female-tmp.png', import.meta.url)
 
 type AvatarSelectionAttributes = keyof {}
+
+const avatars = [
+	{
+		src: avatarThumb,
+		alt: 'Female avatar',
+		value: 'female',
+	},
+	{
+		src: avatarThumb,
+		alt: 'Male avatar',
+		value: 'male',
+	},
+]
 
 @element
 export class AvatarSelection extends Element {
 	static readonly elementName = 'avatar-selection'
 
 	@signal selectedTab = 'female'
+	@signal selectedAvatar = null
 
 	connectedCallback() {
 		super.connectedCallback()
 	}
 
 	#onItemClick = (e: CustomEvent) => {
-		const value = e.detail.itemValue
-		console.log('value', value)
+		this.selectedAvatar = e.detail.itemValue
+	}
+
+	#onSaveClick = () => {
+		const value = this.selectedAvatar
+		console.log(value)
 		// TODO: set the selected avatar. This is a temporary solution.
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('avatar', 'male')
@@ -29,6 +49,18 @@ export class AvatarSelection extends Element {
 	}
 
 	template = () => html`
+	<app-buttons-right>
+		<app-buttons-group>
+			<theme-switch-button></theme-switch-button>
+		</app-buttons-group>
+	</app-buttons-right>
+
+	<app-buttons-right layout="bottom">
+		<app-buttons-group>
+			<save-button onclick=${this.#onSaveClick}></save-button>
+		</app-buttons-group>
+	</app-buttons-right>
+
 		<bottom-sheet>
 			<tabs-provider
 			default-value=${() => this.selectedTab}
@@ -47,14 +79,34 @@ export class AvatarSelection extends Element {
 			<div class="tabs-content-container">
 				<tabs-content selected-value="female">
 					<div class="items-grid">
-						<item-card item-active=false item-src=${avatarThumb.href} item-alt="Female avatar" item-value="female" oncardselected=${this.#onItemClick}></item-card>
-						<item-card item-active=false item-src=${avatarThumb.href} item-alt="Female avatar" item-value="female" oncardselected=${this.#onItemClick}></item-card>
+					<${Index} each=${avatars.filter(avatar => avatar.value === 'female')}>
+						${(avatar: () => (typeof avatars)[number]) => html`
+							<item-card
+								item-active=${() => this.selectedAvatar === avatar().value}
+								item-src=${avatar().src}
+								item-alt=${avatar().alt}
+								item-value=${avatar().value}
+								oncardselected=${this.#onItemClick}
+								object-fit="contain"
+							></item-card>
+						`}
+					</>
 					</div>
 				</tabs-content>
 				<tabs-content selected-value="male">
 					<div class="items-grid">
-						<item-card item-active=false item-src=${avatarThumb.href} item-alt="Male avatar" item-value="male" oncardselected=${this.#onItemClick}></item-card>
-						<item-card item-active=false item-src=${avatarThumb.href} item-alt="Male avatar" item-value="male" oncardselected=${this.#onItemClick}></item-card>
+						<${Index} each=${avatars.filter(avatar => avatar.value === 'male')}>
+							${(avatar: () => (typeof avatars)[number]) => html`
+								<item-card
+									item-active=${() => this.selectedAvatar === avatar().value}
+									item-src=${avatar().src}
+									item-alt=${avatar().alt}
+									item-value=${avatar().value}
+									oncardselected=${this.#onItemClick}
+									object-fit="contain"
+								></item-card>
+							`}
+						</>
 					</div>
 				</tabs-content>
 
