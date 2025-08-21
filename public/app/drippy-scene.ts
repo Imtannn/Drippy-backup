@@ -267,6 +267,17 @@ export class DrippyScene extends Element {
 	}
 
 	template = () => html`
+		<div class="app-buttons">
+			<div class="app-buttons-group">
+				<undo-button disabled></undo-button>
+				<redo-button disabled></redo-button>
+				<refresh-button disabled></refresh-button>
+			</div>
+			<div class="app-buttons-group">
+				<person-button></person-button>
+				<cube-button></cube-button>
+			</div>
+		</div>
 		<lume-scene webgl>
 			<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
 			<lume-directional-light position="5 5 5"></lume-directional-light>
@@ -312,8 +323,24 @@ export class DrippyScene extends Element {
 		:host {
 			width: 600px;
 			height: 400px;
-
 			touch-action: none;
+			position: relative;
+		}
+
+		.app-buttons {
+			position: absolute;
+			z-index: 1;
+			top: 135px;
+			right: 1.5rem;
+			display: flex;
+			flex-direction: column;
+			gap: 25px;
+		}
+
+		.app-buttons-group {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
 		}
 
 		lume-scene {

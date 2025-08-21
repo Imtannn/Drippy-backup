@@ -10,6 +10,7 @@ type BottomSheetAttributes =
 	| 'animateOnExit'
 	| 'floatDirection'
 	| 'maxHeight'
+
 @element
 export class BottomSheet extends Element {
 	static readonly elementName = 'bottom-sheet'
@@ -29,6 +30,7 @@ export class BottomSheet extends Element {
 		startY: 0,
 		startHeight: 0,
 	}
+ 
 	private sheetRef: HTMLElement | null = null
 	private isVisible = false
 

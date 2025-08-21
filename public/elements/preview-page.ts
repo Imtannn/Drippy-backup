@@ -1,161 +1,118 @@
 import {css, Element, element, html} from 'lume'
-import {sharedUIStyles} from './shared-ui-styles.js'
+import {appStyles} from './app-styles.js'
 
 @element
 export class PreviewPage extends Element {
 	static elementName = 'preview-page'
 
 	template = () => html`
-		<div class="preview-container">
-			<!-- Top Navigation -->
-			<div class="top-nav">
-				<div class="nav-left">
-					<button class="nav-button back-button">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-							<path
-								d="M19 12H5M12 19L5 12L12 5"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
-					</button>
-					<button class="nav-button home-button">
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-							<path
-								d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							/>
-						</svg>
-					</button>
-				</div>
-			</div>
-
-			<!-- Logo positioned separately -->
-			<div class="logo-circle logo-positioned">Logo</div>
-
-			<!-- Main Content Area -->
-			<section class="content-wrapper">
-				<!-- 3D Scene Area -->
-				<div class="scene-area">
-					<!-- This would contain the 3D scene -->
-				</div>
-
-				<!-- Product Panel -->
-				<section id="panel">
-					<div class="panel-content">
-						<!-- Product Info -->
-						<div class="product-info">
-							<div class="product-image">
-								<img src="../images/background.jpg" alt="Product" />
-							</div>
-							<div class="product-details">
-								<h2 class="product-name">Product name</h2>
-								<p class="product-price">Custom price</p>
-							</div>
-							<div
-								class="quantity-controls"
-								onclick="
-								const updateQty = (change) => {
-									const qty = this.querySelector('.quantity');
-									const val = parseInt(qty.textContent) + change;
-									if (val >= 1 && val <= 99) qty.textContent = val;
-								};
-								if (event.target.textContent === '+') updateQty(1);
-								if (event.target.textContent === '−') updateQty(-1);
-							"
-							>
-								<button class="quantity-btn">+</button>
-								<span class="quantity">1</span>
-								<button class="quantity-btn">−</button>
-							</div>
-						</div>
-
-						<!-- Size Selection -->
-						<div class="size-section">
-							<h3 class="section-title">Size</h3>
-							<div
-								class="size-options"
-								onclick="
-								if (event.target.classList.contains('size-btn')) {
-									this.querySelector('.selected')?.classList.remove('selected');
-									event.target.classList.add('selected');
-								}
-							"
-							>
-								<button class="size-btn selected">34 (XS)</button>
-								<button class="size-btn">36 (S)</button>
-								<button class="size-btn">38 (M)</button>
-								<button class="size-btn">40/42 (L)</button>
-								<button class="size-btn">44 (XL)</button>
-								<button class="size-btn">48 (2XL)</button>
-								<button class="size-btn">50 (3XL)</button>
-								<button class="size-btn">52 (4XL)</button>
-								<button class="size-btn custom">Custom size</button>
-							</div>
-						</div>
-
-						<!-- Shipping Address -->
-						<div class="shipping-section">
-							<h3 class="section-title">Shipping address</h3>
-							<div class="form-fields">
-								<div class="field-group">
-									<input type="text" class="form-input" placeholder=" " value="Tan" />
-									<label class="floating-label">First name</label>
-								</div>
-								<div class="field-group">
-									<input type="text" class="form-input" placeholder=" " />
-									<label class="floating-label">Last name</label>
-								</div>
-								<div class="field-group">
-									<input type="text" class="form-input" placeholder=" " />
-									<label class="floating-label">Address</label>
-								</div>
-								<div class="field-group">
-									<input type="text" class="form-input" placeholder=" " />
-									<label class="floating-label">Apartment, suite, etc. (optional)</label>
-								</div>
-								<div class="field-group">
-									<input type="text" class="form-input" placeholder=" " />
-									<label class="floating-label">City</label>
-								</div>
-								<div class="field-group">
-									<input type="text" class="form-input" placeholder=" " />
-									<label class="floating-label">Postal code (optional)</label>
-								</div>
-								<div class="field-group">
-									<input type="text" class="form-input" placeholder=" " />
-									<label class="floating-label">Phone</label>
-								</div>
-							</div>
-						</div>
-
-						<!-- Order Button -->
-						<button class="order-button">
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-								<path
-									d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
-							Send my order to LOGO
-						</button>
+		<section id="panel" class="panel-right">
+			<div class="panel-content">
+				<!-- Product Info -->
+				<div class="product-info">
+					<div class="product-image">
+						<img src="../images/background.jpg" alt="Product" />
 					</div>
-				</section>
-			</section>
-		</div>
+					<div class="product-details">
+						<h2 class="product-name">Product name</h2>
+						<p class="product-price">Custom price</p>
+					</div>
+					<div
+						class="quantity-controls"
+						onclick="
+							const updateQty = (change) => {
+								const qty = this.querySelector('.quantity');
+								const val = parseInt(qty.textContent) + change;
+								if (val >= 1 && val <= 99) qty.textContent = val;
+							};
+							if (event.target.textContent === '+') updateQty(1);
+							if (event.target.textContent === '−') updateQty(-1);
+						"
+					>
+						<button class="quantity-btn">+</button>
+						<span class="quantity">1</span>
+						<button class="quantity-btn">−</button>
+					</div>
+				</div>
+
+				<!-- Size Selection -->
+				<div class="size-section">
+					<h3 class="section-title">Size</h3>
+					<div
+						class="size-options"
+						onclick="
+							if (event.target.classList.contains('size-btn')) {
+								this.querySelector('.selected')?.classList.remove('selected');
+								event.target.classList.add('selected');
+							}
+						"
+					>
+						<button class="size-btn selected">34 (XS)</button>
+						<button class="size-btn">36 (S)</button>
+						<button class="size-btn">38 (M)</button>
+						<button class="size-btn">40/42 (L)</button>
+						<button class="size-btn">44 (XL)</button>
+						<button class="size-btn">48 (2XL)</button>
+						<button class="size-btn">50 (3XL)</button>
+						<button class="size-btn">52 (4XL)</button>
+						<button class="size-btn custom">Custom size</button>
+					</div>
+				</div>
+
+				<!-- Shipping Address -->
+				<div class="shipping-section">
+					<h3 class="section-title">Shipping address</h3>
+					<div class="form-fields">
+						<div class="field-group">
+							<input type="text" class="form-input" placeholder=" " value="Tan" />
+							<label class="floating-label">First name</label>
+						</div>
+						<div class="field-group">
+							<input type="text" class="form-input" placeholder=" " />
+							<label class="floating-label">Last name</label>
+						</div>
+						<div class="field-group">
+							<input type="text" class="form-input" placeholder=" " />
+							<label class="floating-label">Address</label>
+						</div>
+						<div class="field-group">
+							<input type="text" class="form-input" placeholder=" " />
+							<label class="floating-label">Apartment, suite, etc. (optional)</label>
+						</div>
+						<div class="field-group">
+							<input type="text" class="form-input" placeholder=" " />
+							<label class="floating-label">City</label>
+						</div>
+						<div class="field-group">
+							<input type="text" class="form-input" placeholder=" " />
+							<label class="floating-label">Postal code (optional)</label>
+						</div>
+						<div class="field-group">
+							<input type="text" class="form-input" placeholder=" " />
+							<label class="floating-label">Phone</label>
+						</div>
+					</div>
+				</div>
+
+				<!-- Order Button -->
+				<button class="order-button">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+						<path
+							d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+					Send my order to LOGO
+				</button>
+			</div>
+		</section>
 	`
 
 	css = css/*css*/ `
-		${sharedUIStyles}
-
+		${appStyles}
 		/* Override panel styles for preview layout */
 		#panel {
 			background-color: white;
@@ -379,26 +336,6 @@ export class PreviewPage extends Element {
 
 		.shipping-section {
 			margin-bottom: 30px;
-		}
-
-		/* Mobile Layout */
-		@media (width < 720px) {
-			#panel {
-				width: 100%;
-				height: 50vh;
-				margin-top: 0;
-				border-radius: 20px 20px 0 0;
-				position: static;
-				padding: 0;
-				left: unset;
-				right: unset;
-			}
-
-			.panel-content {
-				padding: 20px;
-				height: calc(50vh - 40px);
-				overflow-y: auto;
-			}
 		}
 	`
 }

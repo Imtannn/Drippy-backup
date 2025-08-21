@@ -21,10 +21,12 @@ const scenes = [
 	},
 ]
 
+
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
 loadingCover?.classList.add('invisible')
 loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
+
 @element
 export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
@@ -172,7 +174,9 @@ export class DrippyApp extends Element {
 		* {
 			box-sizing: border-box;
 		}
+	}
 
+	css = css`
 		:host {
 			--scene-transform: translateY(-120px);
 		}
@@ -185,14 +189,11 @@ export class DrippyApp extends Element {
 		drippy-scene {
 			width: 100%;
 			height: 100%;
-
-			background: #ccc;
-			:host-context([data-theme='dark']) & {
-				background: #333;
-			}
+			overflow: hidden;
+			box-sizing: border-box;
 		}
 
-		#app-container {
+		.app-layout {
 			position: relative;
 			width: 100%;
 			height: 100%;
