@@ -2,13 +2,27 @@ import {html, css, element, Element, type ElementAttributes, attribute} from 'lu
 
 type LogoButtonAttributes = 'brandName'
 
+const BRANDS = [
+	{
+		name: 'Drippy',
+		image: new URL('../images/drippy-logo.webp', import.meta.url),
+	},
+	{
+		name: 'Speed',
+		image: new URL('../images/speed-logo.webp', import.meta.url),
+	},
+]
+
 @element
 export class LogoButton extends Element {
 	static readonly elementName = 'logo-button'
 
-	@attribute brandName = 'Logo'
+	@attribute brandName = 'Drippy'
 
-	template = () => html`<button class="logo-button">${this.brandName}</button>`
+	template = () =>
+		html`<button class="logo-button">
+			<img src=${BRANDS.find(brand => brand.name === this.brandName)?.image} alt=${this.brandName} />
+		</button>`
 
 	css = css/*css*/ `
 		.logo-button {
@@ -27,6 +41,14 @@ export class LogoButton extends Element {
 			user-select: none;
 			pointer-events: auto;
 			will-change: background-color;
+			overflow: hidden;
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				object-position: center;
+			}
 		}
 	`
 }

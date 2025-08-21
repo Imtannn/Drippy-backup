@@ -5,6 +5,11 @@ import '../elements/home-button.js'
 import '../elements/theme-switch-button.js'
 import '../elements/logo-button.js'
 import {appStyles} from '../elements/app-style.js'
+import './share-button.js'
+import './buy-button.js'
+import '../elements/show-on-device.js'
+import '../elements/person-button.js'
+import './app-buttons.js'
 
 type OrderViewAttributes = 'onclick'
 
@@ -33,19 +38,36 @@ export class OrderView extends Element {
 		store.navigateTo = 'success'
 	}
 
+	#onShareClick = () => {
+		// copy current url to clipboard
+		console.log('Share my drip clicked')
+		navigator.clipboard.writeText(window.location.href)
+		alert('Link copied to clipboard')
+	}
+
 	template = () => html`
 	<app-buttons-left>
-	<app-buttons-group group-direction="row">
-		<back-button onclick=${this.#onBackButtonClick}></back-button>
-		<home-button onclick=${this.#onHomeButtonClick}></home-button>
-	</app-buttons-group>
-</app-buttons-left>
+		<app-buttons-group group-direction="row">
+			<back-button onclick=${this.#onBackButtonClick}></back-button>
+			<home-button onclick=${this.#onHomeButtonClick}></home-button>
+		</app-buttons-group>
+	</app-buttons-left>
 
-<app-buttons-right>
-	<app-buttons-group>
-		<!-- <theme-switch-button></theme-switch-button> -->
-		<logo-button brand-name="Speed"></logo-button>
-	</app-buttons-group>
+		<show-on-device device="desktop">
+		<app-buttons-right layout="bottom">
+			<app-buttons-group custom-style="gap: 34px;" group-direction="row">
+				<share-button onclick=${this.#onShareClick}></share-button>
+				<buy-button onclick=${this.#onBackButtonClick}></buy-button>
+			</app-buttons-group>
+		</app-buttons-right>
+
+	</show-on-device>
+
+	<app-buttons-right>
+		<app-buttons-group>
+			<!-- <theme-switch-button></theme-switch-button> -->
+			<logo-button brand-name="Speed"></logo-button>
+		</app-buttons-group>
 	</app-buttons-right>
 
 	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">

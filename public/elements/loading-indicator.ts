@@ -8,31 +8,64 @@ export class LoadingIndicator extends Element {
 
 	@booleanAttribute isVisible = false
 
-	template = () => html` <div class="spinner" style=${() => `display: ${this.isVisible ? 'flex' : 'none'}`}></div> `
+	connectedCallback() {
+		super.connectedCallback()
+		// this.createEffect(() => {
+		// 	this.style.setProperty('--opacity', this.isVisible ? '1' : '0')
+		// })
+	}
+
+	template = () => html`
+		<div class="loading-indicator">
+			<div class="loader"></div>
+		</div>
+	`
 
 	css = css/*css*/ `
-		.spinner {
-			width: calc(2rem - 1px);
-			height: calc(2rem - 1px);
-			border: 1px solid rgba(0, 0, 0, 0.1);
-			border-top: 1px solid #121316;
-			border-radius: 50%;
-			animation: spin 1s linear infinite;
+		:host {
+			--opacity: 1;
+			opacity: var(--opacity);
+			transition: opacity 0.2s ease-in-out;
 		}
 
-		@keyframes spin {
-			0% {
-				transform: rotate(0deg);
-			}
+		.loading-indicator {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 32px;
+			height: 32px;
+		}
+
+		.loader {
+			width: 15px;
+			aspect-ratio: 0.577;
+			color: #121316;
+			display: grid;
+			background:
+				linear-gradient(currentColor 0 0) top / 100% 1px,
+				linear-gradient(currentColor 0 0) bottom/100% 1px,
+				linear-gradient(to bottom right, #0000 calc(50% - 2px), currentColor calc(50% - 1px), #0000 50%) top/100%
+					calc(100% + 2px),
+				linear-gradient(to bottom left, #0000 calc(50% - 2px), currentColor calc(50% - 1px), #0000 50%) top/100%
+					calc(100% + 2px);
+			background-repeat: no-repeat;
+			animation: l17 4s infinite linear;
+		}
+		.loader::before,
+		.loader::after {
+			content: '';
+			grid-area: 1/1;
+			background: inherit;
+			border: inherit;
+			animation: inherit;
+		}
+		.loader::after {
+			animation-duration: 2s;
+		}
+		@keyframes l17 {
 			100% {
-				transform: rotate(360deg);
+				transform: rotate(1turn);
 			}
-		}
-
-		/* Dark theme support */
-		[data-theme='dark'] .spinner {
-			border: 1px solid rgba(255, 255, 255, 0.1);
-			border-top: 1px solid #ffffff;
 		}
 	`
 }
