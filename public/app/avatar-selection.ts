@@ -48,7 +48,7 @@ export class AvatarSelection extends Element {
 	template = () => html`
 	<app-buttons-right>
 		<app-buttons-group>
-			<theme-switch-button></theme-switch-button>
+			<!-- <theme-switch-button></theme-switch-button> -->
 		</app-buttons-group>
 	</app-buttons-right>
 

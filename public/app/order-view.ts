@@ -43,7 +43,7 @@ export class OrderView extends Element {
 
 <app-buttons-right>
 	<app-buttons-group>
-		<theme-switch-button></theme-switch-button>
+		<!-- <theme-switch-button></theme-switch-button> -->
 		<logo-button brand-name="Speed"></logo-button>
 	</app-buttons-group>
 	</app-buttons-right>

@@ -64,12 +64,12 @@ export class BlocksSelection extends Element {
 
 	<app-buttons-right>
 		<app-buttons-group>
-			<theme-switch-button></theme-switch-button>
+			<!-- <theme-switch-button></theme-switch-button> -->
 			<logo-button brand-name="Speed"></logo-button>
 		</app-buttons-group>
 		<app-buttons-group>
-			<undo-button disabled></undo-button>
-			<redo-button disabled></redo-button>
+			<!-- <undo-button disabled></undo-button>
+			<redo-button disabled></redo-button> -->
 			<refresh-button disabled></refresh-button>
 		</app-buttons-group>
 		<app-buttons-group>
