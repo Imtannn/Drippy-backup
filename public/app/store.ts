@@ -1,5 +1,5 @@
 import {createMutable} from 'solid-js/store'
-import type {Block} from '../types/block.js'
+import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 
 export type AppRoute =
@@ -31,14 +31,14 @@ export const store = createMutable({
 	selectedAvatar: null as Avatar,
 	selectedScene: null as Scene,
 	isPreview: false,
-	selectedBlocks: new Map<string, Block>(),
+	selectedBlocks: new Map<BlockCategory, Block>(),
 	selectedFabric: null as Fabric | null,
 	customMeasurement: null as CustomMeasurement | null,
 	set setSelectedBlocks(blocks: Block[] | Block) {
 		if (!Array.isArray(blocks)) {
 			blocks = [blocks]
 		}
-		const newBlocks = new Map<string, Block>(this.selectedBlocks)
+		const newBlocks = new Map<BlockCategory, Block>(this.selectedBlocks)
 		// check if the block with same category already exists
 		for (const block of blocks) {
 			if (this.selectedBlocks.has(block.category)) {
@@ -80,7 +80,7 @@ export const store = createMutable({
 		this.view = 'avatar' as AppRoute
 		this.selectedAvatar = null as Avatar
 		this.selectedScene = null as Scene
-		this.selectedBlocks = new Map<string, Block>()
+		this.selectedBlocks = new Map<BlockCategory, Block>()
 		this.selectedFabric = null as Fabric | null
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
