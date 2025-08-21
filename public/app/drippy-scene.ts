@@ -437,6 +437,7 @@ export class DrippyScene extends Element {
 		#lume-scene-container {
 			width: 100%;
 			height: 100%;
+			transition: transform 0.2s ease-in-out;
 		}
 
 		lume-scene {
