@@ -10,22 +10,34 @@ export class LoadingIndicator extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
-		this.createEffect(() => {
-			this.style.setProperty('--opacity', this.isVisible ? '1' : '0')
-		})
+		// this.createEffect(() => {
+		// 	this.style.setProperty('--opacity', this.isVisible ? '1' : '0')
+		// })
 	}
 
-	template = () => html` <div class="loader"></div> `
+	template = () => html`
+		<div class="loading-indicator">
+			<div class="loader"></div>
+		</div>
+	`
 
 	css = css/*css*/ `
 		:host {
-			--opacity: 0;
+			--opacity: 1;
 			opacity: var(--opacity);
 			transition: opacity 0.2s ease-in-out;
 		}
 
+		.loading-indicator {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 32px;
+			height: 32px;
+		}
+
 		.loader {
-			width: 1rem;
+			width: 15px;
 			aspect-ratio: 0.577;
 			color: #121316;
 			display: grid;
