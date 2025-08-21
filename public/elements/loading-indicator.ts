@@ -10,9 +10,9 @@ export class LoadingIndicator extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
-		// this.createEffect(() => {
-		// 	this.style.setProperty('--opacity', this.isVisible ? '1' : '0')
-		// })
+		this.createEffect(() => {
+			this.style.setProperty('--opacity', this.isVisible ? '1' : '0')
+		})
 	}
 
 	template = () => html`
@@ -23,7 +23,7 @@ export class LoadingIndicator extends Element {
 
 	css = css/*css*/ `
 		:host {
-			--opacity: 1;
+			--opacity: 0;
 			opacity: var(--opacity);
 			transition: opacity 0.2s ease-in-out;
 		}

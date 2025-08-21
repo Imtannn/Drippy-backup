@@ -41,7 +41,7 @@ export const appStyles = css`
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 10px;
+		font-size: 12px;
 		font-weight: 600;
 	}
 
@@ -59,7 +59,7 @@ export const appStyles = css`
 		padding-top: 18px;
 		border: 1px solid #ddd;
 		border-radius: 8px;
-		font-size: 10px;
+		font-size: 12px;
 		font-weight: 500;
 		box-sizing: border-box;
 		background-color: #f5f5f5;
@@ -75,7 +75,7 @@ export const appStyles = css`
 		position: absolute;
 		top: 12px;
 		left: 15px;
-		font-size: 12px;
+		font-size: 14px;
 		font-weight: 400;
 		color: #999;
 		transition: all 0.2s ease;
@@ -90,7 +90,7 @@ export const appStyles = css`
 	}
 
 	.page-title {
-		font-size: 12px;
+		font-size: 14px;
 		font-weight: 600;
 		color: #000;
 		margin: 0;
@@ -126,7 +126,7 @@ export const appStyles = css`
 		border: none;
 		border-radius: 25px;
 		padding: 15px 20px;
-		font-size: 12px;
+		font-size: 14px;
 		font-weight: 600;
 		cursor: pointer;
 		display: flex;
@@ -145,7 +145,7 @@ export const appStyles = css`
 
 	/* Section Styles */
 	.section-title {
-		font-size: 12px;
+		font-size: 14px;
 		font-weight: 600;
 		color: #000;
 		margin: 0 0 15px 0;
@@ -460,7 +460,7 @@ export const appStyles = css`
 		padding: 0;
 		border: none;
 		border-radius: 12px;
-		font-size: 14px;
+		font-size: 16px;
 		color: #99999a;
 		cursor: pointer;
 		transition: all 0.2s ease;
@@ -526,7 +526,7 @@ export const appStyles = css`
 
 	@media (max-width: 768px) {
 		.category-tab {
-			font-size: 12px;
+			font-size: 14px;
 		}
 
 		.item-card {
