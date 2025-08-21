@@ -81,6 +81,7 @@ export class SpacesSelection extends Element {
 			z-index: 1000;
 			opacity: 0;
 			animation: fadeIn 0.3s ease-out forwards;
+			overflow-y: auto;
 		}
 
 		@keyframes fadeIn {
