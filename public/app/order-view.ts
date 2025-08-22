@@ -335,17 +335,46 @@ export class OrderView extends Element {
 		}
 
 		.size-btn.custom {
+			position: relative;
 			background: linear-gradient(136deg, #e56be8 1.67%, #495cff 100.68%);
 			background-clip: text;
 			-webkit-background-clip: text;
 			-webkit-text-fill-color: transparent;
-			border: 1px solid;
-			border-radius: 20px;
+			border: none;
 		}
 
-		.size-btn.custom:hover {
-			opacity: 0.9;
-			transform: translateY(-1px);
+		.size-btn.custom::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(136deg, #e56be8 1.67%, #495cff 100.68%);
+			border-radius: 20px;
+			z-index: -1;
+		}
+
+		.size-btn.custom::after {
+			content: '';
+			position: absolute;
+			top: 1px;
+			left: 1px;
+			right: 1px;
+			bottom: 1px;
+			background: white; /* or whatever your button background should be */
+			border-radius: 19px;
+			z-index: -1;
+		}
+
+		.size-btn.custom:active::before {
+			transform: scale(0.95);
+			transition: transform 0.05s ease;
+		}
+
+		.size-btn.custom:active::after {
+			transform: scale(0.95);
+			transition: transform 0.05s ease;
 		}
 
 		.size-btn.custom.selected {
@@ -381,11 +410,6 @@ export class OrderView extends Element {
 			background: #000;
 			color: white;
 			border-color: #000;
-		}
-
-		.size-btn.custom {
-			color: #8b5cf6;
-			border-color: #8b5cf6;
 		}
 
 		.shipping-section {
