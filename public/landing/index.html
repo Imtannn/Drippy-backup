@@ -20,47 +20,11 @@
 				pointer-events: auto;
 			}
 
-			login-ui {
-				pointer-events: auto;
-				display: block;
-				position: absolute;
-				top: 10px;
-				right: 10px;
-				z-index: 2;
-			}
-
-			theme-switch {
-				position: absolute;
-				top: 30px;
-				right: 10px;
-				z-index: 1;
-
-				--theme-switch-icon-color: rgb(29, 29, 29);
-
-				[data-theme='dark'] & {
-					--theme-switch-icon-color: rgb(219, 219, 219);
-				}
-			}
-
 			#landingUI {
 				padding: 20px;
 				overflow-x: auto;
 			}
 		</style>
-
-		<login-ui
-			custom-style="
-				#loginButtons a.login-link-text {
-					color: black;
-
-					:host-context([data-theme='dark']) & {
-						color: white;
-					}
-				}
-			"
-		></login-ui>
-
-		<theme-switch></theme-switch>
 
 		<script type="module" src="./landing.js"></script>
 	</body>

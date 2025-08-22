@@ -129,7 +129,7 @@ const statistics = [
 
 document.body.append(
 	html`
-		<div class="landing-page-desktop">
+		<main class="landing-page-desktop" role="main">
 			<!-- Header Navigation -->
 			<nav class="header">
 				<div class="header__logo">
@@ -138,7 +138,7 @@ document.body.append(
 						alt="Drippy Logo"
 						class="header__logo-img"
 					/>
-				</div>
+				</main>
 				<ul class="header__menu">
 					<li class="header__menu-item"><a href="#features" class="header__menu-link">Features</a></li>
 					<li class="header__menu-item"><a href="#pricing" class="header__menu-link">How it works</a></li>
@@ -146,39 +146,39 @@ document.body.append(
 					<li class="header__menu-item"><a href="#contact" class="header__menu-link">Pricing</a></li>
 				</ul>
 				<div class="header__actions">
-					<button class="btn btn--primary">Book a demo</button>
-				</div>
-				<button class="header__mobile-toggle">
+					<button class="btn btn--primary" aria-label="Book a demo">Book a demo</button>
+				</section>
+				<button class="header__mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
 					<span class="header__mobile-toggle-line"></span>
 					<span class="header__mobile-toggle-line"></span>
 					<span class="header__mobile-toggle-line"></span>
 				</button>
 			</nav>
 
-			<div class="div">
+			<div class="container">
 				<div class="overlap">
 					<div class="frame">
 						<!-- Hero Section -->
-						<div class="hero-header">
-							<p class="stop-selling-clothes">Stop selling clothes. <br />Start selling experiences.</p>
-							<p class="turn-your-e-commerce">
-								<span class="text-wrapper">Turn your e-commerce into an </span>
-								<span class="span">interactive 3D studio </span>
-								<span class="text-wrapper">that boosts engagement and sales.</span>
+						<section class="hero-header" aria-labelledby="hero-title">
+							<p id="hero-title" class="stop-selling-clothes">Stop selling clothes. <br />Start selling experiences.</p>
+							<p class="hero__subtitle">
+								Turn your e-commerce into an
+								<span class="highlight"> interactive 3D <br> studio </span>
+							that boosts engagement and sales.
 							</p>
-							<div class="frame-2">
+							<div class="hero__actions">
 								<custom-button variant="secondary" size="large">See it live</custom-button>
 								<custom-button variant="primary" size="large">Book a demo</custom-button>
-							</div>
-						</div>
+							</section>
+						</section>
 
 						<!-- Brands Section -->
-						<div class="div-2">
-							<div class="frame-3">
-								<div class="text-wrapper-4">Backed by the fearless.</div>
-								<div class="text-wrapper-5">Trusted by the rebels.</div>
+						<section class="section">
+							<div class="section-header">
+								<div class="section-title">Backed by the fearless.</div>
+								<div class="section-subtitle">Trusted by the rebels.</div>
 							</div>
-							<div class="brands">
+							<div class="brands__grid">
 								${brands.map(
 									(brand: any) => html`
 										<div class="brands__item">
@@ -187,31 +187,31 @@ document.body.append(
 									`,
 								)}
 							</div>
-						</div>
+						</section>
 
 						<!-- Interactive 3D Section -->
-						<div class="div-2">
-							<div class="frame-4">
-								<p class="interactive-is">
-									<span class="text-wrapper-6">Interactive 3D is </span> <span class="span">the new black.</span>
-								</p>
-								<p class="p">Static images are dead — Today shoppers want fun, interaction, and engagement.</p>
+						<div class="section">
+							<div class="section-header">
+								<div class="section-title">
+									<span>Interactive 3D is </span> <span class="hero__title--highlight">the new black.</span>
+								</div>
+								<div class="section-subtitle">Static images are dead — Today shoppers want fun, interaction, and engagement.</div>
 							</div>
-							<div class="frame-5">
+							<div class="showcase__container">
 								<div class="showcase">
-									<div class="showcase__item showcase__item--visualization">
+									<div class="showcase__item">
 										<div class="showcase__background">
 											<div class="showcase__model-display">
-												<img class="showcase__model" src="${modelImage1}" alt="3D Model Visualization" />
+												<img class="showcase__model" src="${modelImage1}" alt="3D model visualization showing product customization" />
 											</div>
 										</div>
 									</div>
-									<div class="showcase__item showcase__item--interactive">
+									<div class="showcase__item">
 										<div class="showcase__background">
 											<div class="showcase__controls">
-												<img class="showcase__avatar-option" src=${matImage1} alt="Material 1" />
-												<img class="showcase__avatar-option" src=${matImage2} alt="Material 2" />
-												<img class="showcase__avatar-option" src=${matImage3} alt="Material 3" />
+												<img class="showcase__avatar-option" src=${matImage1} alt="Material option 1 for customization" />
+												<img class="showcase__avatar-option" src=${matImage2} alt="Material option 2 for customization" />
+												<img class="showcase__avatar-option" src=${matImage3} alt="Material option 3 for customization" />
 											</div>
 											<div class="showcase__selector">
 												<div class="showcase__selector-dot"></div>
@@ -219,11 +219,11 @@ document.body.append(
 												<img
 													class="showcase__selector-icon"
 													src="https://c.animaapp.com/mejigj1rAIvhIh/img/vector-1.svg"
-													alt="Dropdown"
+													alt="Avatar selection dropdown"
 												/>
 											</div>
 											<div class="showcase__model-display">
-												<img class="showcase__avatar-model" src="${modelImage2}" alt="3D Avatar Model" />
+												<img class="showcase__model" src="${modelImage2}" alt="3D avatar model with interactive controls" />
 											</div>
 											<div class="showcase__label">Interactive 3D with avatars</div>
 										</div>
@@ -233,29 +233,29 @@ document.body.append(
 						</div>
 
 						<!-- Statistics Section -->
-						<div class="div-2">
-							<div class="frame-6">
-								<p class="text-wrapper-9">Well, numbers do not lie.</p>
-								<p class="text-wrapper-10">3D and personalization aren't just buzz — they drive business metrics.</p>
+						<div class="section">
+							<div class="section-header">
+								<div class="section-title">Well, numbers do not lie.</div>
+								<div class="section-subtitle">3D and personalization aren't just buzz — they drive business metrics.</div>
 							</div>
-							<div class="frame-7">
+							<div class="statistics__grid">
 								${statistics.map(
 									(stat: any) => html`
-										<div class="frame-8">
-											<div class="group-2">
-												<div class="overlap-group-3">
+										<div class="statistics__item">
+											<div class="statistics__icon-container">
+												<div class="statistics__icon-overlap">
 													<div class="group-wrapper">
-														<div class="ellipse-wrapper">
+														<div class="statistics__ellipse">
 															<img class="group-wrapper" src=${stat.image} />
 														</div>
 													</div>
-													<div class="text-wrapper-11">${stat.number}</div>
+													<div class="statistics__number">${stat.number}</div>
 												</div>
 											</div>
-											<div class="frame-9">
-												<div class="text-wrapper-12">${stat.name}</div>
-												<p class="text-wrapper-13">${stat.des}</p>
-												<div class="text-wrapper-14">${stat.source}</div>
+											<div class="statistics__content">
+												<div class="statistics__item-title">${stat.name}</div>
+												<p class="statistics__item-description">${stat.des}</p>
+												<div class="statistics__source">${stat.source}</div>
 											</div>
 										</div>
 									`,
@@ -264,68 +264,68 @@ document.body.append(
 						</div>
 
 						<!-- Drippy Features Section -->
-						<div class="section-drippy">
-							<div class="frame-11">
-								<div class="frame-12">
-									<div class="frame-13">
-										<p class="drippy-is-the-new">
-											<span class="text-wrapper-6">Drippy is the new storefront, </span>
-											<span class="span">reimagined. </span>
-										</p>
-										<p class="text-wrapper-17">Let shoppers play, remix, and buy — all in one place.</p>
+						<section class="section-drippy" aria-labelledby="features-title">
+							<div class="features__container">
+								<div class="features__content">
+									<div class="features__header">
+										<div id="features-title" class="drippy-is-the-new">
+											<span class="hero__title">Drippy is the new storefront, </span>
+											<span class="hero__title--highlight">reimagined. </span>
+										</div>
+										<p class="features__subtitle">Let shoppers play, remix, and buy — all in one place.</p>
 									</div>
-									<div class="frame-14">
-										<div class="frame-wrapper">
-											<div class="frame-15">
-												<div class="group-3">
-													<div class="group-4">
-														<div class="overlap-group-4"><div class="text-wrapper-18">1</div></div>
+									<div class="features__grid">
+										<div class="feature__wrapper">
+											<div class="feature__item">
+												<div class="feature__number-container">
+													<div class="feature__number-wrapper">
+														<div class="feature__number-overlap"><div class="feature__number">1</div></div>
 													</div>
 												</div>
-												<div class="frame-16">
-													<p class="text-wrapper-19">Turn store into a playground</p>
-													<p class="text-wrapper-20">Let shoppers explore 3D spaces, remix designs, styled avatars.</p>
+												<div class="feature__content">
+													<p class="feature__title">Turn store into a playground</p>
+													<p class="feature__description">Let shoppers explore 3D spaces, remix designs, styled avatars.</p>
 												</div>
 											</div>
 										</div>
-										<div class="frame-wrapper">
-											<div class="frame-15">
-												<div class="group-3">
-													<div class="group-4">
-														<div class="overlap-group-4"><div class="text-wrapper-18">2</div></div>
+										<div class="feature__wrapper">
+											<div class="feature__item">
+												<div class="feature__number-container">
+													<div class="feature__number-wrapper">
+														<div class="feature__number-overlap"><div class="feature__number">2</div></div>
 													</div>
 												</div>
-												<div class="frame-16">
-													<div class="text-wrapper-19">Sell what people want</div>
-													<p class="text-wrapper-20">
+												<div class="feature__content">
+													<div class="feature__title">Sell what people want</div>
+													<p class="feature__description">
 														Collect payments and orders directly - Fulfill on made-to-order basis.
 													</p>
 												</div>
 											</div>
 										</div>
-										<div class="frame-17">
-											<div class="frame-15">
-												<div class="group-3">
-													<div class="group-4">
-														<div class="overlap-group-4"><div class="text-wrapper-18">3</div></div>
+										<div class="feature__item--second">
+											<div class="feature__item">
+												<div class="feature__number-container">
+													<div class="feature__number-wrapper">
+														<div class="feature__number-overlap"><div class="feature__number">3</div></div>
 													</div>
 												</div>
-												<div class="frame-16">
-													<div class="text-wrapper-19">Collect powerful insights</div>
-													<p class="text-wrapper-20">Get real-time signals on what to produce — no more guesswork.</p>
+												<div class="feature__content">
+													<div class="feature__title">Collect powerful insights</div>
+													<p class="feature__description">Get real-time signals on what to produce — no more guesswork.</p>
 												</div>
 											</div>
 										</div>
-										<div class="frame-18">
-											<div class="frame-15">
-												<div class="group-3">
-													<div class="group-4">
-														<div class="overlap-group-4"><div class="text-wrapper-18">4</div></div>
+										<div class="feature__item--third">
+											<div class="feature__item">
+												<div class="feature__number-container">
+													<div class="feature__number-wrapper">
+														<div class="feature__number-overlap"><div class="feature__number">4</div></div>
 													</div>
 												</div>
-												<div class="frame-19">
-													<div class="text-wrapper-19">Build &amp; grow community</div>
-													<p class="text-wrapper-20">
+												<div class="feature__item--fourth">
+													<div class="feature__title">Build &amp; grow community</div>
+													<p class="feature__description">
 														Host in-app challenges that turn your audience into fans &amp; co-creators
 													</p>
 												</div>
@@ -333,99 +333,99 @@ document.body.append(
 										</div>
 									</div>
 								</div>
-								<div class="frame-2">
+								<div class="hero__actions">
 									<custom-button variant="secondary" size="large">See it live</custom-button>
 									<custom-button variant="primary" size="large">Book a demo</custom-button>
 								</div>
 							</div>
-							<img class="step-view-garments" src=${stepImage1} />
+							<img class="features__image" src=${stepImage1} />
 						</div>
 
 						<!-- How it Works Section -->
-						<div class="div-2">
-							<div class="frame-20">
-								<p class="text-wrapper-21">Built like a game, feel like a game.</p>
-								<p class="here-s-how-it-work">Here&#39;s how it work from your shoppers' POV.</p>
+						<div class="section">
+							<div class="section-header">
+								<div class="section-title">Built like a game, feel like a game.</div>
+								<div class="section-subtitle">Here&#39;s how it work from your shoppers' POV.</div>
 							</div>
-							<div class="frame-21">
+							<div class="how-it-works__grid">
 								${steps.map(
 									(step: any) => html`
-										<div class="frame-22">
-											<div class="group-6">
-												<div class="text-wrapper-24">${step.name}</div>
-												<img class="step-avatar-2" src=${step.logo} />
+										<div class="how-it-works__item">
+											<div class="how-it-works__step">
+												<div class="how-it-works__step-title">${step.name}</div>
+												<img class="how-it-works__step-image" src=${step.logo} />
 											</div>
-											<p class="text-wrapper-23">${step.des}</p>
+											<p class="how-it-works__description">${step.des}</p>
 										</div>
 									`,
 								)}
 							</div>
-							<div class="frame-2">
+							<div class="hero__actions">
 								<custom-button variant="secondary" size="large">See it live</custom-button>
 								<custom-button variant="primary" size="large">Book a demo</custom-button>
 							</div>
 						</div>
 
 						<!-- Platform Integration Section -->
-						<div class="frame-24">
-							<div class="frame-25">
-								<p class="a-plug-play">A plug &amp; play 3D studio.</p>
-								<p class="text-wrapper-26">Browser-based, mobile-first. Zero download, Zero friction.</p>
+						<div class="platform__container">
+							<div class="section-header">
+								<div class="section-title" id="platform-title">A plug &amp; play 3D studio.</div>
+								<div class="section-subtitle">Browser-based, mobile-first. Zero download, Zero friction.</div>
 							</div>
-							<div class="frame-26">
-								<div class="frame-27">
-									<div class="div-3">
-										<div class="overlap-group-5">
-											<div class="group-7">
-												<div class="frame-28">
-													<div class="text-wrapper-12">Link in bios</div>
-													<p class="text-wrapper-15">
+							<div class="platform__content">
+								<div class="platform__grid">
+									<div class="platform__card">
+										<div class="platform__card-overlap">
+											<div class="platform__card-content">
+												<div class="platform__card-text">
+													<div class="statistics__item-title">Link in bios</div>
+													<p class="statistics__description">
 														No website? no problem. Drop Drippy in your bio and turn followers into shoppers.
 													</p>
 												</div>
 											</div>
-											<div class="group-8">
-												<img class="device" src="https://c.animaapp.com/mejigj1rAIvhIh/img/device-14pm-1.png" />
+											<div class="platform__card-image">
+												<img class="platform__device-image" src="https://c.animaapp.com/mejigj1rAIvhIh/img/device-14pm-1.png" />
 											</div>
 										</div>
 									</div>
-									<div class="div-3">
-										<div class="group-9">
-											<div class="div-3">
-												<div class="group-10">
-													<div class="overlap-group-5">
-														<div class="group-7">
-															<div class="frame-28">
-																<div class="text-wrapper-12">Embed on website</div>
-																<p class="text-wrapper-15">
+									<div class="platform__card">
+										<div class="platform__card-wrapper">
+											<div class="platform__card">
+												<div class="platform__card-inner">
+													<div class="platform__card-overlap">
+														<div class="platform__card-content">
+															<div class="platform__card-text">
+																<div class="statistics__item-title">Embed on website</div>
+																<p class="statistics__description">
 																	Plug Drippy directly into your online store. Same site, new experience.
 																</p>
 															</div>
 														</div>
-														<div class="group-8"></div>
+														<div class="platform__card-image"></div>
 													</div>
 												</div>
-												<img class="device-pm" src="https://c.animaapp.com/mejigj1rAIvhIh/img/device-14pm-2.png" />
+												<img class="platform__device-image--pm" src="https://c.animaapp.com/mejigj1rAIvhIh/img/device-14pm-2.png" />
 											</div>
 										</div>
 									</div>
-									<div class="group-11">
-										<div class="group-9">
-											<div class="overlap-wrapper">
-												<div class="overlap-group-5">
-													<div class="group-7">
-														<div class="frame-28">
-															<div class="text-wrapper-12">In-store QR</div>
-															<p class="text-wrapper-15">
+									<div class="platform__card--qr">
+										<div class="platform__card-wrapper">
+											<div class="platform__card-wrapper-overlap">
+												<div class="platform__card-overlap">
+													<div class="platform__card-content">
+														<div class="platform__card-text">
+															<div class="statistics__item-title">In-store QR</div>
+															<p class="statistics__description">
 																Turn retail into an interactive playground. One scan → instant 3D try-on →
 																made-to-order.
 															</p>
 														</div>
 													</div>
-													<div class="group-12">
-														<div class="screenshot-wrapper">
+													<div class="platform__card-screenshot">
+														<div class="platform__screenshot-wrapper">
 															<img
-																class="screenshot"
+																class="platform__screenshot"
 																src="https://c.animaapp.com/mejigj1rAIvhIh/img/screenshot-2025-08-05-at-18-41-55-1.png"
 															/>
 														</div>
@@ -435,7 +435,7 @@ document.body.append(
 										</div>
 									</div>
 								</div>
-								<div class="frame-2">
+								<div class="hero__actions">
 									<custom-button variant="secondary" size="large">See it live</custom-button>
 									<custom-button variant="primary" size="large">Book a demo</custom-button>
 								</div>
@@ -443,169 +443,169 @@ document.body.append(
 						</div>
 
 						<!-- Pricing Section -->
-						<div class="frame-29">
-							<div class="frame-30">
-								<div class="frame-31">
-									<div class="frame-32">
-										<div class="text-wrapper-27">Our pricing.</div>
-										<div class="text-wrapper-28">Pricing without the bullsh*t.</div>
+						<div class="pricing__container">
+							<div class="pricing__content">
+								<div class="pricing__header">
+									<div class="section-header">
+										<div class="section-title">Our pricing.</div>
+										<div class="section-subtitle">Pricing without the bullsh*t.</div>
 									</div>
-									<div class="frame-33">
-										<div class="button-primary-3"><div class="text-wrapper-3">Yearly</div></div>
-										<div class="button-primary-4"><div class="text-wrapper-29">Monthly</div></div>
+									<div class="pricing__toggle">
+										<div class="pricing__toggle--yearly"><div class="hero__button-text">Yearly</div></div>
+										<div class="pricing__toggle--monthly"><div class="pricing__toggle-text">Monthly</div></div>
 									</div>
 								</div>
-								<div class="frame-34">
-									<div class="frame-35">
-										<div class="frame-36">
-											<div class="frame-37">
-												<div class="text-wrapper-30">Studio</div>
-												<p class="div-4">
-													<span class="text-wrapper-6">€45</span> <span class="text-wrapper-31">/month/studio</span>
+								<div class="pricing__plans">
+									<div class="pricing__plan--basic">
+										<div class="pricing__plan-content">
+											<div class="pricing__plan-header">
+												<div class="pricing__plan-name">Studio</div>
+												<p class="pricing__plan-price">
+													<span class="interactive__title">€45</span> <span class="pricing__plan-period">/month/studio</span>
 												</p>
 											</div>
-											<div class="flexcontainer">
-												<p class="div-4">
-													<span class="text-wrapper-31">3-month free trial <br /></span>
+											<div class="pricing__features-list">
+												<p class="pricing__plan-price">
+													<span class="pricing__plan-period">3-month free trial <br /></span>
 												</p>
-												<p class="div-4">
-													<span class="text-wrapper-31">1 space<br /></span>
+												<p class="pricing__plan-price">
+													<span class="pricing__plan-period">1 space<br /></span>
 												</p>
-												<p class="div-4">
-													<span class="text-wrapper-31">12 SKUs per space<br /></span>
+												<p class="pricing__plan-price">
+													<span class="pricing__plan-period">12 SKUs per space<br /></span>
 												</p>
-												<p class="div-4">
-													<span class="text-wrapper-31">Digitize service </span>
-													<span class="text-wrapper-32">not included</span>
+												<p class="pricing__plan-price">
+													<span class="pricing__plan-period">Digitize service </span>
+													<span class="pricing__plan-note">not included</span>
 												</p>
 											</div>
 										</div>
-										<div class="button-primary-5"><div class="text-wrapper-3">Start free trial</div></div>
+										<div class="pricing__button--basic"><div class="hero__button-text">Start free trial</div></div>
 									</div>
-									<div class="frame-38">
-										<div class="frame-36">
-											<div class="frame-39">
-												<div class="frame-40">
-													<div class="text-wrapper-33">Studio PRO</div>
-													<div class="frame-41"><div class="text-wrapper-34">Best value</div></div>
+									<div class="pricing__plan--pro">
+										<div class="pricing__plan-content">
+											<div class="pricing__plan-header--pro">
+												<div class="pricing__plan-title-section">
+													<div class="pricing__plan-name--pro">Studio PRO</div>
+													<div class="pricing__plan-badge"><div class="pricing__plan-badge-text">Best value</div></div>
 												</div>
-												<p class="div-5">
-													<span class="text-wrapper-6">€70</span> <span class="text-wrapper-35">/month/studio</span>
+												<p class="pricing__plan-price--pro">
+													<span class="interactive__title">€70</span> <span class="pricing__plan-period--pro">/month/studio</span>
 												</p>
 											</div>
-											<div class="flexcontainer-2">
-												<p class="div-5">
-													<span class="text-wrapper-36">Everything in </span>
-													<span class="text-wrapper-37">Studio</span>
-													<span class="text-wrapper-36">, plus:<br /></span>
+											<div class="pricing__features-list--pro">
+												<p class="pricing__plan-price--pro">
+													<span class="pricing__plan-feature">Everything in </span>
+													<span class="pricing__plan-feature--highlight">Studio</span>
+													<span class="pricing__plan-feature">, plus:<br /></span>
 												</p>
-												<p class="div-5">
-													<span class="text-wrapper-36">Unlimited spaces &amp; SKUs<br /></span>
+												<p class="pricing__plan-price--pro">
+													<span class="pricing__plan-feature">Unlimited spaces &amp; SKUs<br /></span>
 												</p>
-												<p class="div-5">
-													<span class="text-wrapper-36">Embed on website (custom URL)<br /></span>
+												<p class="pricing__plan-price--pro">
+													<span class="pricing__plan-feature">Embed on website (custom URL)<br /></span>
 												</p>
-												<p class="div-5">
-													<span class="text-wrapper-36">Analytics dashboard<br /></span>
+												<p class="pricing__plan-price--pro">
+													<span class="pricing__plan-feature">Analytics dashboard<br /></span>
 												</p>
-												<p class="div-5">
-													<span class="text-wrapper-37">Add-on: <br /></span>
+												<p class="pricing__plan-price--pro">
+													<span class="pricing__plan-feature--highlight">Add-on: <br /></span>
 												</p>
-												<p class="div-5">
-													<span class="text-wrapper-36">Includes</span>
-													<span class="text-wrapper-37"> 1 growth pack/year </span>
-													<span class="text-wrapper-36"> (24 garments = €840 value).</span>
+												<p class="pricing__plan-price--pro">
+													<span class="pricing__plan-feature">Includes</span>
+													<span class="pricing__plan-feature--highlight"> 1 growth pack/year </span>
+													<span class="pricing__plan-feature"> (24 garments = €840 value).</span>
 												</p>
 											</div>
 										</div>
-										<button class="button"><div class="text-wrapper-38">Get started</div></button>
+										<button class="pricing__button--pro"><div class="pricing__plan-button-text">Get started</div></button>
 									</div>
-									<div class="frame-42">
-										<div class="frame-36">
-											<div class="frame-37">
-												<div class="text-wrapper-30">Digitize packs</div>
-												<div class="div-4">One-time</div>
+									<div class="pricing__plan--digitize">
+										<div class="pricing__plan-content">
+											<div class="pricing__plan-header">
+												<div class="pricing__plan-name">Digitize packs</div>
+												<div class="pricing__plan-price">One-time</div>
 											</div>
-											<div class="flexcontainer-3">
-												<p class="div-4">
-													<span class="text-wrapper-6">Kickoff: </span>
-													<span class="text-wrapper-31">12 garments → </span>
-													<span class="text-wrapper-6">€420/pack </span>
-													<span class="text-wrapper-31">(€40/garment) <br /></span>
+											<div class="pricing__features-list--digitize">
+												<p class="pricing__plan-price">
+													<span class="interactive__title">Kickoff: </span>
+													<span class="pricing__plan-period">12 garments → </span>
+													<span class="interactive__title">€420/pack </span>
+													<span class="pricing__plan-period">(€40/garment) <br /></span>
 												</p>
-												<p class="div-4">
-													<span class="text-wrapper-6">Growth: </span>
-													<span class="text-wrapper-31">24 garments → </span>
-													<span class="text-wrapper-6">€840/pack</span>
-													<span class="text-wrapper-31"> (€35/garment) <br /></span>
+												<p class="pricing__plan-price">
+													<span class="interactive__title">Growth: </span>
+													<span class="pricing__plan-period">24 garments → </span>
+													<span class="interactive__title">€840/pack</span>
+													<span class="pricing__plan-period"> (€35/garment) <br /></span>
 												</p>
-												<p class="div-4">
-													<span class="text-wrapper-6">Scale: </span>
-													<span class="text-wrapper-31">36 garments → </span>
-													<span class="text-wrapper-6">€1050/pack </span>
-													<span class="text-wrapper-31">(€30/garment) </span>
+												<p class="pricing__plan-price">
+													<span class="interactive__title">Scale: </span>
+													<span class="pricing__plan-period">36 garments → </span>
+													<span class="interactive__title">€1050/pack </span>
+													<span class="pricing__plan-period">(€30/garment) </span>
 												</p>
 											</div>
 										</div>
-										<button class="button-primary-6"><div class="text-wrapper-3">Get started</div></button>
+										<button class="pricing__button--digitize"><div class="hero__button-text">Get started</div></button>
 									</div>
 								</div>
 							</div>
 						</div>
 
 						<!-- CTA Section -->
-						<div class="frame-43">
-							<div class="frame-44">
-								<div class="group-13">
-									<div class="overlap-group-6">
-										<img class="cone" src="https://c.animaapp.com/mejigj1rAIvhIh/img/cone-01-2-2.png" />
-										<img class="group-14" src="https://c.animaapp.com/mejigj1rAIvhIh/img/group-11565.png" />
+						<div class="cta__container">
+							<div class="cta__content">
+								<div class="cta__background">
+									<div class="cta__background-overlap">
+										<img class="cta__cone-image" src="https://c.animaapp.com/mejigj1rAIvhIh/img/cone-01-2-2.png" />
+										<img class="cta__background-image" src="https://c.animaapp.com/mejigj1rAIvhIh/img/group-11565.png" />
 									</div>
 								</div>
-								<div class="frame-45">
-									<div class="text-wrapper-39">Join the future.</div>
-									<p class="turn-your">
-										<span class="text-wrapper-40">Turn your collections into </span>
-										<span class="text-wrapper-41">playable, immersive, made-to-order</span>
-										<span class="text-wrapper-40"> experiences today. </span>
+								<div class="cta__text-section">
+									<div class="cta__title">Join the future.</div>
+									<p class="cta__description-text">
+										<span class="cta__description">Turn your collections into </span>
+										<span class="cta__description--highlight">playable, immersive, made-to-order</span>
+										<span class="cta__description"> experiences today. </span>
 									</p>
-									<div class="button-primary-7">
-										<div class="text-wrapper-42">See Drippy in action</div>
-										<img class="arrow" src="https://c.animaapp.com/mejigj1rAIvhIh/img/arrow-1.svg" />
+									<div class="cta__button">
+										<div class="cta__button-text">See Drippy in action</div>
+										<img class="cta__arrow-icon" src="https://c.animaapp.com/mejigj1rAIvhIh/img/arrow-1.svg" />
 									</div>
 								</div>
 							</div>
 						</div>
 
 						<!-- Footer -->
-						<div class="frame-46">
-							<img class="line" src="https://c.animaapp.com/mejigj1rAIvhIh/img/line-1.svg" />
-							<div class="frame-47">
-								<div class="frame-48">
-									<div class="frame-49">
+						<div class="footer__container">
+							<img class="footer__divider" src="https://c.animaapp.com/mejigj1rAIvhIh/img/line-1.svg" />
+							<div class="footer__content">
+								<div class="footer__main">
+									<div class="footer__brand">
 										<img
-											class="element"
+											class="footer__logo"
 											src="https://c.animaapp.com/mejigj1rAIvhIh/img/7aeb67c6-4bc1-4b4c-bbe1-b946b6c2ed7a--1--1.png"
 										/>
-										<div class="text-wrapper-43">@2025 - Drippy, Inc.</div>
+										<div class="footer__copyright">@2025 - Drippy, Inc.</div>
 									</div>
-									<div class="frame-50">
-										<div class="text-wrapper-44">Terms &amp; Conditions</div>
-										<div class="text-wrapper-44">Privacy Policy</div>
-										<div class="text-wrapper-44">Contact Us</div>
+									<div class="footer__links">
+										<div class="footer__link">Terms &amp; Conditions</div>
+										<div class="footer__link">Privacy Policy</div>
+										<div class="footer__link">Contact Us</div>
 									</div>
 								</div>
-								<img class="img" src="https://c.animaapp.com/mejigj1rAIvhIh/img/frame-12632.svg" />
+								<img class="footer__social-icon" src="https://c.animaapp.com/mejigj1rAIvhIh/img/frame-12632.svg" />
 							</div>
 						</div>
 					</div>
 
 					<!-- Decorative Elements -->
-					<div class="cone-wrapper">
-						<img class="cone-2" src=${blingImage1} />
+					<div class="cta__cone-image-wrapper">
+						<img class="cta__cone-image--2" src=${blingImage1} />
 					</div>
-					<img class="cone-3" src=${blingImage2} />
-					<img class="cone-4" src=${blingImage3} />
+					<img class="cta__cone-image--3" src=${blingImage2} />
+					<img class="cta__cone-image--4" src=${blingImage3} />
 				</div>
 			</div>
 		</div>
