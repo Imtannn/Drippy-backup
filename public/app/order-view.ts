@@ -367,18 +367,19 @@ export class OrderView extends Element {
 			z-index: -1;
 		}
 
-		.size-btn.custom:active::before {
-			transform: scale(0.95);
-			transition: transform 0.05s ease;
+		.size-btn.custom:active {
+			opacity: 0.8;
+			transition: opacity 0.1s ease;
 		}
 
-		.size-btn.custom:active::after {
-			transform: scale(0.95);
-			transition: transform 0.05s ease;
-		}
-
-		.size-btn.custom.selected {
-			/* No special styling when selected for now */
+		.size-btn.custom:hover {
+			/* Force no changes on hover */
+			background: linear-gradient(136deg, #e56be8 1.67%, #495cff 100.68%);
+			background-clip: text;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			transform: none;
+			opacity: 1;
 		}
 
 		.shipping-section {
