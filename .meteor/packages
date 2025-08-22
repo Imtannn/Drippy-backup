@@ -52,3 +52,4 @@ zodern:types@1.0.13                     # types for Meteor packages
 # If this gets too slow with a large number of documents, implement tracking count on insert/delete.
 # https://github.com/A-Kyma/publish-counts
 akyma:publish-counts@1.0.1
+email
