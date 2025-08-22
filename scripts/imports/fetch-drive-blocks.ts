@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import * as fs from 'fs'
 import * as path from 'path'
 import * as https from 'https'
@@ -405,8 +403,5 @@ async function main(): Promise<void> {
 	}
 }
 
-if (require.main === module) {
-	main()
-}
-
-module.exports = {main}
+// Run main function if this file is executed directly
+main()
