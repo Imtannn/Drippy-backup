@@ -1209,6 +1209,9 @@ p {
 	gap: 50px;
 	position: relative;
 	flex: 0 0 auto;
+	background-color: var(--primarywhite);
+	z-index: 100;
+	padding: 20px 0 80px 0;
 }
 
 .landing-page-desktop .footer__divider {
@@ -1290,6 +1293,7 @@ p {
 	left: 1226px;
 	transform: rotate(68.06deg);
 	display: block;
+	z-index: 50;
 }
 
 .landing-page-desktop .cta__cone-image--2 {
@@ -1301,6 +1305,7 @@ p {
 	position: absolute;
 	object-fit: cover;
 	display: block;
+	z-index: 50;
 }
 
 .landing-page-desktop .cta__cone-image--3 {
@@ -1311,16 +1316,18 @@ p {
 	position: absolute;
 	object-fit: cover;
 	display: block;
+	z-index: 50;
 }
 
 .landing-page-desktop .cta__cone-image--4 {
 	width: 135px;
 	height: 186px;
-	top: 2450px;
+	top: 2200px;
 	left: -2%;
 	position: absolute;
 	object-fit: cover;
 	display: block;
+	z-index: 50;
 }
 
 .header {
@@ -1752,6 +1759,11 @@ p {
 	.landing-page-desktop .footer__main {
 		flex-direction: column;
 		gap: 20px;
+	}
+
+	.landing-page-desktop .footer__container {
+		z-index: 200;
+		padding: 20px 0;
 	}
 
 	/* Platform section responsive fixes */

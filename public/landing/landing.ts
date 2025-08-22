@@ -451,8 +451,8 @@ document.body.append(
 										<div class="section-subtitle">Pricing without the bullsh*t.</div>
 									</div>
 									<div class="pricing__toggle">
-										<div class="pricing__toggle--yearly"><div class="hero__button-text">Yearly</div></div>
-										<div class="pricing__toggle--monthly"><div class="pricing__toggle-text">Monthly</div></div>
+										<custom-button variant="primary" size="large">Yearly</custom-button>
+										<custom-button variant="secondary" size="large">Monthly</custom-button>
 									</div>
 								</div>
 								<div class="pricing__plans">
@@ -569,10 +569,7 @@ document.body.append(
 										<span class="cta__description--highlight">playable, immersive, made-to-order</span>
 										<span class="cta__description"> experiences today. </span>
 									</p>
-									<div class="cta__button">
-										<div class="cta__button-text">See Drippy in action</div>
-										<img class="cta__arrow-icon" src="https://c.animaapp.com/mejigj1rAIvhIh/img/arrow-1.svg" />
-									</div>
+									<custom-button variant="primary" size="large">See Drippy in action<img class="cta__arrow-icon" src="https://c.animaapp.com/mejigj1rAIvhIh/img/arrow-1.svg" /></custom-button>
 								</div>
 							</div>
 						</div>
