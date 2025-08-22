@@ -81,10 +81,10 @@ export class DrippyScene extends Element {
 		const coef = arr.length > 0 ? this.#getCoef(arr) : 1
 
 		const [baseColorTex, normalTex, displacementTex, roughnessTex] = await Promise.all([
-			this.#getTexture(fabric.baseColor, repete, coef, offset, rotate),
-			this.#getTexture(fabric.normal, repete, coef, offset, rotate),
-			this.#getTexture(fabric.displacement, repete, coef, offset, rotate),
-			this.#getTexture(fabric.roughness, repete, coef, offset, rotate),
+			this.#getTexture(fabric.baseColor || '', repete, coef, offset, rotate),
+			this.#getTexture(fabric.normal || '', repete, coef, offset, rotate),
+			this.#getTexture(fabric.displacement || '', repete, coef, offset, rotate),
+			this.#getTexture(fabric.roughness || '', repete, coef, offset, rotate),
 		])
 
 		if (untrack(cancelApply)) {
@@ -118,6 +118,23 @@ export class DrippyScene extends Element {
 		})
 
 		this.loadingMaterials = untrack(() => this.loadingMaterials).filter(id => id !== loadingId)
+	}
+
+	// Reset materials to default state (no textures)
+	#resetMaterialsToDefault(root: any) {
+		if (!root) return
+
+		const group = root.children?.[0] ?? root
+		group.traverse?.((obj: any) => {
+			if (obj?.isMesh && obj.material) {
+				const material = obj.material
+				material.map = null
+				material.normalMap = null
+				material.roughnessMap = null
+				// material.displacementMap = null
+				material.needsUpdate = true
+			}
+		})
 	}
 
 	#renderTask = () => {
@@ -313,7 +330,20 @@ export class DrippyScene extends Element {
 			}
 
 			if (!fabric) {
-				// nothing to bind
+				// Reset materials to default state (no textures)
+				const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
+
+				for (const el of models) {
+					const resetMaterial = () => {
+						this.#resetMaterialsToDefault((el as any).three)
+					}
+					const behavior = el.behaviors?.get?.('gltf-model')
+					if (!behavior?.model || !el.three) {
+						el.on?.('MODEL_LOAD', resetMaterial)
+					} else {
+						resetMaterial()
+					}
+				}
 				return
 			}
 
@@ -410,21 +440,18 @@ export class DrippyScene extends Element {
 							data-avatar
 			></lume-gltf-model>
 
-			<${For} each=${() => (store.view === 'template' ? Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Template') : Array.from(store.selectedBlocks.values()).filter(item => item.category !== 'Template'))}>
+			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
 				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile}></lume-gltf-model> `}
 			</>
 
-			<${Show}
-				when=${() => store.selectedBlocks.get('Sleeves')?.modelFile && store.view !== 'template'}
-				>
-							${() =>
-								html`<lume-gltf-model
-									data-cloth
-									src=${() => store.selectedBlocks.get('Sleeves')?.modelFile}
-									scale="-1 1 1"
-								></lume-gltf-model>`}
-						</>
-
+			<${Show} when=${() => store.selectedBlocks.get('Sleeves')?.modelFile}>
+				${() =>
+					html`<lume-gltf-model
+						data-cloth
+						src=${() => store.selectedBlocks.get('Sleeves')?.modelFile}
+						scale="-1 1 1"
+					></lume-gltf-model>`}
+			</>
 			</lume-scene>
 		</div>
 	`

@@ -2,106 +2,49 @@ import type {Fabric} from '../types/fabric'
 
 export const fabrics: Record<string, Fabric[]> = {
 	speed: [
-		{
-			_id: '1',
-			thumb: new URL('../images/mat-1.png', import.meta.url).href,
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323332123-Normal',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323333634-BaseColor',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323334705-Displacement',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323336356-Roughness',
-			materialName: 'Cotton 1',
-			category: 'Cotton',
-		},
-		{
-			_id: '2',
-			thumb: new URL(
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/67d7e4ccaa9f645a10ddb48d/170%20Cotton/thumbnail.jpg',
-				import.meta.url,
-			).href,
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/67d7e4ccaa9f645a10ddb48d/STRIPED%20FABRIC/1746431600867-Normal',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/67d7e4ccaa9f645a10ddb48d/STRIPED%20FABRIC/1746431601845-BaseColor',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/67d7e4ccaa9f645a10ddb48d/STRIPED%20FABRIC/1746431602434-Displacement',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/67d7e4ccaa9f645a10ddb48d/STRIPED%20FABRIC/1746431602953-Roughness',
-			materialName: 'Cotton 2',
-			category: 'Cotton',
-		},
-		{
-			_id: '3',
-			thumb: new URL('../images/mat-1.png', import.meta.url).href,
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323332123-Normal',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323333634-BaseColor',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323334705-Displacement',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323336356-Roughness',
-			materialName: 'Cotton 2',
-			category: 'Cotton',
-		},
-		{
-			_id: '4',
-			thumb: new URL('../images/mat-1.png', import.meta.url).href,
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323332123-Normal',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323333634-BaseColor',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323334705-Displacement',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323336356-Roughness',
-			materialName: 'Cotton 3',
-			category: 'Spantex',
-		},
-		{
-			_id: '5',
-			thumb: new URL('../images/mat-1.png', import.meta.url).href,
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323332123-Normal',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323333634-BaseColor',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323334705-Displacement',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323336356-Roughness',
-			materialName: 'Cotton 4',
-			category: 'Denim',
-		},
-		{
-			_id: '6',
-			thumb: new URL('../images/mat-1.png', import.meta.url).href,
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323332123-Normal',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323333634-BaseColor',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323334705-Displacement',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323336356-Roughness',
-			materialName: 'Cotton 5',
-			category: 'Leather',
-		},
-		{
-			_id: '7',
-			thumb: new URL('../images/mat-1.png', import.meta.url).href,
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323332123-Normal',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323333634-BaseColor',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323334705-Displacement',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com//drippy-app/creator-materials/65d9c4f0a5a81aa2b4478569/skin%20leather_1/1719323336356-Roughness',
-			materialName: 'Cotton 6',
-			category: 'Spantex',
-		},
-	],
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Pants/99%20Jean/99%20Jean.png',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Pants/99%20Jean/Normal.png',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Pants/99%20Jean/BaseColor.png',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Pants/99%20Jean/Displacement.png',
+		roughness: '',
+		materialName: '99',
+		category: 'Jean',
+		templateCategory: 'Pants',
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Jacket/56%20Wool/56%20Wool.png',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Jacket/56%20Wool/Normal.png',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Jacket/56%20Wool/BaseColor.png',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Jacket/56%20Wool/Displacement.png',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Jacket/56%20Wool/Roughness.png',
+		materialName: '56',
+		category: 'Wool',
+		templateCategory: 'Jacket',
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Shirt/145%20Cotton/145%20Cotton.png',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Shirt/145%20Cotton/Normal.png',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Shirt/145%20Cotton/BaseColor.png',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Shirt/145%20Cotton/Displacement.png',
+		roughness: '',
+		materialName: '145',
+		category: 'Cotton',
+		templateCategory: 'Shirt',
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Shirt/39%20Linen/39%20Linen.png',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Shirt/39%20Linen/Normal.png',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Shirt/39%20Linen/BaseColor.png',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/speed/Shirt/39%20Linen/Displacement.png',
+		roughness: '',
+		materialName: '39',
+		category: 'Linen',
+		templateCategory: 'Shirt',
+	}
+	]
 }

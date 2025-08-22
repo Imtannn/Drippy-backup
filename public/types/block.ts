@@ -1,4 +1,5 @@
-export type BlockCategory = 'Bodice' | 'Skirt' | 'Sleeves' | 'Pants' | 'Template'
+export type BlockCategory = 'Bodice' | 'Sleeves' | 'Pants'
+export type TemplateCategory = 'Jacket' | 'Shirt' | 'Pants' | 'Accessories'
 
 export type BlockAvatar = 'Male' | 'Female'
 
@@ -9,4 +10,7 @@ export type Block = {
 	blockName: string
 	avatar: BlockAvatar
 	category: BlockCategory
+	templateId: string
+	templateName: string
+	templateCategory: TemplateCategory
 }
