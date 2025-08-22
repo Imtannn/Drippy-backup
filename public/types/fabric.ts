@@ -1,10 +1,11 @@
 export type Fabric = {
 	_id: string
-	thumb: string
-	normal: string
-	baseColor: string
-	displacement: string
-	roughness: string
+	thumb?: string
+	normal?: string
+	baseColor?: string
+	displacement?: string
+	roughness?: string
 	materialName: string
-	category: 'Cotton' | 'Leather' | 'Denim' | 'Spantex'
+	category?: 'Cotton' | 'Leather' | 'Denim' | 'Spantex' | 'Jean' | 'Wool' | 'Linen'
+	templateCategory?: string
 }

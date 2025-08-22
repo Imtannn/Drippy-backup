@@ -6,4 +6,4 @@ if [ -f scripts/.env ]; then
 fi
 
 # Run the TypeScript script
-cd scripts && npx ts-node --project ./tsconfig.json --transpile-only imports/fetch-drive-templates.ts
+cd scripts && npx ts-node --project ./tsconfig.json --transpile-only imports/fetch-combined-assets.ts

@@ -1,6 +1,7 @@
 import {css, Element, element, html, Index, type ElementAttributes} from 'lume'
 import {store} from './store.js'
 import {templates} from '../consts/templates.js'
+import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import './app-buttons.js'
 import './item-card.js'
 import '../elements/bottom-sheet.js'
@@ -23,7 +24,25 @@ export class TemplateView extends Element {
 	}
 
 	#onItemClick = (e: CustomEvent) => {
-		store.setSelectedBlocks = {...e.detail.itemValue, category: 'Template'}
+		const template = e.detail.itemValue
+
+		// Set the selected template
+		store.setSelectedTemplate = template
+
+		// Get blocks for this template using relationships
+		const templateBlocks = getBlocksForTemplate(template, 'speed')
+
+		// Get fabric for this template
+		const templateFabric = getFabricForTemplate(template, 'speed')
+
+		console.log('template', template)
+		console.log('templateBlocks', templateBlocks)
+		console.log('templateFabric', templateFabric)
+
+		// Set the blocks and fabric
+		store.replaceSelectedBlocks = templateBlocks
+
+		store.setSelectedFabrics = templateFabric || null
 	}
 
 	#onDripItClick = () => {
@@ -69,7 +88,7 @@ export class TemplateView extends Element {
 							${(template: () => (typeof templates.speed)[number]) => html`
 								<div class="template-item">
 									<item-card
-										item-active=${() => store.selectedBlocks.get('Template')?._id === template()._id}
+										item-active=${() => store.selectedTemplate?._id === template()._id}
 										item-src=${template().thumb}
 										item-alt=${template().name}
 										item-value=${template()}
