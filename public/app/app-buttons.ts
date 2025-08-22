@@ -71,6 +71,7 @@ export class AppButtonsLeft extends Element {
 			}
 
 			.app-buttons-left {
+				left: 10px;
 				transform: var(--app-buttons-left-transform);
 			}
 		}
@@ -125,6 +126,10 @@ export class AppButtonsRight extends Element {
 				bottom: unset;
 				top: 20px;
 				right: 37px;
+			}
+
+			.app-buttons-right {
+				right: 10px;
 			}
 		}
 	`
