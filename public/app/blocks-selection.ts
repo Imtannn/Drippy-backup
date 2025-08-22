@@ -210,6 +210,7 @@ export class BlocksSelection extends Element {
 		.tabs-container {
 			padding: 20px;
 			padding-top: 0;
+			padding-bottom: 8.5px;
 		}
 
 		.bottom-sheet-header {

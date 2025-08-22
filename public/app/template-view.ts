@@ -99,7 +99,7 @@ export class TemplateView extends Element {
 
 		.templates-content-container {
 			padding: 20px;
-			padding-top: 0;
+			padding-top: 5px;
 		}
 
 		.template-item {
