@@ -24,27 +24,49 @@ export const onboardingStyles = css`
 		min-height: 100vh;
 		display: flex;
 		flex-direction: column;
+		justify-content: flex-start;
 	}
 
 	.title {
-		font-size: 21px;
-		font-weight: bold;
+		font-size: 24px;
+		font-weight: 600;
 		padding: 0 15px;
-		color: #000;
+		color: #121316;
 		line-height: 1.4;
-		margin: 0 0 16px 0;
+		margin: 30px 0;
 	}
 
 	.sub-title {
-		font-size: 16px;
-		color: #000;
+		font-size: 14px;
+		font-weight: 500;
+		color: #121316;
+	}
+
+	.back-btn-container {
+		margin-top: 20px;
+	}
+
+	.email-section {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+
+	.email-section input,
+	button {
+		font-size: 14px;
+	}
+
+	.form-section input,
+	button {
+		font-size: 14px;
 	}
 
 	.form-input {
 		width: 100%;
+		height: 40px;
 		padding: 10px;
 		border-radius: 10px;
-		font-size: 16px;
+		font-size: 14px;
 		margin-bottom: 10px;
 		box-sizing: border-box;
 		background: #f8f8f8;
@@ -77,10 +99,12 @@ export const onboardingStyles = css`
 	}
 
 	.btn {
+		margin-top: 20px;
+		margin-bottom: 20px;
 		padding: 12px 24px;
 		border: none;
 		border-radius: 10px;
-		font-size: 16px;
+		font-size: 14px;
 		font-weight: 600;
 		cursor: pointer;
 		transition: all 0.2s ease;
@@ -115,6 +139,13 @@ export const onboardingStyles = css`
 		background-color: rgba(0, 0, 0, 0.1);
 	}
 
+	.header-logo {
+		width: 56px;
+		height: 56px;
+		margin: 20px auto 0px;
+		display: block;
+	}
+
 	.form-section {
 		margin: 0 0 15px 0;
 	}
@@ -136,7 +167,6 @@ export const onboardingStyles = css`
 	@media (max-width: 480px) {
 		.onboarding-step {
 			padding: 0px;
-			justify-content: center;
 		}
 
 		.title {
