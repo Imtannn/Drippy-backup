@@ -1,12 +1,31 @@
-import {css, Element, element, html} from 'lume'
+import {css, Element, element, html, Index, signal} from 'lume'
+import type {Accessor} from 'solid-js'
 import {store} from './store.js'
+
+const SPACES = [
+	{
+		name: 'Bloom Realm',
+		description: 'One million roses',
+		image: '../images/doina-bg.webp',
+		gender: 'male',
+		garmentsCount: 10,
+	},
+]
 
 @element
 export class SpacesSelection extends Element {
 	static elementName = 'spaces-selection'
 
+	@signal filterdSpace: (typeof SPACES)[number][] = []
+
 	connectedCallback() {
 		super.connectedCallback()
+
+		this.createEffect(() => {
+			console.log(store.selectedAvatar, SPACES)
+			this.filterdSpace = SPACES.filter(space => space.gender === store.selectedAvatar)
+			console.log(this.filterdSpace)
+		})
 	}
 
 	fadeOut(callback?: () => void) {
@@ -33,25 +52,29 @@ export class SpacesSelection extends Element {
 
 			<!-- Space Cards -->
 			<div class="cards-container">
+			<${Index} each=${() => this.filterdSpace}>
+			${(space: Accessor<(typeof SPACES)[number]>) => html`
 				<!-- Bloom Realm Card -->
 				<div class="space-card">
 					<div class="scene-preview">
 						<div class="scene-placeholder">
-							<img src="../images/space-zero.png" alt="Bloom Realm Scene" />
+							<img src=${space().image} alt="Bloom Realm Scene" />
 						</div>
-						<div class="garments-count">10 garments</div>
+						<div class="garments-count">${space().garmentsCount} garments</div>
 					</div>
 					<div class="card-content">
 						<div class="text-content">
-							<h3 class="card-title">Bloom realm</h3>
-							<p class="card-subtitle">One million roses</p>
+							<h3 class="card-title">${space().name}</h3>
+							<p class="card-subtitle">${space().description}</p>
 						</div>
 						<button class="explore-button" onclick=${this.#onSceneSelected}>Explore space →</button>
 					</div>
 				</div>
+			`}
+			</>
 
 				<!-- Neon Future Card -->
-				<div class="space-card">
+				<!--<div class="space-card">
 					<div class="scene-preview">
 						<div class="scene-placeholder">
 							<img src="../images/space-one.png" alt="Neon Future Scene" />
@@ -65,7 +88,7 @@ export class SpacesSelection extends Element {
 						</div>
 						<button class="explore-button" onclick=${this.#onSceneSelected}>Explore space →</button>
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	`
@@ -138,7 +161,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.description {
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 500;
 			color: Eerie black;
 			line-height: 1.5;
@@ -218,7 +241,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.card-title {
-			font-size: 14px;
+			font-size: 16px;
 			font-weight: 600;
 			color: black;
 			margin: 0;
@@ -229,7 +252,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.card-subtitle {
-			font-size: 10px;
+			font-size: 12px;
 			font-weight: 400;
 			color: #666;
 			text-decoration: underline;
@@ -242,7 +265,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.explore-button {
-			font-size: 10px;
+			font-size: 12px;
 			padding: 0.5rem 1rem;
 			background: #121316;
 			border: 2px solid black;

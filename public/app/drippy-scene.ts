@@ -1,4 +1,4 @@
-import {createSignal, css, Element, element, For, html, Motor, onCleanup, signal, untrack} from 'lume'
+import {createSignal, css, Element, element, For, html, Motor, onCleanup, Show, signal, untrack} from 'lume'
 import * as THREE from 'three'
 import '../elements/loading-indicator.js'
 import '../elements/show-when.js'
@@ -7,14 +7,14 @@ import type {Fabric} from '../types/fabric.js'
 import './app-buttons.js'
 import {store} from './store.js'
 
-const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
-const maleAvatar = new URL('../models/ANH-Male.glb', import.meta.url)
+const femaleAvatar = new URL('../models/EM-Underwear.glb', import.meta.url)
+const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
 
 const scenes = [
 	{
 		name: 'bloom realms',
 		description: 'One million roses',
-		image: new URL('../images/background-2.jpeg', import.meta.url),
+		image: new URL('../images/doina-bg.webp', import.meta.url),
 	},
 ]
 
@@ -368,7 +368,7 @@ export class DrippyScene extends Element {
 	}
 
 	template = () => html`
-		<show-when condition=${() => store.view === 'blocks'} content=${() => html`
+		<show-when condition=${() => store.view === 'blocks' || store.view === 'avatar' || store.view === 'template'} content=${() => html`
 			<app-buttons-left layout="bottom">
 				<app-buttons-group>
 					<loading-indicator
@@ -415,13 +415,21 @@ export class DrippyScene extends Element {
 							data-avatar
 			></lume-gltf-model>
 
-			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
+			<${For} each=${() => (store.view === 'template' ? Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Template') : Array.from(store.selectedBlocks.values()).filter(item => item.category !== 'Template'))}>
 				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile}></lume-gltf-model> `}
 			</>
 
-			<${For} each=${() => Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Sleeves')}>
-				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile} scale="-1 1 1"></lume-gltf-model> `}
-			</>
+			<${Show}
+				when=${() => store.selectedBlocks.get('Sleeves')?.modelFile && store.view !== 'template'}
+				>
+							${() =>
+								html`<lume-gltf-model
+									data-cloth
+									src=${() => store.selectedBlocks.get('Sleeves')?.modelFile}
+									scale="-1 1 1"
+								></lume-gltf-model>`}
+						</>
+
 			</lume-scene>
 		</div>
 	`

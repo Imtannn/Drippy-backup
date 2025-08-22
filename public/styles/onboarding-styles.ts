@@ -44,7 +44,7 @@ export const onboardingStyles = css`
 		width: 100%;
 		padding: 10px;
 		border-radius: 10px;
-		font-size: 14px;
+		font-size: 16px;
 		margin-bottom: 10px;
 		box-sizing: border-box;
 		background: #f8f8f8;
@@ -80,7 +80,7 @@ export const onboardingStyles = css`
 		padding: 12px 24px;
 		border: none;
 		border-radius: 10px;
-		font-size: 14px;
+		font-size: 16px;
 		font-weight: 600;
 		cursor: pointer;
 		transition: all 0.2s ease;
@@ -120,7 +120,7 @@ export const onboardingStyles = css`
 	}
 
 	.privacy-note {
-		font-size: 14px;
+		font-size: 16px;
 		color: #666;
 		margin: 6px 0 14px 0;
 		padding: 0;

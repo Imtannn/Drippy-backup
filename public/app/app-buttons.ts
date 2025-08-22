@@ -26,7 +26,7 @@ export class AppButtonsLeft extends Element {
 			) {
 				this.style.setProperty('--app-buttons-left-transform', 'translateX(0)')
 			} else {
-				this.style.setProperty('--app-buttons-left-transform', 'translateX(24rem)')
+				this.style.setProperty('--app-buttons-left-transform', 'translateX(394px)')
 			}
 		})
 	}
@@ -46,32 +46,33 @@ export class AppButtonsLeft extends Element {
 
 	css = css/*css*/ `
 		:host {
-			--app-buttons-left-transform: translateX(24rem);
+			--app-buttons-left-transform: translateX(394px);
 		}
 
 		.app-buttons-left {
 			position: absolute;
-			left: 1.5rem;
+			left: 5px;
 			z-index: 1;
 			transform: translateX(0);
 		}
 
 		.top {
-			top: 30px;
+			top: 20px;
 		}
 
 		.bottom {
-			bottom: calc(100dvh * 0.41 + 30px);
+			bottom: calc(100dvh * 0.41 + 20px);
 		}
 
 		@media (min-width: 767px) {
 			.bottom {
 				bottom: unset;
-				top: 30px;
-				left: 5rem;
+				top: 20px;
+				left: 42px;
 			}
 
 			.app-buttons-left {
+				left: 10px;
 				transform: var(--app-buttons-left-transform);
 			}
 		}
@@ -107,25 +108,29 @@ export class AppButtonsRight extends Element {
 		.app-buttons-right {
 			position: absolute;
 			z-index: 1;
-			right: 1.5rem;
+			right: 5px;
 			display: flex;
 			flex-direction: column;
 			gap: 25px;
 		}
 
 		.top {
-			top: 30px;
+			top: 20px;
 		}
 
 		.bottom {
-			bottom: calc(100dvh * 0.41 + 30px);
+			bottom: calc(100dvh * 0.41 + 20px);
 		}
 
 		@media (min-width: 767px) {
 			.bottom {
 				bottom: unset;
-				top: 30px;
-				right: 5rem;
+				top: 20px;
+				right: 37px;
+			}
+
+			.app-buttons-right {
+				right: 10px;
 			}
 		}
 	`
@@ -135,14 +140,14 @@ export class AppButtonsRight extends Element {
 // APP BUTTONS GROUP - Group of app buttons
 // ============================================================================
 
-type AppButtonsGroupAttributes = 'groupDirection'
+type AppButtonsGroupAttributes = 'groupDirection' | 'customStyle'
 
 @element
 export class AppButtonsGroup extends Element {
 	static readonly elementName = 'app-buttons-group'
 
 	@attribute groupDirection: 'column' | 'row' = 'column'
-
+	@attribute customStyle: string = ''
 	connectedCallback() {
 		super.connectedCallback()
 		this.createEffect(() => {
@@ -155,7 +160,7 @@ export class AppButtonsGroup extends Element {
 	}
 
 	template = () => html`
-		<div class="app-buttons-group" id="app-buttons-group">
+		<div class="app-buttons-group" id="app-buttons-group" style=${() => this.customStyle}>
 			<slot></slot>
 		</div>
 	`

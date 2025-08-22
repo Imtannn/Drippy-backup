@@ -2,8 +2,13 @@ import {css, Element, element, eventAttribute, html, type ElementAttributes} fro
 import '../elements/back-button.js'
 import '../elements/home-button.js'
 import '../elements/logo-button.js'
+import '../elements/person-button.js'
+import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
 import {appStyles} from '../styles/app-styles.js'
+import './app-buttons.js'
+import './buy-button.js'
+import './share-button.js'
 import {store} from './store.js'
 
 type OrderViewAttributes = 'onclick'
@@ -24,13 +29,22 @@ export class OrderView extends Element {
 
 	#onHomeButtonClick = () => {
 		const url = window.location.pathname
-		window.history.replaceState({}, '', url)
+		let search = window.location.search
+		search = search.replace('isPreview=true', '')
+		window.history.replaceState({}, '', `${url}${search}`)
 		store.resetState()
-		store.navigateTo = 'avatar'
+		store.navigateTo = 'template'
 	}
 
 	#onBuyItClick = () => {
 		store.navigateTo = 'success'
+	}
+
+	#onShareClick = () => {
+		// copy current url to clipboard
+		console.log('Share my drip clicked')
+		navigator.clipboard.writeText(window.location.href)
+		alert('Link copied to clipboard')
 	}
 
 	template = () => html`
@@ -41,12 +55,23 @@ export class OrderView extends Element {
 		</app-buttons-group>
 	</app-buttons-left>
 
-		<app-buttons-right>
-			<app-buttons-group>
-				<!-- <theme-switch-button></theme-switch-button> -->
-				<logo-button brand-name="Speed"></logo-button>
-			</app-buttons-group>
-		</app-buttons-right>
+	<show-on-device device="desktop">
+	<app-buttons-right layout="bottom">
+		<app-buttons-group custom-style="gap: 34px;" group-direction="row">
+			<share-button onclick=${this.#onShareClick}></share-button>
+			<buy-button onclick=${this.#onBackButtonClick}></buy-button>
+		</app-buttons-group>
+	</app-buttons-right>
+
+	</show-on-device>
+
+	<app-buttons-right>
+		<app-buttons-group>
+			<!-- <theme-switch-button></theme-switch-button> -->
+			<logo-button brand-name="Speed"></logo-button>
+		</app-buttons-group>
+	</app-buttons-right>
+
 
 	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
 		<div class="order-container">
@@ -186,7 +211,7 @@ export class OrderView extends Element {
 		}
 
 		.product-name {
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 600;
 			color: #000;
 			margin: 0 0 5px 0;
@@ -197,7 +222,7 @@ export class OrderView extends Element {
 		}
 
 		.product-price {
-			font-size: 10px;
+			font-size: 12px;
 			font-weight: 400;
 			color: #666;
 			margin: 0;
@@ -227,7 +252,7 @@ export class OrderView extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 500;
 			transition: all 0.2s;
 			user-select: none;
@@ -247,7 +272,7 @@ export class OrderView extends Element {
 		}
 
 		.quantity {
-			font-size: 12px;
+			font-size: 14px;
 			font-weight: 600;
 			text-align: center;
 			user-select: none;
@@ -275,7 +300,7 @@ export class OrderView extends Element {
 			background: #f5f5f5;
 			border-radius: 20px;
 			cursor: pointer;
-			font-size: 10px;
+			font-size: 12px;
 			font-weight: 400;
 			transition: all 0.2s;
 			color: #000;

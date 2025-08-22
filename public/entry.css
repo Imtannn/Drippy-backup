@@ -71,8 +71,8 @@ body {
 	-webkit-perspective: 0;
 	perspective: none;
 	overflow: hidden;
-	font-family: 'Gotham', 'Helvetica', sans-serif;
-	font-size: 14px;
+	font-family: 'Poppins', 'Helvetica', sans-serif;
+	font-size: 16px;
 }
 
 body.fadePageOut {

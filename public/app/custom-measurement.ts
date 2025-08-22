@@ -3,9 +3,12 @@ import '../elements/back-button.js'
 import '../elements/bottom-sheet.js'
 import '../elements/home-button.js'
 import '../elements/logo-button.js'
+import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
 import {appStyles} from '../styles/app-styles.js'
 import './app-buttons.js'
+import './buy-button.js'
+import './share-button.js'
 import {store} from './store.js'
 
 @element
@@ -24,9 +27,11 @@ export class CustomMeasurement extends Element {
 
 	#onHomeButtonClick = () => {
 		const url = window.location.pathname
-		window.history.replaceState({}, '', url)
+		let search = window.location.search
+		search = search.replace('isPreview=true', '')
+		window.history.replaceState({}, '', `${url}${search}`)
 		store.resetState()
-		store.navigateTo = 'avatar'
+		store.navigateTo = 'template'
 	}
 
 	#onSaveClick = () => {
@@ -69,6 +74,17 @@ export class CustomMeasurement extends Element {
 		this.shoulderToKnee = Number(valueWithoutCm)
 	}
 
+	#onShareClick = () => {
+		// copy current url to clipboard
+		console.log('Share my drip clicked')
+		navigator.clipboard.writeText(window.location.href)
+		alert('Link copied to clipboard')
+	}
+
+	#onBuyItClick = () => {
+		store.navigateTo = 'preview'
+	}
+
 	template = () => html`
 	<app-buttons-left>
 	<app-buttons-group group-direction="row">
@@ -83,6 +99,15 @@ export class CustomMeasurement extends Element {
 		<logo-button brand-name="Speed"></logo-button>
 	</app-buttons-group>
 	</app-buttons-right>
+
+	<show-on-device device="desktop">
+	<app-buttons-right layout="bottom">
+		<app-buttons-group custom-style="gap: 34px;" group-direction="row">
+			<share-button onclick=${this.#onShareClick}></share-button>
+			<buy-button onclick=${this.#onBuyItClick}></buy-button>
+		</app-buttons-group>
+	</app-buttons-right>
+</show-on-device>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
 		<div class="measurement-container">
