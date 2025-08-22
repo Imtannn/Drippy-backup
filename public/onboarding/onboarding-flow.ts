@@ -1,10 +1,13 @@
-import {element, Element, html, signal, type ElementAttributes} from 'lume'
-import {onboardingStyles} from '../elements/onboarding-styles.js'
+import {css, element, Element, html, signal, type ElementAttributes} from 'lume'
+import '../app/app-buttons.js'
+import '../elements/back-button.js'
 import {RouteViews, type RouteViewsConfig} from '../elements/route-views.js'
+import {onboardingStyles} from '../styles/onboarding-styles.js'
 
 const createAccountImg = '/images/create-account.png'
 const step3Img = '/images/img-3-big.png'
 const step4Img = '/images/img-4-big.png'
+const logoLight = '/images/landing/logo-light.png'
 
 const stepConfigs = {
 	step1: {
@@ -12,6 +15,7 @@ const stepConfigs = {
 		subtitle: 'Browse it. Drip it. Shop it IRL!',
 		showBackButton: false,
 		image: createAccountImg,
+		showLogo: true,
 	},
 	step2: {
 		title: 'First, enter your username & date of birth.',
@@ -41,17 +45,15 @@ const onboardingHeader = (
 		subtitle: string
 		showBackButton: boolean
 		image?: string | null
+		showLogo?: boolean
 	},
 	onBack: () => void,
 ) => html`
 	<header>
 		${config.showBackButton
-			? html`
-					<div class="back-btn-container">
-						<button class="back-btn" onclick=${onBack}>←</button>
-					</div>
-				`
+			? html` <div class="back-btn-container"><back-button onclick=${onBack}></back-button></div> `
 			: ''}
+		${config.showLogo ? html`<img src=${logoLight} alt="Drippy Logo" class="header-logo" />` : ''}
 		<h1 class="title">${config.title}</h1>
 		${config.subtitle ? html`<p class="sub-title">${config.subtitle}</p>` : ''}
 	</header>
@@ -164,6 +166,7 @@ export class OnboardingFlow extends Element {
 								<input
 									type="date"
 									class="form-input"
+									placeholder="Select your date of birth"
 									onchange=${(e: Event) => (this.dateOfBirth = (e.target as HTMLInputElement).value)}
 									value=${() => this.dateOfBirth}
 								/>
@@ -213,7 +216,9 @@ export class OnboardingFlow extends Element {
 		`
 	}
 
-	css = onboardingStyles
+	css = css`
+		${onboardingStyles}
+	`
 }
 
 declare module 'solid-js' {

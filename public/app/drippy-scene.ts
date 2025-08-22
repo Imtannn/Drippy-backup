@@ -1,11 +1,11 @@
-import {createSignal, css, Element, element, For, html, Motor, onCleanup, signal, untrack} from 'lume'
+import {createSignal, css, Element, element, For, html, Motor, onCleanup, Show, signal, untrack} from 'lume'
 import * as THREE from 'three'
-import type {Block} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
-import {store} from './store.js'
-import './app-buttons.js'
 import '../elements/loading-indicator.js'
 import '../elements/show-when.js'
+import type {Block} from '../types/block.js'
+import type {Fabric} from '../types/fabric.js'
+import './app-buttons.js'
+import {store} from './store.js'
 
 const femaleAvatar = new URL('../models/EM-Underwear.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
@@ -81,10 +81,10 @@ export class DrippyScene extends Element {
 		const coef = arr.length > 0 ? this.#getCoef(arr) : 1
 
 		const [baseColorTex, normalTex, displacementTex, roughnessTex] = await Promise.all([
-			this.#getTexture(fabric.baseColor, repete, coef, offset, rotate),
-			this.#getTexture(fabric.normal, repete, coef, offset, rotate),
-			this.#getTexture(fabric.displacement, repete, coef, offset, rotate),
-			this.#getTexture(fabric.roughness, repete, coef, offset, rotate),
+			this.#getTexture(fabric.baseColor || '', repete, coef, offset, rotate),
+			this.#getTexture(fabric.normal || '', repete, coef, offset, rotate),
+			this.#getTexture(fabric.displacement || '', repete, coef, offset, rotate),
+			this.#getTexture(fabric.roughness || '', repete, coef, offset, rotate),
 		])
 
 		if (untrack(cancelApply)) {
@@ -118,6 +118,23 @@ export class DrippyScene extends Element {
 		})
 
 		this.loadingMaterials = untrack(() => this.loadingMaterials).filter(id => id !== loadingId)
+	}
+
+	// Reset materials to default state (no textures)
+	#resetMaterialsToDefault(root: any) {
+		if (!root) return
+
+		const group = root.children?.[0] ?? root
+		group.traverse?.((obj: any) => {
+			if (obj?.isMesh && obj.material) {
+				const material = obj.material
+				material.map = null
+				material.normalMap = null
+				material.roughnessMap = null
+				// material.displacementMap = null
+				material.needsUpdate = true
+			}
+		})
 	}
 
 	#renderTask = () => {
@@ -210,7 +227,12 @@ export class DrippyScene extends Element {
 			if (store.view === 'preview') {
 				this.style.setProperty('--scene-transform', 'translateX(0)')
 			} else {
-				if (store.view === 'order' || store.view === 'custom-measurement' || store.view === 'success') {
+				if (
+					store.view === 'order' ||
+					store.view === 'custom-measurement' ||
+					store.view === 'success' ||
+					store.view === 'share'
+				) {
 					this.style.setProperty('--scene-transform', 'translateX(-10rem)')
 				} else {
 					this.style.setProperty('--scene-transform', 'translateX(10rem)')
@@ -313,7 +335,20 @@ export class DrippyScene extends Element {
 			}
 
 			if (!fabric) {
-				// nothing to bind
+				// Reset materials to default state (no textures)
+				const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
+
+				for (const el of models) {
+					const resetMaterial = () => {
+						this.#resetMaterialsToDefault((el as any).three)
+					}
+					const behavior = el.behaviors?.get?.('gltf-model')
+					if (!behavior?.model || !el.three) {
+						el.on?.('MODEL_LOAD', resetMaterial)
+					} else {
+						resetMaterial()
+					}
+				}
 				return
 			}
 
@@ -363,7 +398,7 @@ export class DrippyScene extends Element {
 	}
 
 	template = () => html`
-		<show-when condition=${() => store.view === 'blocks'} content=${() => html`
+		<show-when condition=${() => store.view === 'blocks' || store.view === 'avatar' || store.view === 'template'} content=${() => html`
 			<app-buttons-left layout="bottom">
 				<app-buttons-group>
 					<loading-indicator
@@ -414,8 +449,13 @@ export class DrippyScene extends Element {
 				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile}></lume-gltf-model> `}
 			</>
 
-			<${For} each=${() => Array.from(store.selectedBlocks.values()).filter(item => item.category === 'Sleeves')}>
-				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile} scale="-1 1 1"></lume-gltf-model> `}
+			<${Show} when=${() => store.selectedBlocks.get('Sleeves')?.modelFile}>
+				${() =>
+					html`<lume-gltf-model
+						data-cloth
+						src=${() => store.selectedBlocks.get('Sleeves')?.modelFile}
+						scale="-1 1 1"
+					></lume-gltf-model>`}
 			</>
 			</lume-scene>
 		</div>

@@ -1,0 +1,147 @@
+<html>
+	<head>
+		<meta charset='utf-8' />
+		<meta name='viewport' content='width=device-width, initial-scale=1.0' />
+		<title>Drippy Newsletter</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				line-height: 1.6;
+				color: #333;
+				max-width: 600px;
+				margin: 0 auto;
+				padding: 20px;
+			}
+			.header {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				color: white;
+				padding: 30px;
+				text-align: center;
+				border-radius: 8px 8px 0 0;
+			}
+			.content {
+				background: #f9f9f9;
+				padding: 30px;
+				border-radius: 0 0 8px 8px;
+			}
+			.article {
+				background: white;
+				padding: 20px;
+				margin: 20px 0;
+				border-radius: 8px;
+				border-left: 4px solid #667eea;
+			}
+			.button {
+				display: inline-block;
+				background: #667eea;
+				color: white;
+				padding: 12px 30px;
+				text-decoration: none;
+				border-radius: 5px;
+				margin: 10px 5px;
+			}
+			.footer {
+				text-align: center;
+				margin-top: 30px;
+				font-size: 12px;
+				color: #666;
+			}
+			.highlight {
+				background: #fff3cd;
+				padding: 15px;
+				border-radius: 5px;
+				margin: 20px 0;
+				border-left: 4px solid #ffc107;
+			}
+		</style>
+	</head>
+	<body>
+		<div class='header'>
+			<h1>📬 Drippy Newsletter</h1>
+			<p>{{newsletterDate}}</p>
+		</div>
+
+		<div class='content'>
+			<p>Hi {{userName}},</p>
+
+			<p>Welcome to this month's Drippy newsletter! We've got some exciting updates to share with you.</p>
+
+			{{#if featuredArticle}}
+				<div class='highlight'>
+					<h3>🌟 Featured This Month</h3>
+					<h4>{{featuredArticle.title}}</h4>
+					<p>{{featuredArticle.excerpt}}</p>
+					<a href='{{featuredArticle.url}}' class='button'>Read More</a>
+				</div>
+			{{/if}}
+
+			<h3>🚀 What's New</h3>
+
+			{{#each updates}}
+				<div class='article'>
+					<h4>{{title}}</h4>
+					<p>{{description}}</p>
+					{{#if url}}
+						<a href='{{url}}' class='button'>Learn More</a>
+					{{/if}}
+				</div>
+			{{/each}}
+
+			{{#if communitySpotlight}}
+				<div class='article'>
+					<h3>👥 Community Spotlight</h3>
+					<h4>{{communitySpotlight.title}}</h4>
+					<p>{{communitySpotlight.description}}</p>
+					<p><strong>Creator:</strong> {{communitySpotlight.creator}}</p>
+					{{#if communitySpotlight.imageUrl}}
+						<p><em>Check out this amazing creation in our community showcase!</em></p>
+					{{/if}}
+					<a href='{{communitySpotlight.url}}' class='button'>View Creation</a>
+				</div>
+			{{/if}}
+
+			<div class='article'>
+				<h3>📊 Your Stats This Month</h3>
+				{{#if userStats}}
+					<ul>
+						<li>🎨 Designs Created: <strong>{{userStats.designsCreated}}</strong></li>
+						<li>⭐ Likes Received: <strong>{{userStats.likesReceived}}</strong></li>
+						<li>👥 Community Interactions: <strong>{{userStats.interactions}}</strong></li>
+					</ul>
+				{{else}}
+					<p>Ready to create your first design? Get started today!</p>
+				{{/if}}
+				<a href='{{appUrl}}' class='button'>Start Creating</a>
+			</div>
+
+			{{#if upcomingEvents}}
+				<div class='article'>
+					<h3>📅 Upcoming Events</h3>
+					{{#each upcomingEvents}}
+						<p><strong>{{date}}</strong>
+							-
+							{{title}}<br />
+							<small>{{description}}</small></p>
+					{{/each}}
+				</div>
+			{{/if}}
+
+			<div style='text-align: center; margin: 30px 0;'>
+				<a href='{{appUrl}}' class='button'>Visit Drippy</a>
+				<a href='{{communityUrl}}' class='button'>Join Community</a>
+			</div>
+
+			<p>Questions or feedback? Reply to this email or reach out to us at
+				<a href='mailto:{{supportEmail}}'>{{supportEmail}}</a></p>
+
+			<p>Happy creating!</p>
+			<p>The Drippy Team</p>
+		</div>
+
+		<div class='footer'>
+			<p>© {{currentYear}} Drippy. All rights reserved.</p>
+			<p>You're receiving this because you're a valued member of our community.</p>
+			<p><a href='{{unsubscribeUrl}}'>Unsubscribe</a> | <a href='{{preferencesUrl}}'>Email Preferences</a></p>
+		</div>
+	</body>
+</html>

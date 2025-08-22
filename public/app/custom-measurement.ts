@@ -1,15 +1,15 @@
 import {css, Element, element, html, signal} from 'lume'
 import '../elements/back-button.js'
-import '../elements/home-button.js'
-import '../elements/theme-switch-button.js'
-import '../elements/logo-button.js'
 import '../elements/bottom-sheet.js'
-import './app-buttons.js'
-import {store} from './store.js'
-import {appStyles} from '../elements/app-style.js'
+import '../elements/home-button.js'
+import '../elements/logo-button.js'
 import '../elements/show-on-device.js'
-import './share-button.js'
+import '../elements/theme-switch-button.js'
+import {appStyles} from '../styles/app-styles.js'
+import './app-buttons.js'
 import './buy-button.js'
+import './share-button.js'
+import {store} from './store.js'
 
 @element
 export class CustomMeasurement extends Element {
@@ -27,9 +27,11 @@ export class CustomMeasurement extends Element {
 
 	#onHomeButtonClick = () => {
 		const url = window.location.pathname
-		window.history.replaceState({}, '', url)
+		let search = window.location.search
+		search = search.replace('isPreview=true', '')
+		window.history.replaceState({}, '', `${url}${search}`)
 		store.resetState()
-		store.navigateTo = 'avatar'
+		store.navigateTo = 'template'
 	}
 
 	#onSaveClick = () => {

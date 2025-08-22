@@ -1,5 +1,7 @@
 import {Meteor} from 'meteor/meteor'
 import '../imports/collections/index.js'
+import './imports/load-env.js'
+import './imports/email-service.js'
 import {WebApp} from 'meteor/webapp'
 import {Accounts} from 'meteor/accounts-base'
 import * as fs from 'fs'

@@ -16,7 +16,7 @@
 		"publish": "...TODO...",
 		"typecheck": "lume typecheck",
 		"typecheck:watch": "lume typecheckWatch",
-		"fetch-blocks": "node scripts/fetch-drive-blocks.js"
+		"fetch-combined-assets": "chmod +x scripts/run-combined-assets.sh && ./scripts/run-combined-assets.sh"
 	},
 	"overrides": {
 		"@lume/element": "$@lume/element"
@@ -24,9 +24,12 @@
 	"dependencies": {
 		"@babel/runtime": "^7.15.4",
 		"@lume/element": "^0.16.1",
+		"@sendgrid/mail": "^8.1.5",
 		"@tweenjs/tween.js": "^18.6.4",
 		"@types/meteor": "^2.9.8",
 		"@types/three": "^0.174.0",
+		"aws-sdk": "^2.1692.0",
+		"handlebars": "^4.7.8",
 		"jquery": "^3.7.1",
 		"lume": "^0.3.0-alpha.46",
 		"meteor-node-stubs": "^1.0.0",

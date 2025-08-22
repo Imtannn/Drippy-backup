@@ -473,7 +473,7 @@ export class TabsContent extends Element {
 		}
 
 		.tab-panel {
-			padding: 16px 0;
+			padding: 10px 0;
 		}
 
 		/* Default styles for common content patterns */
