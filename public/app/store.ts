@@ -2,7 +2,7 @@ import {createMutable} from 'solid-js/store'
 import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 
-export type AppRoute = 'avatar' | 'blocks' | 'preview' | 'custom-measurement' | 'success' | 'scene' | 'order'
+export type AppRoute = 'avatar' | 'blocks' | 'preview' | 'custom-measurement' | 'success' | 'scene' | 'order' | 'share'
 
 export type Avatar = 'female' | 'male' | null
 

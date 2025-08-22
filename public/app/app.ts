@@ -1,17 +1,18 @@
 import {css, Element, element, html, signal} from 'lume'
 import '../elements/login-ui.js'
 import '../elements/show-when.js'
+import '../elements/theme-switch.js'
 import '../routes.js' // track page visits
 import './avatar-selection.js'
 import './blocks-selection.js'
-import './drippy-scene.js'
-import './spaces-selection.js'
-import './outfit-preview.js'
-import './order-view.js'
 import './custom-measurement.js'
-import './success-view.js'
-import '../elements/theme-switch.js'
+import './drippy-scene.js'
+import './order-view.js'
+import './outfit-preview.js'
+import './share-view.js'
+import './spaces-selection.js'
 import {store, type Avatar, type Scene} from './store.js'
+import './success-view.js'
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
@@ -99,6 +100,8 @@ export class DrippyApp extends Element {
 						condition=${() => store.view === 'preview'}
 						content=${() => html`<outfit-preview></outfit-preview>`}
 					>
+					</show-when>
+					<show-when condition=${() => store.view === 'share'} content=${() => html`<share-view></share-view>`}>
 					</show-when>
 
 					<show-when condition=${() => store.view === 'order'} content=${() => html`<order-view></order-view>`}>

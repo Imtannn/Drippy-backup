@@ -1,11 +1,11 @@
-import {Element, html, css, element, type ElementAttributes} from 'lume'
-import './app-buttons.js'
-import '../elements/logo-button.js'
+import {css, Element, element, html, type ElementAttributes} from 'lume'
 import '../elements/back-button.js'
-import '../elements/person-button.js'
 import '../elements/cube-button.js'
-import '../elements/theme-switch-button.js'
 import '../elements/home-button.js'
+import '../elements/logo-button.js'
+import '../elements/person-button.js'
+import '../elements/theme-switch-button.js'
+import './app-buttons.js'
 import {store} from './store.js'
 
 type OutfitPreviewAttributes = keyof {}
@@ -35,10 +35,7 @@ export class OutfitPreview extends Element {
 	}
 
 	#onShareClick = () => {
-		// copy current url to clipboard
-		console.log('Share my drip clicked')
-		navigator.clipboard.writeText(window.location.href)
-		alert('Link copied to clipboard')
+		store.navigateTo = 'share'
 	}
 
 	template = () => html`

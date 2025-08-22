@@ -1,4 +1,4 @@
-import {html, css, element, Element, type ElementAttributes, attribute} from 'lume'
+import {attribute, css, element, Element, html, type ElementAttributes} from 'lume'
 import {store} from './store.js'
 
 // ============================================================================
@@ -21,7 +21,8 @@ export class AppButtonsLeft extends Element {
 				store.view === 'preview' ||
 				store.view === 'order' ||
 				store.view === 'custom-measurement' ||
-				store.view === 'success'
+				store.view === 'success' ||
+				store.view === 'share'
 			) {
 				this.style.setProperty('--app-buttons-left-transform', 'translateX(0)')
 			} else {

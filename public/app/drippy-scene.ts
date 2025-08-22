@@ -1,11 +1,11 @@
 import {createSignal, css, Element, element, For, html, Motor, onCleanup, signal, untrack} from 'lume'
 import * as THREE from 'three'
-import type {Block} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
-import {store} from './store.js'
-import './app-buttons.js'
 import '../elements/loading-indicator.js'
 import '../elements/show-when.js'
+import type {Block} from '../types/block.js'
+import type {Fabric} from '../types/fabric.js'
+import './app-buttons.js'
+import {store} from './store.js'
 
 const femaleAvatar = new URL('../models/EM-Female.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Male.glb', import.meta.url)
@@ -210,7 +210,12 @@ export class DrippyScene extends Element {
 			if (store.view === 'preview') {
 				this.style.setProperty('--scene-transform', 'translateX(0)')
 			} else {
-				if (store.view === 'order' || store.view === 'custom-measurement' || store.view === 'success') {
+				if (
+					store.view === 'order' ||
+					store.view === 'custom-measurement' ||
+					store.view === 'success' ||
+					store.view === 'share'
+				) {
 					this.style.setProperty('--scene-transform', 'translateX(-10rem)')
 				} else {
 					this.style.setProperty('--scene-transform', 'translateX(10rem)')
