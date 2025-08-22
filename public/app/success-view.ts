@@ -1,5 +1,5 @@
 import {css, Element, element, html} from 'lume'
-import {appStyles} from '../elements/app-style.js'
+import {appStyles} from '../styles/app-styles.js'
 import {store} from './store.js'
 
 @element

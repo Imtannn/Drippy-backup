@@ -4,6 +4,7 @@ import '../elements/cube-button.js'
 import '../elements/home-button.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
+
 import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
 import './app-buttons.js'
@@ -40,10 +41,7 @@ export class OutfitPreview extends Element {
 	}
 
 	#onShareClick = () => {
-		// copy current url to clipboard
-		console.log('Share my drip clicked')
-		navigator.clipboard.writeText(window.location.href)
-		alert('Link copied to clipboard')
+		store.navigateTo = 'share'
 	}
 
 	shareIcon = () =>

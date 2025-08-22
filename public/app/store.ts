@@ -10,6 +10,7 @@ export type AppRoute =
 	| 'success'
 	| 'scene'
 	| 'order'
+	| 'share'
 	| 'template'
 
 export type Avatar = 'female' | 'male' | null

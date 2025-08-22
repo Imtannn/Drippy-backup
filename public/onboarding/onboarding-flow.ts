@@ -1,6 +1,6 @@
 import {element, Element, html, signal, type ElementAttributes} from 'lume'
-import {onboardingStyles} from '../elements/onboarding-styles.js'
 import {RouteViews, type RouteViewsConfig} from '../elements/route-views.js'
+import {onboardingStyles} from '../styles/onboarding-styles.js'
 
 const createAccountImg = '/images/create-account.png'
 const step3Img = '/images/img-3-big.png'
