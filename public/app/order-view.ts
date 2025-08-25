@@ -1,15 +1,17 @@
 import {css, Element, element, eventAttribute, html, type ElementAttributes} from 'lume'
-import {store} from './store.js'
+import {Meteor} from 'meteor/meteor'
+import type {OrderData} from '../../server/imports/order-service.js'
+import {appStyles} from '../elements/app-style.js'
 import '../elements/back-button.js'
 import '../elements/home-button.js'
-import '../elements/theme-switch-button.js'
 import '../elements/logo-button.js'
-import {appStyles} from '../elements/app-style.js'
-import './share-button.js'
-import './buy-button.js'
-import '../elements/show-on-device.js'
 import '../elements/person-button.js'
+import '../elements/show-on-device.js'
+import '../elements/theme-switch-button.js'
 import './app-buttons.js'
+import './buy-button.js'
+import './share-button.js'
+import {store} from './store.js'
 
 type OrderViewAttributes = 'onclick'
 
@@ -36,8 +38,86 @@ export class OrderView extends Element {
 		store.navigateTo = 'template'
 	}
 
-	#onBuyItClick = () => {
-		store.navigateTo = 'success'
+	// Helper function to collect all order data
+	#collectOrderData = (): OrderData => {
+		// Get form data from DOM
+		const formInputs = this.shadowRoot?.querySelectorAll('.form-input') as NodeListOf<HTMLInputElement>
+		const selectedSizeBtn = this.shadowRoot?.querySelector('.size-btn.selected') as HTMLButtonElement
+		const quantityElement = this.shadowRoot?.querySelector('.quantity') as HTMLSpanElement
+
+		// Extract shipping address from form
+		const shippingAddress = {
+			firstName: formInputs[0]?.value || '',
+			lastName: formInputs[1]?.value || '',
+			address: formInputs[2]?.value || '',
+			apartment: formInputs[3]?.value || '',
+			city: formInputs[4]?.value || '',
+			postalCode: formInputs[5]?.value || '',
+			phone: formInputs[6]?.value || '',
+		}
+
+		const orderData: OrderData = {
+			// Customer information
+			customerEmail:
+				store.order.customerEmail || 'thidieuanhle@gmail.com' || shippingAddress.firstName + '@example.com', // Placeholder
+			firstName: shippingAddress.firstName,
+			lastName: shippingAddress.lastName,
+			phone: shippingAddress.phone,
+
+			// Product information
+			productName: store.order.productName,
+			selectedSize: selectedSizeBtn?.textContent || store.order.selectedSize,
+			isCustomSize: selectedSizeBtn?.classList.contains('custom') || false,
+			customMeasurement: store.customMeasurement || undefined,
+			quantity: parseInt(quantityElement?.textContent || '1'),
+
+			// Shipping information
+			shippingAddress,
+		}
+
+		return orderData
+	}
+
+	#onBuyItClick = async () => {
+		try {
+			// Set loading state
+			store.setOrderStatus = 'submitting'
+			store.setOrderError = null
+
+			// Collect all order data
+			const orderData = this.#collectOrderData()
+
+			// Validate required fields
+			if (!orderData.firstName || !orderData.lastName) {
+				throw new Error('Please fill in your name')
+			}
+
+			if (!orderData.shippingAddress.address || !orderData.shippingAddress.city) {
+				throw new Error('Please fill in your shipping address')
+			}
+
+			if (!orderData.productName) {
+				throw new Error('Product name is required')
+			}
+
+			console.log('📦 Submitting order:', orderData)
+
+			// Call Meteor method to submit order
+			const result = await Meteor.callAsync('order.submit', orderData)
+
+			if (result.success) {
+				console.log('✅ Order submitted successfully:', result.orderId)
+				store.setOrderStatus = 'success'
+				store.navigateTo = 'success'
+			} else {
+				console.error('❌ Server returned error:', result)
+				throw new Error(result.error || 'Failed to submit order')
+			}
+		} catch (error) {
+			console.error('❌ Error submitting order:', error)
+			store.setOrderStatus = 'error'
+			store.setOrderError = error instanceof Error ? error.message : 'Failed to submit order'
+		}
 	}
 
 	#onShareClick = () => {
@@ -55,7 +135,7 @@ export class OrderView extends Element {
 		</app-buttons-group>
 	</app-buttons-left>
 
-		<show-on-device device="desktop">
+	<show-on-device device="desktop">
 		<app-buttons-right layout="bottom">
 			<app-buttons-group custom-style="gap: 34px;" group-direction="row">
 				<share-button onclick=${this.#onShareClick}></share-button>
@@ -160,18 +240,28 @@ export class OrderView extends Element {
 				</div>
 
 				<!-- Order Button -->
-				<button class="order-button" onclick=${this.#onBuyItClick}>
-					<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-						<path
-							d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-						Send my order to LOGO
-					</button>
+				<button 
+					class="order-button" 
+					onclick=${this.#onBuyItClick}
+					disabled=${() => store.order.status === 'submitting'}
+				>
+													${() =>
+														store.order.status === 'submitting'
+															? html`<div class="loading-spinner"></div>
+																	Submitting order...`
+															: html`<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+																		<path
+																			d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
+																			stroke="currentColor"
+																			stroke-width="2"
+																			stroke-linecap="round"
+																			stroke-linejoin="round"
+																		/></svg
+																	>Send my order to LOGO`}
+				</button>
+				
+				<!-- Error Display -->
+				${() => (store.order.error ? html`<div class="error-message">${store.order.error}</div>` : '')}
 				</div>
 			</div>
 		</bottom-sheet>
@@ -389,6 +479,46 @@ export class OrderView extends Element {
 
 		.shipping-section {
 			margin-bottom: 30px;
+		}
+
+		/* Loading spinner */
+		.loading-spinner {
+			width: 16px;
+			height: 16px;
+			border: 2px solid #ffffff40;
+			border-top: 2px solid #ffffff;
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+			margin-right: 8px;
+		}
+
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+
+		.order-button:disabled {
+			opacity: 0.7;
+			cursor: not-allowed;
+		}
+
+		.error-message {
+			margin-top: 10px;
+			padding: 10px;
+			background: #fee2e2;
+			color: #dc2626;
+			border-radius: 8px;
+			font-size: 14px;
+			text-align: center;
+
+			:host-context([data-theme='dark']) & {
+				background: #7f1d1d;
+				color: #fca5a5;
+			}
 		}
 	`
 }

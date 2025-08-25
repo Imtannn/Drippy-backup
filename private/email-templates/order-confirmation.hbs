@@ -13,7 +13,7 @@
 				padding: 20px;
 			}
 			.header {
-				background: #4caf50;
+				background: #e56be8;
 				color: white;
 				padding: 30px;
 				text-align: center;
@@ -40,17 +40,8 @@
 			.total {
 				font-weight: bold;
 				font-size: 1.2em;
-				border-top: 2px solid #4caf50;
+				border-top: 2px solid #e56be8;
 				padding-top: 10px;
-			}
-			.button {
-				display: inline-block;
-				background: #4caf50;
-				color: white;
-				padding: 12px 30px;
-				text-decoration: none;
-				border-radius: 5px;
-				margin: 20px 0;
 			}
 			.footer {
 				text-align: center;
@@ -62,7 +53,7 @@
 	</head>
 	<body>
 		<div class='header'>
-			<h1>✅ Order Confirmed!</h1>
+			<h1 style='color: #e56be8;'>✅ Order Confirmed!</h1>
 			<p>Order #{{orderId}}</p>
 		</div>
 
@@ -106,23 +97,6 @@
 					{{shippingAddress.zipCode}}<br />
 					{{shippingAddress.country}}</p>
 			</div>
-
-			<div style='text-align: center;'>
-				<a href='{{trackingUrl}}' class='button'>Track Your Order</a>
-			</div>
-
-			<p><strong>What happens next?</strong></p>
-			<ul>
-				<li>🎨 Our designers will start working on your custom items</li>
-				<li>📧 You'll receive updates via email as your order progresses</li>
-				<li>📱 You can track your order anytime using the link above</li>
-				<li>📦 Your items will be carefully packaged and shipped</li>
-			</ul>
-
-			<p>Questions about your order? Contact us at
-				<a href='mailto:orders@drippy3d.com'>orders@drippy3d.com</a>
-				or call
-				{{supportPhone}}</p>
 
 			<p>Thank you for choosing Drippy!</p>
 			<p>The Drippy Team</p>

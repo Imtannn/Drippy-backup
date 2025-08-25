@@ -1,9 +1,12 @@
-import {Meteor} from 'meteor/meteor'
-import {Email} from 'meteor/email'
 import * as sgMail from '@sendgrid/mail'
 import * as Handlebars from 'handlebars'
-import * as fs from 'fs'
-import * as path from 'path'
+import {Email} from 'meteor/email'
+import {Meteor} from 'meteor/meteor'
+
+// Access Assets from Meteor global
+declare const Assets: {
+	getTextAsync(path: string): Promise<string>
+}
 
 // Configure SendGrid
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY
@@ -11,24 +14,6 @@ const SENDGRID_FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || 'noreply@drippy3d
 
 if (SENDGRID_API_KEY) {
 	sgMail.setApiKey(SENDGRID_API_KEY)
-}
-
-// MAIL_URL is now set via private/env.json or environment variables
-// No need to construct it manually here
-
-export interface EmailOptions {
-	to: string | string[]
-	subject: string
-	text?: string
-	html?: string
-	from?: string
-}
-
-export interface SendGridTemplateOptions {
-	to: string | string[]
-	templateId: string
-	dynamicTemplateData?: Record<string, any>
-	from?: string
 }
 
 export interface HandlebarsTemplateOptions {
@@ -46,13 +31,13 @@ export class EmailService {
 	 * Get template path for a given template name
 	 */
 	private static getTemplatePath(templateName: string): string {
-		return path.join(process.cwd(), 'private', 'email-templates', `${templateName}.hbs`)
+		return `${templateName}.hbs`
 	}
 
 	/**
 	 * Load and compile Handlebars template with caching
 	 */
-	private static loadTemplate(templateName: string): HandlebarsTemplateDelegate<any> {
+	private static async loadTemplate(templateName: string): Promise<HandlebarsTemplateDelegate<any>> {
 		// Check cache first
 		if (this.templateCache.has(templateName)) {
 			return this.templateCache.get(templateName)!
@@ -60,7 +45,7 @@ export class EmailService {
 
 		try {
 			const templatePath = this.getTemplatePath(templateName)
-			const templateSource = fs.readFileSync(templatePath, 'utf8')
+			const templateSource = await Assets.getTextAsync(`email-templates/${templatePath}`)
 			const compiledTemplate = Handlebars.compile(templateSource)
 
 			// Cache the compiled template
@@ -76,8 +61,8 @@ export class EmailService {
 	/**
 	 * Render Handlebars template with data
 	 */
-	private static renderTemplate(templateName: string, data: Record<string, any> = {}): string {
-		const template = this.loadTemplate(templateName)
+	private static async renderTemplate(templateName: string, data: Record<string, any> = {}): Promise<string> {
+		const template = await this.loadTemplate(templateName)
 
 		// Add common template data
 		const templateData = {
@@ -99,9 +84,9 @@ export class EmailService {
 	 */
 	static async sendWithHandlebarsTemplate(options: HandlebarsTemplateOptions): Promise<void> {
 		try {
-			const htmlContent = this.renderTemplate(options.templateName, options.templateData)
+			const htmlContent = await this.renderTemplate(options.templateName, options.templateData)
 
-			const emailOptions: EmailOptions = {
+			const emailOptions = {
 				to: options.to,
 				subject: options.subject,
 				html: htmlContent,
@@ -114,195 +99,56 @@ export class EmailService {
 			throw new Meteor.Error('handlebars-template-failed', 'Failed to send Handlebars template email')
 		}
 	}
-	/**
-	 * Send email using SendGrid API (preferred method)
-	 */
-	static async sendWithSendGrid(options: EmailOptions): Promise<void> {
-		if (!SENDGRID_API_KEY) {
-			throw new Meteor.Error('sendgrid-not-configured', 'SendGrid API key not configured')
-		}
-
-		const msg: any = {
-			to: options.to,
-			from: options.from || SENDGRID_FROM_EMAIL,
-			subject: options.subject,
-		}
-
-		// Add content based on what's provided
-		if (options.html && options.text) {
-			msg.html = options.html
-			msg.text = options.text
-		} else if (options.html) {
-			msg.html = options.html
-		} else if (options.text) {
-			msg.text = options.text
-		} else {
-			throw new Meteor.Error('email-content-required', 'Either text or html content is required')
-		}
-
-		try {
-			await sgMail.send(msg)
-			console.log('Email sent successfully via SendGrid API')
-		} catch (error) {
-			console.error('SendGrid API error:', error)
-			throw new Meteor.Error('sendgrid-send-failed', 'Failed to send email via SendGrid API')
-		}
-	}
 
 	/**
-	 * Send email using SendGrid dynamic template
+	 * Send email using SendGrid API with fallback to Meteor Email
 	 */
-	static async sendWithTemplate(options: SendGridTemplateOptions): Promise<void> {
-		if (!SENDGRID_API_KEY) {
-			throw new Meteor.Error('sendgrid-not-configured', 'SendGrid API key not configured')
+	static async send(options: any): Promise<void> {
+		// Try SendGrid first if API key is available
+		if (SENDGRID_API_KEY) {
+			try {
+				const msg: any = {
+					to: options.to,
+					from: options.from || SENDGRID_FROM_EMAIL,
+					subject: options.subject,
+					html: options.html,
+				}
+
+				await sgMail.send(msg)
+				console.log('Email sent successfully via SendGrid API')
+				return
+			} catch (error) {
+				console.warn('SendGrid failed, falling back to Meteor Email:', error)
+				// Continue to fallback
+			}
 		}
 
-		const msg: any = {
-			to: options.to,
-			from: options.from || SENDGRID_FROM_EMAIL,
-			templateId: options.templateId,
-			dynamicTemplateData: options.dynamicTemplateData || {},
-		}
-
-		try {
-			await sgMail.send(msg)
-			console.log('Template email sent successfully via SendGrid API')
-		} catch (error) {
-			console.error('SendGrid template error:', error)
-			throw new Meteor.Error('sendgrid-template-failed', 'Failed to send template email via SendGrid API')
-		}
-	}
-
-	/**
-	 * Send email using Meteor's built-in Email package (SMTP fallback)
-	 */
-	static sendWithMeteorEmail(options: EmailOptions): void {
-		if (!process.env.MAIL_URL) {
-			throw new Meteor.Error('mail-url-not-configured', 'MAIL_URL not configured')
-		}
-
+		// Fallback to Meteor's built-in Email package
 		try {
 			Email.send({
 				to: Array.isArray(options.to) ? options.to.join(', ') : options.to,
-				from: options.from || SENDGRID_FROM_EMAIL,
+				from: options.from || SENDGRID_FROM_EMAIL || 'noreply@drippy3d.com',
 				subject: options.subject,
-				text: options.text,
 				html: options.html,
 			})
-			console.log('Email sent successfully via Meteor Email (SMTP)')
+			console.log('Email sent successfully via Meteor Email (fallback)')
 		} catch (error) {
-			console.error('Meteor Email error:', error)
-			throw new Meteor.Error('meteor-email-failed', 'Failed to send email via Meteor Email')
+			console.error('Meteor Email fallback also failed:', error)
+			throw new Meteor.Error('email-send-failed', 'Failed to send email via all methods')
 		}
 	}
 
 	/**
-	 * Smart send: Try SendGrid API first, fallback to SMTP
+	 * Clear template cache (useful for development)
 	 */
-	static async send(options: EmailOptions): Promise<void> {
-		try {
-			// Try SendGrid API first
-			await this.sendWithSendGrid(options)
-		} catch (error) {
-			console.warn('SendGrid API failed, falling back to SMTP:', error)
-			try {
-				// Fallback to Meteor Email (SMTP)
-				this.sendWithMeteorEmail(options)
-			} catch (smtpError) {
-				console.error('Both SendGrid API and SMTP failed:', smtpError)
-				throw new Meteor.Error('email-send-failed', 'Failed to send email via all methods')
-			}
-		}
+	clearTemplateCache(): void {
+		EmailService['templateCache'].clear()
+		console.log('Handlebars template cache cleared')
 	}
 }
 
-// Meteor Methods for client-side email sending
-Meteor.methods({
-	'email.send'(options: EmailOptions) {
-		// Add validation here
-		if (!this.userId) {
-			throw new Meteor.Error('not-authorized', 'Must be logged in to send emails')
-		}
-
-		// Add admin check or other authorization logic if needed
-		const user = Meteor.users.findOne(this.userId)
-		if (!user?.profile?.isAdmin) {
-			throw new Meteor.Error('not-authorized', 'Must be admin to send emails')
-		}
-
-		return EmailService.send(options)
-	},
-
-	'email.sendTemplate'(options: SendGridTemplateOptions) {
-		if (!this.userId) {
-			throw new Meteor.Error('not-authorized', 'Must be logged in to send template emails')
-		}
-
-		const user = Meteor.users.findOne(this.userId)
-		if (!user?.profile?.isAdmin) {
-			throw new Meteor.Error('not-authorized', 'Must be admin to send template emails')
-		}
-
-		return EmailService.sendWithTemplate(options)
-	},
-
-	'email.sendHandlebarsTemplate'(options: HandlebarsTemplateOptions) {
-		if (!this.userId) {
-			throw new Meteor.Error('not-authorized', 'Must be logged in to send Handlebars template emails')
-		}
-
-		const user = Meteor.users.findOne(this.userId)
-		if (!user?.profile?.isAdmin) {
-			throw new Meteor.Error('not-authorized', 'Must be admin to send Handlebars template emails')
-		}
-
-		return EmailService.sendWithHandlebarsTemplate(options)
-	},
-})
-
-// Example usage functions for common email types using Handlebars templates
+// Email templates for common use cases
 export const EmailTemplates = {
-	/**
-	 * Send welcome email to new user using Handlebars template
-	 */
-	async sendWelcomeEmail(userEmail: string, userName: string): Promise<void> {
-		const options: HandlebarsTemplateOptions = {
-			to: userEmail,
-			subject: 'Welcome to Drippy! 🎨',
-			templateName: 'welcome',
-			templateData: {
-				userName,
-				userEmail,
-			},
-		}
-
-		await EmailService.sendWithHandlebarsTemplate(options)
-	},
-
-	/**
-	 * Send password reset email using Handlebars template
-	 */
-	async sendPasswordResetEmail(
-		userEmail: string,
-		userName: string,
-		resetUrl: string,
-		expirationHours: number = 24,
-	): Promise<void> {
-		const options: HandlebarsTemplateOptions = {
-			to: userEmail,
-			subject: 'Reset your Drippy password 🔒',
-			templateName: 'password-reset',
-			templateData: {
-				userName,
-				userEmail,
-				resetUrl,
-				expirationHours,
-			},
-		}
-
-		await EmailService.sendWithHandlebarsTemplate(options)
-	},
-
 	/**
 	 * Send order confirmation email using Handlebars template
 	 */
@@ -320,6 +166,14 @@ export const EmailTemplates = {
 				price: string
 			}>
 			totalAmount: string
+			isCustomSize?: boolean
+			customMeasurement?: {
+				bust: number
+				waist: number
+				hips: number
+				shoulder: number
+				shoulderToKnee: number
+			}
 			shippingAddress: {
 				name: string
 				street: string
@@ -345,13 +199,5 @@ export const EmailTemplates = {
 		}
 
 		await EmailService.sendWithHandlebarsTemplate(options)
-	},
-
-	/**
-	 * Clear template cache (useful for development)
-	 */
-	clearTemplateCache(): void {
-		EmailService['templateCache'].clear()
-		console.log('Handlebars template cache cleared')
 	},
 }

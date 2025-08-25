@@ -15,15 +15,16 @@ Meteor.startup(async () => {
 		let config: Record<string, string> = {}
 
 		try {
-			const configText = await Assets.getTextAsync('env.json')
+			const configText = await Assets.getTextAsync('env.example.json')
 			config = JSON.parse(configText)
 			console.log('📁 Loaded configuration from private/env.json')
 		} catch (error) {
 			// Fallback to default config if env.json doesn't exist
 			config = {
-				SENDGRID_API_KEY: 'SG.your_sendgrid_api_key_here',
-				SENDGRID_FROM_EMAIL: 'noreply@drippy3d.com',
-				MAIL_URL: 'smtp://apikey:SG.your_sendgrid_api_key_here@smtp.sendgrid.net:587',
+				SENDGRID_API_KEY: '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',
+				SENDGRID_FROM_EMAIL: 'team@drippy3d.com',
+				MAIL_URL:
+					'smtp://apikey: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@smtp.sendgrid.net:587',
 				APP_URL: Meteor.isDevelopment ? 'http://localhost:3000' : 'https://drippy3d.com',
 				COMMUNITY_URL: Meteor.isDevelopment ? 'http://localhost:3000/community' : 'https://drippy3d.com/community',
 				PREFERENCES_URL: Meteor.isDevelopment
