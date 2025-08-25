@@ -138,7 +138,7 @@ document.body.append(
 						alt="Drippy Logo"
 						class="header__logo-img"
 					/>
-				</main>
+				</div>
 				<ul class="header__menu">
 					<li class="header__menu-item"><a href="#features" class="header__menu-link">Features</a></li>
 					<li class="header__menu-item"><a href="#pricing" class="header__menu-link">How it works</a></li>
@@ -147,7 +147,7 @@ document.body.append(
 				</ul>
 				<div class="header__actions">
 					<button class="btn btn--primary" aria-label="Book a demo">Book a demo</button>
-				</section>
+				</div>
 				<button class="header__mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
 					<span class="header__mobile-toggle-line"></span>
 					<span class="header__mobile-toggle-line"></span>
@@ -160,8 +160,8 @@ document.body.append(
 					<div class="frame">
 						<!-- Hero Section -->
 						<section class="hero-header" aria-labelledby="hero-title">
-							<p id="hero-title" class="stop-selling-clothes">Stop selling clothes. <br />Start selling experiences.</p>
-							<p class="hero__subtitle">
+							<p id="hero-title" class="stop-selling-clothes text-xl">Stop selling clothes. <br />Start selling experiences.</p>
+							<p class="hero__subtitle text-md">
 								Turn your e-commerce into an
 								<span class="highlight"> interactive 3D <br> studio </span>
 							that boosts engagement and sales.
@@ -169,14 +169,18 @@ document.body.append(
 							<div class="hero__actions">
 								<custom-button variant="secondary" size="large">See it live</custom-button>
 								<custom-button variant="primary" size="large">Book a demo</custom-button>
-							</section>
+							</div>
+
+								<img class="cta__cone-image--2" src=${blingImage1} />
+
+								<img class="cta__cone-image--3" src=${blingImage2} />
 						</section>
 
 						<!-- Brands Section -->
 						<section class="section">
 							<div class="section-header">
-								<div class="section-title">Backed by the fearless.</div>
-								<div class="section-subtitle">Trusted by the rebels.</div>
+								<div class="section-title text-lg">Backed by the fearless.</div>
+								<div class="section-subtitle text-md">Trusted by the rebels.</div>
 							</div>
 							<div class="brands__grid">
 								${brands.map(
@@ -192,10 +196,10 @@ document.body.append(
 						<!-- Interactive 3D Section -->
 						<div class="section">
 							<div class="section-header">
-								<div class="section-title">
+								<div class="section-title text-lg">
 									<span>Interactive 3D is </span> <span class="hero__title--highlight">the new black.</span>
 								</div>
-								<div class="section-subtitle">Static images are dead — Today shoppers want fun, interaction, and engagement.</div>
+								<div class="section-subtitle text-md">Static images are dead — Today shoppers want fun, interaction, and engagement.</div>
 							</div>
 							<div class="showcase__container">
 								<div class="showcase">
@@ -205,6 +209,7 @@ document.body.append(
 												<img class="showcase__model" src="${modelImage1}" alt="3D model visualization showing product customization" />
 											</div>
 										</div>
+										<div class="showcase__label text-xs">Static product photo</div>
 									</div>
 									<div class="showcase__item">
 										<div class="showcase__background">
@@ -215,7 +220,7 @@ document.body.append(
 											</div>
 											<div class="showcase__selector">
 												<div class="showcase__selector-dot"></div>
-												<div class="showcase__selector-text">Male avatar</div>
+												<div class="showcase__selector-text text-xs">Male avatar</div>
 												<img
 													class="showcase__selector-icon"
 													src="https://c.animaapp.com/mejigj1rAIvhIh/img/vector-1.svg"
@@ -225,18 +230,19 @@ document.body.append(
 											<div class="showcase__model-display">
 												<img class="showcase__model" src="${modelImage2}" alt="3D avatar model with interactive controls" />
 											</div>
-											<div class="showcase__label">Interactive 3D with avatars</div>
+											<div class="showcase__label text-xs">Interactive 3D with avatars</div>
 										</div>
 									</div>
 								</div>
 							</div>
+							<img class="cta__cone-image--4" src=${blingImage3} />
 						</div>
 
 						<!-- Statistics Section -->
 						<div class="section">
 							<div class="section-header">
-								<div class="section-title">Well, numbers do not lie.</div>
-								<div class="section-subtitle">3D and personalization aren't just buzz — they drive business metrics.</div>
+								<div class="section-title text-lg">Well, numbers do not lie.</div>
+								<div class="section-subtitle text-md">3D and personalization aren't just buzz — they drive business metrics.</div>
 							</div>
 							<div class="statistics__grid">
 								${statistics.map(
@@ -249,13 +255,13 @@ document.body.append(
 															<img class="group-wrapper" src=${stat.image} />
 														</div>
 													</div>
-													<div class="statistics__number">${stat.number}</div>
+													<div class="statistics__number text-md">${stat.number}</div>
 												</div>
 											</div>
 											<div class="statistics__content">
-												<div class="statistics__item-title">${stat.name}</div>
-												<p class="statistics__item-description">${stat.des}</p>
-												<div class="statistics__source">${stat.source}</div>
+												<div class="statistics__item-title text-sm">${stat.name}</div>
+												<p class="statistics__item-description text-xs">${stat.des}</p>
+												<div class="statistics__source text-xs">${stat.source}</div>
 											</div>
 										</div>
 									`,
@@ -269,22 +275,22 @@ document.body.append(
 								<div class="features__content">
 									<div class="features__header">
 										<div id="features-title" class="drippy-is-the-new">
-											<span class="hero__title">Drippy is the new storefront, </span>
-											<span class="hero__title--highlight">reimagined. </span>
+											<span class="hero__title text-lg">Drippy is the new storefront, </span>
+											<span class="hero__title--highlight text-lg">reimagined. </span>
 										</div>
-										<p class="features__subtitle">Let shoppers play, remix, and buy — all in one place.</p>
+										<p class="features__subtitle text-md">Let shoppers play, remix, and buy — all in one place.</p>
 									</div>
 									<div class="features__grid">
 										<div class="feature__wrapper">
 											<div class="feature__item">
 												<div class="feature__number-container">
 													<div class="feature__number-wrapper">
-														<div class="feature__number-overlap"><div class="feature__number">1</div></div>
+														<div class="feature__number-overlap"><div class="feature__number text-xs">1</div></div>
 													</div>
 												</div>
 												<div class="feature__content">
-													<p class="feature__title">Turn store into a playground</p>
-													<p class="feature__description">Let shoppers explore 3D spaces, remix designs, styled avatars.</p>
+													<p class="feature__title text-sm">Turn store into a playground</p>
+													<p class="feature__description text-xs">Let shoppers explore 3D spaces, remix designs, styled avatars.</p>
 												</div>
 											</div>
 										</div>
@@ -292,12 +298,12 @@ document.body.append(
 											<div class="feature__item">
 												<div class="feature__number-container">
 													<div class="feature__number-wrapper">
-														<div class="feature__number-overlap"><div class="feature__number">2</div></div>
+														<div class="feature__number-overlap"><div class="feature__number text-xs">2</div></div>
 													</div>
 												</div>
 												<div class="feature__content">
-													<div class="feature__title">Sell what people want</div>
-													<p class="feature__description">
+													<div class="feature__title text-sm">Sell what people want</div>
+													<p class="feature__description text-xs">
 														Collect payments and orders directly - Fulfill on made-to-order basis.
 													</p>
 												</div>
@@ -307,12 +313,12 @@ document.body.append(
 											<div class="feature__item">
 												<div class="feature__number-container">
 													<div class="feature__number-wrapper">
-														<div class="feature__number-overlap"><div class="feature__number">3</div></div>
+														<div class="feature__number-overlap"><div class="feature__number text-xs">3</div></div>
 													</div>
 												</div>
 												<div class="feature__content">
-													<div class="feature__title">Collect powerful insights</div>
-													<p class="feature__description">Get real-time signals on what to produce — no more guesswork.</p>
+													<div class="feature__title text-sm">Collect powerful insights</div>
+													<p class="feature__description text-xs">Get real-time signals on what to produce — no more guesswork.</p>
 												</div>
 											</div>
 										</div>
@@ -320,12 +326,12 @@ document.body.append(
 											<div class="feature__item">
 												<div class="feature__number-container">
 													<div class="feature__number-wrapper">
-														<div class="feature__number-overlap"><div class="feature__number">4</div></div>
+														<div class="feature__number-overlap"><div class="feature__number text-xs">4</div></div>
 													</div>
 												</div>
 												<div class="feature__item--fourth">
-													<div class="feature__title">Build &amp; grow community</div>
-													<p class="feature__description">
+													<div class="feature__title text-sm">Build &amp; grow community</div>
+													<p class="feature__description text-xs">
 														Host in-app challenges that turn your audience into fans &amp; co-creators
 													</p>
 												</div>
@@ -344,18 +350,18 @@ document.body.append(
 						<!-- How it Works Section -->
 						<div class="section">
 							<div class="section-header">
-								<div class="section-title">Built like a game, feel like a game.</div>
-								<div class="section-subtitle">Here&#39;s how it work from your shoppers' POV.</div>
+								<div class="section-title text-lg">Built like a game, feel like a game.</div>
+								<div class="section-subtitle text-md">Here&#39;s how it work from your shoppers' POV.</div>
 							</div>
 							<div class="how-it-works__grid">
 								${steps.map(
 									(step: any) => html`
 										<div class="how-it-works__item">
 											<div class="how-it-works__step">
-												<div class="how-it-works__step-title">${step.name}</div>
+												<div class="how-it-works__step-title text-sm">${step.name}</div>
 												<img class="how-it-works__step-image" src=${step.logo} />
 											</div>
-											<p class="how-it-works__description">${step.des}</p>
+											<p class="how-it-works__description text-xs">${step.des}</p>
 										</div>
 									`,
 								)}
@@ -369,8 +375,8 @@ document.body.append(
 						<!-- Platform Integration Section -->
 						<div class="platform__container">
 							<div class="section-header">
-								<div class="section-title" id="platform-title">A plug &amp; play 3D studio.</div>
-								<div class="section-subtitle">Browser-based, mobile-first. Zero download, Zero friction.</div>
+								<div class="section-title text-lg" id="platform-title">A plug &amp; play 3D studio.</div>
+								<div class="section-subtitle text-md">Browser-based, mobile-first. Zero download, Zero friction.</div>
 							</div>
 							<div class="platform__content">
 								<div class="platform__grid">
@@ -378,8 +384,8 @@ document.body.append(
 										<div class="platform__card-overlap">
 											<div class="platform__card-content">
 												<div class="platform__card-text">
-													<div class="statistics__item-title">Link in bios</div>
-													<p class="statistics__description">
+													<div class="statistics__item-title text-sm">Link in bios</div>
+													<p class="statistics__description text-xs">
 														No website? no problem. Drop Drippy in your bio and turn followers into shoppers.
 													</p>
 												</div>
@@ -390,47 +396,34 @@ document.body.append(
 										</div>
 									</div>
 									<div class="platform__card">
-										<div class="platform__card-wrapper">
-											<div class="platform__card">
-												<div class="platform__card-inner">
-													<div class="platform__card-overlap">
-														<div class="platform__card-content">
-															<div class="platform__card-text">
-																<div class="statistics__item-title">Embed on website</div>
-																<p class="statistics__description">
-																	Plug Drippy directly into your online store. Same site, new experience.
-																</p>
-															</div>
-														</div>
-														<div class="platform__card-image"></div>
-													</div>
+										<div class="platform__card-overlap">
+											<div class="platform__card-content">
+												<div class="platform__card-text">
+													<div class="statistics__item-title text-sm">Embed on website</div>
+													<p class="statistics__description text-xs">
+														Plug Drippy directly into your online store. Same site, new experience.
+													</p>
 												</div>
-												<img class="platform__device-image--pm" src="https://c.animaapp.com/mejigj1rAIvhIh/img/device-14pm-2.png" />
+											</div>
+											<div class="platform__card-image">
+												<img class="platform__device-image" src="https://c.animaapp.com/mejigj1rAIvhIh/img/device-14pm-2.png" />
 											</div>
 										</div>
+
 									</div>
-									<div class="platform__card--qr">
-										<div class="platform__card-wrapper">
-											<div class="platform__card-wrapper-overlap">
-												<div class="platform__card-overlap">
-													<div class="platform__card-content">
-														<div class="platform__card-text">
-															<div class="statistics__item-title">In-store QR</div>
-															<p class="statistics__description">
-																Turn retail into an interactive playground. One scan → instant 3D try-on →
-																made-to-order.
-															</p>
-														</div>
-													</div>
-													<div class="platform__card-screenshot">
-														<div class="platform__screenshot-wrapper">
-															<img
-																class="platform__screenshot"
-																src="https://c.animaapp.com/mejigj1rAIvhIh/img/screenshot-2025-08-05-at-18-41-55-1.png"
-															/>
-														</div>
-													</div>
+									<div class="platform__card">
+										<div class="platform__card-overlap">
+											<div class="platform__card-content">
+												<div class="platform__card-text">
+													<div class="statistics__item-title text-sm">In-store QR</div>
+													<p class="statistics__description text-xs">
+														Turn retail into an interactive playground. One scan → instant 3D try-on →
+														made-to-order.
+													</p>
 												</div>
+											</div>
+											<div class="platform__card-image">
+												<img class="platform__screenshot" src="https://c.animaapp.com/mejigj1rAIvhIh/img/screenshot-2025-08-05-at-18-41-55-1.png" />
 											</div>
 										</div>
 									</div>
@@ -447,8 +440,8 @@ document.body.append(
 							<div class="pricing__content">
 								<div class="pricing__header">
 									<div class="section-header">
-										<div class="section-title">Our pricing.</div>
-										<div class="section-subtitle">Pricing without the bullsh*t.</div>
+										<div class="section-title text-lg">Our pricing.</div>
+										<div class="section-subtitle text-md">Pricing without the bullsh*t.</div>
 									</div>
 									<div class="pricing__toggle">
 										<custom-button variant="primary" size="large">Yearly</custom-button>
@@ -459,24 +452,24 @@ document.body.append(
 									<div class="pricing__plan--basic">
 										<div class="pricing__plan-content">
 											<div class="pricing__plan-header">
-												<div class="pricing__plan-name">Studio</div>
+												<div class="pricing__plan-name text-sm">Studio</div>
 												<p class="pricing__plan-price">
-													<span class="interactive__title">€45</span> <span class="pricing__plan-period">/month/studio</span>
+													<span class="interactive__title text-sm">€45</span> <span class="pricing__plan-period text-xs">/month/studio</span>
 												</p>
 											</div>
 											<div class="pricing__features-list">
 												<p class="pricing__plan-price">
-													<span class="pricing__plan-period">3-month free trial <br /></span>
+													<span class="pricing__plan-period text-xs">3-month free trial <br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="pricing__plan-period">1 space<br /></span>
+													<span class="pricing__plan-period text-xs">1 space<br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="pricing__plan-period">12 SKUs per space<br /></span>
+													<span class="pricing__plan-period text-xs">12 SKUs per space<br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="pricing__plan-period">Digitize service </span>
-													<span class="pricing__plan-note">not included</span>
+													<span class="pricing__plan-period text-xs">Digitize service </span>
+													<span class="pricing__plan-note text-xs">not included</span>
 												</p>
 											</div>
 										</div>
@@ -486,35 +479,35 @@ document.body.append(
 										<div class="pricing__plan-content">
 											<div class="pricing__plan-header--pro">
 												<div class="pricing__plan-title-section">
-													<div class="pricing__plan-name--pro">Studio PRO</div>
-													<div class="pricing__plan-badge"><div class="pricing__plan-badge-text">Best value</div></div>
+													<div class="pricing__plan-name--pro text-sm">Studio PRO</div>
+													<div class="pricing__plan-badge"><div class="pricing__plan-badge-text text-xs">Best value</div></div>
 												</div>
 												<p class="pricing__plan-price--pro">
-													<span class="interactive__title">€70</span> <span class="pricing__plan-period--pro">/month/studio</span>
+													<span class="interactive__title text-sm">€70</span> <span class="pricing__plan-period--pro text-xs">/month/studio</span>
 												</p>
 											</div>
 											<div class="pricing__features-list--pro">
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature">Everything in </span>
-													<span class="pricing__plan-feature--highlight">Studio</span>
-													<span class="pricing__plan-feature">, plus:<br /></span>
+													<span class="pricing__plan-feature text-xs">Everything in </span>
+													<span class="pricing__plan-feature--highlight text-sm">Studio</span>
+													<span class="pricing__plan-feature text-xs">, plus:<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature">Unlimited spaces &amp; SKUs<br /></span>
+													<span class="pricing__plan-feature text-xs">Unlimited spaces &amp; SKUs<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature">Embed on website (custom URL)<br /></span>
+													<span class="pricing__plan-feature text-xs">Embed on website (custom URL)<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature">Analytics dashboard<br /></span>
+													<span class="pricing__plan-feature text-xs">Analytics dashboard<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature--highlight">Add-on: <br /></span>
+													<span class="pricing__plan-feature--highlight text-sm">Add-on: <br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature">Includes</span>
-													<span class="pricing__plan-feature--highlight"> 1 growth pack/year </span>
-													<span class="pricing__plan-feature"> (24 garments = €840 value).</span>
+													<span class="pricing__plan-feature text-xs">Includes</span>
+													<span class="pricing__plan-feature--highlight text-sm"> 1 growth pack/year </span>
+													<span class="pricing__plan-feature text-xs"> (24 garments = €840 value).</span>
 												</p>
 											</div>
 										</div>
@@ -523,27 +516,27 @@ document.body.append(
 									<div class="pricing__plan--digitize">
 										<div class="pricing__plan-content">
 											<div class="pricing__plan-header">
-												<div class="pricing__plan-name">Digitize packs</div>
-												<div class="pricing__plan-price">One-time</div>
+												<div class="pricing__plan-name text-sm">Digitize packs</div>
+												<div class="pricing__plan-price text-xs">One-time</div>
 											</div>
 											<div class="pricing__features-list--digitize">
 												<p class="pricing__plan-price">
-													<span class="interactive__title">Kickoff: </span>
-													<span class="pricing__plan-period">12 garments → </span>
-													<span class="interactive__title">€420/pack </span>
-													<span class="pricing__plan-period">(€40/garment) <br /></span>
+													<span class="interactive__title text-sm">Kickoff: </span>
+													<span class="pricing__plan-period text-xs">12 garments → </span>
+													<span class="interactive__title text-sm">€420/pack </span>
+													<span class="pricing__plan-period text-xs">(€40/garment) <br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="interactive__title">Growth: </span>
-													<span class="pricing__plan-period">24 garments → </span>
-													<span class="interactive__title">€840/pack</span>
-													<span class="pricing__plan-period"> (€35/garment) <br /></span>
+													<span class="interactive__title text-sm">Growth: </span>
+													<span class="pricing__plan-period text-xs">24 garments → </span>
+													<span class="interactive__title text-sm">€840/pack</span>
+													<span class="pricing__plan-period text-xs"> (€35/garment) <br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="interactive__title">Scale: </span>
-													<span class="pricing__plan-period">36 garments → </span>
-													<span class="interactive__title">€1050/pack </span>
-													<span class="pricing__plan-period">(€30/garment) </span>
+													<span class="interactive__title text-sm">Scale: </span>
+													<span class="pricing__plan-period text-xs">36 garments → </span>
+													<span class="interactive__title text-sm">€1050/pack </span>
+													<span class="pricing__plan-period text-xs">(€30/garment) </span>
 												</p>
 											</div>
 										</div>
@@ -563,9 +556,9 @@ document.body.append(
 									</div>
 								</div>
 								<div class="cta__text-section">
-									<div class="cta__title">Join the future.</div>
-									<p class="cta__description-text">
-										<span class="cta__description">Turn your collections into </span>
+									<div class="cta__title text-xl">Join the future.</div>
+									<p class="cta__description-text text-md">
+										<span class="cta__description ">Turn your collections into </span>
 										<span class="cta__description--highlight">playable, immersive, made-to-order</span>
 										<span class="cta__description"> experiences today. </span>
 									</p>
@@ -584,25 +577,18 @@ document.body.append(
 											class="footer__logo"
 											src="https://c.animaapp.com/mejigj1rAIvhIh/img/7aeb67c6-4bc1-4b4c-bbe1-b946b6c2ed7a--1--1.png"
 										/>
-										<div class="footer__copyright">@2025 - Drippy, Inc.</div>
+										<div class="footer__copyright text-sm">@2025 - Drippy, Inc.</div>
 									</div>
 									<div class="footer__links">
-										<div class="footer__link">Terms &amp; Conditions</div>
-										<div class="footer__link">Privacy Policy</div>
-										<div class="footer__link">Contact Us</div>
+										<div class="footer__link text-sm">Terms &amp; Conditions</div>
+										<div class="footer__link text-sm">Privacy Policy</div>
+										<div class="footer__link text-sm">Contact Us</div>
 									</div>
 								</div>
 								<img class="footer__social-icon" src="https://c.animaapp.com/mejigj1rAIvhIh/img/frame-12632.svg" />
 							</div>
 						</div>
 					</div>
-
-					<!-- Decorative Elements -->
-					<div class="cta__cone-image-wrapper">
-						<img class="cta__cone-image--2" src=${blingImage1} />
-					</div>
-					<img class="cta__cone-image--3" src=${blingImage2} />
-					<img class="cta__cone-image--4" src=${blingImage3} />
 				</div>
 			</div>
 		</div>
