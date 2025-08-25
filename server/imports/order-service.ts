@@ -40,16 +40,6 @@ function generateOrderId(): string {
 	return `ORD-${timestamp}-${random}`.toUpperCase()
 }
 
-// Helper function to calculate estimated delivery
-function calculateEstimatedDelivery(): string {
-	const deliveryDate = new Date()
-	deliveryDate.setDate(deliveryDate.getDate() + 14) // 2 weeks from now
-	const endDate = new Date(deliveryDate)
-	endDate.setDate(endDate.getDate() + 7) // +1 week range
-
-	return `${deliveryDate.toLocaleDateString('en-US', {month: 'long', day: 'numeric'})}-${endDate.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'})}`
-}
-
 // Helper function to calculate pricing
 function calculateOrderTotal(orderData: OrderData): string {
 	let basePrice = 29.99 // Base price per item
@@ -71,7 +61,6 @@ function processOrderForEmail(orderData: OrderData) {
 		month: 'long',
 		day: 'numeric',
 	})
-	const estimatedDelivery = calculateEstimatedDelivery()
 	const totalAmount = calculateOrderTotal(orderData)
 
 	// Create items description
@@ -87,7 +76,6 @@ function processOrderForEmail(orderData: OrderData) {
 	return {
 		orderId,
 		orderDate,
-		estimatedDelivery,
 		totalAmount,
 		items,
 	}
@@ -119,7 +107,6 @@ Meteor.methods({
 			// Prepare email data
 			const emailOrderDetails = {
 				orderDate: processedOrder.orderDate,
-				estimatedDelivery: processedOrder.estimatedDelivery,
 				items: processedOrder.items,
 				totalAmount: processedOrder.totalAmount,
 				isCustomSize: orderData.isCustomSize,

@@ -32,7 +32,6 @@ export async function sendHandlebarsTemplateEmail() {
 export async function sendOrderConfirmationEmail() {
 	await EmailTemplates.sendOrderConfirmation('user@example.com', 'John Doe', 'ORD-2024-001', {
 		orderDate: 'January 15, 2024',
-		estimatedDelivery: 'January 25-30, 2024',
 		items: [
 			{
 				name: 'Custom 3D Printed T-Shirt',

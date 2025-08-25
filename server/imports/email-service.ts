@@ -158,7 +158,6 @@ export const EmailTemplates = {
 		orderId: string,
 		orderDetails: {
 			orderDate: string
-			estimatedDelivery: string
 			items: Array<{
 				name: string
 				description: string
@@ -182,7 +181,6 @@ export const EmailTemplates = {
 				zipCode: string
 				country: string
 			}
-			trackingUrl?: string
 		},
 	): Promise<void> {
 		const options: HandlebarsTemplateOptions = {
@@ -194,7 +192,6 @@ export const EmailTemplates = {
 				userEmail,
 				orderId,
 				...orderDetails,
-				trackingUrl: orderDetails.trackingUrl || `https://drippy3d.com/track/${orderId}`,
 			},
 		}
 
