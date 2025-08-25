@@ -41,19 +41,18 @@ export class OrderView extends Element {
 	// Helper function to collect all order data
 	#collectOrderData = (): OrderData => {
 		// Get form data from DOM
-		const formInputs = this.shadowRoot?.querySelectorAll('.form-input') as NodeListOf<HTMLInputElement>
 		const selectedSizeBtn = this.shadowRoot?.querySelector('.size-btn.selected') as HTMLButtonElement
 		const quantityElement = this.shadowRoot?.querySelector('.quantity') as HTMLSpanElement
 
-		// Extract shipping address from form
+		// Use store values for shipping address
 		const shippingAddress = {
-			firstName: formInputs[0]?.value || '',
-			lastName: formInputs[1]?.value || '',
-			address: formInputs[2]?.value || '',
-			apartment: formInputs[3]?.value || '',
-			city: formInputs[4]?.value || '',
-			postalCode: formInputs[5]?.value || '',
-			phone: formInputs[6]?.value || '',
+			firstName: store.order.shippingAddress.firstName || '',
+			lastName: store.order.shippingAddress.lastName || '',
+			address: store.order.shippingAddress.address || '',
+			apartment: store.order.shippingAddress.apartment || '',
+			city: store.order.shippingAddress.city || '',
+			postalCode: store.order.shippingAddress.postalCode || '',
+			phone: store.order.shippingAddress.phone || '',
 		}
 
 		const orderData: OrderData = {
@@ -66,8 +65,8 @@ export class OrderView extends Element {
 
 			// Product information
 			productName: store.order.productName,
-			selectedSize: selectedSizeBtn?.textContent || store.order.selectedSize,
-			isCustomSize: selectedSizeBtn?.classList.contains('custom') || false,
+			selectedSize: store.customMeasurement ? 'Custom' : selectedSizeBtn?.textContent || store.order.selectedSize,
+			isCustomSize: !!store.customMeasurement,
 			customMeasurement: store.customMeasurement || undefined,
 			quantity: parseInt(quantityElement?.textContent || '1'),
 
@@ -106,15 +105,15 @@ export class OrderView extends Element {
 			const result = await Meteor.callAsync('order.submit', orderData)
 
 			if (result.success) {
-				console.log('✅ Order submitted successfully:', result.orderId)
+				console.log('Order submitted successfully:', result.orderId)
 				store.setOrderStatus = 'success'
 				store.navigateTo = 'success'
 			} else {
-				console.error('❌ Server returned error:', result)
+				console.error('Server returned error:', result)
 				throw new Error(result.error || 'Failed to submit order')
 			}
 		} catch (error) {
-			console.error('❌ Error submitting order:', error)
+			console.error('Error submitting order:', error)
 			store.setOrderStatus = 'error'
 			store.setOrderError = error instanceof Error ? error.message : 'Failed to submit order'
 		}
@@ -209,31 +208,73 @@ export class OrderView extends Element {
 					<h3 class="section-title">Shipping address</h3>
 					<div class="form-fields">
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " value="Tan" />
+							<input 
+								type="text" 
+								class="form-input" 
+								placeholder=" " 
+								value=${() => store.order.shippingAddress.firstName}
+								oninput=${(e: Event) => (store.order.shippingAddress.firstName = (e.target as HTMLInputElement).value)}
+							/>
 							<label class="floating-label">First name</label>
 						</div>
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " />
+							<input 
+								type="text" 
+								class="form-input" 
+								placeholder=" " 
+								value=${() => store.order.shippingAddress.lastName}
+								oninput=${(e: Event) => (store.order.shippingAddress.lastName = (e.target as HTMLInputElement).value)}
+							/>
 							<label class="floating-label">Last name</label>
 						</div>
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " />
+							<input 
+								type="text" 
+								class="form-input" 
+								placeholder=" " 
+								value=${() => store.order.shippingAddress.address}
+								oninput=${(e: Event) => (store.order.shippingAddress.address = (e.target as HTMLInputElement).value)}
+							/>
 							<label class="floating-label">Address</label>
 						</div>
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " />
+							<input 
+								type="text" 
+								class="form-input" 
+								placeholder=" " 
+								value=${() => store.order.shippingAddress.apartment}
+								oninput=${(e: Event) => (store.order.shippingAddress.apartment = (e.target as HTMLInputElement).value)}
+							/>
 							<label class="floating-label">Apartment, suite, etc. (optional)</label>
 						</div>
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " />
+							<input 
+								type="text" 
+								class="form-input" 
+								placeholder=" " 
+								value=${() => store.order.shippingAddress.city}
+								oninput=${(e: Event) => (store.order.shippingAddress.city = (e.target as HTMLInputElement).value)}
+							/>
 							<label class="floating-label">City</label>
 						</div>
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " />
+							<input 
+								type="text" 
+								class="form-input" 
+								placeholder=" " 
+								value=${() => store.order.shippingAddress.postalCode}
+								oninput=${(e: Event) => (store.order.shippingAddress.postalCode = (e.target as HTMLInputElement).value)}
+							/>
 							<label class="floating-label">Postal code (optional)</label>
 						</div>
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " />
+							<input 
+								type="text" 
+								class="form-input" 
+								placeholder=" " 
+								value=${() => store.order.shippingAddress.phone}
+								oninput=${(e: Event) => (store.order.shippingAddress.phone = (e.target as HTMLInputElement).value)}
+							/>
 							<label class="floating-label">Phone</label>
 						</div>
 					</div>

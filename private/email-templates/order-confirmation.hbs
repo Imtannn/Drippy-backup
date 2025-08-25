@@ -98,6 +98,56 @@
 					{{shippingAddress.country}}</p>
 			</div>
 
+			{{#if isCustomSize}}
+				<div class='order-info'>
+					<h3>📏 Custom Measurements</h3>
+					{{#if customMeasurement}}
+						<table style='width: 100%; border-collapse: collapse; margin-top: 10px;'>
+							<tr style='background-color: #f8f9fa;'>
+								<th style='padding: 8px; text-align: left; border: 1px solid #ddd;'>Measurement</th>
+								<th style='padding: 8px; text-align: right; border: 1px solid #ddd;'>Value (cm)</th>
+							</tr>
+							{{#if customMeasurement.bust}}
+								<tr>
+									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Bust</strong></td>
+									<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.bust}}</td>
+								</tr>
+							{{/if}}
+							{{#if customMeasurement.waist}}
+								<tr>
+									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Waist</strong></td>
+									<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.waist}}</td>
+								</tr>
+							{{/if}}
+							{{#if customMeasurement.hips}}
+								<tr>
+									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Hips</strong></td>
+									<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.hips}}</td>
+								</tr>
+							{{/if}}
+							{{#if customMeasurement.shoulder}}
+								<tr>
+									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Shoulder</strong></td>
+									<td
+										style='padding: 8px; text-align: right; border: 1px solid #ddd;'
+									>{{customMeasurement.shoulder}}</td>
+								</tr>
+							{{/if}}
+							{{#if customMeasurement.shoulderToKnee}}
+								<tr>
+									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Shoulder to Knee</strong></td>
+									<td
+										style='padding: 8px; text-align: right; border: 1px solid #ddd;'
+									>{{customMeasurement.shoulderToKnee}}</td>
+								</tr>
+							{{/if}}
+						</table>
+					{{else}}
+						<p><em>Custom measurements will be provided separately.</em></p>
+					{{/if}}
+				</div>
+			{{/if}}
+
 			<p>Thank you for choosing Drippy!</p>
 			<p>The Drippy Team</p>
 		</div>

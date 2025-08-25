@@ -15,20 +15,7 @@ export async function sendSimpleEmail() {
 	})
 }
 
-// Example 2: Send email using SendGrid template
-export async function sendSendGridTemplateEmail() {
-	await EmailService.sendWithTemplate({
-		to: 'user@example.com',
-		templateId: 'd-1234567890abcdef', // Replace with your SendGrid template ID
-		dynamicTemplateData: {
-			userName: 'John Doe',
-			orderNumber: 'ORD-12345',
-			items: ['Custom T-Shirt', 'Custom Hoodie'],
-		},
-	})
-}
-
-// Example 3: Send email using Handlebars template (NEW!)
+// Example 2: Send email using Handlebars template (NEW!)
 export async function sendHandlebarsTemplateEmail() {
 	await EmailService.sendWithHandlebarsTemplate({
 		to: 'user@example.com',
@@ -41,22 +28,7 @@ export async function sendHandlebarsTemplateEmail() {
 	})
 }
 
-// Example 4: Use predefined email templates (now using Handlebars)
-export async function sendWelcomeEmail(userEmail: string, userName: string) {
-	await EmailTemplates.sendWelcomeEmail(userEmail, userName)
-}
-
-// Example 5: Send password reset email with Handlebars template
-export async function sendPasswordResetEmail() {
-	await EmailTemplates.sendPasswordResetEmail(
-		'user@example.com',
-		'John Doe',
-		'https://drippy3d.com/reset-password?token=abc123',
-		24, // expires in 24 hours
-	)
-}
-
-// Example 6: Send order confirmation with detailed data
+// Example 3: Send order confirmation with detailed data
 export async function sendOrderConfirmationEmail() {
 	await EmailTemplates.sendOrderConfirmation('user@example.com', 'John Doe', 'ORD-2024-001', {
 		orderDate: 'January 15, 2024',
@@ -87,7 +59,7 @@ export async function sendOrderConfirmationEmail() {
 	})
 }
 
-// Example 7: Send multiple emails using Handlebars templates
+// Example 4: Send multiple emails using Handlebars templates
 export async function sendBulkHandlebarsEmails() {
 	const users = [
 		{email: 'user1@example.com', name: 'Alice Johnson'},
@@ -107,7 +79,7 @@ export async function sendBulkHandlebarsEmails() {
 	}
 }
 
-// Example 8: Send email with attachments using SendGrid API
+// Example 5: Send email with attachments using SendGrid API
 export async function sendEmailWithAttachment() {
 	// Note: For attachments, you'll need to use SendGrid API directly
 	// This example shows how to extend the service for attachments
@@ -131,13 +103,7 @@ export async function sendEmailWithAttachment() {
 	await sgMail.send(msg)
 }
 
-// Example 9: Development helper - Clear template cache
-export function clearHandlebarsCache() {
-	EmailTemplates.clearTemplateCache()
-	console.log('Template cache cleared - templates will be reloaded on next use')
-}
-
-// Example 10: Send newsletter email
+// Example 6: Send newsletter email
 export async function sendNewsletterEmail() {
 	await EmailService.sendWithHandlebarsTemplate({
 		to: 'user@example.com',
@@ -189,35 +155,4 @@ export async function sendNewsletterEmail() {
 			],
 		},
 	})
-}
-
-// Example 11: Test all email templates
-export async function testAllEmailTemplates() {
-	const testEmail = 'test@example.com'
-	const testUser = 'Test User'
-
-	console.log('Testing all email templates...')
-
-	try {
-		// Test welcome email
-		await EmailTemplates.sendWelcomeEmail(testEmail, testUser)
-		console.log('✅ Welcome email sent')
-
-		// Test password reset
-		await EmailTemplates.sendPasswordResetEmail(testEmail, testUser, 'https://example.com/reset/token123')
-		console.log('✅ Password reset email sent')
-
-		// Test order confirmation
-		await sendOrderConfirmationEmail()
-		console.log('✅ Order confirmation email sent')
-
-		// Test newsletter
-		await sendNewsletterEmail()
-		console.log('✅ Newsletter email sent')
-
-		console.log('🎉 All email templates tested successfully!')
-	} catch (error) {
-		console.error('❌ Email template test failed:', error)
-		throw error
-	}
 }

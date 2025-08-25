@@ -1,15 +1,15 @@
 import {css, Element, element, html, signal} from 'lume'
-import '../elements/back-button.js'
-import '../elements/home-button.js'
-import '../elements/theme-switch-button.js'
-import '../elements/logo-button.js'
-import '../elements/bottom-sheet.js'
-import './app-buttons.js'
-import {store} from './store.js'
 import {appStyles} from '../elements/app-style.js'
+import '../elements/back-button.js'
+import '../elements/bottom-sheet.js'
+import '../elements/home-button.js'
+import '../elements/logo-button.js'
 import '../elements/show-on-device.js'
-import './share-button.js'
+import '../elements/theme-switch-button.js'
+import './app-buttons.js'
 import './buy-button.js'
+import './share-button.js'
+import {store} from './store.js'
 
 @element
 export class CustomMeasurement extends Element {
@@ -20,6 +20,18 @@ export class CustomMeasurement extends Element {
 	@signal hips = 0
 	@signal shoulder = 0
 	@signal shoulderToKnee = 0
+
+	// Load existing measurements from store when component connects
+	connectedCallback() {
+		super.connectedCallback()
+		if (store.customMeasurement) {
+			this.bust = store.customMeasurement.bust
+			this.waist = store.customMeasurement.waist
+			this.hips = store.customMeasurement.hips
+			this.shoulder = store.customMeasurement.shoulder
+			this.shoulderToKnee = store.customMeasurement.shoulderToKnee
+		}
+	}
 
 	#onBackButtonClick = () => {
 		store.navigateTo = 'order'
@@ -42,6 +54,7 @@ export class CustomMeasurement extends Element {
 			shoulder: this.shoulder,
 			shoulderToKnee: this.shoulderToKnee,
 		}
+
 		store.navigateTo = 'order'
 	}
 
@@ -128,29 +141,29 @@ export class CustomMeasurement extends Element {
 				<div class="measurement-fields">
 					<div class="field-row">
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " value="0 cm" oninput=${this.#onBustChange} />
+							<input type="text" class="form-input" placeholder=" " value=${() => `${this.bust} cm`} oninput=${this.#onBustChange} />
 							<label class="floating-label">Bust</label>
 						</div>
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " value="0 cm" oninput=${this.#onWaistChange} />
+							<input type="text" class="form-input" placeholder=" " value=${() => `${this.waist} cm`} oninput=${this.#onWaistChange} />
 							<label class="floating-label">Waist</label>
 						</div>
 					</div>
 
 					<div class="field-row">
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " value="0 cm" oninput=${this.#onHipsChange} />
+							<input type="text" class="form-input" placeholder=" " value=${() => `${this.hips} cm`} oninput=${this.#onHipsChange} />
 							<label class="floating-label">Hips</label>
 						</div>
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " value="0 cm" oninput=${this.#onShoulderChange} />
+							<input type="text" class="form-input" placeholder=" " value=${() => `${this.shoulder} cm`} oninput=${this.#onShoulderChange} />
 							<label class="floating-label">Shoulder</label>
 						</div>
 					</div>
 
 					<div class="field-row">
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " value="0 cm" oninput=${this.#onShoulderToKneeChange} />
+							<input type="text" class="form-input" placeholder=" " value=${() => `${this.shoulderToKnee} cm`} oninput=${this.#onShoulderToKneeChange} />
 							<label class="floating-label">Shoulder to knee</label>
 						</div>
 					</div>
