@@ -22,24 +22,7 @@ p {
 	margin: 0;
 }
 
-:root {
-	--primaryblack: rgba(18, 19, 22, 1);
-	--primarylight-grey: rgba(246, 246, 246, 1);
-	--primarywhite: rgba(255, 255, 255, 1);
-	--secondarydark-grey-1: rgba(42, 44, 49, 1);
-	--accentviolet: rgba(184, 151, 253, 1);
-	--secondarylight-grey-1: #99999a;
-
-	/* Typography Variables */
-	--font-family-primary: 'Poppins', Helvetica;
-	--font-family-secondary: 'Helvetica', sans-serif;
-
-	--heading-h1---heading-h1-font-weight: 600;
-
-	--heading-h1-letter-spacing: 0px;
-	--heading-h1-line-height: normal;
-	--heading-h1-font-style: normal;
-}
+/* CSS variables now defined in styleVars.ts */
 .text-xl {
 	font-size: 54px;
 }
@@ -64,11 +47,11 @@ p {
 	width: 100vw;
 	min-height: 100vh;
 	overflow-x: hidden;
-	font-family: var(--font-family-primary);
+	font-family: var(--fontFamilyPrimary);
 }
 
 .container {
-	background-color: var(--primarywhite);
+	background-color: var(--primaryWhite);
 	width: 100%;
 	max-width: 1440px;
 	min-height: 100vh;
@@ -124,12 +107,12 @@ p {
 	max-width: 814px;
 	margin-top: -1px;
 	font-weight: 600;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 
 	text-align: center;
-	letter-spacing: var(--heading-h1-letter-spacing);
-	line-height: var(--heading-h1-line-height);
-	font-style: var(--heading-h1-font-style);
+	letter-spacing: var(--headingH1LetterSpacing);
+	line-height: var(--headingH1LineHeight);
+	font-style: var(--headingH1FontStyle);
 	margin-bottom: 0;
 	padding-bottom: 0;
 }
@@ -139,7 +122,7 @@ p {
 	width: 100%;
 	max-width: 600px;
 	font-weight: 400;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -185,7 +168,7 @@ p {
 	position: relative;
 	width: fit-content;
 	font-weight: 600;
-	color: var(--primarywhite);
+	color: var(--primaryWhite);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -212,7 +195,7 @@ p {
 	width: 100%;
 	max-width: 608px;
 	font-weight: 400;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -278,7 +261,7 @@ p {
 	top: 56px;
 	left: 38px;
 	font-weight: 600;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -300,7 +283,7 @@ p {
 	align-self: stretch;
 	margin-top: -1px;
 	font-weight: 600;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -310,7 +293,7 @@ p {
 	position: relative;
 	width: 297px;
 	font-weight: 400;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -320,7 +303,7 @@ p {
 	position: relative;
 	align-self: stretch;
 	font-weight: 400;
-	color: var(--secondarylight-grey-1);
+	color: var(--secondaryLightGrey1);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -331,7 +314,7 @@ p {
 	position: relative;
 	align-self: stretch;
 	font-weight: 400;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -384,7 +367,7 @@ p {
 	height: 129px;
 	margin-top: -1px;
 	font-weight: 400;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	letter-spacing: 0;
 	line-height: normal;
 }
@@ -393,7 +376,7 @@ p {
 	position: relative;
 	align-self: stretch;
 	font-weight: 400;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	letter-spacing: 0;
 	line-height: normal;
 }
@@ -457,7 +440,7 @@ p {
 	top: 2px;
 	left: 10px;
 	font-weight: 600;
-	color: var(--primarywhite);
+	color: var(--primaryWhite);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -479,7 +462,7 @@ p {
 	align-self: stretch;
 	margin-top: -1px;
 	font-weight: 600;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	letter-spacing: 0;
 	line-height: normal;
 }
@@ -488,7 +471,7 @@ p {
 	position: relative;
 	align-self: stretch;
 	font-weight: 400;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	letter-spacing: 0;
 	line-height: normal;
 }
@@ -557,7 +540,7 @@ p {
 	position: relative;
 	width: 244px;
 	font-weight: 400;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -579,7 +562,7 @@ p {
 	top: 565px;
 	left: 0;
 	font-weight: 600;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -635,7 +618,7 @@ p {
 	height: 100%;
 	top: 0;
 	left: 0;
-	background-color: var(--primarywhite);
+	background-color: var(--primaryWhite);
 	border-radius: 20px;
 	border: 1px solid;
 	border-color: #f6f6f6;
@@ -659,7 +642,7 @@ p {
 	height: 265px;
 	top: 0;
 	left: 0;
-	background-color: var(--primarylight-grey);
+	background-color: var(--primaryLightGrey);
 	border: 1px solid;
 	border-color: #f6f6f6;
 	border-radius: 20px 20px 0px 0px;
@@ -744,7 +727,7 @@ p {
 	margin-left: 0;
 	margin-right: 0;
 	font-weight: 600;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -754,7 +737,7 @@ p {
 	position: relative;
 	align-self: stretch;
 	font-weight: 400;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -772,7 +755,7 @@ p {
 	position: relative;
 	width: fit-content;
 	font-weight: 400;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -798,7 +781,7 @@ p {
 	justify-content: space-between;
 	padding: 40px 25px 40px 40px;
 	position: relative;
-	background-color: var(--primarylight-grey);
+	background-color: var(--primaryLightGrey);
 	border-radius: 20px;
 }
 
@@ -908,7 +891,7 @@ p {
 	width: fit-content;
 	margin-top: -1px;
 	font-weight: 600;
-	color: var(--primarywhite);
+	color: var(--primaryWhite);
 	letter-spacing: 0;
 	line-height: normal;
 }
@@ -921,7 +904,7 @@ p {
 	gap: 10px;
 	padding: 10px;
 	position: relative;
-	background-color: var(--accentviolet);
+	background-color: var(--accentViolet);
 	border-radius: 1000px;
 }
 
@@ -931,7 +914,7 @@ p {
 	margin-left: -2px;
 	margin-right: -2px;
 	font-weight: 600;
-	color: var(--primarywhite);
+	color: var(--primaryWhite);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -941,7 +924,7 @@ p {
 	position: relative;
 	align-self: stretch;
 	font-weight: 400;
-	color: var(--primarywhite);
+	color: var(--primaryWhite);
 	letter-spacing: 0;
 	line-height: normal;
 }
@@ -979,7 +962,7 @@ p {
 	align-self: stretch;
 	width: 100%;
 	margin-bottom: -19px;
-	background-color: var(--primarywhite);
+	background-color: var(--primaryWhite);
 	border-radius: 100px;
 	box-shadow: inset 0px 1px 2px #ffffff40;
 	display: flex;
@@ -1008,7 +991,7 @@ p {
 	padding: 40px 25px 40px 40px;
 	position: relative;
 	margin-right: -5px;
-	background-color: var(--primarylight-grey);
+	background-color: var(--primaryLightGrey);
 	border-radius: 20px;
 }
 
@@ -1037,7 +1020,7 @@ p {
 	width: 100%;
 	max-width: 1340px;
 	min-height: 495px;
-	background-color: var(--primarylight-grey);
+	background-color: var(--primaryLightGrey);
 	border-radius: 20px;
 	overflow: hidden;
 	border: 1px solid;
@@ -1121,7 +1104,7 @@ p {
 	position: relative;
 	width: fit-content;
 	font-weight: 600;
-	color: var(--primarywhite);
+	color: var(--primaryWhite);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -1141,7 +1124,7 @@ p {
 	gap: 50px;
 	position: relative;
 	flex: 0 0 auto;
-	background-color: var(--primarywhite);
+	background-color: var(--primaryWhite);
 	z-index: 100;
 	padding: 20px 0 80px 0;
 }
@@ -1255,9 +1238,9 @@ p {
 	transform: translateX(-50%);
 	width: 909px;
 	height: 70px;
-	background-color: var(--primarywhite);
+	background-color: var(--primaryWhite);
 	border-radius: 100px;
-	border: 1px solid var(--primarylight-grey);
+	border: 1px solid var(--primaryLightGrey);
 	box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
 	display: flex;
 	align-items: center;
@@ -1293,14 +1276,14 @@ p {
 
 .header__menu-link {
 	font-weight: 500;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-decoration: none;
 	letter-spacing: 0;
 	transition: color 0.3s ease;
 }
 
 .header__menu-link:hover {
-	color: var(--accentviolet);
+	color: var(--accentViolet);
 }
 
 .header__actions {
@@ -1320,12 +1303,12 @@ p {
 }
 
 .btn--primary {
-	background-color: var(--primaryblack);
-	color: var(--primarywhite);
+	background-color: var(--primaryBlack);
+	color: var(--primaryWhite);
 }
 
 .btn--primary:hover {
-	background-color: var(--accentviolet);
+	background-color: var(--accentViolet);
 }
 
 .header__mobile-toggle {
@@ -1341,7 +1324,7 @@ p {
 .header__mobile-toggle-line {
 	width: 20px;
 	height: 2px;
-	background-color: var(--primaryblack);
+	background-color: var(--primaryBlack);
 	transition: all 0.3s ease;
 }
 
@@ -1869,7 +1852,7 @@ p {
 	min-height: 60px;
 	margin-top: -1px;
 	font-weight: 600;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: 1.2;
@@ -1879,7 +1862,7 @@ p {
 	position: relative;
 	align-self: stretch;
 	font-weight: 400;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: 1.3;
@@ -1913,9 +1896,9 @@ p {
 	position: relative;
 	width: 100%;
 	height: 100%;
-	background-color: var(--primarylight-grey);
+	background-color: var(--primaryLightGrey);
 	border-radius: 20px;
-	border: 1px solid var(--primarylight-grey);
+	border: 1px solid var(--primaryLightGrey);
 	box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
 	overflow: hidden;
 	min-height: 0;
@@ -1965,7 +1948,7 @@ p {
 	position: absolute;
 	top: 3%;
 	left: 3%;
-	background-color: var(--primarywhite);
+	background-color: var(--primaryWhite);
 	border-radius: 100px;
 	border: 1px solid #f6f6f6;
 	box-shadow: 0px 1px 2px #ffffff40;
@@ -1977,24 +1960,24 @@ p {
 }
 
 .showcase__selector:hover {
-	background-color: var(--accentviolet);
+	background-color: var(--accentViolet);
 }
 
 .showcase__selector:hover .showcase__selector-text {
-	color: var(--primarywhite);
+	color: var(--primaryWhite);
 }
 
 .showcase__selector-dot {
 	width: 8px;
 	height: 8px;
-	background-color: var(--accentviolet);
+	background-color: var(--accentViolet);
 	border-radius: 50%;
 	flex-shrink: 0;
 }
 
 .showcase__selector-text {
 	font-weight: 500;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	letter-spacing: 0;
 	line-height: normal;
 	flex: 1;
@@ -2031,7 +2014,7 @@ p {
 	transform: translateX(-50%);
 	height: 24px;
 	font-weight: 500;
-	color: var(--primaryblack);
+	color: var(--primaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: normal;
@@ -2082,7 +2065,7 @@ p {
 	justify-content: center;
 	gap: 10px;
 	position: relative;
-	background-color: var(--primarylight-grey);
+	background-color: var(--primaryLightGrey);
 	border-radius: 100px;
 	box-shadow: inset 0px 1px 2px #ffffff40;
 	display: flex;
@@ -2158,7 +2141,7 @@ p {
 	justify-content: center;
 	gap: 10px;
 	position: relative;
-	background-color: var(--primarylight-grey);
+	background-color: var(--primaryLightGrey);
 	border-radius: 100px;
 	box-shadow: inset 0px 1px 2px #ffffff40;
 	display: flex;

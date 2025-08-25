@@ -9,6 +9,20 @@ const styleVars = {
 
 	uiSpacing: 20,
 	uiSpacingSmall: 8,
+
+	// Landing page variables (moved from landing.css)
+	primaryBlack: 'rgba(18, 19, 22, 1)',
+	primaryLightGrey: 'rgba(246, 246, 246, 1)',
+	primaryWhite: 'rgba(255, 255, 255, 1)',
+	secondaryDarkGrey1: 'rgba(42, 44, 49, 1)',
+	accentViolet: 'rgba(184, 151, 253, 1)',
+	secondaryLightGrey1: '#99999a',
+	fontFamilyPrimary: "'Poppins', Helvetica",
+	fontFamilySecondary: "'Helvetica', sans-serif",
+	headingH1FontWeight: 600,
+	headingH1LetterSpacing: '0px',
+	headingH1LineHeight: 'normal',
+	headingH1FontStyle: 'normal',
 }
 
 interface Window {
