@@ -55,6 +55,9 @@ export class OrderView extends Element {
 			phone: store.order.shippingAddress.phone || '',
 		}
 
+		// Map selected blocks (garments) to minimal payload for email
+		const garments = Array.from(store.selectedBlocks.values()).map(g => ({_id: g._id, blockName: g.blockName}))
+
 		const orderData: OrderData = {
 			// Customer information
 			customerEmail:
@@ -72,6 +75,8 @@ export class OrderView extends Element {
 
 			// Shipping information
 			shippingAddress,
+			// Garments from current model
+			garments,
 		}
 
 		return orderData
@@ -286,19 +291,19 @@ export class OrderView extends Element {
 					onclick=${this.#onBuyItClick}
 					disabled=${() => store.order.status === 'submitting'}
 				>
-													${() =>
-														store.order.status === 'submitting'
-															? html`<div class="loading-spinner"></div>
-																	Submitting order...`
-															: html`<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-																		<path
-																			d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
-																			stroke="currentColor"
-																			stroke-width="2"
-																			stroke-linecap="round"
-																			stroke-linejoin="round"
-																		/></svg
-																	>Send my order to LOGO`}
+					${() =>
+						store.order.status === 'submitting'
+							? html`<div class="loading-spinner"></div>
+									Submitting order...`
+							: html`<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+										<path
+											d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										/></svg
+									>Send my order to LOGO`}
 				</button>
 				
 				<!-- Error Display -->

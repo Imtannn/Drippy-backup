@@ -15,7 +15,7 @@ Meteor.startup(async () => {
 		let config: Record<string, string> = {}
 
 		try {
-			const configText = await Assets.getTextAsync('env.example.json')
+			const configText = await Assets.getTextAsync('variables.json')
 			config = JSON.parse(configText)
 			console.log('📁 Loaded configuration from private/env.json')
 		} catch (error) {

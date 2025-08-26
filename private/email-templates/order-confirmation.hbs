@@ -60,7 +60,7 @@
 		<div class='content'>
 			<p>Hi {{userName}},</p>
 
-			<p>Thank you for your order! We've received your payment and are preparing your custom items.</p>
+			<p>Thank you for your order!</p>
 
 			<div class='order-info'>
 				<h3>📦 Order Details</h3>
@@ -68,16 +68,12 @@
 				<p><strong>Order Date:</strong> {{orderDate}}</p>
 
 				<h4>Items Ordered:</h4>
-				{{#each items}}
-					<div class='item'>
-						<div>
-							<strong>{{name}}</strong><br />
-							<small>{{description}}</small><br />
-							<small>Quantity: {{quantity}}</small>
-						</div>
-						<div style='text-align: right;'>
-							<strong>${{price}}</strong>
-						</div>
+				{{#each garmentsNumbered}}
+					<div style='margin-left: 16px;'>
+						<div><strong>{{blockName}}</strong> <small>(ID: {{_id}})</small></div>
+						<div style='margin-left: 16px;'>Size: {{../selectedSize}}{{#if ../isCustomSize}} (Custom){{/if}}</div>
+						<div style='margin-left: 16px;'>Quantity: {{../quantity}}</div>
+						<div style='margin-left: 16px;'>Price: 125$</div>
 					</div>
 				{{/each}}
 

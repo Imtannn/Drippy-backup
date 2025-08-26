@@ -21,6 +21,12 @@ export interface OrderData {
 	}
 	quantity: number
 
+	// Garments selected in the current model
+	garments?: Array<{
+		_id: string
+		blockName: string
+	}>
+
 	// Shipping information
 	shippingAddress: {
 		firstName: string
@@ -42,14 +48,9 @@ function generateOrderId(): string {
 
 // Helper function to calculate pricing
 function calculateOrderTotal(orderData: OrderData): string {
-	let basePrice = 29.99 // Base price per item
-
-	// Add custom measurement surcharge
-	if (orderData.isCustomSize) {
-		basePrice += 15.0
-	}
-
-	const total = basePrice * orderData.quantity
+	const garmentsCount = orderData.garments ? orderData.garments.length : 0
+	const qty = orderData.quantity || 1
+	const total = 125.0 * garmentsCount * qty
 	return total.toFixed(2)
 }
 
@@ -64,14 +65,19 @@ function processOrderForEmail(orderData: OrderData) {
 	const totalAmount = calculateOrderTotal(orderData)
 
 	// Create items description
-	const items = [
-		{
-			name: orderData.productName,
-			description: `Size: ${orderData.selectedSize}${orderData.isCustomSize ? ' (Custom)' : ''}`,
-			quantity: orderData.quantity,
-			price: totalAmount,
-		},
-	]
+	const items: Array<{name: string; description: string; quantity: number; price: string}> = []
+
+	// Append garments as separate line items ($125.00 each) for now
+	if (orderData.garments && orderData.garments.length > 0) {
+		for (const g of orderData.garments) {
+			items.push({
+				name: g.blockName || `Garment ${g._id}`,
+				description: `Garment ID: ${g._id}`,
+				quantity: 1,
+				price: '125.00',
+			})
+		}
+	}
 
 	return {
 		orderId,
@@ -109,8 +115,15 @@ Meteor.methods({
 				orderDate: processedOrder.orderDate,
 				items: processedOrder.items,
 				totalAmount: processedOrder.totalAmount,
+				selectedSize: orderData.selectedSize,
 				isCustomSize: orderData.isCustomSize,
 				customMeasurement: orderData.customMeasurement,
+				garmentsNumbered:
+					orderData.garments?.map(g => ({
+						_id: g._id,
+						blockName: g.blockName || `Garment ${g._id}`,
+					})) || [],
+				quantity: orderData.quantity || 1,
 				shippingAddress: {
 					name: `${orderData.shippingAddress.firstName} ${orderData.shippingAddress.lastName}`,
 					street:
