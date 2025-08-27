@@ -21,8 +21,14 @@ export class OrderView extends Element {
 
 	@eventAttribute onclick = null
 
-	#onCustomSizeClick() {
-		store.navigateTo = 'custom-measurement'
+	#onSizeButtonClick = (size: string) => {
+		if (size === 'Custom') {
+			store.navigateTo = 'custom-measurement'
+		} else {
+			// Clear custom measurement when selecting a regular size
+			store.customMeasurement = null
+			store.setSelectedSize = size
+		}
 	}
 
 	#onBackButtonClick = () => {
@@ -40,10 +46,6 @@ export class OrderView extends Element {
 
 	// Helper function to collect all order data
 	#collectOrderData = (): OrderData => {
-		// Get form data from DOM
-		const selectedSizeBtn = this.shadowRoot?.querySelector('.size-btn.selected') as HTMLButtonElement
-		const quantityElement = this.shadowRoot?.querySelector('.quantity') as HTMLSpanElement
-
 		// Use store values for shipping address
 		const shippingAddress = {
 			firstName: store.order.shippingAddress.firstName || '',
@@ -68,10 +70,10 @@ export class OrderView extends Element {
 
 			// Product information
 			productName: store.order.productName,
-			selectedSize: store.customMeasurement ? 'Custom' : selectedSizeBtn?.textContent || store.order.selectedSize,
-			isCustomSize: !!store.customMeasurement,
+			selectedSize: store.order.selectedSize,
+			isCustomSize: store.order.selectedSize === 'Custom',
 			customMeasurement: store.customMeasurement || undefined,
-			quantity: parseInt(quantityElement?.textContent || '1'),
+			quantity: store.order.quantity,
 
 			// Shipping information
 			shippingAddress,
@@ -163,48 +165,89 @@ export class OrderView extends Element {
 						<img src="../images/background.jpg" alt="Product" />
 					</div>
 					<div class="product-details">
-						<h2 class="product-name">Product name</h2>
+						<h2 class="product-name">${() => store.order.productName}</h2>
 						<p class="product-price">Custom price</p>
 					</div>
-					<div
-						class="quantity-controls"
-						onclick="
-							const updateQty = (change) => {
-								const qty = this.querySelector('.quantity');
-								const val = parseInt(qty.textContent) + change;
-								if (val >= 1 && val <= 99) qty.textContent = val;
-							};
-							if (event.target.textContent === '+') updateQty(1);
-							if (event.target.textContent === '−') updateQty(-1);
-						"
-					>
-						<button class="quantity-btn">+</button>
-						<span class="quantity">1</span>
-						<button class="quantity-btn">−</button>
+					<div class="quantity-controls">
+						<button class="quantity-btn" onclick=${() => {
+							const newQty = store.order.quantity + 1
+							if (newQty <= 99) store.setQuantity = newQty
+						}}>+</button>
+						<span class="quantity">${() => store.order.quantity}</span>
+						<button class="quantity-btn" onclick=${() => {
+							const newQty = store.order.quantity - 1
+							if (newQty >= 1) store.setQuantity = newQty
+						}}>−</button>
 					</div>
 				</div>
 
 				<!-- Size Selection -->
 				<div class="size-section">
 					<h3 class="section-title">Size</h3>
-					<div
-						class="size-options"
-						onclick="
-							if (event.target.classList.contains('size-btn')) {
-								this.querySelector('.selected')?.classList.remove('selected');
-								event.target.classList.add('selected');
-							}
-						"
-					>
-						<button class="size-btn selected">34 (XS)</button>
-						<button class="size-btn">36 (S)</button>
-						<button class="size-btn">38 (M)</button>
-						<button class="size-btn">40/42 (L)</button>
-						<button class="size-btn">44 (XL)</button>
-						<button class="size-btn">48 (2XL)</button>
-						<button class="size-btn">50 (3XL)</button>
-						<button class="size-btn">52 (4XL)</button>
-						<button class="size-btn custom" onclick=${this.#onCustomSizeClick}>Custom size</button>
+					<div class="size-options">
+						<button 
+							class="size-btn" 
+							classList=${() => ({selected: store.order.selectedSize === '34 (XS)' && !store.customMeasurement})}
+							onclick=${() => this.#onSizeButtonClick('34 (XS)')}
+						>
+							34 (XS)
+						</button>
+						<button 
+							class="size-btn" 
+							classList=${() => ({selected: store.order.selectedSize === '36 (S)' && !store.customMeasurement})}
+							onclick=${() => this.#onSizeButtonClick('36 (S)')}
+						>
+							36 (S)
+						</button>
+						<button 
+							class="size-btn" 
+							classList=${() => ({selected: store.order.selectedSize === '38 (M)' && !store.customMeasurement})}
+							onclick=${() => this.#onSizeButtonClick('38 (M)')}
+						>
+							38 (M)
+						</button>
+						<button 
+							class="size-btn" 
+							classList=${() => ({selected: store.order.selectedSize === '40/42 (L)' && !store.customMeasurement})}
+							onclick=${() => this.#onSizeButtonClick('40/42 (L)')}
+						>
+							40/42 (L)
+						</button>
+						<button 
+							class="size-btn" 
+							classList=${() => ({selected: store.order.selectedSize === '44 (XL)' && !store.customMeasurement})}
+							onclick=${() => this.#onSizeButtonClick('44 (XL)')}
+						>
+							44 (XL)
+						</button>
+						<button 
+							class="size-btn" 
+							classList=${() => ({selected: store.order.selectedSize === '48 (2XL)' && !store.customMeasurement})}
+							onclick=${() => this.#onSizeButtonClick('48 (2XL)')}
+						>
+							48 (2XL)
+						</button>
+						<button 
+							class="size-btn" 
+							classList=${() => ({selected: store.order.selectedSize === '50 (3XL)' && !store.customMeasurement})}
+							onclick=${() => this.#onSizeButtonClick('50 (3XL)')}
+						>
+							50 (3XL)
+						</button>
+						<button 
+							class="size-btn" 
+							classList=${() => ({selected: store.order.selectedSize === '52 (4XL)' && !store.customMeasurement})}
+							onclick=${() => this.#onSizeButtonClick('52 (4XL)')}
+						>
+							52 (4XL)
+						</button>
+						<button 
+							class="size-btn custom" 
+							classList=${() => ({selected: store.order.selectedSize === 'Custom' || !!store.customMeasurement})}
+							onclick=${() => this.#onSizeButtonClick('Custom')}
+						>
+							Custom size
+						</button>
 					</div>
 				</div>
 
@@ -218,7 +261,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.firstName}
-								oninput=${(e: Event) => (store.order.shippingAddress.firstName = (e.target as HTMLInputElement).value)}
+								oninput="store.order.shippingAddress.firstName = this.value"
 							/>
 							<label class="floating-label">First name</label>
 						</div>
@@ -228,7 +271,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.lastName}
-								oninput=${(e: Event) => (store.order.shippingAddress.lastName = (e.target as HTMLInputElement).value)}
+								oninput="store.order.shippingAddress.lastName = this.value"
 							/>
 							<label class="floating-label">Last name</label>
 						</div>
@@ -238,7 +281,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.address}
-								oninput=${(e: Event) => (store.order.shippingAddress.address = (e.target as HTMLInputElement).value)}
+								oninput="store.order.shippingAddress.address = this.value"
 							/>
 							<label class="floating-label">Address</label>
 						</div>
@@ -248,7 +291,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.apartment}
-								oninput=${(e: Event) => (store.order.shippingAddress.apartment = (e.target as HTMLInputElement).value)}
+								oninput="store.order.shippingAddress.apartment = this.value"
 							/>
 							<label class="floating-label">Apartment, suite, etc. (optional)</label>
 						</div>
@@ -258,7 +301,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.city}
-								oninput=${(e: Event) => (store.order.shippingAddress.city = (e.target as HTMLInputElement).value)}
+								oninput="store.order.shippingAddress.city = this.value"
 							/>
 							<label class="floating-label">City</label>
 						</div>
@@ -268,7 +311,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.postalCode}
-								oninput=${(e: Event) => (store.order.shippingAddress.postalCode = (e.target as HTMLInputElement).value)}
+								oninput="store.order.shippingAddress.postalCode = this.value"
 							/>
 							<label class="floating-label">Postal code (optional)</label>
 						</div>
@@ -278,7 +321,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.phone}
-								oninput=${(e: Event) => (store.order.shippingAddress.phone = (e.target as HTMLInputElement).value)}
+								oninput="store.order.shippingAddress.phone = this.value"
 							/>
 							<label class="floating-label">Phone</label>
 						</div>
@@ -484,7 +527,11 @@ export class OrderView extends Element {
 		}
 
 		.size-btn.custom.selected {
-			/* No special styling when selected for now */
+			background: linear-gradient(136deg, #e56be8 1.67%, #495cff 100.68%);
+			color: white;
+			border-color: transparent;
+			-webkit-text-fill-color: white;
+			background-clip: unset;
 		}
 
 		.shipping-section {

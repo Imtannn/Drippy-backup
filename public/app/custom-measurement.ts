@@ -55,6 +55,9 @@ export class CustomMeasurement extends Element {
 			shoulderToKnee: this.shoulderToKnee,
 		}
 
+		// Set the selected size to 'Custom' when saving measurements
+		store.setSelectedSize = 'Custom'
+
 		store.navigateTo = 'order'
 	}
 
