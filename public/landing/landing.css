@@ -4,10 +4,9 @@ body {
 	height: 100%;
 	overflow-x: hidden;
 	box-sizing: border-box;
-	/* Override entry.css styles that break fixed positioning */
-	/* overflow: visible !important; */
 	transform-style: flat;
 	-webkit-transform-style: flat;
+	background-color: var(--uiColorPrimaryWhite);
 }
 
 * {
@@ -47,9 +46,8 @@ p {
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
-	width: 100vw;
+	width: 100%;
 	min-height: 100vh;
-	overflow-x: hidden;
 	font-family: var(--fontFamilyPrimary);
 }
 
@@ -1094,7 +1092,7 @@ p {
 }
 
 .landing-page-desktop .footer__container {
-	display: inline-flex;
+	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	gap: 50px;
@@ -1104,6 +1102,7 @@ p {
 	z-index: 100;
 	padding: 20px 0 100px;
 	width: 100%;
+	margin: 0;
 }
 
 .landing-page-desktop .footer__divider {
@@ -1514,6 +1513,7 @@ p {
 	.landing-page-desktop .frame {
 		gap: 80px;
 	}
+
 	.header {
 		margin: 0 auto;
 		width: 90%;
@@ -1546,8 +1546,8 @@ p {
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--3 {
 		bottom: 5%;
-		width: 110px;
-		height: 71px;
+		width: 105px;
+		height: 61px;
 	}
 
 	.brands__grid {
@@ -1584,6 +1584,55 @@ p {
 	.showcase .showcase__avatar-option {
 		width: 45px;
 		height: 45px;
+	}
+
+	/* Statistics responsive for tablet - 2x2 grid */
+	.landing-page-desktop .statistics__grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr 1fr;
+		gap: 30px;
+		align-items: center;
+		justify-items: center;
+	}
+
+	.landing-page-desktop .statistics__item {
+		max-width: 300px;
+		width: 100%;
+	}
+
+	/* Features responsive for tablet - 2x2 grid */
+	.landing-page-desktop .features__grid {
+		display: grid !important;
+		grid-template-columns: 1fr 1fr !important;
+		grid-template-rows: auto auto !important;
+		gap: 30px !important;
+		align-items: start;
+		flex-wrap: unset !important;
+	}
+
+	.landing-page-desktop .feature__wrapper,
+	.landing-page-desktop .feature__item--second,
+	.landing-page-desktop .feature__item--third {
+		max-width: 100% !important;
+		width: 100%;
+	}
+
+	/* How it works responsive for tablet - 2x2 grid */
+	.landing-page-desktop .how-it-works__grid {
+		display: grid !important;
+		grid-template-columns: 1fr 1fr !important;
+		grid-template-rows: auto auto !important;
+		gap: 30px !important;
+		align-items: start;
+	}
+
+	/* Platform grid responsive for tablet - single column */
+	.landing-page-desktop .platform__grid {
+		display: flex !important;
+		flex-direction: column !important;
+		gap: 25px !important;
+		align-items: center;
 	}
 
 	.landing-page-desktop .cta__title {
@@ -1628,6 +1677,49 @@ p {
 
 	.landing-page-desktop .frame {
 		gap: 50px;
+	}
+
+	/* Statistics responsive for mobile */
+	.landing-page-desktop .statistics__grid {
+		flex-direction: column;
+		gap: 30px;
+		align-items: center;
+	}
+
+	.landing-page-desktop .statistics__item {
+		max-width: 280px;
+		width: 100%;
+	}
+
+	/* Features responsive for mobile - single column */
+	.landing-page-desktop .features__grid {
+		display: flex;
+		flex-direction: column;
+		gap: 25px;
+		align-items: center;
+	}
+
+	.landing-page-desktop .feature__wrapper,
+	.landing-page-desktop .feature__item--second,
+	.landing-page-desktop .feature__item--third {
+		max-width: 100%;
+		width: 100%;
+	}
+
+	/* How it works responsive for mobile - single column */
+	.landing-page-desktop .how-it-works__grid {
+		display: flex !important;
+		flex-direction: column !important;
+		gap: 20px !important;
+		align-items: center;
+	}
+
+	/* Platform grid responsive for mobile - single column */
+	.landing-page-desktop .platform__grid {
+		display: flex !important;
+		flex-direction: column !important;
+		gap: 20px !important;
+		align-items: center;
 	}
 
 	.landing-page-desktop .section {
@@ -1866,9 +1958,9 @@ p {
 	width: 100%;
 	height: 100%;
 
-	background-color: var(--primaryLightGrey);
+	background-color: var(--uiColorPrimaryLightGrey);
 	border-radius: 20px;
-	border: 1px solid var(--primaryLightGrey);
+	border: 1px solid var(--uiColorPrimaryLightGrey);
 	box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
 
 	overflow: hidden;
