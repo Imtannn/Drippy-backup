@@ -50,11 +50,11 @@ p {
 	width: 100vw;
 	min-height: 100vh;
 	overflow-x: hidden;
-	font-family: var(--font-family-primary);
+	font-family: var(--fontFamilyPrimary);
 }
 
 .container {
-	background-color: var(--primarywhite);
+	background-color: var(--primaryWhite);
 	width: 100%;
 	max-width: 1440px;
 	min-height: 100vh;
@@ -113,9 +113,9 @@ p {
 	color: var(--uiColorPrimaryBlack);
 
 	text-align: center;
-	letter-spacing: var(--heading-h1-letter-spacing);
-	line-height: var(--heading-h1-line-height);
-	font-style: var(--heading-h1-font-style);
+	letter-spacing: var(--headingH1LetterSpacing);
+	line-height: var(--headingH1LineHeight);
+	font-style: var(--headingH1FontStyle);
 	margin-bottom: 0;
 	padding-bottom: 0;
 }
@@ -1865,10 +1865,12 @@ p {
 	position: relative;
 	width: 100%;
 	height: 100%;
-	background-color: var(--uiColorPrimaryLightGrey);
+
+	background-color: var(--primaryLightGrey);
 	border-radius: 20px;
-	border: 1px solid var(--uiColorPrimaryLightGrey);
-	box-shadow: 0px 4px 20px var(--uiColorShadowColor);
+	border: 1px solid var(--primaryLightGrey);
+	box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+
 	overflow: hidden;
 	min-height: 0;
 }

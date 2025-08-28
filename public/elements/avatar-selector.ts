@@ -86,7 +86,7 @@ export class AvatarSelector extends Element {
 		dropdown.style.display = 'none'
 
 		// Add options
-		this.options.forEach((option, index) => {
+		this.options.forEach(option => {
 			const optionEl = document.createElement('div')
 			optionEl.className = 'avatar-selector__option'
 			if (option.value === this.selectedOption.value) {
