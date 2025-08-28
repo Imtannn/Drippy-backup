@@ -24,9 +24,9 @@ export class CustomButton extends Element {
 				'custom-button--secondary': this.variant === 'secondary',
 				'custom-button--outline': this.variant === 'outline',
 				'custom-button--ghost': this.variant === 'ghost',
-				'custom-button--small': this.size === 'small',
-				'custom-button--medium': this.size === 'medium',
-				'custom-button--large': this.size === 'large',
+				'custom-button--small text-xs': this.size === 'small',
+				'custom-button--medium text-sm': this.size === 'medium',
+				'custom-button--large text-md': this.size === 'large',
 				'custom-button--disabled': this.disabled || this.loading,
 			})}
 			disabled=${() => this.disabled || this.loading}
@@ -79,7 +79,6 @@ export class CustomButton extends Element {
 		.custom-button {
 			font-family: 'Poppins', Helvetica;
 			font-weight: 500;
-			font-size: 14px;
 			padding: 10px 20px;
 			border-radius: 100px;
 			border: none;
@@ -102,17 +101,14 @@ export class CustomButton extends Element {
 		/* Size Variants */
 		.custom-button--small {
 			padding: 8px 16px;
-			font-size: 12px;
 		}
 
 		.custom-button--medium {
 			padding: 10px 20px;
-			font-size: 14px;
 		}
 
 		.custom-button--large {
 			padding: 12px 24px;
-			font-size: 16px;
 		}
 
 		/* Style Variants */
@@ -122,7 +118,7 @@ export class CustomButton extends Element {
 		}
 
 		.custom-button--primary:hover:not(.custom-button--disabled) {
-			background-color: var(--accentviolet);
+			background-color: var(--uiColorLightPurple);
 		}
 
 		.custom-button--secondary {
@@ -204,7 +200,6 @@ export class CustomButton extends Element {
 		@media (max-width: 768px) {
 			.custom-button--large {
 				padding: 12px 24px;
-				font-size: 16px;
 			}
 		}
 	`

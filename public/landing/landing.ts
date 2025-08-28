@@ -3,8 +3,9 @@ import '../routes.js' // track page visits
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/custom-button.js'
+import '../elements/avatar-selector.js'
 // const logoUrl = new URL('../images/logo.svg', import.meta.url)
-// const logoUrlDark = new URL('../images/logo-dark.svg', import.meta.url)
+const logoUrlDark = new URL('../images/landing/logo.png', import.meta.url)
 const blingImage1 = new URL('../images/landing/bling-1.png', import.meta.url).href
 const blingImage2 = new URL('../images/landing/bling-2.png', import.meta.url).href
 const blingImage3 = new URL('../images/landing/bling-3.png', import.meta.url).href
@@ -15,6 +16,13 @@ const matImage2 = new URL('../images/landing/mat-2.png', import.meta.url).href
 const matImage3 = new URL('../images/landing/mat-3.png', import.meta.url).href
 const stepImage1 = new URL('../images/landing/step-1.png', import.meta.url).href
 
+const cta__background = new URL('../images/landing/cta-background.png', import.meta.url).href
+const cta_model = new URL('../images/landing/cta-model.png', import.meta.url).href
+// Social media icons
+const instagramIcon = new URL('../images/landing/discord.png', import.meta.url).href
+const discordIcon = new URL('../images/landing/instagram.png', import.meta.url).href
+const redditIcon = new URL('../images/landing/reddit.png', import.meta.url).href
+const twitterIcon = new URL('../images/landing/twiter.png', import.meta.url).href
 // Brands data
 const brands = [
 	{
@@ -127,48 +135,46 @@ const statistics = [
 	},
 ]
 
-document.body.append(
-	html`
-		<main class="landing-page-desktop" role="main">
-			<!-- Header Navigation -->
-			<nav class="header">
-				<div class="header__logo">
-					<img
-						src="https://c.animaapp.com/mejigj1rAIvhIh/img/7aeb67c6-4bc1-4b4c-bbe1-b946b6c2ed7a--1--1.png"
-						alt="Drippy Logo"
-						class="header__logo-img"
-					/>
-				</div>
-				<ul class="header__menu">
-					<li class="header__menu-item"><a href="#features" class="header__menu-link">Features</a></li>
-					<li class="header__menu-item"><a href="#pricing" class="header__menu-link">How it works</a></li>
-					<li class="header__menu-item"><a href="#about" class="header__menu-link">Use Cases</a></li>
-					<li class="header__menu-item"><a href="#contact" class="header__menu-link">Pricing</a></li>
-				</ul>
-				<div class="header__actions">
-					<button class="btn btn--primary" aria-label="Book a demo">Book a demo</button>
-				</div>
-				<button class="header__mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
-					<span class="header__mobile-toggle-line"></span>
-					<span class="header__mobile-toggle-line"></span>
-					<span class="header__mobile-toggle-line"></span>
-				</button>
-			</nav>
+// Add navbar first
+const navbar = html`
+	<nav class="header">
+		<div class="header__logo">
+			<img src=${logoUrlDark} alt="Drippy Logo" class="header__logo-img" />
+		</div>
+		<ul class="header__menu">
+			<li class="header__menu-item"><a href="#features" class="header__menu-link">Features</a></li>
+			<li class="header__menu-item"><a href="#pricing" class="header__menu-link">How it works</a></li>
+			<li class="header__menu-item"><a href="#about" class="header__menu-link">Use Cases</a></li>
+			<li class="header__menu-item"><a href="#contact" class="header__menu-link">Pricing</a></li>
+		</ul>
+		<div class="header__actions">
+			<button class="btn btn--primary" aria-label="Book a demo">Book a demo</button>
+		</div>
+		<button class="header__mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+			<span class="header__mobile-toggle-line"></span>
+			<span class="header__mobile-toggle-line"></span>
+			<span class="header__mobile-toggle-line"></span>
+		</button>
+	</nav>
+`
 
+// Add main content
+const mainContent = html`
+	<main class="landing-page-desktop" role="main">
 			<div class="container">
 				<div class="overlap">
 					<div class="frame">
 						<!-- Hero Section -->
 						<section class="hero-header" aria-labelledby="hero-title">
 							<p id="hero-title" class="stop-selling-clothes text-xl">Stop selling clothes. <br />Start selling experiences.</p>
-							<p class="hero__subtitle text-md">
+							<p class="hero__subtitle text-sm">
 								Turn your e-commerce into an
 								<span class="highlight"> interactive 3D <br> studio </span>
 							that boosts engagement and sales.
 							</p>
 							<div class="hero__actions">
-								<custom-button variant="secondary" size="large">See it live</custom-button>
-								<custom-button variant="primary" size="large">Book a demo</custom-button>
+								<custom-button variant="secondary">See it live</custom-button>
+								<custom-button variant="primary">Book a demo</custom-button>
 							</div>
 
 								<img class="cta__cone-image--2" src=${blingImage1} />
@@ -194,7 +200,7 @@ document.body.append(
 						</section>
 
 						<!-- Interactive 3D Section -->
-						<div class="section">
+						<section class="section">
 							<div class="section-header">
 								<div class="section-title text-lg">
 									<span>Interactive 3D is </span> <span class="hero__title--highlight">the new black.</span>
@@ -218,15 +224,9 @@ document.body.append(
 												<img class="showcase__avatar-option" src=${matImage2} alt="Material option 2 for customization" />
 												<img class="showcase__avatar-option" src=${matImage3} alt="Material option 3 for customization" />
 											</div>
-											<div class="showcase__selector">
-												<div class="showcase__selector-dot"></div>
-												<div class="showcase__selector-text text-xs">Male avatar</div>
-												<img
-													class="showcase__selector-icon"
-													src="https://c.animaapp.com/mejigj1rAIvhIh/img/vector-1.svg"
-													alt="Avatar selection dropdown"
-												/>
-											</div>
+
+											<avatar-selector target-model=".showcase__avatar-model" class="showcase__selector"></avatar-selector>
+
 											<div class="showcase__model-display">
 												<img class="showcase__model" src="${modelImage2}" alt="3D avatar model with interactive controls" />
 											</div>
@@ -236,10 +236,10 @@ document.body.append(
 								</div>
 							</div>
 							<img class="cta__cone-image--4" src=${blingImage3} />
-						</div>
+						</section>
 
 						<!-- Statistics Section -->
-						<div class="section">
+						<section class="section">
 							<div class="section-header">
 								<div class="section-title text-lg">Well, numbers do not lie.</div>
 								<div class="section-subtitle text-md">3D and personalization aren't just buzz — they drive business metrics.</div>
@@ -267,7 +267,7 @@ document.body.append(
 									`,
 								)}
 							</div>
-						</div>
+						</section>
 
 						<!-- Drippy Features Section -->
 						<section class="section-drippy" aria-labelledby="features-title">
@@ -340,15 +340,15 @@ document.body.append(
 									</div>
 								</div>
 								<div class="hero__actions">
-									<custom-button variant="secondary" size="large">See it live</custom-button>
-									<custom-button variant="primary" size="large">Book a demo</custom-button>
+									<custom-button variant="secondary">See it live</custom-button>
+									<custom-button variant="primary">Book a demo</custom-button>
 								</div>
 							</div>
 							<img class="features__image" src=${stepImage1} />
 						</div>
 
 						<!-- How it Works Section -->
-						<div class="section">
+						<section class="section">
 							<div class="section-header">
 								<div class="section-title text-lg">Built like a game, feel like a game.</div>
 								<div class="section-subtitle text-md">Here&#39;s how it work from your shoppers' POV.</div>
@@ -367,13 +367,13 @@ document.body.append(
 								)}
 							</div>
 							<div class="hero__actions">
-								<custom-button variant="secondary" size="large">See it live</custom-button>
-								<custom-button variant="primary" size="large">Book a demo</custom-button>
+								<custom-button variant="secondary">See it live</custom-button>
+								<custom-button variant="primary">Book a demo</custom-button>
 							</div>
-						</div>
+						</section>
 
 						<!-- Platform Integration Section -->
-						<div class="platform__container">
+						<section class="section">
 							<div class="section-header">
 								<div class="section-title text-lg" id="platform-title">A plug &amp; play 3D studio.</div>
 								<div class="section-subtitle text-md">Browser-based, mobile-first. Zero download, Zero friction.</div>
@@ -429,14 +429,14 @@ document.body.append(
 									</div>
 								</div>
 								<div class="hero__actions">
-									<custom-button variant="secondary" size="large">See it live</custom-button>
-									<custom-button variant="primary" size="large">Book a demo</custom-button>
+									<custom-button variant="secondary">See it live</custom-button>
+									<custom-button variant="primary">Book a demo</custom-button>
 								</div>
 							</div>
-						</div>
+						</section>
 
 						<!-- Pricing Section -->
-						<div class="pricing__container">
+						<section class="section">
 							<div class="pricing__content">
 								<div class="pricing__header">
 									<div class="section-header">
@@ -444,8 +444,8 @@ document.body.append(
 										<div class="section-subtitle text-md">Pricing without the bullsh*t.</div>
 									</div>
 									<div class="pricing__toggle">
-										<custom-button variant="primary" size="large">Yearly</custom-button>
-										<custom-button variant="secondary" size="large">Monthly</custom-button>
+										<custom-button variant="primary">Yearly</custom-button>
+										<custom-button variant="secondary">Monthly</custom-button>
 									</div>
 								</div>
 								<div class="pricing__plans">
@@ -544,15 +544,15 @@ document.body.append(
 									</div>
 								</div>
 							</div>
-						</div>
+						</section>
 
 						<!-- CTA Section -->
-						<div class="cta__container">
+						<section class="section">
 							<div class="cta__content">
 								<div class="cta__background">
 									<div class="cta__background-overlap">
-										<img class="cta__cone-image" src="https://c.animaapp.com/mejigj1rAIvhIh/img/cone-01-2-2.png" />
-										<img class="cta__background-image" src="https://c.animaapp.com/mejigj1rAIvhIh/img/group-11565.png" />
+										<img class="cta__cone-image" src=${cta__background} />
+										<img class="cta__background-image" src=${cta_model} />
 									</div>
 								</div>
 								<div class="cta__text-section">
@@ -562,13 +562,13 @@ document.body.append(
 										<span class="cta__description--highlight">playable, immersive, made-to-order</span>
 										<span class="cta__description"> experiences today. </span>
 									</p>
-									<custom-button variant="primary" size="large">See Drippy in action<img class="cta__arrow-icon" src="https://c.animaapp.com/mejigj1rAIvhIh/img/arrow-1.svg" /></custom-button>
+									<custom-button variant="primary">See Drippy in action<img class="cta__arrow-icon" src="https://c.animaapp.com/mejigj1rAIvhIh/img/arrow-1.svg" /></custom-button>
 								</div>
 							</div>
-						</div>
+						</section>
 
 						<!-- Footer -->
-						<div class="footer__container">
+						<footer class="footer__container">
 							<img class="footer__divider" src="https://c.animaapp.com/mejigj1rAIvhIh/img/line-1.svg" />
 							<div class="footer__content">
 								<div class="footer__main">
@@ -580,20 +580,46 @@ document.body.append(
 										<div class="footer__copyright text-sm">@2025 - Drippy, Inc.</div>
 									</div>
 									<div class="footer__links">
-										<div class="footer__link text-sm">Terms &amp; Conditions</div>
-										<div class="footer__link text-sm">Privacy Policy</div>
-										<div class="footer__link text-sm">Contact Us</div>
+										<a class="footer__link text-sm">Terms &amp; Conditions</a>
+										<a class="footer__link text-sm">Privacy Policy</a>
+										<a class="footer__link text-sm">Contact Us</a>
 									</div>
 								</div>
-								<img class="footer__social-icon" src="https://c.animaapp.com/mejigj1rAIvhIh/img/frame-12632.svg" />
+								<ul class="social-buttons">
+									<li class="social-buttons__item">
+										<a href="#" class="social-buttons__button" aria-label="Instagram">
+											<img src="${instagramIcon}" alt="Instagram" class="social-buttons__icon social-buttons__icon--instagram">
+										</a>
+									</li>
+									<li class="social-buttons__item">
+										<a href="#" class="social-buttons__button" aria-label="Discord">
+											<img src="${discordIcon}" alt="Discord" class="social-buttons__icon social-buttons__icon--discord">
+										</a>
+									</li>
+									<li class="social-buttons__item">
+										<a href="#" class="social-buttons__button" aria-label="Reddit">
+											<img src="${redditIcon}" alt="Reddit" class="social-buttons__icon social-buttons__icon--reddit">
+										</a>
+									</li>
+									<li class="social-buttons__item">
+										<a href="#" class="social-buttons__button" aria-label="X (Twitter)">
+											<img src="${twitterIcon}" alt="X (Twitter)" class="social-buttons__icon social-buttons__icon--twitter">
+										</a>
+									</li>
+								</ul>
 							</div>
-						</div>
+						</footer>
 					</div>
 				</div>
 			</div>
 		</div>
-	` as Node,
-)
+	` as Node
+
+// Append navbar and main content to body
+document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
+document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
+
+// Avatar selector is now handled by the custom element
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
