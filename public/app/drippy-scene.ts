@@ -234,7 +234,6 @@ export class DrippyScene extends Element {
 		})
 
 		this.createEffect(() => {
-			console.log('store.view', store.view)
 			if (store.view === 'preview') {
 				this.style.setProperty('--scene-desktop-transform', 'translateY(0)')
 			} else {
