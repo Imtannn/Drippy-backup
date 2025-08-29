@@ -79,9 +79,7 @@ export class ItemCard extends Element {
 		.item-card {
 			aspect-ratio: var(--aspect-ratio);
 			/* Two-layer background: inner fill on padding-box, gradient border on border-box */
-			background:
-				linear-gradient(#ebeced, #ebeced) padding-box,
-				var(--item-card-border, linear-gradient(#0000, #0000)) border-box;
+			background: var(--item-card-border);
 			border-radius: 12px;
 			overflow: hidden;
 			cursor: pointer;
@@ -93,7 +91,7 @@ export class ItemCard extends Element {
 
 		.item-card:hover {
 			transform: scale(1.02);
-			--item-card-border: linear-gradient(136.36deg, #e56be8 1.67%, #495cff 100.68%);
+			--item-card-border: #b897fd;
 		}
 
 		@media (max-width: 768px) {
@@ -104,13 +102,13 @@ export class ItemCard extends Element {
 		}
 
 		.item-card.active {
-			--item-card-border: linear-gradient(136.36deg, #e56be8 1.67%, #495cff 100.68%);
+			--item-card-border: #b897fd;
 		}
 
 		.item-preview {
 			width: 100%;
 			height: 100%;
-			background: #e0e0e0;
+			background: var(--appBackground);
 			display: flex;
 			align-items: center;
 			justify-content: center;

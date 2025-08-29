@@ -170,12 +170,14 @@ export class CustomMeasurement extends Element {
 
 		/* Measurement page specific styles */
 		.measurement-container {
-			padding: 20px;
+			padding: var(--uiSpacing);
 			padding-top: 0;
+			padding-bottom: 5px;
+			background: var(--uiColorPrimaryWhite);
 		}
 
 		.measurement-header {
-			margin-bottom: 30px;
+			margin-bottom: var(--uiSpacingLarge);
 		}
 
 		.back-icon {
@@ -185,23 +187,23 @@ export class CustomMeasurement extends Element {
 			align-items: flex-start;
 			justify-content: center;
 			cursor: pointer;
-			padding-right: 10px;
+			padding-right: var(--uiGap);
 		}
 
 		.back-icon svg {
-			color: #000;
+			color: var(--uiColorPrimaryBlack);
 		}
 
 		.back-icon svg path {
-			fill: #000;
+			fill: var(--uiColorPrimaryBlack);
 		}
 
 		:host-context([data-theme='dark']) .back-icon svg path {
-			fill: #fff;
+			fill: var(--uiColorPrimaryWhite);
 		}
 
 		.measurement-fields {
-			margin-bottom: 40px;
+			margin-bottom: var(--uiSpacingXl);
 		}
 
 		.field-group {
@@ -215,7 +217,7 @@ export class CustomMeasurement extends Element {
 
 		/* Override panel styles for measurement layout */
 		#panel {
-			background-color: white;
+			background-color: var(--uiColorPrimaryWhite);
 			width: 400px;
 			position: static;
 			margin-top: 80px;
@@ -226,10 +228,10 @@ export class CustomMeasurement extends Element {
 		}
 
 		.panel-content {
-			padding: 20px;
+			padding: var(--uiSpacing);
 			display: flex;
 			flex-direction: column;
-			height: calc(85vh - 20px);
+			height: calc(85vh - var(--uiSpacing));
 		}
 
 		.measurement-fields {

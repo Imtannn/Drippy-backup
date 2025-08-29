@@ -51,28 +51,28 @@ export class AppButtonsLeft extends Element {
 
 		.app-buttons-left {
 			position: absolute;
-			left: 5px;
+			left: 20px;
 			z-index: 1;
 			transform: translateX(0);
 		}
 
 		.top {
-			top: 20px;
+			top: 50px;
 		}
 
 		.bottom {
-			bottom: calc(100dvh * 0.41 + 20px);
+			bottom: calc(100dvh * 0.41 + 10px);
 		}
 
 		@media (min-width: 767px) {
 			.bottom {
 				bottom: unset;
-				top: 20px;
-				left: 42px;
+				top: 50px;
+				left: 52px;
 			}
 
 			.app-buttons-left {
-				left: 10px;
+				left: 20px;
 				transform: var(--app-buttons-left-transform);
 			}
 		}
@@ -108,29 +108,29 @@ export class AppButtonsRight extends Element {
 		.app-buttons-right {
 			position: absolute;
 			z-index: 1;
-			right: 5px;
+			right: 20px;
 			display: flex;
 			flex-direction: column;
 			gap: 25px;
 		}
 
 		.top {
-			top: 20px;
+			top: 50px;
 		}
 
 		.bottom {
-			bottom: calc(100dvh * 0.41 + 20px);
+			bottom: calc(100dvh * 0.41 + 10px);
 		}
 
 		@media (min-width: 767px) {
 			.bottom {
 				bottom: unset;
-				top: 20px;
-				right: 37px;
+				top: 50px;
+				right: 47px;
 			}
 
 			.app-buttons-right {
-				right: 10px;
+				right: 20px;
 			}
 		}
 	`
