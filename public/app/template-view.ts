@@ -1,6 +1,8 @@
-import {css, Element, element, html, Index, type ElementAttributes} from 'lume'
+import {css, Element, element, html, signal, For, Show, type ElementAttributes, Index} from 'lume'
+import type {Accessor} from 'solid-js'
 import {store} from './store.js'
 import {templates} from '../consts/templates.js'
+import type {Template, TemplateCategory} from '../types/template.js'
 import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import './app-buttons.js'
 import './item-card.js'
@@ -19,8 +21,53 @@ type TemplateViewAttributes = keyof {}
 export class TemplateView extends Element {
 	static readonly elementName = 'template-view'
 
+	@signal selectedTab: TemplateCategory | null = null
+	@signal templateCategories: Record<TemplateCategory, Template[]> = {} as Record<TemplateCategory, Template[]>
+	@signal spaceCollection: string | null = null
+
+	private defaultCollection = 'moidien'
+
 	connectedCallback() {
 		super.connectedCallback()
+
+		this.createEffect(() => {
+			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
+		})
+
+		// Update template categories when templates change
+		this.createEffect(() => {
+			if (!this.spaceCollection) return
+			// Define the category order: 'Dress' | 'Jacket' | 'Shirt' | 'Skirt' | 'Pants' | 'Accessories'
+			const categoryOrder: TemplateCategory[] = ['Dress', 'Jacket', 'Shirt', 'Skirt', 'Pants', 'Accessories']
+
+			// Get available categories from templates
+			const availableCategories = [
+				...new Set(templates[this.spaceCollection].map(template => template.category)),
+			] as TemplateCategory[]
+
+			// Sort categories in the desired order
+			const orderedCategories = categoryOrder.filter(category => availableCategories.includes(category))
+
+			this.templateCategories = orderedCategories.reduce(
+				(acc, category) => {
+					acc[category] = templates[this.spaceCollection!].filter(template => template.category === category)
+					return acc
+				},
+				{} as Record<TemplateCategory, Template[]>,
+			)
+		})
+
+		this.createEffect(() => {
+			// Auto-select first category
+			const categories = Object.keys(this.templateCategories)
+			if (categories.length > 0) {
+				this.selectedTab = categories[0] as TemplateCategory
+			}
+		})
+
+		this.createEffect(() => {
+			console.log('this.templateCategories', this.templateCategories, this.selectedTab, this.spaceCollection)
+		})
 	}
 
 	#onItemClick = (e: CustomEvent) => {
@@ -53,7 +100,7 @@ export class TemplateView extends Element {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.delete('scene')
 		window.history.replaceState({}, '', `?${searchParams.toString()}`)
-		store.selectScene = null
+		store.selectSpace = null
 		store.navigateTo = 'scene'
 	}
 
@@ -82,32 +129,79 @@ export class TemplateView extends Element {
 	</app-buttons-right>
 
 	<bottom-sheet>
-			<div class="templates-content-container">
-					<div class="items-grid">
-						<${Index} each=${templates.speed}>
-							${(template: () => (typeof templates.speed)[number]) => html`
-								<div class="template-item">
-									<item-card
-										item-active=${() => store.selectedTemplate?._id === template()._id}
-										item-src=${template().thumb}
-										item-alt=${template().name}
-										item-value=${template()}
-										oncardselected=${this.#onItemClick}
-										object-fit="contain"
-										aspect-ratio="0.79"
-									></item-card>
-									<div class="template-product-name">Product Name</div>
-									<div class="template-product-price">€ 125.00</div>
-								</div>
-							`}
-						</>
+		<${Show} when=${() => this.selectedTab !== null}>
+		<tabs-provider
+			default-value=${() => this.selectedTab}
+			ontabchange=${(e: CustomEvent) => {
+				this.selectedTab = e.detail.value
+			}}
+		>
+		<bottom-sheet-header>
+			<div class="tabs-container">
+				<tabs-list>
+				<${Index} each=${() => Object.keys(this.templateCategories)}>
+				${(category: Accessor<TemplateCategory>) => html` <tabs-trigger selected-value=${category()}>${category()}</tabs-trigger> `}
+				</>
+				</tabs-list>
 			</div>
-		</bottom-sheet>
+		</bottom-sheet-header>
+		<div class="tabs-content-container">
+			<${For} each=${() => Object.keys(this.templateCategories)}>
+			${(category: TemplateCategory) => html`
+				<tabs-content selected-value=${category}>
+					<div class="items-grid">
+						<${For} each=${() => this.templateCategories[category]}>
+						${(template: Template) => html`
+							<div class="template-item">
+								<item-card
+									item-active=${() => store.selectedTemplate?._id === template._id}
+									item-src=${template.thumb}
+									item-alt=${template.name}
+									item-value=${template}
+									oncardselected=${this.#onItemClick}
+									object-fit="contain"
+									aspect-ratio="0.79"
+								></item-card>
+								<div class="template-product-name">Product Name</div>
+								<div class="template-product-price">€ 125.00</div>
+							</div>
+						`}
+						</>
+					</div>
+				</tabs-content>
+			`}
+			</>
+		</div>
+		</tabs-provider>
+		</>
+	</bottom-sheet>
 	`
 
 	css = css/*css*/ `
 		:host {
 			display: contents;
+		}
+
+		.tabs-container {
+			padding: var(--uiSpacing);
+			padding-top: 0;
+			padding-bottom: var(--uiSpacingSmall);
+			background: var(--uiColorPrimaryWhite);
+		}
+
+		.bottom-sheet-header {
+			position: sticky;
+			top: 0;
+			background: var(--appBackground);
+			z-index: 10;
+			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
+		}
+
+		.tabs-content-container {
+			padding: var(--uiSpacing);
+			padding-top: 0;
+			padding-bottom: 5px;
+			background: var(--uiColorPrimaryWhite);
 		}
 
 		.items-grid {

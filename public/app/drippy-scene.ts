@@ -6,17 +6,10 @@ import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import './app-buttons.js'
 import {store} from './store.js'
+import {spaces} from '../consts/spaces.js'
 
 const femaleAvatar = new URL('../models/EM-Underwear.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
-
-const scenes = [
-	{
-		name: 'bloom realms',
-		description: 'One million roses',
-		image: new URL('../images/doina-bg.webp', import.meta.url),
-	},
-]
 
 @element
 export class DrippyScene extends Element {
@@ -250,10 +243,10 @@ export class DrippyScene extends Element {
 		})
 
 		this.createEffect(() => {
-			if (store.selectedScene) {
-				const scene = scenes.find(scene => scene.name === store.selectedScene)
-				if (scene) {
-					this.sceneUrl = scene.image.href
+			if (store.selectedSpace) {
+				const space = spaces.find(space => space.name === store.selectedSpace?.name)
+				if (space) {
+					this.sceneUrl = space.image.href
 				}
 			}
 		})

@@ -35,25 +35,33 @@ export class BlocksSelection extends Element {
 	@signal fabricCategories: string[] = []
 	@signal availableBlocks: Block[] = []
 	@signal availableFabrics: Fabric[] = []
+	@signal spaceCollection: string | null = null
 
-	private defaultCollection = 'speed'
+	private defaultCollection = 'moidien'
 
 	private availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
 		Shirt: ['Sleeves', 'Pants'],
 		Jacket: ['Sleeves', 'Pants'],
 		Pants: [],
 		Accessories: [],
+		Dress: [],
+		Skirt: [],
 	}
 
 	connectedCallback() {
 		super.connectedCallback()
 
+		this.createEffect(() => {
+			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
+		})
+
 		// Update available blocks when template changes
 		this.createEffect(() => {
+			if (!this.spaceCollection) return
 			const selectedTemplate = store.selectedTemplate
 
 			if (selectedTemplate) {
-				this.availableBlocks = blocks[this.defaultCollection].filter(block => {
+				this.availableBlocks = blocks[this.spaceCollection].filter(block => {
 					if (block.templateCategory === 'Pants' || block.templateCategory === 'Accessories') {
 						return true
 					} else {
@@ -61,19 +69,20 @@ export class BlocksSelection extends Element {
 					}
 				})
 			} else {
-				this.availableBlocks = blocks[this.defaultCollection]
+				this.availableBlocks = blocks[this.spaceCollection]
 			}
 		})
 
 		// Update available fabrics when template changes
 		this.createEffect(() => {
+			if (!this.spaceCollection) return
 			const selectedTemplate = store.selectedTemplate
 			if (selectedTemplate) {
-				this.availableFabrics = fabrics[this.defaultCollection].filter(
+				this.availableFabrics = fabrics[this.spaceCollection].filter(
 					fabric => fabric.templateCategory === selectedTemplate.category,
 				)
 			} else {
-				this.availableFabrics = fabrics[this.defaultCollection]
+				this.availableFabrics = fabrics[this.spaceCollection]
 			}
 		})
 

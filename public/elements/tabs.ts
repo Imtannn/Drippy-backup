@@ -194,9 +194,11 @@ export class TabsList extends Element {
 	updateIndicators() {
 		if (!this.provider) return
 
-		const activeTrigger = this.querySelector(
-			`tabs-trigger[selected-value="${this.provider.activeValue}"]`,
-		) as TabsTrigger
+		const triggers = this.querySelectorAll('tabs-trigger') as NodeListOf<TabsTrigger>
+		const activeTrigger = Array.from(triggers).find(trigger => {
+			const button = trigger.shadowRoot?.querySelector('button')
+			return button?.getAttribute('aria-label') === this.provider?.activeValue
+		})
 		if (activeTrigger && this.indicatorRef) {
 			this.positionIndicator(this.indicatorRef, activeTrigger)
 		}
@@ -349,6 +351,7 @@ export class TabsTrigger extends Element {
 			classList=${() => ({active: this.isActive, disabled: this.isDisabled})}
 			role="tab"
 			aria-selected=${() => this.isActive}
+			aria-label=${() => this.selectedValue}
 			aria-controls=${() => `panel-${this.selectedValue}`}
 			id=${() => `tab-${this.selectedValue}`}
 			tabindex=${() => (this.isActive ? '0' : '-1')}

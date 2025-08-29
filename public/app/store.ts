@@ -2,36 +2,14 @@ import {createMutable} from 'solid-js/store'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template} from '../types/template.js'
-
-export type AppRoute =
-	| 'avatar'
-	| 'blocks'
-	| 'preview'
-	| 'custom-measurement'
-	| 'success'
-	| 'scene'
-	| 'order'
-	| 'share'
-	| 'template'
-
-export type Avatar = 'female' | 'male' | null
-
-export type Scene = 'bloom realms' | null
-
-export type CustomMeasurement = {
-	bust: number
-	waist: number
-	hips: number
-	shoulder: number
-	shoulderToKnee: number
-}
+import type {AppRoute, Avatar, Space, CustomMeasurement} from '../types/types.js'
 
 export const store = createMutable({
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
 	tempSelectedAvatar: 'male' as Avatar,
 	selectedAvatar: null as Avatar,
-	selectedScene: null as Scene,
+	selectedSpace: null as Space | null,
 	isPreview: false,
 	selectedTemplate: null as Template | null,
 	selectedBlocks: new Map<BlockCategory, Block>(),
@@ -86,8 +64,8 @@ export const store = createMutable({
 	set selectAvatar(avatar: Avatar) {
 		this.selectedAvatar = avatar
 	},
-	set selectScene(scene: Scene) {
-		this.selectedScene = scene
+	set selectSpace(space: Space | null) {
+		this.selectedSpace = space
 	},
 	set setIsPreview(isPreview: boolean) {
 		this.isPreview = isPreview
@@ -98,7 +76,7 @@ export const store = createMutable({
 	resetState() {
 		this.view = 'avatar' as AppRoute
 		this.selectedAvatar = null as Avatar
-		this.selectedScene = null as Scene
+		this.selectedSpace = null as Space | null
 		this.selectedTemplate = null as Template | null
 		this.selectedBlocks = new Map<BlockCategory, Block>()
 		this.selectedFabric = null as Fabric | null

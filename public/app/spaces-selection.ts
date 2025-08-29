@@ -1,29 +1,21 @@
 import {css, Element, element, html, Index, signal} from 'lume'
 import type {Accessor} from 'solid-js'
 import {store} from './store.js'
-
-const SPACES = [
-	{
-		name: 'Bloom Realm',
-		description: 'One million roses',
-		image: '../images/doina-bg.webp',
-		gender: 'male',
-		garmentsCount: 10,
-	},
-]
+import type {Space} from '../types/types.js'
+import {spaces} from '../consts/spaces.js'
 
 @element
 export class SpacesSelection extends Element {
 	static elementName = 'spaces-selection'
 
-	@signal filterdSpace: (typeof SPACES)[number][] = []
+	@signal filterdSpace: Space[] = []
 
 	connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => {
-			console.log(store.selectedAvatar, SPACES)
-			this.filterdSpace = SPACES.filter(space => space.gender === store.selectedAvatar)
+			console.log(store.selectedAvatar, spaces)
+			this.filterdSpace = spaces.filter(space => space.gender === store.selectedAvatar)
 			console.log(this.filterdSpace)
 		})
 	}
@@ -35,11 +27,11 @@ export class SpacesSelection extends Element {
 		}, 300) // Match animation duration
 	}
 
-	#onSceneSelected = () => {
+	#onSceneSelected = (space: Space) => {
 		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('scene', 'bloom realms')
+		searchParams.set('scene', space.name)
 		window.history.replaceState({}, '', `?${searchParams.toString()}`)
-		store.selectScene = 'bloom realms'
+		store.selectSpace = space
 	}
 
 	template = () => html`
@@ -54,7 +46,7 @@ export class SpacesSelection extends Element {
 			<!-- Space Cards -->
 			<div class="cards-container">
 			<${Index} each=${() => this.filterdSpace}>
-			${(space: Accessor<(typeof SPACES)[number]>) => html`
+			${(space: Accessor<Space>) => html`
 				<!-- Bloom Realm Card -->
 				<div class="space-card">
 					<div class="scene-preview">
@@ -68,7 +60,7 @@ export class SpacesSelection extends Element {
 							<h3 class="card-title">${space().name}</h3>
 							<p class="card-subtitle">${space().description}</p>
 						</div>
-						<button class="explore-button" onclick=${this.#onSceneSelected}>Explore space →</button>
+						<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>Explore space →</button>
 					</div>
 				</div>
 			`}
