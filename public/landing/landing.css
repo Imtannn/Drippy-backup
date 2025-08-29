@@ -564,17 +564,14 @@ p {
 }
 
 .landing-page-desktop .how-it-works__step-title {
-	position: absolute;
 	width: 100%;
-	max-width: 300px;
-	height: 27px;
-	top: 565px;
-	left: 0;
+	min-width: 100%;
 	font-weight: var(--fontWeightBold);
 	color: var(--uiColorPrimaryBlack);
 	text-align: center;
 	letter-spacing: 0;
 	line-height: var(--lineHeightNormal);
+	margin-top: 5px;
 }
 
 .landing-page-desktop .platform__content {
@@ -626,7 +623,6 @@ p {
 	display: flex;
 	flex-direction: column;
 	width: calc(100% - 52px);
-	max-width: 377px;
 	align-items: center;
 	gap: 5px;
 	position: relative;
@@ -1410,14 +1406,6 @@ p {
 	padding: 40px 16px 80px 16px;
 }
 
-.landing-page-desktop .hero__title {
-	padding: 0 12px;
-}
-
-.landing-page-desktop .hero__action-text {
-	padding: 0 12px;
-}
-
 .landing-page-desktop .stop-selling-clothes {
 	max-width: 700px;
 }
@@ -1511,7 +1499,17 @@ p {
 		font-size: var(--fontSizeTextXsTablet);
 	}
 	.landing-page-desktop .frame {
-		gap: 80px;
+		gap: 60px;
+	}
+
+	/* Container adjustments for tablet */
+	.container {
+		max-width: 100%;
+		padding: 0 15px;
+	}
+
+	.landing-page-desktop {
+		padding: 0;
 	}
 
 	.header {
@@ -1532,7 +1530,8 @@ p {
 
 	.landing-page-desktop .hero-header {
 		padding: 0;
-		min-height: 600px;
+		min-height: 475px;
+		background-position: bottom;
 	}
 	.landing-page-desktop .hero-header .hero__subtitle {
 		margin-bottom: 0;
@@ -1545,7 +1544,7 @@ p {
 		height: 81px;
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--3 {
-		bottom: 5%;
+		bottom: -5%;
 		width: 105px;
 		height: 61px;
 	}
@@ -1561,6 +1560,9 @@ p {
 
 	.brands__logo {
 		height: 150px;
+	}
+	.landing-page-desktop .showcase__container {
+		padding: 40px 0 80px 0;
 	}
 	.showcase .showcase__item {
 		position: relative;
@@ -1586,29 +1588,43 @@ p {
 		height: 45px;
 	}
 
-	/* Statistics responsive for tablet - 2x2 grid */
+	.landing-page-desktop .section-drippy .drippy-is-the-new {
+		height: unset;
+	}
+
 	.landing-page-desktop .statistics__grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		grid-template-rows: 1fr 1fr;
-		gap: 30px;
-		align-items: center;
+		grid-template-rows: auto auto;
+		gap: 15px;
+		align-items: start;
 		justify-items: center;
-	}
-
-	.landing-page-desktop .statistics__item {
-		max-width: 300px;
 		width: 100%;
 	}
 
-	/* Features responsive for tablet - 2x2 grid */
+	.landing-page-desktop .statistics__item {
+		max-width: 280px;
+		width: 100%;
+	}
+
+	.landing-page-desktop .section-drippy {
+		flex-direction: column;
+		align-items: unset;
+		gap: 20px;
+		padding: 0;
+	}
 	.landing-page-desktop .features__grid {
-		display: grid !important;
-		grid-template-columns: 1fr 1fr !important;
-		grid-template-rows: auto auto !important;
-		gap: 30px !important;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto auto;
+		gap: 15px;
 		align-items: start;
-		flex-wrap: unset !important;
+		flex-wrap: unset;
+	}
+	.landing-page-desktop .features__grid .feature__wrapper,
+	.landing-page-desktop .features__grid .feature__item--second,
+	.landing-page-desktop .features__grid .feature__item--third {
+		width: 90%;
 	}
 
 	.landing-page-desktop .feature__wrapper,
@@ -1620,18 +1636,26 @@ p {
 
 	/* How it works responsive for tablet - 2x2 grid */
 	.landing-page-desktop .how-it-works__grid {
-		display: grid !important;
-		grid-template-columns: 1fr 1fr !important;
-		grid-template-rows: auto auto !important;
-		gap: 30px !important;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto auto;
+		gap: 15px;
 		align-items: start;
+	}
+
+	.landing-page-desktop .how-it-works__item {
+		max-width: unset;
+		min-width: 100%;
+	}
+	.landing-page-desktop .how-it-works__item .how-it-works__step-image {
+		min-width: 100%;
 	}
 
 	/* Platform grid responsive for tablet - single column */
 	.landing-page-desktop .platform__grid {
-		display: flex !important;
-		flex-direction: column !important;
-		gap: 25px !important;
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
 		align-items: center;
 	}
 
@@ -1681,6 +1705,7 @@ p {
 
 	/* Statistics responsive for mobile */
 	.landing-page-desktop .statistics__grid {
+		display: flex;
 		flex-direction: column;
 		gap: 30px;
 		align-items: center;
@@ -1724,11 +1749,12 @@ p {
 
 	.landing-page-desktop .section {
 		padding: 0;
+		gap: 25px;
 	}
 	.landing-page-desktop .section-drippy {
 		padding: 0;
 		flex-direction: column;
-		gap: 50px;
+		gap: 25px;
 	}
 
 	.landing-page-desktop .section-title {
@@ -1736,8 +1762,7 @@ p {
 	}
 
 	.landing-page-desktop .hero-header {
-		min-height: 367px;
-		background-position: bottom;
+		min-height: 347px;
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--2 {
 		top: -20%;
@@ -1747,7 +1772,7 @@ p {
 	}
 
 	.brands__logo {
-		height: 120px;
+		height: 100px;
 	}
 
 	.landing-page-desktop .showcase__container {
@@ -2222,12 +2247,9 @@ p {
 }
 
 .landing-page-desktop .how-it-works__step-image {
-	position: absolute;
 	width: 100%;
-	max-width: 300px;
-	height: 540px;
-	top: 0;
-	left: 0;
+	min-width: 100%;
+	height: 100%;
 	border-radius: 20px;
 	border: 1px solid;
 	border-color: var(--uiColorBorderColor);

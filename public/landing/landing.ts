@@ -274,7 +274,7 @@ const mainContent = html`
 							<div class="features__container">
 								<div class="features__content">
 									<div class="features__header">
-										<div id="features-title" class="drippy-is-the-new">
+										<div id="features-title" class="drippy-is-the-new text-lg">
 											<span class="hero__title text-lg">Drippy is the new storefront, </span>
 											<span class="hero__title--highlight text-lg">reimagined. </span>
 										</div>
@@ -358,9 +358,9 @@ const mainContent = html`
 									(step: any) => html`
 										<div class="how-it-works__item">
 											<div class="how-it-works__step">
-												<div class="how-it-works__step-title text-sm">${step.name}</div>
 												<img class="how-it-works__step-image" src=${step.logo} />
 											</div>
+											<div class="how-it-works__step-title text-sm">${step.name}</div>
 											<p class="how-it-works__description text-xs">${step.des}</p>
 										</div>
 									`,
