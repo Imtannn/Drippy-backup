@@ -47,7 +47,8 @@ export class SpacesSelection extends Element {
 			<!-- Main Title and Description -->
 			<div class="header">
 				<h1 class="main-title">Discover & immerse.</h1>
-				<p class="description">Step into the space of each curated collection. Remix, customize, and shop the drip.</p>
+				<p class="description">Step into the space of each curated collection.</p>
+				<p class="description">Remix, customize, and shop the drip.</p>
 			</div>
 
 			<!-- Space Cards -->
@@ -136,7 +137,7 @@ export class SpacesSelection extends Element {
 		/* SpacesPage-specific styles */
 		.spaces-container {
 			padding: var(--uiSpacing);
-			background: white;
+			background: var(--uiColorPrimaryWhite);
 			min-height: 100vh;
 
 			:host-context([data-theme='dark']) & {
@@ -151,21 +152,21 @@ export class SpacesSelection extends Element {
 
 		.main-title {
 			font-size: 28px;
-			font-weight: 600;
-			color: black;
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
 			margin-bottom: 1rem;
 
 			:host-context([data-theme='dark']) & {
-				color: white;
+				color: var(--uiColorPrimaryWhite);
 			}
 		}
 
 		.description {
-			font-size: 14px;
-			font-weight: 500;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightNormal);
 			color: Eerie black;
-			line-height: 1.5;
-			max-width: 600px;
+			line-height: var(--lineHeightLoose);
+			max-width: var(--appWidth);
 			margin: 0 auto;
 
 			:host-context([data-theme='dark']) & {
@@ -182,8 +183,8 @@ export class SpacesSelection extends Element {
 		}
 
 		.space-card {
-			background: white;
-			border-radius: 15px;
+			background: var(--uiColorPrimaryWhite);
+			border-radius: var(--borderRadiusLarge);
 			overflow: hidden;
 			width: 100%;
 			max-width: 354px;
@@ -208,6 +209,7 @@ export class SpacesSelection extends Element {
 			align-items: center;
 			justify-content: center;
 			overflow: hidden;
+			border-radius: var(--borderRadiusLarge);
 		}
 
 		.scene-placeholder img {
@@ -215,24 +217,28 @@ export class SpacesSelection extends Element {
 			height: 100%;
 			object-fit: cover;
 			object-position: center;
+			border-radius: var(--borderRadiusLarge);
 		}
 
 		.garments-count {
 			position: absolute;
-			top: 10px;
-			right: 10px;
-			background: rgba(0, 0, 0, 0.7);
-			color: white;
-			padding: 4px 8px;
-			border-radius: 4px;
+			top: var(--uiGap);
+			right: var(--uiGap);
+			background: rgba(0, 0, 0, 0.1);
+			color: var(--uiColorPrimaryWhite);
+			padding: 4px var(--uiSpacingSmall);
+			border-radius: 15px;
 			font-size: 0.8rem;
+			backdrop-filter: blur(50px);
 		}
 
 		.card-content {
 			padding: 1.5rem;
+			padding-left: 0;
+			padding-right: 0;
 			display: flex;
 			justify-content: space-between;
-			align-items: flex-start;
+			align-items: center;
 		}
 
 		.text-content {
@@ -241,22 +247,22 @@ export class SpacesSelection extends Element {
 		}
 
 		.card-title {
-			font-size: 16px;
-			font-weight: 600;
-			color: black;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
 			margin: 0;
 
 			:host-context([data-theme='dark']) & {
-				color: white;
+				color: var(--uiColorPrimaryWhite);
 			}
 		}
 
 		.card-subtitle {
-			font-size: 12px;
-			font-weight: 400;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightNormal);
 			color: #666;
 			text-decoration: underline;
-			margin: 0.5rem 0 0 0;
+			margin: 0;
 			display: block;
 
 			:host-context([data-theme='dark']) & {
@@ -265,20 +271,20 @@ export class SpacesSelection extends Element {
 		}
 
 		.explore-button {
-			font-size: 12px;
+			font-size: var(--fontSizeTextXs);
 			padding: 0.5rem 1rem;
-			background: #121316;
-			border: 2px solid black;
-			border-radius: 100px;
+			background: var(--uiColorPrimaryBlack);
+			border: 2px solid var(--uiColorPrimaryBlack);
+			border-radius: var(--borderRadiusPill);
 			cursor: pointer;
-			font-weight: 600;
-			color: white;
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryWhite);
 			white-space: nowrap;
 
 			:host-context([data-theme='dark']) & {
 				background: #333;
-				border-color: white;
-				color: white;
+				border-color: var(--uiColorPrimaryWhite);
+				color: var(--uiColorPrimaryWhite);
 			}
 		}
 
@@ -324,8 +330,6 @@ export class SpacesSelection extends Element {
 			}
 
 			.card-content {
-				flex-direction: column;
-				align-items: flex-start;
 				gap: 1rem;
 			}
 

@@ -135,7 +135,7 @@ export class LoginUI extends LumeElement {
 			display: block;
 
 			.login-link-text {
-				color: black;
+				color: var(--uiColorPrimaryBlack);
 				text-decoration: none;
 			}
 
@@ -147,7 +147,7 @@ export class LoginUI extends LumeElement {
 				letter-spacing: normal;
 				text-decoration: none;
 
-				transform: translate(0px, 30px);
+				transform: translate(0px, var(--uiSpacingLarge));
 
 				* {
 					font-family: inherit;
@@ -159,7 +159,7 @@ export class LoginUI extends LumeElement {
 
 				a {
 					/* force black for now, until we handle light/dark theme for login UI. */
-					color: black !important;
+					color: var(--uiColorPrimaryBlack) !important;
 				}
 
 				.login-close-text {
@@ -167,17 +167,17 @@ export class LoginUI extends LumeElement {
 				}
 
 				.login-button {
-					margin-bottom: 6px;
+					margin-bottom: var(--uiSpacingTiny);
 				}
 
 				.login-button-form-submit {
-					margin-top: 12px;
+					margin-top: var(--uiSpacingSmall);
 				}
 
 				[id*='label-and-input'] {
 					display: flex;
-					gap: 10px;
-					margin-bottom: 10px;
+					gap: var(--uiGap);
+					margin-bottom: var(--uiGap);
 				}
 			}
 
@@ -193,7 +193,7 @@ export class LoginUI extends LumeElement {
 		:host-context([data-theme='dark']) {
 			#loginButtons {
 				.login-link-text {
-					color: white;
+					color: var(--uiColorPrimaryWhite);
 				}
 			}
 		}

@@ -245,7 +245,7 @@ export class DrippyScene extends Element {
 			if (store.view === 'preview') {
 				this.style.setProperty('--scene-desktop-transform', 'translateY(0)')
 			} else {
-				this.style.setProperty('--scene-desktop-transform', 'translateY(-120px)')
+				this.style.setProperty('--scene-desktop-transform', 'translateY(-100px)')
 			}
 		})
 
@@ -464,12 +464,13 @@ export class DrippyScene extends Element {
 	css = css/*css*/ `
 		:host {
 			--scene-transform: translateX(0);
-			--scene-desktop-transform: translateY(-120px);
+			--scene-desktop-transform: translateY(-100px);
+			background: var(--appBackground);
 		}
 
 		:host {
-			width: 600px;
-			height: 400px;
+			width: var(--appWidth);
+			height: var(--appHeight);
 			touch-action: none;
 			position: relative;
 		}
@@ -477,12 +478,12 @@ export class DrippyScene extends Element {
 		#lume-scene-container {
 			width: 100%;
 			height: 100%;
-			transition: transform 0.2s ease-in-out;
+			transition: transform var(--transitionFast);
 		}
 
 		lume-scene {
 			transform: var(--scene-transform);
-			transition: transform 0.2s ease-in-out;
+			transition: transform var(--transitionFast);
 		}
 
 		@media (max-width: 767px) {

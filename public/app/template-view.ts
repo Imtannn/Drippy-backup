@@ -70,8 +70,8 @@ export class TemplateView extends Element {
 		<logo-button brand-name="Speed"></logo-button>
 	</app-buttons-group>
 	<app-buttons-group>
-		<person-button disabled></person-button>
-		<cube-button disabled></cube-button>
+		<person-button ></person-button>
+		<cube-button ></cube-button>
 	</app-buttons-group>
 </app-buttons-right>
 
@@ -97,7 +97,7 @@ export class TemplateView extends Element {
 										aspect-ratio="0.79"
 									></item-card>
 									<div class="template-product-name">Product Name</div>
-									<div class="template-product-price">~€ 125.00</div>
+									<div class="template-product-price">€ 125.00</div>
 								</div>
 							`}
 						</>
@@ -113,12 +113,14 @@ export class TemplateView extends Element {
 		.items-grid {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
-			gap: 10px;
+			gap: var(--uiGap);
 		}
 
 		.templates-content-container {
-			padding: 20px;
-			padding-top: 5px;
+			padding: var(--uiSpacing);
+			padding-top: 0;
+			padding-bottom: 5px;
+			background: var(--uiColorPrimaryWhite);
 		}
 
 		.template-item {
@@ -126,18 +128,18 @@ export class TemplateView extends Element {
 			height: 100%;
 			display: flex;
 			flex-direction: column;
-			gap: 5px;
+			gap: var(--uiSpacingTiny);
 		}
 
 		.template-product-name {
-			font-size: 12px;
-			font-weight: 600;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightSemiBold);
 			color: #424347;
 		}
 
 		.template-product-price {
-			font-size: 12px;
-			font-weight: 400;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightNormal);
 			color: #424347;
 		}
 	`
