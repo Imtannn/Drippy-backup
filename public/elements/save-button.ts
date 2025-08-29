@@ -21,6 +21,8 @@ export class SaveButton extends Element {
 			justify-content: center;
 			gap: 5px;
 			padding: 8.5px 20.5px;
+			width: 80px;
+			height: 30px;
 			border-radius: 100px;
 			color: #ffffff;
 			background-color: #121316;

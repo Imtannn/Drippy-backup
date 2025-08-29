@@ -83,7 +83,7 @@ export class OutfitPreview extends Element {
 		<show-on-device device="desktop">
 			<app-buttons-right layout="bottom">
 				<app-buttons-group custom-style="gap: 34px;" group-direction="row">
-					<share-button onclick=${this.#onShareClick}></share-button>
+					<!-- <share-button onclick=${this.#onShareClick}></share-button> -->
 					<buy-button onclick=${this.#onBuyItClick}></buy-button>
 				</app-buttons-group>
 			</app-buttons-right>
@@ -104,7 +104,7 @@ export class OutfitPreview extends Element {
 		<show-on-device device="mobile">
 			<div class="bottom-buttons">
 				<button class="buy-button" onclick=${this.#onBuyItClick}>${this.buyIcon()} Buy it!</button>
-				<button class="share-button" onclick=${this.#onShareClick}>${this.shareIcon()} Share my drip</button>
+				<!-- <button class="share-button" onclick=${this.#onShareClick}>${this.shareIcon()} Share my drip</button> -->
 			</div>
 		</show-on-device>
 	`
@@ -116,12 +116,12 @@ export class OutfitPreview extends Element {
 
 		.bottom-buttons {
 			position: fixed;
-			bottom: 40px;
+			bottom: 20px;
 			left: 50%;
 			transform: translateX(-50%);
 			display: flex;
 			flex-direction: column;
-			gap: 5px;
+			gap: var(--uiSpacingTiny);
 			z-index: 100;
 			width: 90vw;
 			min-width: 254px;
@@ -132,26 +132,26 @@ export class OutfitPreview extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			gap: 10px;
+			gap: var(--uiGap);
 			width: 100%;
-			padding: 16px 32px;
-			border-radius: 10px;
+			padding: var(--uiSpacingMedium) 32px;
+			border-radius: var(--borderRadius);
 			border: none;
-			font-size: 16px;
-			font-weight: 600;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightSemiBold);
 			cursor: pointer;
 			text-align: center;
 		}
 
 		.buy-button {
-			background: #121316;
-			color: #ffffff;
-			box-shadow: 0px 1px 2px 0px #ffffff40 inset;
+			background: var(--uiColorPrimaryBlack);
+			color: var(--uiColorPrimaryWhite);
+			box-shadow: 0px 1px 2px 0px var(--uiColorWhiteShadow) inset;
 		}
 
 		.share-button {
 			background: #12131680;
-			color: #ffffff;
+			color: var(--uiColorPrimaryWhite);
 			backdrop-filter: blur(50px);
 		}
 	`

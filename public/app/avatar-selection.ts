@@ -25,7 +25,7 @@ const avatars = [
 export class AvatarSelection extends Element {
 	static readonly elementName = 'avatar-selection'
 
-	@signal selectedTab = 'male'
+	@signal selectedTab = 'female'
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -68,12 +68,32 @@ export class AvatarSelection extends Element {
 		<bottom-sheet-header>
 			<div class="tabs-container">
 				<tabs-list>
+				<tabs-trigger selected-value="female">Female</tabs-trigger>
 					<tabs-trigger selected-value="male">Male</tabs-trigger>
-					<tabs-trigger selected-value="female">Female</tabs-trigger>
 				</tabs-list>
 			</div>
 			</bottom-sheet-header>
 			<div class="tabs-content-container">
+			<tabs-content selected-value="female">
+			<div class="items-grid">
+			<${For} each=${avatars.filter(avatar => avatar.value === 'female')}>
+				${(avatar: (typeof avatars)[number]) => html`
+					<item-card
+						item-active=${() => store.tempSelectedAvatar === avatar.value}
+						item-src=${avatar.src}
+						item-alt=${avatar.alt}
+						item-value=${avatar.value}
+						oncardselected=${this.#onItemClick}
+						object-fit="cover"
+						object-position="top"
+						aspect-ratio="0.79"
+						image-style="position: absolute; scale: 2; top: 42%;"
+					></item-card>
+				`}
+			</>
+			</div>
+		</tabs-content>
+
 				<tabs-content selected-value="male">
 					<div class="items-grid">
 						<${For} each=${avatars.filter(avatar => avatar.value === 'male')}>
@@ -93,25 +113,7 @@ export class AvatarSelection extends Element {
 						</>
 					</div>
 				</tabs-content>
-				<tabs-content selected-value="female">
-				<div class="items-grid">
-				<${For} each=${avatars.filter(avatar => avatar.value === 'female')}>
-					${(avatar: (typeof avatars)[number]) => html`
-						<item-card
-							item-active=${() => store.tempSelectedAvatar === avatar.value}
-							item-src=${avatar.src}
-							item-alt=${avatar.alt}
-							item-value=${avatar.value}
-							oncardselected=${this.#onItemClick}
-							object-fit="cover"
-							object-position="top"
-							aspect-ratio="0.79"
-							image-style="position: absolute; scale: 2; top: 42%;"
-						></item-card>
-					`}
-				</>
-				</div>
-			</tabs-content>
+
 
 		</tabs-provider>
 		</bottom-sheet>
@@ -127,23 +129,25 @@ export class AvatarSelection extends Element {
 			top: 0;
 			background: var(--appBackground);
 			z-index: 10;
-			border-bottom: 1px solid #e0e1e4;
+			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
 		}
 
 		.items-grid {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
-			gap: 10px;
+			gap: var(--uiGap);
 		}
 
 		.tabs-content-container {
-			padding: 20px;
+			padding: var(--uiSpacing);
 			padding-top: 0;
 		}
 
 		.tabs-container {
-			padding: 20px;
+			padding: var(--uiSpacing);
 			padding-top: 0;
+			padding-bottom: 5px;
+			background: var(--uiColorPrimaryWhite);
 		}
 	`
 }

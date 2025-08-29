@@ -1,4 +1,4 @@
-import {css, element, Element, For, html, signal, type ElementAttributes} from 'lume'
+import {css, element, Element, For, html, Show, signal, type ElementAttributes} from 'lume'
 import {blocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
 
@@ -20,6 +20,7 @@ import type {Fabric} from '../types/fabric.js'
 import './app-buttons.js'
 import './item-card.js'
 import {store} from './store.js'
+import type {TemplateCategory} from '../types/template.js'
 
 type BlocksSelectionAttributes = keyof {}
 
@@ -27,7 +28,7 @@ type BlocksSelectionAttributes = keyof {}
 export class BlocksSelection extends Element {
 	static readonly elementName = 'blocks-selection'
 
-	@signal selectedTab = 'blocks'
+	@signal selectedTab: string | null = null
 	@signal selectedBlockCategory: BlockCategory = 'Bodice'
 	@signal selectedFabricCategory = 'Cotton'
 	@signal blocksCategories: string[] = []
@@ -37,15 +38,25 @@ export class BlocksSelection extends Element {
 
 	private defaultCollection = 'speed'
 
+	private availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
+		Shirt: ['Sleeves', 'Pants'],
+		Jacket: ['Sleeves', 'Pants'],
+		Pants: [],
+		Accessories: [],
+	}
+
 	connectedCallback() {
 		super.connectedCallback()
 
 		// Update available blocks when template changes
 		this.createEffect(() => {
 			const selectedTemplate = store.selectedTemplate
+
 			if (selectedTemplate) {
-				this.availableBlocks = blocks[this.defaultCollection].filter(
-					block => block.templateCategory === selectedTemplate.category,
+				this.availableBlocks = blocks[this.defaultCollection].filter(block =>
+					block.templateCategory === 'Pants' || 'Accessories'
+						? true
+						: block.templateCategory === selectedTemplate.category,
 				)
 			} else {
 				this.availableBlocks = blocks[this.defaultCollection]
@@ -68,7 +79,9 @@ export class BlocksSelection extends Element {
 		this.createEffect(() => {
 			// Sort by Bodice, then Sleeves, then Pants, then Skirt, then rest...
 			const categoryOrder: BlockCategory[] = ['Bodice', 'Sleeves', 'Pants']
-			const availableCategories = [...new Set(this.availableBlocks.map(block => block.category))] as BlockCategory[]
+			const availableCategories = [
+				...new Set(this.availableBlocksMapping[store.selectedTemplate?.category as TemplateCategory] || []),
+			] as BlockCategory[]
 
 			// Filter categories in the desired order, then add any remaining categories
 			const orderedCategories = categoryOrder.filter(category => availableCategories.includes(category))
@@ -80,6 +93,14 @@ export class BlocksSelection extends Element {
 			// Auto-select first category
 			if (newCategories.length > 0) {
 				this.selectedBlockCategory = newCategories[0]
+			}
+		})
+
+		this.createEffect(() => {
+			if (this.blocksCategories.length === 0) {
+				this.selectedTab = 'fabrics'
+			} else if (this.blocksCategories.length > 0) {
+				this.selectedTab = 'blocks'
 			}
 		})
 
@@ -99,7 +120,7 @@ export class BlocksSelection extends Element {
 
 	disconnectedCallback() {
 		super.disconnectedCallback()
-		this.selectedTab = 'blocks'
+		this.selectedTab = null
 	}
 
 	#onBackButtonClick = () => {
@@ -128,11 +149,11 @@ export class BlocksSelection extends Element {
 		<app-buttons-group>
 			<!-- <undo-button disabled></undo-button>
 			<redo-button disabled></redo-button> -->
-			<refresh-button disabled></refresh-button>
+			<refresh-button></refresh-button>
 		</app-buttons-group>
 		<app-buttons-group>
-			<person-button disabled></person-button>
-			<cube-button disabled></cube-button>
+			<person-button></person-button>
+			<cube-button></cube-button>
 		</app-buttons-group>
 	</app-buttons-right>
 
@@ -143,6 +164,7 @@ export class BlocksSelection extends Element {
 	</app-buttons-right>
 
 	<bottom-sheet>
+	<${Show} when=${() => this.selectedTab !== null}>
 	<tabs-provider
 		default-value=${() => this.selectedTab}
 		ontabchange=${(e: CustomEvent) => {
@@ -152,7 +174,9 @@ export class BlocksSelection extends Element {
 	<bottom-sheet-header>
 		<div class="tabs-container">
 			<tabs-list>
+			<${Show} when=${() => this.blocksCategories.length > 0}>
 				<tabs-trigger selected-value="blocks">Blocks</tabs-trigger>
+			</>
 				<tabs-trigger selected-value="fabrics">Fabrics</tabs-trigger>
 				<!-- <tabs-trigger selected-value="accessories">Accessories</tabs-trigger> -->
 			</tabs-list>
@@ -231,6 +255,7 @@ export class BlocksSelection extends Element {
 			</div>
 		</tabs-content> -->
 	</tabs-provider>
+	</>
 </bottom-sheet>
 
 	`
@@ -277,9 +302,10 @@ export class BlocksSelection extends Element {
 		}
 
 		.tabs-container {
-			padding: 20px;
+			padding: var(--uiSpacing);
 			padding-top: 0;
-			padding-bottom: 8.5px;
+			padding-bottom: var(--uiSpacingSmall);
+			background: var(--uiColorPrimaryWhite);
 		}
 
 		.bottom-sheet-header {
@@ -287,12 +313,14 @@ export class BlocksSelection extends Element {
 			top: 0;
 			background: var(--appBackground);
 			z-index: 10;
-			border-bottom: 1px solid #e0e1e4;
+			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
 		}
 
 		.tabs-content-container {
-			padding: 20px;
+			padding: var(--uiSpacing);
 			padding-top: 0;
+			padding-bottom: 5px;
+			background: var(--uiColorPrimaryWhite);
 		}
 
 		.genders {
@@ -380,29 +408,30 @@ export class BlocksSelection extends Element {
 
 		.category-tabs {
 			display: flex;
-			gap: 15px;
-			margin-bottom: 16px;
+			gap: var(--uiGapLarge);
+			margin-bottom: var(--uiSpacingMedium);
 		}
 
 		.category-tab {
 			background: transparent;
 			padding: 0;
 			border: none;
-			border-radius: 12px;
-			font-size: 16px;
-			color: #99999a;
+			border-radius: var(--borderRadiusMedium);
+			font-size: var(--fontSizeTextXs);
+			color: var(--uiColorSecondaryLightGrey);
 			cursor: pointer;
-			transition: all 0.2s ease;
+			transition: var(--transitionSlow);
 		}
 
 		.category-tab.active {
-			color: #121316;
+			color: var(--uiColorPrimaryBlack);
+			font-weight: var(--fontWeightSemiBold);
 		}
 
 		.items-grid {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
-			gap: 10px;
+			gap: var(--uiGap);
 		}
 
 		.item-card {
@@ -411,13 +440,13 @@ export class BlocksSelection extends Element {
 			background:
 				linear-gradient(#f8f8f8, #f8f8f8) padding-box,
 				var(--item-card-border, linear-gradient(#0000, #0000)) border-box;
-			border-radius: 12px;
+			border-radius: var(--borderRadiusMedium);
 			overflow: hidden;
 			cursor: pointer;
-			border: 1px solid transparent; /* needed so the border-box layer shows */
+			border: var(--borderWidth) solid transparent; /* needed so the border-box layer shows */
 			transition:
-				transform 0.2s ease,
-				background 0.2s ease;
+				transform var(--transitionFast),
+				background var(--transitionFast);
 		}
 
 		.item-card:hover {

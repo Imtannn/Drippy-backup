@@ -8,7 +8,14 @@ const styleVars = {
 	appBackgroundDark: '#121316',
 
 	uiSpacing: 20,
+	uiSpacingMedium: 15,
 	uiSpacingSmall: 8,
+	uiSpacingTiny: 5,
+	uiSpacingLarge: 30,
+	uiSpacingXl: 40,
+	uiGap: 10,
+	uiGapSmall: 5,
+	uiGapLarge: 15,
 
 	// UI Colors
 	uiColorPrimaryBlack: '#121316',
@@ -24,12 +31,26 @@ const styleVars = {
 	uiColorWhiteShadow: '#ffffff40',
 	uiColorLightPurple: '#b897fd',
 
+	// Border and Border Radius
+	borderWidth: 1,
+	borderRadius: 10,
+	borderRadiusSmall: 8,
+	borderRadiusMedium: 12,
+	borderRadiusLarge: 15,
+	borderRadiusXl: 20,
+	borderRadiusCircular: '50%',
+	borderRadiusPill: 100,
+
+	// App Dimensions
+	appWidth: 600,
+	appHeight: 400,
+
 	// Font Sizes
 	fontSizeTextXl: 54,
 	fontSizeTextLg: 40,
-	fontSizeTextMd: 24,
-	fontSizeTextSm: 18,
-	fontSizeTextXs: 16,
+	fontSizeTextMd: 16,
+	fontSizeTextSm: 14,
+	fontSizeTextXs: 12,
 	// Responsive sizes
 	fontSizeTextXlTablet: 44,
 	fontSizeTextLgTablet: 28,
@@ -43,10 +64,10 @@ const styleVars = {
 	fontSizeTextXsMobile: 12,
 
 	// Font Weights
-	fontWeightBold: 600,
+	fontWeightBold: 700,
+	fontWeightSemibold: 600,
 	fontWeightMedium: 500,
 	fontWeightNormal: 400,
-
 	// Line Heights
 	lineHeightNormal: 'normal',
 	lineHeightTight: 1.2,
@@ -84,6 +105,7 @@ window.styleVars = styleVars
 		'lineHeightTight',
 		'lineHeightRelaxed',
 		'lineHeightLoose',
+		'borderRadiusCircular',
 	]
 
 	style.textContent = css`

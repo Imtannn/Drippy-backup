@@ -196,7 +196,7 @@ export class ShareView extends Element {
 
 	css = css`
 		.share-container {
-			padding: 20px;
+			padding: var(--uiSpacing);
 			padding-top: 0;
 		}
 
@@ -205,32 +205,32 @@ export class ShareView extends Element {
 		}
 
 		.share-title {
-			font-size: 12px;
-			font-weight: 600;
-			color: #000;
-			margin: 0 0 10px 0;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
+			margin: 0 0 var(--uiGap) 0;
 			text-align: center;
 		}
 
 		.social-buttons {
 			display: flex;
 			justify-content: center;
-			gap: 10px;
-			margin-bottom: 15px;
+			gap: var(--uiGap);
+			margin-bottom: var(--uiGapLarge);
 		}
 
 		.social-btn {
 			width: 35px;
 			height: 35px;
 			border: none;
-			border-radius: 50%;
+			border-radius: var(--borderRadiusCircular);
 			background: #1a1a1a;
-			color: white;
+			color: var(--uiColorPrimaryWhite);
 			cursor: pointer;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			transition: all 0.2s ease;
+			transition: var(--transitionSlow);
 
 			&:hover {
 				transform: scale(1.1);

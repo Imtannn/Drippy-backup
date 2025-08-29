@@ -134,8 +134,8 @@ export class DrippyApp extends Element {
 		}
 
 		:host {
-			width: 600px;
-			height: 400px;
+			width: var(--appWidth);
+			height: var(--appHeight);
 		}
 
 		drippy-scene {

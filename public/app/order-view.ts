@@ -182,21 +182,23 @@ export class OrderView extends Element {
 		${appStyles}
 
 		.order-container {
-			padding: 20px;
+			padding: var(--uiSpacing);
 			padding-top: 0;
+			padding-bottom: 5px;
+			background: var(--uiColorPrimaryWhite);
 		}
 
 		.product-info {
 			display: flex;
 			align-items: center;
-			gap: 15px;
-			margin-bottom: 30px;
+			gap: var(--uiGapLarge);
+			margin-bottom: var(--uiSpacingLarge);
 		}
 
 		.product-image {
 			width: 60px;
 			height: 60px;
-			border-radius: 10px;
+			border-radius: var(--borderRadius);
 			overflow: hidden;
 		}
 
@@ -211,19 +213,19 @@ export class OrderView extends Element {
 		}
 
 		.product-name {
-			font-size: 14px;
-			font-weight: 600;
-			color: #000;
-			margin: 0 0 5px 0;
+			font-size: var(--fontSizeTextSm);
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
+			margin: 0 0 var(--uiSpacingTiny) 0;
 
 			:host-context([data-theme='dark']) & {
-				color: #fff;
+				color: var(--uiColorPrimaryWhite);
 			}
 		}
 
 		.product-price {
-			font-size: 12px;
-			font-weight: 400;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightNormal);
 			color: #666;
 			margin: 0;
 
@@ -237,10 +239,10 @@ export class OrderView extends Element {
 			align-items: center;
 			justify-content: space-between;
 			width: 80px;
-			height: 30px;
+			height: var(--uiSpacingLarge);
 			background: #f5f5f5;
-			border-radius: 1000px;
-			padding: 0 12px;
+			border-radius: var(--borderRadiusPill);
+			padding: 0 var(--uiSpacingSmall);
 
 			:host-context([data-theme='dark']) & {
 				background: #2a2a2a;
@@ -252,14 +254,14 @@ export class OrderView extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 14px;
-			font-weight: 500;
-			transition: all 0.2s;
+			font-size: var(--fontSizeTextSm);
+			font-weight: var(--fontWeightMedium);
+			transition: var(--transitionSlow);
 			user-select: none;
-			color: #000;
+			color: var(--uiColorPrimaryBlack);
 
 			:host-context([data-theme='dark']) & {
-				color: #fff;
+				color: var(--uiColorPrimaryWhite);
 			}
 		}
 
