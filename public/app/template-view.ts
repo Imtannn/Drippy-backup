@@ -133,7 +133,7 @@ export class TemplateView extends Element {
 
 		.template-product-name {
 			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightSemiBold);
+			font-weight: var(--fontWeightSemibold);
 			color: #424347;
 		}
 

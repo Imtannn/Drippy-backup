@@ -53,11 +53,13 @@ export class BlocksSelection extends Element {
 			const selectedTemplate = store.selectedTemplate
 
 			if (selectedTemplate) {
-				this.availableBlocks = blocks[this.defaultCollection].filter(block =>
-					block.templateCategory === 'Pants' || 'Accessories'
-						? true
-						: block.templateCategory === selectedTemplate.category,
-				)
+				this.availableBlocks = blocks[this.defaultCollection].filter(block => {
+					if (block.templateCategory === 'Pants' || block.templateCategory === 'Accessories') {
+						return true
+					} else {
+						return block.templateCategory === selectedTemplate.category
+					}
+				})
 			} else {
 				this.availableBlocks = blocks[this.defaultCollection]
 			}
@@ -425,7 +427,7 @@ export class BlocksSelection extends Element {
 
 		.category-tab.active {
 			color: var(--uiColorPrimaryBlack);
-			font-weight: var(--fontWeightSemiBold);
+			font-weight: var(--fontWeightSemibold);
 		}
 
 		.items-grid {

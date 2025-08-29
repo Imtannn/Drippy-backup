@@ -107,7 +107,7 @@ p {
 	width: 100%;
 	max-width: 814px;
 	margin-top: -1px;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 
 	text-align: center;
@@ -130,13 +130,13 @@ p {
 }
 
 .landing-page-desktop .hero__title {
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 	letter-spacing: 0;
 }
 
 .landing-page-desktop .hero__title--highlight {
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	font-style: italic;
 }
 
@@ -145,7 +145,7 @@ p {
 	margin-bottom: 15px;
 }
 .highlight {
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	font-style: italic;
 }
 
@@ -173,7 +173,7 @@ p {
 .landing-page-desktop .hero__button-text {
 	position: relative;
 	width: fit-content;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryWhite);
 	text-align: center;
 	letter-spacing: 0;
@@ -266,7 +266,7 @@ p {
 	transform: translate(0, -50%);
 	top: 50%;
 	left: 38px;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 	text-align: center;
 	letter-spacing: 0;
@@ -288,7 +288,7 @@ p {
 	position: relative;
 	align-self: stretch;
 	margin-top: -1px;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 	text-align: center;
 	letter-spacing: 0;
@@ -448,7 +448,7 @@ p {
 	height: 25px;
 	top: 6px;
 	left: 10px;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryWhite);
 	text-align: center;
 	letter-spacing: 0;
@@ -470,7 +470,7 @@ p {
 	position: relative;
 	align-self: stretch;
 	margin-top: -1px;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 	letter-spacing: 0;
 	line-height: var(--lineHeightNormal);
@@ -566,7 +566,7 @@ p {
 .landing-page-desktop .how-it-works__step-title {
 	width: 100%;
 	min-width: 100%;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 	text-align: center;
 	letter-spacing: 0;
@@ -708,7 +708,7 @@ p {
 	margin-top: -1px;
 	margin-left: 0;
 	margin-right: 0;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 	text-align: center;
 	letter-spacing: 0;
@@ -797,7 +797,7 @@ p {
 	position: relative;
 	align-self: stretch;
 	margin-top: -1px;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 	letter-spacing: 0;
 	line-height: var(--lineHeightNormal);
@@ -872,7 +872,7 @@ p {
 	position: relative;
 	width: fit-content;
 	margin-top: -1px;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryWhite);
 	letter-spacing: 0;
 	line-height: var(--lineHeightNormal);
@@ -895,7 +895,7 @@ p {
 	width: fit-content;
 	margin-left: -2px;
 	margin-right: -2px;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryWhite);
 	text-align: center;
 	letter-spacing: 0;
@@ -930,7 +930,7 @@ p {
 }
 
 .landing-page-desktop .pricing__plan-feature--highlight {
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryWhite);
 }
 
@@ -955,7 +955,7 @@ p {
 .landing-page-desktop .pricing__plan-button-text {
 	position: relative;
 	width: fit-content;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 	text-align: center;
 	letter-spacing: 0;
@@ -1046,7 +1046,7 @@ p {
 	align-self: stretch;
 	height: 79px;
 	margin-top: -1px;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 	letter-spacing: 0;
 	line-height: var(--lineHeightNormal);
@@ -1066,14 +1066,14 @@ p {
 }
 
 .landing-page-desktop .cta__description--highlight {
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 }
 
 .landing-page-desktop .cta__button-text {
 	position: relative;
 	width: fit-content;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryWhite);
 	text-align: center;
 	letter-spacing: 0;
@@ -1146,7 +1146,7 @@ p {
 .landing-page-desktop .footer__copyright {
 	position: relative;
 	width: fit-content;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 	letter-spacing: 0;
 	line-height: var(--lineHeightNormal);
@@ -1937,7 +1937,7 @@ p {
 	height: auto;
 	min-height: 60px;
 	margin-top: -1px;
-	font-weight: var(--fontWeightSemiBold);
+	font-weight: var(--fontWeightSemibold);
 	color: var(--uiColorPrimaryBlack);
 	text-align: center;
 	letter-spacing: 0;

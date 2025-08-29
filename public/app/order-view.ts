@@ -214,7 +214,7 @@ export class OrderView extends Element {
 
 		.product-name {
 			font-size: var(--fontSizeTextSm);
-			font-weight: var(--fontWeightSemiBold);
+			font-weight: var(--fontWeightSemibold);
 			color: var(--uiColorPrimaryBlack);
 			margin: 0 0 var(--uiSpacingTiny) 0;
 

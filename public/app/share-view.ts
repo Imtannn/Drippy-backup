@@ -206,7 +206,7 @@ export class ShareView extends Element {
 
 		.share-title {
 			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightSemiBold);
+			font-weight: var(--fontWeightSemibold);
 			color: var(--uiColorPrimaryBlack);
 			margin: 0 0 var(--uiGap) 0;
 			text-align: center;
