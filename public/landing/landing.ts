@@ -615,13 +615,8 @@ const mainContent = html`
 		</div>
 	` as Node
 
-// Append navbar and main content to body
 document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
-
-// No scroll animation needed
-
-// Avatar selector is now handled by the custom element
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')

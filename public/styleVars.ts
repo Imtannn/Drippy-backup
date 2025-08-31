@@ -65,7 +65,7 @@ const styleVars = {
 
 	// Font Weights
 	fontWeightBold: 700,
-	fontWeightSemibold: 600,
+	fontWeightSemiBold: 600,
 	fontWeightMedium: 500,
 	fontWeightNormal: 400,
 	// Line Heights
@@ -99,6 +99,7 @@ window.styleVars = styleVars
 
 	// Define which properties should not have 'px' added
 	const unitlessProperties = [
+		'fontWeightSemiBold',
 		'fontWeightBold',
 		'fontWeightMedium',
 		'fontWeightNormal',
