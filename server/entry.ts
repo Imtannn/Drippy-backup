@@ -1,12 +1,13 @@
-import {Meteor} from 'meteor/meteor'
-import '../imports/collections/index.js'
-import './imports/load-env.js'
-import './imports/email-service.js'
-import {WebApp} from 'meteor/webapp'
-import {Accounts} from 'meteor/accounts-base'
 import * as fs from 'fs'
-import * as path from 'path'
 import type {ServerResponse} from 'http'
+import {Accounts} from 'meteor/accounts-base'
+import {Meteor} from 'meteor/meteor'
+import {WebApp} from 'meteor/webapp'
+import * as path from 'path'
+import '../imports/collections/index.js'
+import './imports/email-service.js'
+import './imports/load-env.js'
+import './imports/order-service.js'
 
 // @ts-expect-error missing type (TODO update away from @types/meteor? Ask
 // Meteor's AI "How to set up TypeScript", there's some good docs.)

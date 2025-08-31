@@ -69,11 +69,6 @@ export class EmailService {
 			...data,
 			currentYear: new Date().getFullYear(),
 			appUrl: process.env.APP_URL || 'https://drippy3d.com/app',
-			communityUrl: process.env.COMMUNITY_URL || 'https://drippy3d.com/community',
-			preferencesUrl: process.env.PREFERENCES_URL || 'https://drippy3d.com/preferences',
-			supportEmail: 'support@drippy3d.com',
-			supportPhone: '1-800-DRIPPY',
-			unsubscribeUrl: `${process.env.APP_URL || 'https://drippy3d.com'}/unsubscribe?email=${encodeURIComponent(data.userEmail || '')}`,
 		}
 
 		return template(templateData)
@@ -104,7 +99,6 @@ export class EmailService {
 	 * Send email using SendGrid API with fallback to Meteor Email
 	 */
 	static async send(options: any): Promise<void> {
-		// Try SendGrid first if API key is available
 		if (SENDGRID_API_KEY) {
 			try {
 				const msg: any = {
@@ -115,7 +109,6 @@ export class EmailService {
 				}
 
 				await sgMail.send(msg)
-				console.log('Email sent successfully via SendGrid API')
 				return
 			} catch (error) {
 				console.warn('SendGrid failed, falling back to Meteor Email:', error)
@@ -131,7 +124,6 @@ export class EmailService {
 				subject: options.subject,
 				html: options.html,
 			})
-			console.log('Email sent successfully via Meteor Email (fallback)')
 		} catch (error) {
 			console.error('Meteor Email fallback also failed:', error)
 			throw new Meteor.Error('email-send-failed', 'Failed to send email via all methods')
@@ -143,7 +135,6 @@ export class EmailService {
 	 */
 	clearTemplateCache(): void {
 		EmailService['templateCache'].clear()
-		console.log('Handlebars template cache cleared')
 	}
 }
 

@@ -90,8 +90,6 @@ function processOrderForEmail(orderData: OrderData) {
 // Meteor Methods
 Meteor.methods({
 	async 'order.submit'(orderData: OrderData) {
-		console.log('📦 Processing order submission:', orderData)
-
 		// Validate required fields
 		if (!orderData.customerEmail || !orderData.firstName || !orderData.lastName) {
 			throw new Meteor.Error('validation-error', 'Customer information is required')
@@ -108,7 +106,6 @@ Meteor.methods({
 		try {
 			// Process the order
 			const processedOrder = processOrderForEmail(orderData)
-			console.log('📋 Processed order:', processedOrder)
 
 			// Prepare email data
 			const emailOrderDetails = {
@@ -132,21 +129,18 @@ Meteor.methods({
 					city: orderData.shippingAddress.city,
 					state: '',
 					zipCode: orderData.shippingAddress.postalCode || '',
-					country: 'USA',
+					country: 'France',
 				},
 			}
 
 			// Send order confirmation email
-			console.log('📤 Attempting to send email...')
+
 			await EmailTemplates.sendOrderConfirmation(
 				orderData.customerEmail,
 				orderData.firstName,
 				processedOrder.orderId,
 				emailOrderDetails,
 			)
-			console.log('📧 Email sent successfully!')
-
-			console.log('✅ Order processed successfully:', processedOrder.orderId)
 
 			// Return order confirmation
 			return {

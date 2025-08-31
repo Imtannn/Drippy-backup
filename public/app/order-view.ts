@@ -126,6 +126,55 @@ export class OrderView extends Element {
 		}
 	}
 
+	#onFirstNameInput = (e?: Event) => {
+		if (e?.target) {
+			const target = e.target as HTMLInputElement
+			store.order.shippingAddress.firstName = target.value
+		}
+	}
+
+	#onLastNameInput = (e?: Event) => {
+		if (e?.target) {
+			const target = e.target as HTMLInputElement
+			store.order.shippingAddress.lastName = target.value
+		}
+	}
+
+	#onAddressInput = (e?: Event) => {
+		if (e?.target) {
+			const target = e.target as HTMLInputElement
+			store.order.shippingAddress.address = target.value
+		}
+	}
+
+	#onApartmentInput = (e?: Event) => {
+		if (e?.target) {
+			const target = e.target as HTMLInputElement
+			store.order.shippingAddress.apartment = target.value
+		}
+	}
+
+	#onCityInput = (e?: Event) => {
+		if (e?.target) {
+			const target = e.target as HTMLInputElement
+			store.order.shippingAddress.city = target.value
+		}
+	}
+
+	#onPostalCodeInput = (e?: Event) => {
+		if (e?.target) {
+			const target = e.target as HTMLInputElement
+			store.order.shippingAddress.postalCode = target.value
+		}
+	}
+
+	#onPhoneInput = (e?: Event) => {
+		if (e?.target) {
+			const target = e.target as HTMLInputElement
+			store.order.shippingAddress.phone = target.value
+		}
+	}
+
 	#onShareClick = () => {
 		// copy current url to clipboard
 		console.log('Share my drip clicked')
@@ -261,7 +310,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.firstName}
-								oninput="store.order.shippingAddress.firstName = this.value"
+								oninput=${this.#onFirstNameInput}
 							/>
 							<label class="floating-label">First name</label>
 						</div>
@@ -271,7 +320,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.lastName}
-								oninput="store.order.shippingAddress.lastName = this.value"
+								oninput=${this.#onLastNameInput}
 							/>
 							<label class="floating-label">Last name</label>
 						</div>
@@ -281,7 +330,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.address}
-								oninput="store.order.shippingAddress.address = this.value"
+								oninput=${this.#onAddressInput}
 							/>
 							<label class="floating-label">Address</label>
 						</div>
@@ -291,7 +340,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.apartment}
-								oninput="store.order.shippingAddress.apartment = this.value"
+								oninput=${this.#onApartmentInput}
 							/>
 							<label class="floating-label">Apartment, suite, etc. (optional)</label>
 						</div>
@@ -301,7 +350,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.city}
-								oninput="store.order.shippingAddress.city = this.value"
+								oninput=${this.#onCityInput}
 							/>
 							<label class="floating-label">City</label>
 						</div>
@@ -311,7 +360,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.postalCode}
-								oninput="store.order.shippingAddress.postalCode = this.value"
+								oninput=${this.#onPostalCodeInput}
 							/>
 							<label class="floating-label">Postal code (optional)</label>
 						</div>
@@ -321,7 +370,7 @@ export class OrderView extends Element {
 								class="form-input" 
 								placeholder=" " 
 								value=${() => store.order.shippingAddress.phone}
-								oninput="store.order.shippingAddress.phone = this.value"
+								oninput=${this.#onPhoneInput}
 							/>
 							<label class="floating-label">Phone</label>
 						</div>
