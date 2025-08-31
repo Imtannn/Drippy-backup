@@ -62,6 +62,7 @@ export class OrderView extends Element {
 
 		const orderData: OrderData = {
 			// Customer information
+			email: store.order.email || '',
 			customerEmail:
 				store.order.customerEmail || 'thidieuanhle@gmail.com' || shippingAddress.firstName + '@example.com', // Placeholder
 			firstName: shippingAddress.firstName,
@@ -96,6 +97,10 @@ export class OrderView extends Element {
 			// Validate required fields
 			if (!orderData.firstName || !orderData.lastName) {
 				throw new Error('Please fill in your name')
+			}
+
+			if (!orderData.email) {
+				throw new Error('Please fill in your email address')
 			}
 
 			if (!orderData.shippingAddress.address || !orderData.shippingAddress.city) {
@@ -137,6 +142,13 @@ export class OrderView extends Element {
 		if (e?.target) {
 			const target = e.target as HTMLInputElement
 			store.order.shippingAddress.lastName = target.value
+		}
+	}
+
+	#onEmailInput = (e?: Event) => {
+		if (e?.target) {
+			const target = e.target as HTMLInputElement
+			store.order.email = target.value
 		}
 	}
 
@@ -323,6 +335,16 @@ export class OrderView extends Element {
 								oninput=${this.#onLastNameInput}
 							/>
 							<label class="floating-label">Last name</label>
+						</div>
+						<div class="field-group">
+							<input 
+								type="email" 
+								class="form-input" 
+								placeholder=" " 
+								value=${() => store.order.email || ''}
+								oninput=${this.#onEmailInput}
+							/>
+							<label class="floating-label">Email</label>
 						</div>
 						<div class="field-group">
 							<input 

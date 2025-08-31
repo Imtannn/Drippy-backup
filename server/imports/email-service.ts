@@ -12,6 +12,9 @@ declare const Assets: {
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY
 const SENDGRID_FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || 'noreply@drippy3d.com'
 
+// Admin email for order notifications
+const ADMIN_EMAIL = 'thidieuanhle@gmail.com'
+
 if (SENDGRID_API_KEY) {
 	sgMail.setApiKey(SENDGRID_API_KEY)
 }
@@ -178,6 +181,55 @@ export const EmailTemplates = {
 			to: userEmail,
 			subject: `Order Confirmation - ${orderId} ✅`,
 			templateName: 'order-confirmation',
+			templateData: {
+				userName,
+				userEmail,
+				orderId,
+				...orderDetails,
+			},
+		}
+
+		await EmailService.sendWithHandlebarsTemplate(options)
+	},
+
+	/**
+	 * Send admin notification email for new orders
+	 */
+	async sendAdminOrderNotification(
+		userEmail: string,
+		userName: string,
+		orderId: string,
+		orderDetails: {
+			orderDate: string
+			items: Array<{
+				name: string
+				description: string
+				quantity: number
+				price: string
+			}>
+			totalAmount: string
+			isCustomSize?: boolean
+			customMeasurement?: {
+				bust: number
+				waist: number
+				hips: number
+				shoulder: number
+				shoulderToKnee: number
+			}
+			shippingAddress: {
+				name: string
+				street: string
+				city: string
+				state: string
+				zipCode: string
+				country: string
+			}
+		},
+	): Promise<void> {
+		const options: HandlebarsTemplateOptions = {
+			to: ADMIN_EMAIL,
+			subject: `New Order Received - ${orderId} 📦`,
+			templateName: 'admin-order-notification',
 			templateData: {
 				userName,
 				userEmail,

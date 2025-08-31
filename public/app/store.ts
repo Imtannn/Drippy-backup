@@ -42,6 +42,7 @@ export type OrderState = {
 	productName: string
 	selectedSize: string
 	quantity: number
+	email: string
 	customerEmail: string
 	customerFirstName: string
 	customerLastName: string
@@ -158,6 +159,7 @@ export const store = createMutable({
 			productName: 'Custom 3D Drippy Design',
 			selectedSize: '34 (XS)',
 			quantity: 1,
+			email: '',
 			customerEmail: '',
 			customerFirstName: '',
 			customerLastName: '',

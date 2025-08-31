@@ -3,6 +3,7 @@ import {EmailTemplates} from './email-service.js'
 
 export interface OrderData {
 	// Customer information
+	email: string
 	customerEmail: string
 	firstName: string
 	lastName: string
@@ -133,10 +134,17 @@ Meteor.methods({
 				},
 			}
 
-			// Send order confirmation email
-
+			// Send customer confirmation email
 			await EmailTemplates.sendOrderConfirmation(
-				orderData.customerEmail,
+				orderData.email, // Use email from form instead of customerEmail
+				orderData.firstName,
+				processedOrder.orderId,
+				emailOrderDetails,
+			)
+
+			// Send admin notification email
+			await EmailTemplates.sendAdminOrderNotification(
+				orderData.email,
 				orderData.firstName,
 				processedOrder.orderId,
 				emailOrderDetails,
