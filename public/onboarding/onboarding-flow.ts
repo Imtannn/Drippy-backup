@@ -26,15 +26,30 @@ export class OnboardingFlow extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
-			// Add any initialization logic here if needed
+			const searchParams = new URLSearchParams(window.location.search)
+			const stepFromUrl = searchParams.get('step') as OnboardingStep
+
+			if (stepFromUrl && ['step1', 'step2', 'step3', 'step4'].includes(stepFromUrl)) {
+				this.currentStep = stepFromUrl
+			} else {
+				this.#updateUrl('step1')
+			}
 		})
+	}
+
+	#updateUrl = (step: OnboardingStep) => {
+		const url = new URL(window.location.href)
+		url.searchParams.set('step', step)
+		window.history.replaceState({}, '', url.toString())
 	}
 
 	#nextStep = () => {
 		const steps: OnboardingStep[] = ['step1', 'step2', 'step3', 'step4']
 		const currentIndex = steps.indexOf(this.currentStep)
 		if (currentIndex !== -1 && currentIndex < steps.length - 1) {
-			this.currentStep = steps[currentIndex + 1]
+			const nextStep = steps[currentIndex + 1]
+			this.currentStep = nextStep
+			this.#updateUrl(nextStep)
 		}
 	}
 
@@ -42,7 +57,9 @@ export class OnboardingFlow extends Element {
 		const steps: OnboardingStep[] = ['step1', 'step2', 'step3', 'step4']
 		const currentIndex = steps.indexOf(this.currentStep)
 		if (currentIndex !== -1 && currentIndex > 0) {
-			this.currentStep = steps[currentIndex - 1]
+			const prevStep = steps[currentIndex - 1]
+			this.currentStep = prevStep
+			this.#updateUrl(prevStep)
 		}
 	}
 
