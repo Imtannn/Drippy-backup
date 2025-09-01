@@ -426,7 +426,7 @@ export class DrippyScene extends Element {
 		`}></show-when>
 
 		<div id="lume-scene-container" style=${() => `background: url(${this.sceneUrl}) center bottom / cover no-repeat`}>
-		<lume-scene webgl>
+		<lume-scene webgl perspective="2200">
 			<lume-ambient-light intensity="1" color="0xffffff"></lume-ambient-light>
 			<lume-directional-light
 			position="5 5 5"
@@ -434,9 +434,9 @@ export class DrippyScene extends Element {
 			<lume-directional-light position="-5 -5 -5"></lume-directional-light>
 
 			<lume-camera-rig
-				min-distance="1.5"
-				max-distance="8"
-				distance="4"
+				min-distance="5"
+				max-distance="10"
+				distance="9"
 				dolly-speed="0.01"
 				position="0 -1 0"
 			></lume-camera-rig>
