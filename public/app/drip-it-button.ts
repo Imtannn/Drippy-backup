@@ -30,6 +30,7 @@ export class DripItButton extends Element {
 			outline: none;
 			font-weight: 600;
 			font-size: 14px;
+			width: 100px;
 		}
 	`
 }

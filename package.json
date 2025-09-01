@@ -16,8 +16,7 @@
 		"publish": "...TODO...",
 		"typecheck": "lume typecheck",
 		"typecheck:watch": "lume typecheckWatch",
-		"fetch-blocks": "chmod +x scripts/run-fetch-blocks.sh && ./scripts/run-fetch-blocks.sh",
-		"fetch-templates": "chmod +x scripts/run-fetch-templates.sh && ./scripts/run-fetch-templates.sh"
+		"fetch-combined-assets": "chmod +x scripts/run-combined-assets.sh && ./scripts/run-combined-assets.sh"
 	},
 	"overrides": {
 		"@lume/element": "$@lume/element"

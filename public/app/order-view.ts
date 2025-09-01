@@ -1,13 +1,14 @@
 import {css, Element, element, eventAttribute, html, type ElementAttributes} from 'lume'
 import {Meteor} from 'meteor/meteor'
 import type {OrderData} from '../../server/imports/order-service.js'
-import {appStyles} from '../elements/app-style.js'
+
 import '../elements/back-button.js'
 import '../elements/home-button.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
 import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
+import {appStyles} from '../styles/app-styles.js'
 import './app-buttons.js'
 import './buy-button.js'
 import './share-button.js'
@@ -195,31 +196,30 @@ export class OrderView extends Element {
 	}
 
 	template = () => html`
-	<app-buttons-left>
-		<app-buttons-group group-direction="row">
-			<back-button onclick=${this.#onBackButtonClick}></back-button>
-			<home-button onclick=${this.#onHomeButtonClick}></home-button>
-		</app-buttons-group>
-	</app-buttons-left>
+		<app-buttons-left>
+			<app-buttons-group group-direction="row">
+				<back-button onclick=${this.#onBackButtonClick}></back-button>
+				<home-button onclick=${this.#onHomeButtonClick}></home-button>
+			</app-buttons-group>
+		</app-buttons-left>
 
-	<show-on-device device="desktop">
-		<app-buttons-right layout="bottom">
-			<app-buttons-group custom-style="gap: 34px;" group-direction="row">
-				<share-button onclick=${this.#onShareClick}></share-button>
-				<buy-button onclick=${this.#onBackButtonClick}></buy-button>
+		<show-on-device device="desktop">
+			<app-buttons-right layout="bottom">
+				<app-buttons-group custom-style="gap: 34px;" group-direction="row">
+					<share-button onclick=${this.#onShareClick}></share-button>
+					<buy-button onclick=${this.#onBackButtonClick}></buy-button>
+				</app-buttons-group>
+			</app-buttons-right>
+		</show-on-device>
+
+		<app-buttons-right>
+			<app-buttons-group>
+				<!-- <theme-switch-button></theme-switch-button> -->
+				<logo-button brand-name="Speed"></logo-button>
 			</app-buttons-group>
 		</app-buttons-right>
 
-	</show-on-device>
-
-	<app-buttons-right>
-		<app-buttons-group>
-			<!-- <theme-switch-button></theme-switch-button> -->
-			<logo-button brand-name="Speed"></logo-button>
-		</app-buttons-group>
-	</app-buttons-right>
-
-	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
+		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
 			<div class="order-container">
 				<div class="product-info">
 					<div class="product-image">
@@ -230,15 +230,25 @@ export class OrderView extends Element {
 						<p class="product-price">Custom price</p>
 					</div>
 					<div class="quantity-controls">
-						<button class="quantity-btn" onclick=${() => {
-							const newQty = store.order.quantity + 1
-							if (newQty <= 99) store.setQuantity = newQty
-						}}>+</button>
+						<button
+							class="quantity-btn"
+							onclick=${() => {
+								const newQty = store.order.quantity + 1
+								if (newQty <= 99) store.setQuantity = newQty
+							}}
+						>
+							+
+						</button>
 						<span class="quantity">${() => store.order.quantity}</span>
-						<button class="quantity-btn" onclick=${() => {
-							const newQty = store.order.quantity - 1
-							if (newQty >= 1) store.setQuantity = newQty
-						}}>−</button>
+						<button
+							class="quantity-btn"
+							onclick=${() => {
+								const newQty = store.order.quantity - 1
+								if (newQty >= 1) store.setQuantity = newQty
+							}}
+						>
+							−
+						</button>
 					</div>
 				</div>
 
@@ -246,64 +256,64 @@ export class OrderView extends Element {
 				<div class="size-section">
 					<h3 class="section-title">Size</h3>
 					<div class="size-options">
-						<button 
-							class="size-btn" 
+						<button
+							class="size-btn"
 							classList=${() => ({selected: store.order.selectedSize === '34 (XS)' && !store.customMeasurement})}
 							onclick=${() => this.#onSizeButtonClick('34 (XS)')}
 						>
 							34 (XS)
 						</button>
-						<button 
-							class="size-btn" 
+						<button
+							class="size-btn"
 							classList=${() => ({selected: store.order.selectedSize === '36 (S)' && !store.customMeasurement})}
 							onclick=${() => this.#onSizeButtonClick('36 (S)')}
 						>
 							36 (S)
 						</button>
-						<button 
-							class="size-btn" 
+						<button
+							class="size-btn"
 							classList=${() => ({selected: store.order.selectedSize === '38 (M)' && !store.customMeasurement})}
 							onclick=${() => this.#onSizeButtonClick('38 (M)')}
 						>
 							38 (M)
 						</button>
-						<button 
-							class="size-btn" 
+						<button
+							class="size-btn"
 							classList=${() => ({selected: store.order.selectedSize === '40/42 (L)' && !store.customMeasurement})}
 							onclick=${() => this.#onSizeButtonClick('40/42 (L)')}
 						>
 							40/42 (L)
 						</button>
-						<button 
-							class="size-btn" 
+						<button
+							class="size-btn"
 							classList=${() => ({selected: store.order.selectedSize === '44 (XL)' && !store.customMeasurement})}
 							onclick=${() => this.#onSizeButtonClick('44 (XL)')}
 						>
 							44 (XL)
 						</button>
-						<button 
-							class="size-btn" 
+						<button
+							class="size-btn"
 							classList=${() => ({selected: store.order.selectedSize === '48 (2XL)' && !store.customMeasurement})}
 							onclick=${() => this.#onSizeButtonClick('48 (2XL)')}
 						>
 							48 (2XL)
 						</button>
-						<button 
-							class="size-btn" 
+						<button
+							class="size-btn"
 							classList=${() => ({selected: store.order.selectedSize === '50 (3XL)' && !store.customMeasurement})}
 							onclick=${() => this.#onSizeButtonClick('50 (3XL)')}
 						>
 							50 (3XL)
 						</button>
-						<button 
-							class="size-btn" 
+						<button
+							class="size-btn"
 							classList=${() => ({selected: store.order.selectedSize === '52 (4XL)' && !store.customMeasurement})}
 							onclick=${() => this.#onSizeButtonClick('52 (4XL)')}
 						>
 							52 (4XL)
 						</button>
-						<button 
-							class="size-btn custom" 
+						<button
+							class="size-btn custom"
 							classList=${() => ({selected: store.order.selectedSize === 'Custom' || !!store.customMeasurement})}
 							onclick=${() => this.#onSizeButtonClick('Custom')}
 						>
@@ -317,80 +327,80 @@ export class OrderView extends Element {
 					<h3 class="section-title">Shipping address</h3>
 					<div class="form-fields">
 						<div class="field-group">
-							<input 
-								type="text" 
-								class="form-input" 
-								placeholder=" " 
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
 								value=${() => store.order.shippingAddress.firstName}
 								oninput=${this.#onFirstNameInput}
 							/>
 							<label class="floating-label">First name</label>
 						</div>
 						<div class="field-group">
-							<input 
-								type="text" 
-								class="form-input" 
-								placeholder=" " 
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
 								value=${() => store.order.shippingAddress.lastName}
 								oninput=${this.#onLastNameInput}
 							/>
 							<label class="floating-label">Last name</label>
 						</div>
 						<div class="field-group">
-							<input 
-								type="email" 
-								class="form-input" 
-								placeholder=" " 
+							<input
+								type="email"
+								class="form-input"
+								placeholder=" "
 								value=${() => store.order.email || ''}
 								oninput=${this.#onEmailInput}
 							/>
 							<label class="floating-label">Email</label>
 						</div>
 						<div class="field-group">
-							<input 
-								type="text" 
-								class="form-input" 
-								placeholder=" " 
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
 								value=${() => store.order.shippingAddress.address}
 								oninput=${this.#onAddressInput}
 							/>
 							<label class="floating-label">Address</label>
 						</div>
 						<div class="field-group">
-							<input 
-								type="text" 
-								class="form-input" 
-								placeholder=" " 
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
 								value=${() => store.order.shippingAddress.apartment}
 								oninput=${this.#onApartmentInput}
 							/>
 							<label class="floating-label">Apartment, suite, etc. (optional)</label>
 						</div>
 						<div class="field-group">
-							<input 
-								type="text" 
-								class="form-input" 
-								placeholder=" " 
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
 								value=${() => store.order.shippingAddress.city}
 								oninput=${this.#onCityInput}
 							/>
 							<label class="floating-label">City</label>
 						</div>
 						<div class="field-group">
-							<input 
-								type="text" 
-								class="form-input" 
-								placeholder=" " 
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
 								value=${() => store.order.shippingAddress.postalCode}
 								oninput=${this.#onPostalCodeInput}
 							/>
 							<label class="floating-label">Postal code (optional)</label>
 						</div>
 						<div class="field-group">
-							<input 
-								type="text" 
-								class="form-input" 
-								placeholder=" " 
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
 								value=${() => store.order.shippingAddress.phone}
 								oninput=${this.#onPhoneInput}
 							/>
@@ -400,8 +410,8 @@ export class OrderView extends Element {
 				</div>
 
 				<!-- Order Button -->
-				<button 
-					class="order-button" 
+				<button
+					class="order-button"
 					onclick=${this.#onBuyItClick}
 					disabled=${() => store.order.status === 'submitting'}
 				>
@@ -419,7 +429,7 @@ export class OrderView extends Element {
 										/></svg
 									>Send my order to LOGO`}
 				</button>
-				
+
 				<!-- Error Display -->
 				${() => (store.order.error ? html`<div class="error-message">${store.order.error}</div>` : '')}
 				</div>
@@ -431,21 +441,23 @@ export class OrderView extends Element {
 		${appStyles}
 
 		.order-container {
-			padding: 20px;
+			padding: var(--uiSpacing);
 			padding-top: 0;
+			padding-bottom: 5px;
+			background: var(--uiColorPrimaryWhite);
 		}
 
 		.product-info {
 			display: flex;
 			align-items: center;
-			gap: 15px;
-			margin-bottom: 30px;
+			gap: var(--uiGapLarge);
+			margin-bottom: var(--uiSpacingLarge);
 		}
 
 		.product-image {
 			width: 60px;
 			height: 60px;
-			border-radius: 10px;
+			border-radius: var(--borderRadius);
 			overflow: hidden;
 		}
 
@@ -460,19 +472,19 @@ export class OrderView extends Element {
 		}
 
 		.product-name {
-			font-size: 14px;
-			font-weight: 600;
-			color: #000;
-			margin: 0 0 5px 0;
+			font-size: var(--fontSizeTextSm);
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
+			margin: 0 0 var(--uiSpacingTiny) 0;
 
 			:host-context([data-theme='dark']) & {
-				color: #fff;
+				color: var(--uiColorPrimaryWhite);
 			}
 		}
 
 		.product-price {
-			font-size: 12px;
-			font-weight: 400;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightNormal);
 			color: #666;
 			margin: 0;
 
@@ -486,10 +498,10 @@ export class OrderView extends Element {
 			align-items: center;
 			justify-content: space-between;
 			width: 80px;
-			height: 30px;
+			height: var(--uiSpacingLarge);
 			background: #f5f5f5;
-			border-radius: 1000px;
-			padding: 0 12px;
+			border-radius: var(--borderRadiusPill);
+			padding: 0 var(--uiSpacingSmall);
 
 			:host-context([data-theme='dark']) & {
 				background: #2a2a2a;
@@ -501,14 +513,14 @@ export class OrderView extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 14px;
-			font-weight: 500;
-			transition: all 0.2s;
+			font-size: var(--fontSizeTextSm);
+			font-weight: var(--fontWeightMedium);
+			transition: var(--transitionSlow);
 			user-select: none;
-			color: #000;
+			color: var(--uiColorPrimaryBlack);
 
 			:host-context([data-theme='dark']) & {
-				color: #fff;
+				color: var(--uiColorPrimaryWhite);
 			}
 		}
 
@@ -584,12 +596,41 @@ export class OrderView extends Element {
 		}
 
 		.size-btn.custom {
+			position: relative;
 			background: linear-gradient(136deg, #e56be8 1.67%, #495cff 100.68%);
 			background-clip: text;
 			-webkit-background-clip: text;
 			-webkit-text-fill-color: transparent;
-			border: 1px solid;
+			border: none;
+		}
+
+		.size-btn.custom::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(136deg, #e56be8 1.67%, #495cff 100.68%);
 			border-radius: 20px;
+			z-index: -1;
+		}
+
+		.size-btn.custom::after {
+			content: '';
+			position: absolute;
+			top: 1px;
+			left: 1px;
+			right: 1px;
+			bottom: 1px;
+			background: white;
+			border-radius: 19px;
+			z-index: -1;
+		}
+
+		.size-btn.custom:active {
+			opacity: 0.8;
+			transition: opacity 0.1s ease;
 		}
 
 		.size-btn.custom:hover {
@@ -634,11 +675,6 @@ export class OrderView extends Element {
 			background: #000;
 			color: white;
 			border-color: #000;
-		}
-
-		.size-btn.custom {
-			color: #8b5cf6;
-			border-color: #8b5cf6;
 		}
 
 		.shipping-section {

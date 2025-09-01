@@ -9,6 +9,7 @@ import {
 	onCleanup,
 	type ElementAttributes,
 } from 'lume'
+import '../styleVars.js'
 
 // ============================================================================
 // TABS PROVIDER - Main container that manages state
@@ -367,11 +368,12 @@ export class TabsTrigger extends Element {
 			position: relative;
 			width: auto;
 			padding: 8px 16px;
+			height: 25px;
 			background: none;
 			border: none;
 			border-radius: 16px;
-			font-size: 14px;
-			font-weight: 500;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightSemiBold);
 			color: #424347;
 			cursor: pointer;
 			transition:

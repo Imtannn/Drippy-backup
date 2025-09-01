@@ -1,6 +1,7 @@
 import {css, Element, element, html, Index, type ElementAttributes} from 'lume'
 import {store} from './store.js'
 import {templates} from '../consts/templates.js'
+import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import './app-buttons.js'
 import './item-card.js'
 import '../elements/bottom-sheet.js'
@@ -23,7 +24,25 @@ export class TemplateView extends Element {
 	}
 
 	#onItemClick = (e: CustomEvent) => {
-		store.setSelectedBlocks = {...e.detail.itemValue, category: 'Template'}
+		const template = e.detail.itemValue
+
+		// Set the selected template
+		store.setSelectedTemplate = template
+
+		// Get blocks for this template using relationships
+		const templateBlocks = getBlocksForTemplate(template, 'speed')
+
+		// Get fabric for this template
+		const templateFabric = getFabricForTemplate(template, 'speed')
+
+		console.log('template', template)
+		console.log('templateBlocks', templateBlocks)
+		console.log('templateFabric', templateFabric)
+
+		// Set the blocks and fabric
+		store.replaceSelectedBlocks = templateBlocks
+
+		store.setSelectedFabrics = templateFabric || null
 	}
 
 	#onDripItClick = () => {
@@ -51,8 +70,8 @@ export class TemplateView extends Element {
 		<logo-button brand-name="Speed"></logo-button>
 	</app-buttons-group>
 	<app-buttons-group>
-		<person-button disabled></person-button>
-		<cube-button disabled></cube-button>
+		<person-button ></person-button>
+		<cube-button ></cube-button>
 	</app-buttons-group>
 </app-buttons-right>
 
@@ -69,7 +88,7 @@ export class TemplateView extends Element {
 							${(template: () => (typeof templates.speed)[number]) => html`
 								<div class="template-item">
 									<item-card
-										item-active=${() => store.selectedBlocks.get('Template')?._id === template()._id}
+										item-active=${() => store.selectedTemplate?._id === template()._id}
 										item-src=${template().thumb}
 										item-alt=${template().name}
 										item-value=${template()}
@@ -78,7 +97,7 @@ export class TemplateView extends Element {
 										aspect-ratio="0.79"
 									></item-card>
 									<div class="template-product-name">Product Name</div>
-									<div class="template-product-price">~€ 125.00</div>
+									<div class="template-product-price">€ 125.00</div>
 								</div>
 							`}
 						</>
@@ -94,12 +113,14 @@ export class TemplateView extends Element {
 		.items-grid {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
-			gap: 10px;
+			gap: var(--uiGap);
 		}
 
 		.templates-content-container {
-			padding: 20px;
-			padding-top: 5px;
+			padding: var(--uiSpacing);
+			padding-top: 0;
+			padding-bottom: 5px;
+			background: var(--uiColorPrimaryWhite);
 		}
 
 		.template-item {
@@ -107,18 +128,18 @@ export class TemplateView extends Element {
 			height: 100%;
 			display: flex;
 			flex-direction: column;
-			gap: 5px;
+			gap: var(--uiSpacingTiny);
 		}
 
 		.template-product-name {
-			font-size: 12px;
-			font-weight: 600;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightSemiBold);
 			color: #424347;
 		}
 
 		.template-product-price {
-			font-size: 12px;
-			font-weight: 400;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightNormal);
 			color: #424347;
 		}
 	`

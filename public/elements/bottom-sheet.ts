@@ -30,7 +30,7 @@ export class BottomSheet extends Element {
 		startY: 0,
 		startHeight: 0,
 	}
- 
+
 	private sheetRef: HTMLElement | null = null
 	private isVisible = false
 
@@ -306,7 +306,7 @@ export class BottomSheet extends Element {
 		}
 
 		:host {
-			--bottom-sheet-handle-height: 2rem;
+			--bottom-sheet-handle-height: 15px;
 			position: fixed;
 			bottom: 0;
 			left: 5px;
@@ -326,9 +326,9 @@ export class BottomSheet extends Element {
 			left: 0;
 			right: 0;
 			z-index: 50;
-			background: var(--appBackground);
-			border-top: 1px solid #e5e7eb;
-			box-shadow: 0 -25px 50px -12px rgba(0, 0, 0, 0.25);
+			background: var(--uiColorPrimaryWhite);
+			// border-top: 1px solid #e5e7eb;
+			/* box-shadow: 0 -25px 50px -12px rgba(0, 0, 0, 0.25); */
 			border-top-left-radius: 1rem;
 			border-top-right-radius: 1rem;
 			transform: translateY(100%);
@@ -359,6 +359,7 @@ export class BottomSheet extends Element {
 			justify-content: center;
 			cursor: grab;
 			touch-action: none;
+			margin-bottom: 5px;
 		}
 
 		.drag-handle:active {
@@ -366,8 +367,8 @@ export class BottomSheet extends Element {
 		}
 
 		.drag-indicator {
-			width: 2.5rem;
-			height: 0.375rem;
+			width: 45px;
+			height: 5px;
 			background: #d1d5db;
 			border-radius: 9999px;
 		}

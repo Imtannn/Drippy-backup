@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<title>Drippy - Landing Page</title>
+
+		<base href="/landing/index.html" />
+
+		<script src="../write-html.js" href="/"></script>
+		<link rel="stylesheet" href="./landing.css" />
+	</head>
+
+	<body>
+		<style>
+			/* Hide the #root we're not using from the imported HTML. */
+			#root:first-of-type {
+				display: none;
+			}
+
+			body {
+				overflow: auto;
+				pointer-events: auto;
+			}
+
+			#landingUI {
+				padding: 20px;
+				overflow-x: auto;
+			}
+		</style>
+
+		<script type="module" src="./landing.js"></script>
+	</body>
+</html>
