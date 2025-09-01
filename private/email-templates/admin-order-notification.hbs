@@ -2,7 +2,7 @@
 	<head>
 		<meta charset='utf-8' />
 		<meta name='viewport' content='width=device-width, initial-scale=1.0' />
-		<title>Order Confirmation</title>
+		<title>New Order Notification</title>
 		<style>
 			body {
 				font-family: Arial, sans-serif;
@@ -53,27 +53,28 @@
 	</head>
 	<body>
 		<div class='header'>
-			<h1'>✅ Order Confirmed!</h1>
+			<h1>📦 New Order Received!</h1>
 			<p>Order #{{orderId}}</p>
 		</div>
 
 		<div class='content'>
-			<p>Hi {{userName}},</p>
-
-			<p>Thank you for your order!</p>
+			<p>We have an order from {{userEmail}}</p>
 
 			<div class='order-info'>
 				<h3>📦 Order Details</h3>
 				<p><strong>Order Number:</strong> {{orderId}}</p>
 				<p><strong>Order Date:</strong> {{orderDate}}</p>
+				<p><strong>Customer:</strong> {{userName}} ({{userEmail}})</p>
 
 				<h4>Items Ordered:</h4>
-				{{#each garmentsNumbered}}
-					<div style='margin-left: 16px;'>
-						<div><strong>{{blockName}}</strong> <small>(ID: {{_id}})</small></div>
-						<div style='margin-left: 16px;'>Size: {{../selectedSize}}{{#if ../isCustomSize}} (Custom){{/if}}</div>
-						<div style='margin-left: 16px;'>Quantity: {{../quantity}}</div>
-						<div style='margin-left: 16px;'>Price: 125$</div>
+				{{#each items}}
+					<div class='item'>
+						<div>
+							<strong>{{name}}</strong><br />
+							<small>{{description}}</small><br />
+							<small>Qty: {{quantity}}</small>
+						</div>
+						<div>{{price}}</div>
 					</div>
 				{{/each}}
 
@@ -102,54 +103,47 @@
 								<th style='padding: 8px; text-align: left; border: 1px solid #ddd;'>Measurement</th>
 								<th style='padding: 8px; text-align: right; border: 1px solid #ddd;'>Value (cm)</th>
 							</tr>
-							{{#if customMeasurement.bust}}
-								<tr>
-									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Bust</strong></td>
-									<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.bust}}</td>
-								</tr>
-							{{/if}}
-							{{#if customMeasurement.waist}}
-								<tr>
-									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Waist</strong></td>
-									<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.waist}}</td>
-								</tr>
-							{{/if}}
-							{{#if customMeasurement.hips}}
-								<tr>
-									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Hips</strong></td>
-									<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.hips}}</td>
-								</tr>
-							{{/if}}
-							{{#if customMeasurement.shoulder}}
-								<tr>
-									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Shoulder</strong></td>
-									<td
-										style='padding: 8px; text-align: right; border: 1px solid #ddd;'
-									>{{customMeasurement.shoulder}}</td>
-								</tr>
-							{{/if}}
-							{{#if customMeasurement.shoulderToKnee}}
-								<tr>
-									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Shoulder to Knee</strong></td>
-									<td
-										style='padding: 8px; text-align: right; border: 1px solid #ddd;'
-									>{{customMeasurement.shoulderToKnee}}</td>
-								</tr>
-							{{/if}}
+							<tr>
+								<td style='padding: 8px; border: 1px solid #ddd;'>Bust</td>
+								<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.bust}}</td>
+							</tr>
+							<tr style='background-color: #f8f9fa;'>
+								<td style='padding: 8px; border: 1px solid #ddd;'>Waist</td>
+								<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.waist}}</td>
+							</tr>
+							<tr>
+								<td style='padding: 8px; border: 1px solid #ddd;'>Hips</td>
+								<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.hips}}</td>
+							</tr>
+							<tr style='background-color: #f8f9fa;'>
+								<td style='padding: 8px; border: 1px solid #ddd;'>Shoulder</td>
+								<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.shoulder}}</td>
+							</tr>
+							<tr>
+								<td style='padding: 8px; border: 1px solid #ddd;'>Shoulder to Knee</td>
+								<td
+									style='padding: 8px; text-align: right; border: 1px solid #ddd;'
+								>{{customMeasurement.shoulderToKnee}}</td>
+							</tr>
 						</table>
 					{{else}}
-						<p><em>Custom measurements will be provided separately.</em></p>
+						<p>Standard size selected: <strong>{{selectedSize}}</strong></p>
 					{{/if}}
+				</div>
+			{{else}}
+				<div class='order-info'>
+					<h3>📏 Size Information</h3>
+					<p>Standard size selected: <strong>{{selectedSize}}</strong></p>
 				</div>
 			{{/if}}
 
-			<p>Thank you for choosing Drippy!</p>
-			<p>The Drippy Team</p>
+			<p>Please process this order promptly.</p>
+			<p>Admin Notification System</p>
 		</div>
 
 		<div class='footer'>
 			<p>© {{currentYear}} Drippy. All rights reserved.</p>
-			<p>Order confirmation for {{userEmail}}</p>
+			<p>Admin notification for {{userEmail}}</p>
 		</div>
 	</body>
 </html>
