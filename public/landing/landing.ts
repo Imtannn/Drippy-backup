@@ -143,9 +143,9 @@ const navbar = html`
 		</div>
 		<ul class="header__menu">
 			<li class="header__menu-item"><a href="#features" class="header__menu-link">Features</a></li>
-			<li class="header__menu-item"><a href="#pricing" class="header__menu-link">How it works</a></li>
-			<li class="header__menu-item"><a href="#about" class="header__menu-link">Use Cases</a></li>
-			<li class="header__menu-item"><a href="#contact" class="header__menu-link">Pricing</a></li>
+			<li class="header__menu-item"><a href="#how-it-works" class="header__menu-link">How it works</a></li>
+			<li class="header__menu-item"><a href="#platform" class="header__menu-link">Use Cases</a></li>
+			<li class="header__menu-item"><a href="#pricing" class="header__menu-link">Pricing</a></li>
 		</ul>
 		<div class="header__actions">
 			<button class="btn btn--primary" aria-label="Book a demo">Book a demo</button>
@@ -270,7 +270,7 @@ const mainContent = html`
 						</section>
 
 						<!-- Drippy Features Section -->
-						<section class="section-drippy" aria-labelledby="features-title">
+						<section id="features" class="section-drippy" aria-labelledby="features-title">
 							<div class="features__container">
 								<div class="features__content">
 									<div class="features__header">
@@ -345,10 +345,10 @@ const mainContent = html`
 								</div>
 							</div>
 							<img class="features__image" src=${stepImage1} />
-						</div>
+						</section>
 
 						<!-- How it Works Section -->
-						<section class="section">
+						<section id="how-it-works" class="section">
 							<div class="section-header">
 								<div class="section-title text-lg">Built like a game, feel like a game.</div>
 								<div class="section-subtitle text-md">Here&#39;s how it work from your shoppers' POV.</div>
@@ -373,7 +373,7 @@ const mainContent = html`
 						</section>
 
 						<!-- Platform Integration Section -->
-						<section class="section">
+						<section id="platform" class="section">
 							<div class="section-header">
 								<div class="section-title text-lg" id="platform-title">A plug &amp; play 3D studio.</div>
 								<div class="section-subtitle text-md">Browser-based, mobile-first. Zero download, Zero friction.</div>
@@ -436,7 +436,7 @@ const mainContent = html`
 						</section>
 
 						<!-- Pricing Section -->
-						<section class="section">
+						<section id="pricing" class="section">
 							<div class="pricing__content">
 								<div class="pricing__header">
 									<div class="section-header">
@@ -617,6 +617,32 @@ const mainContent = html`
 
 document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
+
+// Add smooth scroll behavior for header menu links
+function setupSmoothScroll() {
+	const headerMenu = document.querySelector('.header__menu')
+	if (headerMenu) {
+		headerMenu.addEventListener('click', e => {
+			const target = e.target as HTMLElement
+			if (target.classList.contains('header__menu-link')) {
+				e.preventDefault()
+				const targetId = target.getAttribute('href')?.substring(1)
+				if (targetId) {
+					const targetElement = document.getElementById(targetId)
+					if (targetElement) {
+						targetElement.scrollIntoView({behavior: 'smooth', block: 'start'})
+						// Add offset for fixed header
+						setTimeout(() => window.scrollBy({top: -120, behavior: 'smooth'}), 100)
+					}
+				}
+			}
+		})
+	}
+}
+
+// Setup smooth scroll
+setupSmoothScroll()
+setTimeout(setupSmoothScroll, 500) // Retry if needed
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
