@@ -520,7 +520,7 @@ export class BlocksSelection extends Element {
 
 		.category-tab.active {
 			color: var(--uiColorPrimaryBlack);
-			font-weight: var(--fontWeightSemibold);
+			font-weight: var(--fontWeightSemiBold);
 		}
 
 		.items-grid {

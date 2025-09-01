@@ -59,7 +59,9 @@ export class OrderView extends Element {
 		}
 
 		// Map selected blocks (garments) to minimal payload for email
-		const garments = Array.from(store.selectedBlocks.values()).map(g => ({_id: g._id, blockName: g.blockName}))
+		const garments = Array.from(store.selectedBlocks.values())
+			.flatMap(g => Array.from(g.values()))
+			.map(g => ({_id: g._id, blockName: g.blockName}))
 
 		const orderData: OrderData = {
 			// Customer information
@@ -218,7 +220,7 @@ export class OrderView extends Element {
 			</app-buttons-group>
 		</app-buttons-right>
 
-		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
+		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-snap="0.88">
 			<div class="order-container">
 				<div class="product-info">
 					<div class="product-image">
@@ -472,7 +474,7 @@ export class OrderView extends Element {
 
 		.product-name {
 			font-size: var(--fontSizeTextSm);
-			font-weight: var(--fontWeightSemibold);
+			font-weight: var(--fontWeightSemiBold);
 			color: var(--uiColorPrimaryBlack);
 			margin: 0 0 var(--uiSpacingTiny) 0;
 
