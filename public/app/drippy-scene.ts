@@ -66,8 +66,8 @@ export class DrippyScene extends Element {
 
 		const loadingId = blockId || `${fabric._id}-${Date.now()}`
 		this.loadingMaterials = [...untrack(() => this.loadingMaterials), loadingId]
-		const repete: [number, number] = [60 / 19, 60 / 19]
-		const offset: [number, number] = [0, 0]
+		const repete: [number, number] = [60 / 3, 60 / 3]
+		const offset: [number, number] = [1, 1]
 		const rotate = 0
 		const meshes = this.#extractMeshesFromObj(root)
 		const arr = Array.from(meshes[0]?.geometry?.attributes?.uv?.array)
@@ -103,6 +103,14 @@ export class DrippyScene extends Element {
 				material.normalMap = normalTex
 				// material.displacementMap = displacementTex
 				material.roughnessMap = roughnessTex
+				material.roughnessIntensity = 1
+				material.transparent = true
+				material.emissive = new THREE.Color(0x000000)
+				material.emissiveIntensity = 0
+				material.aoMapIntensity = 1
+				material.side = THREE.DoubleSide
+				material.normalScale = new THREE.Vector2(2, 2)
+				material.blending = THREE.NormalBlending
 				// Ensure GPU-side texture state updates immediately
 				if (material.map) material.map.needsUpdate = true
 				if (material.normalMap) material.normalMap.needsUpdate = true
@@ -427,14 +435,14 @@ export class DrippyScene extends Element {
 
 		<div id="lume-scene-container" style=${() => `background: url(${this.sceneUrl}) center bottom / cover no-repeat`}>
 		<lume-scene webgl perspective="2200">
-			<lume-ambient-light intensity="1" color="0xffffff"></lume-ambient-light>
+			<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
 			<lume-directional-light
-			position="5 5 5"
+			position="500 500 500"
 		></lume-directional-light>
-			<lume-directional-light position="-5 -5 -5"></lume-directional-light>
+			<lume-directional-light position="-500 -500 -500"></lume-directional-light>
 
 			<lume-camera-rig
-				min-distance="5"
+				min-distance="2"
 				max-distance="10"
 				distance="9"
 				dolly-speed="0.01"
