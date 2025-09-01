@@ -376,7 +376,7 @@ export class TabsTrigger extends Element {
 			border: none;
 			border-radius: 16px;
 			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightSemibold);
+			font-weight: var(--fontWeightSemiBold);
 			color: #424347;
 			cursor: pointer;
 			transition:

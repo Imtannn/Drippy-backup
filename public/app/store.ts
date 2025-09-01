@@ -4,6 +4,31 @@ import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, Avatar, Space, CustomMeasurement} from '../types/types.js'
 
+export type OrderStatus = 'idle' | 'submitting' | 'success' | 'error'
+
+export type ShippingAddress = {
+	firstName: string
+	lastName: string
+	address: string
+	apartment: string
+	city: string
+	postalCode: string
+	phone: string
+}
+
+export type OrderState = {
+	status: OrderStatus
+	error: string | null
+	productName: string
+	selectedSize: string
+	quantity: number
+	email: string
+	customerEmail: string
+	customerFirstName: string
+	customerLastName: string
+	shippingAddress: ShippingAddress
+}
+
 export const store = createMutable({
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
@@ -15,6 +40,27 @@ export const store = createMutable({
 	selectedBlocks: new Map<TemplateCategory, Map<BlockCategory, Block>>(),
 	selectedFabrics: new Map<TemplateCategory, Map<BlockCategory, Fabric>>(),
 	customMeasurement: null as CustomMeasurement | null,
+
+	// Order-related state
+	order: {
+		status: 'idle' as OrderStatus,
+		error: null as string | null,
+		productName: 'Custom 3D Drippy Design',
+		selectedSize: '34 (XS)',
+		quantity: 1,
+		customerEmail: '',
+		customerFirstName: '',
+		customerLastName: '',
+		shippingAddress: {
+			firstName: '',
+			lastName: '',
+			address: '',
+			apartment: '',
+			city: '',
+			postalCode: '',
+			phone: '',
+		},
+	} as OrderState,
 	set setSelectedBlocks(
 		blockData:
 			| {block: Block; templateCategory: TemplateCategory}
@@ -145,6 +191,29 @@ export const store = createMutable({
 	set setCustomMeasurement(measurement: CustomMeasurement) {
 		this.customMeasurement = measurement
 	},
+
+	// Order-related setters
+	set setOrderStatus(status: OrderStatus) {
+		this.order.status = status
+	},
+	set setOrderError(error: string | null) {
+		this.order.error = error
+	},
+	set setSelectedSize(size: string) {
+		this.order.selectedSize = size
+	},
+	set setQuantity(quantity: number) {
+		this.order.quantity = quantity
+	},
+	set setCustomerInfo(info: {email?: string; firstName?: string; lastName?: string}) {
+		if (info.email !== undefined) this.order.customerEmail = info.email
+		if (info.firstName !== undefined) this.order.customerFirstName = info.firstName
+		if (info.lastName !== undefined) this.order.customerLastName = info.lastName
+	},
+	set setShippingAddress(address: Partial<ShippingAddress>) {
+		this.order.shippingAddress = {...this.order.shippingAddress, ...address}
+	},
+
 	resetState() {
 		this.view = 'avatar' as AppRoute
 		this.selectedAvatar = null as Avatar
@@ -154,5 +223,25 @@ export const store = createMutable({
 		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
+		this.order = {
+			status: 'idle' as OrderStatus,
+			error: null as string | null,
+			productName: 'Custom 3D Drippy Design',
+			selectedSize: '34 (XS)',
+			quantity: 1,
+			email: '',
+			customerEmail: '',
+			customerFirstName: '',
+			customerLastName: '',
+			shippingAddress: {
+				firstName: '',
+				lastName: '',
+				address: '',
+				apartment: '',
+				city: '',
+				postalCode: '',
+				phone: '',
+			},
+		} as OrderState
 	},
 })
