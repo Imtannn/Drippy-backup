@@ -130,7 +130,7 @@ export class OutfitPreview extends Element {
 			border-radius: var(--borderRadius);
 			border: none;
 			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightSemibold);
+			font-weight: var(--fontWeightSemiBold);
 			cursor: pointer;
 			text-align: center;
 		}

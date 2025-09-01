@@ -144,7 +144,7 @@ export class SpacesSelection extends Element {
 
 		.main-title {
 			font-size: 28px;
-			font-weight: var(--fontWeightSemibold);
+			font-weight: var(--fontWeightSemiBold);
 			color: var(--uiColorPrimaryBlack);
 			margin-bottom: 1rem;
 
@@ -240,7 +240,7 @@ export class SpacesSelection extends Element {
 
 		.card-title {
 			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightSemibold);
+			font-weight: var(--fontWeightSemiBold);
 			color: var(--uiColorPrimaryBlack);
 			margin: 0;
 
@@ -269,7 +269,7 @@ export class SpacesSelection extends Element {
 			border: 2px solid var(--uiColorPrimaryBlack);
 			border-radius: var(--borderRadiusPill);
 			cursor: pointer;
-			font-weight: var(--fontWeightSemibold);
+			font-weight: var(--fontWeightSemiBold);
 			color: var(--uiColorPrimaryWhite);
 			white-space: nowrap;
 
