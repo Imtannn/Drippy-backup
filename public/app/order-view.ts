@@ -214,7 +214,6 @@ export class OrderView extends Element {
 
 		<app-buttons-right>
 			<app-buttons-group>
-				<!-- <theme-switch-button></theme-switch-button> -->
 				<logo-button brand-name="Speed"></logo-button>
 			</app-buttons-group>
 		</app-buttons-right>
@@ -473,7 +472,7 @@ export class OrderView extends Element {
 
 		.product-name {
 			font-size: var(--fontSizeTextSm);
-			font-weight: var(--fontWeightSemiBold);
+			font-weight: var(--fontWeightSemibold);
 			color: var(--uiColorPrimaryBlack);
 			margin: 0 0 var(--uiSpacingTiny) 0;
 
