@@ -36,7 +36,6 @@ export class OutfitPreview extends Element {
 	}
 
 	#onBuyItClick = () => {
-		console.log('Buy It clicked')
 		store.navigateTo = 'order'
 	}
 

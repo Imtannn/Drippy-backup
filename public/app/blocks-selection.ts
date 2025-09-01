@@ -28,9 +28,11 @@ type BlocksSelectionAttributes = keyof {}
 export class BlocksSelection extends Element {
 	static readonly elementName = 'blocks-selection'
 
-	@signal selectedTab: string | null = null
+	@signal selectedTemplateCategory: TemplateCategory | null = null
+	@signal selectedSubTab: string | null = null // block category or "fabric"
 	@signal selectedBlockCategory: BlockCategory = 'Bodice'
 	@signal selectedFabricCategory = 'Cotton'
+	@signal availableTemplateCategories: TemplateCategory[] = []
 	@signal blocksCategories: string[] = []
 	@signal fabricCategories: string[] = []
 	@signal availableBlocks: Block[] = []
@@ -40,8 +42,8 @@ export class BlocksSelection extends Element {
 	private defaultCollection = 'moidien'
 
 	private availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
-		Shirt: ['Sleeves', 'Pants'],
-		Jacket: ['Sleeves', 'Pants'],
+		Shirt: ['Sleeves'],
+		Jacket: ['Sleeves'],
 		Pants: [],
 		Accessories: [],
 		Dress: [],
@@ -55,11 +57,21 @@ export class BlocksSelection extends Element {
 			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
 		})
 
-		// Update available blocks when template changes
+		// Update available template categories from selectedTemplates
 		this.createEffect(() => {
-			if (!this.spaceCollection) return
-			const selectedTemplate = store.selectedTemplate
+			this.availableTemplateCategories = Array.from(store.selectedTemplates.keys())
 
+			// Auto-select first template category if none selected
+			if (this.availableTemplateCategories.length > 0 && !this.selectedTemplateCategory) {
+				this.selectedTemplateCategory = this.availableTemplateCategories[0]
+			}
+		})
+
+		// Update available blocks when template category changes
+		this.createEffect(() => {
+			if (!this.spaceCollection || !this.selectedTemplateCategory) return
+
+			const selectedTemplate = store.selectedTemplates.get(this.selectedTemplateCategory)
 			if (selectedTemplate) {
 				this.availableBlocks = blocks[this.spaceCollection].filter(block => {
 					if (block.templateCategory === 'Pants' || block.templateCategory === 'Accessories') {
@@ -69,29 +81,35 @@ export class BlocksSelection extends Element {
 					}
 				})
 			} else {
-				this.availableBlocks = blocks[this.spaceCollection]
+				this.availableBlocks = []
 			}
 		})
 
-		// Update available fabrics when template changes
+		// Update available fabrics when template category changes
 		this.createEffect(() => {
-			if (!this.spaceCollection) return
-			const selectedTemplate = store.selectedTemplate
+			if (!this.spaceCollection || !this.selectedTemplateCategory) return
+
+			const selectedTemplate = store.selectedTemplates.get(this.selectedTemplateCategory)
 			if (selectedTemplate) {
 				this.availableFabrics = fabrics[this.spaceCollection].filter(
 					fabric => fabric.templateCategory === selectedTemplate.category,
 				)
 			} else {
-				this.availableFabrics = fabrics[this.spaceCollection]
+				this.availableFabrics = []
 			}
 		})
 
-		// Update block categories when available blocks change
+		// Update block categories when template category changes
 		this.createEffect(() => {
+			if (!this.selectedTemplateCategory) {
+				this.blocksCategories = []
+				return
+			}
+
 			// Sort by Bodice, then Sleeves, then Pants, then Skirt, then rest...
 			const categoryOrder: BlockCategory[] = ['Bodice', 'Sleeves', 'Pants']
 			const availableCategories = [
-				...new Set(this.availableBlocksMapping[store.selectedTemplate?.category as TemplateCategory] || []),
+				...new Set(this.availableBlocksMapping[this.selectedTemplateCategory] || []),
 			] as BlockCategory[]
 
 			// Filter categories in the desired order, then add any remaining categories
@@ -101,17 +119,21 @@ export class BlocksSelection extends Element {
 
 			this.blocksCategories = newCategories
 
-			// Auto-select first category
+			// Auto-select first sub-tab (first block category or fabric if no blocks)
 			if (newCategories.length > 0) {
 				this.selectedBlockCategory = newCategories[0]
+				this.selectedSubTab = newCategories[0]
+			} else if (this.availableFabrics.length > 0) {
+				this.selectedSubTab = 'fabric'
 			}
 		})
 
+		// Update sub-tab when block categories or fabrics change
 		this.createEffect(() => {
-			if (this.blocksCategories.length === 0) {
-				this.selectedTab = 'fabrics'
-			} else if (this.blocksCategories.length > 0) {
-				this.selectedTab = 'blocks'
+			if (this.blocksCategories.length > 0 && !this.selectedSubTab) {
+				this.selectedSubTab = this.blocksCategories[0]
+			} else if (this.blocksCategories.length === 0 && this.availableFabrics.length > 0 && !this.selectedSubTab) {
+				this.selectedSubTab = 'fabric'
 			}
 		})
 
@@ -131,7 +153,8 @@ export class BlocksSelection extends Element {
 
 	disconnectedCallback() {
 		super.disconnectedCallback()
-		this.selectedTab = null
+		this.selectedTemplateCategory = null
+		this.selectedSubTab = null
 	}
 
 	#onBackButtonClick = () => {
@@ -143,6 +166,26 @@ export class BlocksSelection extends Element {
 		searchParams.set('isPreview', 'true')
 		store.setIsPreview = true
 		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+	}
+
+	#onFabricClick = (e: CustomEvent) => {
+		const fabric = e.detail.itemValue
+		if (!this.selectedTemplateCategory) return
+
+		// Get ALL actually selected block categories for this template (not just the editable ones)
+		const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory)
+		if (!templateBlocks) return
+
+		const actualBlockCategories = Array.from(templateBlocks.keys())
+
+		// Apply fabric to ALL selected blocks of this template category
+		const fabricData = actualBlockCategories.map(blockCategory => ({
+			fabric,
+			blockCategory,
+			templateCategory: this.selectedTemplateCategory!,
+		}))
+
+		store.setSelectedFabrics = fabricData
 	}
 
 	template = () => html`
@@ -175,96 +218,137 @@ export class BlocksSelection extends Element {
 	</app-buttons-right>
 
 	<bottom-sheet>
-	<${Show} when=${() => this.selectedTab !== null}>
+	<${Show} when=${() => this.availableTemplateCategories.length > 0}>
 	<tabs-provider
-		default-value=${() => this.selectedTab}
+		default-value=${() => this.selectedTemplateCategory}
 		ontabchange=${(e: CustomEvent) => {
-			this.selectedTab = e.detail.value
+			this.selectedTemplateCategory = e.detail.value
 		}}
 	>
 	<bottom-sheet-header>
 		<div class="tabs-container">
 			<tabs-list>
-			<${Show} when=${() => this.blocksCategories.length > 0}>
-				<tabs-trigger selected-value="blocks">Blocks</tabs-trigger>
+			<${For} each=${() => this.availableTemplateCategories}>
+				${(category: TemplateCategory) => html` <tabs-trigger selected-value=${category}>${category}</tabs-trigger> `}
 			</>
-				<tabs-trigger selected-value="fabrics">Fabrics</tabs-trigger>
-				<!-- <tabs-trigger selected-value="accessories">Accessories</tabs-trigger> -->
 			</tabs-list>
 		</div>
 		</bottom-sheet-header>
 		<div class="tabs-content-container">
-			<tabs-content selected-value="blocks">
-				<div class="category-tabs">
-					<${For} each=${() => this.blocksCategories}>
-					${(category: BlockCategory) => html`
-						<button
-							class="category-tab"
-							classList=${() => ({active: this.selectedBlockCategory === category})}
-							onclick=${() => (this.selectedBlockCategory = category)}
-						>
-							${category}
-						</button>
-					`}
-					</>
-				</div>
-				<div class="items-grid">
-					<${For} each=${() => this.availableBlocks.filter(block => block.category === this.selectedBlockCategory)}>
-					${(block: Block) => html`
-						<item-card
-							item-active=${() => store.selectedBlocks.get(block.category)?._id === block._id}
-							item-src=${() => block.thumb}
-							item-alt=${() => block.blockName}
-							item-value=${() => block}
-							oncardselected=${(e: CustomEvent) => {
-								store.setSelectedBlocks = e.detail.itemValue
-							}}
-						></item-card>
-					`}
-					</>
-		</div>
-
-			</tabs-content>
-			<tabs-content selected-value="fabrics">
-				<div class="category-tabs">
-					<${For} each=${() => this.fabricCategories}>
-					${(category: string) => html`
-						<button
-							class="category-tab"
-							classList=${() => ({active: this.selectedFabricCategory === category})}
-							onclick=${() => (this.selectedFabricCategory = category)}
-						>
-							${category}
-						</button>
-					`}
-					</>
-				</div>
-			<div class="items-grid">
-				<${For} each=${() => this.availableFabrics.filter(fabric => fabric.category === this.selectedFabricCategory)}>
-				${(fabric: Fabric) => html`
-					<item-card
-						item-active=${() => store.selectedFabric?._id === fabric._id}
-						item-src=${() => fabric.thumb}
-						item-alt=${() => fabric.materialName}
-						item-value=${() => fabric}
-						oncardselected=${(e: CustomEvent) => {
-							store.setSelectedFabrics = e.detail.itemValue
+			<${For} each=${() => this.availableTemplateCategories}>
+			${(templateCategory: TemplateCategory) => html`
+				<tabs-content selected-value=${templateCategory}>
+					<!-- Sub-tabs within each template category -->
+					<${Show} when=${() => this.selectedTemplateCategory === templateCategory}>
+					<tabs-provider
+						default-value=${() => this.selectedSubTab}
+						ontabchange=${(e: CustomEvent) => {
+							this.selectedSubTab = e.detail.value
 						}}
-					></item-card>
-				`}
-				</>
-			</div>
-		</tabs-content>
-		<!-- <tabs-content selected-value="accessories">
-			<div class="items-grid">
-				<div class="item-card">
-					<div class="item-preview accessory"></div>
-				</div>
-				<div class="item-card">
-					<div class="item-preview accessory"></div>
-				</div>
-			</div>
-		</tabs-content> -->
+					>
+					<div class="category-tabs">
+						<!-- Block category tabs -->
+						<${For} each=${() => this.blocksCategories}>
+						${(category: BlockCategory) => html`
+							<button
+								class="category-tab"
+								classList=${() => ({active: this.selectedSubTab === category})}
+								onclick=${() => {
+									this.selectedSubTab = category
+									this.selectedBlockCategory = category
+								}}
+							>
+								${category}
+							</button>
+						`}
+						</>
+						<!-- Fabric tab at the end if fabrics are available -->
+						<${Show} when=${() => this.availableFabrics.length > 0}>
+							<button
+								class="category-tab"
+								classList=${() => ({active: this.selectedSubTab === 'fabric'})}
+								onclick=${() => (this.selectedSubTab = 'fabric')}
+							>
+								Fabric
+							</button>
+						</>
+					</div>
+
+					<!-- Block content -->
+					<${For} each=${() => this.blocksCategories}>
+					${(blockCategory: BlockCategory) => html`
+						<${Show} when=${() => this.selectedSubTab === blockCategory}>
+							<div class="items-grid">
+								<${For} each=${() => this.availableBlocks.filter(block => block.category === blockCategory)}>
+								${(block: Block) => html`
+									<item-card
+										item-active=${() => {
+											const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory!)
+											return templateBlocks?.get(block.category)?._id === block._id
+										}}
+										item-src=${() => block.thumb}
+										item-alt=${() => block.blockName}
+										item-value=${() => block}
+										oncardselected=${(e: CustomEvent) => {
+											if (!this.selectedTemplateCategory) return
+											store.setSelectedBlocks = {
+												block: e.detail.itemValue,
+												templateCategory: this.selectedTemplateCategory,
+											}
+										}}
+									></item-card>
+								`}
+								</>
+							</div>
+						</>
+					`}
+					</>
+
+					<!-- Fabric content -->
+					<${Show} when=${() => this.selectedSubTab === 'fabric'}>
+						<div class="category-tabs">
+							<${For} each=${() => this.fabricCategories}>
+							${(category: string) => html`
+								<button
+									class="category-tab"
+									classList=${() => ({active: this.selectedFabricCategory === category})}
+									onclick=${() => (this.selectedFabricCategory = category)}
+								>
+									${category}
+								</button>
+							`}
+							</>
+						</div>
+						<div class="items-grid">
+							<${For} each=${() => this.availableFabrics.filter(fabric => fabric.category === this.selectedFabricCategory)}>
+							${(fabric: Fabric) => html`
+								<item-card
+									item-active=${() => {
+										// Check if this fabric is applied to any block of current template
+										const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory!)
+										const templateFabrics = store.selectedFabrics.get(this.selectedTemplateCategory!)
+										if (!templateBlocks || !templateFabrics) return false
+
+										const actualBlockCategories = Array.from(templateBlocks.keys())
+										return actualBlockCategories.some(
+											blockCategory => templateFabrics.get(blockCategory)?._id === fabric._id,
+										)
+									}}
+									item-src=${() => fabric.thumb}
+									item-alt=${() => fabric.materialName}
+									item-value=${() => fabric}
+									oncardselected=${this.#onFabricClick}
+								></item-card>
+							`}
+							</>
+						</div>
+					</>
+					</tabs-provider>
+					</>
+				</tabs-content>
+			`}
+			</>
+		</div>
 	</tabs-provider>
 	</>
 </bottom-sheet>

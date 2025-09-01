@@ -73,7 +73,7 @@ export class OrderView extends Element {
 	</app-buttons-right>
 
 
-	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-snap="0.9">
+	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-snap="0.88">
 		<div class="order-container">
 			<div class="product-info">
 				<div class="product-image">

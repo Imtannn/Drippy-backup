@@ -3,7 +3,8 @@ import type {Accessor} from 'solid-js'
 import {store} from './store.js'
 import {templates} from '../consts/templates.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
+import type {Block} from '../types/block.js'
+import {getBlocksForTemplate} from '../consts/relationships.js'
 import './app-buttons.js'
 import './item-card.js'
 import '../elements/bottom-sheet.js'
@@ -73,23 +74,23 @@ export class TemplateView extends Element {
 	#onItemClick = (e: CustomEvent) => {
 		const template = e.detail.itemValue
 
-		// Set the selected template
-		store.setSelectedTemplate = template
+		// Set the selected template using the new Map structure
+		store.setSelectedTemplates = template
 
-		// Get blocks for this template using relationships
-		const templateBlocks = getBlocksForTemplate(template, 'speed')
+		// Get blocks for ALL selected templates, organized by template category
+		const templateBlockData: {blocks: Block[]; templateCategory: TemplateCategory}[] = []
+		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
+			const templateBlocks = getBlocksForTemplate(selectedTemplate, 'speed')
+			templateBlockData.push({
+				blocks: templateBlocks,
+				templateCategory: templateCategory,
+			})
+		}
 
-		// Get fabric for this template
-		const templateFabric = getFabricForTemplate(template, 'speed')
+		// Replace blocks with aggregated blocks from all selected templates
+		store.replaceSelectedBlocks = templateBlockData
 
-		console.log('template', template)
-		console.log('templateBlocks', templateBlocks)
-		console.log('templateFabric', templateFabric)
-
-		// Set the blocks and fabric
-		store.replaceSelectedBlocks = templateBlocks
-
-		store.setSelectedFabrics = templateFabric || null
+		// Note: Fabric selection will be handled separately per block, not per template
 	}
 
 	#onDripItClick = () => {
@@ -154,7 +155,7 @@ export class TemplateView extends Element {
 						${(template: Template) => html`
 							<div class="template-item">
 								<item-card
-									item-active=${() => store.selectedTemplate?._id === template._id}
+									item-active=${() => store.selectedTemplates.get(template.category)?._id === template._id}
 									item-src=${template.thumb}
 									item-alt=${template.name}
 									item-value=${template}
