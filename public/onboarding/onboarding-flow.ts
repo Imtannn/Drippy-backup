@@ -25,6 +25,17 @@ export class OnboardingFlow extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
+		// Listen for back-button clicks
+		this.addEventListener('click', e => {
+			// Check if this is a back-button click by looking at the event path
+			const path = e.composedPath()
+			const hasBackButton = path.some(el => el instanceof HTMLElement && el.tagName?.toLowerCase() === 'back-button')
+
+			if (hasBackButton) {
+				this.#previousStep()
+			}
+		})
+
 		this.createEffect(() => {
 			const searchParams = new URLSearchParams(window.location.search)
 			const stepFromUrl = searchParams.get('step') as OnboardingStep
@@ -114,7 +125,9 @@ export class OnboardingFlow extends Element {
 				content=${() => html`
 					<div class="onboarding-step">
 						<header>
-							<div class="back-btn-container"><back-button onclick=${this.#previousStep}></back-button></div>
+							<div class="back-btn-container">
+								<back-button onclick=${this.#previousStep}></back-button>
+							</div>
 							<h1 class="title">First, enter your username & date of birth.</h1>
 						</header>
 						<div class="form-section">
@@ -144,7 +157,9 @@ export class OnboardingFlow extends Element {
 				content=${() => html`
 					<div class="onboarding-step">
 						<header>
-							<div class="back-btn-container"><back-button onclick=${this.#previousStep}></back-button></div>
+							<div class="back-btn-container">
+								<back-button onclick=${this.#previousStep}></back-button>
+							</div>
 							<h1 class="title">Did you know? Every garment on Drippy can be shopped IRL.</h1>
 						</header>
 						<div class="action-section">
@@ -160,7 +175,9 @@ export class OnboardingFlow extends Element {
 				content=${() => html`
 					<div class="onboarding-step">
 						<header>
-							<div class="back-btn-container"><back-button onclick=${this.#previousStep}></back-button></div>
+							<div class="back-btn-container">
+								<back-button onclick=${this.#previousStep}></back-button>
+							</div>
 							<h1 class="title">Ready to discover your unique style? Let's get started!</h1>
 						</header>
 						<div class="action-section">
