@@ -1,5 +1,5 @@
-import {Element, element, html, css, numberAttribute} from 'lume'
 import type {ElementAttributes} from '@lume/element'
+import {css, Element, element, html, numberAttribute} from 'lume'
 import '../imports/collections/Users.js'
 import './login-ui.js'
 import './theme-switch.js'
@@ -31,7 +31,7 @@ export class HomePage extends Element {
 
 		<nav>
 			<a href="/landing">Landing Page - Marketing page for Drippy</a>
-			<a href="/onboarding/step1">Onboarding - Get started with Drippy</a>
+			<a href="/onboarding">Onboarding - Get started with Drippy</a>
 			<a href="/stats">Stats - View page visits and number of users</a>
 			<a href="/profile">Profile - View and edit your username</a>
 			<a href="/app">App - New app WIP</a>
