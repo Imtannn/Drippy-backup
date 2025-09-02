@@ -229,6 +229,10 @@ export class LoginUI extends LumeElement {
 				#login-sign-in-link {
 					display: none;
 				}
+
+				#login-dropdown-list {
+					position: relative !important;
+				}
 			}
 		}
 	`
