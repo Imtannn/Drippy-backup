@@ -1,11 +1,11 @@
 import {
-	css,
-	Element as LumeElement,
-	element,
-	type ElementAttributes,
 	booleanAttribute,
-	stringAttribute,
+	css,
+	element,
 	jsonAttribute,
+	Element as LumeElement,
+	stringAttribute,
+	type ElementAttributes,
 } from '@lume/element'
 import {onCleanup} from 'solid-js'
 import html from 'solid-js/html'
@@ -15,7 +15,7 @@ import './blaze-component.js'
 // Props that the Blaze loginButtons template accepts.
 type LoginButtonProps = {align: 'left' | 'right'}
 
-type LoginUIAttributes = 'disabled' | 'data' | 'customStyle'
+type LoginUIAttributes = 'disabled' | 'data' | 'customStyle' | 'expanded'
 
 /**
  * This element wraps a the "loginButtons" Blaze template (loaded with the
@@ -47,6 +47,8 @@ export class LoginUI extends LumeElement {
 
 	/** CSS code for custom styling of the loginButtons Blaze template's DOM. */
 	@stringAttribute customStyle = ''
+
+	@booleanAttribute expanded = false
 
 	#handleLoginUI = (el: HTMLElement) => {
 		let original = document.getElementById
@@ -110,6 +112,29 @@ export class LoginUI extends LumeElement {
 
 			document.addEventListener('click', onclick, opts)
 			onCleanup(() => document.removeEventListener('click', onclick, opts))
+		})
+
+		// Optionally expand the dropdown by simulating a click on the existing
+		// "Sign in" link once Blaze has rendered it.
+		this.createEffect(() => {
+			if (!this.expanded) return
+
+			const root = (this.shadowRoot ?? this.getRootNode()) as Document | ShadowRoot
+
+			const tryClick = () => {
+				const signInLink = root.querySelector('#login-sign-in-link') as HTMLElement | null
+				if (signInLink) {
+					signInLink.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
+					observer.disconnect()
+				}
+			}
+
+			const observer = new MutationObserver(() => tryClick())
+			observer.observe(root, {childList: true, subtree: true})
+			// Try immediately in case it's already there
+			setTimeout(tryClick, 0)
+
+			onCleanup(() => observer.disconnect())
 		})
 	}
 
