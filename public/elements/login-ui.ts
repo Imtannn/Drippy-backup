@@ -234,6 +234,9 @@ export class LoginUI extends LumeElement {
 					position: relative !important;
 				}
 			}
+			#login-buttons.login-buttons-dropdown-align-right {
+				margin-top: -20px;
+			}
 		}
 	`
 }

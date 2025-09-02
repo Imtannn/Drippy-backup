@@ -1,4 +1,6 @@
 import {css, element, Element, html, signal, type ElementAttributes} from 'lume'
+import {Meteor} from 'meteor/meteor'
+import {Tracker} from 'meteor/tracker'
 import '../app/app-buttons.js'
 import '../elements/back-button.js'
 import '../elements/show-when.js'
@@ -45,6 +47,18 @@ export class OnboardingFlow extends Element {
 			} else {
 				this.#updateUrl('step1')
 			}
+		})
+
+		// When user logs in, advance to next step
+		const computation = Tracker.autorun(() => {
+			if (Meteor.userId()) {
+				this.#nextStep()
+			}
+		})
+
+		// Clean up Tracker computation when component is destroyed
+		this.createEffect(() => {
+			return () => computation.stop()
 		})
 	}
 
