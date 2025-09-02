@@ -1810,10 +1810,19 @@ p {
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, 0%);
+		-webkit-transform: translate(-50%, 0%);
+		will-change: transform;
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
 	}
+
 	.showcase .showcase__model {
-		scale: 0.9;
+		transform: scale(0.9);
+		-webkit-transform: scale(0.9);
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
 	}
+
 	.landing-page-desktop .cta__cone-image--4 {
 		width: 80px;
 		height: 114px;
