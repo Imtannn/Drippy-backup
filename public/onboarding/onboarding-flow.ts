@@ -74,13 +74,13 @@ export class OnboardingFlow extends Element {
 		}
 	}
 
-	#handleStep1Submit = () => {
-		if (this.email.includes('@')) {
-			this.#nextStep()
-		} else {
-			alert('Please enter a valid email address')
-		}
-	}
+	// #handleStep1Submit = () => {
+	// 	if (this.email.includes('@')) {
+	// 		this.#nextStep()
+	// 	} else {
+	// 		alert('Please enter a valid email address')
+	// 	}
+	// }
 
 	#handleStep2Submit = () => {
 		if (this.username && this.dateOfBirth) {
@@ -105,15 +105,8 @@ export class OnboardingFlow extends Element {
 							<h1 class="title">Gamify your fashion shopping experience.</h1>
 							<p class="sub-title">Browse it. Drip it. Shop it IRL!</p>
 						</header>
-						<div class="email-section">
-							<input
-								type="email"
-								placeholder="Enter your email"
-								class="form-input"
-								oninput=${(e: InputEvent) => (this.email = (e.target as HTMLInputElement).value)}
-								value=${() => this.email}
-							/>
-							<button class="btn btn-primary" onclick=${this.#handleStep1Submit}>Count me in 🔥</button>
+						<div class="login-section">
+							<login-ui expanded> </login-ui>
 						</div>
 						<img src=${createAccountImg} alt="Create Account" />
 					</div>

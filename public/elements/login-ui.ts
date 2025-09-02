@@ -222,6 +222,15 @@ export class LoginUI extends LumeElement {
 				}
 			}
 		}
+
+		/* Hide login-sign-in-link when expanded */
+		:host([expanded]) {
+			#loginButtons {
+				#login-sign-in-link {
+					display: none;
+				}
+			}
+		}
 	`
 }
 
