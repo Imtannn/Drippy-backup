@@ -1,5 +1,6 @@
-import {createSignal, css, Element, element, For, html, Motor, onCleanup, signal, untrack} from 'lume'
+import {createSignal, css, Element, element, html, Motor, onCleanup, signal, untrack, Show, Index} from 'lume'
 import * as THREE from 'three'
+import type {Accessor} from 'solid-js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/loading-indicator.js'
 import '../elements/show-when.js'
@@ -330,11 +331,27 @@ export class DrippyScene extends Element {
 
 		this.createEffect(() => {
 			const blocks = Array.from(store.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
-			this.renderBlocks = blocks.map(block => ({
-				block,
-				templateCategory: block.templateCategory,
-				id: `${block.templateCategory}-${block.category}-${block._id}`,
-			}))
+			this.renderBlocks = blocks.flatMap(block => {
+				if (block.category === 'Sleeves') {
+					return [
+						{
+							block,
+							templateCategory: block.templateCategory,
+							id: `${block.templateCategory}-${block.category}-${block._id}`,
+						},
+						{
+							block,
+							templateCategory: block.templateCategory,
+							id: `${block.templateCategory}-${block.category}-${block._id}-mirror`,
+						},
+					]
+				}
+				return {
+					block,
+					templateCategory: block.templateCategory,
+					id: `${block.templateCategory}-${block.category}-${block._id}`,
+				}
+			})
 		})
 
 		// Re-apply materials whenever the selected fabrics change or models mount
@@ -434,7 +451,7 @@ export class DrippyScene extends Element {
 		`}></show-when>
 
 		<div id="lume-scene-container" style=${() => `background: url(${this.sceneUrl}) center bottom / cover no-repeat`}>
-		<lume-scene webgl perspective="2200">
+		<lume-scene id="drippy-scene" webgl perspective="2200">
 			<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
 			<lume-directional-light
 			position="500 500 500"
@@ -443,7 +460,7 @@ export class DrippyScene extends Element {
 
 			<lume-camera-rig
 				min-distance="2"
-				max-distance="10"
+				max-distance="15"
 				distance="9"
 				dolly-speed="0.01"
 				position="0 -1 0"
@@ -473,18 +490,20 @@ export class DrippyScene extends Element {
 				data-avatar
 			></lume-gltf-model>
 
-			<${For} each=${() => this.renderBlocks}>
-				${(item: {block: Block; templateCategory: TemplateCategory; id: string}) => {
+			<${Show} when=${() => store.selectedSpace}>
+				${() => html`<lume-gltf-model id="scene" src=${() => store.selectedSpace?.scene.href}></lume-gltf-model>`}
+			</>
+
+			<${Index} each=${() => this.renderBlocks}>
+				${(item: Accessor<{block: Block; templateCategory: TemplateCategory; id: string}>, index: number) => {
 					return html`
-						<lume-gltf-model id=${item.id} data-cloth src=${() => item.block.modelFile}></lume-gltf-model> ${item.block
-							.category === 'Sleeves'
-							? html`<lume-gltf-model
-									id=${`${item.id}-mirror`}
-									data-cloth
-									src=${() => item.block.modelFile}
-									scale="-1 1 1"
-								></lume-gltf-model>`
-							: ''}
+						<lume-gltf-model
+							id=${item().id}
+							data-index=${index}
+							data-cloth
+							src=${() => item().block.modelFile}
+							scale=${() => (item().id.endsWith('-mirror') ? '-1 1 1' : '1 1 1')}
+						></lume-gltf-model>
 					`
 				}}
 			</>

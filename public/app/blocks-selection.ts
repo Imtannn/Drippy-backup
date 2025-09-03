@@ -91,9 +91,8 @@ export class BlocksSelection extends Element {
 
 			const selectedTemplate = store.selectedTemplates.get(this.selectedTemplateCategory)
 			if (selectedTemplate) {
-				this.availableFabrics = fabrics[this.spaceCollection].filter(
-					fabric => fabric.templateCategory === selectedTemplate.category,
-				)
+				this.availableFabrics =
+					fabrics[this.spaceCollection]?.filter(fabric => fabric.templateCategory === selectedTemplate.category) ?? []
 			} else {
 				this.availableFabrics = []
 			}
@@ -158,6 +157,7 @@ export class BlocksSelection extends Element {
 	}
 
 	#onBackButtonClick = () => {
+		store.resetSelectedTemplates()
 		store.navigateTo = 'template'
 	}
 

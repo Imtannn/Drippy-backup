@@ -1,18 +1,23 @@
-import {Element, html, css, element, type ElementAttributes, eventAttribute} from 'lume'
+import {Element, html, css, element, type ElementAttributes, eventAttribute, booleanAttribute} from 'lume'
 
-type DripItButtonAttributes = 'onclick'
+type DripItButtonAttributes = 'onclick' | 'buttonDisabled'
 
 @element
 export class DripItButton extends Element {
 	static readonly elementName = 'drip-it-button'
 
+	@booleanAttribute buttonDisabled = false
+
 	@eventAttribute onclick = null
 
 	#onClick = () => {
+		if (this.buttonDisabled) return
 		this.dispatchEvent(new CustomEvent('click', {bubbles: true}))
 	}
 
-	template = () => html` <button class="drip-it-button" onclick=${this.#onClick}>Drip it!</button> `
+	template = () => html`
+		<button class="drip-it-button" onclick=${this.#onClick} disabled=${() => this.buttonDisabled}>Drip it!</button>
+	`
 
 	css = css/*css*/ `
 		.drip-it-button {
@@ -31,6 +36,11 @@ export class DripItButton extends Element {
 			font-weight: 600;
 			font-size: 14px;
 			width: 100px;
+		}
+
+		.drip-it-button:disabled {
+			opacity: 0;
+			cursor: not-allowed;
 		}
 	`
 }

@@ -125,7 +125,7 @@ export class TemplateView extends Element {
 
 	<app-buttons-right layout="bottom">
 		<app-buttons-group>
-			<drip-it-button onclick=${this.#onDripItClick}></drip-it-button>
+			<drip-it-button button-disabled=${() => store.selectedTemplates.size === 0} onclick=${this.#onDripItClick}></drip-it-button>
 		</app-buttons-group>
 	</app-buttons-right>
 

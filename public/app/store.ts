@@ -3,7 +3,6 @@ import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, Avatar, Space, CustomMeasurement} from '../types/types.js'
-import {getBlocksForTemplate} from '../consts/relationships.js'
 
 export type OrderStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -33,7 +32,7 @@ export type OrderState = {
 export const store = createMutable({
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
-	tempSelectedAvatar: 'male' as Avatar,
+	tempSelectedAvatar: 'female' as Avatar,
 	selectedAvatar: null as Avatar,
 	selectedSpace: null as Space | null,
 	isPreview: false,
@@ -162,14 +161,12 @@ export const store = createMutable({
 			category: TemplateCategory,
 			selectedTemplates: Map<TemplateCategory, Template>,
 		) => {
-			const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory | 'Hat' | 'Bag'>[]> = {
+			const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
 				Dress: ['Shirt'],
 				Shirt: ['Dress'],
 				Jacket: [],
 				Skirt: ['Pants'],
 				Pants: ['Skirt'],
-				Hat: [],
-				Bag: [],
 			}
 
 			const interchangeableCategories = interchangeableCategoriesMapping[category]
@@ -239,6 +236,34 @@ export const store = createMutable({
 	},
 	set setShippingAddress(address: Partial<ShippingAddress>) {
 		this.order.shippingAddress = {...this.order.shippingAddress, ...address}
+	},
+
+	resetSelectedTemplates() {
+		this.selectedTemplates = new Map<TemplateCategory, Template>()
+		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
+		this.isPreview = false
+		this.customMeasurement = null as CustomMeasurement | null
+		this.order = {
+			status: 'idle' as OrderStatus,
+			error: null as string | null,
+			productName: 'Custom 3D Drippy Design',
+			selectedSize: '34 (XS)',
+			quantity: 1,
+			email: '',
+			customerEmail: '',
+			customerFirstName: '',
+			customerLastName: '',
+			shippingAddress: {
+				firstName: '',
+				lastName: '',
+				address: '',
+				apartment: '',
+				city: '',
+				postalCode: '',
+				phone: '',
+			},
+		} as OrderState
 	},
 
 	resetState() {
