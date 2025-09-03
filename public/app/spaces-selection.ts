@@ -202,6 +202,11 @@ export class SpacesSelection extends Element {
 			justify-content: center;
 			overflow: hidden;
 			border-radius: var(--borderRadiusLarge);
+
+			img {
+				object-fit: cover;
+				object-position: center;
+			}
 		}
 
 		.scene-placeholder img {
