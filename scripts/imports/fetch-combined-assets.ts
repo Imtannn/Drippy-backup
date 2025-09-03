@@ -24,8 +24,8 @@ AWS.config.update({
 const s3 = new AWS.S3()
 
 // Root folder ID from the Google Drive URL
-const ROOT_FOLDER_ID = '1zYLtaDyheX-nIwNgL4Q_tEwjvqFjVVNR'
-const BRAND = 'speed'
+const ROOT_FOLDER_ID = '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-'
+const BRAND = 'moidien'
 
 // Helper function to make HTTP requests
 function makeRequest<T = unknown>(url: string): Promise<T> {
@@ -126,9 +126,14 @@ function normalizeName(name: string): string {
 
 function normalizeBlockCategory(folderName: string): string {
 	// Normalize block type folder names to exact category names
-	if (folderName.includes('Bodice')) return 'Bodice'
-	if (folderName.includes('Pants')) return 'Pants'
-	if (folderName.includes('Sleeves')) return 'Sleeves'
+	if (folderName.toLowerCase().includes('bodice')) return 'Bodice'
+	if (folderName.toLowerCase().includes('pants')) return 'Pants'
+	if (folderName.toLowerCase().includes('sleeves')) return 'Sleeves'
+	if (folderName.toLowerCase().includes('hat')) return 'Hat'
+	if (folderName.toLowerCase().includes('dress')) return 'Dress'
+	if (folderName.toLowerCase().includes('skirt')) return 'Skirt'
+	if (folderName.toLowerCase().includes('fullbody')) return 'Full Body'
+	if (folderName.toLowerCase().includes('bag')) return 'Bag'
 	return folderName // fallback to original name
 }
 
@@ -136,7 +141,7 @@ function normalizeBlockCategory(folderName: string): string {
 async function processTemplateFolder(
 	templateFolder: TODO,
 	category: string,
-): Promise<{template: TODO; blocks: TODO[]}> {
+): Promise<{template: TODO; blocks: TODO[]; unsucceeded: TODO[]}> {
 	console.log(`  📂 Processing template: ${templateFolder.name}`)
 
 	const templateContents = await fetchFolderContents(templateFolder.id)
@@ -148,33 +153,36 @@ async function processTemplateFolder(
 
 	if (!templateThumbnail) {
 		console.warn(`  ⚠️  No template thumbnail found for ${templateFolder.name}`)
-		return {template: null, blocks: []}
+		return {template: null, blocks: [], unsucceeded: []}
 	}
 
 	// Find block type folders (Bodice, Pants, Sleeves)
 	const blockTypeFolders = templateContents.filter(
 		item =>
 			item.mimeType === 'application/vnd.google-apps.folder' &&
-			['Bodice', 'Pants', 'Sleeves'].some(blockType => item.name.includes(blockType)),
+			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag'].some(blockType =>
+				item.name.toLowerCase().includes(blockType.toLowerCase()),
+			),
 	)
 
-	// Find Materials folder
-	const materialsFolder = templateContents.find(
-		item => item.mimeType === 'application/vnd.google-apps.folder' && item.name.includes('Materials'),
+	// Find material files directly in template folder
+	const materialFiles = templateContents.filter(
+		file =>
+			file.mimeType !== 'application/vnd.google-apps.folder' &&
+			(file.name.toLowerCase().includes('normal') ||
+				file.name.toLowerCase().includes('basecolor') ||
+				file.name.toLowerCase().includes('displacement') ||
+				file.name.toLowerCase().includes('roughness')),
 	)
-
-	if (!materialsFolder) {
-		console.warn(`  ⚠️  No materials folder found for ${templateFolder.name}`)
-	}
 
 	if (blockTypeFolders.length === 0) {
 		console.warn(`  ⚠️  No block type folders found for ${templateFolder.name}`)
-		return {template: null, blocks: []}
+		return {template: null, blocks: [], unsucceeded: []}
 	}
 
 	console.log(`    Found ${blockTypeFolders.length} block type folders`)
-	if (materialsFolder) {
-		console.log(`    Found Materials folder`)
+	if (materialFiles.length > 0) {
+		console.log(`    Found ${materialFiles.length} material files`)
 	}
 
 	// Download template thumbnail
@@ -186,19 +194,38 @@ async function processTemplateFolder(
 		'image/png',
 	)
 
-	// Get material reference if Materials folder exists
+	// Process material files if they exist
 	let materialId: string | null = null
-	if (materialsFolder) {
-		console.log(`    📁 Finding material reference from Materials folder`)
+	if (materialFiles.length > 0) {
+		console.log(`    📁 Processing material files for template`)
 
-		const materialsContents = await fetchFolderContents(materialsFolder.id)
-		const materialFolders = materialsContents.filter((f: TODO) => f.mimeType === 'application/vnd.google-apps.folder')
+		// Use template name as material reference since materials are embedded
+		materialId = templateFolder.name
+		console.log(`      📎 Material reference: ${materialId}`)
 
-		// Assuming there's one material folder per template
-		if (materialFolders.length > 0) {
-			const materialFolder = materialFolders[0] // Take the first material folder
-			materialId = materialFolder.name // Use folder name as reference to fabric
-			console.log(`      📎 Material reference: ${materialId}`)
+		// Process and upload material files
+		for (const materialFile of materialFiles) {
+			try {
+				console.log(`      📥 Processing material file: ${materialFile.name}`)
+
+				const materialBuffer = await downloadToBuffer(getDriveDownloadUrl(materialFile.id))
+				const extension = path.extname(materialFile.name).toLowerCase()
+				let contentType = 'application/octet-stream'
+
+				if (extension === '.jpg' || extension === '.jpeg') contentType = 'image/jpeg'
+				else if (extension === '.png') contentType = 'image/png'
+				else if (extension === '.webp') contentType = 'image/webp'
+
+				const materialS3Url = await uploadToS3(
+					materialBuffer,
+					`materials/${BRAND}/templates/${category}/${templateFolder.name}/${materialFile.name}`,
+					contentType,
+				)
+
+				console.log(`      ✅ Uploaded material file ${materialFile.name}`)
+			} catch (error) {
+				console.error(`      ❌ Failed to process material file ${materialFile.name}:`, error)
+			}
 		}
 	}
 
@@ -211,6 +238,7 @@ async function processTemplateFolder(
 
 	// Process blocks in each block type folder
 	const allBlocks: TODO[] = []
+	const unsucceeded: TODO[] = []
 
 	for (const blockTypeFolder of blockTypeFolders) {
 		console.log(`    📁 Processing block type: ${blockTypeFolder.name}`)
@@ -218,11 +246,14 @@ async function processTemplateFolder(
 		const blockTypeContents = await fetchFolderContents(blockTypeFolder.id)
 		const gltfFiles = blockTypeContents.filter((f: TODO) => f.name.toLowerCase().endsWith('.gltf'))
 		const pngFiles = blockTypeContents.filter((f: TODO) => f.name.toLowerCase().endsWith('.png'))
+		console.log(
+			`      📁 Found ${gltfFiles.length} GLTF files and ${pngFiles.length} PNG files, block type: ${blockTypeContents[0].name} ${blockTypeContents[1].name}`,
+		)
 
 		// Match GLTF and PNG pairs
 		for (const gltfFile of gltfFiles) {
-			const baseName = path.basename(gltfFile.name, '.gltf')
-			const matchingPng = pngFiles.find((png: TODO) => path.basename(png.name, '.png') === baseName)
+			const baseName = path.basename(gltfFile.name, '.gltf').toLowerCase()
+			const matchingPng = pngFiles[0]
 
 			if (matchingPng) {
 				console.log(`      📥 Processing block: ${baseName}`)
@@ -261,11 +292,14 @@ async function processTemplateFolder(
 				} catch (error) {
 					console.error(`      ❌ Failed to process block ${baseName}:`, error)
 				}
+			} else {
+				console.error(`      ❌ No matching PNG file found for ${baseName}`)
+				unsucceeded.push(baseName)
 			}
 		}
 	}
 
-	return {template, blocks: allBlocks}
+	return {template, blocks: allBlocks, unsucceeded: unsucceeded}
 }
 
 function generateTemplateData(processedData: TODO[]): TODO {
@@ -494,6 +528,7 @@ async function main(): Promise<void> {
 
 		const allProcessedData: TODO[] = []
 		const allFabrics: TODO[] = []
+		const allUnsucceeded: TODO[] = []
 
 		// Process each category
 		for (const categoryFolder of categoryFolders) {
@@ -515,6 +550,7 @@ async function main(): Promise<void> {
 				if (processedTemplate.template) {
 					allProcessedData.push(processedTemplate)
 				}
+				allUnsucceeded.push(...processedTemplate.unsucceeded)
 			}
 
 			// Process Materials folder for fabrics if it exists
@@ -645,6 +681,7 @@ async function main(): Promise<void> {
 		console.log(`📄 Templates: ${templateCount} items generated`)
 		console.log(`🧱 Blocks: ${blockCount} items generated`)
 		console.log(`🎨 Fabrics: ${fabricCount} items generated`)
+		console.log(`❌ Unsucceeded: ${allUnsucceeded.length} items`)
 
 		console.log(`\n📁 Assets organized as:`)
 		console.log(`   Template Images: images/${BRAND}/templates/{category}/`)

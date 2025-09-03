@@ -9,7 +9,7 @@ import type {TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import {store} from './store.js'
 
-const femaleAvatar = new URL('../models/EM-Underwear.glb', import.meta.url)
+const femaleAvatar = new URL('../models/EM-MoiDien.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
 
 @element

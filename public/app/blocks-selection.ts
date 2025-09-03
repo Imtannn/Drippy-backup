@@ -247,6 +247,16 @@ export class BlocksSelection extends Element {
 						}}
 					>
 					<div class="category-tabs">
+						<!-- Fabric tab at the end if fabrics are available -->
+						<${Show} when=${() => this.availableFabrics.length > 0}>
+							<button
+								class="category-tab"
+								classList=${() => ({active: this.selectedSubTab === 'fabric'})}
+								onclick=${() => (this.selectedSubTab = 'fabric')}
+							>
+								Fabric
+							</button>
+						</>
 						<!-- Block category tabs -->
 						<${For} each=${() => this.blocksCategories}>
 						${(category: BlockCategory) => html`
@@ -261,16 +271,6 @@ export class BlocksSelection extends Element {
 								${category}
 							</button>
 						`}
-						</>
-						<!-- Fabric tab at the end if fabrics are available -->
-						<${Show} when=${() => this.availableFabrics.length > 0}>
-							<button
-								class="category-tab"
-								classList=${() => ({active: this.selectedSubTab === 'fabric'})}
-								onclick=${() => (this.selectedSubTab = 'fabric')}
-							>
-								Fabric
-							</button>
 						</>
 					</div>
 

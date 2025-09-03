@@ -3,6 +3,7 @@ import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, Avatar, Space, CustomMeasurement} from '../types/types.js'
+import {getBlocksForTemplate} from '../consts/relationships.js'
 
 export type OrderStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -157,8 +158,34 @@ export const store = createMutable({
 			template = [template]
 		}
 		const newTemplates = new Map<TemplateCategory, Template>(this.selectedTemplates)
+		const checkInterchangeableCategories = (
+			category: TemplateCategory,
+			selectedTemplates: Map<TemplateCategory, Template>,
+		) => {
+			const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory | 'Hat' | 'Bag'>[]> = {
+				Dress: ['Shirt'],
+				Shirt: ['Dress'],
+				Jacket: [],
+				Skirt: ['Pants'],
+				Pants: ['Skirt'],
+				Hat: [],
+				Bag: [],
+			}
+
+			const interchangeableCategories = interchangeableCategoriesMapping[category]
+
+			return interchangeableCategories?.filter(c => selectedTemplates.has(c as TemplateCategory)) ?? []
+		}
 		// check if the template with same category already exists
 		for (const temp of template) {
+			const interchangeableCategories = checkInterchangeableCategories(temp.category, this.selectedTemplates)
+			if (interchangeableCategories.length > 0) {
+				for (const category of interchangeableCategories) {
+					if (this.selectedTemplates.has(category as TemplateCategory)) {
+						newTemplates.delete(category as TemplateCategory)
+					}
+				}
+			}
 			if (this.selectedTemplates.has(temp.category)) {
 				// if it exists, check if the template is the same, if so, remove it
 				if (this.selectedTemplates.get(temp.category)?._id === temp._id) {
