@@ -88,17 +88,20 @@ export class OnboardingFlow extends Element {
 		}
 	}
 
-	// #handleStep1Submit = () => {
-	// 	if (this.email.includes('@')) {
-	// 		this.#nextStep()
-	// 	} else {
-	// 		alert('Please enter a valid email address')
-	// 	}
-	// }
-
-	#handleStep2Submit = () => {
+	#handleStep2Submit = async () => {
 		if (this.username && this.dateOfBirth) {
-			this.#nextStep()
+			try {
+				// Save username and dateOfBirth to current user's profile
+				await Meteor.callAsync('users.updateProfile', {
+					username: this.username,
+					dateOfBirth: this.dateOfBirth,
+				})
+
+				this.#nextStep()
+			} catch (error) {
+				console.error('Error saving profile:', error)
+				alert('Failed to save profile. Please try again.')
+			}
 		} else {
 			alert('Please enter both username and date of birth')
 		}
@@ -132,9 +135,6 @@ export class OnboardingFlow extends Element {
 				content=${() => html`
 					<div class="onboarding-step">
 						<header>
-							<div class="back-btn-container">
-								<back-button onclick=${this.#previousStep}></back-button>
-							</div>
 							<h1 class="title">First, enter your username & date of birth.</h1>
 						</header>
 						<div class="form-section">
