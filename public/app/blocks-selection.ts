@@ -91,9 +91,8 @@ export class BlocksSelection extends Element {
 
 			const selectedTemplate = store.selectedTemplates.get(this.selectedTemplateCategory)
 			if (selectedTemplate) {
-				this.availableFabrics = fabrics[this.spaceCollection].filter(
-					fabric => fabric.templateCategory === selectedTemplate.category,
-				)
+				this.availableFabrics =
+					fabrics[this.spaceCollection]?.filter(fabric => fabric.templateCategory === selectedTemplate.category) ?? []
 			} else {
 				this.availableFabrics = []
 			}
@@ -158,6 +157,7 @@ export class BlocksSelection extends Element {
 	}
 
 	#onBackButtonClick = () => {
+		store.resetSelectedTemplates()
 		store.navigateTo = 'template'
 	}
 
@@ -247,6 +247,16 @@ export class BlocksSelection extends Element {
 						}}
 					>
 					<div class="category-tabs">
+						<!-- Fabric tab at the end if fabrics are available -->
+						<${Show} when=${() => this.availableFabrics.length > 0}>
+							<button
+								class="category-tab"
+								classList=${() => ({active: this.selectedSubTab === 'fabric'})}
+								onclick=${() => (this.selectedSubTab = 'fabric')}
+							>
+								Fabric
+							</button>
+						</>
 						<!-- Block category tabs -->
 						<${For} each=${() => this.blocksCategories}>
 						${(category: BlockCategory) => html`
@@ -261,16 +271,6 @@ export class BlocksSelection extends Element {
 								${category}
 							</button>
 						`}
-						</>
-						<!-- Fabric tab at the end if fabrics are available -->
-						<${Show} when=${() => this.availableFabrics.length > 0}>
-							<button
-								class="category-tab"
-								classList=${() => ({active: this.selectedSubTab === 'fabric'})}
-								onclick=${() => (this.selectedSubTab = 'fabric')}
-							>
-								Fabric
-							</button>
 						</>
 					</div>
 

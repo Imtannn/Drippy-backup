@@ -39,7 +39,7 @@ export class TemplateView extends Element {
 		this.createEffect(() => {
 			if (!this.spaceCollection) return
 			// Define the category order: 'Dress' | 'Jacket' | 'Shirt' | 'Skirt' | 'Pants' | 'Accessories'
-			const categoryOrder: TemplateCategory[] = ['Dress', 'Jacket', 'Shirt', 'Skirt', 'Pants', 'Accessories']
+			const categoryOrder: TemplateCategory[] = ['Dress', 'Shirt', 'Jacket', 'Skirt', 'Pants', 'Accessories']
 
 			// Get available categories from templates
 			const availableCategories = [
@@ -80,7 +80,7 @@ export class TemplateView extends Element {
 		// Get blocks for ALL selected templates, organized by template category
 		const templateBlockData: {blocks: Block[]; templateCategory: TemplateCategory}[] = []
 		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
-			const templateBlocks = getBlocksForTemplate(selectedTemplate, 'speed')
+			const templateBlocks = getBlocksForTemplate(selectedTemplate, 'moidien')
 			templateBlockData.push({
 				blocks: templateBlocks,
 				templateCategory: templateCategory,
@@ -125,7 +125,7 @@ export class TemplateView extends Element {
 
 	<app-buttons-right layout="bottom">
 		<app-buttons-group>
-			<drip-it-button onclick=${this.#onDripItClick}></drip-it-button>
+			<drip-it-button button-disabled=${() => store.selectedTemplates.size === 0} onclick=${this.#onDripItClick}></drip-it-button>
 		</app-buttons-group>
 	</app-buttons-right>
 

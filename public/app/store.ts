@@ -32,7 +32,7 @@ export type OrderState = {
 export const store = createMutable({
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
-	tempSelectedAvatar: 'male' as Avatar,
+	tempSelectedAvatar: 'female' as Avatar,
 	selectedAvatar: null as Avatar,
 	selectedSpace: null as Space | null,
 	isPreview: false,
@@ -157,8 +157,32 @@ export const store = createMutable({
 			template = [template]
 		}
 		const newTemplates = new Map<TemplateCategory, Template>(this.selectedTemplates)
+		const checkInterchangeableCategories = (
+			category: TemplateCategory,
+			selectedTemplates: Map<TemplateCategory, Template>,
+		) => {
+			const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
+				Dress: ['Shirt'],
+				Shirt: ['Dress'],
+				Jacket: [],
+				Skirt: ['Pants'],
+				Pants: ['Skirt'],
+			}
+
+			const interchangeableCategories = interchangeableCategoriesMapping[category]
+
+			return interchangeableCategories?.filter(c => selectedTemplates.has(c as TemplateCategory)) ?? []
+		}
 		// check if the template with same category already exists
 		for (const temp of template) {
+			const interchangeableCategories = checkInterchangeableCategories(temp.category, this.selectedTemplates)
+			if (interchangeableCategories.length > 0) {
+				for (const category of interchangeableCategories) {
+					if (this.selectedTemplates.has(category as TemplateCategory)) {
+						newTemplates.delete(category as TemplateCategory)
+					}
+				}
+			}
 			if (this.selectedTemplates.has(temp.category)) {
 				// if it exists, check if the template is the same, if so, remove it
 				if (this.selectedTemplates.get(temp.category)?._id === temp._id) {
@@ -212,6 +236,34 @@ export const store = createMutable({
 	},
 	set setShippingAddress(address: Partial<ShippingAddress>) {
 		this.order.shippingAddress = {...this.order.shippingAddress, ...address}
+	},
+
+	resetSelectedTemplates() {
+		this.selectedTemplates = new Map<TemplateCategory, Template>()
+		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
+		this.isPreview = false
+		this.customMeasurement = null as CustomMeasurement | null
+		this.order = {
+			status: 'idle' as OrderStatus,
+			error: null as string | null,
+			productName: 'Custom 3D Drippy Design',
+			selectedSize: '34 (XS)',
+			quantity: 1,
+			email: '',
+			customerEmail: '',
+			customerFirstName: '',
+			customerLastName: '',
+			shippingAddress: {
+				firstName: '',
+				lastName: '',
+				address: '',
+				apartment: '',
+				city: '',
+				postalCode: '',
+				phone: '',
+			},
+		} as OrderState
 	},
 
 	resetState() {

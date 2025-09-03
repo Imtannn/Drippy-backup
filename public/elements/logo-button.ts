@@ -9,7 +9,7 @@ const BRANDS = [
 	},
 	{
 		name: 'Speed',
-		image: new URL('../images/speed-logo.webp', import.meta.url),
+		image: new URL('../images/moidien-logo.webp', import.meta.url),
 	},
 ]
 
