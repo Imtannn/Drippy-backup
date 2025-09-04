@@ -6,6 +6,16 @@ export type Fabric = {
 	displacement?: string
 	roughness?: string
 	materialName: string
-	category?: 'Cotton' | 'Leather' | 'Denim' | 'Spantex' | 'Jean' | 'Wool' | 'Linen'
+	category?:
+		| 'Cotton'
+		| 'Leather'
+		| 'Denim'
+		| 'Spantex'
+		| 'Jean'
+		| 'Wool'
+		| 'Linen'
+		| 'Crinkle Fabric'
+		| 'Pleated Fabric'
+		| 'Seersucker Fabric'
 	templateCategory?: string
 }

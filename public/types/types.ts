@@ -17,6 +17,7 @@ export type Space = {
 	description: string
 	image: URL
 	scene: URL
+	includedModelFiles: URL[]
 	gender: 'male' | 'female'
 	garmentsCount: number
 	isWholesale: boolean

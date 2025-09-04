@@ -11,6 +11,10 @@ const BRANDS = [
 		name: 'Speed',
 		image: new URL('../images/moidien-logo.webp', import.meta.url),
 	},
+	{
+		name: 'MoiDien',
+		image: new URL('../images/MoiDien-logo.webp', import.meta.url),
+	},
 ]
 
 @element

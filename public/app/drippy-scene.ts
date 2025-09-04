@@ -1,6 +1,6 @@
-import {createSignal, css, Element, element, html, Motor, onCleanup, signal, untrack, Show, Index} from 'lume'
-import * as THREE from 'three'
+import {createSignal, css, Element, element, For, html, Index, Motor, onCleanup, Show, signal, untrack} from 'lume'
 import type {Accessor} from 'solid-js'
+import * as THREE from 'three'
 import {spaces} from '../consts/spaces.js'
 import '../elements/loading-indicator.js'
 import '../elements/show-when.js'
@@ -383,6 +383,7 @@ export class DrippyScene extends Element {
 				const isMirror = blockId.endsWith('-mirror')
 				const baseBlockId = isMirror ? blockId.slice(0, -7) : blockId // Remove "-mirror" if present
 				const parts = baseBlockId.split('-')
+				console.log('parts', parts)
 
 				if (parts.length < 3) continue
 
@@ -393,6 +394,7 @@ export class DrippyScene extends Element {
 				const templateFabrics = selectedFabrics.get(templateCategory)
 				const fabric = templateFabrics?.get(blockCategory)
 				const loadingId = `material-${blockId}`
+				console.log('fabric', fabric, blockId)
 
 				const applyOrReset = () => {
 					const isCanceled = untrack(cancelApply)
@@ -466,16 +468,6 @@ export class DrippyScene extends Element {
 				position="0 -1 0"
 			></lume-camera-rig>
 
-			<lume-box
-				visible="false"
-				cast-shadow="false"
-				size="1 1 1"
-				color="skyblue"
-				roughness="0.3"
-				metalness="0.7"
-				mount-point="0.5 0.5 0.5"
-			></lume-box>
-
 			<lume-gltf-model
 				id="avatar"
 				src=${() =>
@@ -494,15 +486,21 @@ export class DrippyScene extends Element {
 				${() => html`<lume-gltf-model id="scene" src=${() => store.selectedSpace?.scene.href}></lume-gltf-model>`}
 			</>
 
-			<${Index} each=${() => this.renderBlocks}>
-				${(item: Accessor<{block: Block; templateCategory: TemplateCategory; id: string}>, index: number) => {
+			<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
+				${(item: Accessor<URL>) => {
+					return html`<lume-gltf-model src=${() => item().href}></lume-gltf-model>`
+				}}
+			</>
+
+			<${For} each=${() => this.renderBlocks}>
+				${(item: {block: Block; templateCategory: TemplateCategory; id: string}, index: Accessor<number>) => {
 					return html`
 						<lume-gltf-model
-							id=${item().id}
-							data-index=${index}
+							id=${item.id}
+							data-index=${index()}
 							data-cloth
-							src=${() => item().block.modelFile}
-							scale=${() => (item().id.endsWith('-mirror') ? '-1 1 1' : '1 1 1')}
+							src=${() => item.block.modelFile}
+							scale=${() => (item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1')}
 						></lume-gltf-model>
 					`
 				}}
