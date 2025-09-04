@@ -16,8 +16,10 @@ export type Space = {
 	collection: string
 	description: string
 	image: URL
+	scene: URL
 	gender: 'male' | 'female'
 	garmentsCount: number
+	isWholesale: boolean
 }
 
 export type CustomMeasurement = {

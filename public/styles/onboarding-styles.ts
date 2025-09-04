@@ -46,16 +46,6 @@ export const onboardingStyles = css`
 		margin-top: 20px;
 	}
 
-	.email-section {
-		margin-top: 20px;
-		margin-bottom: 20px;
-	}
-
-	.email-section input,
-	button {
-		font-size: 14px;
-	}
-
 	.form-section input,
 	button {
 		font-size: 14px;

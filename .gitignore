@@ -12,6 +12,4 @@ public/imports
 /**/*.js.map
 
 website.tar.gz
-# Add private/env.ts to gitignore to keep credentials secure
-private/env.ts
-private/env.json
+
