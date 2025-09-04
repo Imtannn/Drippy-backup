@@ -84,10 +84,42 @@ export const store = createMutable({
 				// if it exists, check if the block is the same, if so, remove it
 				if (templateBlocks.get(block.category)?._id === block._id) {
 					templateBlocks.delete(block.category)
+					// also remove it from selectedFabrics
+					this.selectedFabrics.get(templateCategory)?.delete(block.category)
 				} else {
+					// check if the fabric for this block category already exists in this template
+					const templateCategoryFabrics = this.selectedFabrics.get(templateCategory)
+					if (templateCategoryFabrics) {
+						// if the block category is Sleeves, check for bodice and add it to the fabric
+						if (block.category === 'Sleeves') {
+							const bodice = templateCategoryFabrics.get('Bodice')
+							if (!bodice) return
+
+							this.setSelectedFabrics = {
+								fabric: bodice,
+								blockCategory: 'Sleeves',
+								templateCategory: templateCategory,
+							}
+						}
+					}
 					templateBlocks.set(block.category, block)
 				}
 			} else {
+				// check if the fabric for this block category already exists in this template
+				const templateCategoryFabrics = this.selectedFabrics.get(templateCategory)
+				if (templateCategoryFabrics) {
+					// if the block category is Sleeves, check for bodice and add it to the fabric
+					if (block.category === 'Sleeves') {
+						const bodice = templateCategoryFabrics.get('Bodice')
+						if (!bodice) return
+
+						this.setSelectedFabrics = {
+							fabric: bodice,
+							blockCategory: 'Sleeves',
+							templateCategory: templateCategory,
+						}
+					}
+				}
 				// if not, add it
 				templateBlocks.set(block.category, block)
 			}
@@ -95,6 +127,7 @@ export const store = createMutable({
 			// If template has no blocks left, remove the template entry
 			if (templateBlocks.size === 0) {
 				newBlocks.delete(templateCategory)
+				this.selectedFabrics.delete(templateCategory)
 			}
 		}
 		this.selectedBlocks = newBlocks

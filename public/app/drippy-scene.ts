@@ -383,7 +383,6 @@ export class DrippyScene extends Element {
 				const isMirror = blockId.endsWith('-mirror')
 				const baseBlockId = isMirror ? blockId.slice(0, -7) : blockId // Remove "-mirror" if present
 				const parts = baseBlockId.split('-')
-				console.log('parts', parts)
 
 				if (parts.length < 3) continue
 
@@ -394,7 +393,6 @@ export class DrippyScene extends Element {
 				const templateFabrics = selectedFabrics.get(templateCategory)
 				const fabric = templateFabrics?.get(blockCategory)
 				const loadingId = `material-${blockId}`
-				console.log('fabric', fabric, blockId)
 
 				const applyOrReset = () => {
 					const isCanceled = untrack(cancelApply)
