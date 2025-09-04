@@ -97,6 +97,7 @@ export class LoginUI extends LumeElement {
 
 		// When clicking anywhere not inside of the login-ui popup, close the popup.
 		this.createEffect(() => {
+			if (this.expanded) return
 			const onclick = (event: MouseEvent) => {
 				const root = (this.shadowRoot ?? this.getRootNode()) as Document | ShadowRoot
 				const closeButton = root.querySelector('.login-close-text') as HTMLElement
@@ -165,6 +166,7 @@ export class LoginUI extends LumeElement {
 			}
 
 			.accounts-dialog {
+				width: 354px;
 				pointer-events: auto;
 				text-transform: none;
 				font-family: var(--base-font-family);
@@ -193,16 +195,40 @@ export class LoginUI extends LumeElement {
 
 				.login-button {
 					margin-bottom: var(--uiSpacingTiny);
+					border-radius: var(--borderRadiusSmall);
+					background-color: #e0e1e4;
+					color: var(--appBackgroundDark);
+					font-weight: var(--fontWeightMedium);
+					border: none;
 				}
 
 				.login-button-form-submit {
 					margin-top: var(--uiSpacingSmall);
 				}
 
+				.or {
+					font-size: var(--fontSizeTextXs);
+					color: var(--appBackgroundDark);
+				}
+
+				input[type='email'],
+				input[type='password'] {
+					border-radius: var(--borderRadiusSmall);
+				}
+
 				[id*='label-and-input'] {
 					display: flex;
 					gap: var(--uiGap);
 					margin-bottom: var(--uiGap);
+				}
+
+				#login-email-label,
+				#login-password-label,
+				#forgot-password-link,
+				#signup-link {
+					font-size: var(--fontSizeTextXs);
+					font-weight: var(--fontWeightMedium);
+					color: var(--appBackgroundDark);
 				}
 			}
 
@@ -232,6 +258,13 @@ export class LoginUI extends LumeElement {
 
 				#login-dropdown-list {
 					position: relative !important;
+				}
+
+				.accounts-dialog {
+					/* Remove Meteor's default dialog styling */
+					box-shadow: none;
+					background: none;
+					border: none;
 				}
 			}
 			#login-buttons.login-buttons-dropdown-align-right {
