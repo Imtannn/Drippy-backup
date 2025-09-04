@@ -9,8 +9,8 @@ import {fabrics} from './fabrics.js'
  * Data Relationships Documentation
  *
  * 1. Templates → Fabrics:
- *    - template.materialId matches "${fabric.materialName} ${fabric.category}"
- *    - Example: materialId "145 Cotton" → fabric with materialName="145", category="Cotton"
+ *    - template.materialId matches "${fabric.materialName} ${fabric.category} ${fabric.templateCategory}"
+ *    - Example: materialId "145 Cotton Shirt" → fabric with materialName="145", category="Cotton", templateCategory="Shirt"
  *
  * 2. Blocks → Templates:
  *    - block.templateId/templateName matches template.name
@@ -31,7 +31,11 @@ export function getFabricForTemplate(template: Template, brand: string = 'moidie
 	if (!template.materialId) return null
 
 	const brandFabrics = (fabrics as BrandData<Fabric>)[brand] || []
-	return brandFabrics.find(fabric => `${fabric.materialName} ${fabric.category}` === template.materialId) || null
+	return (
+		brandFabrics.find(
+			fabric => `${fabric.materialName} ${fabric.category} ${fabric.templateCategory}` === template.materialId,
+		) || null
+	)
 }
 
 /**
@@ -203,7 +207,7 @@ export function validateRelationships(brand: string = 'moidien') {
 
 	// Check for orphaned fabrics (no template references them)
 	brandFabrics.forEach(fabric => {
-		const fabricId = `${fabric.materialName} ${fabric.category}`
+		const fabricId = `${fabric.materialName} ${fabric.category} ${fabric.templateCategory}`
 		const isReferenced = brandTemplates.some(template => template.materialId === fabricId)
 		if (!isReferenced) {
 			issues.push(`Fabric "${fabricId}" is not referenced by any template`)

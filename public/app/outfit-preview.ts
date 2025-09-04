@@ -85,7 +85,7 @@ export class OutfitPreview extends Element {
 
 		<app-buttons-right>
 			<app-buttons-group>
-				<logo-button brand-name="Speed"></logo-button>
+				<logo-button brand-name="MoiDien"></logo-button>
 			</app-buttons-group>
 
 			<app-buttons-group>

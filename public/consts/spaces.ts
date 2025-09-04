@@ -7,6 +7,7 @@ export const spaces: Space[] = [
 		description: 'MoiDien',
 		image: new URL('../images/moidien-scene.webp', import.meta.url),
 		scene: new URL('../models/Moidien-scene.glb', import.meta.url),
+		includedModelFiles: [new URL('../models/Moidien-shoes.glb', import.meta.url)],
 		gender: 'female',
 		garmentsCount: blocks.moidien.length,
 		collection: 'moidien',

@@ -59,7 +59,9 @@ export class BlocksSelection extends Element {
 
 		// Update available template categories from selectedTemplates
 		this.createEffect(() => {
-			this.availableTemplateCategories = Array.from(store.selectedTemplates.keys())
+			this.availableTemplateCategories = Array.from(store.selectedTemplates.keys()).filter(
+				category => category !== 'Accessories',
+			)
 
 			// Auto-select first template category if none selected
 			if (this.availableTemplateCategories.length > 0 && !this.selectedTemplateCategory) {
@@ -91,6 +93,7 @@ export class BlocksSelection extends Element {
 
 			const selectedTemplate = store.selectedTemplates.get(this.selectedTemplateCategory)
 			if (selectedTemplate) {
+				console.log('fabrics', fabrics[this.spaceCollection], selectedTemplate.category)
 				this.availableFabrics =
 					fabrics[this.spaceCollection]?.filter(fabric => fabric.templateCategory === selectedTemplate.category) ?? []
 			} else {
@@ -119,11 +122,17 @@ export class BlocksSelection extends Element {
 			this.blocksCategories = newCategories
 
 			// Auto-select first sub-tab (first block category or fabric if no blocks)
-			if (newCategories.length > 0) {
+			// if (newCategories.length > 0) {
+			// 	this.selectedBlockCategory = newCategories[0]
+			// 	this.selectedSubTab = newCategories[0]
+			// } else if (this.availableFabrics.length > 0) {
+			// 	this.selectedSubTab = 'fabric'
+			// }
+			if (this.availableFabrics.length > 0) {
+				this.selectedSubTab = 'fabric'
+			} else if (newCategories.length > 0) {
 				this.selectedBlockCategory = newCategories[0]
 				this.selectedSubTab = newCategories[0]
-			} else if (this.availableFabrics.length > 0) {
-				this.selectedSubTab = 'fabric'
 			}
 		})
 
@@ -198,7 +207,7 @@ export class BlocksSelection extends Element {
 	<app-buttons-right>
 		<app-buttons-group>
 			<!-- <theme-switch-button></theme-switch-button> -->
-			<logo-button brand-name="Speed"></logo-button>
+			<logo-button brand-name="MoiDien"></logo-button>
 		</app-buttons-group>
 		<app-buttons-group>
 			<!-- <undo-button disabled></undo-button>
@@ -274,38 +283,8 @@ export class BlocksSelection extends Element {
 						</>
 					</div>
 
-					<!-- Block content -->
-					<${For} each=${() => this.blocksCategories}>
-					${(blockCategory: BlockCategory) => html`
-						<${Show} when=${() => this.selectedSubTab === blockCategory}>
-							<div class="items-grid">
-								<${For} each=${() => this.availableBlocks.filter(block => block.category === blockCategory)}>
-								${(block: Block) => html`
-									<item-card
-										item-active=${() => {
-											const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory!)
-											return templateBlocks?.get(block.category)?._id === block._id
-										}}
-										item-src=${() => block.thumb}
-										item-alt=${() => block.blockName}
-										item-value=${() => block}
-										oncardselected=${(e: CustomEvent) => {
-											if (!this.selectedTemplateCategory) return
-											store.setSelectedBlocks = {
-												block: e.detail.itemValue,
-												templateCategory: this.selectedTemplateCategory,
-											}
-										}}
-									></item-card>
-								`}
-								</>
-							</div>
-						</>
-					`}
-					</>
-
-					<!-- Fabric content -->
-					<${Show} when=${() => this.selectedSubTab === 'fabric'}>
+						<!-- Fabric content -->
+						<${Show} when=${() => this.selectedSubTab === 'fabric'}>
 						<div class="category-tabs">
 							<${For} each=${() => this.fabricCategories}>
 							${(category: string) => html`
@@ -342,6 +321,36 @@ export class BlocksSelection extends Element {
 							`}
 							</>
 						</div>
+					</>
+
+					<!-- Block content -->
+					<${For} each=${() => this.blocksCategories}>
+					${(blockCategory: BlockCategory) => html`
+						<${Show} when=${() => this.selectedSubTab === blockCategory}>
+							<div class="items-grid">
+								<${For} each=${() => this.availableBlocks.filter(block => block.category === blockCategory)}>
+								${(block: Block) => html`
+									<item-card
+										item-active=${() => {
+											const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory!)
+											return templateBlocks?.get(block.category)?._id === block._id
+										}}
+										item-src=${() => block.thumb}
+										item-alt=${() => block.blockName}
+										item-value=${() => block}
+										oncardselected=${(e: CustomEvent) => {
+											if (!this.selectedTemplateCategory) return
+											store.setSelectedBlocks = {
+												block: e.detail.itemValue,
+												templateCategory: this.selectedTemplateCategory,
+											}
+										}}
+									></item-card>
+								`}
+								</>
+							</div>
+						</>
+					`}
 					</>
 					</tabs-provider>
 					</>

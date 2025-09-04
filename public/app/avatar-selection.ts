@@ -10,7 +10,7 @@ type AvatarSelectionAttributes = keyof {}
 
 const avatars = [
 	{
-		src: new URL('../images/Em_Underwear.png', import.meta.url),
+		src: new URL('../images/Em_Underwear.webp', import.meta.url),
 		alt: 'Female avatar',
 		value: 'female',
 	},
