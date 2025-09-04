@@ -306,7 +306,9 @@ export class DrippyScene extends Element {
 				avatar.on?.('MODEL_LOAD', loaded)
 				onCleanup(() => {
 					avatar.off?.('MODEL_LOAD', loaded)
-					enableShadows(avatar.three)
+					setTimeout(() => {
+						enableShadows(avatar.three)
+					}, 100)
 				})
 			}
 		})
