@@ -23,6 +23,7 @@ export class OnboardingFlow extends Element {
 	@signal username = ''
 	@signal dateOfBirth = ''
 	@signal currentStep: OnboardingStep = 'step1'
+	@signal errorMessage = ''
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -89,6 +90,9 @@ export class OnboardingFlow extends Element {
 	}
 
 	#handleStep2Submit = async () => {
+		// Clear any previous errors
+		this.errorMessage = ''
+
 		if (this.username && this.dateOfBirth) {
 			try {
 				// Save username and dateOfBirth to current user's profile
@@ -98,12 +102,19 @@ export class OnboardingFlow extends Element {
 				})
 
 				this.#nextStep()
-			} catch (error) {
+			} catch (error: any) {
 				console.error('Error saving profile:', error)
-				alert('Failed to save profile. Please try again.')
+
+				if (error.error === 'username-taken') {
+					this.errorMessage = 'This username is already taken. Please choose a different one.'
+				} else if (error.error === 'invalid-username') {
+					this.errorMessage = error.reason || 'Invalid username format.'
+				} else {
+					this.errorMessage = 'Failed to save profile. Please try again.'
+				}
 			}
 		} else {
-			alert('Please enter both username and date of birth')
+			this.errorMessage = 'Please enter both username and date of birth.'
 		}
 	}
 
@@ -142,17 +153,27 @@ export class OnboardingFlow extends Element {
 								type="text"
 								placeholder="@username"
 								class="form-input"
-								oninput=${(e: InputEvent) => (this.username = (e.target as HTMLInputElement).value)}
+								oninput=${(e: InputEvent) => {
+									this.username = (e.target as HTMLInputElement).value
+									this.errorMessage = '' // Clear error when user starts typing
+								}}
 								value=${() => this.username}
 							/>
 							<input
 								type="date"
 								class="form-input"
 								placeholder="Select your date of birth"
+								max="9999-12-31"
+								min="1950-01-01"
 								onchange=${(e: Event) => (this.dateOfBirth = (e.target as HTMLInputElement).value)}
 								value=${() => this.dateOfBirth}
 							/>
 							<p class="privacy-note">Don't worry, we won't tell about it. 😉</p>
+
+							<show-when
+								condition=${() => this.errorMessage.length > 0}
+								content=${() => html`<div class="error-message">${this.errorMessage}</div>`}
+							></show-when>
 						</div>
 						<button class="btn btn-primary" onclick=${this.#handleStep2Submit}>OK!</button>
 					</div>

@@ -178,6 +178,7 @@ export class LoginUI extends LumeElement {
 
 				* {
 					font-family: inherit;
+					font-size: var(--fontSizeTextSm);
 
 					.login-link-text {
 						text-decoration: none;
@@ -200,10 +201,13 @@ export class LoginUI extends LumeElement {
 					color: var(--appBackgroundDark);
 					font-weight: var(--fontWeightMedium);
 					border: none;
+					height: var(--uiSpacingXl);
+					line-height: var(--uiSpacingXl);
 				}
 
 				.login-button-form-submit {
 					margin-top: var(--uiSpacingSmall);
+					font-size: var(--fontSizeTextSm);
 				}
 
 				.or {
@@ -214,6 +218,7 @@ export class LoginUI extends LumeElement {
 				input[type='email'],
 				input[type='password'] {
 					border-radius: var(--borderRadiusSmall);
+					height: var(--uiSpacingXl);
 				}
 
 				[id*='label-and-input'] {

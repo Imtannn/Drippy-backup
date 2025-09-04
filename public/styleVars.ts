@@ -13,6 +13,7 @@ const styleVars = {
 	uiSpacingTiny: 5,
 	uiSpacingLarge: 30,
 	uiSpacingXl: 40,
+	uiSpacingXxl: 60,
 	uiGap: 10,
 	uiGapSmall: 5,
 	uiGapLarge: 15,
@@ -44,6 +45,8 @@ const styleVars = {
 	// App Dimensions
 	appWidth: 600,
 	appHeight: 400,
+
+	fontFamily: 'Poppins, Helvetica, sans-serif',
 
 	// Font Sizes
 	fontSizeTextXl: 54,
