@@ -7,7 +7,9 @@ import * as path from 'path'
 import '../imports/collections/index.js'
 import './imports/email-service.js'
 import './imports/load-env.js'
+import './imports/oauth-config.js'
 import './imports/order-service.js'
+import './imports/user-service.js'
 
 // @ts-expect-error missing type (TODO update away from @types/meteor? Ask
 // Meteor's AI "How to set up TypeScript", there's some good docs.)

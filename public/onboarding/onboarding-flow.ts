@@ -1,4 +1,6 @@
 import {css, element, Element, html, signal, type ElementAttributes} from 'lume'
+import {Meteor} from 'meteor/meteor'
+import {Tracker} from 'meteor/tracker'
 import '../app/app-buttons.js'
 import '../elements/back-button.js'
 import '../elements/show-when.js'
@@ -46,6 +48,18 @@ export class OnboardingFlow extends Element {
 				this.#updateUrl('step1')
 			}
 		})
+
+		// When user logs in, advance to next step
+		const computation = Tracker.autorun(() => {
+			if (Meteor.userId()) {
+				this.#nextStep()
+			}
+		})
+
+		// Clean up Tracker computation when component is destroyed
+		this.createEffect(() => {
+			return () => computation.stop()
+		})
 	}
 
 	#updateUrl = (step: OnboardingStep) => {
@@ -74,17 +88,20 @@ export class OnboardingFlow extends Element {
 		}
 	}
 
-	#handleStep1Submit = () => {
-		if (this.email.includes('@')) {
-			this.#nextStep()
-		} else {
-			alert('Please enter a valid email address')
-		}
-	}
-
-	#handleStep2Submit = () => {
+	#handleStep2Submit = async () => {
 		if (this.username && this.dateOfBirth) {
-			this.#nextStep()
+			try {
+				// Save username and dateOfBirth to current user's profile
+				await Meteor.callAsync('users.updateProfile', {
+					username: this.username,
+					dateOfBirth: this.dateOfBirth,
+				})
+
+				this.#nextStep()
+			} catch (error) {
+				console.error('Error saving profile:', error)
+				alert('Failed to save profile. Please try again.')
+			}
 		} else {
 			alert('Please enter both username and date of birth')
 		}
@@ -105,15 +122,8 @@ export class OnboardingFlow extends Element {
 							<h1 class="title">Gamify your fashion shopping experience.</h1>
 							<p class="sub-title">Browse it. Drip it. Shop it IRL!</p>
 						</header>
-						<div class="email-section">
-							<input
-								type="email"
-								placeholder="Enter your email"
-								class="form-input"
-								oninput=${(e: InputEvent) => (this.email = (e.target as HTMLInputElement).value)}
-								value=${() => this.email}
-							/>
-							<button class="btn btn-primary" onclick=${this.#handleStep1Submit}>Count me in 🔥</button>
+						<div class="login-section">
+							<login-ui expanded> </login-ui>
 						</div>
 						<img src=${createAccountImg} alt="Create Account" />
 					</div>
@@ -125,9 +135,6 @@ export class OnboardingFlow extends Element {
 				content=${() => html`
 					<div class="onboarding-step">
 						<header>
-							<div class="back-btn-container">
-								<back-button onclick=${this.#previousStep}></back-button>
-							</div>
 							<h1 class="title">First, enter your username & date of birth.</h1>
 						</header>
 						<div class="form-section">
