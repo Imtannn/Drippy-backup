@@ -36,6 +36,12 @@ p {
 .text-md {
 	font-size: var(--fontSizeTextMd);
 }
+.text-md-1 {
+	font-size: var(--fontSizeTextMdDesktop);
+}
+.text-md-2 {
+	font-size: var(--fontSizeTextSmDesktop);
+}
 .text-sm {
 	font-size: var(--fontSizeTextSm);
 }
@@ -1245,10 +1251,7 @@ p {
 	width: min(909px, 90vw);
 	height: 70px;
 	margin: 0 auto;
-	background: var(--uiColorPrimaryWhite);
 	border-radius: 100px;
-	border: 1px solid var(--uiColorPrimaryLightGrey);
-	box-shadow: 0px 4px 20px var(--uiColorShadowColor);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -1280,8 +1283,8 @@ p {
 }
 
 .header__menu-link {
-	font-weight: var(--fontWeightMedium);
-	color: var(--uiColorPrimaryBlack);
+	font-weight: var(--fontWeightNormal);
+	color: var(--appBackgroundDark);
 	text-decoration: none;
 	letter-spacing: 0;
 	transition: var(--transitionHover);
@@ -1364,15 +1367,7 @@ p {
 
 .brands__logo {
 	height: 120px;
-	width: auto;
-	max-width: 100%;
-	object-fit: contain;
-	filter: grayscale(100%);
-	transition: var(--transitionFast);
-}
-
-.brands__item:hover .brands__logo {
-	filter: grayscale(0%);
+	min-width: 100%;
 }
 
 .header__logo-img {
@@ -1991,6 +1986,9 @@ p {
 }
 
 @media (max-width: 768px) {
+	.text-md-1 {
+		font-size: var(--fontSizeTextMd);
+	}
 	.header {
 		width: min(400px, 95vw);
 		height: 60px;
@@ -2066,7 +2064,15 @@ p {
 		line-height: var(--lineHeightNormal);
 	}
 	.text-md {
-		font-size: var(--fontSizeTextMdMobile);
+		font-size: var(--fontSizeTextSm);
+		line-height: var(--lineHeightNormal);
+	}
+	.text-md-1 {
+		font-size: var(--fontSizeTextSm);
+		line-height: var(--lineHeightNormal);
+	}
+	.text-md-2 {
+		font-size: var(--fontSizeTextSm);
 		line-height: var(--lineHeightNormal);
 	}
 	.text-sm {
@@ -2313,4 +2319,20 @@ p {
 		flex-direction: column;
 		gap: 26px;
 	}
+}
+
+/* Circular Progress Animation */
+
+
+
+.statistics__ellipse {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.statistics__ellipse img {
+	position: relative;
+	z-index: 2;
 }

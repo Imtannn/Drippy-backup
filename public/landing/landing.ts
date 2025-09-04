@@ -148,7 +148,7 @@ const navbar = html`
 			<li class="header__menu-item"><a href="#pricing" class="header__menu-link">Pricing</a></li>
 		</ul>
 		<div class="header__actions">
-			<button class="btn btn--primary" aria-label="Book a demo">Book a demo</button>
+			<custom-button variant="primary" size="small">Book a demo</custom-button>
 		</div>
 		<button class="header__mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
 			<span class="header__mobile-toggle-line"></span>
@@ -167,7 +167,7 @@ const mainContent = html`
 						<!-- Hero Section -->
 						<section class="hero-header" aria-labelledby="hero-title">
 							<p id="hero-title" class="stop-selling-clothes text-xl">Stop selling clothes. <br />Start selling experiences.</p>
-							<p class="hero__subtitle text-sm">
+							<p class="hero__subtitle text-md-1">
 								Turn your e-commerce into an
 								<span class="highlight"> interactive 3D <br> studio </span>
 							that boosts engagement and sales.
@@ -183,10 +183,10 @@ const mainContent = html`
 						</section>
 
 						<!-- Brands Section -->
-						<section class="section">
+						<section class="section" id="statistics">
 							<div class="section-header">
 								<div class="section-title text-lg">Backed by the fearless.</div>
-								<div class="section-subtitle text-md">Trusted by the rebels.</div>
+								<div class="section-subtitle text-md-2">Trusted by the rebels.</div>
 							</div>
 							<div class="brands__grid">
 								${brands.map(
@@ -200,12 +200,12 @@ const mainContent = html`
 						</section>
 
 						<!-- Interactive 3D Section -->
-						<section class="section">
+						<section class="section" id="statistics">
 							<div class="section-header">
 								<div class="section-title text-lg">
 									<span>Interactive 3D is </span> <span class="hero__title--highlight">the new black.</span>
 								</div>
-								<div class="section-subtitle text-md">Static images are dead — Today shoppers want fun, interaction, and engagement.</div>
+								<div class="section-subtitle text-md-2">Static images are dead — Today shoppers want fun,<br> interaction, and engagement.</div>
 							</div>
 							<div class="showcase__container">
 								<div class="showcase">
@@ -239,15 +239,14 @@ const mainContent = html`
 						</section>
 
 						<!-- Statistics Section -->
-						<section class="section">
+						<section class="section" id="statistics">
 							<div class="section-header">
 								<div class="section-title text-lg">Well, numbers do not lie.</div>
-								<div class="section-subtitle text-md">3D and personalization aren't just buzz — they drive business metrics.</div>
+								<div class="section-subtitle text-md-2">3D and personalization aren't just buzz — they drive business metrics.</div>
 							</div>
 							<div class="statistics__grid">
 								${statistics.map(
 									(stat: any) => html`
-										<div class="statistics__item">
 											<div class="statistics__icon-container">
 												<div class="statistics__icon-overlap">
 													<div class="group-wrapper">
@@ -278,7 +277,7 @@ const mainContent = html`
 											<span class="hero__title text-lg">Drippy is the new storefront, </span>
 											<span class="hero__title--highlight text-lg">reimagined. </span>
 										</div>
-										<p class="features__subtitle text-md">Let shoppers play, remix, and buy — all in one place.</p>
+										<p class="features__subtitle text-md-1">Let shoppers play, remix, and buy — all in one place.</p>
 									</div>
 									<div class="features__grid">
 										<div class="feature__wrapper">
@@ -289,8 +288,8 @@ const mainContent = html`
 													</div>
 												</div>
 												<div class="feature__content">
-													<p class="feature__title text-sm">Turn store into a playground</p>
-													<p class="feature__description text-xs">Let shoppers explore 3D spaces, remix designs, styled avatars.</p>
+													<p class="feature__title text-md-1">Turn store into a playground</p>
+													<p class="feature__description text-sm">Let shoppers explore 3D spaces, remix designs, styled avatars.</p>
 												</div>
 											</div>
 										</div>
@@ -302,8 +301,8 @@ const mainContent = html`
 													</div>
 												</div>
 												<div class="feature__content">
-													<div class="feature__title text-sm">Sell what people want</div>
-													<p class="feature__description text-xs">
+													<div class="feature__title text-md-1">Sell what people want</div>
+													<p class="feature__description text-sm">
 														Collect payments and orders directly - Fulfill on made-to-order basis.
 													</p>
 												</div>
@@ -317,8 +316,8 @@ const mainContent = html`
 													</div>
 												</div>
 												<div class="feature__content">
-													<div class="feature__title text-sm">Collect powerful insights</div>
-													<p class="feature__description text-xs">Get real-time signals on what to produce — no more guesswork.</p>
+													<div class="feature__title text-md-1">Collect powerful insights</div>
+													<p class="feature__description text-sm">Get real-time signals on what to produce — no more guesswork.</p>
 												</div>
 											</div>
 										</div>
@@ -330,8 +329,8 @@ const mainContent = html`
 													</div>
 												</div>
 												<div class="feature__item--fourth">
-													<div class="feature__title text-sm">Build &amp; grow community</div>
-													<p class="feature__description text-xs">
+													<div class="feature__title text-md-1">Build &amp; grow community</div>
+													<p class="feature__description text-sm">
 														Host in-app challenges that turn your audience into fans &amp; co-creators
 													</p>
 												</div>
@@ -351,7 +350,7 @@ const mainContent = html`
 						<section id="how-it-works" class="section">
 							<div class="section-header">
 								<div class="section-title text-lg">Built like a game, feel like a game.</div>
-								<div class="section-subtitle text-md">Here&#39;s how it work from your shoppers' POV.</div>
+								<div class="section-subtitle text-md-2">Here&#39;s how it work from your shoppers' POV.</div>
 							</div>
 							<div class="how-it-works__grid">
 								${steps.map(
@@ -360,8 +359,8 @@ const mainContent = html`
 											<div class="how-it-works__step">
 												<img class="how-it-works__step-image" src=${step.logo} />
 											</div>
-											<div class="how-it-works__step-title text-sm">${step.name}</div>
-											<p class="how-it-works__description text-xs">${step.des}</p>
+											<div class="how-it-works__step-title text-md-1">${step.name}</div>
+											<p class="how-it-works__description text-sm">${step.des}</p>
 										</div>
 									`,
 								)}
@@ -376,7 +375,7 @@ const mainContent = html`
 						<section id="platform" class="section">
 							<div class="section-header">
 								<div class="section-title text-lg" id="platform-title">A plug &amp; play 3D studio.</div>
-								<div class="section-subtitle text-md">Browser-based, mobile-first. Zero download, Zero friction.</div>
+								<div class="section-subtitle text-md-2">Browser-based, mobile-first. Zero download, Zero friction.</div>
 							</div>
 							<div class="platform__content">
 								<div class="platform__grid">
@@ -384,8 +383,8 @@ const mainContent = html`
 										<div class="platform__card-overlap">
 											<div class="platform__card-content">
 												<div class="platform__card-text">
-													<div class="statistics__item-title text-sm">Link in bios</div>
-													<p class="statistics__description text-xs">
+													<div class="statistics__item-title text-md-1">Link in bios</div>
+													<p class="statistics__description text-sm">
 														No website? no problem. Drop Drippy in your bio and turn followers into shoppers.
 													</p>
 												</div>
@@ -399,7 +398,7 @@ const mainContent = html`
 										<div class="platform__card-overlap">
 											<div class="platform__card-content">
 												<div class="platform__card-text">
-													<div class="statistics__item-title text-sm">Embed on website</div>
+													<div class="statistics__item-title text-md-1">Embed on website</div>
 													<p class="statistics__description text-xs">
 														Plug Drippy directly into your online store. Same site, new experience.
 													</p>
@@ -441,7 +440,7 @@ const mainContent = html`
 								<div class="pricing__header">
 									<div class="section-header">
 										<div class="section-title text-lg">Our pricing.</div>
-										<div class="section-subtitle text-md">Pricing without the bullsh*t.</div>
+										<div class="section-subtitle text-md-2">Pricing without the bullsh*t.</div>
 									</div>
 									<div class="pricing__toggle">
 										<custom-button variant="primary">Yearly</custom-button>
@@ -547,7 +546,7 @@ const mainContent = html`
 						</section>
 
 						<!-- CTA Section -->
-						<section class="section">
+						<section class="section" id="statistics">
 							<div class="cta__content">
 								<div class="cta__background">
 									<div class="cta__background-overlap">
@@ -648,3 +647,4 @@ setTimeout(setupSmoothScroll, 500) // Retry if needed
 const loadingCover = document.getElementById('loadingCover')
 loadingCover?.classList.add('invisible')
 loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
+

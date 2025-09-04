@@ -2,7 +2,7 @@
 const styleVars = {
 	// Example: this results in 0.8 when used in JS, and 80% when used in CSS.
 	logoWidth: '5%' as any as number,
-
+	fontFamilyPrimary: 'Poppins',
 	// Soft blue in light mode, and dark blue in dark mode.
 	appBackground: '#f6f6f6',
 	appBackgroundDark: '#121316',
@@ -59,10 +59,8 @@ const styleVars = {
 	fontSizeTextXsTablet: 14,
 	fontSizeTextXlMobile: 24,
 	fontSizeTextLgMobile: 20,
-	fontSizeTextMdMobile: 18,
-	fontSizeTextSmMobile: 14,
-	fontSizeTextXsMobile: 12,
-
+	fontSizeTextMdDesktop: 18,
+	fontSizeTextSmDesktop: 21,
 	// Font Weights
 	fontWeightBold: 700,
 	fontWeightSemiBold: 600,
