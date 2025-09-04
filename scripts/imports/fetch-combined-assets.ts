@@ -24,8 +24,10 @@ AWS.config.update({
 const s3 = new AWS.S3()
 
 // Root folder ID from the Google Drive URL
-const ROOT_FOLDER_ID = '1zYLtaDyheX-nIwNgL4Q_tEwjvqFjVVNR'
-const BRAND = 'speed'
+const ROOT_FOLDER_ID = '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-'
+const BRAND = 'moidien'
+
+const allFabrics: TODO[] = []
 
 // Helper function to make HTTP requests
 function makeRequest<T = unknown>(url: string): Promise<T> {
@@ -57,7 +59,7 @@ function getDriveDownloadUrl(fileId: string): string {
 async function uploadToS3(buffer: Buffer, key: string, contentType: string): Promise<string> {
 	const params = {
 		Bucket: S3_BUCKET,
-		Key: key,
+		Key: key.replace(/ /g, '_'),
 		Body: buffer,
 		ContentType: contentType,
 		ACL: 'public-read',
@@ -65,6 +67,7 @@ async function uploadToS3(buffer: Buffer, key: string, contentType: string): Pro
 
 	try {
 		const result = await s3.upload(params).promise()
+		console.log(result.Location)
 		return result.Location
 	} catch (error) {
 		console.error('Error uploading to S3:', error)
@@ -124,11 +127,20 @@ function normalizeName(name: string): string {
 	return name.replace(/_/g, ' ').trim()
 }
 
+function capitalize(name: string): string {
+	return name.toLowerCase().replace(/\b\w/g, char => char.toUpperCase())
+}
+
 function normalizeBlockCategory(folderName: string): string {
 	// Normalize block type folder names to exact category names
-	if (folderName.includes('Bodice')) return 'Bodice'
-	if (folderName.includes('Pants')) return 'Pants'
-	if (folderName.includes('Sleeves')) return 'Sleeves'
+	if (folderName.toLowerCase().includes('bodice')) return 'Bodice'
+	if (folderName.toLowerCase().includes('pants')) return 'Pants'
+	if (folderName.toLowerCase().includes('sleeves')) return 'Sleeves'
+	if (folderName.toLowerCase().includes('dress')) return 'Dress'
+	if (folderName.toLowerCase().includes('skirt')) return 'Skirt'
+	if (folderName.toLowerCase().includes('fullbody')) return 'Full Body'
+	if (folderName.toLowerCase().includes('hat')) return 'Hat'
+	if (folderName.toLowerCase().includes('bag')) return 'Bag'
 	return folderName // fallback to original name
 }
 
@@ -136,7 +148,7 @@ function normalizeBlockCategory(folderName: string): string {
 async function processTemplateFolder(
 	templateFolder: TODO,
 	category: string,
-): Promise<{template: TODO; blocks: TODO[]}> {
+): Promise<{template: TODO; blocks: TODO[]; unsucceeded: TODO[]}> {
 	console.log(`  📂 Processing template: ${templateFolder.name}`)
 
 	const templateContents = await fetchFolderContents(templateFolder.id)
@@ -148,33 +160,53 @@ async function processTemplateFolder(
 
 	if (!templateThumbnail) {
 		console.warn(`  ⚠️  No template thumbnail found for ${templateFolder.name}`)
-		return {template: null, blocks: []}
+		return {template: null, blocks: [], unsucceeded: []}
 	}
 
 	// Find block type folders (Bodice, Pants, Sleeves)
 	const blockTypeFolders = templateContents.filter(
 		item =>
 			item.mimeType === 'application/vnd.google-apps.folder' &&
-			['Bodice', 'Pants', 'Sleeves'].some(blockType => item.name.includes(blockType)),
+			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag'].some(blockType =>
+				item.name.toLowerCase().includes(blockType.toLowerCase()),
+			),
 	)
 
-	// Find Materials folder
-	const materialsFolder = templateContents.find(
-		item => item.mimeType === 'application/vnd.google-apps.folder' && item.name.includes('Materials'),
+	const materialFolders = templateContents.filter(
+		item => item.mimeType === 'application/vnd.google-apps.folder' && item.name.toLowerCase().includes('material'),
 	)
 
-	if (!materialsFolder) {
-		console.warn(`  ⚠️  No materials folder found for ${templateFolder.name}`)
+	let materialFolder = materialFolders?.[0] as TODO
+	if (!materialFolder) {
+		console.warn(`  ⚠️  No material folders found for ${templateFolder.name}`)
+	} else {
+		console.log(`    Found ${materialFolder.name} material folder`)
 	}
+
+	let materialContents: TODO[] = []
+	if (materialFolder) {
+		materialContents = await fetchFolderContents(materialFolder.id)
+	}
+
+	// Find material files directly in template folder
+	const materialFiles = materialContents.filter(
+		file =>
+			file.mimeType !== 'application/vnd.google-apps.folder' &&
+			(file.name.toLowerCase().includes('normal') ||
+				file.name.toLowerCase().includes('basecolor') ||
+				file.name.toLowerCase().includes('displace') ||
+				file.name.toLowerCase().includes('rough') ||
+				file.name.toLowerCase().includes('(render)')),
+	)
 
 	if (blockTypeFolders.length === 0) {
 		console.warn(`  ⚠️  No block type folders found for ${templateFolder.name}`)
-		return {template: null, blocks: []}
+		return {template: null, blocks: [], unsucceeded: []}
 	}
 
 	console.log(`    Found ${blockTypeFolders.length} block type folders`)
-	if (materialsFolder) {
-		console.log(`    Found Materials folder`)
+	if (materialFiles.length > 0) {
+		console.log(`    Found ${materialFiles.length} material files`)
 	}
 
 	// Download template thumbnail
@@ -186,20 +218,14 @@ async function processTemplateFolder(
 		'image/png',
 	)
 
-	// Get material reference if Materials folder exists
+	// Process material files if they exist
 	let materialId: string | null = null
-	if (materialsFolder) {
-		console.log(`    📁 Finding material reference from Materials folder`)
+	if (materialFiles.length > 0) {
+		console.log(`    📁 Processing material files for template`)
 
-		const materialsContents = await fetchFolderContents(materialsFolder.id)
-		const materialFolders = materialsContents.filter((f: TODO) => f.mimeType === 'application/vnd.google-apps.folder')
-
-		// Assuming there's one material folder per template
-		if (materialFolders.length > 0) {
-			const materialFolder = materialFolders[0] // Take the first material folder
-			materialId = materialFolder.name // Use folder name as reference to fabric
-			console.log(`      📎 Material reference: ${materialId}`)
-		}
+		// Process and upload material files
+		materialId = await processMaterialFolder(materialFolder, category)
+		console.log(`     📎 Material reference: ${materialId}`)
 	}
 
 	const template = {
@@ -211,18 +237,28 @@ async function processTemplateFolder(
 
 	// Process blocks in each block type folder
 	const allBlocks: TODO[] = []
+	const unsucceeded: TODO[] = []
 
 	for (const blockTypeFolder of blockTypeFolders) {
 		console.log(`    📁 Processing block type: ${blockTypeFolder.name}`)
 
 		const blockTypeContents = await fetchFolderContents(blockTypeFolder.id)
 		const gltfFiles = blockTypeContents.filter((f: TODO) => f.name.toLowerCase().endsWith('.gltf'))
-		const pngFiles = blockTypeContents.filter((f: TODO) => f.name.toLowerCase().endsWith('.png'))
+		let pngFiles = blockTypeContents.filter((f: TODO) => f.name.toLowerCase().endsWith('.png'))
+
+		if (pngFiles.length === 0) {
+			console.error(`      ❌ No Block PNG files found for ${blockTypeFolder.name}`)
+			console.log('      📥 Using template thumbnail as block thumbnail')
+			pngFiles = [templateThumbnail]
+		}
+		console.log(
+			`      📁 Found ${gltfFiles.length} GLTF files and ${pngFiles.length} PNG files, block type: ${gltfFiles[0]?.name || ''} ${pngFiles[0]?.name || ''}`,
+		)
 
 		// Match GLTF and PNG pairs
 		for (const gltfFile of gltfFiles) {
-			const baseName = path.basename(gltfFile.name, '.gltf')
-			const matchingPng = pngFiles.find((png: TODO) => path.basename(png.name, '.png') === baseName)
+			const baseName = path.basename(gltfFile.name, '.gltf').toLowerCase()
+			const matchingPng = pngFiles[0]
 
 			if (matchingPng) {
 				console.log(`      📥 Processing block: ${baseName}`)
@@ -261,11 +297,14 @@ async function processTemplateFolder(
 				} catch (error) {
 					console.error(`      ❌ Failed to process block ${baseName}:`, error)
 				}
+			} else {
+				console.error(`      ❌ No matching PNG file found for ${baseName}`)
+				unsucceeded.push(baseName)
 			}
 		}
 	}
 
-	return {template, blocks: allBlocks}
+	return {template, blocks: allBlocks, unsucceeded: unsucceeded}
 }
 
 function generateTemplateData(processedData: TODO[]): TODO {
@@ -460,6 +499,122 @@ async function updateFabricsFile(content: string): Promise<void> {
 	console.log('✅ fabrics.ts updated successfully')
 }
 
+// Get material and return material name as id
+async function processMaterialFolder(materialFolder: TODO, categoryName: string): Promise<string> {
+	// Parse thumbnail file name, the format is "${materialCategory} - ${materialName} - RENDER"
+	const materialContents = await fetchFolderContents(materialFolder.id)
+	const materialFiles = materialContents.filter(item => item.mimeType !== 'application/vnd.google-apps.folder')
+
+	// Process texture files
+	const textureUrls: {[key: string]: string} = {}
+	let thumbUrl = ''
+
+	// First, look for thumbnail file matching folder name
+	const thumbnailFile = materialFiles.find(file => file.name.includes('RENDER'))
+	const thumbnailFileName = thumbnailFile?.name
+	const materialCategory = capitalize(normalizeName(thumbnailFile?.name.split('-')[0].trim()))
+	const materialName = capitalize(normalizeName(thumbnailFile?.name.split('-')[1].trim()))
+
+	const matchingFabric = allFabrics.find(
+		fabric =>
+			fabric.materialName === materialName &&
+			fabric.category === materialCategory &&
+			fabric.templateCategory === categoryName,
+	)
+	if (matchingFabric) {
+		console.log(`      ⚠️ Material ${materialName} already exists, skipping...`)
+		console.log(`    ✅ Processed fabric: ${materialName} (${materialCategory})`)
+		return `${materialName} ${materialCategory} ${categoryName}`
+	}
+
+	if (thumbnailFile) {
+		try {
+			console.log(`      📸 Processing thumbnail: ${thumbnailFile.name}`)
+
+			const thumbBuffer = await downloadToBuffer(getDriveDownloadUrl(thumbnailFile.id))
+			thumbUrl = await uploadToS3(
+				thumbBuffer,
+				`fabrics/${BRAND}/${categoryName}/${materialFolder.name}/${thumbnailFile.name}`,
+				'image/png',
+			)
+
+			console.log(`       ✅ Uploaded thumbnail ${thumbnailFile.name}`)
+		} catch (error) {
+			console.error(`       ❌ Failed to process thumbnail ${thumbnailFile.name}:`, error)
+		}
+	}
+
+	for (const file of materialFiles) {
+		// Skip thumbnail file as we've already processed it
+		if (file.name === thumbnailFileName) continue
+
+		try {
+			console.log(`      📥 Processing texture: ${file.name}`)
+
+			const fileBuffer = await downloadToBuffer(getDriveDownloadUrl(file.id))
+			const extension = path.extname(file.name).toLowerCase()
+			let contentType = 'application/octet-stream'
+
+			if (extension === '.jpg' || extension === '.jpeg') contentType = 'image/jpeg'
+			else if (extension === '.png') contentType = 'image/png'
+			else if (extension === '.webp') contentType = 'image/webp'
+
+			const fileS3Url = await uploadToS3(
+				fileBuffer,
+				`fabrics/${BRAND}/${categoryName}/${materialFolder.name}/${file.name}`,
+				contentType,
+			)
+
+			// Map files based on name
+			const fileName = path.basename(file.name, path.extname(file.name)).toLowerCase()
+			if (fileName.includes('normal')) {
+				textureUrls.normal = fileS3Url
+			} else if (fileName.includes('base')) {
+				textureUrls.baseColor = fileS3Url
+			} else if (fileName.includes('displace')) {
+				textureUrls.displacement = fileS3Url
+			} else if (fileName.includes('rough')) {
+				textureUrls.roughness = fileS3Url
+			}
+
+			console.log(`       ✅ Uploaded texture ${file.name}`)
+		} catch (error) {
+			console.error(`       ❌ Failed to process texture ${file.name}:`, error)
+		}
+	}
+
+	// Create fabric object
+	const fabric = {
+		materialName,
+		category: materialCategory,
+		templateCategory: categoryName,
+		thumbUrl,
+		...textureUrls,
+	}
+
+	allFabrics.push(fabric)
+	console.log(`     🥳 Processed fabric: ${materialName} (${materialCategory})`)
+	return `${materialName} ${materialCategory} ${categoryName}`
+}
+
+async function processMaterialsFolders(materialsFolder: TODO, categoryName: string): Promise<void> {
+	// Process Materials folder for fabrics if it exists
+	if (materialsFolder) {
+		console.log(`  📁 Processing Materials folder for ${categoryName} category`)
+
+		const materialsContents = await fetchFolderContents(materialsFolder.id)
+		const materialFolders = materialsContents.filter(item => item.mimeType === 'application/vnd.google-apps.folder')
+
+		console.log(`    Found ${materialFolders.length} material folders`)
+
+		for (const materialFolder of materialFolders) {
+			console.log(`    📁 Processing material: ${materialFolder.name}`)
+
+			await processMaterialFolder(materialFolder, categoryName)
+		}
+	}
+}
+
 async function main(): Promise<void> {
 	try {
 		console.log('🚀 Fetching combined assets from Google Drive and uploading to S3...')
@@ -493,7 +648,7 @@ async function main(): Promise<void> {
 		console.log(`📁 Found ${categoryFolders.length} category folders`)
 
 		const allProcessedData: TODO[] = []
-		const allFabrics: TODO[] = []
+		const allUnsucceeded: TODO[] = []
 
 		// Process each category
 		for (const categoryFolder of categoryFolders) {
@@ -515,105 +670,11 @@ async function main(): Promise<void> {
 				if (processedTemplate.template) {
 					allProcessedData.push(processedTemplate)
 				}
+				allUnsucceeded.push(...processedTemplate.unsucceeded)
 			}
 
-			// Process Materials folder for fabrics if it exists
-			if (materialsFolder) {
-				console.log(`  📁 Processing Materials folder for ${categoryFolder.name} category`)
-
-				const materialsContents = await fetchFolderContents(materialsFolder.id)
-				const materialFolders = materialsContents.filter(item => item.mimeType === 'application/vnd.google-apps.folder')
-
-				console.log(`    Found ${materialFolders.length} material folders`)
-
-				for (const materialFolder of materialFolders) {
-					console.log(`    📁 Processing material: ${materialFolder.name}`)
-
-					// Parse folder name: "${materialName} ${category}"
-					const folderNameParts = materialFolder.name.split(' ')
-					const materialCategory = folderNameParts[folderNameParts.length - 1] // Last part is category
-					const materialName = folderNameParts.slice(0, -1).join(' ') // Everything else is material name
-
-					const materialContents = await fetchFolderContents(materialFolder.id)
-					const materialFiles = materialContents.filter(item => item.mimeType !== 'application/vnd.google-apps.folder')
-
-					// Process texture files
-					const textureUrls: {[key: string]: string} = {}
-					let thumbUrl = ''
-
-					// First, look for thumbnail file matching folder name
-					const thumbnailFileName = `${materialFolder.name}.png`
-					const thumbnailFile = materialFiles.find(file => file.name === thumbnailFileName)
-
-					if (thumbnailFile) {
-						try {
-							console.log(`      📸 Processing thumbnail: ${thumbnailFile.name}`)
-
-							const thumbBuffer = await downloadToBuffer(getDriveDownloadUrl(thumbnailFile.id))
-							thumbUrl = await uploadToS3(
-								thumbBuffer,
-								`fabrics/${BRAND}/${categoryFolder.name}/${materialFolder.name}/${thumbnailFile.name}`,
-								'image/png',
-							)
-
-							console.log(`      ✅ Uploaded thumbnail ${thumbnailFile.name}`)
-						} catch (error) {
-							console.error(`      ❌ Failed to process thumbnail ${thumbnailFile.name}:`, error)
-						}
-					}
-
-					for (const file of materialFiles) {
-						// Skip thumbnail file as we've already processed it
-						if (file.name === thumbnailFileName) continue
-
-						try {
-							console.log(`      📥 Processing texture: ${file.name}`)
-
-							const fileBuffer = await downloadToBuffer(getDriveDownloadUrl(file.id))
-							const extension = path.extname(file.name).toLowerCase()
-							let contentType = 'application/octet-stream'
-
-							if (extension === '.jpg' || extension === '.jpeg') contentType = 'image/jpeg'
-							else if (extension === '.png') contentType = 'image/png'
-							else if (extension === '.webp') contentType = 'image/webp'
-
-							const fileS3Url = await uploadToS3(
-								fileBuffer,
-								`fabrics/${BRAND}/${categoryFolder.name}/${materialFolder.name}/${file.name}`,
-								contentType,
-							)
-
-							// Map files based on name
-							const fileName = path.basename(file.name, path.extname(file.name))
-							if (fileName === 'Normal') {
-								textureUrls.normal = fileS3Url
-							} else if (fileName === 'BaseColor') {
-								textureUrls.baseColor = fileS3Url
-							} else if (fileName === 'Displacement') {
-								textureUrls.displacement = fileS3Url
-							} else if (fileName === 'Roughness') {
-								textureUrls.roughness = fileS3Url
-							}
-
-							console.log(`      ✅ Uploaded texture ${file.name}`)
-						} catch (error) {
-							console.error(`      ❌ Failed to process texture ${file.name}:`, error)
-						}
-					}
-
-					// Create fabric object
-					const fabric = {
-						materialName,
-						category: materialCategory,
-						templateCategory: categoryFolder.name,
-						thumbUrl,
-						...textureUrls,
-					}
-
-					allFabrics.push(fabric)
-					console.log(`    ✅ Processed fabric: ${materialName} (${materialCategory})`)
-				}
-			}
+			// Process fabrics if Materials folder exists inside Template folder
+			await processMaterialsFolders(materialsFolder, categoryFolder.name)
 		}
 
 		// Generate templates, blocks, and fabrics data
@@ -645,6 +706,7 @@ async function main(): Promise<void> {
 		console.log(`📄 Templates: ${templateCount} items generated`)
 		console.log(`🧱 Blocks: ${blockCount} items generated`)
 		console.log(`🎨 Fabrics: ${fabricCount} items generated`)
+		console.log(`❌ Unsucceeded: ${allUnsucceeded.length} items`)
 
 		console.log(`\n📁 Assets organized as:`)
 		console.log(`   Template Images: images/${BRAND}/templates/{category}/`)

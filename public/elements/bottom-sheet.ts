@@ -1,7 +1,7 @@
 import {attribute, booleanAttribute, css, Element, element, type ElementAttributes, html, onCleanup} from 'lume'
 
 // Define snap points in percentages of viewport height
-const SNAP_POINTS = [0.41, 0.6, 0.9]
+const SNAP_POINTS = [0.41, 0.6, 0.88]
 
 type BottomSheetAttributes =
 	| 'defaultSnap'
@@ -459,7 +459,6 @@ export class BottomSheetHeader extends Element {
 			top: 0;
 			background: var(--appBackground);
 			z-index: 10;
-			border-bottom: 1px solid #e0e1e4;
 		}
 	`
 }

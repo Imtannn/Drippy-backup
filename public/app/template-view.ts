@@ -1,7 +1,10 @@
-import {css, Element, element, html, Index, type ElementAttributes} from 'lume'
+import {css, Element, element, html, signal, For, Show, type ElementAttributes, Index} from 'lume'
+import type {Accessor} from 'solid-js'
 import {store} from './store.js'
 import {templates} from '../consts/templates.js'
-import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
+import type {Template, TemplateCategory} from '../types/template.js'
+import type {Block} from '../types/block.js'
+import {getBlocksForTemplate} from '../consts/relationships.js'
 import './app-buttons.js'
 import './item-card.js'
 import '../elements/bottom-sheet.js'
@@ -19,30 +22,75 @@ type TemplateViewAttributes = keyof {}
 export class TemplateView extends Element {
 	static readonly elementName = 'template-view'
 
+	@signal selectedTab: TemplateCategory | null = null
+	@signal templateCategories: Record<TemplateCategory, Template[]> = {} as Record<TemplateCategory, Template[]>
+	@signal spaceCollection: string | null = null
+
+	private defaultCollection = 'moidien'
+
 	connectedCallback() {
 		super.connectedCallback()
+
+		this.createEffect(() => {
+			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
+		})
+
+		// Update template categories when templates change
+		this.createEffect(() => {
+			if (!this.spaceCollection) return
+			// Define the category order: 'Dress' | 'Jacket' | 'Shirt' | 'Skirt' | 'Pants' | 'Accessories'
+			const categoryOrder: TemplateCategory[] = ['Dress', 'Shirt', 'Jacket', 'Skirt', 'Pants', 'Accessories']
+
+			// Get available categories from templates
+			const availableCategories = [
+				...new Set(templates[this.spaceCollection].map(template => template.category)),
+			] as TemplateCategory[]
+
+			// Sort categories in the desired order
+			const orderedCategories = categoryOrder.filter(category => availableCategories.includes(category))
+
+			this.templateCategories = orderedCategories.reduce(
+				(acc, category) => {
+					acc[category] = templates[this.spaceCollection!].filter(template => template.category === category)
+					return acc
+				},
+				{} as Record<TemplateCategory, Template[]>,
+			)
+		})
+
+		this.createEffect(() => {
+			// Auto-select first category
+			const categories = Object.keys(this.templateCategories)
+			if (categories.length > 0) {
+				this.selectedTab = categories[0] as TemplateCategory
+			}
+		})
+
+		this.createEffect(() => {
+			console.log('this.templateCategories', this.templateCategories, this.selectedTab, this.spaceCollection)
+		})
 	}
 
 	#onItemClick = (e: CustomEvent) => {
 		const template = e.detail.itemValue
 
-		// Set the selected template
-		store.setSelectedTemplate = template
+		// Set the selected template using the new Map structure
+		store.setSelectedTemplates = template
 
-		// Get blocks for this template using relationships
-		const templateBlocks = getBlocksForTemplate(template, 'speed')
+		// Get blocks for ALL selected templates, organized by template category
+		const templateBlockData: {blocks: Block[]; templateCategory: TemplateCategory}[] = []
+		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
+			const templateBlocks = getBlocksForTemplate(selectedTemplate, 'moidien')
+			templateBlockData.push({
+				blocks: templateBlocks,
+				templateCategory: templateCategory,
+			})
+		}
 
-		// Get fabric for this template
-		const templateFabric = getFabricForTemplate(template, 'speed')
+		// Replace blocks with aggregated blocks from all selected templates
+		store.replaceSelectedBlocks = templateBlockData
 
-		console.log('template', template)
-		console.log('templateBlocks', templateBlocks)
-		console.log('templateFabric', templateFabric)
-
-		// Set the blocks and fabric
-		store.replaceSelectedBlocks = templateBlocks
-
-		store.setSelectedFabrics = templateFabric || null
+		// Note: Fabric selection will be handled separately per block, not per template
 	}
 
 	#onDripItClick = () => {
@@ -53,7 +101,7 @@ export class TemplateView extends Element {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.delete('scene')
 		window.history.replaceState({}, '', `?${searchParams.toString()}`)
-		store.selectScene = null
+		store.selectSpace = null
 		store.navigateTo = 'scene'
 	}
 
@@ -67,7 +115,7 @@ export class TemplateView extends Element {
 	<app-buttons-right>
 	<app-buttons-group>
 		<!-- <theme-switch-button></theme-switch-button> -->
-		<logo-button brand-name="Speed"></logo-button>
+		<logo-button brand-name="MoiDien"></logo-button>
 	</app-buttons-group>
 	<app-buttons-group>
 		<person-button ></person-button>
@@ -77,37 +125,97 @@ export class TemplateView extends Element {
 
 	<app-buttons-right layout="bottom">
 		<app-buttons-group>
-			<drip-it-button onclick=${this.#onDripItClick}></drip-it-button>
+			<drip-it-button button-disabled=${() => store.selectedTemplates.size === 0} onclick=${this.#onDripItClick}></drip-it-button>
 		</app-buttons-group>
 	</app-buttons-right>
 
 	<bottom-sheet>
-			<div class="templates-content-container">
-					<div class="items-grid">
-						<${Index} each=${templates.speed}>
-							${(template: () => (typeof templates.speed)[number]) => html`
-								<div class="template-item">
-									<item-card
-										item-active=${() => store.selectedTemplate?._id === template()._id}
-										item-src=${template().thumb}
-										item-alt=${template().name}
-										item-value=${template()}
-										oncardselected=${this.#onItemClick}
-										object-fit="contain"
-										aspect-ratio="0.79"
-									></item-card>
-									<div class="template-product-name">Product Name</div>
-									<div class="template-product-price">€ 125.00</div>
-								</div>
-							`}
-						</>
+		<${Show} when=${() => this.selectedTab !== null}>
+		<tabs-provider
+			default-value=${() => this.selectedTab}
+			ontabchange=${(e: CustomEvent) => {
+				this.selectedTab = e.detail.value
+			}}
+		>
+		<bottom-sheet-header>
+			<div class="tabs-container">
+				<tabs-list>
+				<${Index} each=${() => Object.keys(this.templateCategories)}>
+				${(category: Accessor<TemplateCategory>) => html` <tabs-trigger selected-value=${category()}>${category()}</tabs-trigger> `}
+				</>
+				</tabs-list>
 			</div>
-		</bottom-sheet>
+		</bottom-sheet-header>
+		<div class="tabs-content-container">
+			<${For} each=${() => Object.keys(this.templateCategories)}>
+			${(category: TemplateCategory) => html`
+				<tabs-content selected-value=${category}>
+					<div class="items-grid">
+						<${For} each=${() => this.templateCategories[category]}>
+						${(template: Template) => html`
+							<div class="template-item">
+								<item-card
+									item-active=${() => store.selectedTemplates.get(template.category)?._id === template._id}
+									item-src=${template.thumb}
+									item-alt=${template.name}
+									item-value=${template}
+									oncardselected=${this.#onItemClick}
+									object-fit="contain"
+									aspect-ratio="0.79"
+								></item-card>
+								<div class="template-product-name">Product Name</div>
+								<div class="template-product-price-container">
+									<div
+										class="template-product-price"
+										classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
+									>
+										€ 125.00
+									</div>
+									<div
+										class="template-product-wholesale"
+										classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
+									>
+										MOQ: 5pcs
+									</div>
+								</div>
+							</div>
+						`}
+						</>
+					</div>
+				</tabs-content>
+			`}
+			</>
+		</div>
+		</tabs-provider>
+		</>
+	</bottom-sheet>
 	`
 
 	css = css/*css*/ `
 		:host {
 			display: contents;
+		}
+
+		.tabs-container {
+			padding: var(--uiSpacing);
+			padding-top: 0;
+			padding-bottom: var(--uiSpacingSmall);
+			background: var(--uiColorPrimaryWhite);
+		}
+
+		.bottom-sheet-header {
+			position: sticky;
+			top: 0;
+			background: var(--appBackground);
+			z-index: 10;
+			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
+		}
+
+		.tabs-content-container {
+			padding: var(--uiSpacing);
+			padding-top: 0;
+			padding-bottom: 5px;
+			background: var(--uiColorPrimaryWhite);
 		}
 
 		.items-grid {
@@ -137,10 +245,35 @@ export class TemplateView extends Element {
 			color: #424347;
 		}
 
+		.template-product-price-container {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			flex-wrap: wrap;
+		}
+
 		.template-product-price {
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightNormal);
 			color: #424347;
+			text-wrap: nowrap;
+		}
+
+		.template-product-price.wholesale {
+			font-size: var(--fontSizeTextXxs);
+		}
+
+		.template-product-wholesale {
+			opacity: 0;
+		}
+
+		.template-product-wholesale.wholesale {
+			font-size: var(--fontSizeTextXxs);
+			font-weight: var(--fontWeightNormal);
+			color: #424347;
+			text-wrap: nowrap;
+			opacity: 1;
 		}
 	`
 }

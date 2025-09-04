@@ -9,8 +9,8 @@ import {fabrics} from './fabrics.js'
  * Data Relationships Documentation
  *
  * 1. Templates → Fabrics:
- *    - template.materialId matches "${fabric.materialName} ${fabric.category}"
- *    - Example: materialId "145 Cotton" → fabric with materialName="145", category="Cotton"
+ *    - template.materialId matches "${fabric.materialName} ${fabric.category} ${fabric.templateCategory}"
+ *    - Example: materialId "145 Cotton Shirt" → fabric with materialName="145", category="Cotton", templateCategory="Shirt"
  *
  * 2. Blocks → Templates:
  *    - block.templateId/templateName matches template.name
@@ -27,17 +27,21 @@ type BrandData<T> = Record<string, T[]>
 /**
  * Find fabric that matches a template's materialId
  */
-export function getFabricForTemplate(template: Template, brand: string = 'speed'): Fabric | null {
+export function getFabricForTemplate(template: Template, brand: string = 'moidien'): Fabric | null {
 	if (!template.materialId) return null
 
 	const brandFabrics = (fabrics as BrandData<Fabric>)[brand] || []
-	return brandFabrics.find(fabric => `${fabric.materialName} ${fabric.category}` === template.materialId) || null
+	return (
+		brandFabrics.find(
+			fabric => `${fabric.materialName} ${fabric.category} ${fabric.templateCategory}` === template.materialId,
+		) || null
+	)
 }
 
 /**
  * Find all blocks that belong to a specific template
  */
-export function getBlocksForTemplate(template: Template, brand: string = 'speed'): Block[] {
+export function getBlocksForTemplate(template: Template, brand: string = 'moidien'): Block[] {
 	const brandBlocks = (blocks as BrandData<Block>)[brand] || []
 	return brandBlocks.filter(
 		block => block.templateName === template.name && block.templateCategory === template.category,
@@ -47,7 +51,7 @@ export function getBlocksForTemplate(template: Template, brand: string = 'speed'
 /**
  * Find template that a block belongs to
  */
-export function getTemplateForBlock(block: Block, brand: string = 'speed'): Template | null {
+export function getTemplateForBlock(block: Block, brand: string = 'moidien'): Template | null {
 	const brandTemplates = (templates as BrandData<Template>)[brand] || []
 	return (
 		brandTemplates.find(
@@ -59,7 +63,7 @@ export function getTemplateForBlock(block: Block, brand: string = 'speed'): Temp
 /**
  * Get all fabrics for a specific template category
  */
-export function getFabricsForTemplateCategory(category: string, brand: string = 'speed'): Fabric[] {
+export function getFabricsForTemplateCategory(category: string, brand: string = 'moidien'): Fabric[] {
 	const brandFabrics = (fabrics as BrandData<Fabric>)[brand] || []
 	return brandFabrics.filter(fabric => fabric.templateCategory === category)
 }
@@ -67,7 +71,7 @@ export function getFabricsForTemplateCategory(category: string, brand: string = 
 /**
  * Get blocks grouped by their category for a template
  */
-export function getBlocksByCategoryForTemplate(template: Template, brand: string = 'speed'): Record<string, Block[]> {
+export function getBlocksByCategoryForTemplate(template: Template, brand: string = 'moidien'): Record<string, Block[]> {
 	const templateBlocks = getBlocksForTemplate(template, brand)
 
 	return templateBlocks.reduce(
@@ -84,7 +88,7 @@ export function getBlocksByCategoryForTemplate(template: Template, brand: string
 /**
  * Get complete template data with related blocks and fabric
  */
-export function getCompleteTemplateData(templateId: string, brand: string = 'speed') {
+export function getCompleteTemplateData(templateId: string, brand: string = 'moidien') {
 	const brandTemplates = (templates as BrandData<Template>)[brand] || []
 	const template = brandTemplates.find(t => t._id === templateId)
 
@@ -101,7 +105,7 @@ export function getCompleteTemplateData(templateId: string, brand: string = 'spe
 /**
  * Get data summary for debugging/overview
  */
-export function getDataSummary(brand: string = 'speed') {
+export function getDataSummary(brand: string = 'moidien') {
 	const brandTemplates = (templates as BrandData<Template>)[brand] || []
 	const brandBlocks = (blocks as BrandData<Block>)[brand] || []
 	const brandFabrics = (fabrics as BrandData<Fabric>)[brand] || []
@@ -174,7 +178,7 @@ export function getDataSummary(brand: string = 'speed') {
 /**
  * Validate data relationships
  */
-export function validateRelationships(brand: string = 'speed') {
+export function validateRelationships(brand: string = 'moidien') {
 	const brandTemplates = (templates as BrandData<Template>)[brand] || []
 	const brandBlocks = (blocks as BrandData<Block>)[brand] || []
 	const brandFabrics = (fabrics as BrandData<Fabric>)[brand] || []
@@ -203,7 +207,7 @@ export function validateRelationships(brand: string = 'speed') {
 
 	// Check for orphaned fabrics (no template references them)
 	brandFabrics.forEach(fabric => {
-		const fabricId = `${fabric.materialName} ${fabric.category}`
+		const fabricId = `${fabric.materialName} ${fabric.category} ${fabric.templateCategory}`
 		const isReferenced = brandTemplates.some(template => template.materialId === fabricId)
 		if (!isReferenced) {
 			issues.push(`Fabric "${fabricId}" is not referenced by any template`)

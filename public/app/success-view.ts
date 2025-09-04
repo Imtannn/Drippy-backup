@@ -37,7 +37,7 @@ export class SuccessView extends Element {
 		<app-buttons-right>
 			<app-buttons-group>
 				<!-- <theme-switch-button></theme-switch-button> -->
-				<logo-button brand-name="Speed"></logo-button>
+				<logo-button brand-name="MoiDien"></logo-button>
 			</app-buttons-group>
 		</app-buttons-right>
 

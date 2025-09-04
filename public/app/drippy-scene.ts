@@ -1,22 +1,17 @@
-import {createSignal, css, Element, element, For, html, Motor, onCleanup, Show, signal, untrack} from 'lume'
+import {createSignal, css, Element, element, For, html, Index, Motor, onCleanup, Show, signal, untrack} from 'lume'
+import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
+import {spaces} from '../consts/spaces.js'
 import '../elements/loading-indicator.js'
 import '../elements/show-when.js'
-import type {Block} from '../types/block.js'
+import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
+import type {TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import {store} from './store.js'
 
-const femaleAvatar = new URL('../models/EM-Underwear.glb', import.meta.url)
+const femaleAvatar = new URL('../models/EM-MoiDien.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
-
-const scenes = [
-	{
-		name: 'bloom realms',
-		description: 'One million roses',
-		image: new URL('../images/doina-bg.webp', import.meta.url),
-	},
-]
 
 @element
 export class DrippyScene extends Element {
@@ -26,6 +21,7 @@ export class DrippyScene extends Element {
 	@signal loadingBlocks: string[] = []
 	@signal loadingMaterials: string[] = []
 	@signal sceneUrl = ''
+	@signal renderBlocks: {block: Block; templateCategory: TemplateCategory; id: string}[] = []
 
 	// Cache for textures per URL so we don't reload repeatedly
 	#textureCache = new Map<string, any>()
@@ -71,8 +67,8 @@ export class DrippyScene extends Element {
 
 		const loadingId = blockId || `${fabric._id}-${Date.now()}`
 		this.loadingMaterials = [...untrack(() => this.loadingMaterials), loadingId]
-		const repete: [number, number] = [60 / 19, 60 / 19]
-		const offset: [number, number] = [0, 0]
+		const repete: [number, number] = [60 / 3, 60 / 3]
+		const offset: [number, number] = [1, 1]
 		const rotate = 0
 		const meshes = this.#extractMeshesFromObj(root)
 		const arr = Array.from(meshes[0]?.geometry?.attributes?.uv?.array)
@@ -108,6 +104,14 @@ export class DrippyScene extends Element {
 				material.normalMap = normalTex
 				// material.displacementMap = displacementTex
 				material.roughnessMap = roughnessTex
+				material.roughnessIntensity = 1
+				material.transparent = true
+				material.emissive = new THREE.Color(0x000000)
+				material.emissiveIntensity = 0
+				material.aoMapIntensity = 1
+				material.side = THREE.DoubleSide
+				material.normalScale = new THREE.Vector2(2, 2)
+				material.blending = THREE.NormalBlending
 				// Ensure GPU-side texture state updates immediately
 				if (material.map) material.map.needsUpdate = true
 				if (material.normalMap) material.normalMap.needsUpdate = true
@@ -241,7 +245,6 @@ export class DrippyScene extends Element {
 		})
 
 		this.createEffect(() => {
-			console.log('store.view', store.view)
 			if (store.view === 'preview') {
 				this.style.setProperty('--scene-desktop-transform', 'translateY(0)')
 			} else {
@@ -250,10 +253,10 @@ export class DrippyScene extends Element {
 		})
 
 		this.createEffect(() => {
-			if (store.selectedScene) {
-				const scene = scenes.find(scene => scene.name === store.selectedScene)
-				if (scene) {
-					this.sceneUrl = scene.image.href
+			if (store.selectedSpace) {
+				const space = spaces.find(space => space.name === store.selectedSpace?.name)
+				if (space) {
+					this.sceneUrl = space.image.href
 				}
 			}
 		})
@@ -293,9 +296,12 @@ export class DrippyScene extends Element {
 
 		// Track block loading state
 		this.createEffect(() => {
-			const blockCount = store.selectedBlocks.size
+			const totalBlockCount = Array.from(store.selectedBlocks.values()).reduce(
+				(sum, templateBlocks) => sum + templateBlocks.size,
+				0,
+			)
 
-			if (blockCount === 0) {
+			if (totalBlockCount === 0) {
 				this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== 'avatar')
 				return
 			}
@@ -323,32 +329,43 @@ export class DrippyScene extends Element {
 			}
 		})
 
-		// Re-apply materials whenever the selected fabric changes or models mount
 		this.createEffect(() => {
-			const fabric = store.selectedFabric
-			// Cause reactive re-run when the number of blocks changes
-			const blockCount = store.selectedBlocks.size
-
-			if (blockCount === 0) {
-				// nothing to bind
-				return
-			}
-
-			if (!fabric) {
-				// Reset materials to default state (no textures)
-				const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
-
-				for (const el of models) {
-					const resetMaterial = () => {
-						this.#resetMaterialsToDefault((el as any).three)
-					}
-					const behavior = el.behaviors?.get?.('gltf-model')
-					if (!behavior?.model || !el.three) {
-						el.on?.('MODEL_LOAD', resetMaterial)
-					} else {
-						resetMaterial()
-					}
+			const blocks = Array.from(store.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
+			this.renderBlocks = blocks.flatMap(block => {
+				if (block.category === 'Sleeves') {
+					return [
+						{
+							block,
+							templateCategory: block.templateCategory,
+							id: `${block.templateCategory}-${block.category}-${block._id}`,
+						},
+						{
+							block,
+							templateCategory: block.templateCategory,
+							id: `${block.templateCategory}-${block.category}-${block._id}-mirror`,
+						},
+					]
 				}
+				return {
+					block,
+					templateCategory: block.templateCategory,
+					id: `${block.templateCategory}-${block.category}-${block._id}`,
+				}
+			})
+		})
+
+		// Re-apply materials whenever the selected fabrics change or models mount
+		this.createEffect(() => {
+			const selectedFabrics = store.selectedFabrics
+			const selectedBlocks = store.selectedBlocks
+			// Cause reactive re-run when the number of blocks changes
+			const totalBlockCount = Array.from(selectedBlocks.values()).reduce(
+				(sum, templateBlocks) => sum + templateBlocks.size,
+				0,
+			)
+
+			if (totalBlockCount === 0) {
+				// nothing to bind
 				return
 			}
 
@@ -356,20 +373,45 @@ export class DrippyScene extends Element {
 			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
 			const handlers: Array<{el: any; fn: () => void}> = []
 
-			for (const [index, el] of models.entries()) {
-				const blockId = `material-${index}`
-				const apply = () => {
+			// Process each model using its data-blockid to find the correct fabric
+			for (const el of models) {
+				const blockId = el.getAttribute('id')
+				if (!blockId) continue
+
+				// Parse blockId to extract template category, block category, and block ID
+				// Format: "TemplateCategory-BlockCategory-BlockId" or "TemplateCategory-BlockCategory-BlockId-mirror"
+				const isMirror = blockId.endsWith('-mirror')
+				const baseBlockId = isMirror ? blockId.slice(0, -7) : blockId // Remove "-mirror" if present
+				const parts = baseBlockId.split('-')
+
+				if (parts.length < 3) continue
+
+				const templateCategory = parts[0] as TemplateCategory
+				const blockCategory = parts[1] as BlockCategory
+
+				// Find the fabric for this block
+				const templateFabrics = selectedFabrics.get(templateCategory)
+				const fabric = templateFabrics?.get(blockCategory)
+				const loadingId = `material-${blockId}`
+
+				const applyOrReset = () => {
 					const isCanceled = untrack(cancelApply)
 					if (!isCanceled) {
-						this.#applyFabricToThreeObject((el as any).three, fabric, cancelApply, blockId)
+						if (fabric) {
+							this.#applyFabricToThreeObject((el as any).three, fabric, cancelApply, loadingId)
+						} else {
+							// Reset to default material if no fabric selected for this block category
+							this.#resetMaterialsToDefault((el as any).three)
+						}
 					}
 				}
+
 				const behavior = el.behaviors?.get?.('gltf-model')
 				if (!behavior?.model || !el.three) {
-					el.on?.('MODEL_LOAD', apply)
-					handlers.push({el, fn: apply})
+					el.on?.('MODEL_LOAD', applyOrReset)
+					handlers.push({el, fn: applyOrReset})
 				} else {
-					apply()
+					applyOrReset()
 				}
 			}
 
@@ -408,31 +450,24 @@ export class DrippyScene extends Element {
 			</app-buttons-left>
 		`}></show-when>
 
-		<div id="lume-scene-container" style=${() => `background: url(${this.sceneUrl}) center bottom / cover no-repeat`}>
-		<lume-scene webgl>
+		<div id="lume-scene-container">
+		<lume-scene id="drippy-scene" webgl perspective="2200">
 			<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
-			<lume-directional-light position="5 5 5"></lume-directional-light>
-			<lume-directional-light position="-5 -5 -5"></lume-directional-light>
+			<lume-directional-light
+			position="500 500 500"
+		></lume-directional-light>
+			<lume-directional-light position="-500 -500 -500"></lume-directional-light>
 
 			<lume-camera-rig
-				min-distance="1.5"
-				max-distance="8"
-				distance="4"
+				min-distance="2"
+				max-distance="15"
+				distance="9"
 				dolly-speed="0.01"
 				position="0 -1 0"
 			></lume-camera-rig>
 
-			<lume-box
-				visible="false"
-				cast-shadow="false"
-				size="1 1 1"
-				color="skyblue"
-				roughness="0.3"
-				metalness="0.7"
-				mount-point="0.5 0.5 0.5"
-			></lume-box>
-
 			<lume-gltf-model
+				id="avatar"
 				src=${() =>
 					store.selectedAvatar !== null
 						? store.selectedAvatar === 'female'
@@ -441,21 +476,32 @@ export class DrippyScene extends Element {
 						: store.tempSelectedAvatar === 'female'
 							? femaleAvatar.href
 							: maleAvatar.href}
-
-							data-avatar
+				scale="1 1 1"
+				data-avatar
 			></lume-gltf-model>
 
-			<${For} each=${() => Array.from(store.selectedBlocks.values())}>
-				${(item: Block) => html` <lume-gltf-model data-cloth src=${item.modelFile}></lume-gltf-model> `}
+			<${Show} when=${() => store.selectedSpace}>
+				${() => html`<lume-gltf-model id="scene" src=${() => store.selectedSpace?.scene.href}></lume-gltf-model>`}
 			</>
 
-			<${Show} when=${() => store.selectedBlocks.get('Sleeves')?.modelFile}>
-				${() =>
-					html`<lume-gltf-model
-						data-cloth
-						src=${() => store.selectedBlocks.get('Sleeves')?.modelFile}
-						scale="-1 1 1"
-					></lume-gltf-model>`}
+			<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
+				${(item: Accessor<URL>) => {
+					return html`<lume-gltf-model src=${() => item().href}></lume-gltf-model>`
+				}}
+			</>
+
+			<${For} each=${() => this.renderBlocks}>
+				${(item: {block: Block; templateCategory: TemplateCategory; id: string}, index: Accessor<number>) => {
+					return html`
+						<lume-gltf-model
+							id=${item.id}
+							data-index=${index()}
+							data-cloth
+							src=${() => item.block.modelFile}
+							scale=${() => (item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1')}
+						></lume-gltf-model>
+					`
+				}}
 			</>
 			</lume-scene>
 		</div>
@@ -466,9 +512,6 @@ export class DrippyScene extends Element {
 			--scene-transform: translateX(0);
 			--scene-desktop-transform: translateY(-100px);
 			background: var(--appBackground);
-		}
-
-		:host {
 			width: var(--appWidth);
 			height: var(--appHeight);
 			touch-action: none;
