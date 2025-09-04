@@ -8,6 +8,7 @@ body {
 	transform-style: flat;
 	-webkit-transform-style: flat;
 	background-color: var(--uiColorPrimaryWhite);
+	scroll-behavior: smooth;
 }
 
 * {
@@ -1451,6 +1452,364 @@ p {
 }
 
 /* ======================================== */
+/* COMMON SECTION STYLES                    */
+/* ======================================== */
+
+.section-header {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	align-items: center;
+	gap: 5px;
+	position: relative;
+	flex: 0 0 auto;
+	margin: 0 auto;
+}
+
+.section-title {
+	position: relative;
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+	min-height: 60px;
+	margin-top: -1px;
+	font-weight: var(--fontWeightSemiBold);
+	color: var(--uiColorPrimaryBlack);
+	text-align: center;
+	letter-spacing: 0;
+	line-height: var(--lineHeightTight);
+}
+
+.section-subtitle {
+	position: relative;
+	align-self: stretch;
+	font-weight: var(--fontWeightNormal);
+	color: var(--uiColorPrimaryBlack);
+	text-align: center;
+	letter-spacing: 0;
+	line-height: var(--lineHeightRelaxed);
+	margin-top: 10px;
+}
+
+/* ======================================== */
+/* SHOWCASE SECTION - CLEAN & OPTIMIZED     */
+/* ======================================== */
+
+.showcase {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 30px;
+	width: 100%;
+	max-width: 100%;
+	overflow: hidden;
+}
+
+.showcase__item {
+	position: relative;
+	width: 100%;
+	max-width: 660px;
+	height: 682px;
+	flex-shrink: 0;
+	flex: 1;
+}
+
+.showcase__background {
+	position: relative;
+	width: 100%;
+	height: 100%;
+
+	background-color: var(--uiColorPrimaryLightGrey);
+	border-radius: 20px;
+	border: 1px solid var(--uiColorPrimaryLightGrey);
+	box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+
+	overflow: hidden;
+	min-height: 0;
+}
+
+.showcase__item--interactive .showcase__background {
+	backdrop-filter: blur(25px) brightness(100%);
+	-webkit-backdrop-filter: blur(25px) brightness(100%);
+	/* Fallback for iOS */
+	background-color: rgba(246, 246, 246, 0.95);
+}
+
+.showcase__model {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	-webkit-object-fit: cover;
+	border-radius: 20px;
+	display: block;
+	/* iOS specific fixes */
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+.showcase__controls {
+	position: absolute;
+	top: 18px;
+	right: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	z-index: 10;
+}
+
+.showcase__avatar-option {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	cursor: pointer;
+	transition: var(--transitionTransform);
+	-webkit-transition: var(--transitionTransform);
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	/* iOS specific fixes */
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+.showcase__avatar-option:hover {
+	transform: scale(1.1);
+	-webkit-transform: scale(1.1);
+	border-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Avatar selector styles are now encapsulated in the custom element */
+
+.showcase__model-display {
+	position: absolute;
+	top: 14px;
+	left: 50%;
+	width: 55%;
+	height: 625px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transform: translate(-50%, 0);
+	-webkit-transform: translate(-50%, 0);
+	/* iOS specific fixes */
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	will-change: transform;
+}
+
+.showcase__avatar-model {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	border-radius: 10px;
+}
+
+.showcase__label {
+	position: absolute;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	height: 24px;
+	font-weight: var(--fontWeightMedium);
+	color: var(--uiColorPrimaryBlack);
+	text-align: center;
+	letter-spacing: 0;
+	line-height: var(--lineHeightNormal);
+	z-index: 10;
+}
+
+/* ======================================== */
+/* ADDITIONAL UTILITY CLASSES               */
+/* ======================================== */
+
+.statistics__ellipse {
+	position: relative;
+	height: 152px;
+	background-image: url(https://c.animaapp.com/mejigj1rAIvhIh/img/ellipse-3-1.svg);
+	background-size: 100% 100%;
+}
+
+.how-it-works__step-image {
+	position: absolute;
+	width: 100%;
+	max-width: 300px;
+	height: 540px;
+	top: 0;
+	left: 0;
+	border-radius: 20px;
+	border: 1px solid;
+	border-color: var(--uiColorBorderColor);
+	object-fit: cover;
+}
+
+.pricing__toggle--yearly {
+	width: 157px;
+	height: 50px;
+	justify-content: center;
+	gap: 10px;
+	position: relative;
+	background-color: var(--uiColorPrimaryBlack);
+	border-radius: 100px;
+	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+}
+
+.pricing__toggle--monthly {
+	width: 157px;
+	height: 50px;
+	justify-content: center;
+	gap: 10px;
+	position: relative;
+	background-color: var(--uiColorPrimaryLightGrey);
+	border-radius: 100px;
+	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+}
+
+.pricing__button--basic {
+	height: 50px;
+	justify-content: center;
+	gap: 10px;
+	position: relative;
+	align-self: stretch;
+	width: 100%;
+	margin-bottom: -20px;
+	background-color: var(--uiColorPrimaryBlack);
+	border-radius: 100px;
+	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+}
+
+.pricing__button--digitize {
+	all: unset;
+	box-sizing: border-box;
+	height: 50px;
+	justify-content: center;
+	gap: 10px;
+	position: relative;
+	align-self: stretch;
+	width: 100%;
+	margin-bottom: -18px;
+	background-color: var(--uiColorPrimaryBlack);
+	border-radius: 100px;
+	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+}
+
+.cta__button {
+	width: 278px;
+	height: 50px;
+	justify-content: center;
+	gap: 10px;
+	position: relative;
+	background-color: var(--uiColorPrimaryBlack);
+	border-radius: 1000px;
+	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+}
+
+.landing-page-desktop .pricing__toggle--yearly {
+	width: 157px;
+	height: 50px;
+	justify-content: center;
+	gap: 10px;
+	position: relative;
+	background-color: var(--uiColorPrimaryBlack);
+	border-radius: 100px;
+	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+}
+
+.landing-page-desktop .pricing__toggle--monthly {
+	width: 157px;
+	height: 50px;
+	justify-content: center;
+	gap: 10px;
+	position: relative;
+	background-color: var(--uiColorPrimaryLightGrey);
+	border-radius: 100px;
+	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+}
+
+.landing-page-desktop .pricing__button--basic {
+	height: 50px;
+	justify-content: center;
+	gap: 10px;
+	position: relative;
+	align-self: stretch;
+	width: 100%;
+	margin-bottom: -20px;
+	background-color: var(--uiColorPrimaryBlack);
+	border-radius: 100px;
+	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+}
+
+.landing-page-desktop .pricing__button--digitize {
+	all: unset;
+	box-sizing: border-box;
+	height: 50px;
+	justify-content: center;
+	gap: 10px;
+	position: relative;
+	align-self: stretch;
+	width: 100%;
+	margin-bottom: -18px;
+	background-color: var(--uiColorPrimaryBlack);
+	border-radius: 100px;
+	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+}
+
+.landing-page-desktop .cta__button {
+	width: 278px;
+	height: 50px;
+	justify-content: center;
+	gap: 10px;
+	position: relative;
+	background-color: var(--uiColorPrimaryBlack);
+	border-radius: 1000px;
+	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
+	display: flex;
+	align-items: center;
+	overflow: hidden;
+}
+
+.landing-page-desktop .statistics__ellipse {
+	position: relative;
+	height: 152px;
+	background-image: url(https://c.animaapp.com/mejigj1rAIvhIh/img/ellipse-3-1.svg);
+	background-size: 100% 100%;
+}
+
+.landing-page-desktop .how-it-works__step-image {
+	width: 100%;
+	min-width: 100%;
+	height: 100%;
+	border-radius: 20px;
+	border: 1px solid;
+	border-color: var(--uiColorBorderColor);
+	object-fit: cover;
+}
+
+/* ======================================== */
 /* TABLET & MOBILE BREAKPOINT (768px and below) */
 /* ======================================== */
 
@@ -1733,6 +2092,10 @@ p {
 		width: 100%;
 	}
 
+	.showcase .showcase__item {
+		height: unset;
+	}
+
 	/* Features responsive for mobile - single column */
 	.landing-page-desktop .features__grid {
 		display: flex;
@@ -1806,13 +2169,22 @@ p {
 		position: relative;
 		width: 100%;
 		height: 100%;
-		top: 50%;
+		top: 0;
 		left: 50%;
 		transform: translate(-50%, 0%);
+		-webkit-transform: translate(-50%, 0%);
+		will-change: transform;
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
 	}
+
 	.showcase .showcase__model {
-		scale: 0.9;
+		transform: scale(0.9);
+		-webkit-transform: scale(0.9);
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
 	}
+
 	.landing-page-desktop .cta__cone-image--4 {
 		width: 80px;
 		height: 114px;
@@ -1941,346 +2313,4 @@ p {
 		flex-direction: column;
 		gap: 26px;
 	}
-}
-
-/* ======================================== */
-/* COMMON SECTION STYLES                    */
-/* ======================================== */
-
-.section-header {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	align-items: center;
-	gap: 5px;
-	position: relative;
-	flex: 0 0 auto;
-	margin: 0 auto;
-}
-
-.section-title {
-	position: relative;
-	width: 100%;
-	max-width: 100%;
-	height: auto;
-	min-height: 60px;
-	margin-top: -1px;
-	font-weight: var(--fontWeightSemiBold);
-	color: var(--uiColorPrimaryBlack);
-	text-align: center;
-	letter-spacing: 0;
-	line-height: var(--lineHeightTight);
-}
-
-.section-subtitle {
-	position: relative;
-	align-self: stretch;
-	font-weight: var(--fontWeightNormal);
-	color: var(--uiColorPrimaryBlack);
-	text-align: center;
-	letter-spacing: 0;
-	line-height: var(--lineHeightRelaxed);
-	margin-top: 10px;
-}
-
-/* ======================================== */
-/* SHOWCASE SECTION - CLEAN & OPTIMIZED     */
-/* ======================================== */
-
-.showcase {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 30px;
-	width: 100%;
-	max-width: 100%;
-	overflow: hidden;
-}
-
-.showcase__item {
-	position: relative;
-	width: 100%;
-	max-width: 660px;
-	height: 682px;
-	flex-shrink: 0;
-	flex: 1;
-}
-
-.showcase__background {
-	position: relative;
-	width: 100%;
-	height: 100%;
-
-	background-color: var(--uiColorPrimaryLightGrey);
-	border-radius: 20px;
-	border: 1px solid var(--uiColorPrimaryLightGrey);
-	box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-
-	overflow: hidden;
-	min-height: 0;
-}
-
-.showcase__item--interactive .showcase__background {
-	backdrop-filter: blur(25px) brightness(100%);
-	-webkit-backdrop-filter: blur(25px) brightness(100%);
-}
-
-.showcase__model {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	border-radius: 20px;
-	display: block;
-}
-
-.showcase__controls {
-	position: absolute;
-	top: 18px;
-	right: 16px;
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-	z-index: 10;
-}
-
-.showcase__avatar-option {
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	cursor: pointer;
-	transition: var(--transitionTransform);
-	border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.showcase__avatar-option:hover {
-	transform: scale(1.1);
-	border-color: rgba(255, 255, 255, 0.8);
-}
-
-/* Avatar selector styles are now encapsulated in the custom element */
-
-.showcase__model-display {
-	position: absolute;
-	top: 14px;
-	left: 50%;
-	width: 55%;
-	height: 625px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transform: translate(-50%, 0);
-}
-
-.showcase__avatar-model {
-	width: 100%;
-	height: 100%;
-	object-fit: contain;
-	border-radius: 10px;
-}
-
-.showcase__label {
-	position: absolute;
-	bottom: 20px;
-	left: 50%;
-	transform: translateX(-50%);
-	height: 24px;
-	font-weight: var(--fontWeightMedium);
-	color: var(--uiColorPrimaryBlack);
-	text-align: center;
-	letter-spacing: 0;
-	line-height: var(--lineHeightNormal);
-	z-index: 10;
-}
-
-/* ======================================== */
-/* ADDITIONAL UTILITY CLASSES               */
-/* ======================================== */
-
-.statistics__ellipse {
-	position: relative;
-	height: 152px;
-	background-image: url(https://c.animaapp.com/mejigj1rAIvhIh/img/ellipse-3-1.svg);
-	background-size: 100% 100%;
-}
-
-.how-it-works__step-image {
-	position: absolute;
-	width: 100%;
-	max-width: 300px;
-	height: 540px;
-	top: 0;
-	left: 0;
-	border-radius: 20px;
-	border: 1px solid;
-	border-color: var(--uiColorBorderColor);
-	object-fit: cover;
-}
-
-.pricing__toggle--yearly {
-	width: 157px;
-	height: 50px;
-	justify-content: center;
-	gap: 10px;
-	position: relative;
-	background-color: var(--uiColorPrimaryBlack);
-	border-radius: 100px;
-	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-}
-
-.pricing__toggle--monthly {
-	width: 157px;
-	height: 50px;
-	justify-content: center;
-	gap: 10px;
-	position: relative;
-	background-color: var(--uiColorPrimaryLightGrey);
-	border-radius: 100px;
-	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-}
-
-.pricing__button--basic {
-	height: 50px;
-	justify-content: center;
-	gap: 10px;
-	position: relative;
-	align-self: stretch;
-	width: 100%;
-	margin-bottom: -20px;
-	background-color: var(--uiColorPrimaryBlack);
-	border-radius: 100px;
-	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-}
-
-.pricing__button--digitize {
-	all: unset;
-	box-sizing: border-box;
-	height: 50px;
-	justify-content: center;
-	gap: 10px;
-	position: relative;
-	align-self: stretch;
-	width: 100%;
-	margin-bottom: -18px;
-	background-color: var(--uiColorPrimaryBlack);
-	border-radius: 100px;
-	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-}
-
-.cta__button {
-	width: 278px;
-	height: 50px;
-	justify-content: center;
-	gap: 10px;
-	position: relative;
-	background-color: var(--uiColorPrimaryBlack);
-	border-radius: 1000px;
-	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-}
-
-.landing-page-desktop .pricing__toggle--yearly {
-	width: 157px;
-	height: 50px;
-	justify-content: center;
-	gap: 10px;
-	position: relative;
-	background-color: var(--uiColorPrimaryBlack);
-	border-radius: 100px;
-	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-}
-
-.landing-page-desktop .pricing__toggle--monthly {
-	width: 157px;
-	height: 50px;
-	justify-content: center;
-	gap: 10px;
-	position: relative;
-	background-color: var(--uiColorPrimaryLightGrey);
-	border-radius: 100px;
-	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-}
-
-.landing-page-desktop .pricing__button--basic {
-	height: 50px;
-	justify-content: center;
-	gap: 10px;
-	position: relative;
-	align-self: stretch;
-	width: 100%;
-	margin-bottom: -20px;
-	background-color: var(--uiColorPrimaryBlack);
-	border-radius: 100px;
-	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-}
-
-.landing-page-desktop .pricing__button--digitize {
-	all: unset;
-	box-sizing: border-box;
-	height: 50px;
-	justify-content: center;
-	gap: 10px;
-	position: relative;
-	align-self: stretch;
-	width: 100%;
-	margin-bottom: -18px;
-	background-color: var(--uiColorPrimaryBlack);
-	border-radius: 100px;
-	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-}
-
-.landing-page-desktop .cta__button {
-	width: 278px;
-	height: 50px;
-	justify-content: center;
-	gap: 10px;
-	position: relative;
-	background-color: var(--uiColorPrimaryBlack);
-	border-radius: 1000px;
-	box-shadow: inset 0px 1px 2px var(--uiColorWhiteShadow);
-	display: flex;
-	align-items: center;
-	overflow: hidden;
-}
-
-.landing-page-desktop .statistics__ellipse {
-	position: relative;
-	height: 152px;
-	background-image: url(https://c.animaapp.com/mejigj1rAIvhIh/img/ellipse-3-1.svg);
-	background-size: 100% 100%;
-}
-
-.landing-page-desktop .how-it-works__step-image {
-	width: 100%;
-	min-width: 100%;
-	height: 100%;
-	border-radius: 20px;
-	border: 1px solid;
-	border-color: var(--uiColorBorderColor);
-	object-fit: cover;
 }

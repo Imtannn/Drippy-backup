@@ -36,12 +36,7 @@ export class OutfitPreview extends Element {
 	}
 
 	#onBuyItClick = () => {
-		console.log('Buy It clicked')
 		store.navigateTo = 'order'
-	}
-
-	#onShareClick = () => {
-		store.navigateTo = 'share'
 	}
 
 	shareIcon = () =>
@@ -83,7 +78,6 @@ export class OutfitPreview extends Element {
 		<show-on-device device="desktop">
 			<app-buttons-right layout="bottom">
 				<app-buttons-group custom-style="gap: 34px;" group-direction="row">
-					<!-- <share-button onclick=${this.#onShareClick}></share-button> -->
 					<buy-button onclick=${this.#onBuyItClick}></buy-button>
 				</app-buttons-group>
 			</app-buttons-right>
@@ -91,7 +85,6 @@ export class OutfitPreview extends Element {
 
 		<app-buttons-right>
 			<app-buttons-group>
-				<!-- <theme-switch-button></theme-switch-button> -->
 				<logo-button brand-name="Speed"></logo-button>
 			</app-buttons-group>
 
@@ -104,7 +97,6 @@ export class OutfitPreview extends Element {
 		<show-on-device device="mobile">
 			<div class="bottom-buttons">
 				<button class="buy-button" onclick=${this.#onBuyItClick}>${this.buyIcon()} Buy it!</button>
-				<!-- <button class="share-button" onclick=${this.#onShareClick}>${this.shareIcon()} Share my drip</button> -->
 			</div>
 		</show-on-device>
 	`

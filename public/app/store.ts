@@ -1,30 +1,8 @@
 import {createMutable} from 'solid-js/store'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
-import type {Template} from '../types/template.js'
-
-export type AppRoute =
-	| 'avatar'
-	| 'blocks'
-	| 'preview'
-	| 'custom-measurement'
-	| 'success'
-	| 'scene'
-	| 'order'
-	| 'share'
-	| 'template'
-
-export type Avatar = 'female' | 'male' | null
-
-export type Scene = 'bloom realms' | null
-
-export type CustomMeasurement = {
-	bust: number
-	waist: number
-	hips: number
-	shoulder: number
-	shoulderToKnee: number
-}
+import type {Template, TemplateCategory} from '../types/template.js'
+import type {AppRoute, Avatar, Space, CustomMeasurement} from '../types/types.js'
 
 export type OrderStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -54,13 +32,13 @@ export type OrderState = {
 export const store = createMutable({
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
-	tempSelectedAvatar: 'male' as Avatar,
+	tempSelectedAvatar: 'female' as Avatar,
 	selectedAvatar: null as Avatar,
-	selectedScene: null as Scene,
+	selectedSpace: null as Space | null,
 	isPreview: false,
-	selectedTemplate: null as Template | null,
-	selectedBlocks: new Map<BlockCategory, Block>(),
-	selectedFabric: null as Fabric | null,
+	selectedTemplates: new Map<TemplateCategory, Template>(),
+	selectedBlocks: new Map<TemplateCategory, Map<BlockCategory, Block>>(),
+	selectedFabrics: new Map<TemplateCategory, Map<BlockCategory, Fabric>>(),
 	customMeasurement: null as CustomMeasurement | null,
 
 	// Order-related state
@@ -83,45 +61,141 @@ export const store = createMutable({
 			phone: '',
 		},
 	} as OrderState,
-	set setSelectedBlocks(blocks: Block[] | Block) {
-		if (!Array.isArray(blocks)) {
-			blocks = [blocks]
+	set setSelectedBlocks(
+		blockData:
+			| {block: Block; templateCategory: TemplateCategory}
+			| {block: Block; templateCategory: TemplateCategory}[],
+	) {
+		if (!Array.isArray(blockData)) {
+			blockData = [blockData]
 		}
-		const newBlocks = new Map<BlockCategory, Block>(this.selectedBlocks)
-		// check if the block with same category already exists
-		for (const block of blocks) {
-			if (this.selectedBlocks.has(block.category)) {
+		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(this.selectedBlocks)
+
+		for (const {block, templateCategory} of blockData) {
+			// Get or create the template's block map
+			let templateBlocks = newBlocks.get(templateCategory)
+			if (!templateBlocks) {
+				templateBlocks = new Map<BlockCategory, Block>()
+				newBlocks.set(templateCategory, templateBlocks)
+			}
+
+			// Check if the block with same category already exists in this template
+			if (templateBlocks.has(block.category)) {
 				// if it exists, check if the block is the same, if so, remove it
-				if (this.selectedBlocks.get(block.category)?._id === block._id) {
-					newBlocks.delete(block.category)
+				if (templateBlocks.get(block.category)?._id === block._id) {
+					templateBlocks.delete(block.category)
 				} else {
-					newBlocks.set(block.category, block)
+					templateBlocks.set(block.category, block)
 				}
 			} else {
 				// if not, add it
-				newBlocks.set(block.category, block)
+				templateBlocks.set(block.category, block)
+			}
+
+			// If template has no blocks left, remove the template entry
+			if (templateBlocks.size === 0) {
+				newBlocks.delete(templateCategory)
 			}
 		}
 		this.selectedBlocks = newBlocks
 	},
-	set replaceSelectedBlocks(blocks: Block[]) {
+	set replaceSelectedBlocks(blockData: {blocks: Block[]; templateCategory: TemplateCategory}[]) {
 		// Completely replace selectedBlocks with new blocks (used for template selection)
-		const newBlocks = new Map<BlockCategory, Block>()
-		for (const block of blocks) {
-			newBlocks.set(block.category, block)
+		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+
+		for (const {blocks, templateCategory} of blockData) {
+			const templateBlocks = new Map<BlockCategory, Block>()
+			for (const block of blocks) {
+				templateBlocks.set(block.category, block)
+			}
+			if (templateBlocks.size > 0) {
+				newBlocks.set(templateCategory, templateBlocks)
+			}
 		}
 		this.selectedBlocks = newBlocks
 	},
-	set setSelectedFabrics(fabric: Fabric | null) {
-		console.log('setSelectedFabrics', fabric, this.selectedFabric)
-		if (fabric?._id === this.selectedFabric?._id) {
-			this.selectedFabric = null
-			return
+	set setSelectedFabrics(
+		fabricData:
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}[],
+	) {
+		if (!Array.isArray(fabricData)) {
+			fabricData = [fabricData]
 		}
-		this.selectedFabric = fabric
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>(this.selectedFabrics)
+
+		for (const {fabric, blockCategory, templateCategory} of fabricData) {
+			// Get or create the template's fabric map
+			let templateFabrics = newFabrics.get(templateCategory)
+			if (!templateFabrics) {
+				templateFabrics = new Map<BlockCategory, Fabric>()
+				newFabrics.set(templateCategory, templateFabrics)
+			}
+
+			// Check if the fabric for this block category already exists in this template
+			if (templateFabrics.has(blockCategory)) {
+				// if it exists, check if the fabric is the same, if so, remove it
+				if (templateFabrics.get(blockCategory)?._id === fabric._id) {
+					templateFabrics.delete(blockCategory)
+				} else {
+					templateFabrics.set(blockCategory, fabric)
+				}
+			} else {
+				// if not, add it
+				templateFabrics.set(blockCategory, fabric)
+			}
+
+			// If template has no fabrics left, remove the template entry
+			if (templateFabrics.size === 0) {
+				newFabrics.delete(templateCategory)
+			}
+		}
+		this.selectedFabrics = newFabrics
 	},
-	set setSelectedTemplate(template: Template | null) {
-		this.selectedTemplate = template
+	set setSelectedTemplates(template: Template | Template[]) {
+		if (!Array.isArray(template)) {
+			template = [template]
+		}
+		const newTemplates = new Map<TemplateCategory, Template>(this.selectedTemplates)
+		const checkInterchangeableCategories = (
+			category: TemplateCategory,
+			selectedTemplates: Map<TemplateCategory, Template>,
+		) => {
+			const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
+				Dress: ['Shirt'],
+				Shirt: ['Dress'],
+				Jacket: [],
+				Skirt: ['Pants'],
+				Pants: ['Skirt'],
+			}
+
+			const interchangeableCategories = interchangeableCategoriesMapping[category]
+
+			return interchangeableCategories?.filter(c => selectedTemplates.has(c as TemplateCategory)) ?? []
+		}
+		// check if the template with same category already exists
+		for (const temp of template) {
+			const interchangeableCategories = checkInterchangeableCategories(temp.category, this.selectedTemplates)
+			if (interchangeableCategories.length > 0) {
+				for (const category of interchangeableCategories) {
+					if (this.selectedTemplates.has(category as TemplateCategory)) {
+						newTemplates.delete(category as TemplateCategory)
+					}
+				}
+			}
+			if (this.selectedTemplates.has(temp.category)) {
+				// if it exists, check if the template is the same, if so, remove it
+				if (this.selectedTemplates.get(temp.category)?._id === temp._id) {
+					newTemplates.delete(temp.category)
+				} else {
+					newTemplates.set(temp.category, temp)
+				}
+			} else {
+				// if not, add it
+				newTemplates.set(temp.category, temp)
+			}
+		}
+		this.selectedTemplates = newTemplates
 	},
 	set navigateTo(route: AppRoute) {
 		this.view = route
@@ -132,8 +206,8 @@ export const store = createMutable({
 	set selectAvatar(avatar: Avatar) {
 		this.selectedAvatar = avatar
 	},
-	set selectScene(scene: Scene) {
-		this.selectedScene = scene
+	set selectSpace(space: Space | null) {
+		this.selectedSpace = space
 	},
 	set setIsPreview(isPreview: boolean) {
 		this.isPreview = isPreview
@@ -164,13 +238,41 @@ export const store = createMutable({
 		this.order.shippingAddress = {...this.order.shippingAddress, ...address}
 	},
 
+	resetSelectedTemplates() {
+		this.selectedTemplates = new Map<TemplateCategory, Template>()
+		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
+		this.isPreview = false
+		this.customMeasurement = null as CustomMeasurement | null
+		this.order = {
+			status: 'idle' as OrderStatus,
+			error: null as string | null,
+			productName: 'Custom 3D Drippy Design',
+			selectedSize: '34 (XS)',
+			quantity: 1,
+			email: '',
+			customerEmail: '',
+			customerFirstName: '',
+			customerLastName: '',
+			shippingAddress: {
+				firstName: '',
+				lastName: '',
+				address: '',
+				apartment: '',
+				city: '',
+				postalCode: '',
+				phone: '',
+			},
+		} as OrderState
+	},
+
 	resetState() {
 		this.view = 'avatar' as AppRoute
 		this.selectedAvatar = null as Avatar
-		this.selectedScene = null as Scene
-		this.selectedTemplate = null as Template | null
-		this.selectedBlocks = new Map<BlockCategory, Block>()
-		this.selectedFabric = null as Fabric | null
+		this.selectedSpace = null as Space | null
+		this.selectedTemplates = new Map<TemplateCategory, Template>()
+		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {

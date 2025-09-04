@@ -51,6 +51,7 @@ const styleVars = {
 	fontSizeTextMd: 16,
 	fontSizeTextSm: 14,
 	fontSizeTextXs: 12,
+	fontSizeTextXxs: 10,
 	// Responsive sizes
 	fontSizeTextXlTablet: 44,
 	fontSizeTextLgTablet: 28,

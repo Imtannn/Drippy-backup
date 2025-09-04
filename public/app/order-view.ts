@@ -59,7 +59,9 @@ export class OrderView extends Element {
 		}
 
 		// Map selected blocks (garments) to minimal payload for email
-		const garments = Array.from(store.selectedBlocks.values()).map(g => ({_id: g._id, blockName: g.blockName}))
+		const garments = Array.from(store.selectedBlocks.values())
+			.flatMap(g => Array.from(g.values()))
+			.map(g => ({_id: g._id, blockName: g.blockName}))
 
 		const orderData: OrderData = {
 			// Customer information
@@ -214,12 +216,11 @@ export class OrderView extends Element {
 
 		<app-buttons-right>
 			<app-buttons-group>
-				<!-- <theme-switch-button></theme-switch-button> -->
 				<logo-button brand-name="Speed"></logo-button>
 			</app-buttons-group>
 		</app-buttons-right>
 
-		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
+		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-snap="0.88">
 			<div class="order-container">
 				<div class="product-info">
 					<div class="product-image">
