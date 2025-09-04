@@ -18,7 +18,7 @@ export const onboardingStyles = css`
 	.onboarding-step {
 		max-width: 393px;
 		margin: 0 auto;
-		padding: 19.5px;
+		padding: var(--uiSpacing);
 		text-align: center;
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 		min-height: 100vh;
@@ -28,47 +28,47 @@ export const onboardingStyles = css`
 	}
 
 	.title {
-		font-size: 24px;
-		font-weight: 600;
-		padding: 0 15px;
-		color: #121316;
-		line-height: 1.4;
-		margin: 30px 0;
+		font-size: var(--fontSizeTextXlMobile);
+		font-weight: var(--fontWeightSemiBold);
+		padding: 0 var(--uiSpacingMedium);
+		color: var(--uiColorPrimaryBlack);
+		line-height: var(--lineHeightRelaxed);
+		margin: var(--uiSpacingLarge) 0;
 	}
 
 	.sub-title {
-		font-size: 14px;
-		font-weight: 500;
-		color: #121316;
+		font-size: var(--fontSizeTextSm);
+		font-weight: var(--fontWeightMedium);
+		color: var(--uiColorPrimaryBlack);
 	}
 
 	.back-btn-container {
-		margin-top: 20px;
+		margin-top: var(--uiSpacing);
 	}
 
 	.form-section input,
 	button {
-		font-size: 14px;
+		font-size: var(--fontSizeTextSm);
 	}
 
 	.form-input {
 		width: 100%;
-		height: 40px;
-		padding: 10px;
-		border-radius: 10px;
-		font-size: 14px;
-		margin-bottom: 10px;
+		height: var(--uiSpacingXl);
+		padding: var(--uiGap);
+		border-radius: var(--borderRadius);
+		font-size: var(--fontSizeTextSm);
+		margin-bottom: var(--uiGap);
 		box-sizing: border-box;
 		background: #f8f8f8;
-		border: 1px solid #ccc;
+		border: var(--borderWidth) solid #ccc;
 		color: #333;
-		transition: all 0.3s ease;
+		transition: var(--transitionSlow);
 		pointer-events: auto;
 	}
 
 	.form-input:focus {
 		outline: none;
-		border: 1px solid transparent;
+		border: var(--borderWidth) solid transparent;
 		background:
 			linear-gradient(white, white) padding-box,
 			linear-gradient(45deg, #e56be8, #495cff) border-box;
@@ -89,20 +89,20 @@ export const onboardingStyles = css`
 	}
 
 	.btn {
-		margin-top: 20px;
-		margin-bottom: 20px;
-		padding: 12px 24px;
+		margin-top: var(--uiSpacing);
+		margin-bottom: var(--uiSpacing);
+		padding: var(--uiSpacingMedium) var(--fontSizeTextXlMobile);
 		border: none;
-		border-radius: 10px;
-		font-size: 14px;
-		font-weight: 600;
+		border-radius: var(--borderRadius);
+		font-size: var(--fontSizeTextSm);
+		font-weight: var(--fontWeightSemiBold);
 		cursor: pointer;
 		transition: all 0.2s ease;
 	}
 
 	.btn-primary {
 		background: #000;
-		color: white;
+		color: var(--uiColorPrimaryWhite);
 		width: 100%;
 	}
 
@@ -117,11 +117,11 @@ export const onboardingStyles = css`
 	.back-btn {
 		background: none;
 		border: none;
-		font-size: 24px;
+		font-size: var(--fontSizeTextXlMobile);
 		cursor: pointer;
 		color: #000;
-		padding: 8px;
-		border-radius: 50%;
+		padding: var(--uiSpacingSmall);
+		border-radius: var(--borderRadiusCircular);
 		transition: background-color 0.2s ease;
 	}
 
@@ -132,18 +132,18 @@ export const onboardingStyles = css`
 	.header-logo {
 		width: 56px;
 		height: 56px;
-		margin: 20px auto 0px;
+		margin: var(--uiSpacing) auto 0px;
 		display: block;
 	}
 
 	.form-section {
-		margin: 0 0 15px 0;
+		margin: 0 0 var(--uiSpacingMedium) 0;
 	}
 
 	.privacy-note {
-		font-size: 16px;
+		font-size: var(--fontSizeTextMd);
 		color: #666;
-		margin: 6px 0 14px 0;
+		margin: var(--uiSpacingTiny) 0 var(--fontSizeTextSm) 0;
 		padding: 0;
 		text-align: center;
 	}
@@ -160,7 +160,7 @@ export const onboardingStyles = css`
 		}
 
 		.title {
-			font-size: 24px;
+			font-size: var(--fontSizeTextXlMobile);
 			padding: 0;
 		}
 	}
