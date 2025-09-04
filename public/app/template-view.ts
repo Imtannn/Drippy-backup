@@ -164,7 +164,20 @@ export class TemplateView extends Element {
 									aspect-ratio="0.79"
 								></item-card>
 								<div class="template-product-name">Product Name</div>
-								<div class="template-product-price">€ 125.00</div>
+								<div class="template-product-price-container">
+									<div
+										class="template-product-price"
+										classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
+									>
+										€ 125.00
+									</div>
+									<div
+										class="template-product-wholesale"
+										classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
+									>
+										MOQ: 5pcs
+									</div>
+								</div>
 							</div>
 						`}
 						</>
@@ -232,10 +245,35 @@ export class TemplateView extends Element {
 			color: #424347;
 		}
 
+		.template-product-price-container {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			flex-wrap: wrap;
+		}
+
 		.template-product-price {
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightNormal);
 			color: #424347;
+			text-wrap: nowrap;
+		}
+
+		.template-product-price.wholesale {
+			font-size: var(--fontSizeTextXxs);
+		}
+
+		.template-product-wholesale {
+			opacity: 0;
+		}
+
+		.template-product-wholesale.wholesale {
+			font-size: var(--fontSizeTextXxs);
+			font-weight: var(--fontWeightNormal);
+			color: #424347;
+			text-wrap: nowrap;
+			opacity: 1;
 		}
 	`
 }

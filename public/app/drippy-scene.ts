@@ -516,9 +516,6 @@ export class DrippyScene extends Element {
 			--scene-transform: translateX(0);
 			--scene-desktop-transform: translateY(-100px);
 			background: var(--appBackground);
-		}
-
-		:host {
 			width: var(--appWidth);
 			height: var(--appHeight);
 			touch-action: none;
