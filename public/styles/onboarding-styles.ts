@@ -13,14 +13,15 @@ export const onboardingStyles = css`
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		overflow: auto;
 	}
 
 	.onboarding-step {
 		max-width: 393px;
-		margin: 0 auto;
+		margin-top: var(--uiSpacingXxl);
 		padding: var(--uiSpacing);
 		text-align: center;
-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+		font-family: var(--fontFamily);
 		min-height: 100vh;
 		display: flex;
 		flex-direction: column;
@@ -44,17 +45,20 @@ export const onboardingStyles = css`
 
 	.back-btn-container {
 		margin-top: var(--uiSpacing);
+		text-align: left;
 	}
 
-	.form-section input,
-	button {
-		font-size: var(--fontSizeTextSm);
+	.form-section {
+		& input,
+		& button {
+			font-size: var(--fontSizeTextSm);
+		}
 	}
 
 	.form-input {
 		width: 100%;
 		height: var(--uiSpacingXl);
-		padding: var(--uiGap);
+		padding: var(--uiGapSmall);
 		border-radius: var(--borderRadius);
 		font-size: var(--fontSizeTextSm);
 		margin-bottom: var(--uiGap);
@@ -64,32 +68,34 @@ export const onboardingStyles = css`
 		color: #333;
 		transition: var(--transitionSlow);
 		pointer-events: auto;
+
+		&:focus {
+			outline: none;
+			border: var(--borderWidth) solid transparent;
+			background:
+				linear-gradient(white, white) padding-box,
+				linear-gradient(45deg, #e56be8, #495cff) border-box;
+		}
+
+		&::placeholder {
+			color: #999;
+		}
 	}
 
-	.form-input:focus {
-		outline: none;
-		border: var(--borderWidth) solid transparent;
-		background:
-			linear-gradient(white, white) padding-box,
-			linear-gradient(45deg, #e56be8, #495cff) border-box;
-	}
+	input[type='date'] {
+		&::-webkit-calendar-picker-indicator {
+			display: none;
+		}
 
-	.form-input::placeholder {
-		color: #999;
-	}
-
-	input[type='date']::-webkit-calendar-picker-indicator {
-		display: none;
-	}
-
-	input[type='date']::-webkit-inner-spin-button,
-	input[type='date']::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
+		&::-webkit-inner-spin-button,
+		&::-webkit-outer-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
 	}
 
 	.btn {
-		margin-top: var(--uiSpacing);
+		margin-top: var(--uiSpacingSmall);
 		margin-bottom: var(--uiSpacing);
 		padding: var(--uiSpacingMedium) var(--fontSizeTextXlMobile);
 		border: none;
@@ -98,20 +104,16 @@ export const onboardingStyles = css`
 		font-weight: var(--fontWeightSemiBold);
 		cursor: pointer;
 		transition: all 0.2s ease;
-	}
 
-	.btn-primary {
-		background: #000;
-		color: var(--uiColorPrimaryWhite);
-		width: 100%;
-	}
+		&.btn-primary {
+			background: #000;
+			color: var(--uiColorPrimaryWhite);
+			width: 100%;
 
-	.btn-primary:hover {
-		background: #333;
-	}
-
-	.back-btn-container {
-		text-align: left;
+			&:hover {
+				background: #333;
+			}
+		}
 	}
 
 	.back-btn {
@@ -123,10 +125,10 @@ export const onboardingStyles = css`
 		padding: var(--uiSpacingSmall);
 		border-radius: var(--borderRadiusCircular);
 		transition: background-color 0.2s ease;
-	}
 
-	.back-btn:hover {
-		background-color: rgba(0, 0, 0, 0.1);
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.1);
+		}
 	}
 
 	.header-logo {
@@ -134,10 +136,6 @@ export const onboardingStyles = css`
 		height: 56px;
 		margin: var(--uiSpacing) auto 0px;
 		display: block;
-	}
-
-	.form-section {
-		margin: 0 0 var(--uiSpacingMedium) 0;
 	}
 
 	.privacy-note {
@@ -148,20 +146,21 @@ export const onboardingStyles = css`
 		text-align: center;
 	}
 
+	.error-message {
+		background: #fee;
+		border: var(--borderWidth) solid #f88;
+		border-radius: var(--borderRadiusSmall);
+		color: #c33;
+		font-size: var(--fontSizeTextSm);
+		font-weight: var(--fontWeightMedium);
+		margin: var(--uiGapSmall) 0;
+		padding: var(--uiGapSmall) var(--uiGap);
+		text-align: center;
+	}
+
 	img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-	}
-
-	@media (max-width: 480px) {
-		.onboarding-step {
-			padding: 0px;
-		}
-
-		.title {
-			font-size: var(--fontSizeTextXlMobile);
-			padding: 0;
-		}
 	}
 `
