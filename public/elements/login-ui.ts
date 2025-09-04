@@ -203,6 +203,7 @@ export class LoginUI extends LumeElement {
 					border: none;
 					height: var(--uiSpacingXl);
 					line-height: var(--uiSpacingXl);
+					padding: 0;
 				}
 
 				.login-button-form-submit {
@@ -217,8 +218,26 @@ export class LoginUI extends LumeElement {
 
 				input[type='email'],
 				input[type='password'] {
-					border-radius: var(--borderRadiusSmall);
+					width: 100%;
 					height: var(--uiSpacingXl);
+					padding: var(--uiGapSmall);
+					border-radius: var(--borderRadius);
+					font-size: var(--fontSizeTextSm);
+					margin-bottom: var(--uiGap);
+					box-sizing: border-box;
+					background: #f8f8f8;
+					border: var(--borderWidth) solid #ccc;
+					color: #333;
+					transition: var(--transitionSlow);
+					pointer-events: auto;
+
+					&:focus {
+						outline: none;
+						border: var(--borderWidth) solid transparent;
+						background:
+							linear-gradient(white, white) padding-box,
+							linear-gradient(45deg, #e56be8, #495cff) border-box;
+					}
 				}
 
 				[id*='label-and-input'] {
