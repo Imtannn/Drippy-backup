@@ -1,4 +1,18 @@
-import {createSignal, css, Element, element, For, html, Index, Motor, onCleanup, Show, signal, untrack} from 'lume'
+import {
+	createSignal,
+	css,
+	Element,
+	element,
+	For,
+	GltfModel,
+	html,
+	Index,
+	Motor,
+	onCleanup,
+	Show,
+	signal,
+	untrack,
+} from 'lume'
 import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {spaces} from '../consts/spaces.js'
@@ -25,6 +39,8 @@ export class DrippyScene extends Element {
 
 	// Cache for textures per URL so we don't reload repeatedly
 	#textureCache = new Map<string, any>()
+
+	@signal private background: GltfModel | null = null
 
 	async #getTexture(url: string, repete: [number, number], coef: number, offset: [number, number], rotate: number) {
 		const key = `${url}-${repete[0]}-${repete[1]}-${coef}-${offset[0]}-${offset[1]}-${rotate}`
@@ -290,6 +306,7 @@ export class DrippyScene extends Element {
 				avatar.on?.('MODEL_LOAD', loaded)
 				onCleanup(() => {
 					avatar.off?.('MODEL_LOAD', loaded)
+					enableShadows(avatar.three)
 				})
 			}
 		})
@@ -432,6 +449,17 @@ export class DrippyScene extends Element {
 		// onCleanup(() => {
 		// 	Motor?.removeRenderTask(this.#renderTask)
 		// })
+
+		this.createEffect(() => {
+			if (!this.background) return
+
+			this.background.on('MODEL_LOAD', () => {
+				if (!this.background) return
+				console.log('Setting up background shadows after load')
+
+				enableShadows(this.background.three)
+			})
+		})
 	}
 
 	disconnectedCallback() {
@@ -450,59 +478,120 @@ export class DrippyScene extends Element {
 			</app-buttons-left>
 		`}></show-when>
 
+
+
+
+
+
 		<div id="lume-scene-container">
-		<lume-scene id="drippy-scene" webgl perspective="2200">
-			<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
-			<lume-directional-light
-			position="500 500 500"
-		></lume-directional-light>
-			<lume-directional-light position="-500 -500 -500"></lume-directional-light>
 
-			<lume-camera-rig
-				min-distance="2"
-				max-distance="15"
-				distance="9"
-				dolly-speed="0.01"
-				position="0 -1 0"
-			></lume-camera-rig>
+			<lume-scene id="drippy-scene" webgl perspective="2200" physically-correct-lights >
+				<lume-element3d align-point="0.5 0.5 0.5">
 
-			<lume-gltf-model
-				id="avatar"
-				src=${() =>
-					store.selectedAvatar !== null
-						? store.selectedAvatar === 'female'
-							? femaleAvatar.href
-							: maleAvatar.href
-						: store.tempSelectedAvatar === 'female'
-							? femaleAvatar.href
-							: maleAvatar.href}
-				scale="1 1 1"
-				data-avatar
-			></lume-gltf-model>
+					<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
 
-			<${Show} when=${() => store.selectedSpace}>
-				${() => html`<lume-gltf-model id="scene" src=${() => store.selectedSpace?.scene.href}></lume-gltf-model>`}
-			</>
+					<lume-spot-light
+						position="5 -5 0"
+						intensity="13"
+						shadow-camera-top="-5"
+						shadow-camera-bottom="5"
+						shadow-camera-left="-5"
+						shadow-camera-right="5"
+						shadow-map-width="2048"
+						shadow-map-height="2048"
+						shadow-bias="-0.0002"
+						target="#avatar"
+						penumbra="0.25"
+						angle="20"
+					>
 
-			<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
-				${(item: Accessor<URL>) => {
-					return html`<lume-gltf-model src=${() => item().href}></lume-gltf-model>`
-				}}
-			</>
+						<lume-sphere size="1 1 1" color="deeppink" has="basic-material"
+						mount-point="0.5 0.5 0.5"
+						cast-shadow="false"
+						></lume-sphere>
 
-			<${For} each=${() => this.renderBlocks}>
-				${(item: {block: Block; templateCategory: TemplateCategory; id: string}, index: Accessor<number>) => {
-					return html`
-						<lume-gltf-model
-							id=${item.id}
-							data-index=${index()}
-							data-cloth
-							src=${() => item.block.modelFile}
-							scale=${() => (item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1')}
-						></lume-gltf-model>
-					`
-				}}
-			</>
+					</lume-spot-light>
+
+					<lume-spot-light
+						position="-5 -5 0"
+						intensity="13"
+						shadow-camera-top="-5"
+						shadow-camera-bottom="5"
+						shadow-camera-left="-5"
+						shadow-camera-right="5"
+						shadow-map-width="2048"
+						shadow-map-height="2048"
+						shadow-bias="-0.0002"
+						target="#avatar"
+						penumbra="0.25"
+						angle="20"
+					>
+
+						<lume-sphere size="1 1 1" color="deeppink" has="basic-material"
+						mount-point="0.5 0.5 0.5"
+						cast-shadow="false"
+						></lume-sphere>
+
+					</lume-spot-light>
+
+					<!-- <lume-spot-light
+						position="-500 -500 -500"
+						shadow-camera-top="-5"
+						shadow-camera-bottom="5"
+						shadow-camera-left="-5"
+						shadow-camera-right="5"
+						shadow-map-width="2048"
+						shadow-map-height="2048"
+						shadow-bias="-0.00002"
+					></lume-spot-light> -->
+
+					<lume-camera-rig
+						min-distance="20"
+						max-distance="150"
+						distance="9"
+						dolly-speed="0.01"
+						position="0 -1 0"
+					></lume-camera-rig>
+
+					<lume-gltf-model
+						id="avatar"
+						src=${() =>
+							store.selectedAvatar !== null
+								? store.selectedAvatar === 'female'
+									? femaleAvatar.href
+									: maleAvatar.href
+								: store.tempSelectedAvatar === 'female'
+									? femaleAvatar.href
+									: maleAvatar.href}
+						scale="1 1 1"
+						data-avatar
+					></lume-gltf-model>
+
+					<${Show} when=${() => store.selectedSpace}>
+						${() => html`<lume-gltf-model ref=${(el: GltfModel) => (this.background = el)} id="scene" src=${() => store.selectedSpace?.scene.href}></lume-gltf-model>`}
+					</>
+
+					<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
+						${(item: Accessor<URL>) => {
+							return html`<lume-gltf-model src=${() => item().href}></lume-gltf-model>`
+						}}
+					</>
+
+					<${For} each=${() => this.renderBlocks}>
+						${(item: {block: Block; templateCategory: TemplateCategory; id: string}, index: Accessor<number>) => {
+							return html`
+								<lume-gltf-model
+									id=${item.id}
+									data-index=${index()}
+									data-cloth
+									src=${() => item.block.modelFile}
+									scale=${() => (item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1')}
+								></lume-gltf-model>
+							`
+						}}
+					</>
+
+				</lume-element3d>
 			</lume-scene>
 		</div>
 	`
@@ -539,4 +628,16 @@ export class DrippyScene extends Element {
 			}
 		}
 	`
+}
+
+function enableShadows(obj: THREE.Object3D) {
+	obj.traverse((child: THREE.Object3D) => {
+		if (!isMesh(child)) return
+		child.castShadow = true
+		child.receiveShadow = true
+	})
+}
+
+function isMesh(obj: THREE.Object3D): obj is THREE.Mesh {
+	return obj instanceof THREE.Mesh
 }

@@ -9,3 +9,5 @@ Place all CSS variables in styleVars.ts
 Place global styles for the whole app in global.css. This sheet is injected into all Shadow Roots so it affects all elements.
 
 Prefer CSS animations over JS animations.
+
+Use --camelCase for CSS variables.
