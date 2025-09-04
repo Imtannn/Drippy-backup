@@ -450,7 +450,7 @@ export class DrippyScene extends Element {
 			</app-buttons-left>
 		`}></show-when>
 
-		<div id="lume-scene-container" style=${() => `background: url(${this.sceneUrl}) center bottom / cover no-repeat`}>
+		<div id="lume-scene-container">
 		<lume-scene id="drippy-scene" webgl perspective="2200">
 			<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
 			<lume-directional-light
