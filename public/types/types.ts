@@ -19,6 +19,7 @@ export type Space = {
 	scene: URL
 	gender: 'male' | 'female'
 	garmentsCount: number
+	isWholesale: boolean
 }
 
 export type CustomMeasurement = {
