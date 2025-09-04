@@ -93,7 +93,6 @@ export class BlocksSelection extends Element {
 
 			const selectedTemplate = store.selectedTemplates.get(this.selectedTemplateCategory)
 			if (selectedTemplate) {
-				console.log('fabrics', fabrics[this.spaceCollection], selectedTemplate.category)
 				this.availableFabrics =
 					fabrics[this.spaceCollection]?.filter(fabric => fabric.templateCategory === selectedTemplate.category) ?? []
 			} else {
@@ -186,7 +185,6 @@ export class BlocksSelection extends Element {
 		if (!templateBlocks) return
 
 		const actualBlockCategories = Array.from(templateBlocks.keys())
-
 		// Apply fabric to ALL selected blocks of this template category
 		const fabricData = actualBlockCategories.map(blockCategory => ({
 			fabric,
