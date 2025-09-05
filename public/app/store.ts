@@ -41,6 +41,8 @@ export const store = createMutable({
 	selectedBlocks: new Map<TemplateCategory, Map<BlockCategory, Block>>(),
 	selectedFabrics: new Map<TemplateCategory, Map<BlockCategory, Fabric>>(),
 	customMeasurement: null as CustomMeasurement | null,
+	isShowAvatar: true,
+	isShowScene: true,
 
 	// Order-related state
 	order: {
@@ -288,7 +290,12 @@ export const store = createMutable({
 	set setCustomMeasurement(measurement: CustomMeasurement) {
 		this.customMeasurement = measurement
 	},
-
+	set setIsShowAvatar(isShowAvatar: boolean) {
+		this.isShowAvatar = isShowAvatar
+	},
+	set setIsShowScene(isShowScene: boolean) {
+		this.isShowScene = isShowScene
+	},
 	// Order-related setters
 	set setOrderStatus(status: OrderStatus) {
 		this.order.status = status
