@@ -23,9 +23,18 @@ AWS.config.update({
 
 const s3 = new AWS.S3()
 
-// Root folder ID from the Google Drive URL
-const ROOT_FOLDER_ID = '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-'
-const BRAND = 'moidien'
+// Brand configurations with Google Drive folder IDs
+const BRAND_CONFIGS = [
+	{
+		brand: 'moidien',
+		rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
+	},
+	// Add more brands here as needed
+	// {
+	//   brand: 'another-brand',
+	//   rootFolderId: 'another-folder-id',
+	// },
+]
 
 const allFabrics: TODO[] = []
 
@@ -67,7 +76,6 @@ async function uploadToS3(buffer: Buffer, key: string, contentType: string): Pro
 
 	try {
 		const result = await s3.upload(params).promise()
-		console.log(result.Location)
 		return result.Location
 	} catch (error) {
 		console.error('Error uploading to S3:', error)
@@ -141,6 +149,7 @@ function normalizeBlockCategory(folderName: string): string {
 	if (folderName.toLowerCase().includes('fullbody')) return 'Full Body'
 	if (folderName.toLowerCase().includes('hat')) return 'Hat'
 	if (folderName.toLowerCase().includes('bag')) return 'Bag'
+	if (folderName.toLowerCase().includes('accessory')) return 'Accessory'
 	return folderName // fallback to original name
 }
 
@@ -148,6 +157,7 @@ function normalizeBlockCategory(folderName: string): string {
 async function processTemplateFolder(
 	templateFolder: TODO,
 	category: string,
+	brand: string,
 ): Promise<{template: TODO; blocks: TODO[]; unsucceeded: TODO[]}> {
 	console.log(`  📂 Processing template: ${templateFolder.name}`)
 
@@ -167,7 +177,7 @@ async function processTemplateFolder(
 	const blockTypeFolders = templateContents.filter(
 		item =>
 			item.mimeType === 'application/vnd.google-apps.folder' &&
-			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag'].some(blockType =>
+			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory'].some(blockType =>
 				item.name.toLowerCase().includes(blockType.toLowerCase()),
 			),
 	)
@@ -214,7 +224,7 @@ async function processTemplateFolder(
 	const templateThumbnailBuffer = await downloadToBuffer(templateThumbnailUrl)
 	const templateS3Url = await uploadToS3(
 		templateThumbnailBuffer,
-		`images/${BRAND}/templates/${category}/${templateFolder.name}.png`,
+		`images/${brand}/templates/${category}/${templateFolder.name}.png`,
 		'image/png',
 	)
 
@@ -224,7 +234,7 @@ async function processTemplateFolder(
 		console.log(`    📁 Processing material files for template`)
 
 		// Process and upload material files
-		materialId = await processMaterialFolder(materialFolder, category)
+		materialId = await processMaterialFolder(materialFolder, category, brand)
 		console.log(`     📎 Material reference: ${materialId}`)
 	}
 
@@ -243,11 +253,17 @@ async function processTemplateFolder(
 		console.log(`    📁 Processing block type: ${blockTypeFolder.name}`)
 
 		const blockTypeContents = await fetchFolderContents(blockTypeFolder.id)
-		const gltfFiles = blockTypeContents.filter((f: TODO) => f.name.toLowerCase().endsWith('.gltf'))
+		if (blockTypeContents.length === 0) {
+			console.warn(`      ⚠️ No block type files found for ${blockTypeFolder.name}`)
+			continue
+		}
+		const gltfFiles = blockTypeContents.filter(
+			(f: TODO) => f.name.toLowerCase().endsWith('.gltf') || f.name.toLowerCase().endsWith('.glb'),
+		)
 		let pngFiles = blockTypeContents.filter((f: TODO) => f.name.toLowerCase().endsWith('.png'))
 
 		if (pngFiles.length === 0) {
-			console.error(`      ❌ No Block PNG files found for ${blockTypeFolder.name}`)
+			console.warn(`      ⚠️ No Block PNG files found for ${blockTypeFolder.name}`)
 			console.log('      📥 Using template thumbnail as block thumbnail')
 			pngFiles = [templateThumbnail]
 		}
@@ -257,7 +273,7 @@ async function processTemplateFolder(
 
 		// Match GLTF and PNG pairs
 		for (const gltfFile of gltfFiles) {
-			const baseName = path.basename(gltfFile.name, '.gltf').toLowerCase()
+			const baseName = path.basename(gltfFile.name, path.extname(gltfFile.name)).toLowerCase()
 			const matchingPng = pngFiles[0]
 
 			if (matchingPng) {
@@ -274,12 +290,12 @@ async function processTemplateFolder(
 					const [blockThumbS3Url, blockModelS3Url] = await Promise.all([
 						uploadToS3(
 							pngBuffer,
-							`images/${BRAND}/blocks/${category}/${blockTypeFolder.name}/${baseName}.png`,
+							`images/${brand}/blocks/${category}/${blockTypeFolder.name}/${baseName}.png`,
 							'image/png',
 						),
 						uploadToS3(
 							gltfBuffer,
-							`models/${BRAND}/blocks/${category}/${blockTypeFolder.name}/${baseName}.gltf`,
+							`models/${brand}/blocks/${category}/${blockTypeFolder.name}/${baseName}.${path.extname(gltfFile.name)}`,
 							'model/gltf+json',
 						),
 					])
@@ -307,15 +323,15 @@ async function processTemplateFolder(
 	return {template, blocks: allBlocks, unsucceeded: unsucceeded}
 }
 
-function generateTemplateData(processedData: TODO[]): TODO {
+function generateTemplateData(processedData: TODO[], brand: string): TODO {
 	const templates: TODO = {}
 	let idCounter = 1
 
 	processedData.forEach(({template}) => {
 		if (!template) return
 
-		templates[BRAND] = templates[BRAND] || []
-		templates[BRAND].push({
+		templates[brand] = templates[brand] || []
+		templates[brand].push({
 			_id: idCounter.toString(),
 			thumb: template.thumbUrl,
 			name: template.name,
@@ -329,14 +345,14 @@ function generateTemplateData(processedData: TODO[]): TODO {
 	return templates
 }
 
-function generateBlockData(processedData: TODO[]): TODO {
+function generateBlockData(processedData: TODO[], brand: string): TODO {
 	const blocks: TODO = {}
 	let idCounter = 1
 
 	processedData.forEach(({blocks: templateBlocks}) => {
 		templateBlocks.forEach((block: TODO) => {
-			blocks[BRAND] = blocks[BRAND] || []
-			blocks[BRAND].push({
+			blocks[brand] = blocks[brand] || []
+			blocks[brand].push({
 				_id: idCounter.toString(),
 				thumb: block.thumbUrl,
 				modelFile: block.modelUrl,
@@ -354,13 +370,13 @@ function generateBlockData(processedData: TODO[]): TODO {
 	return blocks
 }
 
-function generateFabricData(fabricsData: TODO[]): TODO {
+function generateFabricData(fabricsData: TODO[], brand: string): TODO {
 	const fabrics: TODO = {}
 	let idCounter = 1
 
 	fabricsData.forEach(fabric => {
-		fabrics[BRAND] = fabrics[BRAND] || []
-		fabrics[BRAND].push({
+		fabrics[brand] = fabrics[brand] || []
+		fabrics[brand].push({
 			_id: idCounter.toString(),
 			thumb: fabric.thumbUrl,
 			normal: fabric.normal,
@@ -500,7 +516,7 @@ async function updateFabricsFile(content: string): Promise<void> {
 }
 
 // Get material and return material name as id
-async function processMaterialFolder(materialFolder: TODO, categoryName: string): Promise<string> {
+async function processMaterialFolder(materialFolder: TODO, categoryName: string, brand: string): Promise<string> {
 	// Parse thumbnail file name, the format is "${materialCategory} - ${materialName} - RENDER"
 	const materialContents = await fetchFolderContents(materialFolder.id)
 	const materialFiles = materialContents.filter(item => item.mimeType !== 'application/vnd.google-apps.folder')
@@ -512,29 +528,30 @@ async function processMaterialFolder(materialFolder: TODO, categoryName: string)
 	// First, look for thumbnail file matching folder name
 	const thumbnailFile = materialFiles.find(file => file.name.includes('RENDER'))
 	const thumbnailFileName = thumbnailFile?.name
-	const materialCategory = capitalize(normalizeName(thumbnailFile?.name.split('-')[0].trim()))
-	const materialName = capitalize(normalizeName(thumbnailFile?.name.split('-')[1].trim()))
-
-	const matchingFabric = allFabrics.find(
-		fabric =>
-			fabric.materialName === materialName &&
-			fabric.category === materialCategory &&
-			fabric.templateCategory === categoryName,
-	)
-	if (matchingFabric) {
-		console.log(`      ⚠️ Material ${materialName} already exists, skipping...`)
-		console.log(`    ✅ Processed fabric: ${materialName} (${materialCategory})`)
-		return `${materialName} ${materialCategory} ${categoryName}`
-	}
+	const materialCategory = capitalize(normalizeName(thumbnailFileName.split('-')[0].trim()))
+	const materialName = capitalize(normalizeName(thumbnailFileName.split('-')[1].trim()))
+	console.log(thumbnailFileName, materialCategory, materialName)
 
 	if (thumbnailFile) {
 		try {
+			const matchingFabric = allFabrics.find(
+				fabric =>
+					fabric.materialName === materialName &&
+					fabric.category === materialCategory &&
+					fabric.templateCategory === categoryName,
+			)
+			if (matchingFabric) {
+				console.log(`      ⚠️ Material ${materialName} already exists, skipping...`)
+				console.log(`    ✅ Processed fabric: ${materialName} (${materialCategory})`)
+				return `${materialName} ${materialCategory} ${categoryName}`
+			}
+
 			console.log(`      📸 Processing thumbnail: ${thumbnailFile.name}`)
 
 			const thumbBuffer = await downloadToBuffer(getDriveDownloadUrl(thumbnailFile.id))
 			thumbUrl = await uploadToS3(
 				thumbBuffer,
-				`fabrics/${BRAND}/${categoryName}/${materialFolder.name}/${thumbnailFile.name}`,
+				`fabrics/${brand}/${categoryName}/${materialFolder.name}/${thumbnailFile.name}`,
 				'image/png',
 			)
 
@@ -561,7 +578,7 @@ async function processMaterialFolder(materialFolder: TODO, categoryName: string)
 
 			const fileS3Url = await uploadToS3(
 				fileBuffer,
-				`fabrics/${BRAND}/${categoryName}/${materialFolder.name}/${file.name}`,
+				`fabrics/${brand}/${categoryName}/${materialFolder.name}/${file.name}`,
 				contentType,
 			)
 
@@ -597,7 +614,7 @@ async function processMaterialFolder(materialFolder: TODO, categoryName: string)
 	return `${materialName} ${materialCategory} ${categoryName}`
 }
 
-async function processMaterialsFolders(materialsFolder: TODO, categoryName: string): Promise<void> {
+async function processMaterialsFolders(materialsFolder: TODO, categoryName: string, brand: string): Promise<void> {
 	// Process Materials folder for fabrics if it exists
 	if (materialsFolder) {
 		console.log(`  📁 Processing Materials folder for ${categoryName} category`)
@@ -610,7 +627,7 @@ async function processMaterialsFolders(materialsFolder: TODO, categoryName: stri
 		for (const materialFolder of materialFolders) {
 			console.log(`    📁 Processing material: ${materialFolder.name}`)
 
-			await processMaterialFolder(materialFolder, categoryName)
+			await processMaterialFolder(materialFolder, categoryName, brand)
 		}
 	}
 }
@@ -639,57 +656,79 @@ async function main(): Promise<void> {
 
 		console.log(`📦 Using S3 bucket: ${S3_BUCKET}`)
 		console.log(`🌍 S3 region: ${S3_REGION}`)
-		console.log(`🗂️  Root folder ID: ${ROOT_FOLDER_ID}`)
+		console.log(`🏷️  Processing ${BRAND_CONFIGS.length} brands: ${BRAND_CONFIGS.map(c => c.brand).join(', ')}`)
 
-		// Get category folders (Jacket, Shirt, Pants, Accessories)
-		const rootContents = await fetchFolderContents(ROOT_FOLDER_ID)
-		const categoryFolders = rootContents.filter(item => item.mimeType === 'application/vnd.google-apps.folder')
-
-		console.log(`📁 Found ${categoryFolders.length} category folders`)
-
-		const allProcessedData: TODO[] = []
+		// Initialize combined data structures
+		const allTemplates: TODO = {}
+		const allBlocks: TODO = {}
+		const allCombinedFabrics: TODO = {}
 		const allUnsucceeded: TODO[] = []
 
-		// Process each category
-		for (const categoryFolder of categoryFolders) {
-			console.log(`\n📂 Processing category: ${categoryFolder.name}`)
+		// Process each brand
+		for (const brandConfig of BRAND_CONFIGS) {
+			const {brand, rootFolderId} = brandConfig
+			console.log(`\n🏢 Processing brand: ${brand}`)
+			console.log(`🗂️  Root folder ID: ${rootFolderId}`)
 
-			const categoryContents = await fetchFolderContents(categoryFolder.id)
-			const templateFolders = categoryContents.filter(
-				item => item.mimeType === 'application/vnd.google-apps.folder' && item.name !== 'Materials',
-			)
-			const materialsFolder = categoryContents.find(
-				item => item.mimeType === 'application/vnd.google-apps.folder' && item.name === 'Materials',
-			)
+			// Reset fabrics array for this brand
+			allFabrics.length = 0
 
-			console.log(`  Found ${templateFolders.length} template folders`)
+			// Get category folders (Jacket, Shirt, Pants, Accessories)
+			const rootContents = await fetchFolderContents(rootFolderId)
+			const categoryFolders = rootContents.filter(item => item.mimeType === 'application/vnd.google-apps.folder')
 
-			// Process each template in this category
-			for (const templateFolder of templateFolders) {
-				const processedTemplate = await processTemplateFolder(templateFolder, categoryFolder.name)
-				if (processedTemplate.template) {
-					allProcessedData.push(processedTemplate)
+			console.log(`📁 Found ${categoryFolders.length} category folders`)
+
+			const brandProcessedData: TODO[] = []
+
+			// Process each category for this brand
+			for (const categoryFolder of categoryFolders) {
+				console.log(`\n📂 Processing category: ${categoryFolder.name}`)
+
+				const categoryContents = await fetchFolderContents(categoryFolder.id)
+				const templateFolders = categoryContents.filter(
+					item => item.mimeType === 'application/vnd.google-apps.folder' && item.name !== 'Materials',
+				)
+				const materialsFolder = categoryContents.find(
+					item => item.mimeType === 'application/vnd.google-apps.folder' && item.name === 'Materials',
+				)
+
+				console.log(`  Found ${templateFolders.length} template folders`)
+
+				// Process each template in this category
+				for (const templateFolder of templateFolders) {
+					const processedTemplate = await processTemplateFolder(templateFolder, categoryFolder.name, brand)
+					if (processedTemplate.template) {
+						brandProcessedData.push(processedTemplate)
+					}
+					allUnsucceeded.push(...processedTemplate.unsucceeded)
 				}
-				allUnsucceeded.push(...processedTemplate.unsucceeded)
+
+				// Process fabrics if Materials folder exists inside Template folder
+				await processMaterialsFolders(materialsFolder, categoryFolder.name, brand)
 			}
 
-			// Process fabrics if Materials folder exists inside Template folder
-			await processMaterialsFolders(materialsFolder, categoryFolder.name)
+			// Generate data for this brand
+			const brandTemplates = generateTemplateData(brandProcessedData, brand)
+			const brandBlocks = generateBlockData(brandProcessedData, brand)
+			const brandFabricsData = generateFabricData(allFabrics, brand)
+
+			// Merge with combined data
+			Object.assign(allTemplates, brandTemplates)
+			Object.assign(allBlocks, brandBlocks)
+			Object.assign(allCombinedFabrics, brandFabricsData)
+
+			console.log(`✅ Completed processing brand: ${brand}`)
 		}
 
-		// Generate templates, blocks, and fabrics data
-		const templates = generateTemplateData(allProcessedData)
-		const blocks = generateBlockData(allProcessedData)
-		const fabrics = generateFabricData(allFabrics)
-
-		console.log(`📊 Generated ${Object.keys(templates).length} template collections`)
-		console.log(`📊 Generated ${Object.keys(blocks).length} block collections`)
-		console.log(`📊 Generated ${Object.keys(fabrics).length} fabric collections`)
+		console.log(`\n📊 Generated ${Object.keys(allTemplates).length} template collections`)
+		console.log(`📊 Generated ${Object.keys(allBlocks).length} block collections`)
+		console.log(`📊 Generated ${Object.keys(allCombinedFabrics).length} fabric collections`)
 
 		// Generate and write the files
-		const templatesContent = generateTemplatesFileContent(templates)
-		const blocksContent = generateBlocksFileContent(blocks)
-		const fabricsContent = generateFabricsFileContent(fabrics)
+		const templatesContent = generateTemplatesFileContent(allTemplates)
+		const blocksContent = generateBlocksFileContent(allBlocks)
+		const fabricsContent = generateFabricsFileContent(allCombinedFabrics)
 
 		await updateTemplatesFile(templatesContent)
 		await updateBlocksFile(blocksContent)
@@ -699,9 +738,9 @@ async function main(): Promise<void> {
 		console.log('\n📋 Summary:')
 
 		// Summary
-		const templateCount = Object.values(templates).flat().length
-		const blockCount = Object.values(blocks).flat().length
-		const fabricCount = Object.values(fabrics).flat().length
+		const templateCount = Object.values(allTemplates).flat().length
+		const blockCount = Object.values(allBlocks).flat().length
+		const fabricCount = Object.values(allCombinedFabrics).flat().length
 
 		console.log(`📄 Templates: ${templateCount} items generated`)
 		console.log(`🧱 Blocks: ${blockCount} items generated`)
@@ -709,11 +748,13 @@ async function main(): Promise<void> {
 		console.log(`❌ Unsucceeded: ${allUnsucceeded.length} items`)
 
 		console.log(`\n📁 Assets organized as:`)
-		console.log(`   Template Images: images/${BRAND}/templates/{category}/`)
-		console.log(`   Template Materials: materials/${BRAND}/templates/{category}/{templateName}/`)
-		console.log(`   Block Images: images/${BRAND}/blocks/{category}/{blockType}/`)
-		console.log(`   Fabric Textures: fabrics/${BRAND}/{category}/{materialName}/`)
-		console.log(`   Block Models: models/${BRAND}/blocks/{category}/{blockType}/`)
+		BRAND_CONFIGS.forEach(({brand}) => {
+			console.log(`   ${brand} Template Images: images/${brand}/templates/{category}/`)
+			console.log(`   ${brand} Template Materials: materials/${brand}/templates/{category}/{templateName}/`)
+			console.log(`   ${brand} Block Images: images/${brand}/blocks/{category}/{blockType}/`)
+			console.log(`   ${brand} Fabric Textures: fabrics/${brand}/{category}/{materialName}/`)
+			console.log(`   ${brand} Block Models: models/${brand}/blocks/{category}/{blockType}/`)
+		})
 
 		process.exit(0)
 	} catch (error) {

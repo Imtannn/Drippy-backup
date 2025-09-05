@@ -1,4 +1,4 @@
-export type BlockCategory = 'Bodice' | 'Sleeves' | 'Pants' | 'Bag' | 'Hat' | 'Full Body'
+export type BlockCategory = 'Bodice' | 'Sleeves' | 'Pants' | 'Bag' | 'Hat' | 'Full Body' | 'Accessory'
 export type TemplateCategory = 'Jacket' | 'Shirt' | 'Pants' | 'Accessories' | 'Dress' | 'Skirt'
 
 export type BlockAvatar = 'Male' | 'Female'
