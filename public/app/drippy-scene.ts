@@ -1,18 +1,4 @@
-import {
-	createSignal,
-	css,
-	Element,
-	element,
-	For,
-	GltfModel,
-	html,
-	Index,
-	Motor,
-	onCleanup,
-	Show,
-	signal,
-	untrack,
-} from 'lume'
+import {createSignal, css, Element, element, For, GltfModel, html, Index, Motor, onCleanup, signal, untrack} from 'lume'
 import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {spaces} from '../consts/spaces.js'
