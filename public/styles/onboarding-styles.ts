@@ -53,7 +53,7 @@ export const onboardingStyles = css`
 		}
 	}
 
-	.form-input {
+	.onboarding-step .form-input {
 		width: 100%;
 		height: var(--uiSpacingXl);
 		padding: var(--uiGapSmall);
@@ -73,6 +73,10 @@ export const onboardingStyles = css`
 			background:
 				linear-gradient(white, white) padding-box,
 				linear-gradient(45deg, #e56be8, #495cff) border-box;
+		}
+
+		&:not(:focus) {
+			border: var(--borderWidth) solid #ccc;
 		}
 
 		&::placeholder {
