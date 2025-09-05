@@ -3,7 +3,7 @@ import {createEffect, html, signal} from 'lume'
 import {Meteor} from 'meteor/meteor'
 import '../routes.js' // track page visits
 import '../elements/login-ui.js'
-import '../elements/show-when.js'
+import '../elements/logic/show-when.js'
 import {toSolidSignal} from '../utils.js'
 
 export type UserProfileAttributes = keyof {} // no attributes yet

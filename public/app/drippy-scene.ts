@@ -1,5 +1,5 @@
 import {
-	createSignal,
+	createEffect,
 	css,
 	Element,
 	element,
@@ -9,7 +9,7 @@ import {
 	Index,
 	Motor,
 	onCleanup,
-	Show,
+	Scene,
 	signal,
 	untrack,
 } from 'lume'
@@ -17,7 +17,7 @@ import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {spaces} from '../consts/spaces.js'
 import '../elements/loading-indicator.js'
-import '../elements/show-when.js'
+import '../elements/logic/show-when.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
@@ -27,6 +27,8 @@ import {store} from './store.js'
 const femaleAvatar = new URL('../models/EM-MoiDien.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
 
+type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
+
 @element
 export class DrippyScene extends Element {
 	static elementName = 'drippy-scene'
@@ -35,12 +37,14 @@ export class DrippyScene extends Element {
 	@signal loadingBlocks: string[] = []
 	@signal loadingMaterials: string[] = []
 	@signal sceneUrl = ''
-	@signal renderBlocks: {block: Block; templateCategory: TemplateCategory; id: string}[] = []
+	@signal renderBlocks: RenderBlock[] = []
 
 	// Cache for textures per URL so we don't reload repeatedly
 	#textureCache = new Map<string, any>()
 
-	@signal private background: GltfModel | null = null
+	@signal private backgroundModel: GltfModel | null = null
+
+	@signal private lumeScene: Scene | null = null
 
 	async #getTexture(url: string, repete: [number, number], coef: number, offset: [number, number], rotate: number) {
 		const key = `${url}-${repete[0]}-${repete[1]}-${coef}-${offset[0]}-${offset[1]}-${rotate}`
@@ -78,7 +82,7 @@ export class DrippyScene extends Element {
 	}
 
 	// TODO: If the same fabric with same key is already fetching, wait for it to finish and use the same texture
-	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, cancelApply: () => boolean, blockId?: string) {
+	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, isCanceled: () => boolean, blockId?: string) {
 		if (!fabric || !root) return
 
 		const loadingId = blockId || `${fabric._id}-${Date.now()}`
@@ -99,7 +103,7 @@ export class DrippyScene extends Element {
 			this.#getTexture(fabric.roughness || '', repete, coef, offset, rotate),
 		])
 
-		if (untrack(cancelApply)) {
+		if (isCanceled()) {
 			this.loadingMaterials = untrack(() => this.loadingMaterials).filter(id => id !== loadingId)
 			return
 		}
@@ -159,7 +163,7 @@ export class DrippyScene extends Element {
 
 	#renderTask = () => {
 		if (!this.shadowRoot) return
-		const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
+		const models = Array.from(this.shadowRoot.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
 		for (const el of models) {
 			el.needsUpdate?.()
 			el.scene?.needsRender?.()
@@ -303,13 +307,13 @@ export class DrippyScene extends Element {
 				const loaded = () => {
 					this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== avatarId)
 				}
+
 				avatar.on?.('MODEL_LOAD', loaded)
 				onCleanup(() => {
 					avatar.off?.('MODEL_LOAD', loaded)
-					setTimeout(() => {
-						enableShadows(avatar.three)
-					}, 100)
 				})
+
+				enableShadowOnModelLoad(avatar)
 			}
 		})
 
@@ -348,28 +352,33 @@ export class DrippyScene extends Element {
 			}
 		})
 
+		// This will cache render blocks by ID. This is a quick fix to make the
+		// <For> re-use the same objects to avoid reloading GLTF models.
+		const renderBlockCache = new Map<string, RenderBlock>()
+
+		function getRenderBlock(id: string, block: Block, templateCategory: TemplateCategory) {
+			let renderBlock = renderBlockCache.get(id)
+			if (!renderBlock) renderBlockCache.set(id, (renderBlock = {block, templateCategory, id}))
+			return renderBlock
+		}
+
 		this.createEffect(() => {
 			const blocks = Array.from(store.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
 			this.renderBlocks = blocks.flatMap(block => {
 				if (block.category === 'Sleeves') {
-					return [
-						{
-							block,
-							templateCategory: block.templateCategory,
-							id: `${block.templateCategory}-${block.category}-${block._id}`,
-						},
-						{
-							block,
-							templateCategory: block.templateCategory,
-							id: `${block.templateCategory}-${block.category}-${block._id}-mirror`,
-						},
-					]
+					const id = `${block.templateCategory}-${block.category}-${block._id}`
+					let renderBlock = getRenderBlock(id, block, block.templateCategory)
+
+					const idMirror = `${id}-mirror`
+					let renderBlockMirror = getRenderBlock(idMirror, block, block.templateCategory)
+
+					return [renderBlock, renderBlockMirror]
 				}
-				return {
-					block,
-					templateCategory: block.templateCategory,
-					id: `${block.templateCategory}-${block.category}-${block._id}`,
-				}
+
+				const id = `${block.templateCategory}-${block.category}-${block._id}`
+				let renderBlock = getRenderBlock(id, block, block.templateCategory)
+
+				return renderBlock
 			})
 		})
 
@@ -388,7 +397,9 @@ export class DrippyScene extends Element {
 				return
 			}
 
-			const [cancelApply, setCancelApply] = createSignal(false)
+			let shouldCancel = false
+			const isCanceled = () => shouldCancel
+
 			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
 			const handlers: Array<{el: any; fn: () => void}> = []
 
@@ -414,14 +425,13 @@ export class DrippyScene extends Element {
 				const loadingId = `material-${blockId}`
 
 				const applyOrReset = () => {
-					const isCanceled = untrack(cancelApply)
-					if (!isCanceled) {
-						if (fabric) {
-							this.#applyFabricToThreeObject((el as any).three, fabric, cancelApply, loadingId)
-						} else {
-							// Reset to default material if no fabric selected for this block category
-							this.#resetMaterialsToDefault((el as any).three)
-						}
+					if (isCanceled()) return
+
+					if (fabric) {
+						this.#applyFabricToThreeObject((el as any).three, fabric, isCanceled, loadingId)
+					} else {
+						// Reset to default material if no fabric selected for this block category
+						this.#resetMaterialsToDefault((el as any).three)
 					}
 				}
 
@@ -435,32 +445,27 @@ export class DrippyScene extends Element {
 			}
 
 			onCleanup(() => {
-				setCancelApply(true)
+				shouldCancel = true
 				for (const {el, fn} of handlers) {
 					el.off?.('MODEL_LOAD', fn)
 				}
 			})
 		})
 
-		// Force update the scene when the fabric changes
-		Motor?.addRenderTask(this.#renderTask)
-
-		/**
-		 * TODO: FIX: This is causing errors, when click on another component (which is unrelated to the scene) onCleanUp is getting called
-		 */
-		// onCleanup(() => {
-		// 	Motor?.removeRenderTask(this.#renderTask)
-		// })
+		this.createEffect(() => {
+			// Force update the scene when the fabric changes
+			Motor?.addRenderTask(this.#renderTask)
+			onCleanup(() => Motor?.removeRenderTask(this.#renderTask))
+		})
 
 		this.createEffect(() => {
-			if (!this.background) return
+			if (!this.backgroundModel) return
+			enableShadowOnModelLoad(this.backgroundModel)
+		})
 
-			this.background.on('MODEL_LOAD', () => {
-				if (!this.background) return
-				console.log('Setting up background shadows after load')
-
-				enableShadows(this.background.three)
-			})
+		this.createEffect(() => {
+			if (!this.lumeScene) return
+			this.lumeScene.glRenderer!.toneMapping = THREE.ACESFilmicToneMapping
 		})
 	}
 
@@ -469,134 +474,161 @@ export class DrippyScene extends Element {
 		Motor?.removeRenderTask(this.#renderTask)
 	}
 
-	template = () => html`
-		<show-when condition=${() => store.view === 'blocks' || store.view === 'avatar' || store.view === 'template'} content=${() => html`
-			<app-buttons-left layout="bottom">
-				<app-buttons-group>
-					<loading-indicator
-						is-visible=${() => this.loadingBlocks.length > 0 || this.loadingMaterials.length > 0}
-					></loading-indicator>
-				</app-buttons-group>
-			</app-buttons-left>
-		`}></show-when>
+	template = () => {
+		const shadowBias = -0.0005
+		const shadowNormalBias = /*0.005*/ 0
+		const shadowCameraSize = 5
+		const shadowMapSize = 1024
+		const penumbra = 0.25
+		const spotAngle = 30
+		const shadowRadius = 4
 
+		return html`
+			<show-when condition=${() => store.view === 'blocks' || store.view === 'avatar' || store.view === 'template'} content=${() => html`
+				<app-buttons-left layout="bottom">
+					<app-buttons-group>
+						<loading-indicator
+							is-visible=${() => this.loadingBlocks.length > 0 || this.loadingMaterials.length > 0}
+						></loading-indicator>
+					</app-buttons-group>
+				</app-buttons-left>
+			`}></show-when>
 
+			<div id="lume-scene-container">
+				<lume-scene
+					ref=${(el: Scene) => (this.lumeScene = el)}
+					id="drippy-scene"
+					webgl
+					perspective="2200"
+					physically-correct-lights
+					shadow-mode="vsm"
+				>
+					<lume-element3d align-point="0.5 0.5 0.5">
+						<lume-ambient-light intensity="0.7" color="white"></lume-ambient-light>
 
+						<lume-spot-light
+							target="#avatar"
+							position="5 -5 1"
+							intensity="3"
+							shadow-camera-top="${-shadowCameraSize}"
+							shadow-camera-bottom="${shadowCameraSize}"
+							shadow-camera-left="${-shadowCameraSize}"
+							shadow-camera-right="${shadowCameraSize}"
+							shadow-map-width="${shadowMapSize}"
+							shadow-map-height="${shadowMapSize}"
+							shadow-bias="${shadowBias}"
+							shadow-normal-bias="${shadowNormalBias}"
+							penumbra="${penumbra}"
+							angle="${spotAngle}"
+							shadow-radius="${shadowRadius}"
+						>
 
+							<!-- <lume-sphere size="1 1 1" color="deeppink" has="basic-material"
+								mount-point="0.5 0.5 0.5"
+								cast-shadow="false"
+							></lume-sphere> -->
 
+						</lume-spot-light>
 
-		<div id="lume-scene-container">
+						<lume-spot-light
+							target="#avatar"
+							position="-5 -5 1"
+							intensity="3"
+							shadow-camera-top="${-shadowCameraSize}"
+							shadow-camera-bottom="${shadowCameraSize}"
+							shadow-camera-left="${-shadowCameraSize}"
+							shadow-camera-right="${shadowCameraSize}"
+							shadow-map-width="${shadowMapSize}"
+							shadow-map-height="${shadowMapSize}"
+							shadow-bias="${shadowBias}"
+							shadow-normal-bias="${shadowNormalBias}"
+							penumbra="${penumbra}"
+							angle="${spotAngle}"
+							shadow-radius="${shadowRadius}"
+						>
 
-			<lume-scene id="drippy-scene" webgl perspective="2200" physically-correct-lights >
-				<lume-element3d align-point="0.5 0.5 0.5">
+							<!-- <lume-sphere size="1 1 1" color="deeppink" has="basic-material"
+								mount-point="0.5 0.5 0.5"
+								cast-shadow="false"
+							></lume-sphere> -->
 
-					<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
+						</lume-spot-light>
 
-					<lume-spot-light
-						position="5 -5 0"
-						intensity="13"
-						shadow-camera-top="-5"
-						shadow-camera-bottom="5"
-						shadow-camera-left="-5"
-						shadow-camera-right="5"
-						shadow-map-width="2048"
-						shadow-map-height="2048"
-						shadow-bias="-0.0002"
-						target="#avatar"
-						penumbra="0.25"
-						angle="20"
-					>
+						<lume-spot-light
+							target="#avatar"
+							position="0 -5 5"
+							intensity="3"
+							shadow-camera-top="${-shadowCameraSize}"
+							shadow-camera-bottom="${shadowCameraSize}"
+							shadow-camera-left="${-shadowCameraSize}"
+							shadow-camera-right="${shadowCameraSize}"
+							shadow-map-width="${shadowMapSize}"
+							shadow-map-height="${shadowMapSize}"
+							shadow-bias="${shadowBias}"
+							shadow-normal-bias="${shadowNormalBias}"
+							penumbra="${penumbra}"
+							angle="${spotAngle}"
+							shadow-radius="${shadowRadius}"
+						>
 
-						<lume-sphere size="1 1 1" color="deeppink" has="basic-material"
-						mount-point="0.5 0.5 0.5"
-						cast-shadow="false"
-						></lume-sphere>
+							<!-- <lume-sphere size="1 1 1" color="deeppink" has="basic-material"
+								mount-point="0.5 0.5 0.5"
+								cast-shadow="false"
+							></lume-sphere> -->
 
-					</lume-spot-light>
+						</lume-spot-light>
 
-					<lume-spot-light
-						position="-5 -5 0"
-						intensity="13"
-						shadow-camera-top="-5"
-						shadow-camera-bottom="5"
-						shadow-camera-left="-5"
-						shadow-camera-right="5"
-						shadow-map-width="2048"
-						shadow-map-height="2048"
-						shadow-bias="-0.0002"
-						target="#avatar"
-						penumbra="0.25"
-						angle="20"
-					>
+						<lume-camera-rig
+							min-distance="2"
+							max-distance="15"
+							distance="9"
+							dolly-speed="0.01"
+							position="0 -1 0"
+						></lume-camera-rig>
 
-						<lume-sphere size="1 1 1" color="deeppink" has="basic-material"
-						mount-point="0.5 0.5 0.5"
-						cast-shadow="false"
-						></lume-sphere>
+						<lume-gltf-model
+							id="avatar"
+							src=${() =>
+								store.selectedAvatar !== null
+									? store.selectedAvatar === 'female'
+										? femaleAvatar.href
+										: maleAvatar.href
+									: store.tempSelectedAvatar === 'female'
+										? femaleAvatar.href
+										: maleAvatar.href}
+							scale="1 1 1"
+							data-avatar
+						></lume-gltf-model>
 
-					</lume-spot-light>
+						<lume-gltf-model
+							ref=${(el: GltfModel) => (this.backgroundModel = el)}
+							id="scene"
+							src=${() => store.selectedSpace?.scene.href ?? ''}
+						></lume-gltf-model>
 
-					<!-- <lume-spot-light
-						position="-500 -500 -500"
-						shadow-camera-top="-5"
-						shadow-camera-bottom="5"
-						shadow-camera-left="-5"
-						shadow-camera-right="5"
-						shadow-map-width="2048"
-						shadow-map-height="2048"
-						shadow-bias="-0.00002"
-					></lume-spot-light> -->
+						<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
+							${(item: Accessor<URL>) => html`
+								<lume-gltf-model ref=${enableShadowOnModelLoad} src=${() => item().href}></lume-gltf-model>
+							`}
+						</>
 
-					<lume-camera-rig
-						min-distance="20"
-						max-distance="150"
-						distance="9"
-						dolly-speed="0.01"
-						position="0 -1 0"
-					></lume-camera-rig>
-
-					<lume-gltf-model
-						id="avatar"
-						src=${() =>
-							store.selectedAvatar !== null
-								? store.selectedAvatar === 'female'
-									? femaleAvatar.href
-									: maleAvatar.href
-								: store.tempSelectedAvatar === 'female'
-									? femaleAvatar.href
-									: maleAvatar.href}
-						scale="1 1 1"
-						data-avatar
-					></lume-gltf-model>
-
-					<${Show} when=${() => store.selectedSpace}>
-						${() => html`<lume-gltf-model ref=${(el: GltfModel) => (this.background = el)} id="scene" src=${() => store.selectedSpace?.scene.href}></lume-gltf-model>`}
-					</>
-
-					<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
-						${(item: Accessor<URL>) => {
-							return html`<lume-gltf-model src=${() => item().href}></lume-gltf-model>`
-						}}
-					</>
-
-					<${For} each=${() => this.renderBlocks}>
-						${(item: {block: Block; templateCategory: TemplateCategory; id: string}, index: Accessor<number>) => {
-							return html`
+						<${For} each=${() => this.renderBlocks}>
+							${(item: RenderBlock, index: Accessor<number>) => html`
 								<lume-gltf-model
+									ref=${enableShadowOnModelLoad}
 									id=${item.id}
 									data-index=${index()}
 									data-cloth
-									src=${() => item.block.modelFile}
-									scale=${() => (item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1')}
+									src=${item.block.modelFile}
+									scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
 								></lume-gltf-model>
-							`
-						}}
-					</>
-
-				</lume-element3d>
-			</lume-scene>
-		</div>
-	`
+							`}
+						</>
+					</lume-element3d>
+				</lume-scene>
+			</div>
+		`
+	}
 
 	css = css/*css*/ `
 		:host {
@@ -632,14 +664,22 @@ export class DrippyScene extends Element {
 	`
 }
 
+function isMesh(obj: THREE.Object3D): obj is THREE.Mesh {
+	return obj instanceof THREE.Mesh
+}
+
+const enableShadowOnModelLoad = (el: GltfModel) => {
+	createEffect(() => {
+		const onload = () => enableShadows(el.three)
+		el.on('MODEL_LOAD', onload)
+		onCleanup(() => el.off('MODEL_LOAD', onload))
+	})
+}
+
 function enableShadows(obj: THREE.Object3D) {
 	obj.traverse((child: THREE.Object3D) => {
 		if (!isMesh(child)) return
 		child.castShadow = true
 		child.receiveShadow = true
 	})
-}
-
-function isMesh(obj: THREE.Object3D): obj is THREE.Mesh {
-	return obj instanceof THREE.Mesh
 }
