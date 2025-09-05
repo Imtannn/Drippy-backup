@@ -43,6 +43,7 @@ export const store = createMutable({
 	customMeasurement: null as CustomMeasurement | null,
 	isShowAvatar: true,
 	isShowScene: true,
+	isDrippySceneLoading: [] as string[],
 
 	// Order-related state
 	order: {
@@ -375,5 +376,12 @@ export const store = createMutable({
 				phone: '',
 			},
 		} as OrderState
+	},
+
+	set addIsDrippySceneLoading(key: string) {
+		this.isDrippySceneLoading = [...this.isDrippySceneLoading, key]
+	},
+	set removeIsDrippySceneLoading(key: string) {
+		this.isDrippySceneLoading = this.isDrippySceneLoading.filter(k => k !== key)
 	},
 })

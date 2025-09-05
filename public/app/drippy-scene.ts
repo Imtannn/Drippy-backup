@@ -306,8 +306,13 @@ export class DrippyScene extends Element {
 					this.loadingBlocks = [...untrack(() => this.loadingBlocks), avatarId]
 				}
 
+				if (!untrack(() => store.isDrippySceneLoading.includes(avatarId))) {
+					store.addIsDrippySceneLoading = avatarId
+				}
+
 				const loaded = () => {
 					this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== avatarId)
+					store.removeIsDrippySceneLoading = avatarId
 				}
 
 				avatar.on?.('MODEL_LOAD', loaded)
@@ -317,6 +322,35 @@ export class DrippyScene extends Element {
 
 				enableShadowOnModelLoad(avatar)
 			}
+		})
+
+		// Track scene loading state
+		this.createEffect(() => {
+			if (!store.selectedSpace || !store.isShowScene) return
+			const scene = this.backgroundModel
+			if (!scene) return
+
+			const behavior = scene.behaviors?.get?.('gltf-model')
+			const sceneId = 'scene'
+
+			if (!behavior?.model && scene.three) {
+				if (!untrack(() => this.loadingBlocks.includes(sceneId))) {
+					this.loadingBlocks = [...untrack(() => this.loadingBlocks), sceneId]
+				}
+				if (!untrack(() => store.isDrippySceneLoading.includes(sceneId))) {
+					store.addIsDrippySceneLoading = sceneId
+				}
+			}
+
+			const loaded = () => {
+				this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== sceneId)
+				store.removeIsDrippySceneLoading = sceneId
+			}
+
+			scene.on?.('MODEL_LOAD', loaded)
+			onCleanup(() => {
+				scene.off?.('MODEL_LOAD', loaded)
+			})
 		})
 
 		// Track block loading state

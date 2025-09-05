@@ -16,6 +16,7 @@ import type {Avatar} from '../types/types.js'
 import './success-view.js'
 import './template-view.js'
 import {spaces} from '../consts/spaces.js'
+import '../elements/video-loading.js'
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
@@ -84,6 +85,20 @@ export class DrippyApp extends Element {
 			condition=${() => this.appLoaded}
 			fallback=${() => html`<div class="loading">Loading...</div>`}
 			content=${() => html`
+				<show-when
+					condition=${() =>
+						store.view !== 'avatar' &&
+						store.view !== 'scene' &&
+						store.selectedAvatar &&
+						store.selectedSpace &&
+						store.isDrippySceneLoading.length > 0}
+					content=${() => html`
+						<div id="loadingCover">
+							<video-loading isVisible="true"></video-loading>
+						</div>
+					`}
+				></show-when>
+
 				<div id="app-container">
 					<drippy-scene id="drippy-scene"></drippy-scene>
 
@@ -158,6 +173,33 @@ export class DrippyApp extends Element {
 			width: 100%;
 			height: 100%;
 			overflow: hidden;
+		}
+
+		#loadingCover {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: opacity 0.5s;
+
+			/* TODO Perhaps put the loading cover in the :modal layer so z-index is never needed.  */
+			z-index: 1000;
+
+			loading-icon {
+				--loading-icon-color: 76, 169, 195;
+				--loading-icon-outer-radius: 60px;
+				--loading-icon-inner-radius: 30px;
+			}
+
+			background: var(--appBackground);
+
+			[data-theme='dark'] & {
+				background: var(--appBackgroundDark);
+			}
 		}
 	`
 }
