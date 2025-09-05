@@ -457,6 +457,7 @@ export class DrippyScene extends Element {
 		this.createEffect(() => {
 			if (!this.backgroundModel) return
 			enableShadowOnModelLoad(this.backgroundModel)
+			enableFrontsideOnlyRenderLoad(this.backgroundModel)
 		})
 
 		this.createEffect(() => {
@@ -666,6 +667,29 @@ export class DrippyScene extends Element {
 
 function isMesh(obj: THREE.Object3D): obj is THREE.Mesh {
 	return obj instanceof THREE.Mesh
+}
+
+const enableFrontsideOnlyRenderLoad = (obj: GltfModel) => {
+	createEffect(() => {
+		const onFrontSideRender = () => enableFrontsideRendering(obj.three)
+		obj.on('MODEL_LOAD', onFrontSideRender)
+		onCleanup(() => obj.off('MODEL_LOAD', onFrontSideRender))
+	})
+}
+
+function enableFrontsideRendering(obj: THREE.Object3D) {
+	obj.traverse((child: THREE.Object3D) => {
+		if (!isMesh(child)) return
+		if (child.material instanceof THREE.Material) {
+			child.material.side = THREE.FrontSide
+			child.material.needsUpdate = true
+		} else {
+			child.material.map(material => {
+				material.side = THREE.FrontSide
+				material.needsUpdate = true
+			})
+		}
+	})
 }
 
 const enableShadowOnModelLoad = (el: GltfModel) => {
