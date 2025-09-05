@@ -7,8 +7,8 @@ import '../elements/logic/show-when.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 
 const createAccountImg = '/images/create-account.png'
-const step3Img = '/images/img-3-big.png'
-const step4Img = '/images/img-4-big.png'
+const step1Img = '/images/img-3-big.png'
+const step2Img = '/images/img-4-big.png'
 const logoLight = '/images/landing/logo-light.png'
 
 type OnboardingStep = 'step1' | 'step2' | 'step3' | 'step4'
@@ -24,6 +24,8 @@ export class OnboardingFlow extends Element {
 	@signal dateOfBirth = ''
 	@signal currentStep: OnboardingStep = 'step1'
 	@signal errorMessage = ''
+	@signal isUserLoggedIn = false
+	@signal previousStep: OnboardingStep | null = null
 
 	#hasProcessedLogin = false
 
@@ -52,14 +54,35 @@ export class OnboardingFlow extends Element {
 			}
 		})
 
-		// When user logs in, advance to next step
+		// Track login state and handle step visibility
 		const computation = Tracker.autorun(() => {
-			if (Meteor.userId()) {
+			const userId = Meteor.userId()
+			this.isUserLoggedIn = !!userId
+
+			if (userId) {
 				this.#loadUserProfile()
-				if (!this.#hasProcessedLogin) {
+				// If user just logged in and is on step3, advance to step4
+				if (!this.#hasProcessedLogin && this.currentStep === 'step3') {
 					this.#nextStep()
 				}
 				this.#hasProcessedLogin = true
+			} else {
+				// User logged out, reset the flag
+				this.#hasProcessedLogin = false
+			}
+
+			// If user is logged in and on step3, skip to step1
+			if (this.isUserLoggedIn && this.currentStep === 'step3') {
+				this.currentStep = 'step1'
+				this.#updateUrl('step1')
+			}
+
+			// If user is logged in and on step4, check if they came from step3 (login flow)
+			if (this.isUserLoggedIn && this.currentStep === 'step4') {
+				if (this.previousStep !== 'step3') {
+					this.currentStep = 'step2'
+					this.#updateUrl('step2')
+				}
 			}
 		})
 
@@ -80,6 +103,7 @@ export class OnboardingFlow extends Element {
 		const currentIndex = steps.indexOf(this.currentStep)
 		if (currentIndex !== -1 && currentIndex < steps.length - 1) {
 			const nextStep = steps[currentIndex + 1]
+			this.previousStep = this.currentStep
 			this.currentStep = nextStep
 			this.#updateUrl(nextStep)
 		}
@@ -90,12 +114,23 @@ export class OnboardingFlow extends Element {
 		const currentIndex = steps.indexOf(this.currentStep)
 		if (currentIndex !== -1 && currentIndex > 0) {
 			const prevStep = steps[currentIndex - 1]
+			this.previousStep = this.currentStep
 			this.currentStep = prevStep
 			this.#updateUrl(prevStep)
 		}
 	}
 
 	#handleStep2Submit = async () => {
+		if (this.isUserLoggedIn) {
+			// If user is logged in, step2 goes directly to app
+			this.#goToApp()
+		} else {
+			// If user is not logged in, proceed to step3 (login)
+			this.#nextStep()
+		}
+	}
+
+	#handleStep4Submit = async () => {
 		// Clear any previous errors
 		this.errorMessage = ''
 
@@ -122,6 +157,7 @@ export class OnboardingFlow extends Element {
 		} else {
 			this.errorMessage = 'Please enter both username and date of birth.'
 		}
+		this.#goToApp()
 	}
 
 	#loadUserProfile = () => {
@@ -148,6 +184,39 @@ export class OnboardingFlow extends Element {
 				content=${() => html`
 					<div class="onboarding-step">
 						<header>
+							<h1 class="title">Did you know? Every garment on Drippy can be shopped IRL.</h1>
+						</header>
+						<div class="action-section">
+							<button class="btn btn-primary" onclick=${this.#nextStep}>Yesss!</button>
+						</div>
+						<img src=${step1Img} alt="Step 1" />
+					</div>
+				`}
+			></show-when>
+
+			<show-when
+				condition=${() => this.currentStep === 'step2'}
+				content=${() => html`
+					<div class="onboarding-step">
+						<header>
+							<div class="back-btn-container">
+								<back-button onclick=${this.#previousStep}></back-button>
+							</div>
+							<h1 class="title">Ready to discover your unique style? Let's get started!</h1>
+						</header>
+						<div class="action-section">
+							<button class="btn btn-primary" onclick=${this.#handleStep2Submit}>Let's Go!</button>
+						</div>
+						<img src=${step2Img} alt="Step 2" />
+					</div>
+				`}
+			></show-when>
+
+			<show-when
+				condition=${() => this.currentStep === 'step3' && !this.isUserLoggedIn}
+				content=${() => html`
+					<div class="onboarding-step">
+						<header>
 							<img src=${logoLight} alt="Drippy Logo" class="header-logo" />
 							<h1 class="title">Gamify your fashion shopping experience.</h1>
 							<p class="sub-title">Browse it. Drip it. Shop it IRL!</p>
@@ -161,7 +230,7 @@ export class OnboardingFlow extends Element {
 			></show-when>
 
 			<show-when
-				condition=${() => this.currentStep === 'step2'}
+				condition=${() => this.currentStep === 'step4'}
 				content=${() => html`
 					<div class="onboarding-step">
 						<header>
@@ -201,43 +270,7 @@ export class OnboardingFlow extends Element {
 								content=${() => html`<div class="error-message">${this.errorMessage}</div>`}
 							></show-when>
 						</div>
-						<button class="btn btn-primary" onclick=${this.#handleStep2Submit}>OK!</button>
-					</div>
-				`}
-			></show-when>
-
-			<show-when
-				condition=${() => this.currentStep === 'step3'}
-				content=${() => html`
-					<div class="onboarding-step">
-						<header>
-							<div class="back-btn-container">
-								<back-button onclick=${this.#previousStep}></back-button>
-							</div>
-							<h1 class="title">Did you know? Every garment on Drippy can be shopped IRL.</h1>
-						</header>
-						<div class="action-section">
-							<button class="btn btn-primary" onclick=${this.#nextStep}>Yesss!</button>
-						</div>
-						<img src=${step3Img} alt="Step 3" />
-					</div>
-				`}
-			></show-when>
-
-			<show-when
-				condition=${() => this.currentStep === 'step4'}
-				content=${() => html`
-					<div class="onboarding-step">
-						<header>
-							<div class="back-btn-container">
-								<back-button onclick=${this.#previousStep}></back-button>
-							</div>
-							<h1 class="title">Ready to discover your unique style? Let's get started!</h1>
-						</header>
-						<div class="action-section">
-							<button class="btn btn-primary" onclick=${this.#goToApp}>Let's Go!</button>
-						</div>
-						<img src=${step4Img} alt="Step 4" />
+						<button class="btn btn-primary" onclick=${this.#handleStep4Submit}>OK!</button>
 					</div>
 				`}
 			></show-when>
