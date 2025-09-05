@@ -24,10 +24,36 @@ export const onboardingStyles = css`
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
+		width: 100%;
+		overflow: hidden;
+	}
+
+	.onboarding-step-content {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.onboarding-header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--uiSpacingMedium);
+	}
+
+	.step3-title {
+		margin: 0 !important;
+		margin-top: var(--uiSpacingMedium) !important;
+	}
+
+	.step3-sub-title {
+		margin: 0 !important;
 	}
 
 	.title {
-		font-size: var(--fontSizeTextXlMobile);
+		font-size: var(--fontSizeTextLgTablet);
 		font-weight: var(--fontWeightSemiBold);
 		padding: 0 var(--uiSpacingMedium);
 		color: var(--uiColorPrimaryBlack);
@@ -134,8 +160,8 @@ export const onboardingStyles = css`
 	}
 
 	.header-logo {
-		width: 56px;
-		height: 56px;
+		width: 30px;
+		height: 30px;
 		margin: var(--uiSpacing) auto 0px;
 		display: block;
 	}
