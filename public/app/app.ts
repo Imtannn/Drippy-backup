@@ -17,6 +17,7 @@ import './success-view.js'
 import './template-view.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/video-loading.js'
+import './app-guard.js'
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
@@ -81,6 +82,7 @@ export class DrippyApp extends Element {
 	}
 
 	template = () => html`
+		<app-guard></app-guard>
 		<show-when
 			condition=${() => this.appLoaded}
 			fallback=${() => html`<div class="loading">Loading...</div>`}
