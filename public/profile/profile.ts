@@ -1,9 +1,9 @@
 import {css, element, Element, type ElementAttributes} from '@lume/element'
 import {createEffect, html, signal} from 'lume'
 import {Meteor} from 'meteor/meteor'
-import '../routes.js' // track page visits
-import '../elements/login-ui.js'
 import '../elements/logic/show-when.js'
+import '../elements/login-ui.js'
+import '../routes.js' // track page visits
 import {toSolidSignal} from '../utils.js'
 
 export type UserProfileAttributes = keyof {} // no attributes yet
@@ -31,7 +31,7 @@ export class UserProfile extends Element {
 			const user = currentUser()
 			if (!user) return
 
-			this.username = user.username ?? ''
+			this.username = user.profile?.username ?? ''
 		})
 
 		// Hide the loading cover
@@ -41,13 +41,17 @@ export class UserProfile extends Element {
 	}
 
 	#saveChanges() {
-		Meteor.call('updateUsername', this.username)
+		Meteor.call('users.updateProfile', {
+			username: this.username,
+			dateOfBirth: currentUser()?.profile?.dateOfBirth ?? '',
+		})
 
 		this.editing = false
 	}
 
 	#cancel() {
-		this.username = ''
+		// Reset to current username
+		this.username = currentUser()?.profile?.username ?? ''
 
 		this.editing = false
 	}
@@ -84,7 +88,7 @@ export class UserProfile extends Element {
 					<div>
 						<input
 							type="text"
-							value=${currentUser()?.username ?? ''}
+							value=${() => currentUser()?.profile?.username ?? ''}
 							onchange="${(ev: any) => (this.username = ev.target.value)}"
 						/>
 					</div>
@@ -95,7 +99,7 @@ export class UserProfile extends Element {
 				`}
 				fallback=${() => html`
 					<div style="display: flex; justify-content: space-between;">
-						<div>${() => currentUser()?.username ?? ''}</div>
+						<div>${() => currentUser()?.profile?.username ?? ''}</div>
 						<div>
 							<button onclick="${() => (this.editing = true)}">Edit profile</button>
 						</div>

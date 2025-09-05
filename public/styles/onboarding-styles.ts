@@ -17,7 +17,6 @@ export const onboardingStyles = css`
 
 	.onboarding-step {
 		max-width: 393px;
-		margin-top: var(--uiSpacingXxl);
 		padding: var(--uiSpacing);
 		text-align: center;
 		font-family: var(--fontFamily);
@@ -54,7 +53,7 @@ export const onboardingStyles = css`
 		}
 	}
 
-	.form-input {
+	.onboarding-step .form-input {
 		width: 100%;
 		height: var(--uiSpacingXl);
 		padding: var(--uiGapSmall);
@@ -74,6 +73,10 @@ export const onboardingStyles = css`
 			background:
 				linear-gradient(white, white) padding-box,
 				linear-gradient(45deg, #e56be8, #495cff) border-box;
+		}
+
+		&:not(:focus) {
+			border: var(--borderWidth) solid #ccc;
 		}
 
 		&::placeholder {
@@ -158,8 +161,7 @@ export const onboardingStyles = css`
 	}
 
 	img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
+		transform: scale(1.6);
+		margin-top: 160px;
 	}
 `
