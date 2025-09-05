@@ -4,6 +4,7 @@ import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/custom-button.js'
 import '../elements/avatar-selector.js'
+import '../elements/video-loading.js'
 // const logoUrl = new URL('../images/logo.svg', import.meta.url)
 const logoUrlDark = new URL('../images/landing/logo.png', import.meta.url)
 const blingImage1 = new URL('../images/landing/bling-1.png', import.meta.url).href
@@ -106,7 +107,7 @@ const statistics = [
 		name: 'Lift in conversions',
 		des: 'Conversion rate of 3D preview compared to static images.',
 		image: new URL('../images/landing/statistic-1.png', import.meta.url).href,
-		number: '+94%',
+		number: 94,
 		source: 'Source: Shopify, 2021',
 	},
 	{
@@ -114,7 +115,7 @@ const statistics = [
 		name: 'Boost up engagement',
 		des: 'Four in five shoppers interact longer with 3D (34% over 30+ seconds)',
 		image: new URL('../images/landing/statistic-2.png', import.meta.url).href,
-		number: '+82%',
+		number: 82,
 		source: 'Source: Cappasity, 2020',
 	},
 	{
@@ -122,7 +123,7 @@ const statistics = [
 		name: 'More add-to-cart',
 		des: 'More add-to-cart actions if 3D and personalization is being offered.',
 		image: new URL('../images/landing/statistic-3.png', import.meta.url).href,
-		number: '+35%',
+		number: 35,
 		source: 'Source: Cappasity, 2020',
 	},
 	{
@@ -130,7 +131,7 @@ const statistics = [
 		name: 'More sales',
 		des: 'Brands using personalization see higher revenue on average.',
 		image: new URL('../images/landing/statistic-4.png', import.meta.url).href,
-		number: '+20%',
+		number: 20,
 		source: 'Source: McKinsey, 2021',
 	},
 ]
@@ -183,7 +184,7 @@ const mainContent = html`
 						</section>
 
 						<!-- Brands Section -->
-						<section class="section" id="statistics">
+						<section class="section" id="brand">
 							<div class="section-header">
 								<div class="section-title text-lg">Backed by the fearless.</div>
 								<div class="section-subtitle text-md-2">Trusted by the rebels.</div>
@@ -200,7 +201,7 @@ const mainContent = html`
 						</section>
 
 						<!-- Interactive 3D Section -->
-						<section class="section" id="statistics">
+						<section class="section" id="interactive">
 							<div class="section-header">
 								<div class="section-title text-lg">
 									<span>Interactive 3D is </span> <span class="hero__title--highlight">the new black.</span>
@@ -247,21 +248,22 @@ const mainContent = html`
 							<div class="statistics__grid">
 								${statistics.map(
 									(stat: any) => html`
-											<div class="statistics__icon-container">
-												<div class="statistics__icon-overlap">
-													<div class="group-wrapper">
-														<div class="statistics__ellipse">
-															<img class="group-wrapper" src=${stat.image} />
-														</div>
-													</div>
-													<div class="statistics__number text-md">${stat.number}</div>
-												</div>
+									<div class="statistics__item">
+											<div class="statistics__icon-overlap">
+											<div class="statistics__ellipse" data-percent=${stat.number}>
+												<svg>
+												<circle class="bg" cx="60" cy="60" r="55" />
+												<circle class="progress" cx="60" cy="60" r="55" />
+												</svg>
+												<div class="statistics__number">+${stat.number}%</div>
+											</div>
 											</div>
 											<div class="statistics__content">
 												<div class="statistics__item-title text-sm">${stat.name}</div>
 												<p class="statistics__item-description text-xs">${stat.des}</p>
 												<div class="statistics__source text-xs">${stat.source}</div>
 											</div>
+										</div>
 										</div>
 									`,
 								)}
@@ -546,7 +548,7 @@ const mainContent = html`
 						</section>
 
 						<!-- CTA Section -->
-						<section class="section" id="statistics">
+						<section class="section" id="cta">
 							<div class="cta__content">
 								<div class="cta__background">
 									<div class="cta__background-overlap">
@@ -558,7 +560,7 @@ const mainContent = html`
 									<div class="cta__title text-xl">Join the future.</div>
 									<p class="cta__description-text text-md">
 										<span class="cta__description ">Turn your collections into </span>
-										<span class="cta__description--highlight">playable, immersive, made-to-order</span>
+										<span class="cta__description--highlight">playable, immersive,<br> made-to-order</span>
 										<span class="cta__description"> experiences today. </span>
 									</p>
 									<custom-button variant="primary">See Drippy in action<img class="cta__arrow-icon" src="https://c.animaapp.com/mejigj1rAIvhIh/img/arrow-1.svg" /></custom-button>
@@ -617,6 +619,19 @@ const mainContent = html`
 document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
 
+// Bỏ dòng này vì không cần thiết
+// const videoLoading = document.querySelector('video-loading') as any
+
+// Component sẽ tự động xử lý thời gian, không cần JavaScript can thiệp
+// Chỉ cần ẩn loadingCover sau 5 giây
+setTimeout(() => {
+	const loadingCover = document.getElementById('loadingCover')
+	if (loadingCover) {
+		loadingCover.classList.add('invisible')
+		loadingCover.addEventListener('transitionend', () => loadingCover.remove())
+	}
+}, 5000)
+
 // Add smooth scroll behavior for header menu links
 function setupSmoothScroll() {
 	const headerMenu = document.querySelector('.header__menu')
@@ -648,3 +663,42 @@ const loadingCover = document.getElementById('loadingCover')
 loadingCover?.classList.add('invisible')
 loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
 
+// Statistics animation on scroll
+function animateStatistics() {
+	document.querySelectorAll('.statistics__ellipse').forEach(el => {
+		const percent = (el as HTMLElement).dataset.percent
+		const circle = el.querySelector('.progress') as SVGCircleElement
+		if (circle && percent) {
+			const radius = circle.r.baseVal.value
+			const circumference = 2 * Math.PI * radius
+
+			circle.style.strokeDasharray = circumference.toString()
+			circle.style.strokeDashoffset = circumference.toString()
+
+			setTimeout(() => {
+				const offset = circumference - (parseInt(percent) / 100) * circumference
+				circle.style.strokeDashoffset = offset.toString()
+			}, 300)
+		}
+	})
+}
+
+// Intersection Observer for statistics section
+const statisticsSection = document.getElementById('statistics')
+if (statisticsSection) {
+	const observer = new IntersectionObserver(
+		entries => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					animateStatistics()
+					observer.unobserve(entry.target) // Only animate once
+				}
+			})
+		},
+		{
+			threshold: 0.3, // Trigger when 30% of the section is visible
+		},
+	)
+
+	observer.observe(statisticsSection)
+}
