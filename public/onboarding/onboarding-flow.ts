@@ -25,6 +25,8 @@ export class OnboardingFlow extends Element {
 	@signal currentStep: OnboardingStep = 'step1'
 	@signal errorMessage = ''
 
+	#hasProcessedLogin = false
+
 	connectedCallback() {
 		super.connectedCallback()
 
@@ -50,24 +52,20 @@ export class OnboardingFlow extends Element {
 			}
 		})
 
-		// When user logs in, advance to next step and load existing profile data
+		// When user logs in, advance to next step
 		const computation = Tracker.autorun(() => {
 			if (Meteor.userId()) {
 				this.#loadUserProfile()
-				this.#nextStep()
+				if (!this.#hasProcessedLogin) {
+					this.#nextStep()
+				}
+				this.#hasProcessedLogin = true
 			}
 		})
 
 		// Clean up Tracker computation when component is destroyed
 		this.createEffect(() => {
 			return () => computation.stop()
-		})
-
-		// Load user profile data when component mounts, user changes, or step changes
-		this.createEffect(() => {
-			if (Meteor.userId() && (this.currentStep === 'step2' || this.currentStep === 'step3')) {
-				this.#loadUserProfile()
-			}
 		})
 	}
 
