@@ -65,10 +65,14 @@ export class AppButtonsLeft extends Element {
 		}
 
 		@media (min-width: 767px) {
+			.top {
+				top: 20px;
+			}
+
 			.bottom {
 				bottom: unset;
-				top: 50px;
-				left: 52px;
+				top: 20px;
+				left: 57px !important;
 			}
 
 			.app-buttons-left {
@@ -123,10 +127,14 @@ export class AppButtonsRight extends Element {
 		}
 
 		@media (min-width: 767px) {
+			.top {
+				top: 20px;
+			}
+
 			.bottom {
 				bottom: unset;
-				top: 50px;
-				right: 47px;
+				top: 20px;
+				right: 57px !important;
 			}
 
 			.app-buttons-right {

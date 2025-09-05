@@ -25,7 +25,7 @@ export class CustomButton extends Element {
 				'custom-button--outline': this.variant === 'outline',
 				'custom-button--ghost': this.variant === 'ghost',
 				'custom-button--small text-xs': this.size === 'small',
-				'custom-button--medium text-sm': this.size === 'medium',
+				'custom-button--medium text-md-1': this.size === 'medium',
 				'custom-button--large text-md': this.size === 'large',
 				'custom-button--disabled': this.disabled || this.loading,
 			})}
@@ -78,7 +78,7 @@ export class CustomButton extends Element {
 
 		.custom-button {
 			font-family: 'Poppins', Helvetica;
-			font-weight: 500;
+			font-weight: var(--fontWeightSemiBold);
 			padding: 10px 20px;
 			border-radius: 100px;
 			border: none;

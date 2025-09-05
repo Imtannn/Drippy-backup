@@ -13,14 +13,17 @@ export type ForEachAttributes = 'items' | 'content'
 export class ForEach extends Element {
 	static readonly elementName = 'for-each'
 
-	@attribute items = []
-	@attribute content = () => []
+	/** An array of items to iterate over. */
+	@attribute items: unknown[] = []
+
+	/** A function that returns a template for each item. */
+	@attribute content = (_item: unknown, _index: () => number) => html``
 
 	hasShadow = false
 
 	template = () => html`
 		<${For} each=${() => this.items}>
-			${() => this.content}
+			${(item: unknown, index: () => number) => this.content(item, index)}
 		</>
 	`
 

@@ -1,6 +1,6 @@
 import {css, Element, element, html, signal} from 'lume'
 import '../elements/login-ui.js'
-import '../elements/show-when.js'
+import '../elements/logic/show-when.js'
 import '../elements/theme-switch.js'
 import '../routes.js' // track page visits
 import './avatar-selection.js'
@@ -11,9 +11,11 @@ import './order-view.js'
 import './outfit-preview.js'
 import './share-view.js'
 import './spaces-selection.js'
-import {store, type Avatar, type Scene} from './store.js'
+import {store} from './store.js'
+import type {Avatar} from '../types/types.js'
 import './success-view.js'
 import './template-view.js'
+import {spaces} from '../consts/spaces.js'
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
@@ -47,9 +49,15 @@ export class DrippyApp extends Element {
 				}
 
 				// If no scene is selected and no scene is provided in search params, navigate to scene selection. Else, use the provided scene.
-				if (!store.selectedScene) {
+				if (!store.selectedSpace) {
 					if (scene) {
-						store.selectScene = scene as Scene
+						const space = spaces.find(space => space.name === scene)
+						if (space) {
+							store.selectSpace = space
+						} else {
+							store.navigateTo = 'scene'
+							return
+						}
 					} else {
 						store.navigateTo = 'scene'
 						return

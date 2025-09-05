@@ -22,7 +22,7 @@ Templates reference fabrics through `materialId`:
   _id: '20',
   name: 'Item 1',
   category: 'Shirt',
-  materialId: '145 Cotton'  // ← References fabric
+  materialId: '145 Cotton Shirt'  // ← References fabric
 }
 
 // Matching Fabric
@@ -30,11 +30,11 @@ Templates reference fabrics through `materialId`:
   _id: '3',
   materialName: '145',      // ← Combined with category
   category: 'Cotton',       // ← to form "145 Cotton"
-  templateCategory: 'Shirt'
+  templateCategory: 'Shirt' // ← to form "145 Cotton Shirt"
 }
 ```
 
-**Relationship**: `template.materialId === "${fabric.materialName} ${fabric.category}"`
+**Relationship**: `template.materialId === "${fabric.materialName} ${fabric.category} ${fabric.templateCategory}"`
 
 ### 2. Block → Template Relationship
 
@@ -97,7 +97,7 @@ For Template "Item 1" (Shirt):
     _id: '20',
     name: 'Item 1',
     category: 'Shirt',
-    materialId: '145 Cotton'
+    materialId: '145 Cotton Shirt'
   },
   fabric: {
     _id: '3',
@@ -135,7 +135,7 @@ For Template "Item 1" (Shirt):
 Blocks are categorized by clothing components:
 
 - **Bodice**: Main body/torso part
-- **Sleeves**: Arm covering parts  
+- **Sleeves**: Arm covering parts
 - **Pants**: Leg covering parts
 
 Each template can have multiple blocks of different categories.
@@ -145,9 +145,9 @@ Each template can have multiple blocks of different categories.
 Fabrics provide material properties for templates:
 
 - **Thumbnail**: Preview image (`${materialName} ${category}.png`)
-- **Textures**: 
+- **Textures**:
   - Normal map (`Normal.png`)
-  - Base color (`BaseColor.png`) 
+  - Base color (`BaseColor.png`)
   - Displacement (`Displacement.png`)
   - Roughness (`Roughness.png`)
 
@@ -157,7 +157,7 @@ Fabrics provide material properties for templates:
 ```typescript
 import { getFabricForTemplate } from './relationships'
 
-const template = templates.speed.find(t => t.name === 'Item 1')
+const template = templates.moidien.find(t => t.name === 'Item 1')
 const fabric = getFabricForTemplate(template)
 // Returns fabric with materialName='145', category='Cotton'
 ```
@@ -166,7 +166,7 @@ const fabric = getFabricForTemplate(template)
 ```typescript
 import { getBlocksForTemplate } from './relationships'
 
-const template = templates.speed.find(t => t.name === 'Item 1')
+const template = templates.moidien.find(t => t.name === 'Item 1')
 const blocks = getBlocksForTemplate(template)
 // Returns [Sleeves 1291, Bodice 1289]
 ```
@@ -193,7 +193,7 @@ if (!validation.valid) {
 
 Current data structure contains:
 - **20 Templates** across 3 categories (Jacket, Shirt, Pants)
-- **25 Blocks** of 3 types (Bodice, Sleeves, Pants)  
+- **25 Blocks** of 3 types (Bodice, Sleeves, Pants)
 - **4 Fabrics** for different template categories
 
 Use `getDataSummary()` for detailed statistics.

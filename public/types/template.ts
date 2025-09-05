@@ -1,4 +1,4 @@
-export type TemplateCategory = 'Jacket' | 'Shirt' | 'Pants' | 'Accessories'
+export type TemplateCategory = 'Dress' | 'Skirt' | 'Jacket' | 'Shirt' | 'Pants' | 'Accessories' | 'Dress'
 
 export type Template = {
 	_id: string
