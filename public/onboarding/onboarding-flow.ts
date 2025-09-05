@@ -165,7 +165,14 @@ export class OnboardingFlow extends Element {
 								placeholder="Select your date of birth"
 								max="9999-12-31"
 								min="1950-01-01"
-								onchange=${(e: Event) => (this.dateOfBirth = (e.target as HTMLInputElement).value)}
+								onchange=${(e: Event) => {
+									this.dateOfBirth = (e.target as HTMLInputElement).value
+									this.errorMessage = ''
+								}}
+								oninput=${(e: Event) => {
+									this.dateOfBirth = (e.target as HTMLInputElement).value
+									this.errorMessage = ''
+								}}
 								value=${() => this.dateOfBirth}
 							/>
 							<p class="privacy-note">Don't worry, we won't tell about it. 😉</p>
