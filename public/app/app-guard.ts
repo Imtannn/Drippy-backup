@@ -11,8 +11,8 @@ export class AppGuard extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
-		this.createEffect(async () => {
-			const user = await Meteor.userAsync()
+		this.createEffect(() => {
+			const user = Meteor.user()
 			if (!user) {
 				window.location.href = '/onboarding?step=step3'
 			} else {
