@@ -156,6 +156,12 @@ export class LoginUI extends LumeElement {
 			display: contents;
 		}
 
+		/* Hide the or and login form for demo purposes */
+		.or,
+		.login-form {
+			display: none;
+		}
+
 		#loginButtons {
 			user-select: none;
 			display: block;
@@ -197,13 +203,16 @@ export class LoginUI extends LumeElement {
 				.login-button {
 					margin-bottom: var(--uiSpacingTiny);
 					border-radius: var(--borderRadiusSmall);
-					background-color: #e0e1e4;
-					color: var(--appBackgroundDark);
-					font-weight: var(--fontWeightMedium);
+					background-color: var(--uiColorPrimaryBlack);
+					color: var(--uiColorPrimaryWhite);
+					font-weight: var(--fontWeightSemiBold);
 					border: none;
+					font-size: var(--fontSizeTextMdDesktop);
 					height: var(--uiSpacingXl);
 					line-height: var(--uiSpacingXl);
 					padding: 0;
+					font-family: var(--fontFamilyPrimary);
+					width: 100%;
 				}
 
 				.login-button-form-submit {

@@ -1,4 +1,4 @@
-import {Element, element, type ElementAttributes} from 'lume'
+import {Element, element, html, signal, type ElementAttributes, Show} from 'lume'
 import {Meteor} from 'meteor/meteor'
 
 type AppGuardAttributes = keyof {}
@@ -6,6 +6,7 @@ type AppGuardAttributes = keyof {}
 @element
 export class AppGuard extends Element {
 	static readonly elementName = 'app-guard'
+	@signal user: Meteor.User | null = null
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -14,9 +15,17 @@ export class AppGuard extends Element {
 			const user = await Meteor.userAsync()
 			if (!user) {
 				window.location.href = '/onboarding?step=step3'
+			} else {
+				this.user = user
 			}
 		})
 	}
+
+	template = () => html`
+		<${Show} when=${() => this.user}>
+			<slot></slot>
+		</>
+	`
 }
 
 declare global {

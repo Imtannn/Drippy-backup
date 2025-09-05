@@ -97,7 +97,7 @@ export class VideoLoading extends Element {
 			width: 100%;
 			height: 100%;
 			position: relative;
-			background: rgba(0, 0, 0, 0.8);
+			background: #010304;
 		}
 
 		.loading-gif {
@@ -119,7 +119,7 @@ export class VideoLoading extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background: rgba(0, 0, 0, 0.9);
+			background: #010304;
 			z-index: 5;
 		}
 
@@ -144,7 +144,7 @@ export class VideoLoading extends Element {
 
 		/* Dark theme support */
 		[data-theme='dark'] .fallback-loader {
-			background: rgba(0, 0, 0, 0.95);
+			background: #010304;
 		}
 
 		[data-theme='dark'] .spinner {

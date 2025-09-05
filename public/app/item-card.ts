@@ -83,7 +83,7 @@ export class ItemCard extends Element {
 			border-radius: 12px;
 			overflow: hidden;
 			cursor: pointer;
-			border: 1px solid transparent; /* needed so the border-box layer shows */
+			border: 2px solid transparent; /* needed so the border-box layer shows */
 			transition:
 				transform 0.2s ease,
 				background 0.2s ease;

@@ -6,10 +6,10 @@ import '../elements/back-button.js'
 import '../elements/logic/show-when.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 
-const createAccountImg = '/images/create-account.png'
+const createAccountImg = '/images/create-account.webp'
 const step1Img = '/images/img-3-big.png'
 const step2Img = '/images/img-4-big.png'
-const logoLight = '/images/landing/logo-light.png'
+const logoLight = '/images/logo-light-fullsize.webp'
 
 type OnboardingStep = 'step1' | 'step2' | 'step3' | 'step4'
 
@@ -236,13 +236,15 @@ export class OnboardingFlow extends Element {
 				condition=${() => this.currentStep === 'step3' && !this.isUserLoggedIn}
 				content=${() => html`
 					<div class="onboarding-step">
-						<header>
-							<img src=${logoLight} alt="Drippy Logo" class="header-logo" />
-							<h1 class="title">Gamify your fashion shopping experience.</h1>
-							<p class="sub-title">Browse it. Drip it. Shop it IRL!</p>
-						</header>
-						<div class="login-section">
-							<login-ui expanded> </login-ui>
+						<div class="onboarding-step-content">
+							<header class="onboarding-header">
+								<img src=${logoLight} alt="Drippy Logo" class="header-logo" />
+								<h1 class="title step3-title">Gamify your fashion shopping experience.</h1>
+								<p class="sub-title step3-sub-title">Browse it. Drip it. Shop it IRL!</p>
+							</header>
+							<div class="login-section">
+								<login-ui expanded> </login-ui>
+							</div>
 						</div>
 						<img src=${createAccountImg} alt="Create Account" />
 					</div>
