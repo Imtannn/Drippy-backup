@@ -1,4 +1,4 @@
-import {css, element, Element, For, html, Show, signal, type ElementAttributes} from 'lume'
+import {css, element, Element, For, html, Show, signal, untrack, type ElementAttributes} from 'lume'
 import {blocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
 
@@ -110,9 +110,23 @@ export class BlocksSelection extends Element {
 
 			// Sort by Bodice, then Sleeves, then Pants, then Skirt, then rest...
 			const categoryOrder: BlockCategory[] = ['Bodice', 'Sleeves', 'Pants']
-			const availableCategories = [
+			let availableCategories = [
 				...new Set(this.availableBlocksMapping[this.selectedTemplateCategory] || []),
 			] as BlockCategory[]
+
+			const selectedBlock = untrack(() =>
+				store.selectedBlocks.get(this.selectedTemplateCategory!)?.get(this.selectedBlockCategory),
+			)
+			const selectedSpace = untrack(() => store.selectedSpace)
+
+			if (
+				this.selectedTemplateCategory === 'Shirt' &&
+				selectedBlock?.templateId !== 'Item 9' &&
+				selectedSpace?.collection === 'moidien'
+			) {
+				this.blocksCategories = []
+				return
+			}
 
 			// Filter categories in the desired order, then add any remaining categories
 			const orderedCategories = categoryOrder.filter(category => availableCategories.includes(category))
