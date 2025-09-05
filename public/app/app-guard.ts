@@ -1,7 +1,10 @@
-import {Element, element, html, signal, type ElementAttributes, Show} from 'lume'
+import {Element, element, html, Show, signal, type ElementAttributes} from 'lume'
 import {Meteor} from 'meteor/meteor'
+import {toSolidSignal} from '../utils.js'
 
 type AppGuardAttributes = keyof {}
+
+const currentUser = toSolidSignal(() => Meteor.user())
 
 @element
 export class AppGuard extends Element {
@@ -11,8 +14,10 @@ export class AppGuard extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
+		// Check if user is logged in
 		this.createEffect(() => {
-			const user = Meteor.user()
+			const user = currentUser()
+
 			if (!user) {
 				window.location.href = '/onboarding?step=step3'
 			} else {
