@@ -228,9 +228,6 @@ export class OnboardingFlow extends Element {
 				content=${() => html`
 					<div class="onboarding-step">
 						<header>
-							<div class="back-btn-container">
-								<back-button></back-button>
-							</div>
 							<img src=${logoLight} alt="Drippy Logo" class="header-logo" />
 							<h1 class="title">Gamify your fashion shopping experience.</h1>
 							<p class="sub-title">Browse it. Drip it. Shop it IRL!</p>
