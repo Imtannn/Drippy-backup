@@ -243,9 +243,15 @@ export class TabsList extends Element {
 		.tabs-list {
 			position: relative;
 			display: flex;
+			overflow: scroll;
 			align-items: center;
-			border-radius: 20px;
+			flex-wrap: nowrap;
 			gap: 5px;
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+			&::-webkit-scrollbar {
+				display: none;
+			}
 		}
 
 		.tab-indicator {
