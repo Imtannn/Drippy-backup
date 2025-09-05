@@ -54,5 +54,4 @@ zodern:types@1.0.13                     # types for Meteor packages
 akyma:publish-counts@1.0.1
 email
 accounts-google
-accounts-facebook
 service-configuration

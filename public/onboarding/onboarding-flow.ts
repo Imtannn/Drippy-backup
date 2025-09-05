@@ -59,15 +59,22 @@ export class OnboardingFlow extends Element {
 		})
 
 		// Track login state and handle step visibility
-		const computation = Tracker.autorun(() => {
-			const userId = Meteor.userId()
+		const computation = Tracker.autorun(async () => {
+			const user = await Meteor.userAsync()
+			const userId = user?._id
 			this.isUserLoggedIn = !!userId
 
 			if (userId) {
-				this.#loadUserProfile()
+				await this.#loadUserProfile()
 				// If user just logged in and is on step3, advance to step4
 				if (!this.#hasProcessedLogin && this.currentStep === 'step3') {
-					this.#nextStep()
+					if (this.username && this.dateOfBirth) {
+						this.#goToApp()
+						return
+					} else {
+						this.#nextStep()
+						return
+					}
 				}
 				this.#hasProcessedLogin = true
 			} else {
@@ -79,6 +86,7 @@ export class OnboardingFlow extends Element {
 			if (this.isUserLoggedIn && this.currentStep === 'step3') {
 				this.currentStep = 'step1'
 				this.#updateUrl('step1')
+				return
 			}
 
 			// If user is logged in and on step4, check if they came from step3 (login flow)
@@ -86,6 +94,7 @@ export class OnboardingFlow extends Element {
 				if (this.previousStep !== 'step3') {
 					this.currentStep = 'step2'
 					this.#updateUrl('step2')
+					return
 				}
 			}
 		})
@@ -164,8 +173,8 @@ export class OnboardingFlow extends Element {
 		this.#goToApp()
 	}
 
-	#loadUserProfile = () => {
-		const user = Meteor.user()
+	#loadUserProfile = async () => {
+		const user = await Meteor.userAsync()
 		if (user?.profile) {
 			// Load existing username and dateOfBirth if they exist
 			if (user.profile.username) {
@@ -178,7 +187,7 @@ export class OnboardingFlow extends Element {
 	}
 
 	#goToApp = () => {
-		window.location.href = '/app'
+		window.location.href = '/app?avatar=female&scene=G%E1%BA%A4P'
 	}
 
 	#goToHome = () => {
