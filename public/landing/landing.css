@@ -248,32 +248,15 @@ p {
 	position: relative;
 }
 
-.landing-page-desktop .statistics__icon-container {
-	position: relative;
-	width: 154.42px;
-	height: 152.42px;
-}
-
 .landing-page-desktop .statistics__icon-overlap {
 	position: relative;
-	width: 152px;
-	height: 152px;
-}
-
-.landing-page-desktop .group-wrapper {
-	position: absolute;
-	width: 152px;
-	height: 152px;
-	top: 0;
-	left: 0;
 }
 
 .landing-page-desktop .statistics__number {
 	position: absolute;
-	width: 75px;
-	transform: translate(0, -50%);
 	top: 50%;
-	left: 38px;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	font-weight: var(--fontWeightSemiBold);
 	color: var(--uiColorPrimaryBlack);
 	text-align: center;
@@ -1617,9 +1600,28 @@ p {
 
 .statistics__ellipse {
 	position: relative;
-	height: 152px;
-	background-image: url(https://c.animaapp.com/mejigj1rAIvhIh/img/ellipse-3-1.svg);
-	background-size: 100% 100%;
+	margin: 0 auto 20px;
+}
+
+.statistics__ellipse svg {
+	transform: rotate(-90deg);
+	width: 120px;
+	height: 120px;
+}
+.statistics__ellipse circle {
+	fill: none;
+	stroke-width: 10;
+}
+
+.statistics__ellipse .bg {
+	stroke: #e5e5e5;
+}
+.statistics__ellipse .progress {
+	stroke: #000;
+	stroke-linecap: round;
+	stroke-dasharray: 377;
+	stroke-dashoffset: 377;
+	transition: stroke-dashoffset 1.5s ease;
 }
 
 .how-it-works__step-image {
@@ -1785,13 +1787,6 @@ p {
 	display: flex;
 	align-items: center;
 	overflow: hidden;
-}
-
-.landing-page-desktop .statistics__ellipse {
-	position: relative;
-	height: 152px;
-	background-image: url(https://c.animaapp.com/mejigj1rAIvhIh/img/ellipse-3-1.svg);
-	background-size: 100% 100%;
 }
 
 .landing-page-desktop .how-it-works__step-image {
@@ -2319,20 +2314,4 @@ p {
 		flex-direction: column;
 		gap: 26px;
 	}
-}
-
-/* Circular Progress Animation */
-
-
-
-.statistics__ellipse {
-	position: relative;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.statistics__ellipse img {
-	position: relative;
-	z-index: 2;
 }

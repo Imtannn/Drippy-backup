@@ -1,3 +1,5 @@
+import './elements/video-loading.js'
+
 // Render the UI only when on the home page domain (or localhost), but
 // not for HTML files because they render their own content (they can
 // still use Meteor APIs), and not when in an iframe (because if we're
@@ -24,11 +26,19 @@ if (renderHomePage) {
 
 	setInterval(() => el!.count++, 1000)
 
-	setTimeout(() => {
-		const loadingCover = document.getElementById('loadingCover')!
-		loadingCover.classList.add('invisible')
-		loadingCover.addEventListener('transitionend', () => loadingCover.remove())
-	}, 500)
+	// Control VideoLoading component
+	const videoLoading = document.querySelector('video-loading') as any
+	if (videoLoading) {
+		videoLoading.isVisible = true // Show loading
+
+		// Listen for when VideoLoading finishes (after 5+ seconds)
+		// Hide loading cover only after VideoLoading is done
+		setTimeout(() => {
+			const loadingCover = document.getElementById('loadingCover')!
+			loadingCover.classList.add('invisible')
+			loadingCover.addEventListener('transitionend', () => loadingCover.remove())
+		}, 5000)
+	}
 }
 
 export {} // merely so that TS treats the file as a module
