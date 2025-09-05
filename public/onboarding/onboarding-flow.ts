@@ -68,13 +68,16 @@ export class OnboardingFlow extends Element {
 				await this.#loadUserProfile()
 				// If user just logged in and is on step3, advance to step4
 				if (!this.#hasProcessedLogin && this.currentStep === 'step3') {
-					if (this.username && this.dateOfBirth) {
-						this.#goToApp()
-						return
-					} else {
-						this.#nextStep()
-						return
-					}
+					// if (this.username && this.dateOfBirth) {
+					// 	this.#goToApp()
+					// 	return
+					// } else {
+					// 	this.#nextStep()
+					// 	return
+					// }
+
+					// Skip step 4 entirely
+					this.#goToApp()
 				}
 				this.#hasProcessedLogin = true
 			} else {
