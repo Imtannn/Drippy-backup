@@ -3,6 +3,7 @@ import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, Avatar, Space, CustomMeasurement} from '../types/types.js'
+import {fabrics} from '../consts/fabrics.js'
 
 export type OrderStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -132,20 +133,59 @@ export const store = createMutable({
 		}
 		this.selectedBlocks = newBlocks
 	},
-	set replaceSelectedBlocks(blockData: {blocks: Block[]; templateCategory: TemplateCategory}[]) {
+	set replaceSelectedBlocks(blockData: {blocks: Block[]; templateCategory: TemplateCategory; materialId: string}[]) {
 		// Completely replace selectedBlocks with new blocks (used for template selection)
 		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+		const newFabrics: {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}[] = []
 
-		for (const {blocks, templateCategory} of blockData) {
+		for (const {blocks, templateCategory, materialId} of blockData) {
 			const templateBlocks = new Map<BlockCategory, Block>()
 			for (const block of blocks) {
 				templateBlocks.set(block.category, block)
+				if (materialId) {
+					const fabric = fabrics[this.selectedSpace?.collection ?? 'moidien']?.find(
+						fabric => `${fabric.materialName} ${fabric.category} ${fabric.templateCategory}` === materialId,
+					)
+					if (fabric) {
+						newFabrics.push({
+							fabric: fabric,
+							blockCategory: block.category,
+							templateCategory: templateCategory,
+						})
+					}
+				}
 			}
 			if (templateBlocks.size > 0) {
 				newBlocks.set(templateCategory, templateBlocks)
 			}
 		}
 		this.selectedBlocks = newBlocks
+		this.replaceSelectedFabrics = newFabrics
+	},
+	set removeSelectedFabrics(fabricData: {blockCategory: BlockCategory; templateCategory: TemplateCategory}) {
+		this.selectedFabrics.get(fabricData.templateCategory)?.delete(fabricData.blockCategory)
+	},
+	set replaceSelectedFabrics(
+		fabricData:
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}[],
+	) {
+		if (!Array.isArray(fabricData)) {
+			fabricData = [fabricData]
+		}
+
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>(this.selectedFabrics)
+
+		for (const {fabric, blockCategory, templateCategory} of fabricData) {
+			let templateFabrics = newFabrics.get(templateCategory)
+			if (!templateFabrics) {
+				templateFabrics = new Map<BlockCategory, Fabric>()
+				newFabrics.set(templateCategory, templateFabrics)
+			}
+
+			templateFabrics.set(blockCategory, fabric)
+		}
+		this.selectedFabrics = newFabrics
 	},
 	set setSelectedFabrics(
 		fabricData:

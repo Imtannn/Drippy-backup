@@ -319,10 +319,7 @@ export class DrippyScene extends Element {
 
 		// Track block loading state
 		this.createEffect(() => {
-			const totalBlockCount = Array.from(store.selectedBlocks.values()).reduce(
-				(sum, templateBlocks) => sum + templateBlocks.size,
-				0,
-			)
+			const totalBlockCount = this.renderBlocks.length
 
 			if (totalBlockCount === 0) {
 				this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== 'avatar')
@@ -383,16 +380,13 @@ export class DrippyScene extends Element {
 		})
 
 		// Re-apply materials whenever the selected fabrics change or models mount
-		this.createEffect(() => {
+		this.createEffect(async () => {
 			const selectedFabrics = store.selectedFabrics
-			const selectedBlocks = store.selectedBlocks
-			// Cause reactive re-run when the number of blocks changes
-			const totalBlockCount = Array.from(selectedBlocks.values()).reduce(
-				(sum, templateBlocks) => sum + templateBlocks.size,
-				0,
-			)
+			// Add a delay of 100ms to ensure the lume-gltf-model are in the DOM
+			await new Promise(resolve => setTimeout(resolve, 100))
 
-			if (totalBlockCount === 0) {
+			// Cause reactive re-run when the number of blocks changes
+			if (this.renderBlocks.length === 0) {
 				// nothing to bind
 				return
 			}

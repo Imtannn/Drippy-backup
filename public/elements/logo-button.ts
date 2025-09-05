@@ -24,9 +24,11 @@ export class LogoButton extends Element {
 	@attribute brandName = 'Drippy'
 
 	template = () =>
-		html`<button class="logo-button">
-			<img src=${BRANDS.find(brand => brand.name === this.brandName)?.image} alt=${this.brandName} />
-		</button>`
+		html`<button
+			class="logo-button"
+			style=${() =>
+				`background-image: url(${BRANDS.find(brand => brand.name === this.brandName)?.image}); background-size: cover; background-position: center;`}
+		></button>`
 
 	css = css/*css*/ `
 		.logo-button {

@@ -49,9 +49,11 @@ export class TemplateView extends Element {
 			// Sort categories in the desired order
 			const orderedCategories = categoryOrder.filter(category => availableCategories.includes(category))
 
-			this.templateCategories = orderedCategories.reduce(
+			this.templateCategories = ['All', ...orderedCategories].reduce(
 				(acc, category) => {
-					acc[category] = templates[this.spaceCollection!].filter(template => template.category === category)
+					acc[category as TemplateCategory] = templates[this.spaceCollection!].filter(
+						template => template.category === category,
+					)
 					return acc
 				},
 				{} as Record<TemplateCategory, Template[]>,
@@ -65,10 +67,6 @@ export class TemplateView extends Element {
 				this.selectedTab = categories[0] as TemplateCategory
 			}
 		})
-
-		this.createEffect(() => {
-			console.log('this.templateCategories', this.templateCategories, this.selectedTab, this.spaceCollection)
-		})
 	}
 
 	#onItemClick = (e: CustomEvent) => {
@@ -78,19 +76,18 @@ export class TemplateView extends Element {
 		store.setSelectedTemplates = template
 
 		// Get blocks for ALL selected templates, organized by template category
-		const templateBlockData: {blocks: Block[]; templateCategory: TemplateCategory}[] = []
+		const templateBlockData: {blocks: Block[]; templateCategory: TemplateCategory; materialId: string}[] = []
 		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
 			const templateBlocks = getBlocksForTemplate(selectedTemplate, 'moidien')
 			templateBlockData.push({
 				blocks: templateBlocks,
 				templateCategory: templateCategory,
+				materialId: selectedTemplate.materialId ?? '',
 			})
 		}
 
 		// Replace blocks with aggregated blocks from all selected templates
 		store.replaceSelectedBlocks = templateBlockData
-
-		// Note: Fabric selection will be handled separately per block, not per template
 	}
 
 	#onDripItClick = () => {
@@ -151,7 +148,7 @@ export class TemplateView extends Element {
 			${(category: TemplateCategory) => html`
 				<tabs-content selected-value=${category}>
 					<div class="items-grid">
-						<${For} each=${() => this.templateCategories[category]}>
+						<${For} each=${() => (category === 'All' ? Object.values(this.templateCategories).flat() : this.templateCategories[category])}>
 						${(template: Template) => html`
 							<div class="template-item">
 								<item-card
@@ -161,6 +158,7 @@ export class TemplateView extends Element {
 									item-value=${template}
 									oncardselected=${this.#onItemClick}
 									object-fit="contain"
+									object-position="center"
 									aspect-ratio="0.79"
 								></item-card>
 								<div class="template-product-name">Product Name</div>

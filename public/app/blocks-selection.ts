@@ -42,6 +42,7 @@ export class BlocksSelection extends Element {
 	private defaultCollection = 'moidien'
 
 	private availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
+		All: [],
 		Shirt: ['Sleeves'],
 		Jacket: ['Sleeves'],
 		Pants: [],
@@ -165,7 +166,6 @@ export class BlocksSelection extends Element {
 	}
 
 	#onBackButtonClick = () => {
-		store.resetSelectedTemplates()
 		store.navigateTo = 'template'
 	}
 
@@ -283,21 +283,8 @@ export class BlocksSelection extends Element {
 
 						<!-- Fabric content -->
 						<${Show} when=${() => this.selectedSubTab === 'fabric'}>
-						<div class="category-tabs">
-							<${For} each=${() => this.fabricCategories}>
-							${(category: string) => html`
-								<button
-									class="category-tab"
-									classList=${() => ({active: this.selectedFabricCategory === category})}
-									onclick=${() => (this.selectedFabricCategory = category)}
-								>
-									${category}
-								</button>
-							`}
-							</>
-						</div>
 						<div class="items-grid">
-							<${For} each=${() => this.availableFabrics.filter(fabric => fabric.category === this.selectedFabricCategory)}>
+							<${For} each=${() => this.availableFabrics}>
 							${(fabric: Fabric) => html`
 								<item-card
 									item-active=${() => {
