@@ -16,6 +16,17 @@ export const blocks: Record<string, Block[]> = {
 	},
 	{
 		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Accessories/Item_15___accessory/item_15_accessory.png',
+		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Accessories/Item_15___accessory/item_15_accessory..glb',
+		blockName: 'item 15 accessory',
+		avatar: 'Female',
+		category: 'Accessory',
+		templateId: 'Item 15',
+		templateName: 'Item 15',
+		templateCategory: 'Accessories',
+	},
+	{
+		_id: '3',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Accessories/Item_17___accessory/item_17_accessory.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Accessories/Item_17___accessory/item_17_accessory..glb',
 		blockName: 'item 17 accessory',
@@ -26,7 +37,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Accessories',
 	},
 	{
-		_id: '3',
+		_id: '4',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Accessories/Item_13___accessory/item_13.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Accessories/Item_13___accessory/item_13..glb',
 		blockName: 'item 13',
@@ -37,7 +48,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Accessories',
 	},
 	{
-		_id: '4',
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Accessories/Item_10___bag/bag_127.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Accessories/Item_10___bag/bag_127..gltf',
 		blockName: 'bag 127',
@@ -48,7 +59,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Accessories',
 	},
 	{
-		_id: '5',
+		_id: '6',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Accessories/Item_2___bag/bag_122.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Accessories/Item_2___bag/bag_122..gltf',
 		blockName: 'bag 122',
@@ -59,7 +70,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Accessories',
 	},
 	{
-		_id: '6',
+		_id: '7',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Accessories/Item_1___hat/hat_125.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Accessories/Item_1___hat/hat_125..gltf',
 		blockName: 'hat 125',
@@ -70,7 +81,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Accessories',
 	},
 	{
-		_id: '7',
+		_id: '8',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Dress/Item_3___fullbody/fullbody_125.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Dress/Item_3___fullbody/fullbody_125..gltf',
 		blockName: 'fullbody 125',
@@ -81,7 +92,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Dress',
 	},
 	{
-		_id: '8',
+		_id: '9',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Shirt/Item_9___Sleeves/sleeve_126.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Shirt/Item_9___Sleeves/sleeve_126..gltf',
 		blockName: 'sleeve 126',
@@ -92,7 +103,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Shirt',
 	},
 	{
-		_id: '9',
+		_id: '10',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Shirt/Item_9___Bodice/shirt__126.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Shirt/Item_9___Bodice/shirt__126..gltf',
 		blockName: 'shirt  126',
@@ -103,7 +114,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Shirt',
 	},
 	{
-		_id: '10',
+		_id: '11',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Shirt/Item_12___bodice/bodice__1426.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Shirt/Item_12___bodice/bodice__1426..gltf',
 		blockName: 'bodice  1426',
@@ -114,7 +125,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Shirt',
 	},
 	{
-		_id: '11',
+		_id: '12',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Shirt/Item_11___Bodice/bodice_123.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Shirt/Item_11___Bodice/bodice_123..gltf',
 		blockName: 'bodice 123',
@@ -125,7 +136,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Shirt',
 	},
 	{
-		_id: '12',
+		_id: '13',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455..gltf',
 		blockName: 'bodice 1455',
@@ -136,7 +147,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Shirt',
 	},
 	{
-		_id: '13',
+		_id: '14',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Pants/Item_7_Pants/pants_130.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Pants/Item_7_Pants/pants_130..gltf',
 		blockName: 'pants 130',
@@ -147,7 +158,7 @@ export const blocks: Record<string, Block[]> = {
 		templateCategory: 'Pants',
 	},
 	{
-		_id: '14',
+		_id: '15',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Pants/Item_4_pants/pants__124.png',
 		modelFile: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Pants/Item_4_pants/pants__124..gltf',
 		blockName: 'pants  124',
