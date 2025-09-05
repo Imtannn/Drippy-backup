@@ -1,5 +1,6 @@
 import {booleanAttribute, element, Element, html, type ElementAttributes} from 'lume'
 import './icon-button.js'
+import {store} from '../app/store.js'
 
 type CubeButtonAttributes = 'disabled'
 
@@ -8,6 +9,10 @@ export class CubeButton extends Element {
 	static readonly elementName = 'cube-button'
 
 	@booleanAttribute disabled = false
+
+	#onToggleSceneClick = () => {
+		store.setIsShowScene = !store.isShowScene
+	}
 
 	icon = () => html`
 		<svg width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,7 +32,10 @@ export class CubeButton extends Element {
 		</svg>
 	`
 
-	template = () => html`<icon-button disabled=${() => this.disabled}>${() => this.icon()}</icon-button>`
+	template = () =>
+		html`<icon-button onclick=${this.#onToggleSceneClick} disabled=${() => this.disabled}
+			>${() => this.icon()}</icon-button
+		>`
 }
 
 declare module 'solid-js' {

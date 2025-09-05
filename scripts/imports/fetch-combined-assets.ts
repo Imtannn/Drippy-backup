@@ -319,7 +319,7 @@ function generateTemplateData(processedData: TODO[]): TODO {
 			_id: idCounter.toString(),
 			thumb: template.thumbUrl,
 			name: template.name,
-			avatar: 'Male',
+			avatar: 'Female',
 			category: template.category,
 			materialId: template.materialId,
 		})
@@ -341,7 +341,7 @@ function generateBlockData(processedData: TODO[]): TODO {
 				thumb: block.thumbUrl,
 				modelFile: block.modelUrl,
 				blockName: block.blockName,
-				avatar: 'Male',
+				avatar: 'Female',
 				category: block.category,
 				templateId: block.templateName, // Using template name as ID for now
 				templateName: block.templateName,

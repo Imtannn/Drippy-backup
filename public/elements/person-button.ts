@@ -1,5 +1,6 @@
 import {booleanAttribute, element, Element, html, type ElementAttributes} from 'lume'
 import './icon-button.js'
+import {store} from '../app/store.js'
 
 type PersonButtonAttributes = 'disabled'
 
@@ -8,6 +9,10 @@ export class PersonButton extends Element {
 	static readonly elementName = 'person-button'
 
 	@booleanAttribute disabled = false
+
+	#onToggleAvatarClick = () => {
+		store.setIsShowAvatar = !store.isShowAvatar
+	}
 
 	icon = () => html`
 		<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,7 +57,10 @@ export class PersonButton extends Element {
 		</svg>
 	`
 
-	template = () => html`<icon-button disabled=${() => this.disabled}>${() => this.icon()}</icon-button>`
+	template = () =>
+		html`<icon-button onclick=${this.#onToggleAvatarClick} disabled=${() => this.disabled}
+			>${() => this.icon()}</icon-button
+		>`
 }
 
 declare module 'solid-js' {

@@ -10,6 +10,7 @@ import {
 	Motor,
 	onCleanup,
 	Scene,
+	Show,
 	signal,
 	untrack,
 } from 'lume'
@@ -293,6 +294,7 @@ export class DrippyScene extends Element {
 
 		// Track avatar loading state
 		this.createEffect(() => {
+			if (!store.selectedAvatar || !store.tempSelectedAvatar || !store.isShowAvatar) return
 			const avatar = this.shadowRoot?.querySelector('lume-gltf-model[data-avatar]') as any
 			if (!avatar) return
 
@@ -319,10 +321,7 @@ export class DrippyScene extends Element {
 
 		// Track block loading state
 		this.createEffect(() => {
-			const totalBlockCount = Array.from(store.selectedBlocks.values()).reduce(
-				(sum, templateBlocks) => sum + templateBlocks.size,
-				0,
-			)
+			const totalBlockCount = this.renderBlocks.length
 
 			if (totalBlockCount === 0) {
 				this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== 'avatar')
@@ -383,16 +382,13 @@ export class DrippyScene extends Element {
 		})
 
 		// Re-apply materials whenever the selected fabrics change or models mount
-		this.createEffect(() => {
+		this.createEffect(async () => {
 			const selectedFabrics = store.selectedFabrics
-			const selectedBlocks = store.selectedBlocks
-			// Cause reactive re-run when the number of blocks changes
-			const totalBlockCount = Array.from(selectedBlocks.values()).reduce(
-				(sum, templateBlocks) => sum + templateBlocks.size,
-				0,
-			)
+			// Add a delay of 100ms to ensure the lume-gltf-model are in the DOM
+			await new Promise(resolve => setTimeout(resolve, 100))
 
-			if (totalBlockCount === 0) {
+			// Cause reactive re-run when the number of blocks changes
+			if (this.renderBlocks.length === 0) {
 				// nothing to bind
 				return
 			}
@@ -586,25 +582,29 @@ export class DrippyScene extends Element {
 							position="0 -1 0"
 						></lume-camera-rig>
 
-						<lume-gltf-model
-							id="avatar"
-							src=${() =>
-								store.selectedAvatar !== null
-									? store.selectedAvatar === 'female'
-										? femaleAvatar.href
-										: maleAvatar.href
-									: store.tempSelectedAvatar === 'female'
-										? femaleAvatar.href
-										: maleAvatar.href}
-							scale="1 1 1"
-							data-avatar
-						></lume-gltf-model>
+						<${Show} when=${() => store.isShowAvatar}>
+							<lume-gltf-model
+								id="avatar"
+								src=${() =>
+									store.selectedAvatar !== null
+										? store.selectedAvatar === 'female'
+											? femaleAvatar.href
+											: maleAvatar.href
+										: store.tempSelectedAvatar === 'female'
+											? femaleAvatar.href
+											: maleAvatar.href}
+								scale="1 1 1"
+								data-avatar
+							></lume-gltf-model>
+						</>
 
-						<lume-gltf-model
-							ref=${(el: GltfModel) => (this.backgroundModel = el)}
-							id="scene"
-							src=${() => store.selectedSpace?.scene.href ?? ''}
-						></lume-gltf-model>
+						<${Show} when=${() => store.isShowScene}>
+							<lume-gltf-model
+								ref=${(el: GltfModel) => (this.backgroundModel = el)}
+								id="scene"
+								src=${() => store.selectedSpace?.scene.href ?? ''}
+							></lume-gltf-model>
+						</>
 
 						<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
 							${(item: Accessor<URL>) => html`

@@ -1,4 +1,4 @@
-import {css, element, Element, For, html, Show, signal, type ElementAttributes} from 'lume'
+import {css, element, Element, For, html, Show, signal, untrack, type ElementAttributes} from 'lume'
 import {blocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
 
@@ -42,6 +42,7 @@ export class BlocksSelection extends Element {
 	private defaultCollection = 'moidien'
 
 	private availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
+		All: [],
 		Shirt: ['Sleeves'],
 		Jacket: ['Sleeves'],
 		Pants: [],
@@ -109,9 +110,23 @@ export class BlocksSelection extends Element {
 
 			// Sort by Bodice, then Sleeves, then Pants, then Skirt, then rest...
 			const categoryOrder: BlockCategory[] = ['Bodice', 'Sleeves', 'Pants']
-			const availableCategories = [
+			let availableCategories = [
 				...new Set(this.availableBlocksMapping[this.selectedTemplateCategory] || []),
 			] as BlockCategory[]
+
+			const selectedBlock = untrack(() =>
+				store.selectedBlocks.get(this.selectedTemplateCategory!)?.get(this.selectedBlockCategory),
+			)
+			const selectedSpace = untrack(() => store.selectedSpace)
+
+			if (
+				this.selectedTemplateCategory === 'Shirt' &&
+				selectedBlock?.templateId !== 'Item 9' &&
+				selectedSpace?.collection === 'moidien'
+			) {
+				this.blocksCategories = []
+				return
+			}
 
 			// Filter categories in the desired order, then add any remaining categories
 			const orderedCategories = categoryOrder.filter(category => availableCategories.includes(category))
@@ -165,7 +180,6 @@ export class BlocksSelection extends Element {
 	}
 
 	#onBackButtonClick = () => {
-		store.resetSelectedTemplates()
 		store.navigateTo = 'template'
 	}
 
@@ -283,21 +297,8 @@ export class BlocksSelection extends Element {
 
 						<!-- Fabric content -->
 						<${Show} when=${() => this.selectedSubTab === 'fabric'}>
-						<div class="category-tabs">
-							<${For} each=${() => this.fabricCategories}>
-							${(category: string) => html`
-								<button
-									class="category-tab"
-									classList=${() => ({active: this.selectedFabricCategory === category})}
-									onclick=${() => (this.selectedFabricCategory = category)}
-								>
-									${category}
-								</button>
-							`}
-							</>
-						</div>
 						<div class="items-grid">
-							<${For} each=${() => this.availableFabrics.filter(fabric => fabric.category === this.selectedFabricCategory)}>
+							<${For} each=${() => this.availableFabrics}>
 							${(fabric: Fabric) => html`
 								<item-card
 									item-active=${() => {
