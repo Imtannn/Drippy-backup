@@ -17,7 +17,6 @@ export const onboardingStyles = css`
 
 	.onboarding-step {
 		max-width: 393px;
-		margin-top: var(--uiSpacingXxl);
 		padding: var(--uiSpacing);
 		text-align: center;
 		font-family: var(--fontFamily);

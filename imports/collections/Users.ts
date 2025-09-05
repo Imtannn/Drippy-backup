@@ -5,6 +5,8 @@ declare module 'meteor/meteor' {
 	namespace Meteor {
 		interface UserProfile {
 			isAdmin?: boolean
+			username?: string
+			dateOfBirth?: string
 		}
 	}
 }

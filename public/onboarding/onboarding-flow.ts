@@ -50,9 +50,10 @@ export class OnboardingFlow extends Element {
 			}
 		})
 
-		// When user logs in, advance to next step
+		// When user logs in, advance to next step and load existing profile data
 		const computation = Tracker.autorun(() => {
 			if (Meteor.userId()) {
+				this.#loadUserProfile()
 				this.#nextStep()
 			}
 		})
@@ -60,6 +61,13 @@ export class OnboardingFlow extends Element {
 		// Clean up Tracker computation when component is destroyed
 		this.createEffect(() => {
 			return () => computation.stop()
+		})
+
+		// Load user profile data when component mounts, user changes, or step changes
+		this.createEffect(() => {
+			if (Meteor.userId() && (this.currentStep === 'step2' || this.currentStep === 'step3')) {
+				this.#loadUserProfile()
+			}
 		})
 	}
 
@@ -115,6 +123,19 @@ export class OnboardingFlow extends Element {
 			}
 		} else {
 			this.errorMessage = 'Please enter both username and date of birth.'
+		}
+	}
+
+	#loadUserProfile = () => {
+		const user = Meteor.user()
+		if (user?.profile) {
+			// Load existing username and dateOfBirth if they exist
+			if (user.profile.username) {
+				this.username = user.profile.username
+			}
+			if (user.profile.dateOfBirth) {
+				this.dateOfBirth = user.profile.dateOfBirth
+			}
 		}
 	}
 
