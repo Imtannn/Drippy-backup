@@ -1,6 +1,6 @@
 import {css, Element, element, html, signal} from 'lume'
 import '../elements/login-ui.js'
-import '../elements/show-when.js'
+import '../elements/logic/show-when.js'
 import '../elements/theme-switch.js'
 import '../routes.js' // track page visits
 import './avatar-selection.js'

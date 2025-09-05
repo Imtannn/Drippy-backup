@@ -3,7 +3,7 @@ import {Meteor} from 'meteor/meteor'
 import {Tracker} from 'meteor/tracker'
 import '../app/app-buttons.js'
 import '../elements/back-button.js'
-import '../elements/show-when.js'
+import '../elements/logic/show-when.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 
 const createAccountImg = '/images/create-account.png'

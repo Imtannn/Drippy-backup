@@ -17,7 +17,7 @@ import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {spaces} from '../consts/spaces.js'
 import '../elements/loading-indicator.js'
-import '../elements/show-when.js'
+import '../elements/logic/show-when.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
@@ -27,6 +27,8 @@ import {store} from './store.js'
 const femaleAvatar = new URL('../models/EM-MoiDien.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
 
+type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
+
 @element
 export class DrippyScene extends Element {
 	static elementName = 'drippy-scene'
@@ -35,7 +37,7 @@ export class DrippyScene extends Element {
 	@signal loadingBlocks: string[] = []
 	@signal loadingMaterials: string[] = []
 	@signal sceneUrl = ''
-	@signal renderBlocks: {block: Block; templateCategory: TemplateCategory; id: string}[] = []
+	@signal renderBlocks: RenderBlock[] = []
 
 	// Cache for textures per URL so we don't reload repeatedly
 	#textureCache = new Map<string, any>()
@@ -348,28 +350,33 @@ export class DrippyScene extends Element {
 			}
 		})
 
+		// This will cache render blocks by ID. This is a quick fix to make the
+		// <For> re-use the same objects to avoid reloading GLTF models.
+		const renderBlockCache = new Map<string, RenderBlock>()
+
+		function getRenderBlock(id: string, block: Block, templateCategory: TemplateCategory) {
+			let renderBlock = renderBlockCache.get(id)
+			if (!renderBlock) renderBlockCache.set(id, (renderBlock = {block, templateCategory, id}))
+			return renderBlock
+		}
+
 		this.createEffect(() => {
 			const blocks = Array.from(store.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
 			this.renderBlocks = blocks.flatMap(block => {
 				if (block.category === 'Sleeves') {
-					return [
-						{
-							block,
-							templateCategory: block.templateCategory,
-							id: `${block.templateCategory}-${block.category}-${block._id}`,
-						},
-						{
-							block,
-							templateCategory: block.templateCategory,
-							id: `${block.templateCategory}-${block.category}-${block._id}-mirror`,
-						},
-					]
+					const id = `${block.templateCategory}-${block.category}-${block._id}`
+					let renderBlock = getRenderBlock(id, block, block.templateCategory)
+
+					const idMirror = `${id}-mirror`
+					let renderBlockMirror = getRenderBlock(idMirror, block, block.templateCategory)
+
+					return [renderBlock, renderBlockMirror]
 				}
-				return {
-					block,
-					templateCategory: block.templateCategory,
-					id: `${block.templateCategory}-${block.category}-${block._id}`,
-				}
+
+				const id = `${block.templateCategory}-${block.category}-${block._id}`
+				let renderBlock = getRenderBlock(id, block, block.templateCategory)
+
+				return renderBlock
 			})
 		})
 
@@ -480,16 +487,9 @@ export class DrippyScene extends Element {
 			</app-buttons-left>
 		`}></show-when>
 
-
-
-
-
-
 		<div id="lume-scene-container">
-
 			<lume-scene id="drippy-scene" webgl perspective="2200" physically-correct-lights >
 				<lume-element3d align-point="0.5 0.5 0.5">
-
 					<lume-ambient-light intensity="0.8" color="0xffffff"></lume-ambient-light>
 
 					<lume-spot-light
@@ -507,10 +507,10 @@ export class DrippyScene extends Element {
 						angle="20"
 					>
 
-						<lume-sphere size="1 1 1" color="deeppink" has="basic-material"
+						<!-- <lume-sphere size="1 1 1" color="deeppink" has="basic-material"
 						mount-point="0.5 0.5 0.5"
 						cast-shadow="false"
-						></lume-sphere>
+						></lume-sphere> -->
 
 					</lume-spot-light>
 
@@ -529,23 +529,12 @@ export class DrippyScene extends Element {
 						angle="20"
 					>
 
-						<lume-sphere size="1 1 1" color="deeppink" has="basic-material"
+						<!-- <lume-sphere size="1 1 1" color="deeppink" has="basic-material"
 						mount-point="0.5 0.5 0.5"
 						cast-shadow="false"
-						></lume-sphere>
+						></lume-sphere> -->
 
 					</lume-spot-light>
-
-					<!-- <lume-spot-light
-						position="-500 -500 -500"
-						shadow-camera-top="-5"
-						shadow-camera-bottom="5"
-						shadow-camera-left="-5"
-						shadow-camera-right="5"
-						shadow-map-width="2048"
-						shadow-map-height="2048"
-						shadow-bias="-0.00002"
-					></lume-spot-light> -->
 
 					<lume-camera-rig
 						min-distance="20"
@@ -569,30 +558,27 @@ export class DrippyScene extends Element {
 						data-avatar
 					></lume-gltf-model>
 
-					<${Show} when=${() => store.selectedSpace}>
-						${() => html`<lume-gltf-model ref=${(el: GltfModel) => (this.background = el)} id="scene" src=${() => store.selectedSpace?.scene.href}></lume-gltf-model>`}
-					</>
+					<lume-gltf-model
+						ref=${(el: GltfModel) => (this.background = el)}
+						id="scene"
+						src=${() => store.selectedSpace?.scene.href ?? ''}
+					></lume-gltf-model>
 
 					<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
-						${(item: Accessor<URL>) => {
-							return html`<lume-gltf-model src=${() => item().href}></lume-gltf-model>`
-						}}
+						${(item: Accessor<URL>) => html` <lume-gltf-model src=${() => item().href}></lume-gltf-model> `}
 					</>
 
 					<${For} each=${() => this.renderBlocks}>
-						${(item: {block: Block; templateCategory: TemplateCategory; id: string}, index: Accessor<number>) => {
-							return html`
-								<lume-gltf-model
-									id=${item.id}
-									data-index=${index()}
-									data-cloth
-									src=${() => item.block.modelFile}
-									scale=${() => (item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1')}
-								></lume-gltf-model>
-							`
-						}}
+						${(item: RenderBlock, index: Accessor<number>) => html`
+							<lume-gltf-model
+								id=${item.id}
+								data-index=${index()}
+								data-cloth
+								src=${item.block.modelFile}
+								scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
+							></lume-gltf-model>
+						`}
 					</>
-
 				</lume-element3d>
 			</lume-scene>
 		</div>
