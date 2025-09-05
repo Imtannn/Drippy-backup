@@ -161,8 +161,7 @@ export const onboardingStyles = css`
 	}
 
 	img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
+		transform: scale(1.6);
+		margin-top: 160px;
 	}
 `

@@ -39,7 +39,11 @@ export class OnboardingFlow extends Element {
 			const hasBackButton = path.some(el => el instanceof HTMLElement && el.tagName?.toLowerCase() === 'back-button')
 
 			if (hasBackButton) {
-				this.#previousStep()
+				if (this.currentStep === 'step1') {
+					this.#goToHome()
+				} else {
+					this.#previousStep()
+				}
 			}
 		})
 
@@ -177,6 +181,10 @@ export class OnboardingFlow extends Element {
 		window.location.href = '/app'
 	}
 
+	#goToHome = () => {
+		window.location.href = '/'
+	}
+
 	template = () => html`
 		<div class="onboarding-flow">
 			<show-when
@@ -184,6 +192,9 @@ export class OnboardingFlow extends Element {
 				content=${() => html`
 					<div class="onboarding-step">
 						<header>
+							<div class="back-btn-container">
+								<back-button></back-button>
+							</div>
 							<h1 class="title">Did you know? Every garment on Drippy can be shopped IRL.</h1>
 						</header>
 						<div class="action-section">
@@ -217,6 +228,9 @@ export class OnboardingFlow extends Element {
 				content=${() => html`
 					<div class="onboarding-step">
 						<header>
+							<div class="back-btn-container">
+								<back-button></back-button>
+							</div>
 							<img src=${logoLight} alt="Drippy Logo" class="header-logo" />
 							<h1 class="title">Gamify your fashion shopping experience.</h1>
 							<p class="sub-title">Browse it. Drip it. Shop it IRL!</p>
