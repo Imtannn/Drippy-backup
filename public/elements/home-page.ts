@@ -21,6 +21,10 @@ export class HomePage extends Element {
 		this.createEffect(() => {
 			console.log(this.count)
 		})
+
+		this.createEffect(() => {
+			window.location.href = '/onboarding?step=step3'
+		})
 	}
 
 	template = () => html`

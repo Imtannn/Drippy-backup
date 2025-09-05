@@ -9,7 +9,7 @@ export class VideoLoading extends Element {
 	static elementName = 'video-loading'
 
 	@booleanAttribute isVisible = false
-	// private minDisplayTime = 5000
+ 
 	private hideTimeout: number | null = null
 	private isActuallyVisible = false
 
