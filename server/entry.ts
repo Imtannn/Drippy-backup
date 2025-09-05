@@ -17,7 +17,7 @@ WebApp.addHtmlAttributeHook(() => ({lang: 'en', prefix: 'og: http://ogp.me/ns#'}
 
 // TODO update this with the primary app domain name. This should be the domain
 // under which the Meteor app is served.
-const primaryTLD = 'example.com'
+const primaryTLD = 'drippy3d.com'
 
 const appOrigin = (sub?: string, TLD = primaryTLD) => `https://${sub ? sub + '.' : ''}${TLD}`
 
