@@ -44,16 +44,16 @@ export class VideoLoading extends Element {
 			this.hideTimeout = null
 		}
 
-		this.hideTimeout = setTimeout(() => {
-			console.log('Auto hiding after', this.minDisplayTime, 'ms at:', Date.now())
-			this.isVisible = false
+		// this.hideTimeout = setTimeout(() => {
+		// 	console.log('Auto hiding after', this.minDisplayTime, 'ms at:', Date.now())
+		// 	this.isVisible = false
 
-			setTimeout(() => {
-				if (this.parentNode) {
-					this.parentNode.removeChild(this)
-				}
-			}, 500)
-		}, this.minDisplayTime) as unknown as number
+		// 	setTimeout(() => {
+		// 		if (this.parentNode) {
+		// 			this.parentNode.removeChild(this)
+		// 		}
+		// 	}, 500)
+		// }, this.minDisplayTime) as unknown as number
 	}
 
 	hideLoading() {
