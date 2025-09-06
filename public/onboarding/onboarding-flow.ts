@@ -78,6 +78,7 @@ export class OnboardingFlow extends Element {
 
 					// Skip step 4 entirely
 					this.#goToApp()
+					return
 				}
 				this.#hasProcessedLogin = true
 			} else {
