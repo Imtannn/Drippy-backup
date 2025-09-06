@@ -4,7 +4,7 @@ import {toSolidSignal} from '../utils.js'
 
 type AppGuardAttributes = keyof {}
 
-const currentUser = toSolidSignal(() => Meteor.user())
+const currentUser = toSolidSignal(() => Meteor.userAsync())
 
 @element
 export class AppGuard extends Element {
@@ -15,8 +15,8 @@ export class AppGuard extends Element {
 		super.connectedCallback()
 
 		// Check if user is logged in
-		this.createEffect(() => {
-			const user = currentUser()
+		this.createEffect(async () => {
+			const user = await currentUser()
 
 			if (!user) {
 				window.location.href = '/onboarding?step=step3'
