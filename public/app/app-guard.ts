@@ -1,10 +1,5 @@
-import {Element, element, html, Show, signal, type ElementAttributes} from 'lume'
-import {Meteor} from 'meteor/meteor'
-import {toSolidSignal} from '../utils'
-
-type AppGuardAttributes = keyof {}
-
-const currentUser = toSolidSignal(() => Meteor.user())
+import {Element, element, html, Show, signal} from 'lume'
+import {currentUser} from './store.js'
 
 @element
 export class AppGuard extends Element {
@@ -35,16 +30,4 @@ export class AppGuard extends Element {
 			<slot></slot>
 		</>
 	`
-}
-
-declare global {
-	interface HTMLElementTagNameMap {
-		'app-guard': AppGuard
-	}
-}
-
-declare global {
-	interface IntrinsicElements {
-		'app-guard': ElementAttributes<AppGuard, AppGuardAttributes>
-	}
 }

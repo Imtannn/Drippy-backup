@@ -4,6 +4,8 @@ import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, Avatar, Space, CustomMeasurement} from '../types/types.js'
 import {fabrics} from '../consts/fabrics.js'
+import {toSolidSignal} from '../utils.js'
+import {Meteor} from 'meteor/meteor'
 
 export type OrderStatus = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -385,3 +387,5 @@ export const store = createMutable({
 		this.isDrippySceneLoading = this.isDrippySceneLoading.filter(k => k !== key)
 	},
 })
+
+export const currentUser = toSolidSignal(() => Meteor.user())
