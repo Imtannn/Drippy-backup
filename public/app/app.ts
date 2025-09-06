@@ -17,7 +17,6 @@ import './success-view.js'
 import './template-view.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/video-loading.js'
-import './app-guard.js'
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
@@ -82,76 +81,74 @@ export class DrippyApp extends Element {
 	}
 
 	template = () => html`
-		<app-guard>
-			<show-when
-				condition=${() => this.appLoaded}
-				fallback=${() => html`<div class="loading">Loading...</div>`}
-				content=${() => html`
+		<show-when
+			condition=${() => this.appLoaded}
+			fallback=${() => html`<div class="loading">Loading...</div>`}
+			content=${() => html`
+				<show-when
+					condition=${() =>
+						store.view !== 'avatar' &&
+						store.view !== 'scene' &&
+						store.selectedAvatar &&
+						store.selectedSpace &&
+						store.isDrippySceneLoading.length > 0}
+					content=${() => html`
+						<div id="loadingCover">
+							<video-loading isVisible="true"></video-loading>
+						</div>
+					`}
+				></show-when>
+
+				<div id="app-container">
+					<drippy-scene id="drippy-scene"></drippy-scene>
+
 					<show-when
-						condition=${() =>
-							store.view !== 'avatar' &&
-							store.view !== 'scene' &&
-							store.selectedAvatar &&
-							store.selectedSpace &&
-							store.isDrippySceneLoading.length > 0}
-						content=${() => html`
-							<div id="loadingCover">
-								<video-loading isVisible="true"></video-loading>
-							</div>
-						`}
-					></show-when>
+						condition=${() => store.view === 'avatar'}
+						content=${() => html`<avatar-selection></avatar-selection>`}
+					>
+					</show-when>
 
-					<div id="app-container">
-						<drippy-scene id="drippy-scene"></drippy-scene>
+					<show-when
+						condition=${() => store.view === 'scene'}
+						content=${() => html`<spaces-selection></spaces-selection>`}
+					>
+					</show-when>
 
-						<show-when
-							condition=${() => store.view === 'avatar'}
-							content=${() => html`<avatar-selection></avatar-selection>`}
-						>
-						</show-when>
+					<show-when
+						condition=${() => store.view === 'template'}
+						content=${() => html`<template-view></template-view>`}
+					>
+					</show-when>
 
-						<show-when
-							condition=${() => store.view === 'scene'}
-							content=${() => html`<spaces-selection></spaces-selection>`}
-						>
-						</show-when>
+					<show-when
+						condition=${() => store.view === 'blocks'}
+						content=${() => html`<blocks-selection></blocks-selection>`}
+					>
+					</show-when>
 
-						<show-when
-							condition=${() => store.view === 'template'}
-							content=${() => html`<template-view></template-view>`}
-						>
-						</show-when>
+					<show-when
+						condition=${() => store.view === 'preview'}
+						content=${() => html`<outfit-preview></outfit-preview>`}
+					>
+					</show-when>
+					<show-when condition=${() => store.view === 'share'} content=${() => html`<share-view></share-view>`}>
+					</show-when>
 
-						<show-when
-							condition=${() => store.view === 'blocks'}
-							content=${() => html`<blocks-selection></blocks-selection>`}
-						>
-						</show-when>
+					<show-when condition=${() => store.view === 'order'} content=${() => html`<order-view></order-view>`}>
+					</show-when>
 
-						<show-when
-							condition=${() => store.view === 'preview'}
-							content=${() => html`<outfit-preview></outfit-preview>`}
-						>
-						</show-when>
-						<show-when condition=${() => store.view === 'share'} content=${() => html`<share-view></share-view>`}>
-						</show-when>
+					<show-when
+						condition=${() => store.view === 'custom-measurement'}
+						content=${() => html`<custom-measurement></custom-measurement>`}
+					>
+					</show-when>
 
-						<show-when condition=${() => store.view === 'order'} content=${() => html`<order-view></order-view>`}>
-						</show-when>
-
-						<show-when
-							condition=${() => store.view === 'custom-measurement'}
-							content=${() => html`<custom-measurement></custom-measurement>`}
-						>
-						</show-when>
-
-						<show-when condition=${() => store.view === 'success'} content=${() => html`<success-view></success-view>`}>
-						</show-when>
-					</div>
-				`}
-			>
-			</show-when>
-		</app-guard>
+					<show-when condition=${() => store.view === 'success'} content=${() => html`<success-view></success-view>`}>
+					</show-when>
+				</div>
+			`}
+		>
+		</show-when>
 	`
 
 	css = css`
