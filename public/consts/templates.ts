@@ -20,6 +20,14 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Accessories/Item_14.png',
+		name: 'Item 14',
+		avatar: 'Female',
+		category: 'Accessories',
+		materialId: '',
+	},
+	{
+		_id: '4',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Accessories/Item_17.png',
 		name: 'Item 17',
 		avatar: 'Female',
@@ -27,7 +35,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: '',
 	},
 	{
-		_id: '4',
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Accessories/Item_13.png',
 		name: 'Item 13',
 		avatar: 'Female',
@@ -35,7 +43,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: '',
 	},
 	{
-		_id: '5',
+		_id: '6',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Accessories/Item_10.png',
 		name: 'Item 10',
 		avatar: 'Female',
@@ -43,7 +51,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Black Pleated Fabric Accessories',
 	},
 	{
-		_id: '6',
+		_id: '7',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Accessories/Item_2.png',
 		name: 'Item 2',
 		avatar: 'Female',
@@ -51,7 +59,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'White Pleated Fabric Accessories',
 	},
 	{
-		_id: '7',
+		_id: '8',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Accessories/Item_1.png',
 		name: 'Item 1',
 		avatar: 'Female',
@@ -59,7 +67,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Black Pleated Fabric Accessories',
 	},
 	{
-		_id: '8',
+		_id: '9',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Dress/Item_3.png',
 		name: 'Item 3',
 		avatar: 'Female',
@@ -67,7 +75,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Taupe Cotton Dress',
 	},
 	{
-		_id: '9',
+		_id: '10',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Shirt/Item_9.png',
 		name: 'Item 9',
 		avatar: 'Female',
@@ -75,7 +83,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'White Pleated Fabric Shirt',
 	},
 	{
-		_id: '10',
+		_id: '11',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Shirt/Item_12.png',
 		name: 'Item 12',
 		avatar: 'Female',
@@ -83,7 +91,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Black Seersucker Fabric Shirt',
 	},
 	{
-		_id: '11',
+		_id: '12',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Shirt/Item_11.png',
 		name: 'Item 11',
 		avatar: 'Female',
@@ -91,7 +99,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'White Cotton Shirt',
 	},
 	{
-		_id: '12',
+		_id: '13',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Shirt/Item_8.png',
 		name: 'Item 8',
 		avatar: 'Female',
@@ -99,7 +107,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Navy Crinkle Fabric Shirt',
 	},
 	{
-		_id: '13',
+		_id: '14',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Pants/Item_7.png',
 		name: 'Item 7',
 		avatar: 'Female',
@@ -107,7 +115,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Black Cotton Pants',
 	},
 	{
-		_id: '14',
+		_id: '15',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/templates/Pants/Item_4.png',
 		name: 'Item 4',
 		avatar: 'Female',
