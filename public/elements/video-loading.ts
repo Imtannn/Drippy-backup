@@ -2,31 +2,26 @@ import {booleanAttribute, css, Element, element, html, type ElementAttributes} f
 
 type VideoLoadingAttributes = 'isVisible'
 
-const loadingUrl = new URL('../videos/logogif.gif', import.meta.url).href
+const loadingVideoUrl = new URL('../videos/landing.mp4', import.meta.url).href
 
 @element
 export class VideoLoading extends Element {
 	static elementName = 'video-loading'
 
 	@booleanAttribute isVisible = false
- 
+
 	private hideTimeout: number | null = null
 	private isActuallyVisible = false
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		console.log('VideoLoading connected, isVisible:', this.isVisible)
-
 		// Force show loading cho landing page
 		this.isVisible = true
 		if (this.isVisible) {
-			console.log('Auto showing loading...')
 			this.showLoading()
 		}
 
 		this.createEffect(() => {
-			console.log('Effect triggered, isVisible:', this.isVisible, 'isActuallyVisible:', this.isActuallyVisible)
 			if (this.isVisible && !this.isActuallyVisible) {
 				this.showLoading()
 			} else if (!this.isVisible && this.isActuallyVisible) {
@@ -44,16 +39,21 @@ export class VideoLoading extends Element {
 			this.hideTimeout = null
 		}
 
-		// this.hideTimeout = setTimeout(() => {
-		// 	console.log('Auto hiding after', this.minDisplayTime, 'ms at:', Date.now())
-		// 	this.isVisible = false
+		this.hideTimeout = setTimeout(() => {
+			this.isVisible = false
 
-		// 	setTimeout(() => {
-		// 		if (this.parentNode) {
-		// 			this.parentNode.removeChild(this)
-		// 		}
-		// 	}, 500)
-		// }, this.minDisplayTime) as unknown as number
+			// Remove loadingCover khỏi DOM sau 5 giây
+			const loadingCover = document.getElementById('loadingCover')
+			if (loadingCover) {
+				loadingCover.remove()
+			}
+
+			setTimeout(() => {
+				if (this.parentNode) {
+					this.parentNode.removeChild(this)
+				}
+			}, 500)
+		}, 5000) as unknown as number
 	}
 
 	hideLoading() {
@@ -68,10 +68,10 @@ export class VideoLoading extends Element {
 
 	template = () => html`
 		<div class="video-loading">
-			<img class="loading-gif" src=${loadingUrl} alt="Loading..." />
-			<div class="fallback-loader">
-				<div class="spinner"></div>
-			</div>
+			<video class="loading-video" autoplay muted loop>
+				<source src=${loadingVideoUrl} type="video/mp4" />
+			</video>
+			<!-- Fallback cho trường hợp video không load được -->
 		</div>
 	`
 
@@ -100,14 +100,13 @@ export class VideoLoading extends Element {
 			background: #010304;
 		}
 
-		.loading-gif {
-			max-width: 100%;
-			max-height: 100%;
-			width: auto;
-			height: auto;
-			position: relative;
+		.loading-video {
+			width: 100vw;
+			height: 100vh;
+			position: absolute;
+			top: 0;
+			left: 0;
 			z-index: 10;
-			object-fit: contain;
 		}
 
 		.fallback-loader {

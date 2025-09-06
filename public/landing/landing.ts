@@ -6,10 +6,10 @@ import '../elements/custom-button.js'
 import '../elements/avatar-selector.js'
 
 // Hide the loading cover
-const loadingCover = document.getElementById('loadingCover')
-console.log('loadingCover', loadingCover)
-loadingCover?.classList.add('invisible')
-loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
+// const loadingCover = document.getElementById('loadingCover')
+// console.log('loadingCover', loadingCover)
+// loadingCover?.classList.add('invisible')
+// loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
 
 // const logoUrl = new URL('../images/logo.svg', import.meta.url)
 const logoUrlDark = new URL('../images/landing/logo.png', import.meta.url)
@@ -227,9 +227,15 @@ const mainContent = html`
 									<div class="showcase__item">
 										<div class="showcase__background">
 											<div class="showcase__controls">
-												<img class="showcase__avatar-option" src=${matImage1} alt="Material option 1 for customization" />
-												<img class="showcase__avatar-option" src=${matImage2} alt="Material option 2 for customization" />
-												<img class="showcase__avatar-option" src=${matImage3} alt="Material option 3 for customization" />
+												<div class="showcase__avatar-option">
+													<img src=${matImage1} alt="Material option 1 for customization" />
+												</div>
+												<div class="showcase__avatar-option">
+													<img src=${matImage2} alt="Material option 2 for customization" />
+												</div>
+												<div class="showcase__avatar-option">
+													<img src=${matImage3} alt="Material option 3 for customization" />
+												</div>
 											</div>
 
 											<avatar-selector target-model=".showcase__avatar-model" class="showcase__selector"></avatar-selector>
