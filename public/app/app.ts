@@ -17,7 +17,6 @@ import './success-view.js'
 import './template-view.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/video-loading.js'
-import './app-guard.js'
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
