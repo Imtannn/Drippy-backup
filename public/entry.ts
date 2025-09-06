@@ -25,20 +25,6 @@ if (renderHomePage) {
 	const el = root.querySelector<HomePage>('home-page')
 
 	setInterval(() => el!.count++, 1000)
-
-	// Control VideoLoading component
-	const videoLoading = document.querySelector('video-loading') as any
-	if (videoLoading) {
-		videoLoading.isVisible = true // Show loading
-
-		// Listen for when VideoLoading finishes (after 5+ seconds)
-		// Hide loading cover only after VideoLoading is done
-		setTimeout(() => {
-			const loadingCover = document.getElementById('loadingCover')!
-			loadingCover.classList.add('invisible')
-			loadingCover.addEventListener('transitionend', () => loadingCover.remove())
-		}, 5000)
-	}
 }
 
 export {} // merely so that TS treats the file as a module

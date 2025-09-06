@@ -4,7 +4,13 @@ import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/custom-button.js'
 import '../elements/avatar-selector.js'
-import '../elements/video-loading.js'
+
+// Hide the loading cover
+const loadingCover = document.getElementById('loadingCover')
+console.log('loadingCover', loadingCover)
+loadingCover?.classList.add('invisible')
+loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
+
 // const logoUrl = new URL('../images/logo.svg', import.meta.url)
 const logoUrlDark = new URL('../images/landing/logo.png', import.meta.url)
 const blingImage1 = new URL('../images/landing/bling-1.png', import.meta.url).href
@@ -619,19 +625,6 @@ const mainContent = html`
 document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
 
-// Bỏ dòng này vì không cần thiết
-// const videoLoading = document.querySelector('video-loading') as any
-
-// Component sẽ tự động xử lý thời gian, không cần JavaScript can thiệp
-// Chỉ cần ẩn loadingCover sau 5 giây
-setTimeout(() => {
-	const loadingCover = document.getElementById('loadingCover')
-	if (loadingCover) {
-		loadingCover.classList.add('invisible')
-		loadingCover.addEventListener('transitionend', () => loadingCover.remove())
-	}
-}, 5000)
-
 // Add smooth scroll behavior for header menu links
 function setupSmoothScroll() {
 	const headerMenu = document.querySelector('.header__menu')
@@ -657,11 +650,6 @@ function setupSmoothScroll() {
 // Setup smooth scroll
 setupSmoothScroll()
 setTimeout(setupSmoothScroll, 500) // Retry if needed
-
-// Hide the loading cover
-const loadingCover = document.getElementById('loadingCover')
-loadingCover?.classList.add('invisible')
-loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
 
 // Statistics animation on scroll
 function animateStatistics() {
