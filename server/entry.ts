@@ -30,8 +30,16 @@ const localhost = (port: string | number) => [
 // Origins that are allowed to access the app domain (CORS). Only authorized
 // domains will be able to fetch certain assets or authenticate using the app
 // domain via iframe.
-const remoteOrigins = [appOrigin(), appOrigin('drippy', 'meteorapp.com'), appOrigin('drippy-test', 'meteorapp.com')]
-console.log('Remote origins:', ...remoteOrigins)
+const remoteOrigins = [
+	appOrigin(),
+	appOrigin('drippy', 'meteorapp.com'),
+
+	appOrigin('test'),
+	appOrigin('drippy-test', 'meteorapp.com'),
+
+	appOrigin('dev'),
+	appOrigin('drippy-dev', 'meteorapp.com'),
+]
 // List multiple localhost origins to test multiple apps authenticating with the main app locally.
 const localhostOrigins = [...localhost(3000), ...localhost(4000)]
 const allowedOrigins = [...remoteOrigins, ...localhostOrigins]
@@ -77,7 +85,6 @@ WebApp.rawHandlers.use(
 		// otherwise).
 		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Origin#description)
 		if (!req.headers.origin || allowedOrigins.includes(req.headers.origin)) {
-			console.log('Allowed origin:', req.headers.origin || 'none (same-origin request)')
 			res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*')
 			res.setHeader('Vary', 'Origin')
 
@@ -87,10 +94,7 @@ WebApp.rawHandlers.use(
 				'Content-Security-Policy',
 				`frame-ancestors 'self' ${Meteor.isDevelopment ? localhostOrigins.join(' ') : remoteOrigins.join(' ')}`,
 			)
-		} else {
-			console.log('Blocked origin:', req.headers.origin)
-			return getCoffee(res)
-		}
+		} else return getCoffee(res)
 
 		if (req.url !== req.originalUrl) {
 			console.error('url and originalUrl do not match, needs handling:', req.url, req.originalUrl)
