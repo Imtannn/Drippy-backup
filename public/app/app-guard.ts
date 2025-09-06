@@ -13,14 +13,15 @@ export class AppGuard extends Element {
 		super.connectedCallback()
 
 		// Check if user is logged in
-		// Track login state and handle step visibility
 		const computation = Tracker.autorun(async () => {
 			const user = await Meteor.userAsync()
 			const userId = user?._id
 			this.isUserLoggedIn = !!userId
 
+			console.log('[app-guard] user is logged in', user)
+
 			if (!userId) {
-				// User logged out, reset the flag
+				console.log('[app-guard] user is logged out, redirecting to login')
 				window.location.href = '/onboarding?step=step3'
 			}
 		})
