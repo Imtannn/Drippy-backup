@@ -1,33 +1,38 @@
 import {Element, element, html, Show, signal, type ElementAttributes} from 'lume'
 import {Meteor} from 'meteor/meteor'
-import {toSolidSignal} from '../utils.js'
+import {Tracker} from 'meteor/tracker'
 
 type AppGuardAttributes = keyof {}
-
-const currentUser = toSolidSignal(() => Meteor.userAsync())
 
 @element
 export class AppGuard extends Element {
 	static readonly elementName = 'app-guard'
-	@signal user: Meteor.User | null = null
+	@signal isUserLoggedIn = false
 
 	connectedCallback() {
 		super.connectedCallback()
 
 		// Check if user is logged in
-		this.createEffect(async () => {
-			const user = await currentUser()
+		// Track login state and handle step visibility
+		const computation = Tracker.autorun(async () => {
+			const user = await Meteor.userAsync()
+			const userId = user?._id
+			this.isUserLoggedIn = !!userId
 
-			if (!user) {
+			if (!userId) {
+				// User logged out, reset the flag
 				window.location.href = '/onboarding?step=step3'
-			} else {
-				this.user = user
 			}
+		})
+
+		// Clean up Tracker computation when component is destroyed
+		this.createEffect(() => {
+			return () => computation.stop()
 		})
 	}
 
 	template = () => html`
-		<${Show} when=${() => this.user}>
+		<${Show} when=${() => this.isUserLoggedIn}>
 			<slot></slot>
 		</>
 	`
