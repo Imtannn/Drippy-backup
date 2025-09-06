@@ -17,7 +17,7 @@ export class AppGuard extends Element {
 		this.createEffect(() => {
 			const user = currentUser()
 			// If undefined, means the user is still loading
-			if (!user === undefined) return
+			if (user === undefined) return
 
 			// If null, means the user is logged out
 			if (user === null) {
