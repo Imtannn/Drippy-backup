@@ -1,8 +1,12 @@
 import {css, Element, element, html, signal} from 'lume'
-import '../elements/login-ui.js'
+import {spaces} from '../consts/spaces.js'
 import '../elements/logic/show-when.js'
+import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
+import '../elements/video-loading.js'
 import '../routes.js' // track page visits
+import type {Avatar} from '../types/types.js'
+import './app-guard.js'
 import './avatar-selection.js'
 import './blocks-selection.js'
 import './custom-measurement.js'
@@ -12,12 +16,8 @@ import './outfit-preview.js'
 import './share-view.js'
 import './spaces-selection.js'
 import {store} from './store.js'
-import type {Avatar} from '../types/types.js'
 import './success-view.js'
 import './template-view.js'
-import {spaces} from '../consts/spaces.js'
-import '../elements/video-loading.js'
-import './app-guard.js'
 
 // Hide the loading cover
 const loadingCover = document.getElementById('loadingCover')
