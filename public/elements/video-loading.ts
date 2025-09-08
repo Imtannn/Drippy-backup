@@ -1,4 +1,4 @@
-import {booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
+import {booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 
 type VideoLoadingAttributes = 'isVisible'
 
@@ -12,11 +12,12 @@ export class VideoLoading extends Element {
 
 	private hideTimeout: number | null = null
 	private isActuallyVisible = false
+	@signal private videoError = false
 
 	connectedCallback() {
 		super.connectedCallback()
-		// Force show loading cho landing page
-		this.isVisible = true
+
+		// Initialize visibility based on the actual isVisible prop
 		if (this.isVisible) {
 			this.showLoading()
 		}
@@ -28,38 +29,52 @@ export class VideoLoading extends Element {
 				this.hideLoading()
 			}
 		})
+
+		// Set up video event listeners after template is rendered
+		setTimeout(() => {
+			const video = this.shadowRoot?.querySelector('.loading-video') as HTMLVideoElement
+			if (video) {
+				video.addEventListener('loadeddata', () => {
+					this.videoError = false
+				})
+
+				video.addEventListener('error', e => {
+					console.error('[video-loading] Video error:', e, video.error)
+					this.videoError = true
+				})
+
+				video.addEventListener('canplay', () => {
+					if (video.paused) {
+						video.play().catch(e => {
+							console.warn('[video-loading] Video autoplay failed:', e)
+							this.videoError = true
+						})
+					}
+				})
+			}
+		}, 0)
 	}
 
 	showLoading() {
 		this.isActuallyVisible = true
-		this.style.setProperty('--opacity', '1')
 
+		// Clear any existing timeout when showing
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout)
 			this.hideTimeout = null
 		}
 
-		this.hideTimeout = setTimeout(() => {
-			this.isVisible = false
-
-			// Remove loadingCover khỏi DOM sau 5 giây
-			const loadingCover = document.getElementById('loadingCover')
-			if (loadingCover) {
-				loadingCover.remove()
-			}
-
-			setTimeout(() => {
-				if (this.parentNode) {
-					this.parentNode.removeChild(this)
-				}
-			}, 500)
-		}, 5000) as unknown as number
+		// Small delay to ensure smooth transition instead of abrupt appearance
+		requestAnimationFrame(() => {
+			this.style.setProperty('--opacity', '1')
+		})
 	}
 
 	hideLoading() {
 		this.isActuallyVisible = false
 		this.style.setProperty('--opacity', '0')
 
+		// Clear any existing timeout when hiding
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout)
 			this.hideTimeout = null
@@ -68,10 +83,13 @@ export class VideoLoading extends Element {
 
 	template = () => html`
 		<div class="video-loading">
-			<video class="loading-video" autoplay muted loop>
+			<video class="loading-video" autoplay muted loop playsinline>
 				<source src=${loadingVideoUrl} type="video/mp4" />
 			</video>
-			<!-- Fallback cho trường hợp video không load được -->
+			<!-- Fallback spinner shown when video fails to load -->
+			<div class="fallback-loader" style=${() => (this.videoError ? 'display: flex' : 'display: none')}>
+				<div class="spinner"></div>
+			</div>
 		</div>
 	`
 
@@ -107,6 +125,8 @@ export class VideoLoading extends Element {
 			top: 0;
 			left: 0;
 			z-index: 10;
+			object-fit: cover;
+			object-position: center;
 		}
 
 		.fallback-loader {

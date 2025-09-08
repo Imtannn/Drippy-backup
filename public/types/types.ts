@@ -30,3 +30,28 @@ export type CustomMeasurement = {
 	shoulder: number
 	shoulderToKnee: number
 }
+
+export type OrderStatus = 'idle' | 'submitting' | 'success' | 'error'
+
+export type ShippingAddress = {
+	firstName: string
+	lastName: string
+	address: string
+	apartment: string
+	city: string
+	postalCode: string
+	phone: string
+}
+
+export type OrderState = {
+	status: OrderStatus
+	error: string | null
+	productName: string
+	selectedSize: string
+	quantity: number
+	email: string
+	customerEmail: string
+	customerFirstName: string
+	customerLastName: string
+	shippingAddress: ShippingAddress
+}
