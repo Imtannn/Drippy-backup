@@ -6,19 +6,24 @@ import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
 import '../routes.js' // track page visits
 
-// Function to hide loading cover when content is ready
-function hideLoadingCover() {
+// Control video loading for landing page
+function hideLandingVideoLoading() {
 	const loadingCover = document.getElementById('loadingCover')
-	if (loadingCover) {
-		const videoLoading = loadingCover.querySelector('video-loading') as HTMLElement & {isVisible: boolean}
-		if (videoLoading) {
-			videoLoading.isVisible = false
+	const videoLoading = loadingCover?.querySelector('video-loading') as any
+
+	if (videoLoading) {
+		// Hide the video loading component
+		videoLoading.isVisible = false
+
+		// Listen for the video loading component's opacity transition to complete
+		const handleTransition = (e: TransitionEvent) => {
+			if (e.propertyName === 'opacity' && loadingCover) {
+				videoLoading.removeEventListener('transitionend', handleTransition)
+				loadingCover.classList.add('invisible')
+				loadingCover.addEventListener('transitionend', () => loadingCover.remove())
+			}
 		}
-		// Fallback: hide the cover after transition
-		setTimeout(() => {
-			loadingCover.classList.add('invisible')
-			loadingCover.addEventListener('transitionend', () => loadingCover.remove())
-		}, 500)
+		videoLoading.addEventListener('transitionend', handleTransition)
 	}
 }
 
@@ -642,10 +647,31 @@ const mainContent = html`
 document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
 
-// Wait for DOM to settle and images to start loading
-setTimeout(() => {
-	hideLoadingCover()
-}, 100)
+// Wait for all images and content to be fully loaded
+function waitForContentReady() {
+	// Check if all images are loaded
+	const images = document.querySelectorAll('img')
+	const imagePromises = Array.from(images).map(img => {
+		if (img.complete) {
+			return Promise.resolve()
+		}
+		return new Promise(resolve => {
+			img.addEventListener('load', resolve)
+			img.addEventListener('error', resolve) // Still resolve on error to not block
+		})
+	})
+
+	// Wait for images + a small delay for layout settling
+	Promise.all(imagePromises).then(() => {
+		// Use requestAnimationFrame to ensure DOM has updated
+		requestAnimationFrame(() => {
+			hideLandingVideoLoading()
+		})
+	})
+}
+
+// Start waiting for content to be ready
+waitForContentReady()
 
 // Add smooth scroll behavior for header menu links
 function setupSmoothScroll() {
