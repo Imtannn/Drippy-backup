@@ -64,6 +64,8 @@ export class VideoLoading extends Element {
 			this.hideTimeout = null
 		}
 
+		// Enable pointer events and show
+		this.style.setProperty('--pointer-events', 'auto')
 		// Small delay to ensure smooth transition instead of abrupt appearance
 		requestAnimationFrame(() => {
 			this.style.setProperty('--opacity', '1')
@@ -73,6 +75,7 @@ export class VideoLoading extends Element {
 	hideLoading() {
 		this.isActuallyVisible = false
 		this.style.setProperty('--opacity', '0')
+		this.style.setProperty('--pointer-events', 'none')
 
 		// Clear any existing timeout when hiding
 		if (this.hideTimeout) {
@@ -106,6 +109,7 @@ export class VideoLoading extends Element {
 			top: 0;
 			left: 0;
 			z-index: 9999;
+			pointer-events: var(--pointer-events, none);
 		}
 
 		.video-loading {
