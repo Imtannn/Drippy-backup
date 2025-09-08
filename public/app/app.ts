@@ -108,12 +108,24 @@ export class DrippyApp extends Element {
 				fallback=${() => html`<div class="loading">Loading...</div>`}
 				content=${() => html`
 					<show-when
-						condition=${() =>
-							store.view !== 'avatar' &&
-							store.view !== 'scene' &&
-							store.selectedAvatar &&
-							store.selectedSpace &&
-							store.isDrippySceneLoading.length > 0}
+						condition=${() => {
+							const shouldShow =
+								store.view !== 'avatar' &&
+								store.view !== 'scene' &&
+								store.selectedAvatar &&
+								store.selectedSpace &&
+								store.isDrippySceneLoading.length > 0
+
+							console.log('loading condition:', {
+								view: store.view,
+								hasAvatar: !!store.selectedAvatar,
+								hasSpace: !!store.selectedSpace,
+								loadingCount: store.isDrippySceneLoading.length,
+								shouldShow,
+							})
+
+							return shouldShow
+						}}
 						content=${() => html`
 							<div>
 								<video-loading isVisible="true"></video-loading>
