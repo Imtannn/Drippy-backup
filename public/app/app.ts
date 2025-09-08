@@ -19,7 +19,26 @@ import {store} from './store.js'
 import './success-view.js'
 import './template-view.js'
 
-const globalVideoLoading = document.getElementById('globalVideoLoading') as HTMLElement & {isVisible: boolean}
+// Control video loading for app page
+function hideAppVideoLoading() {
+	const loadingCover = document.getElementById('loadingCover')
+	const videoLoading = loadingCover?.querySelector('video-loading') as any
+
+	if (videoLoading) {
+		// Hide the video loading component
+		videoLoading.isVisible = false
+
+		// Listen for the video loading component's opacity transition to complete
+		const handleTransition = (e: TransitionEvent) => {
+			if (e.propertyName === 'opacity' && loadingCover) {
+				videoLoading.removeEventListener('transitionend', handleTransition)
+				loadingCover.classList.add('invisible')
+				loadingCover.addEventListener('transitionend', () => loadingCover.remove())
+			}
+		}
+		videoLoading.addEventListener('transitionend', handleTransition)
+	}
+}
 
 @element
 export class DrippyApp extends Element {
@@ -74,20 +93,10 @@ export class DrippyApp extends Element {
 				console.error('Error loading app', error)
 			} finally {
 				this.appLoaded = true
-			}
-		})
-
-		// Control global video loading based on app loading state
-		this.createEffect(() => {
-			if (globalVideoLoading) {
-				const shouldShowLoading =
-					store.view !== 'avatar' &&
-					store.view !== 'scene' &&
-					store.selectedAvatar &&
-					store.selectedSpace &&
-					store.isDrippySceneLoading.length > 0
-
-				globalVideoLoading.isVisible = shouldShowLoading || false
+				// App initialization complete - hide video loading when DOM is ready
+				requestAnimationFrame(() => {
+					hideAppVideoLoading()
+				})
 			}
 		})
 	}
@@ -98,6 +107,20 @@ export class DrippyApp extends Element {
 				condition=${() => this.appLoaded}
 				fallback=${() => html`<div class="loading">Loading...</div>`}
 				content=${() => html`
+					<show-when
+						condition=${() =>
+							store.view !== 'avatar' &&
+							store.view !== 'scene' &&
+							store.selectedAvatar &&
+							store.selectedSpace &&
+							store.isDrippySceneLoading.length > 0}
+						content=${() => html`
+							<div>
+								<video-loading isVisible="true"></video-loading>
+							</div>
+						`}
+					></show-when>
+
 					<div id="app-container">
 						<drippy-scene id="drippy-scene"></drippy-scene>
 
