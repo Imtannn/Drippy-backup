@@ -1,10 +1,10 @@
 import {css, element, Element, html, signal, type ElementAttributes} from 'lume'
 import {Meteor} from 'meteor/meteor'
 import '../app/app-buttons.js'
+import {currentUser} from '../app/store.js'
 import '../elements/back-button.js'
 import '../elements/logic/show-when.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
-import {currentUser} from '../app/store.js'
 
 const createAccountImg = '/images/create-account.webp'
 const step1Img = '/images/img-3-big.png'
@@ -46,7 +46,6 @@ export class OnboardingFlow extends Element {
 		})
 
 		this.createEffect(() => {
-			console.log('i am here in step3')
 			const searchParams = new URLSearchParams(window.location.search)
 			const stepFromUrl = searchParams.get('step') as OnboardingStep
 
