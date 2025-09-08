@@ -4,13 +4,11 @@ import {Meteor} from 'meteor/meteor'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../routes.js' // track page visits
-import {toSolidSignal} from '../utils.js'
+import {currentUser} from '../app/store.js'
 
 export type UserProfileAttributes = keyof {} // no attributes yet
 
 const elName = 'user-profile'
-
-const currentUser = toSolidSignal(() => Meteor.user())
 
 /**
  * Very basic example of a user profile, with a single input for modifying the
