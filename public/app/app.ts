@@ -19,27 +19,6 @@ import {store} from './store.js'
 import './success-view.js'
 import './template-view.js'
 
-// Control video loading for app page
-function hideAppVideoLoading() {
-	const loadingCover = document.getElementById('loadingCover')
-	const videoLoading = loadingCover?.querySelector('video-loading') as any
-
-	if (videoLoading) {
-		// Hide the video loading component
-		videoLoading.isVisible = false
-
-		// Listen for the video loading component's opacity transition to complete
-		const handleTransition = (e: TransitionEvent) => {
-			if (e.propertyName === 'opacity' && loadingCover) {
-				videoLoading.removeEventListener('transitionend', handleTransition)
-				loadingCover.classList.add('invisible')
-				loadingCover.addEventListener('transitionend', () => loadingCover.remove())
-			}
-		}
-		videoLoading.addEventListener('transitionend', handleTransition)
-	}
-}
-
 @element
 export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
@@ -93,10 +72,6 @@ export class DrippyApp extends Element {
 				console.error('Error loading app', error)
 			} finally {
 				this.appLoaded = true
-				// App initialization complete - hide video loading when DOM is ready
-				requestAnimationFrame(() => {
-					hideAppVideoLoading()
-				})
 			}
 		})
 	}
@@ -115,14 +90,6 @@ export class DrippyApp extends Element {
 								store.selectedAvatar &&
 								store.selectedSpace &&
 								store.isDrippySceneLoading.length > 0
-
-							console.log('loading condition:', {
-								view: store.view,
-								hasAvatar: !!store.selectedAvatar,
-								hasSpace: !!store.selectedSpace,
-								loadingCount: store.isDrippySceneLoading.length,
-								shouldShow,
-							})
 
 							return shouldShow
 						}}
