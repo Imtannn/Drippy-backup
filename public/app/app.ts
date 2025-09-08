@@ -19,10 +19,7 @@ import {store} from './store.js'
 import './success-view.js'
 import './template-view.js'
 
-// Hide the loading cover
-const loadingCover = document.getElementById('loadingCover')
-loadingCover?.classList.add('invisible')
-loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
+const globalVideoLoading = document.getElementById('globalVideoLoading') as HTMLElement & {isVisible: boolean}
 
 @element
 export class DrippyApp extends Element {
@@ -79,6 +76,20 @@ export class DrippyApp extends Element {
 				this.appLoaded = true
 			}
 		})
+
+		// Control global video loading based on app loading state
+		this.createEffect(() => {
+			if (globalVideoLoading) {
+				const shouldShowLoading =
+					store.view !== 'avatar' &&
+					store.view !== 'scene' &&
+					store.selectedAvatar &&
+					store.selectedSpace &&
+					store.isDrippySceneLoading.length > 0
+
+				globalVideoLoading.isVisible = shouldShowLoading || false
+			}
+		})
 	}
 
 	template = () => html`
@@ -87,20 +98,6 @@ export class DrippyApp extends Element {
 				condition=${() => this.appLoaded}
 				fallback=${() => html`<div class="loading">Loading...</div>`}
 				content=${() => html`
-					<show-when
-						condition=${() =>
-							store.view !== 'avatar' &&
-							store.view !== 'scene' &&
-							store.selectedAvatar &&
-							store.selectedSpace &&
-							store.isDrippySceneLoading.length > 0}
-						content=${() => html`
-							<div id="loadingCover">
-								<video-loading isVisible="true"></video-loading>
-							</div>
-						`}
-					></show-when>
-
 					<div id="app-container">
 						<drippy-scene id="drippy-scene"></drippy-scene>
 

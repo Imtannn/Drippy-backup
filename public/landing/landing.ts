@@ -1,15 +1,26 @@
 import {html} from 'lume'
-import '../routes.js' // track page visits
+import '../elements/avatar-selector.js'
+import '../elements/custom-button.js'
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
-import '../elements/custom-button.js'
-import '../elements/avatar-selector.js'
+import '../elements/video-loading.js'
+import '../routes.js' // track page visits
 
-// Hide the loading cover
-// const loadingCover = document.getElementById('loadingCover')
-// console.log('loadingCover', loadingCover)
-// loadingCover?.classList.add('invisible')
-// loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
+// Function to hide loading cover when content is ready
+function hideLoadingCover() {
+	const loadingCover = document.getElementById('loadingCover')
+	if (loadingCover) {
+		const videoLoading = loadingCover.querySelector('video-loading') as HTMLElement & {isVisible: boolean}
+		if (videoLoading) {
+			videoLoading.isVisible = false
+		}
+		// Fallback: hide the cover after transition
+		setTimeout(() => {
+			loadingCover.classList.add('invisible')
+			loadingCover.addEventListener('transitionend', () => loadingCover.remove())
+		}, 500)
+	}
+}
 
 // const logoUrl = new URL('../images/logo.svg', import.meta.url)
 const logoUrlDark = new URL('../images/landing/logo.png', import.meta.url)
@@ -630,6 +641,11 @@ const mainContent = html`
 
 document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
+
+// Wait for DOM to settle and images to start loading
+setTimeout(() => {
+	hideLoadingCover()
+}, 100)
 
 // Add smooth scroll behavior for header menu links
 function setupSmoothScroll() {
