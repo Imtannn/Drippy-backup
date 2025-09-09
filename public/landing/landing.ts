@@ -6,24 +6,17 @@ import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
 import '../routes.js' // track page visits
 
-// Control video loading for landing page
-function hideLandingVideoLoading() {
-	const loadingCover = document.getElementById('loadingCover')
-	const videoLoading = loadingCover?.querySelector('video-loading') as any
+// Show video loading initially
+function showVideoLoading() {
+	const videoLoadingElement = html`<video-loading></video-loading>`
+	document.body.appendChild(videoLoadingElement as any)
+	return videoLoadingElement
+}
 
-	if (videoLoading) {
-		// Hide the video loading component
-		videoLoading.isVisible = false
-
-		// Listen for the video loading component's opacity transition to complete
-		const handleTransition = (e: TransitionEvent) => {
-			if (e.propertyName === 'opacity' && loadingCover) {
-				videoLoading.removeEventListener('transitionend', handleTransition)
-				loadingCover.classList.add('invisible')
-				loadingCover.addEventListener('transitionend', () => loadingCover.remove())
-			}
-		}
-		videoLoading.addEventListener('transitionend', handleTransition)
+// Hide video loading when content is ready
+function hideVideoLoading(videoLoadingElement: any) {
+	if (videoLoadingElement && videoLoadingElement.parentNode) {
+		videoLoadingElement.remove()
 	}
 }
 
@@ -644,6 +637,10 @@ const mainContent = html`
 		</div>
 	` as Node
 
+// Show video loading immediately when landing page starts loading
+const videoLoadingElement = showVideoLoading()
+
+// First, append the content to DOM so we can track image loading
 document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
 
@@ -665,7 +662,8 @@ function waitForContentReady() {
 	Promise.all(imagePromises).then(() => {
 		// Use requestAnimationFrame to ensure DOM has updated
 		requestAnimationFrame(() => {
-			hideLandingVideoLoading()
+			// Hide video loading when everything is ready
+			hideVideoLoading(videoLoadingElement)
 		})
 	})
 }
