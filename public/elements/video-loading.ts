@@ -1,6 +1,4 @@
-import {booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
-
-type VideoLoadingAttributes = 'isVisible'
+import {css, Element, element, html, signal} from 'lume'
 
 const loadingVideoUrl = new URL('../videos/landing.mp4', import.meta.url).href
 
@@ -8,27 +6,10 @@ const loadingVideoUrl = new URL('../videos/landing.mp4', import.meta.url).href
 export class VideoLoading extends Element {
 	static elementName = 'video-loading'
 
-	@booleanAttribute isVisible = false
-
-	private hideTimeout: number | null = null
-	private isActuallyVisible = false
 	@signal private videoError = false
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		// Initialize visibility based on the actual isVisible prop
-		if (this.isVisible) {
-			this.showLoading()
-		}
-
-		this.createEffect(() => {
-			if (this.isVisible && !this.isActuallyVisible) {
-				this.showLoading()
-			} else if (!this.isVisible && this.isActuallyVisible) {
-				this.hideLoading()
-			}
-		})
 
 		// Set up video event listeners after template is rendered
 		setTimeout(() => {
@@ -55,34 +36,6 @@ export class VideoLoading extends Element {
 		}, 0)
 	}
 
-	showLoading() {
-		this.isActuallyVisible = true
-
-		// Clear any existing timeout when showing
-		if (this.hideTimeout) {
-			clearTimeout(this.hideTimeout)
-			this.hideTimeout = null
-		}
-
-		// Enable pointer events and show
-		this.style.setProperty('--pointer-events', 'auto')
-		// Small delay to ensure smooth transition instead of abrupt appearance
-		requestAnimationFrame(() => {
-			this.style.setProperty('--opacity', '1')
-		})
-	}
-
-	hideLoading() {
-		this.isActuallyVisible = false
-		this.style.setProperty('--opacity', '0')
-		this.style.setProperty('--pointer-events', 'none')
-
-		// Clear any existing timeout when hiding
-		if (this.hideTimeout) {
-			clearTimeout(this.hideTimeout)
-			this.hideTimeout = null
-		}
-	}
 
 	template = () => html`
 		<div class="video-loading">
@@ -98,9 +51,6 @@ export class VideoLoading extends Element {
 
 	css = css/*css*/ `
 		:host {
-			--opacity: 0;
-			opacity: var(--opacity);
-			transition: opacity 0.5s ease-in-out;
 			/* Full page loading */
 			display: block;
 			width: 100vw;
@@ -109,7 +59,7 @@ export class VideoLoading extends Element {
 			top: 0;
 			left: 0;
 			z-index: 9999;
-			pointer-events: var(--pointer-events, none);
+			pointer-events: auto;
 		}
 
 		.video-loading {
@@ -180,7 +130,7 @@ export class VideoLoading extends Element {
 declare module 'solid-js' {
 	namespace JSX {
 		interface IntrinsicElements {
-			[VideoLoading.elementName]: ElementAttributes<VideoLoading, VideoLoadingAttributes>
+			[VideoLoading.elementName]: any
 		}
 	}
 }
