@@ -1,5 +1,6 @@
 import type {ElementAttributes} from '@lume/element'
 import {css, Element, element, html, numberAttribute} from 'lume'
+import {currentUser} from '../app/store.js'
 import '../imports/collections/Users.js'
 import './login-ui.js'
 import './theme-switch.js'
@@ -23,7 +24,16 @@ export class HomePage extends Element {
 		})
 
 		this.createEffect(() => {
-			window.location.href = '/onboarding?step=step3'
+			const user = currentUser()
+			// If undefined, means the user is still loading
+			if (user === undefined) return
+
+			// If null, means the user is logged out
+			if (user === null) {
+				window.location.href = '/onboarding?step=step3'
+			} else {
+				window.location.href = '/app?avatar=female&scene=G%E1%BA%A4P'
+			}
 		})
 	}
 

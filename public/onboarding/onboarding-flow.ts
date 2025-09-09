@@ -1,7 +1,7 @@
 import {css, element, Element, html, signal, type ElementAttributes} from 'lume'
 import {Meteor} from 'meteor/meteor'
-import {Tracker} from 'meteor/tracker'
 import '../app/app-buttons.js'
+import {currentUser} from '../app/store.js'
 import '../elements/back-button.js'
 import '../elements/logic/show-when.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
@@ -26,8 +26,6 @@ export class OnboardingFlow extends Element {
 	@signal errorMessage = ''
 	@signal isUserLoggedIn = false
 	@signal previousStep: OnboardingStep | null = null
-
-	#hasProcessedLogin = false
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -59,15 +57,18 @@ export class OnboardingFlow extends Element {
 		})
 
 		// Track login state and handle step visibility
-		const computation = Tracker.autorun(async () => {
-			const user = await Meteor.userAsync()
-			const userId = user?._id
-			this.isUserLoggedIn = !!userId
+		this.createEffect(async () => {
+			const user = currentUser()
 
-			if (userId) {
+			// If undefined, means the user is still loading
+			if (user === undefined) return
+
+			this.isUserLoggedIn = user !== null
+
+			if (user !== null) {
 				await this.#loadUserProfile()
-				// If user just logged in and is on step3, advance to step4
-				if (!this.#hasProcessedLogin && this.currentStep === 'step3') {
+				// If user is logged in and on step3, go directly to app
+				if (this.currentStep === 'step3') {
 					// if (this.username && this.dateOfBirth) {
 					// 	this.#goToApp()
 					// 	return
@@ -80,17 +81,6 @@ export class OnboardingFlow extends Element {
 					this.#goToApp()
 					return
 				}
-				this.#hasProcessedLogin = true
-			} else {
-				// User logged out, reset the flag
-				this.#hasProcessedLogin = false
-			}
-
-			// If user is logged in and on step3, skip to step1
-			if (this.isUserLoggedIn && this.currentStep === 'step3') {
-				this.currentStep = 'step1'
-				this.#updateUrl('step1')
-				return
 			}
 
 			// If user is logged in and on step4, check if they came from step3 (login flow)
@@ -101,11 +91,6 @@ export class OnboardingFlow extends Element {
 					return
 				}
 			}
-		})
-
-		// Clean up Tracker computation when component is destroyed
-		this.createEffect(() => {
-			return () => computation.stop()
 		})
 	}
 
@@ -178,7 +163,7 @@ export class OnboardingFlow extends Element {
 	}
 
 	#loadUserProfile = async () => {
-		const user = await Meteor.userAsync()
+		const user = currentUser()
 		if (user?.profile) {
 			// Load existing username and dateOfBirth if they exist
 			if (user.profile.username) {

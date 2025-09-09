@@ -2,35 +2,10 @@ import {createMutable} from 'solid-js/store'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {AppRoute, Avatar, Space, CustomMeasurement} from '../types/types.js'
+import type {AppRoute, Avatar, Space, CustomMeasurement, OrderStatus, ShippingAddress, OrderState} from '../types/types.js'
 import {fabrics} from '../consts/fabrics.js'
 import {toSolidSignal} from '../utils.js'
 import {Meteor} from 'meteor/meteor'
-
-export type OrderStatus = 'idle' | 'submitting' | 'success' | 'error'
-
-export type ShippingAddress = {
-	firstName: string
-	lastName: string
-	address: string
-	apartment: string
-	city: string
-	postalCode: string
-	phone: string
-}
-
-export type OrderState = {
-	status: OrderStatus
-	error: string | null
-	productName: string
-	selectedSize: string
-	quantity: number
-	email: string
-	customerEmail: string
-	customerFirstName: string
-	customerLastName: string
-	shippingAddress: ShippingAddress
-}
 
 export const store = createMutable({
 	// key is the block category, value is the block

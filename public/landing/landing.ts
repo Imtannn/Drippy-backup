@@ -1,15 +1,31 @@
 import {html} from 'lume'
-import '../routes.js' // track page visits
+import '../elements/avatar-selector.js'
+import '../elements/custom-button.js'
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
-import '../elements/custom-button.js'
-import '../elements/avatar-selector.js'
+import '../elements/video-loading.js'
+import '../routes.js' // track page visits
 
-// Hide the loading cover
-const loadingCover = document.getElementById('loadingCover')
-console.log('loadingCover', loadingCover)
-loadingCover?.classList.add('invisible')
-loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
+// Control video loading for landing page
+function hideLandingVideoLoading() {
+	const loadingCover = document.getElementById('loadingCover')
+	const videoLoading = loadingCover?.querySelector('video-loading') as any
+
+	if (videoLoading) {
+		// Hide the video loading component
+		videoLoading.isVisible = false
+
+		// Listen for the video loading component's opacity transition to complete
+		const handleTransition = (e: TransitionEvent) => {
+			if (e.propertyName === 'opacity' && loadingCover) {
+				videoLoading.removeEventListener('transitionend', handleTransition)
+				loadingCover.classList.add('invisible')
+				loadingCover.addEventListener('transitionend', () => loadingCover.remove())
+			}
+		}
+		videoLoading.addEventListener('transitionend', handleTransition)
+	}
+}
 
 // const logoUrl = new URL('../images/logo.svg', import.meta.url)
 const logoUrlDark = new URL('../images/landing/logo.png', import.meta.url)
@@ -227,9 +243,15 @@ const mainContent = html`
 									<div class="showcase__item">
 										<div class="showcase__background">
 											<div class="showcase__controls">
-												<img class="showcase__avatar-option" src=${matImage1} alt="Material option 1 for customization" />
-												<img class="showcase__avatar-option" src=${matImage2} alt="Material option 2 for customization" />
-												<img class="showcase__avatar-option" src=${matImage3} alt="Material option 3 for customization" />
+												<div class="showcase__avatar-option">
+													<img src=${matImage1} alt="Material option 1 for customization" />
+												</div>
+												<div class="showcase__avatar-option">
+													<img src=${matImage2} alt="Material option 2 for customization" />
+												</div>
+												<div class="showcase__avatar-option">
+													<img src=${matImage3} alt="Material option 3 for customization" />
+												</div>
 											</div>
 
 											<avatar-selector target-model=".showcase__avatar-model" class="showcase__selector"></avatar-selector>
@@ -624,6 +646,32 @@ const mainContent = html`
 
 document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
+
+// Wait for all images and content to be fully loaded
+function waitForContentReady() {
+	// Check if all images are loaded
+	const images = document.querySelectorAll('img')
+	const imagePromises = Array.from(images).map(img => {
+		if (img.complete) {
+			return Promise.resolve()
+		}
+		return new Promise(resolve => {
+			img.addEventListener('load', resolve)
+			img.addEventListener('error', resolve) // Still resolve on error to not block
+		})
+	})
+
+	// Wait for images + a small delay for layout settling
+	Promise.all(imagePromises).then(() => {
+		// Use requestAnimationFrame to ensure DOM has updated
+		requestAnimationFrame(() => {
+			hideLandingVideoLoading()
+		})
+	})
+}
+
+// Start waiting for content to be ready
+waitForContentReady()
 
 // Add smooth scroll behavior for header menu links
 function setupSmoothScroll() {

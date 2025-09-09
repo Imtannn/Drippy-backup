@@ -1,65 +1,83 @@
-import {booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
+import {booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 
 type VideoLoadingAttributes = 'isVisible'
 
-const loadingUrl = new URL('../videos/logogif.gif', import.meta.url).href
+const loadingVideoUrl = new URL('../videos/landing.mp4', import.meta.url).href
 
 @element
 export class VideoLoading extends Element {
 	static elementName = 'video-loading'
 
 	@booleanAttribute isVisible = false
- 
+
 	private hideTimeout: number | null = null
 	private isActuallyVisible = false
+	@signal private videoError = false
 
 	connectedCallback() {
 		super.connectedCallback()
 
-		console.log('VideoLoading connected, isVisible:', this.isVisible)
-
-		// Force show loading cho landing page
-		this.isVisible = true
+		// Initialize visibility based on the actual isVisible prop
 		if (this.isVisible) {
-			console.log('Auto showing loading...')
 			this.showLoading()
 		}
 
 		this.createEffect(() => {
-			console.log('Effect triggered, isVisible:', this.isVisible, 'isActuallyVisible:', this.isActuallyVisible)
 			if (this.isVisible && !this.isActuallyVisible) {
 				this.showLoading()
 			} else if (!this.isVisible && this.isActuallyVisible) {
 				this.hideLoading()
 			}
 		})
+
+		// Set up video event listeners after template is rendered
+		setTimeout(() => {
+			const video = this.shadowRoot?.querySelector('.loading-video') as HTMLVideoElement
+			if (video) {
+				video.addEventListener('loadeddata', () => {
+					this.videoError = false
+				})
+
+				video.addEventListener('error', e => {
+					console.error('[video-loading] Video error:', e, video.error)
+					this.videoError = true
+				})
+
+				video.addEventListener('canplay', () => {
+					if (video.paused) {
+						video.play().catch(e => {
+							console.warn('[video-loading] Video autoplay failed:', e)
+							this.videoError = true
+						})
+					}
+				})
+			}
+		}, 0)
 	}
 
 	showLoading() {
 		this.isActuallyVisible = true
-		this.style.setProperty('--opacity', '1')
 
+		// Clear any existing timeout when showing
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout)
 			this.hideTimeout = null
 		}
 
-		// this.hideTimeout = setTimeout(() => {
-		// 	console.log('Auto hiding after', this.minDisplayTime, 'ms at:', Date.now())
-		// 	this.isVisible = false
-
-		// 	setTimeout(() => {
-		// 		if (this.parentNode) {
-		// 			this.parentNode.removeChild(this)
-		// 		}
-		// 	}, 500)
-		// }, this.minDisplayTime) as unknown as number
+		// Enable pointer events and show
+		this.style.setProperty('--pointer-events', 'auto')
+		// Small delay to ensure smooth transition instead of abrupt appearance
+		requestAnimationFrame(() => {
+			this.style.setProperty('--opacity', '1')
+		})
 	}
 
 	hideLoading() {
 		this.isActuallyVisible = false
 		this.style.setProperty('--opacity', '0')
+		this.style.setProperty('--pointer-events', 'none')
 
+		// Clear any existing timeout when hiding
 		if (this.hideTimeout) {
 			clearTimeout(this.hideTimeout)
 			this.hideTimeout = null
@@ -68,8 +86,11 @@ export class VideoLoading extends Element {
 
 	template = () => html`
 		<div class="video-loading">
-			<img class="loading-gif" src=${loadingUrl} alt="Loading..." />
-			<div class="fallback-loader">
+			<video class="loading-video" autoplay muted loop playsinline>
+				<source src=${loadingVideoUrl} type="video/mp4" />
+			</video>
+			<!-- Fallback spinner shown when video fails to load -->
+			<div class="fallback-loader" style=${() => (this.videoError ? 'display: flex' : 'display: none')}>
 				<div class="spinner"></div>
 			</div>
 		</div>
@@ -88,6 +109,7 @@ export class VideoLoading extends Element {
 			top: 0;
 			left: 0;
 			z-index: 9999;
+			pointer-events: var(--pointer-events, none);
 		}
 
 		.video-loading {
@@ -100,14 +122,15 @@ export class VideoLoading extends Element {
 			background: #010304;
 		}
 
-		.loading-gif {
-			max-width: 100%;
-			max-height: 100%;
-			width: auto;
-			height: auto;
-			position: relative;
+		.loading-video {
+			width: 100vw;
+			height: 100vh;
+			position: absolute;
+			top: 0;
+			left: 0;
 			z-index: 10;
-			object-fit: contain;
+			object-fit: cover;
+			object-position: center;
 		}
 
 		.fallback-loader {
