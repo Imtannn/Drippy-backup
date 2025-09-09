@@ -88,6 +88,11 @@ WebApp.rawHandlers.use(
 			res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*')
 			res.setHeader('Vary', 'Origin')
 
+			// Allow OAuth popup communication only for OAuth endpoints
+			if (req.url?.includes('/_oauth/') || req.url === '/') {
+				res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups')
+			}
+
 			// TODO maybe we only need to set this for documents (not scripts,
 			// images, etc).
 			res.setHeader(

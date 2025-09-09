@@ -93,11 +93,7 @@ export class DrippyApp extends Element {
 
 							return shouldShow
 						}}
-						content=${() => html`
-							<div>
-								<video-loading isVisible="true"></video-loading>
-							</div>
-						`}
+						content=${() => html`<video-loading></video-loading>`}
 					></show-when>
 
 					<div id="app-container">
