@@ -5,6 +5,7 @@ export type Fabric = {
 	baseColor?: string
 	displacement?: string
 	roughness?: string
+	alpha?: string
 	materialName: string
 	category?:
 		| 'Cotton'

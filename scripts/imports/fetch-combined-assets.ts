@@ -203,9 +203,10 @@ async function processTemplateFolder(
 		file =>
 			file.mimeType !== 'application/vnd.google-apps.folder' &&
 			(file.name.toLowerCase().includes('normal') ||
-				file.name.toLowerCase().includes('basecolor') ||
+				file.name.toLowerCase().includes('base') ||
 				file.name.toLowerCase().includes('displace') ||
 				file.name.toLowerCase().includes('rough') ||
+				file.name.toLowerCase().includes('opacity') ||
 				file.name.toLowerCase().includes('(render)')),
 	)
 
@@ -383,6 +384,7 @@ function generateFabricData(fabricsData: TODO[], brand: string): TODO {
 			baseColor: fabric.baseColor,
 			displacement: fabric.displacement,
 			roughness: fabric.roughness,
+			alpha: fabric.alpha,
 			materialName: fabric.materialName,
 			category: fabric.category,
 			templateCategory: fabric.templateCategory,
@@ -592,6 +594,8 @@ async function processMaterialFolder(materialFolder: TODO, categoryName: string,
 				textureUrls.displacement = fileS3Url
 			} else if (fileName.includes('rough')) {
 				textureUrls.roughness = fileS3Url
+			} else if (fileName.includes('opacity')) {
+				textureUrls.alpha = fileS3Url
 			}
 
 			console.log(`       ✅ Uploaded texture ${file.name}`)
