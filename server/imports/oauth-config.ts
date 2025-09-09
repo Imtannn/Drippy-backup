@@ -10,7 +10,7 @@ Meteor.startup(async () => {
 				$set: {
 					clientId: process.env.GOOGLE_CLIENT_ID,
 					secret: process.env.GOOGLE_CLIENT_SECRET,
-					loginStyle: 'popup',
+					loginStyle: 'redirect',
 				},
 			},
 		)
@@ -23,7 +23,7 @@ Meteor.startup(async () => {
 				$set: {
 					appId: process.env.FACEBOOK_APP_ID,
 					secret: process.env.FACEBOOK_APP_SECRET,
-					loginStyle: 'popup',
+					loginStyle: 'redirect',
 				},
 			},
 		)
