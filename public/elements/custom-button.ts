@@ -192,8 +192,7 @@ export class CustomButton extends Element {
 
 		/* Focus styles */
 		.custom-button:focus {
-			outline: 2px solid #007aff;
-			outline-offset: 2px;
+			outline: none;
 		}
 
 		/* Responsive */
