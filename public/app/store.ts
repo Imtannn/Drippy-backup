@@ -46,6 +46,8 @@ export const store = createMutable({
 	isShowAvatar: true,
 	isShowScene: true,
 	isDrippySceneLoading: [] as string[],
+	loadingBlocks: [] as string[],
+	loadingMaterials: [] as string[],
 
 	// Order-related state
 	order: {
@@ -167,9 +169,6 @@ export const store = createMutable({
 		this.selectedBlocks = newBlocks
 		this.replaceSelectedFabrics = newFabrics
 	},
-	set removeSelectedFabrics(fabricData: {blockCategory: BlockCategory; templateCategory: TemplateCategory}) {
-		this.selectedFabrics.get(fabricData.templateCategory)?.delete(fabricData.blockCategory)
-	},
 	set replaceSelectedFabrics(
 		fabricData:
 			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}
@@ -210,18 +209,7 @@ export const store = createMutable({
 				newFabrics.set(templateCategory, templateFabrics)
 			}
 
-			// Check if the fabric for this block category already exists in this template
-			if (templateFabrics.has(blockCategory)) {
-				// if it exists, check if the fabric is the same, if so, remove it
-				if (templateFabrics.get(blockCategory)?._id === fabric._id) {
-					templateFabrics.delete(blockCategory)
-				} else {
-					templateFabrics.set(blockCategory, fabric)
-				}
-			} else {
-				// if not, add it
-				templateFabrics.set(blockCategory, fabric)
-			}
+			templateFabrics.set(blockCategory, fabric)
 
 			// If template has no fabrics left, remove the template entry
 			if (templateFabrics.size === 0) {
