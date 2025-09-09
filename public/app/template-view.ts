@@ -1,10 +1,10 @@
-import {css, Element, element, html, signal, For, Show, type ElementAttributes, Index} from 'lume'
+import {css, Element, element, html, signal, For, Show, type ElementAttributes, Index, untrack} from 'lume'
 import type {Accessor} from 'solid-js'
 import {store} from './store.js'
 import {templates} from '../consts/templates.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {Block} from '../types/block.js'
-import {getBlocksForTemplate} from '../consts/relationships.js'
+import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import './app-buttons.js'
 import './item-card.js'
 import '../elements/bottom-sheet.js'
@@ -15,6 +15,7 @@ import '../elements/back-button.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
 import '../elements/cube-button.js'
+import {preloadImage} from '../utils.js'
 
 type TemplateViewAttributes = keyof {}
 
@@ -69,8 +70,25 @@ export class TemplateView extends Element {
 		})
 	}
 
-	#onItemClick = (e: CustomEvent) => {
-		const template = e.detail.itemValue
+	#onItemClick = async (e: CustomEvent) => {
+		const template = e.detail.itemValue as Template
+
+		const templateFabric = getFabricForTemplate(template, 'moidien')
+
+		const fabricsImgUrls = [
+			templateFabric?.normal,
+			templateFabric?.baseColor,
+			templateFabric?.displacement,
+			templateFabric?.roughness,
+			templateFabric?.alpha,
+		].filter(Boolean) as string[]
+
+		if (fabricsImgUrls.length > 0) {
+			const loadingId = `${templateFabric!._id}-${Date.now()}`
+			store.loadingMaterials = [...untrack(() => store.loadingMaterials), loadingId]
+			await Promise.all(fabricsImgUrls.map(imgUrl => preloadImage(imgUrl)))
+			store.loadingMaterials = untrack(() => store.loadingMaterials).filter(id => id !== loadingId)
+		}
 
 		// Set the selected template using the new Map structure
 		store.setSelectedTemplates = template

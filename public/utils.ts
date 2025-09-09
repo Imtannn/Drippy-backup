@@ -286,3 +286,14 @@ export function hasDescendant(a: MaybeElement, b: MaybeElement): boolean {
 	for (const parent of ancestorElements(b)) if (a === parent) return true
 	return false
 }
+
+export async function preloadImage(image: string) {
+	return new Promise<void>(resolve => {
+		const img = new Image()
+		img.src = image
+		img.onload = () => {
+			img.remove()
+			resolve()
+		}
+	})
+}

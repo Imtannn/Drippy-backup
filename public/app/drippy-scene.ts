@@ -35,8 +35,6 @@ export class DrippyScene extends Element {
 	static elementName = 'drippy-scene'
 
 	@signal isDark = false
-	@signal loadingBlocks: string[] = []
-	@signal loadingMaterials: string[] = []
 	@signal sceneUrl = ''
 	@signal renderBlocks: RenderBlock[] = []
 
@@ -87,7 +85,7 @@ export class DrippyScene extends Element {
 		if (!fabric || !root) return
 
 		const loadingId = blockId || `${fabric._id}-${Date.now()}`
-		this.loadingMaterials = [...untrack(() => this.loadingMaterials), loadingId]
+		store.loadingMaterials = [...untrack(() => store.loadingMaterials), loadingId]
 		const repete: [number, number] = [60 / 3, 60 / 3]
 		const offset: [number, number] = [1, 1]
 		const rotate = 0
@@ -97,15 +95,16 @@ export class DrippyScene extends Element {
 			.map((el: any) => Math.abs(el))
 		const coef = arr.length > 0 ? this.#getCoef(arr) : 1
 
-		const [baseColorTex, normalTex, displacementTex, roughnessTex] = await Promise.all([
+		const [baseColorTex, normalTex, displacementTex, roughnessTex, alphaTex] = await Promise.all([
 			this.#getTexture(fabric.baseColor || '', repete, coef, offset, rotate),
 			this.#getTexture(fabric.normal || '', repete, coef, offset, rotate),
 			this.#getTexture(fabric.displacement || '', repete, coef, offset, rotate),
 			this.#getTexture(fabric.roughness || '', repete, coef, offset, rotate),
+			this.#getTexture(fabric.alpha || '', repete, coef, offset, rotate),
 		])
 
 		if (isCanceled()) {
-			this.loadingMaterials = untrack(() => this.loadingMaterials).filter(id => id !== loadingId)
+			store.loadingMaterials = untrack(() => store.loadingMaterials).filter(id => id !== loadingId)
 			return
 		}
 
@@ -126,6 +125,7 @@ export class DrippyScene extends Element {
 				// material.displacementMap = displacementTex
 				material.roughnessMap = roughnessTex
 				material.roughnessIntensity = 1
+				material.alphaMap = alphaTex
 				material.transparent = true
 				material.emissive = new THREE.Color(0x000000)
 				material.emissiveIntensity = 0
@@ -142,7 +142,7 @@ export class DrippyScene extends Element {
 			}
 		})
 
-		this.loadingMaterials = untrack(() => this.loadingMaterials).filter(id => id !== loadingId)
+		store.loadingMaterials = untrack(() => store.loadingMaterials).filter(id => id !== loadingId)
 	}
 
 	// Reset materials to default state (no textures)
@@ -302,8 +302,8 @@ export class DrippyScene extends Element {
 			const avatarId = 'avatar'
 
 			if (!behavior?.model && avatar.three) {
-				if (!untrack(() => this.loadingBlocks.includes(avatarId))) {
-					this.loadingBlocks = [...untrack(() => this.loadingBlocks), avatarId]
+				if (!untrack(() => store.loadingBlocks.includes(avatarId))) {
+					store.loadingBlocks = [...untrack(() => store.loadingBlocks), avatarId]
 				}
 
 				if (!untrack(() => store.isDrippySceneLoading.includes(avatarId))) {
@@ -311,7 +311,7 @@ export class DrippyScene extends Element {
 				}
 
 				const loaded = () => {
-					this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== avatarId)
+					store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== avatarId)
 					store.removeIsDrippySceneLoading = avatarId
 				}
 
@@ -334,8 +334,8 @@ export class DrippyScene extends Element {
 			const sceneId = 'scene'
 
 			if (!behavior?.model && scene.three) {
-				if (!untrack(() => this.loadingBlocks.includes(sceneId))) {
-					this.loadingBlocks = [...untrack(() => this.loadingBlocks), sceneId]
+				if (!untrack(() => store.loadingBlocks.includes(sceneId))) {
+					store.loadingBlocks = [...untrack(() => store.loadingBlocks), sceneId]
 				}
 				if (!untrack(() => store.isDrippySceneLoading.includes(sceneId))) {
 					store.addIsDrippySceneLoading = sceneId
@@ -343,7 +343,7 @@ export class DrippyScene extends Element {
 			}
 
 			const loaded = () => {
-				this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== sceneId)
+				store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== sceneId)
 				store.removeIsDrippySceneLoading = sceneId
 			}
 
@@ -358,7 +358,7 @@ export class DrippyScene extends Element {
 			const totalBlockCount = this.renderBlocks.length
 
 			if (totalBlockCount === 0) {
-				this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== 'avatar')
+				store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== 'avatar')
 				return
 			}
 
@@ -369,12 +369,12 @@ export class DrippyScene extends Element {
 				const blockId = `block-${index}`
 
 				if (!behavior?.model && el.three) {
-					if (!untrack(() => this.loadingBlocks.includes(blockId))) {
-						this.loadingBlocks = [...untrack(() => this.loadingBlocks), blockId]
+					if (!untrack(() => store.loadingBlocks.includes(blockId))) {
+						store.loadingBlocks = [...untrack(() => store.loadingBlocks), blockId]
 					}
 
 					const loaded = () => {
-						this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== blockId)
+						store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== blockId)
 					}
 
 					el?.on?.('MODEL_LOAD', loaded)
@@ -430,7 +430,9 @@ export class DrippyScene extends Element {
 			let shouldCancel = false
 			const isCanceled = () => shouldCancel
 
-			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
+			const models: GltfModel[] = Array.from(
+				this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? [],
+			) as any[]
 			const handlers: Array<{el: any; fn: () => void}> = []
 
 			// Process each model using its data-blockid to find the correct fabric
@@ -458,10 +460,10 @@ export class DrippyScene extends Element {
 					if (isCanceled()) return
 
 					if (fabric) {
-						this.#applyFabricToThreeObject((el as any).three, fabric, isCanceled, loadingId)
+						this.#applyFabricToThreeObject(el.three, fabric, isCanceled, loadingId)
 					} else {
 						// Reset to default material if no fabric selected for this block category
-						this.#resetMaterialsToDefault((el as any).three)
+						this.#resetMaterialsToDefault(el.three)
 					}
 				}
 
@@ -519,7 +521,7 @@ export class DrippyScene extends Element {
 				<app-buttons-left layout="bottom">
 					<app-buttons-group>
 						<loading-indicator
-							is-visible=${() => this.loadingBlocks.length > 0 || this.loadingMaterials.length > 0}
+							is-visible=${() => store.loadingBlocks.length > 0 || store.loadingMaterials.length > 0}
 						></loading-indicator>
 					</app-buttons-group>
 				</app-buttons-left>
