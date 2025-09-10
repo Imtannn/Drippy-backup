@@ -14,7 +14,7 @@ export class SuccessView extends Element {
 	}
 
 	#onBackButtonClick = () => {
-		store.navigateTo = 'order'
+		store.navigateTo = 'order-items'
 	}
 
 	#onHomeButtonClick = () => {
