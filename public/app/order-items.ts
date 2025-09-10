@@ -63,6 +63,7 @@ export class OrderItems extends Element {
 
 		newSelectedItems.set(category, !currentlySelected)
 		this.selectedOrderItems = newSelectedItems
+		console.log('🔴 selectedOrderItems', this.selectedOrderItems)
 	}
 
 	#onShareClick = () => {
@@ -102,42 +103,42 @@ export class OrderItems extends Element {
 
 	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
 		<div class="order-container">
-			<div class="items-section">
-
-				<!-- Items List -->
-				<div class="items-list">
-					<${For} each=${() => Array.from(store.selectedTemplates.entries())}>
-					${([category, template]: [TemplateCategory, Template]) => html`
-						<div class="item-row">
-							<div class="item-checkbox">
-								<input
-									type="checkbox"
-									id="item-${category}"
-									checked=${() => this.selectedOrderItems.get(category) || false}
-									onchange=${() => this.#onItemToggle(category)}
+			<!-- Items List -->
+			<div class="items-list">
+				<${For} each=${() => Array.from(store.selectedTemplates.entries())}>
+				${([category, template]: [TemplateCategory, Template]) => html`
+					<div class="item-row">
+						<div
+							class="checkbox-icon"
+							classList=${() => ({checked: this.selectedOrderItems.get(category) || false})}
+							onclick=${() => this.#onItemToggle(category)}
+						>
+							<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<rect y="0.569336" width="15" height="15" rx="7.5" fill="#B897FD" />
+								<path
+									d="M11 5.56934L7.64637 9.63434C7.24639 10.1192 6.50361 10.1192 6.10363 9.63434L5 8.29661"
+									stroke="white"
+									stroke-width="1.2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
 								/>
-								<label for="item-${category}"></label>
-							</div>
-							<div class="item-content">
-								<div class="item-image">
-									<img src=${template.thumb} alt=${template.name} />
-								</div>
-								<div class="item-details">
-									<div class="item-name">Product Name</div>
-									<div class="item-price-container">
-										<div class="item-price" classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}>
-											€ 125.00
-										</div>
-										<div class="item-moq" classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}>
-											MOQ: 5pcs
-										</div>
-									</div>
-								</div>
+							</svg>
+						</div>
+						<div class="item-image">
+							<img src=${template.thumb} alt=${template.name} />
+						</div>
+						<div class="item-details">
+							<div class="item-name">Product name</div>
+							<div class="item-price-row">
+								<span class="item-price">$125.00</span>
+								<span class="item-moq" classList=${() => ({visible: store.selectedSpace?.isWholesale})}
+									>MOQ: 5 pcs</span
+								>
 							</div>
 						</div>
-					`}
-					</>
-				</div>
+					</div>
+				`}
+				</>
 			</div>
 
 			<!-- Spacer to push button to bottom -->
@@ -151,6 +152,92 @@ export class OrderItems extends Element {
 	css = css/*css*/ `
 		${appStyles}
 		${orderStyles}
+
+		.items-list {
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+			padding-top: 20px;
+		}
+
+		.item-row {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+		}
+
+		.checkbox-icon {
+			cursor: pointer;
+			opacity: 0.1;
+			transition: opacity 0.2s ease;
+		}
+
+		.checkbox-icon.checked {
+			opacity: 1 !important;
+		}
+
+		.checkbox-icon:not(.checked) {
+			opacity: 0.1 !important;
+		}
+
+		.checkbox-icon:hover:not(.checked) {
+			opacity: 0.3;
+		}
+
+		.checkbox-icon.checked:hover {
+			opacity: 1;
+		}
+
+		.item-image {
+			width: 60px;
+			height: 60px;
+			border-radius: 8px;
+			overflow: hidden;
+			background: #f5f5f5;
+		}
+
+		.item-image img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		.item-details {
+			flex: 1;
+		}
+
+		.item-name {
+			font-size: 16px;
+			font-weight: 600;
+			color: #000;
+			margin-bottom: 4px;
+		}
+
+		.item-price-row {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.item-price {
+			font-size: 14px;
+			color: #666;
+		}
+
+		.item-moq {
+			font-size: 14px;
+			color: #666;
+			opacity: 0;
+		}
+
+		.item-moq.visible {
+			opacity: 1;
+		}
+
+		.button-spacer {
+			flex: 1;
+			min-height: 40px;
+		}
 	`
 }
 

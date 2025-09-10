@@ -23,18 +23,7 @@ export class OrderView extends Element {
 
 	@eventAttribute onclick = null
 
-	#onSizeButtonClick = (size: string) => {
-		if (size === 'Custom') {
-			store.navigateTo = 'custom-measurement'
-		} else {
-			// Clear custom measurement when selecting a regular size
-			store.customMeasurement = null
-			store.setSelectedSize = size
-		}
-	}
-
 	#onBackButtonClick = () => {
-		console.log('🔴 navigateTo order-size', store.view)
 		store.navigateTo = 'order-size'
 	}
 
@@ -224,7 +213,6 @@ export class OrderView extends Element {
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-snap="0.88">
 			<div class="order-container">
-				<back-button onclick=${this.#onBackButtonClick}></back-button>
 				<!-- Shipping Address -->
 				<div class="shipping-section">
 					<h3 class="section-title">Shipping address</h3>
