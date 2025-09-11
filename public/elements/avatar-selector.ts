@@ -5,7 +5,8 @@ interface AvatarOption {
 	label: string
 	image: string
 }
-
+const maleAvatar = new URL('../images/landing/male.png', import.meta.url).href
+const femaleAvatar = new URL('../images/landing/female.png', import.meta.url).href
 /**
  * Avatar Selector Custom Element with dropdown functionality
  * Allows users to select between different avatar options
@@ -21,19 +22,19 @@ export class AvatarSelector extends Element {
 	private selectedOption: AvatarOption = {
 		value: 'male',
 		label: 'Male avatar',
-		image: 'https://c.animaapp.com/mejigj1rAIvhIh/img/em-underwear-1.png',
+		image: maleAvatar,
 	}
 
 	private options: AvatarOption[] = [
 		{
 			value: 'male',
 			label: 'Male avatar',
-			image: 'https://c.animaapp.com/mejigj1rAIvhIh/img/em-underwear-1.png',
+			image: maleAvatar,
 		},
 		{
 			value: 'female',
 			label: 'Female avatar',
-			image: 'https://c.animaapp.com/mejigj1rAIvhIh/img/anh-underwear-1.png',
+			image: femaleAvatar,
 		},
 	]
 
@@ -228,7 +229,7 @@ export class AvatarSelector extends Element {
 
 	template = () => html`
 		<div class="avatar-selector__wrapper" onclick=${this.handleToggle}>
-			<div class="avatar-selector__dot"></div>
+			<img class="avatar-selector__avatar" src=${this.selectedOption.image} alt=${this.selectedOption.label} />
 			<span class="avatar-selector__text">${this.selectedOption.label}</span>
 			<img
 				class="avatar-selector__icon"
@@ -246,7 +247,7 @@ export class AvatarSelector extends Element {
 							this.handleSelect(option)
 						}}
 					>
-						<div class="avatar-selector__option-dot"></div>
+						<img class="avatar-selector__option-avatar" src=${option.image} alt=${option.label} />
 						<span>${option.label}</span>
 						${option.value === this.selectedOption.value ? html`<span class="checkmark">✓</span>` : ''}
 					</div>
@@ -271,7 +272,7 @@ export class AvatarSelector extends Element {
 			overflow: visible;
 			cursor: pointer;
 			transition: all 0.3s ease;
-			z-index: 100;
+			z-index: 9;
 			min-width: 120px;
 		}
 
@@ -291,11 +292,11 @@ export class AvatarSelector extends Element {
 			padding: 15px;
 		}
 
-		.avatar-selector__dot {
-			width: 8px;
-			height: 8px;
-			background-color: #8b5cf6;
+		.avatar-selector__avatar {
+			width: 24px;
+			height: 24px;
 			border-radius: 50%;
+			object-fit: cover;
 			flex-shrink: 0;
 		}
 
@@ -365,11 +366,11 @@ export class AvatarSelector extends Element {
 			background-color: #f1f5f9;
 		}
 
-		.avatar-selector__option-dot {
-			width: 8px;
-			height: 8px;
-			background-color: #8b5cf6;
+		.avatar-selector__option-avatar {
+			width: 20px;
+			height: 20px;
 			border-radius: 50%;
+			object-fit: cover;
 			flex-shrink: 0;
 		}
 

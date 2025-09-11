@@ -231,7 +231,7 @@ p {
 .landing-page-desktop .statistics__grid {
 	display: flex;
 	align-items: center;
-	gap: 47px;
+	gap: 40px;
 	position: relative;
 	align-self: stretch;
 	width: 100%;
@@ -242,7 +242,6 @@ p {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	max-width: 300px;
 	align-items: center;
 	gap: 18px;
 	position: relative;
@@ -781,7 +780,7 @@ p {
 	flex: 0 0 auto;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
-	border-color: var(--uiColorBorderColor);
+	border-color: var(--uiColorSecondaryDarkGrey);
 }
 
 .landing-page-desktop .pricing__plan-name {
@@ -846,7 +845,7 @@ p {
 	flex: 0 0 auto;
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
-	border-color: var(--uiColorDarkGrey);
+	border-color: var(--uiColorSecondaryDarkGrey);
 }
 
 .landing-page-desktop .pricing__plan-title-section {
@@ -1239,7 +1238,10 @@ p {
 	align-items: center;
 	justify-content: space-between;
 	padding: 0 30px;
-	z-index: 1;
+	z-index: 10;
+	background: rgba(255, 255, 255, 0.2);
+	backdrop-filter: blur(50px);
+	-webkit-backdrop-filter: blur(50px);
 }
 
 .header__logo {
@@ -1267,7 +1269,7 @@ p {
 
 .header__menu-link {
 	font-weight: var(--fontWeightNormal);
-	color: var(--appBackgroundDark);
+	color: var(--appBackgroundDark) !important;
 	text-decoration: none;
 	letter-spacing: 0;
 	transition: var(--transitionHover);
@@ -1438,7 +1440,6 @@ p {
 	flex-direction: column;
 	width: 100%;
 	align-items: center;
-	gap: 5px;
 	position: relative;
 	flex: 0 0 auto;
 	margin: 0 auto;
@@ -1709,6 +1710,7 @@ p {
 	display: flex;
 	align-items: center;
 	overflow: hidden;
+	cursor: pointer;
 }
 
 .cta__button {
@@ -1988,7 +1990,7 @@ p {
 	}
 
 	.landing-page-desktop .cta__title {
-		height: 0;
+		height: 55px;
 	}
 }
 
@@ -2301,7 +2303,7 @@ p {
 	}
 
 	.landing-page-desktop .cta__title {
-		margin-bottom: 15px;
+		height: 0;
 		text-align: center;
 	}
 	.landing-page-desktop .cta__description-text {
