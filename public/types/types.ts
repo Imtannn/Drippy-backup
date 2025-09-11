@@ -6,6 +6,8 @@ export type AppRoute =
 	| 'success'
 	| 'scene'
 	| 'order'
+	| 'order-items'
+	| 'order-size'
 	| 'share'
 	| 'template'
 

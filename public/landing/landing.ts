@@ -1,31 +1,33 @@
 import {html} from 'lume'
 import '../elements/avatar-selector.js'
 import '../elements/custom-button.js'
+import {createSignal} from 'solid-js'
+import '../routes.js' // track page visits
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
 import '../routes.js' // track page visits
 
-// Control video loading for landing page
-function hideLandingVideoLoading() {
-	const loadingCover = document.getElementById('loadingCover')
-	const videoLoading = loadingCover?.querySelector('video-loading') as any
+// Show video loading initially
+function showVideoLoading() {
+	const videoLoadingElement = html`<video-loading></video-loading>`
+	document.body.appendChild(videoLoadingElement as any)
+	return videoLoadingElement
+}
 
-	if (videoLoading) {
-		// Hide the video loading component
-		videoLoading.isVisible = false
-
-		// Listen for the video loading component's opacity transition to complete
-		const handleTransition = (e: TransitionEvent) => {
-			if (e.propertyName === 'opacity' && loadingCover) {
-				videoLoading.removeEventListener('transitionend', handleTransition)
-				loadingCover.classList.add('invisible')
-				loadingCover.addEventListener('transitionend', () => loadingCover.remove())
-			}
-		}
-		videoLoading.addEventListener('transitionend', handleTransition)
+// Hide video loading when content is ready
+function hideVideoLoading(videoLoadingElement: any) {
+	if (videoLoadingElement && videoLoadingElement.parentNode) {
+		videoLoadingElement.remove()
 	}
 }
+const [isYearlyActive, setIsYearlyActive] = createSignal(true)
+
+// Hide the loading cover
+// const loadingCover = document.getElementById('loadingCover')
+// console.log('loadingCover', loadingCover)
+// loadingCover?.classList.add('invisible')
+// loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
 
 // const logoUrl = new URL('../images/logo.svg', import.meta.url)
 const logoUrlDark = new URL('../images/landing/logo.png', import.meta.url)
@@ -53,16 +55,16 @@ const brands = [
 		name: 'Brand 1',
 		logo: new URL('../images/landing/brand-1.png', import.meta.url).href,
 	},
-	{
-		id: 2,
-		name: 'Brand 2',
-		logo: new URL('../images/landing/brand-2.png', import.meta.url).href,
-	},
-	{
-		id: 3,
-		name: 'Brand 3',
-		logo: new URL('../images/landing/brand-3.png', import.meta.url).href,
-	},
+	// {
+	// 	id: 2,
+	// 	name: 'Brand 2',
+	// 	logo: new URL('../images/landing/brand-2.png', import.meta.url).href,
+	// },
+	// {
+	// 	id: 3,
+	// 	name: 'Brand 3',
+	// 	logo: new URL('../images/landing/brand-3.png', import.meta.url).href,
+	// },
 	{
 		id: 4,
 		name: 'Brand 4',
@@ -181,7 +183,7 @@ const navbar = html`
 	</nav>
 `
 
-// Add main content
+// Add main content với reactive pricing buttons
 const mainContent = html`
 	<main class="landing-page-desktop" role="main">
 			<div class="container">
@@ -414,7 +416,7 @@ const mainContent = html`
 											<div class="platform__card-content">
 												<div class="platform__card-text">
 													<div class="statistics__item-title text-md-1">Link in bios</div>
-													<p class="statistics__description text-sm">
+													<p class="statistics__description text-md">
 														No website? no problem. Drop Drippy in your bio and turn followers into shoppers.
 													</p>
 												</div>
@@ -429,7 +431,7 @@ const mainContent = html`
 											<div class="platform__card-content">
 												<div class="platform__card-text">
 													<div class="statistics__item-title text-md-1">Embed on website</div>
-													<p class="statistics__description text-xs">
+													<p class="statistics__description text-md">
 														Plug Drippy directly into your online store. Same site, new experience.
 													</p>
 												</div>
@@ -445,7 +447,7 @@ const mainContent = html`
 											<div class="platform__card-content">
 												<div class="platform__card-text">
 													<div class="statistics__item-title text-sm">In-store QR</div>
-													<p class="statistics__description text-xs">
+													<p class="statistics__description text-md">
 														Turn retail into an interactive playground. One scan → instant 3D try-on →
 														made-to-order.
 													</p>
@@ -473,99 +475,109 @@ const mainContent = html`
 										<div class="section-subtitle text-md-2">Pricing without the bullsh*t.</div>
 									</div>
 									<div class="pricing__toggle">
-										<custom-button variant="primary">Yearly</custom-button>
-										<custom-button variant="secondary">Monthly</custom-button>
+										<custom-button
+											variant=${() => (isYearlyActive() ? 'primary' : 'secondary')}
+											data-action="toggle"
+										>
+											Yearly
+										</custom-button>
+										<custom-button
+											variant=${() => (isYearlyActive() ? 'secondary' : 'primary')}
+											data-action="toggle"
+										>
+											Monthly
+										</custom-button>
 									</div>
 								</div>
 								<div class="pricing__plans">
-									<div class="pricing__plan--basic">
+									<div class="pricing__plan--basic pricing__plans--item">
 										<div class="pricing__plan-content">
 											<div class="pricing__plan-header">
-												<div class="pricing__plan-name text-sm">Studio</div>
+												<div class="pricing__plan-name text-md">Studio</div>
 												<p class="pricing__plan-price">
-													<span class="interactive__title text-sm">€45</span> <span class="pricing__plan-period text-xs">/month/studio</span>
+													<span class="interactive__title text-md">€${() => (isYearlyActive() ? '45' : '50')}</span> <span class="pricing__plan-period text-md">/month/studio</span>
 												</p>
 											</div>
 											<div class="pricing__features-list">
 												<p class="pricing__plan-price">
-													<span class="pricing__plan-period text-xs">3-month free trial <br /></span>
+													<span class="pricing__plan-period text-md">3-month free trial <br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="pricing__plan-period text-xs">1 space<br /></span>
+													<span class="pricing__plan-period text-md">1 space<br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="pricing__plan-period text-xs">12 SKUs per space<br /></span>
+													<span class="pricing__plan-period text-md">12 SKUs per space<br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="pricing__plan-period text-xs">Digitize service </span>
-													<span class="pricing__plan-note text-xs">not included</span>
+													<span class="pricing__plan-period text-md">Digitize service </span>
+													<span class="pricing__plan-note text-md">not included</span>
 												</p>
 											</div>
 										</div>
 										<div class="pricing__button--basic"><div class="hero__button-text">Start free trial</div></div>
 									</div>
-									<div class="pricing__plan--pro">
+									<div class="pricing__plan--pro pricing__plans--item">
 										<div class="pricing__plan-content">
 											<div class="pricing__plan-header--pro">
 												<div class="pricing__plan-title-section">
-													<div class="pricing__plan-name--pro text-sm">Studio PRO</div>
-													<div class="pricing__plan-badge"><div class="pricing__plan-badge-text text-xs">Best value</div></div>
+													<div class="pricing__plan-name--pro text-md">Studio PRO</div>
+													<div class="pricing__plan-badge"><div class="pricing__plan-badge-text text-md">Best value</div></div>
 												</div>
 												<p class="pricing__plan-price--pro">
-													<span class="interactive__title text-sm">€70</span> <span class="pricing__plan-period--pro text-xs">/month/studio</span>
+													<span class="interactive__title text-md">€${() => (isYearlyActive() ? '70' : '75')}</span> <span class="pricing__plan-period--pro text-md">/month/studio</span>
 												</p>
 											</div>
 											<div class="pricing__features-list--pro">
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature text-xs">Everything in </span>
-													<span class="pricing__plan-feature--highlight text-sm">Studio</span>
-													<span class="pricing__plan-feature text-xs">, plus:<br /></span>
+													<span class="pricing__plan-feature text-md">Everything in </span>
+													<span class="pricing__plan-feature--highlight text-md">Studio</span>
+													<span class="pricing__plan-feature text-md">, plus:<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature text-xs">Unlimited spaces &amp; SKUs<br /></span>
+													<span class="pricing__plan-feature text-md">Unlimited spaces &amp; SKUs<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature text-xs">Embed on website (custom URL)<br /></span>
+													<span class="pricing__plan-feature text-md">Embed on website (custom URL)<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature text-xs">Analytics dashboard<br /></span>
+													<span class="pricing__plan-feature text-md">Analytics dashboard<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature--highlight text-sm">Add-on: <br /></span>
+													<span class="pricing__plan-feature--highlight text-md">Add-on: <br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature text-xs">Includes</span>
-													<span class="pricing__plan-feature--highlight text-sm"> 1 growth pack/year </span>
-													<span class="pricing__plan-feature text-xs"> (24 garments = €840 value).</span>
+													<span class="pricing__plan-feature text-md">Includes</span>
+													<span class="pricing__plan-feature--highlight text-md"> 1 growth pack/year </span>
+													<span class="pricing__plan-feature text-md"> (24 garments = €840 value).</span>
 												</p>
 											</div>
 										</div>
-										<button class="pricing__button--pro"><div class="pricing__plan-button-text">Get started</div></button>
+										<button class="pricing__button--pro"><div class="pricing__plan-button-text">Start free trial</div></button>
 									</div>
-									<div class="pricing__plan--digitize">
+									<div class="pricing__plan--digitize pricing__plans--item">
 										<div class="pricing__plan-content">
 											<div class="pricing__plan-header">
-												<div class="pricing__plan-name text-sm">Digitize packs</div>
-												<div class="pricing__plan-price text-xs">One-time</div>
+												<div class="pricing__plan-name text-md">Digitize packs</div>
+												<div class="pricing__plan-price text-md">One-time</div>
 											</div>
 											<div class="pricing__features-list--digitize">
 												<p class="pricing__plan-price">
-													<span class="interactive__title text-sm">Kickoff: </span>
-													<span class="pricing__plan-period text-xs">12 garments → </span>
-													<span class="interactive__title text-sm">€420/pack </span>
-													<span class="pricing__plan-period text-xs">(€40/garment) <br /></span>
+													<span class="interactive__title text-md">Kickoff: </span>
+													<span class="pricing__plan-period text-md">12 garments → </span>
+													<span class="interactive__title text-md">€420/pack </span>
+													<span class="pricing__plan-period text-md">(€40/garment) <br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="interactive__title text-sm">Growth: </span>
-													<span class="pricing__plan-period text-xs">24 garments → </span>
-													<span class="interactive__title text-sm">€840/pack</span>
-													<span class="pricing__plan-period text-xs"> (€35/garment) <br /></span>
+													<span class="interactive__title text-md">Growth: </span>
+													<span class="pricing__plan-period text-md">24 garments → </span>
+													<span class="interactive__title text-md">€840/pack</span>
+													<span class="pricing__plan-period text-md"> (€35/garment) <br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="interactive__title text-sm">Scale: </span>
-													<span class="pricing__plan-period text-xs">36 garments → </span>
-													<span class="interactive__title text-sm">€1050/pack </span>
-													<span class="pricing__plan-period text-xs">(€30/garment) </span>
+													<span class="interactive__title text-md">Scale: </span>
+													<span class="pricing__plan-period text-md">36 garments → </span>
+													<span class="interactive__title text-md">€1050/pack </span>
+													<span class="pricing__plan-period text-md">(€30/garment) </span>
 												</p>
 											</div>
 										</div>
@@ -644,6 +656,10 @@ const mainContent = html`
 		</div>
 	` as Node
 
+// Show video loading immediately when landing page starts loading
+const videoLoadingElement = showVideoLoading()
+
+// First, append the content to DOM so we can track image loading
 document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
 
@@ -665,7 +681,8 @@ function waitForContentReady() {
 	Promise.all(imagePromises).then(() => {
 		// Use requestAnimationFrame to ensure DOM has updated
 		requestAnimationFrame(() => {
-			hideLandingVideoLoading()
+			// Hide video loading when everything is ready
+			hideVideoLoading(videoLoadingElement)
 		})
 	})
 }
@@ -738,3 +755,158 @@ if (statisticsSection) {
 
 	observer.observe(statisticsSection)
 }
+
+// Add event listeners for pricing toggle buttons
+setTimeout(() => {
+	document.querySelectorAll('[data-action="toggle"]').forEach(button => {
+		button.addEventListener('click', () => {
+			setIsYearlyActive(!isYearlyActive())
+		})
+	})
+}, 100)
+
+// Carousel functionality
+function initCarousel() {
+	const track = document.querySelector('.pricing__plans') as HTMLElement
+	const items = document.querySelectorAll('.pricing__plans--item') as NodeListOf<HTMLElement>
+	const carousel = document.querySelector('.pricing__content') as HTMLElement
+
+	if (!track || !items.length || !carousel) return
+
+	let activeIndex = 1
+	let startX = 0
+	let isDragging = false
+	let isActive = false
+	let eventListeners: Array<{element: HTMLElement | Window; event: string; handler: Function}> = []
+	let resizeTimeout: ReturnType<typeof setTimeout>
+
+	function checkScreenSize() {
+		clearTimeout(resizeTimeout)
+		resizeTimeout = setTimeout(() => {
+			const wasActive = isActive
+			isActive = window.innerWidth >= 430 && window.innerWidth <= 830
+
+			if (wasActive !== isActive) {
+				if (isActive) {
+					carousel.classList.add('carousel')
+					items.forEach(item => {
+						item.classList.add('carousel-item')
+					})
+
+					if (carousel.classList.contains('carousel') && document.querySelectorAll('.carousel-item').length > 0) {
+						addEventListeners()
+						updateCarousel()
+					}
+				} else {
+					carousel.classList.remove('carousel')
+					items.forEach(item => {
+						item.classList.remove('carousel-item')
+					})
+
+					removeEventListeners()
+					resetCarousel()
+				}
+			}
+		}, 100)
+	}
+
+	function resetCarousel() {
+		track.style.transform = 'translateX(0)'
+		items.forEach((item, i) => {
+			item.classList.toggle('active', i === 1)
+		})
+		activeIndex = 1
+	}
+
+	function updateCarousel() {
+		if (
+			!isActive ||
+			!carousel.classList.contains('carousel') ||
+			document.querySelectorAll('.carousel-item').length === 0
+		)
+			return
+
+		const offset = -(activeIndex - 1) * (250 + 32)
+		track.style.transform = `translateX(${offset}px)`
+
+		items.forEach((item, i) => {
+			item.classList.toggle('active', i === activeIndex)
+		})
+	}
+
+	function handleSwipe(deltaX: number) {
+		if (
+			!isActive ||
+			!carousel.classList.contains('carousel') ||
+			document.querySelectorAll('.carousel-item').length === 0
+		)
+			return
+
+		if (deltaX > 50) {
+			activeIndex = Math.max(0, activeIndex - 1)
+		} else if (deltaX < -50) {
+			activeIndex = Math.min(items.length - 1, activeIndex + 1)
+		}
+		updateCarousel()
+	}
+
+	const touchStartHandler = (e: TouchEvent) => {
+		if (!isActive || !carousel.classList.contains('carousel')) return
+		startX = e.touches[0].clientX
+	}
+
+	const touchEndHandler = (e: TouchEvent) => {
+		if (!isActive || !carousel.classList.contains('carousel')) return
+		const deltaX = e.changedTouches[0].clientX - startX
+		handleSwipe(deltaX)
+	}
+
+	// Mouse events
+	const mouseDownHandler = (e: MouseEvent) => {
+		if (!isActive || !carousel.classList.contains('carousel')) return
+		isDragging = true
+		startX = e.clientX
+	}
+
+	const mouseUpHandler = (e: MouseEvent) => {
+		if (!isDragging || !isActive || !carousel.classList.contains('carousel')) return
+		isDragging = false
+		const deltaX = e.clientX - startX
+		handleSwipe(deltaX)
+	}
+
+	const resizeHandler = () => {
+		checkScreenSize()
+	}
+
+	function addEventListeners() {
+		removeEventListeners()
+
+		if (!carousel.classList.contains('carousel')) return
+
+		carousel.addEventListener('touchstart', touchStartHandler, {passive: true})
+		carousel.addEventListener('touchend', touchEndHandler, {passive: true})
+		carousel.addEventListener('mousedown', mouseDownHandler)
+		carousel.addEventListener('mouseup', mouseUpHandler)
+
+		eventListeners = [
+			{element: carousel, event: 'touchstart', handler: touchStartHandler},
+			{element: carousel, event: 'touchend', handler: touchEndHandler},
+			{element: carousel, event: 'mousedown', handler: mouseDownHandler},
+			{element: carousel, event: 'mouseup', handler: mouseUpHandler},
+		]
+	}
+
+	function removeEventListeners() {
+		eventListeners.forEach(({element, event, handler}) => {
+			element.removeEventListener(event, handler as EventListener)
+		})
+		eventListeners = []
+	}
+
+	checkScreenSize()
+
+	window.addEventListener('resize', resizeHandler, {passive: true})
+}
+
+setTimeout(initCarousel, 100)

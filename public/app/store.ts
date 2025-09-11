@@ -1,11 +1,19 @@
+import {Meteor} from 'meteor/meteor'
 import {createMutable} from 'solid-js/store'
+import {fabrics} from '../consts/fabrics.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {AppRoute, Avatar, Space, CustomMeasurement, OrderStatus, ShippingAddress, OrderState} from '../types/types.js'
-import {fabrics} from '../consts/fabrics.js'
+import type {
+	AppRoute,
+	Avatar,
+	CustomMeasurement,
+	OrderState,
+	OrderStatus,
+	ShippingAddress,
+	Space,
+} from '../types/types.js'
 import {toSolidSignal} from '../utils.js'
-import {Meteor} from 'meteor/meteor'
 
 export const store = createMutable({
 	// key is the block category, value is the block
@@ -25,6 +33,9 @@ export const store = createMutable({
 	loadingMaterials: [] as string[],
 
 	// Order-related state
+	selectedOrderItems: new Map<TemplateCategory, boolean>(),
+	// Size-specific quantities: Map<TemplateCategory, Map<Size, quantity>>
+	orderSizeQuantities: new Map<TemplateCategory, Map<string, number>>(),
 	order: {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -284,10 +295,82 @@ export const store = createMutable({
 		this.order.shippingAddress = {...this.order.shippingAddress, ...address}
 	},
 
+	set setSelectedOrderItems(items: Map<TemplateCategory, boolean>) {
+		this.selectedOrderItems = items
+	},
+
+	setSizeQuantity(category: TemplateCategory, size: string, quantity: number) {
+		// Create a new Map to trigger reactivity
+		const newQuantities = new Map(this.orderSizeQuantities)
+
+		if (!newQuantities.has(category)) {
+			newQuantities.set(category, new Map<string, number>())
+		}
+
+		// Create new inner Map to trigger reactivity
+		const categoryMap = new Map(newQuantities.get(category)!)
+		categoryMap.set(size, quantity)
+		newQuantities.set(category, categoryMap)
+
+		this.orderSizeQuantities = newQuantities
+	},
+
+	getSizeQuantity(category: TemplateCategory, size: string): number {
+		return this.orderSizeQuantities.get(category)?.get(size) || 0
+	},
+
+	getItemTotalQuantity(category: TemplateCategory): number {
+		const sizeMap = this.orderSizeQuantities.get(category)
+		if (!sizeMap) return 0
+		return Array.from(sizeMap.values()).reduce((sum, qty) => sum + qty, 0)
+	},
+
+	getOrderTotalQuantity(): number {
+		let total = 0
+		for (const [category] of this.selectedOrderItems.entries()) {
+			if (this.selectedOrderItems.get(category)) {
+				total += this.getItemTotalQuantity(category)
+			}
+		}
+		return total
+	},
+
+	getOrderTotalCost(): number {
+		// For now, using $125 per item as shown in UI
+		// TODO: Use actual pricing from templates/store
+		return this.getOrderTotalQuantity() * 125
+	},
+
+	toggleOrderItem(category: TemplateCategory) {
+		const newSelectedItems = new Map(this.selectedOrderItems)
+		const currentlySelected = newSelectedItems.get(category) || false
+
+		// Check if this would leave no items selected
+		const selectedCount = Array.from(newSelectedItems.values()).filter(Boolean).length
+		if (currentlySelected && selectedCount <= 1) {
+			// Don't allow unchecking if it's the last selected item
+			return
+		}
+
+		newSelectedItems.set(category, !currentlySelected)
+		this.selectedOrderItems = newSelectedItems
+	},
+
+	initializeOrderItems() {
+		// Initialize all selected templates as checked
+		const newSelectedItems = new Map<TemplateCategory, boolean>()
+		for (const [category] of this.selectedTemplates.entries()) {
+			newSelectedItems.set(category, true)
+		}
+		this.selectedOrderItems = newSelectedItems
+	},
+
 	resetSelectedTemplates() {
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
 		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
+		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
+		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {
@@ -319,6 +402,8 @@ export const store = createMutable({
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
 		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
+		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
+		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {
