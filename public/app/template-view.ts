@@ -1,21 +1,22 @@
-import {css, Element, element, html, signal, For, Show, type ElementAttributes, Index, untrack} from 'lume'
+import {css, Element, element, For, html, Index, Show, signal, untrack, type ElementAttributes} from 'lume'
 import type {Accessor} from 'solid-js'
-import {store} from './store.js'
-import {templates} from '../consts/templates.js'
-import type {Template, TemplateCategory} from '../types/template.js'
-import type {Block} from '../types/block.js'
 import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
-import './app-buttons.js'
-import './item-card.js'
-import '../elements/bottom-sheet.js'
-import '../elements/tabs.js'
-import './drip-it-button.js'
-import '../elements/theme-switch-button.js'
+import {templates} from '../consts/templates.js'
 import '../elements/back-button.js'
+import '../elements/bottom-sheet.js'
+import '../elements/cube-button.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
-import '../elements/cube-button.js'
-import {textureManager} from '../texture-manager.js'
+import '../elements/tabs.js'
+import '../elements/theme-switch-button.js'
+import type {Block} from '../types/block.js'
+import type {Template, TemplateCategory} from '../types/template.js'
+import './app-buttons.js'
+import {blockManager} from './block-manager.js'
+import './drip-it-button.js'
+import './item-card.js'
+import {store} from './store.js'
+import {textureManager} from './texture-manager.js'
 
 type TemplateViewAttributes = keyof {}
 
@@ -82,7 +83,11 @@ export class TemplateView extends Element {
 			store.loadingMaterials = [...untrack(() => store.loadingMaterials), loadingId]
 			try {
 				// Preload base fabric textures into cache (most efficient - no config needed yet)
-				await textureManager.preloadFabricBaseTextures(templateFabric)
+				// Preload template blocks
+				await Promise.all([
+					textureManager.preloadFabricBaseTextures(templateFabric),
+					blockManager.preloadTemplateBlocks(template, store.selectedSpace!),
+				])
 			} catch (error) {
 				console.warn('Failed to preload fabric textures:', error)
 			} finally {

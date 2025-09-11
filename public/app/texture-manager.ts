@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import type {Fabric} from './types/fabric.js'
+import type {Fabric} from '../types/fabric.js'
 
 export interface TextureConfig {
 	repeat: [number, number]
