@@ -1,11 +1,19 @@
+import {Meteor} from 'meteor/meteor'
 import {createMutable} from 'solid-js/store'
+import {fabrics} from '../consts/fabrics.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {AppRoute, Avatar, Space, CustomMeasurement, OrderStatus, ShippingAddress, OrderState} from '../types/types.js'
-import {fabrics} from '../consts/fabrics.js'
+import type {
+	AppRoute,
+	Avatar,
+	CustomMeasurement,
+	OrderState,
+	OrderStatus,
+	ShippingAddress,
+	Space,
+} from '../types/types.js'
 import {toSolidSignal} from '../utils.js'
-import {Meteor} from 'meteor/meteor'
 
 export const store = createMutable({
 	// key is the block category, value is the block
@@ -23,6 +31,7 @@ export const store = createMutable({
 	isDrippySceneLoading: [] as string[],
 
 	// Order-related state
+	selectedOrderItems: new Map<TemplateCategory, boolean>(),
 	order: {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -296,10 +305,39 @@ export const store = createMutable({
 		this.order.shippingAddress = {...this.order.shippingAddress, ...address}
 	},
 
+	set setSelectedOrderItems(items: Map<TemplateCategory, boolean>) {
+		this.selectedOrderItems = items
+	},
+
+	toggleOrderItem(category: TemplateCategory) {
+		const newSelectedItems = new Map(this.selectedOrderItems)
+		const currentlySelected = newSelectedItems.get(category) || false
+
+		// Check if this would leave no items selected
+		const selectedCount = Array.from(newSelectedItems.values()).filter(Boolean).length
+		if (currentlySelected && selectedCount <= 1) {
+			// Don't allow unchecking if it's the last selected item
+			return
+		}
+
+		newSelectedItems.set(category, !currentlySelected)
+		this.selectedOrderItems = newSelectedItems
+	},
+
+	initializeOrderItems() {
+		// Initialize all selected templates as checked
+		const newSelectedItems = new Map<TemplateCategory, boolean>()
+		for (const [category] of this.selectedTemplates.entries()) {
+			newSelectedItems.set(category, true)
+		}
+		this.selectedOrderItems = newSelectedItems
+	},
+
 	resetSelectedTemplates() {
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
 		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
+		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {
@@ -331,6 +369,7 @@ export const store = createMutable({
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
 		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
+		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {

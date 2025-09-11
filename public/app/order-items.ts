@@ -1,4 +1,4 @@
-import {css, Element, element, For, html, signal} from 'lume'
+import {css, Element, element, For, html} from 'lume'
 import '../elements/back-button.js'
 import '../elements/bottom-sheet.js'
 import '../elements/home-button.js'
@@ -17,20 +17,12 @@ import {store} from './store.js'
 export class OrderItems extends Element {
 	static elementName = 'order-items'
 
-	@signal selectedOrderItems: Map<TemplateCategory, boolean> = new Map()
-
 	// Load existing selections when component connects
 	connectedCallback() {
 		super.connectedCallback()
 
 		// Initialize all selected templates as checked
-		this.createEffect(() => {
-			const newSelectedItems = new Map<TemplateCategory, boolean>()
-			for (const [category] of store.selectedTemplates.entries()) {
-				newSelectedItems.set(category, true)
-			}
-			this.selectedOrderItems = newSelectedItems
-		})
+		store.initializeOrderItems()
 	}
 
 	#onBackButtonClick = () => {
@@ -51,19 +43,7 @@ export class OrderItems extends Element {
 	}
 
 	#onItemToggle = (category: TemplateCategory) => {
-		const newSelectedItems = new Map(this.selectedOrderItems)
-		const currentlySelected = newSelectedItems.get(category) || false
-
-		// Check if this would leave no items selected
-		const selectedCount = Array.from(newSelectedItems.values()).filter(Boolean).length
-		if (currentlySelected && selectedCount <= 1) {
-			// Don't allow unchecking if it's the last selected item
-			return
-		}
-
-		newSelectedItems.set(category, !currentlySelected)
-		this.selectedOrderItems = newSelectedItems
-		console.log('🔴 selectedOrderItems', this.selectedOrderItems)
+		store.toggleOrderItem(category)
 	}
 
 	#onShareClick = () => {
@@ -110,7 +90,7 @@ export class OrderItems extends Element {
 					<div class="item-row">
 						<div
 							class="checkbox-icon"
-							classList=${() => ({checked: this.selectedOrderItems.get(category) || false})}
+							classList=${() => ({checked: store.selectedOrderItems.get(category) || false})}
 							onclick=${() => this.#onItemToggle(category)}
 						>
 							<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
