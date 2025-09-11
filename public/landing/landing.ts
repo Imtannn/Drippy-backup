@@ -490,7 +490,7 @@ const mainContent = html`
 									</div>
 								</div>
 								<div class="pricing__plans">
-									<div class="pricing__plan--basic">
+									<div class="pricing__plan--basic pricing__plans--item">
 										<div class="pricing__plan-content">
 											<div class="pricing__plan-header">
 												<div class="pricing__plan-name text-md">Studio</div>
@@ -516,7 +516,7 @@ const mainContent = html`
 										</div>
 										<div class="pricing__button--basic"><div class="hero__button-text">Start free trial</div></div>
 									</div>
-									<div class="pricing__plan--pro">
+									<div class="pricing__plan--pro pricing__plans--item">
 										<div class="pricing__plan-content">
 											<div class="pricing__plan-header--pro">
 												<div class="pricing__plan-title-section">
@@ -529,9 +529,9 @@ const mainContent = html`
 											</div>
 											<div class="pricing__features-list--pro">
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature text-xs">Everything in </span>
-													<span class="pricing__plan-feature--highlight text-sm">Studio</span>
-													<span class="pricing__plan-feature text-xs">, plus:<br /></span>
+													<span class="pricing__plan-feature text-md">Everything in </span>
+													<span class="pricing__plan-feature--highlight text-md">Studio</span>
+													<span class="pricing__plan-feature text-md">, plus:<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
 													<span class="pricing__plan-feature text-md">Unlimited spaces &amp; SKUs<br /></span>
@@ -552,9 +552,9 @@ const mainContent = html`
 												</p>
 											</div>
 										</div>
-										<button class="pricing__button--pro"><div class="pricing__plan-button-text">Get started</div></button>
+										<button class="pricing__button--pro"><div class="pricing__plan-button-text">Start free trial</div></button>
 									</div>
-									<div class="pricing__plan--digitize">
+									<div class="pricing__plan--digitize pricing__plans--item">
 										<div class="pricing__plan-content">
 											<div class="pricing__plan-header">
 												<div class="pricing__plan-name text-md">Digitize packs</div>
@@ -764,3 +764,149 @@ setTimeout(() => {
 		})
 	})
 }, 100)
+
+// Carousel functionality
+function initCarousel() {
+	const track = document.querySelector('.pricing__plans') as HTMLElement
+	const items = document.querySelectorAll('.pricing__plans--item') as NodeListOf<HTMLElement>
+	const carousel = document.querySelector('.pricing__content') as HTMLElement
+
+	if (!track || !items.length || !carousel) return
+
+	let activeIndex = 1
+	let startX = 0
+	let isDragging = false
+	let isActive = false
+	let eventListeners: Array<{element: HTMLElement | Window; event: string; handler: Function}> = []
+	let resizeTimeout: ReturnType<typeof setTimeout>
+
+	function checkScreenSize() {
+		clearTimeout(resizeTimeout)
+		resizeTimeout = setTimeout(() => {
+			const wasActive = isActive
+			isActive = window.innerWidth >= 430 && window.innerWidth <= 830
+
+			if (wasActive !== isActive) {
+				if (isActive) {
+					carousel.classList.add('carousel')
+					items.forEach(item => {
+						item.classList.add('carousel-item')
+					})
+
+					if (carousel.classList.contains('carousel') && document.querySelectorAll('.carousel-item').length > 0) {
+						addEventListeners()
+						updateCarousel()
+					}
+				} else {
+					carousel.classList.remove('carousel')
+					items.forEach(item => {
+						item.classList.remove('carousel-item')
+					})
+
+					removeEventListeners()
+					resetCarousel()
+				}
+			}
+		}, 100)
+	}
+
+	function resetCarousel() {
+		track.style.transform = 'translateX(0)'
+		items.forEach((item, i) => {
+			item.classList.toggle('active', i === 1)
+		})
+		activeIndex = 1
+	}
+
+	function updateCarousel() {
+		if (
+			!isActive ||
+			!carousel.classList.contains('carousel') ||
+			document.querySelectorAll('.carousel-item').length === 0
+		)
+			return
+
+		const offset = -(activeIndex - 1) * (250 + 32)
+		track.style.transform = `translateX(${offset}px)`
+
+		items.forEach((item, i) => {
+			item.classList.toggle('active', i === activeIndex)
+		})
+	}
+
+	function handleSwipe(deltaX: number) {
+		if (
+			!isActive ||
+			!carousel.classList.contains('carousel') ||
+			document.querySelectorAll('.carousel-item').length === 0
+		)
+			return
+
+		if (deltaX > 50) {
+			activeIndex = Math.max(0, activeIndex - 1)
+		} else if (deltaX < -50) {
+			activeIndex = Math.min(items.length - 1, activeIndex + 1)
+		}
+		updateCarousel()
+	}
+
+	const touchStartHandler = (e: TouchEvent) => {
+		if (!isActive || !carousel.classList.contains('carousel')) return
+		startX = e.touches[0].clientX
+	}
+
+	const touchEndHandler = (e: TouchEvent) => {
+		if (!isActive || !carousel.classList.contains('carousel')) return
+		const deltaX = e.changedTouches[0].clientX - startX
+		handleSwipe(deltaX)
+	}
+
+	// Mouse events
+	const mouseDownHandler = (e: MouseEvent) => {
+		if (!isActive || !carousel.classList.contains('carousel')) return
+		isDragging = true
+		startX = e.clientX
+	}
+
+	const mouseUpHandler = (e: MouseEvent) => {
+		if (!isDragging || !isActive || !carousel.classList.contains('carousel')) return
+		isDragging = false
+		const deltaX = e.clientX - startX
+		handleSwipe(deltaX)
+	}
+
+	const resizeHandler = () => {
+		checkScreenSize()
+	}
+
+	function addEventListeners() {
+		removeEventListeners()
+
+		if (!carousel.classList.contains('carousel')) return
+
+		carousel.addEventListener('touchstart', touchStartHandler, {passive: true})
+		carousel.addEventListener('touchend', touchEndHandler, {passive: true})
+		carousel.addEventListener('mousedown', mouseDownHandler)
+		carousel.addEventListener('mouseup', mouseUpHandler)
+
+		eventListeners = [
+			{element: carousel, event: 'touchstart', handler: touchStartHandler},
+			{element: carousel, event: 'touchend', handler: touchEndHandler},
+			{element: carousel, event: 'mousedown', handler: mouseDownHandler},
+			{element: carousel, event: 'mouseup', handler: mouseUpHandler},
+		]
+	}
+
+	function removeEventListeners() {
+		eventListeners.forEach(({element, event, handler}) => {
+			element.removeEventListener(event, handler as EventListener)
+		})
+		eventListeners = []
+	}
+
+	checkScreenSize()
+
+	window.addEventListener('resize', resizeHandler, {passive: true})
+}
+
+setTimeout(initCarousel, 100)
