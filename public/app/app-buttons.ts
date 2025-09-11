@@ -20,6 +20,8 @@ export class AppButtonsLeft extends Element {
 			if (
 				store.view === 'preview' ||
 				store.view === 'order' ||
+				store.view === 'order-items' ||
+				store.view === 'order-size' ||
 				store.view === 'custom-measurement' ||
 				store.view === 'success' ||
 				store.view === 'share'

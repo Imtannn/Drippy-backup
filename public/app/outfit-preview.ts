@@ -36,7 +36,7 @@ export class OutfitPreview extends Element {
 	}
 
 	#onBuyItClick = () => {
-		store.navigateTo = 'order'
+		store.navigateTo = 'order-items'
 	}
 
 	shareIcon = () =>

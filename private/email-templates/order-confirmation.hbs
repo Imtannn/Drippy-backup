@@ -68,17 +68,26 @@
 				<p><strong>Order Date:</strong> {{orderDate}}</p>
 
 				<h4>Items Ordered:</h4>
-				{{#each garmentsNumbered}}
-					<div style='margin-left: 16px;'>
-						<div><strong>{{blockName}}</strong> <small>(ID: {{_id}})</small></div>
-						<div style='margin-left: 16px;'>Size: {{../selectedSize}}{{#if ../isCustomSize}} (Custom){{/if}}</div>
-						<div style='margin-left: 16px;'>Quantity: {{../quantity}}</div>
-						<div style='margin-left: 16px;'>Price: 125$</div>
+				{{#each items}}
+					<div style='margin-left: 16px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee;'>
+						<div><strong>{{name}}</strong></div>
+						<div style='margin-left: 16px; color: #666;'><small>{{description}}</small></div>
+						{{#if sizes}}
+							{{#each sizes}}
+								<div style='margin-left: 16px; margin-top: 5px;'>
+									<span>Size {{size}}: </span>
+									<span>{{quantity}} pcs @ ${{price}} = ${{price}}</span>
+								</div>
+							{{/each}}
+							<div style='margin-left: 16px; margin-top: 8px; font-weight: bold;'>
+								Item Total: {{quantity}} pcs - ${{price}}
+							</div>
+						{{/if}}
 					</div>
 				{{/each}}
 
 				<div class='item total'>
-					<div>Total Amount</div>
+					<div>Total Amount:&nbsp;</div>
 					<div>${{totalAmount}}</div>
 				</div>
 			</div>
@@ -93,55 +102,6 @@
 					{{shippingAddress.country}}</p>
 			</div>
 
-			{{#if isCustomSize}}
-				<div class='order-info'>
-					<h3>📏 Custom Measurements</h3>
-					{{#if customMeasurement}}
-						<table style='width: 100%; border-collapse: collapse; margin-top: 10px;'>
-							<tr style='background-color: #f8f9fa;'>
-								<th style='padding: 8px; text-align: left; border: 1px solid #ddd;'>Measurement</th>
-								<th style='padding: 8px; text-align: right; border: 1px solid #ddd;'>Value (cm)</th>
-							</tr>
-							{{#if customMeasurement.bust}}
-								<tr>
-									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Bust</strong></td>
-									<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.bust}}</td>
-								</tr>
-							{{/if}}
-							{{#if customMeasurement.waist}}
-								<tr>
-									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Waist</strong></td>
-									<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.waist}}</td>
-								</tr>
-							{{/if}}
-							{{#if customMeasurement.hips}}
-								<tr>
-									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Hips</strong></td>
-									<td style='padding: 8px; text-align: right; border: 1px solid #ddd;'>{{customMeasurement.hips}}</td>
-								</tr>
-							{{/if}}
-							{{#if customMeasurement.shoulder}}
-								<tr>
-									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Shoulder</strong></td>
-									<td
-										style='padding: 8px; text-align: right; border: 1px solid #ddd;'
-									>{{customMeasurement.shoulder}}</td>
-								</tr>
-							{{/if}}
-							{{#if customMeasurement.shoulderToKnee}}
-								<tr>
-									<td style='padding: 8px; border: 1px solid #ddd;'><strong>Shoulder to Knee</strong></td>
-									<td
-										style='padding: 8px; text-align: right; border: 1px solid #ddd;'
-									>{{customMeasurement.shoulderToKnee}}</td>
-								</tr>
-							{{/if}}
-						</table>
-					{{else}}
-						<p><em>Custom measurements will be provided separately.</em></p>
-					{{/if}}
-				</div>
-			{{/if}}
 
 			<p>Thank you for choosing Drippy!</p>
 			<p>The Drippy Team</p>
