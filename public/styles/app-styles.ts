@@ -543,4 +543,32 @@ export const appStyles = css`
 			transform: translateY(-120px);
 		}
 	}
+
+	.order-container {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		padding: var(--uiSpacing);
+		padding-top: 0;
+		padding-bottom: 15px;
+		background: var(--uiColorPrimaryWhite);
+		border-radius: var(--borderRadiusLarge);
+	}
+
+	.order-content {
+		flex: 1;
+		overflow-y: auto;
+	}
+
+	.order-button {
+		margin-top: auto;
+		flex-shrink: 0;
+	}
+
+	.order-button {
+		:host-context([data-theme='dark']) & {
+			background: #fff;
+			color: #000;
+		}
+	}
 `

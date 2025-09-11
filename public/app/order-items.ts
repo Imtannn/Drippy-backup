@@ -6,7 +6,6 @@ import '../elements/logo-button.js'
 import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
 import {appStyles} from '../styles/app-styles.js'
-import {orderStyles} from '../styles/order-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import './buy-button.js'
@@ -131,55 +130,54 @@ export class OrderItems extends Element {
 
 	css = css/*css*/ `
 		${appStyles}
-		${orderStyles}
 
 		.items-list {
 			display: flex;
 			flex-direction: column;
-			gap: 16px;
-			padding-top: 20px;
+			gap: var(--uiSpacingMedium);
+			padding-top: var(--uiSpacing);
 		}
 
 		.item-row {
 			display: flex;
 			align-items: center;
-			gap: 16px;
+			gap: var(--uiSpacingMedium);
 		}
 
 		.checkbox-icon {
 			cursor: pointer;
 			opacity: 0.1;
-			transition: opacity 0.2s ease;
-		}
+			transition: var(--transitionFast);
 
-		.checkbox-icon.checked {
-			opacity: 1 !important;
-		}
+			&.checked {
+				opacity: 1 !important;
 
-		.checkbox-icon:not(.checked) {
-			opacity: 0.1 !important;
-		}
+				&:hover {
+					opacity: 1;
+				}
+			}
 
-		.checkbox-icon:hover:not(.checked) {
-			opacity: 0.3;
-		}
+			&:not(.checked) {
+				opacity: 0.1 !important;
 
-		.checkbox-icon.checked:hover {
-			opacity: 1;
+				&:hover {
+					opacity: 0.3;
+				}
+			}
 		}
 
 		.item-image {
 			width: 60px;
 			height: 60px;
-			border-radius: 8px;
+			border-radius: var(--borderRadiusSmall);
 			overflow: hidden;
-			background: #f5f5f5;
-		}
+			background: var(--uiColorPrimaryLightGrey);
 
-		.item-image img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
 		}
 
 		.item-details {
@@ -187,36 +185,88 @@ export class OrderItems extends Element {
 		}
 
 		.item-name {
-			font-size: 16px;
-			font-weight: 600;
-			color: #000;
-			margin-bottom: 4px;
+			font-size: var(--fontSizeTextMd);
+			font-weight: var(--fontWeightSemiBold);
+			font-family: var(--fontFamily);
+			color: var(--uiColorPrimaryBlack);
+			margin-bottom: var(--uiSpacingTiny);
 		}
 
 		.item-price-row {
 			display: flex;
 			align-items: center;
-			gap: 12px;
+			gap: var(--uiSpacingSmall);
 		}
 
 		.item-price {
-			font-size: 14px;
-			color: #666;
+			font-size: var(--fontSizeTextSm);
+			font-family: var(--fontFamily);
+			color: var(--uiColorSecondaryLightGrey);
 		}
 
 		.item-moq {
-			font-size: 14px;
-			color: #666;
+			font-size: var(--fontSizeTextSm);
+			font-family: var(--fontFamily);
+			color: var(--uiColorSecondaryLightGrey);
 			opacity: 0;
-		}
 
-		.item-moq.visible {
-			opacity: 1;
+			&.visible {
+				opacity: 1;
+			}
 		}
 
 		.button-spacer {
 			flex: 1;
 			min-height: 40px;
+		}
+
+		.item-image {
+			width: 60px;
+			height: 60px;
+			border-radius: var(--borderRadiusSmall);
+			overflow: hidden;
+			background: var(--uiColorPrimaryLightGrey);
+
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+		}
+
+		.item-details {
+			flex: 1;
+		}
+
+		.item-name {
+			font-size: var(--fontSizeTextMd);
+			font-weight: var(--fontWeightSemiBold);
+			font-family: var(--fontFamily);
+			color: var(--uiColorPrimaryBlack);
+			margin-bottom: var(--uiSpacingTiny);
+		}
+
+		.item-price-row {
+			display: flex;
+			align-items: center;
+			gap: var(--uiSpacingSmall);
+		}
+
+		.item-price {
+			font-size: var(--fontSizeTextSm);
+			font-family: var(--fontFamily);
+			color: var(--uiColorSecondaryLightGrey);
+		}
+
+		.item-moq {
+			font-size: var(--fontSizeTextSm);
+			font-family: var(--fontFamily);
+			color: var(--uiColorSecondaryLightGrey);
+			opacity: 0;
+
+			&.visible {
+				opacity: 1;
+			}
 		}
 	`
 }

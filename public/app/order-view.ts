@@ -9,7 +9,6 @@ import '../elements/person-button.js'
 import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
 import {appStyles} from '../styles/app-styles.js'
-import {orderStyles} from '../styles/order-styles.js'
 import './app-buttons.js'
 import './buy-button.js'
 import './share-button.js'
@@ -302,7 +301,7 @@ export class OrderView extends Element {
 
 				<!-- Order Button -->
 				<button
-					class="order-button"
+					class="order-button order-button-moidien"
 					onclick=${this.#onBuyItClick}
 					disabled=${() => store.order.status === 'submitting'}
 				>
@@ -330,7 +329,66 @@ export class OrderView extends Element {
 
 	css = css/*css*/ `
 		${appStyles}
-		${orderStyles}
+		
+		.order-button-moidien {
+			background: var(--uiColorAccentViolet);
+		}
+
+		/* Form Styles */
+		.form-fields {
+			display: flex;
+			flex-direction: column;
+			gap: var(--uiSpacingMedium);
+		}
+
+		.field-group {
+			position: relative;
+		}
+
+		.form-input {
+			width: 100%;
+			padding: var(--uiSpacingSmall) var(--uiSpacingMedium);
+			border: var(--borderWidth) solid var(--uiColorBorderColor);
+			border-radius: var(--borderRadiusSmall);
+			font-size: var(--fontSizeTextSm);
+			font-family: var(--fontFamily);
+			background: var(--uiColorPrimaryWhite);
+			transition: var(--transitionFast);
+
+			&:focus {
+				outline: none;
+				border-color: var(--uiColorAccentViolet);
+			}
+		}
+
+		.floating-label {
+			position: absolute;
+			left: var(--uiSpacingMedium);
+			top: var(--uiSpacingSmall);
+			color: var(--uiColorSecondaryLightGrey);
+			font-size: var(--fontSizeTextSm);
+			font-family: var(--fontFamily);
+			pointer-events: none;
+			transition: var(--transitionFast);
+		}
+
+		.form-input:focus + .floating-label,
+		.form-input:not(:placeholder-shown) + .floating-label {
+			top: -var(--uiSpacingSmall);
+			left: var(--uiSpacingSmall);
+			font-size: var(--fontSizeTextXs);
+			background: var(--uiColorPrimaryWhite);
+			padding: 0 var(--uiSpacingTiny);
+			color: var(--uiColorAccentViolet);
+		}
+
+		.section-title {
+			font-size: var(--fontSizeTextMd);
+			font-weight: var(--fontWeightSemiBold);
+			font-family: var(--fontFamily);
+			color: var(--uiColorPrimaryBlack);
+			margin: 0 0 var(--uiSpacingMedium) 0;
+		}
 	`
 }
 

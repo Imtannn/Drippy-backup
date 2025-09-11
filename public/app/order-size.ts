@@ -6,7 +6,6 @@ import '../elements/logo-button.js'
 import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
 import {appStyles} from '../styles/app-styles.js'
-import {orderStyles} from '../styles/order-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import './buy-button.js'
@@ -71,8 +70,9 @@ export class OrderSize extends Element {
 
 	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
 		<div class="order-container">
-			<!-- Selected Items List -->
-			<div class="selected-items">
+			<div class="order-content">
+				<!-- Selected Items List -->
+				<div class="selected-items">
 				<${For} each=${() => Array.from(store.selectedTemplates.entries()).filter(([category]) => store.selectedOrderItems.get(category))}>
 				${([category, template]: [TemplateCategory, Template]) => html`
 					<div class="item-section">
@@ -181,11 +181,12 @@ export class OrderSize extends Element {
 				</>
 			</div>
 
-			<!-- Total Order -->
-			<div class="order-summary">
-				<div class="total-section">
-					<span class="total-label">Total order</span>
-					<span class="total-amount">$${() => store.getOrderTotalCost()}</span>
+				<!-- Total Order -->
+				<div class="order-summary">
+					<div class="total-section">
+						<span class="total-label">Total order</span>
+						<span class="total-amount">$${() => store.getOrderTotalCost()}</span>
+					</div>
 				</div>
 			</div>
 
@@ -196,42 +197,40 @@ export class OrderSize extends Element {
 
 	css = css/*css*/ `
 		${appStyles}
-		${orderStyles}
 
 		.selected-items {
-			padding-top: 20px;
+			padding-top: var(--uiSpacing);
 		}
 
 		.item-section {
-			margin-bottom: 30px;
-			border-bottom: 1px solid #f0f0f0;
-			padding-bottom: 20px;
-		}
+			margin-bottom: var(--uiSpacingMedium);
+			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
 
-		.item-section:last-child {
-			border-bottom: none;
-			margin-bottom: 20px;
+			&:last-child {
+				border-bottom: none;
+				margin-bottom: var(--uiSpacingLarge);
+			}
 		}
 
 		.item-header {
 			display: flex;
 			align-items: flex-start;
-			gap: 16px;
-			margin-bottom: 20px;
+			gap: var(--uiSpacingSmall);
+			margin-bottom: var(--uiSpacing);
 		}
 
 		.item-image {
 			width: 60px;
 			height: 60px;
-			border-radius: 8px;
+			border-radius: var(--borderRadiusSmall);
 			overflow: hidden;
-			background: #f5f5f5;
-		}
+			background: var(--uiColorPrimaryLightGrey);
 
-		.item-image img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
+			img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
 		}
 
 		.item-details {
@@ -239,91 +238,157 @@ export class OrderSize extends Element {
 		}
 
 		.item-name {
-			font-size: 16px;
-			font-weight: 600;
-			color: #000;
-			margin-bottom: 4px;
+			font-size: var(--fontSizeTextSm);
+			font-weight: var(--fontWeightSemiBold);
+			font-family: var(--fontFamily);
+			color: var(--uiColorPrimaryBlack);
+			margin-bottom: var(--uiSpacingTiny);
 		}
 
 		.item-price-row {
 			display: flex;
 			align-items: center;
-			gap: 12px;
+			gap: var(--uiSpacingSmall);
 		}
 
 		.item-price {
-			font-size: 14px;
-			color: #666;
+			font-size: var(--fontSizeTextSm);
+			font-family: var(--fontFamily);
+			color: var(--uiColorSecondaryLightGrey);
 		}
 
 		.item-moq {
-			font-size: 14px;
-			color: #666;
+			font-size: var(--fontSizeTextSm);
+			font-family: var(--fontFamily);
+			color: var(--uiColorSecondaryLightGrey);
 			opacity: 0;
+
+			&.visible {
+				opacity: 1;
+			}
 		}
 
-		.item-moq.visible {
-			opacity: 1;
-		}
+		.size-section {
+			margin-bottom: var(--uiSpacingMedium);
 
-		.size-section h4 {
-			font-size: 16px;
-			font-weight: 600;
-			color: #000;
-			margin: 0 0 16px 0;
+			h4 {
+				font-size: var(--fontSizeTextSm);
+				font-weight: var(--fontWeightSemiBold);
+				font-family: var(--fontFamily);
+				color: var(--uiColorPrimaryBlack);
+				margin: 0 0 var(--uiSpacingSmall) 0;
+			}
 		}
 
 		.size-options {
 			display: flex;
 			flex-direction: column;
-			gap: 12px;
 		}
 
 		.size-row {
 			display: flex;
 			align-items: center;
-			justify-content: space-between;
-			padding: 12px 0;
+			gap: var(--uiSpacingSmall);
+			padding: var(--uiSpacingTiny) 0;
 		}
 
 		.size-label {
-			font-size: 14px;
-			font-weight: 500;
-			color: #000;
+			font-size: var(--fontSizeTextSm);
+			font-weight: var(--fontWeightMedium);
+			font-family: var(--fontFamily);
+			color: var(--uiColorPrimaryBlack);
 			min-width: 60px;
 		}
 
 		.size-price {
-			font-size: 14px;
-			color: #666;
-			flex: 1;
-			text-align: left;
-			margin-left: 20px;
+			font-size: var(--fontSizeTextSm);
+			font-family: var(--fontFamily);
+			color: var(--uiColorSecondaryLightGrey);
+			margin-left: auto;
+			margin-right: var(--uiSpacingSmall);
 		}
 
 		.order-summary {
-			margin-top: 30px;
-			padding-top: 20px;
-			border-top: 1px solid #f0f0f0;
+			margin-top: var(--uiSpacingLarge);
+			padding-top: var(--uiSpacing);
+			border-top: var(--borderWidth) solid var(--uiColorBorderColor);
 		}
 
 		.total-section {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			margin-bottom: 20px;
+			margin-bottom: var(--uiSpacing);
 		}
 
 		.total-label {
-			font-size: 16px;
-			font-weight: 600;
-			color: #000;
+			font-size: var(--fontSizeTextSm);
+			font-weight: var(--fontWeightSemiBold);
+			font-family: var(--fontFamily);
+			color: var(--uiColorPrimaryBlack);
 		}
 
 		.total-amount {
-			font-size: 16px;
-			font-weight: 600;
-			color: #000;
+			font-size: var(--fontSizeTextSm);
+			font-weight: var(--fontWeightSemiBold);
+			font-family: var(--fontFamily);
+			color: var(--uiColorPrimaryBlack);
+		}
+
+		.quantity-controls {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 80px;
+			height: var(--uiSpacingLarge);
+			background: var(--uiColorPrimaryLightGrey);
+			border-radius: var(--borderRadiusPill);
+			padding: 0 var(--uiSpacingSmall);
+
+			:host-context([data-theme='dark']) & {
+				background: var(--uiColorSecondaryDarkGrey);
+			}
+		}
+
+		.quantity-btn {
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: var(--fontSizeTextSm);
+			font-weight: var(--fontWeightMedium);
+			transition: var(--transitionSlow);
+			user-select: none;
+			color: var(--uiColorPrimaryBlack);
+			border: none;
+			background: none;
+			padding: 0;
+			margin: 0;
+
+			:host-context([data-theme='dark']) & {
+				color: var(--uiColorPrimaryWhite);
+			}
+
+			&:hover {
+				opacity: 0.7;
+			}
+
+			&:active {
+				transform: scale(0.95);
+			}
+		}
+
+		.quantity {
+			font-size: var(--fontSizeTextSm);
+			font-weight: var(--fontWeightSemiBold);
+			text-align: center;
+			user-select: none;
+			flex: 1;
+			color: var(--uiColorPrimaryBlack);
+
+			:host-context([data-theme='dark']) & {
+				color: var(--uiColorPrimaryWhite);
+			}
 		}
 	`
 }
