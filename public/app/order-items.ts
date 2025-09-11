@@ -93,7 +93,7 @@ export class OrderItems extends Element {
 							onclick=${() => this.#onItemToggle(category)}
 						>
 							<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<rect y="0.569336" width="15" height="15" rx="7.5" fill="#B897FD" />
+								<rect y="0.569336" width="15" height="15" rx="7.5" fill="var(--uiColorAccentViolet)" />
 								<path
 									d="M11 5.56934L7.64637 9.63434C7.24639 10.1192 6.50361 10.1192 6.10363 9.63434L5 8.29661"
 									stroke="white"

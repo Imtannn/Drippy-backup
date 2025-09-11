@@ -48,10 +48,43 @@ export class OrderView extends Element {
 			phone: store.order.shippingAddress.phone || '',
 		}
 
-		// Map selected blocks (garments) to minimal payload for email
-		const garments = Array.from(store.selectedBlocks.values())
-			.flatMap(g => Array.from(g.values()))
-			.map(g => ({_id: g._id, blockName: g.blockName}))
+		const orderItems = []
+		for (const [category, template] of store.selectedTemplates.entries()) {
+			// Only include items that are selected in the order
+			if (store.selectedOrderItems.get(category)) {
+				const sizes = []
+				let totalQuantity = 0
+				let totalPrice = 0
+
+				// Get size quantities from the store
+				const sizeMap = store.orderSizeQuantities.get(category)
+				if (sizeMap) {
+					for (const [size, quantity] of sizeMap.entries()) {
+						if (quantity > 0) {
+							const price = 125 * quantity // $125 per item
+							sizes.push({
+								size,
+								quantity,
+								price,
+							})
+							totalQuantity += quantity
+							totalPrice += price
+						}
+					}
+				}
+
+				if (totalQuantity > 0) {
+					orderItems.push({
+						templateCategory: category,
+						templateName: template.name || `${category} Item`,
+						templateId: template._id || category,
+						sizes,
+						totalQuantity,
+						totalPrice,
+					})
+				}
+			}
+		}
 
 		const orderData: OrderData = {
 			// Customer information
@@ -62,17 +95,10 @@ export class OrderView extends Element {
 			lastName: shippingAddress.lastName,
 			phone: shippingAddress.phone,
 
-			// Product information
-			productName: store.order.productName,
-			selectedSize: store.order.selectedSize,
-			isCustomSize: store.order.selectedSize === 'Custom',
-			customMeasurement: store.customMeasurement || undefined,
-			quantity: store.order.quantity,
+			orderItems,
 
 			// Shipping information
 			shippingAddress,
-			// Garments from current model
-			garments,
 		}
 
 		return orderData
@@ -100,8 +126,8 @@ export class OrderView extends Element {
 				throw new Error('Please fill in your shipping address')
 			}
 
-			if (!orderData.productName) {
-				throw new Error('Product name is required')
+			if (!orderData.orderItems || orderData.orderItems.length === 0) {
+				throw new Error('Please select at least one item to order')
 			}
 
 			console.log('📦 Submitting order:', orderData)
@@ -329,7 +355,7 @@ export class OrderView extends Element {
 
 	css = css/*css*/ `
 		${appStyles}
-		
+
 		.order-button-moidien {
 			background: var(--uiColorAccentViolet);
 		}
@@ -343,43 +369,6 @@ export class OrderView extends Element {
 
 		.field-group {
 			position: relative;
-		}
-
-		.form-input {
-			width: 100%;
-			padding: var(--uiSpacingSmall) var(--uiSpacingMedium);
-			border: var(--borderWidth) solid var(--uiColorBorderColor);
-			border-radius: var(--borderRadiusSmall);
-			font-size: var(--fontSizeTextSm);
-			font-family: var(--fontFamily);
-			background: var(--uiColorPrimaryWhite);
-			transition: var(--transitionFast);
-
-			&:focus {
-				outline: none;
-				border-color: var(--uiColorAccentViolet);
-			}
-		}
-
-		.floating-label {
-			position: absolute;
-			left: var(--uiSpacingMedium);
-			top: var(--uiSpacingSmall);
-			color: var(--uiColorSecondaryLightGrey);
-			font-size: var(--fontSizeTextSm);
-			font-family: var(--fontFamily);
-			pointer-events: none;
-			transition: var(--transitionFast);
-		}
-
-		.form-input:focus + .floating-label,
-		.form-input:not(:placeholder-shown) + .floating-label {
-			top: -var(--uiSpacingSmall);
-			left: var(--uiSpacingSmall);
-			font-size: var(--fontSizeTextXs);
-			background: var(--uiColorPrimaryWhite);
-			padding: 0 var(--uiSpacingTiny);
-			color: var(--uiColorAccentViolet);
 		}
 
 		.section-title {

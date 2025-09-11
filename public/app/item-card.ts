@@ -91,7 +91,7 @@ export class ItemCard extends Element {
 
 		.item-card:hover {
 			transform: scale(1.02);
-			--item-card-border: #b897fd;
+			--item-card-border: var(--uiColorAccentViolet);
 		}
 
 		@media (max-width: 768px) {
@@ -102,7 +102,7 @@ export class ItemCard extends Element {
 		}
 
 		.item-card.active {
-			--item-card-border: #b897fd;
+			--item-card-border: var(--uiColorAccentViolet);
 		}
 
 		.item-preview {

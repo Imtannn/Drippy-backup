@@ -67,7 +67,7 @@ export const appStyles = css`
 	}
 
 	.form-input:focus {
-		border-color: #e56be8;
+		border-color: var(--uiColorAccentViolet);
 		outline: none;
 	}
 
