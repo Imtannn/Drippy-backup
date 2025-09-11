@@ -11,15 +11,24 @@ export type AppRoute =
 	| 'share'
 	| 'template'
 
-export type Avatar = 'female' | 'male' | null
+export type Gender = 'male' | 'female'
+
+export type Avatar = {
+	thumbnail: string
+	src: string
+	value: string
+	gender: Gender
+}
 
 export type Space = {
 	name: string
+	slug: string
+	logo: string
+	sceneThumbnail: string
 	collection: string
 	description: string
-	image: URL
-	scene: URL
-	includedModelFiles: URL[]
+	scene: string
+	includedModelFiles: string[]
 	gender: 'male' | 'female'
 	garmentsCount: number
 	isWholesale: boolean

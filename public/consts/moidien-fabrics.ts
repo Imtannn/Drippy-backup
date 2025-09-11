@@ -1,55 +1,7 @@
 import type {Fabric} from '../types/fabric'
 
+// Temporary copy of moidien's fabrics until we have the new structure ready
 export const fabrics: Record<string, Fabric[]> = {
-	baroudeuses: [
-		{
-			_id: '1',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Linen_-_38/Linen_-_38_-_Render.png',
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Linen_-_38/Linen_-_38_-_Normal_Map.jpg',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Linen_-_38/Linen_-_38_-_Base_Color.jpg',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Linen_-_38/Linen_-_38_-_Displacement.jpg',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Linen_-_38/Linen_-_38_-_Roughness.jpg',
-			materialName: '38',
-			category: 'Linen',
-			templateCategories: ['Pants', 'Shirt'],
-		},
-		{
-			_id: '2',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Cotton_-_Taupe/Cotton_-_Taupe_-_Render.png',
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Cotton_-_Taupe/Cotton_-_Taupe_-_Normal_Map.jpg',
-			baseColor: '',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Cotton_-_Taupe/Cotton_-_Taupe_-_Displacement.jpg',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Cotton_-_Taupe/Cotton_-_Taupe_-_Roughness.jpg',
-			materialName: 'Taupe',
-			category: 'Cotton',
-			templateCategories: ['Pants', 'Shirt'],
-		},
-		{
-			_id: '3',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Silk_-_Herringbone/Silk_-_Herringbone_-_Render.png',
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Silk_-_Herringbone/Silk_-_Herringbone_-_Normal_Map.jpg',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Silk_-_Herringbone/Silk_-_Herringbone_-_Base_color.jpg',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Silk_-_Herringbone/Silk_-_Herringbone_-_Displacement.jpg',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Silk_-_Herringbone/Silk_-_Herringbone_-_Roughness.jpg',
-			materialName: 'Herringbone',
-			category: 'Silk',
-			templateCategories: ['Pants', 'Shirt'],
-		},
-	],
 	moidien: [
 		{
 			_id: '1',

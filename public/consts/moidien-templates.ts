@@ -1,56 +1,7 @@
 import type {Template} from '../types/template'
 
+// Temporary copy of moidien's templates until we have the new structure ready
 export const templates: Record<string, Template[]> = {
-	baroudeuses: [
-		{
-			_id: '1',
-			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Pants/Item_3.png',
-			name: 'Item 3',
-			avatar: 'Female',
-			category: 'Pants',
-			materialId: 'Silk - Herringbone',
-		},
-		{
-			_id: '2',
-			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Pants/Item_2.png',
-			name: 'Item 2',
-			avatar: 'Female',
-			category: 'Pants',
-			materialId: 'Silk - Herringbone',
-		},
-		{
-			_id: '3',
-			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Pants/Item_1.png',
-			name: 'Item 1',
-			avatar: 'Female',
-			category: 'Pants',
-			materialId: 'Silk - Herringbone',
-		},
-		{
-			_id: '4',
-			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Shirt/Item_3.png',
-			name: 'Item 3',
-			avatar: 'Female',
-			category: 'Shirt',
-			materialId: 'Silk - Herringbone',
-		},
-		{
-			_id: '5',
-			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Shirt/Item_2.png',
-			name: 'Item 2',
-			avatar: 'Female',
-			category: 'Shirt',
-			materialId: 'Silk - Herringbone',
-		},
-		{
-			_id: '6',
-			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Shirt/Item_1.png',
-			name: 'Item 1',
-			avatar: 'Female',
-			category: 'Shirt',
-			materialId: 'Silk - Herringbone',
-		},
-	],
 	moidien: [
 		{
 			_id: '1',
@@ -98,7 +49,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 10',
 			avatar: 'Female',
 			category: 'Accessories',
-			materialId: 'Pleated Fabric - Black',
+			materialId: 'Black Pleated Fabric Accessories',
 		},
 		{
 			_id: '7',
@@ -106,7 +57,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 2',
 			avatar: 'Female',
 			category: 'Accessories',
-			materialId: 'Pleated Fabric - White',
+			materialId: 'White Pleated Fabric Accessories',
 		},
 		{
 			_id: '8',
@@ -114,7 +65,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 1',
 			avatar: 'Female',
 			category: 'Accessories',
-			materialId: 'Pleated Fabric - Black',
+			materialId: 'Black Pleated Fabric Accessories',
 		},
 		{
 			_id: '9',
@@ -122,7 +73,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 3',
 			avatar: 'Female',
 			category: 'Dress',
-			materialId: 'Cotton - Taupe',
+			materialId: 'Taupe Cotton Dress',
 		},
 		{
 			_id: '10',
@@ -130,7 +81,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 9',
 			avatar: 'Female',
 			category: 'Shirt',
-			materialId: 'Pleated Fabric - White',
+			materialId: 'White Pleated Fabric Shirt',
 		},
 		{
 			_id: '11',
@@ -138,7 +89,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 12',
 			avatar: 'Female',
 			category: 'Shirt',
-			materialId: 'Seersucker Fabric - Black',
+			materialId: 'Black Seersucker Fabric Shirt',
 		},
 		{
 			_id: '12',
@@ -146,7 +97,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 11',
 			avatar: 'Female',
 			category: 'Shirt',
-			materialId: 'Cotton - White',
+			materialId: 'White Cotton Shirt',
 		},
 		{
 			_id: '13',
@@ -154,7 +105,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 8',
 			avatar: 'Female',
 			category: 'Shirt',
-			materialId: 'Crinkle Fabric - Navy',
+			materialId: 'Navy Crinkle Fabric Shirt',
 		},
 		{
 			_id: '14',
@@ -162,7 +113,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 7',
 			avatar: 'Female',
 			category: 'Pants',
-			materialId: 'Cotton - Black',
+			materialId: 'Black Cotton Pants',
 		},
 		{
 			_id: '15',
@@ -170,7 +121,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 4',
 			avatar: 'Female',
 			category: 'Pants',
-			materialId: 'Cotton - Twill',
+			materialId: 'Twill Cotton Pants',
 		},
 	],
 }

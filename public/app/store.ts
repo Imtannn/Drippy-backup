@@ -4,22 +4,14 @@ import {fabrics} from '../consts/fabrics.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {
-	AppRoute,
-	Avatar,
-	CustomMeasurement,
-	OrderState,
-	OrderStatus,
-	ShippingAddress,
-	Space,
-} from '../types/types.js'
+import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {toSolidSignal} from '../utils.js'
 
 export const store = createMutable({
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
-	tempSelectedAvatar: 'female' as Avatar,
-	selectedAvatar: null as Avatar,
+	tempSelectedAvatar: null as string | null,
+	selectedAvatar: null as string | null,
 	selectedSpace: null as Space | null,
 	isPreview: false,
 	selectedTemplates: new Map<TemplateCategory, Template>(),
@@ -29,6 +21,8 @@ export const store = createMutable({
 	isShowAvatar: true,
 	isShowScene: true,
 	isDrippySceneLoading: [] as string[],
+	loadingBlocks: [] as string[],
+	loadingMaterials: [] as string[],
 
 	// Order-related state
 	selectedOrderItems: new Map<TemplateCategory, boolean>(),
@@ -135,7 +129,7 @@ export const store = createMutable({
 				templateBlocks.set(block.category, block)
 				if (materialId) {
 					const fabric = fabrics[this.selectedSpace?.collection ?? 'moidien']?.find(
-						fabric => `${fabric.materialName} ${fabric.category} ${fabric.templateCategory}` === materialId,
+						fabric => `${fabric.category} - ${fabric.materialName}` === materialId,
 					)
 					if (fabric) {
 						newFabrics.push({
@@ -152,9 +146,6 @@ export const store = createMutable({
 		}
 		this.selectedBlocks = newBlocks
 		this.replaceSelectedFabrics = newFabrics
-	},
-	set removeSelectedFabrics(fabricData: {blockCategory: BlockCategory; templateCategory: TemplateCategory}) {
-		this.selectedFabrics.get(fabricData.templateCategory)?.delete(fabricData.blockCategory)
 	},
 	set replaceSelectedFabrics(
 		fabricData:
@@ -196,18 +187,7 @@ export const store = createMutable({
 				newFabrics.set(templateCategory, templateFabrics)
 			}
 
-			// Check if the fabric for this block category already exists in this template
-			if (templateFabrics.has(blockCategory)) {
-				// if it exists, check if the fabric is the same, if so, remove it
-				if (templateFabrics.get(blockCategory)?._id === fabric._id) {
-					templateFabrics.delete(blockCategory)
-				} else {
-					templateFabrics.set(blockCategory, fabric)
-				}
-			} else {
-				// if not, add it
-				templateFabrics.set(blockCategory, fabric)
-			}
+			templateFabrics.set(blockCategory, fabric)
 
 			// If template has no fabrics left, remove the template entry
 			if (templateFabrics.size === 0) {
@@ -226,11 +206,11 @@ export const store = createMutable({
 			selectedTemplates: Map<TemplateCategory, Template>,
 		) => {
 			const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
-				Dress: ['Shirt'],
+				Dress: ['Shirt', 'Pants', 'Skirt'],
 				Shirt: ['Dress'],
 				Jacket: [],
-				Skirt: ['Pants'],
-				Pants: ['Skirt'],
+				Skirt: ['Pants', 'Dress'],
+				Pants: ['Skirt', 'Dress'],
 			}
 
 			const interchangeableCategories = interchangeableCategoriesMapping[category]
@@ -264,10 +244,10 @@ export const store = createMutable({
 	set navigateTo(route: AppRoute) {
 		this.view = route
 	},
-	set setTempSelectedAvatar(avatar: Avatar) {
+	set setTempSelectedAvatar(avatar: string) {
 		this.tempSelectedAvatar = avatar
 	},
-	set selectAvatar(avatar: Avatar) {
+	set selectAvatar(avatar: string) {
 		this.selectedAvatar = avatar
 	},
 	set selectSpace(space: Space | null) {
@@ -409,7 +389,7 @@ export const store = createMutable({
 
 	resetState() {
 		this.view = 'avatar' as AppRoute
-		this.selectedAvatar = null as Avatar
+		this.selectedAvatar = null as string | null
 		this.selectedSpace = null as Space | null
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()

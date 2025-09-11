@@ -60,9 +60,11 @@ export class BlocksSelection extends Element {
 
 		// Update available template categories from selectedTemplates
 		this.createEffect(() => {
-			this.availableTemplateCategories = Array.from(store.selectedTemplates.keys()).filter(
-				category => category !== 'Accessories',
-			)
+			// Sort template categories in the desired order
+			const templateCategoriesOrder = ['Dress', 'Shirt', 'Jacket', 'Pants', 'Skirt']
+			this.availableTemplateCategories = Array.from(store.selectedTemplates.keys())
+				.filter(category => category !== 'Accessories')
+				.sort((a, b) => templateCategoriesOrder.indexOf(a) - templateCategoriesOrder.indexOf(b))
 
 			// Auto-select first template category if none selected
 			if (this.availableTemplateCategories.length > 0 && !this.selectedTemplateCategory) {
@@ -95,7 +97,9 @@ export class BlocksSelection extends Element {
 			const selectedTemplate = store.selectedTemplates.get(this.selectedTemplateCategory)
 			if (selectedTemplate) {
 				this.availableFabrics =
-					fabrics[this.spaceCollection]?.filter(fabric => fabric.templateCategory === selectedTemplate.category) ?? []
+					fabrics[this.spaceCollection]?.filter(fabric =>
+						fabric.templateCategories?.includes(selectedTemplate.category),
+					) ?? []
 			} else {
 				this.availableFabrics = []
 			}

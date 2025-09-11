@@ -5,21 +5,9 @@ import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import './item-card.js'
 import {store} from './store.js'
+import {avatars} from '../consts/avatars.js'
 
 type AvatarSelectionAttributes = keyof {}
-
-const avatars = [
-	{
-		src: new URL('../images/Em_Underwear.webp', import.meta.url),
-		alt: 'Female avatar',
-		value: 'female',
-	},
-	{
-		src: new URL('../images/Anh_Underwear.png', import.meta.url),
-		alt: 'Male avatar',
-		value: 'male',
-	},
-]
 
 @element
 export class AvatarSelection extends Element {
@@ -29,6 +17,12 @@ export class AvatarSelection extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
+
+		this.createEffect(() => {
+			if (!store.tempSelectedAvatar) {
+				store.setTempSelectedAvatar = avatars[0].value
+			}
+		})
 	}
 
 	#onItemClick = (e: CustomEvent) => {
@@ -46,11 +40,6 @@ export class AvatarSelection extends Element {
 	}
 
 	template = () => html`
-	<app-buttons-right>
-		<app-buttons-group>
-			<!-- <theme-switch-button></theme-switch-button> -->
-		</app-buttons-group>
-	</app-buttons-right>
 
 	<app-buttons-right layout="bottom">
 		<app-buttons-group>
@@ -76,12 +65,12 @@ export class AvatarSelection extends Element {
 			<div class="tabs-content-container">
 			<tabs-content selected-value="female">
 			<div class="items-grid">
-			<${For} each=${avatars.filter(avatar => avatar.value === 'female')}>
+			<${For} each=${avatars.filter(avatar => avatar.gender === 'female')}>
 				${(avatar: (typeof avatars)[number]) => html`
 					<item-card
 						item-active=${() => store.tempSelectedAvatar === avatar.value}
-						item-src=${avatar.src}
-						item-alt=${avatar.alt}
+						item-src=${avatar.thumbnail}
+						item-alt=${avatar.value}
 						item-value=${avatar.value}
 						oncardselected=${this.#onItemClick}
 						object-fit="cover"
@@ -96,12 +85,12 @@ export class AvatarSelection extends Element {
 
 				<tabs-content selected-value="male">
 					<div class="items-grid">
-						<${For} each=${avatars.filter(avatar => avatar.value === 'male')}>
+						<${For} each=${avatars.filter(avatar => avatar.gender === 'male')}>
 							${(avatar: (typeof avatars)[number]) => html`
 								<item-card
 									item-active=${() => store.tempSelectedAvatar === avatar.value}
-									item-src=${avatar.src}
-									item-alt=${avatar.alt}
+									item-src=${avatar.thumbnail}
+									item-alt=${avatar.value}
 									item-value=${avatar.value}
 									oncardselected=${this.#onItemClick}
 									object-fit="cover"

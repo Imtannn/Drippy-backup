@@ -19,7 +19,7 @@ export class AppGuard extends Element {
 				console.log('[app-guard] user is logged out, redirecting to login')
 				window.location.href = '/onboarding?step=step3'
 			} else {
-				console.log('[app-guard] user is logged in', user)
+				console.log('[app-guard] user is logged in')
 				this.isUserLoggedIn = true
 			}
 		})
