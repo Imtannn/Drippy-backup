@@ -15,7 +15,7 @@ import '../elements/back-button.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
 import '../elements/cube-button.js'
-import {preloadImage} from '../utils.js'
+import {textureManager} from '../texture-manager.js'
 
 type TemplateViewAttributes = keyof {}
 
@@ -73,30 +73,29 @@ export class TemplateView extends Element {
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
 
-		const templateFabric = getFabricForTemplate(template, 'moidien')
+		store.setSelectedTemplates = template
 
-		const fabricsImgUrls = [
-			templateFabric?.normal,
-			templateFabric?.baseColor,
-			templateFabric?.displacement,
-			templateFabric?.roughness,
-			templateFabric?.alpha,
-		].filter(Boolean) as string[]
+		const templateFabric = getFabricForTemplate(template, store.selectSpace?.collection)
 
-		if (fabricsImgUrls.length > 0) {
-			const loadingId = `${templateFabric!._id}-${Date.now()}`
+		if (templateFabric) {
+			const loadingId = `${templateFabric._id}-${Date.now()}`
 			store.loadingMaterials = [...untrack(() => store.loadingMaterials), loadingId]
-			await Promise.all(fabricsImgUrls.map(imgUrl => preloadImage(imgUrl)))
-			store.loadingMaterials = untrack(() => store.loadingMaterials).filter(id => id !== loadingId)
+			try {
+				// Preload base fabric textures into cache (most efficient - no config needed yet)
+				await textureManager.preloadFabricBaseTextures(templateFabric)
+			} catch (error) {
+				console.warn('Failed to preload fabric textures:', error)
+			} finally {
+				store.loadingMaterials = untrack(() => store.loadingMaterials).filter(id => id !== loadingId)
+			}
 		}
 
 		// Set the selected template using the new Map structure
-		store.setSelectedTemplates = template
 
 		// Get blocks for ALL selected templates, organized by template category
 		const templateBlockData: {blocks: Block[]; templateCategory: TemplateCategory; materialId: string}[] = []
 		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
-			const templateBlocks = getBlocksForTemplate(selectedTemplate, 'moidien')
+			const templateBlocks = getBlocksForTemplate(selectedTemplate, store.selectedSpace?.collection)
 			templateBlockData.push({
 				blocks: templateBlocks,
 				templateCategory: templateCategory,
@@ -248,6 +247,8 @@ export class TemplateView extends Element {
 		}
 
 		.template-item {
+			min-width: 0;
+			min-height: 0;
 			width: 100%;
 			height: 100%;
 			display: flex;

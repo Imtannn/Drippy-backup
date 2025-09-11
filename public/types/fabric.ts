@@ -1,3 +1,5 @@
+import type {Texture} from 'three'
+
 export type Fabric = {
 	_id: string
 	thumb?: string
@@ -6,6 +8,12 @@ export type Fabric = {
 	displacement?: string
 	roughness?: string
 	alpha?: string
+	baseColorTex?: Texture | undefined
+	normalTex?: Texture | undefined
+	displacementTex?: Texture | undefined
+	roughnessTex?: Texture | undefined
+	alphaTex?: Texture | undefined
+
 	materialName: string
 	category?:
 		| 'Cotton'
@@ -18,5 +26,6 @@ export type Fabric = {
 		| 'Crinkle Fabric'
 		| 'Pleated Fabric'
 		| 'Seersucker Fabric'
-	templateCategory?: string
+		| 'Silk'
+	templateCategories?: string[]
 }

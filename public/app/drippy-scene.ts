@@ -24,9 +24,8 @@ import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import {store} from './store.js'
-
-const femaleAvatar = new URL('../models/EM-MoiDien.glb', import.meta.url)
-const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
+import {textureManager} from '../texture-manager.js'
+import {avatars} from '../consts/avatars.js'
 
 type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
 
@@ -38,22 +37,9 @@ export class DrippyScene extends Element {
 	@signal sceneUrl = ''
 	@signal renderBlocks: RenderBlock[] = []
 
-	// Cache for textures per URL so we don't reload repeatedly
-	#textureCache = new Map<string, any>()
-
 	@signal private backgroundModel: GltfModel | null = null
-
+	@signal private avatarModel: GltfModel | null = null
 	@signal private lumeScene: Scene | null = null
-
-	async #getTexture(url: string, repete: [number, number], coef: number, offset: [number, number], rotate: number) {
-		const key = `${url}-${repete[0]}-${repete[1]}-${coef}-${offset[0]}-${offset[1]}-${rotate}`
-		if (this.#textureCache.has(key)) return this.#textureCache.get(key) as THREE.Texture
-
-		const texture = await this.#createTexture(url, repete, coef, offset, rotate)
-		if (!texture) return undefined
-		this.#textureCache.set(key, texture)
-		return texture
-	}
 
 	#extractMeshesFromObj(obj: THREE.Object3D): THREE.Mesh[] {
 		const meshes: THREE.Mesh[] = []
@@ -75,74 +61,40 @@ export class DrippyScene extends Element {
 		return meshes
 	}
 
-	#getCoef(arr: number[]) {
-		const max = Math.max(...arr)
-		return max > 1 ? 1000 : 1
-	}
-
-	// TODO: If the same fabric with same key is already fetching, wait for it to finish and use the same texture
 	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, isCanceled: () => boolean, blockId?: string) {
 		if (!fabric || !root) return
 
 		const loadingId = blockId || `${fabric._id}-${Date.now()}`
 		store.loadingMaterials = [...untrack(() => store.loadingMaterials), loadingId]
-		const repete: [number, number] = [60 / 3, 60 / 3]
-		const offset: [number, number] = [1, 1]
-		const rotate = 0
-		const meshes = this.#extractMeshesFromObj(root)
-		const arr = Array.from(meshes[0]?.geometry?.attributes?.uv?.array)
-			.slice(0, 5)
-			.map((el: any) => Math.abs(el))
-		const coef = arr.length > 0 ? this.#getCoef(arr) : 1
 
-		const [baseColorTex, normalTex, displacementTex, roughnessTex, alphaTex] = await Promise.all([
-			this.#getTexture(fabric.baseColor || '', repete, coef, offset, rotate),
-			this.#getTexture(fabric.normal || '', repete, coef, offset, rotate),
-			this.#getTexture(fabric.displacement || '', repete, coef, offset, rotate),
-			this.#getTexture(fabric.roughness || '', repete, coef, offset, rotate),
-			this.#getTexture(fabric.alpha || '', repete, coef, offset, rotate),
-		])
+		try {
+			// Extract UV data for proper texture scaling
+			const meshes = this.#extractMeshesFromObj(root)
+			const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
+				? Array.from(meshes[0].geometry.attributes.uv.array)
+						.slice(0, 5)
+						.map((el: any) => Math.abs(el))
+				: []
 
-		if (isCanceled()) {
-			store.loadingMaterials = untrack(() => store.loadingMaterials).filter(id => id !== loadingId)
-			return
-		}
+			// Load textures with UV-aware scaling using texture manager
+			const textureSet = await textureManager.loadFabricTexturesWithUV(fabric, uvArray)
 
-		// Configure textures
-		if (baseColorTex) baseColorTex.colorSpace = THREE.SRGBColorSpace as any
-		for (const tex of [baseColorTex, normalTex, displacementTex, roughnessTex]) {
-			if (!tex) continue
-			tex.wrapS = THREE.RepeatWrapping
-			tex.wrapT = THREE.RepeatWrapping
-		}
-
-		const group = root.children?.[0] ?? root
-		group.traverse?.((obj: any) => {
-			if (obj?.isMesh && obj.material) {
-				const material = obj.material
-				material.map = baseColorTex
-				material.normalMap = normalTex
-				// material.displacementMap = displacementTex
-				material.roughnessMap = roughnessTex
-				material.roughnessIntensity = 1
-				material.alphaMap = alphaTex
-				material.transparent = true
-				material.emissive = new THREE.Color(0x000000)
-				material.emissiveIntensity = 0
-				material.aoMapIntensity = 1
-				material.side = THREE.DoubleSide
-				material.normalScale = new THREE.Vector2(2, 2)
-				material.blending = THREE.NormalBlending
-				// Ensure GPU-side texture state updates immediately
-				if (material.map) material.map.needsUpdate = true
-				if (material.normalMap) material.normalMap.needsUpdate = true
-				if (material.roughnessMap) material.roughnessMap.needsUpdate = true
-				// if (material.displacementMap) material.displacementMap.needsUpdate = true
-				material.needsUpdate = true
+			if (isCanceled()) {
+				return
 			}
-		})
 
-		store.loadingMaterials = untrack(() => store.loadingMaterials).filter(id => id !== loadingId)
+			// Apply textures to all meshes in the object
+			const group = root.children?.[0] ?? root
+			group.traverse?.((obj: any) => {
+				if (obj?.isMesh && obj.material) {
+					textureManager.applyTexturesToMaterial(obj.material, textureSet)
+				}
+			})
+		} catch (error) {
+			console.warn('Failed to apply fabric to object:', error)
+		} finally {
+			store.loadingMaterials = untrack(() => store.loadingMaterials).filter(id => id !== loadingId)
+		}
 	}
 
 	// Reset materials to default state (no textures)
@@ -168,80 +120,6 @@ export class DrippyScene extends Element {
 		for (const el of models) {
 			el.needsUpdate?.()
 			el.scene?.needsRender?.()
-		}
-	}
-
-	async #createTexture(
-		image: string | undefined,
-		repeat: [number, number],
-		coef?: number,
-		offset?: [number, number],
-		rotate?: number,
-	): Promise<THREE.Texture | null> {
-		return new Promise<THREE.Texture | null>((resolve, reject) => {
-			if (!image) {
-				resolve(null)
-			} else {
-				const loader = new THREE.TextureLoader()
-
-				loader.load(
-					this.#uncacheImage(image),
-					(texture: any) => {
-						texture.needsUpdate = true
-						texture.wrapS = THREE.RepeatWrapping
-						texture.wrapT = THREE.RepeatWrapping
-						texture.flipY = false
-						if (offset) {
-							texture.offset.set(offset[0], offset[1])
-						}
-						if (rotate) {
-							texture.rotation = rotate
-						}
-
-						// Calculate repeat based on the texture's aspect ratio
-						const aspectRatio = texture.image.width / texture.image.height
-						let repeatX = repeat[0]
-						let repeatY = repeat[1]
-
-						if (coef) {
-							repeatX /= coef
-							repeatY /= coef
-						}
-
-						// Adjust for aspect ratio
-						if (aspectRatio > 1) {
-							repeatY /= aspectRatio
-						} else {
-							repeatX *= aspectRatio
-						}
-
-						// Update texture repeat
-						texture.repeat.set(repeatX, repeatY)
-
-						// Optional: mipmapping for better performance and quality
-						texture.generateMipmaps = true
-						texture.minFilter = THREE.LinearMipmapLinearFilter
-						texture.magFilter = THREE.LinearFilter
-						texture.format = THREE.RGBAFormat
-						resolve(texture)
-					},
-					undefined,
-					err => {
-						console.error('An error happened while loading the texture:', err)
-						reject(null)
-					},
-				)
-			}
-		})
-	}
-
-	#uncacheImage(img: string) {
-		try {
-			const url = new URL(img)
-			url.searchParams.set('v', new Date().getTime().toString())
-			return url.toString()
-		} catch (e) {
-			return img
 		}
 	}
 
@@ -277,9 +155,9 @@ export class DrippyScene extends Element {
 
 		this.createEffect(() => {
 			if (store.selectedSpace) {
-				const space = spaces.find(space => space.name === store.selectedSpace?.name)
+				const space = spaces.find(space => space.slug === store.selectedSpace?.slug)
 				if (space) {
-					this.sceneUrl = space.image.href
+					this.sceneUrl = space.scene
 				}
 			}
 		})
@@ -294,27 +172,57 @@ export class DrippyScene extends Element {
 			onCleanup(() => mo.disconnect())
 		})
 
-		// Track avatar loading state
+		// Track selected avatar loading state
 		this.createEffect(() => {
-			if (!store.selectedAvatar || !store.tempSelectedAvatar || !store.isShowAvatar) return
-			const avatar = this.shadowRoot?.querySelector('lume-gltf-model[data-avatar]') as any
-			if (!avatar) return
+			if (!store.isShowAvatar) return
+			if (store.selectedAvatar) {
+				const avatar = this.avatarModel
+				if (!avatar) return
 
-			const behavior = avatar.behaviors?.get?.('gltf-model')
-			const avatarId = 'avatar'
+				const avatarId = 'avatar'
+				const behavior = avatar.behaviors?.get?.('gltf-model')
 
-			if (!behavior?.model && avatar.three) {
-				if (!untrack(() => store.loadingBlocks.includes(avatarId))) {
-					store.loadingBlocks = [...untrack(() => store.loadingBlocks), avatarId]
+				if (!behavior?.model && avatar.three) {
+					if (!untrack(() => store.loadingBlocks.includes(avatarId))) {
+						store.loadingBlocks = [...untrack(() => store.loadingBlocks), avatarId]
+					}
+
+					if (!untrack(() => store.isDrippySceneLoading.includes(avatarId))) {
+						store.addIsDrippySceneLoading = avatarId
+					}
+
+					const loaded = () => {
+						store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== avatarId)
+						store.removeIsDrippySceneLoading = avatarId
+					}
+
+					avatar.on?.('MODEL_LOAD', loaded)
+					onCleanup(() => {
+						avatar.off?.('MODEL_LOAD', loaded)
+					})
+
+					enableShadowOnModelLoad(avatar)
 				}
+			}
+		})
 
-				if (!untrack(() => store.isDrippySceneLoading.includes(avatarId))) {
-					store.addIsDrippySceneLoading = avatarId
+		// Track temp selected avatar loading state
+		this.createEffect(() => {
+			if (!store.isShowAvatar || store.selectedAvatar) return
+			if (store.tempSelectedAvatar) {
+				const avatar = this.avatarModel
+				if (!avatar) return
+
+				const avatarId = 'avatar'
+
+				if (avatar.three) {
+					if (!untrack(() => store.loadingBlocks.includes(avatarId))) {
+						store.loadingBlocks = [...untrack(() => store.loadingBlocks), avatarId]
+					}
 				}
 
 				const loaded = () => {
 					store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== avatarId)
-					store.removeIsDrippySceneLoading = avatarId
 				}
 
 				avatar.on?.('MODEL_LOAD', loaded)
@@ -624,14 +532,8 @@ export class DrippyScene extends Element {
 						<${Show} when=${() => store.isShowAvatar}>
 							<lume-gltf-model
 								id="avatar"
-								src=${() =>
-									store.selectedAvatar !== null
-										? store.selectedAvatar === 'female'
-											? femaleAvatar.href
-											: maleAvatar.href
-										: store.tempSelectedAvatar === 'female'
-											? femaleAvatar.href
-											: maleAvatar.href}
+								ref=${(el: GltfModel) => (this.avatarModel = el)}
+								src=${() => avatars.find(avatar => avatar.value === (store.selectedAvatar ?? store.tempSelectedAvatar))?.src}
 								scale="1 1 1"
 								data-avatar
 							></lume-gltf-model>
@@ -641,13 +543,13 @@ export class DrippyScene extends Element {
 							<lume-gltf-model
 								ref=${(el: GltfModel) => (this.backgroundModel = el)}
 								id="scene"
-								src=${() => store.selectedSpace?.scene.href ?? ''}
+								src=${() => store.selectedSpace?.scene ?? ''}
 							></lume-gltf-model>
 						</>
 
 						<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
-							${(item: Accessor<URL>) => html`
-								<lume-gltf-model ref=${enableShadowOnModelLoad} src=${() => item().href}></lume-gltf-model>
+							${(item: Accessor<string>) => html`
+								<lume-gltf-model ref=${enableShadowOnModelLoad} src=${() => item()}></lume-gltf-model>
 							`}
 						</>
 

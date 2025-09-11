@@ -36,7 +36,6 @@ export class VideoLoading extends Element {
 		}, 0)
 	}
 
-
 	template = () => html`
 		<div class="video-loading">
 			<video class="loading-video" autoplay muted loop playsinline>

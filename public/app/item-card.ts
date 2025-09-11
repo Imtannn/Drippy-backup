@@ -77,6 +77,8 @@ export class ItemCard extends Element {
 		}
 
 		.item-card {
+			width: 100%;
+			height: 100%;
 			aspect-ratio: var(--aspect-ratio);
 			/* Two-layer background: inner fill on padding-box, gradient border on border-box */
 			background: var(--item-card-border);
