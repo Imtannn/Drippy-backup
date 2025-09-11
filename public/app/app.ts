@@ -11,6 +11,8 @@ import './avatar-selection.js'
 import './blocks-selection.js'
 import './custom-measurement.js'
 import './drippy-scene.js'
+import './order-items.js'
+import './order-size.js'
 import './order-view.js'
 import './outfit-preview.js'
 import './share-view.js'
@@ -129,6 +131,12 @@ export class DrippyApp extends Element {
 						>
 						</show-when>
 						<show-when condition=${() => store.view === 'share'} content=${() => html`<share-view></share-view>`}>
+						</show-when>
+
+						<show-when condition=${() => store.view === 'order-items'} content=${() => html`<order-items></order-items>`}>
+						</show-when>
+
+						<show-when condition=${() => store.view === 'order-size'} content=${() => html`<order-size></order-size>`}>
 						</show-when>
 
 						<show-when condition=${() => store.view === 'order'} content=${() => html`<order-view></order-view>`}>

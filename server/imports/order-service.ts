@@ -9,23 +9,18 @@ export interface OrderData {
 	lastName: string
 	phone: string
 
-	// Product information
-	productName: string
-	selectedSize: string
-	isCustomSize: boolean
-	customMeasurement?: {
-		bust: number
-		waist: number
-		hips: number
-		shoulder: number
-		shoulderToKnee: number
-	}
-	quantity: number
-
-	// Garments selected in the current model
-	garments?: Array<{
-		_id: string
-		blockName: string
+	// Multi-size order items
+	orderItems: Array<{
+		templateCategory: string
+		templateName: string
+		templateId: string
+		sizes: Array<{
+			size: string
+			quantity: number
+			price: number
+		}>
+		totalQuantity: number
+		totalPrice: number
 	}>
 
 	// Shipping information
@@ -49,9 +44,7 @@ function generateOrderId(): string {
 
 // Helper function to calculate pricing
 function calculateOrderTotal(orderData: OrderData): string {
-	const garmentsCount = orderData.garments ? orderData.garments.length : 0
-	const qty = orderData.quantity || 1
-	const total = 125.0 * garmentsCount * qty
+	const total = orderData.orderItems.reduce((sum, item) => sum + item.totalPrice, 0)
 	return total.toFixed(2)
 }
 
@@ -65,19 +58,23 @@ function processOrderForEmail(orderData: OrderData) {
 	})
 	const totalAmount = calculateOrderTotal(orderData)
 
-	// Create items description
-	const items: Array<{name: string; description: string; quantity: number; price: string}> = []
+	// Create items description from order items
+	const items: Array<{
+		name: string
+		description: string
+		quantity: number
+		price: string
+		sizes: Array<{size: string; quantity: number; price: number}>
+	}> = []
 
-	// Append garments as separate line items ($125.00 each) for now
-	if (orderData.garments && orderData.garments.length > 0) {
-		for (const g of orderData.garments) {
-			items.push({
-				name: g.blockName || `Garment ${g._id}`,
-				description: `Garment ID: ${g._id}`,
-				quantity: 1,
-				price: '125.00',
-			})
-		}
+	for (const item of orderData.orderItems) {
+		items.push({
+			name: item.templateName,
+			description: `Category: ${item.templateCategory}`,
+			quantity: item.totalQuantity,
+			price: item.totalPrice.toFixed(2),
+			sizes: item.sizes,
+		})
 	}
 
 	return {
@@ -100,8 +97,15 @@ Meteor.methods({
 			throw new Meteor.Error('validation-error', 'Shipping address is required')
 		}
 
-		if (!orderData.productName) {
-			throw new Meteor.Error('validation-error', 'Product name is required')
+		if (!orderData.orderItems || orderData.orderItems.length === 0) {
+			throw new Meteor.Error('validation-error', 'At least one order item is required')
+		}
+
+		// Validate order items have quantities
+		for (const item of orderData.orderItems) {
+			if (item.totalQuantity <= 0) {
+				throw new Meteor.Error('validation-error', `Item "${item.templateName}" must have at least 1 quantity`)
+			}
 		}
 
 		try {
@@ -113,15 +117,6 @@ Meteor.methods({
 				orderDate: processedOrder.orderDate,
 				items: processedOrder.items,
 				totalAmount: processedOrder.totalAmount,
-				selectedSize: orderData.selectedSize,
-				isCustomSize: orderData.isCustomSize,
-				customMeasurement: orderData.customMeasurement,
-				garmentsNumbered:
-					orderData.garments?.map(g => ({
-						_id: g._id,
-						blockName: g.blockName || `Garment ${g._id}`,
-					})) || [],
-				quantity: orderData.quantity || 1,
 				shippingAddress: {
 					name: `${orderData.shippingAddress.firstName} ${orderData.shippingAddress.lastName}`,
 					street:

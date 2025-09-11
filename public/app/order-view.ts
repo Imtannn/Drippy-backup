@@ -22,18 +22,8 @@ export class OrderView extends Element {
 
 	@eventAttribute onclick = null
 
-	#onSizeButtonClick = (size: string) => {
-		if (size === 'Custom') {
-			store.navigateTo = 'custom-measurement'
-		} else {
-			// Clear custom measurement when selecting a regular size
-			store.customMeasurement = null
-			store.setSelectedSize = size
-		}
-	}
-
 	#onBackButtonClick = () => {
-		store.navigateTo = 'preview'
+		store.navigateTo = 'order-size'
 	}
 
 	#onHomeButtonClick = () => {
@@ -58,10 +48,43 @@ export class OrderView extends Element {
 			phone: store.order.shippingAddress.phone || '',
 		}
 
-		// Map selected blocks (garments) to minimal payload for email
-		const garments = Array.from(store.selectedBlocks.values())
-			.flatMap(g => Array.from(g.values()))
-			.map(g => ({_id: g._id, blockName: g.blockName}))
+		const orderItems = []
+		for (const [category, template] of store.selectedTemplates.entries()) {
+			// Only include items that are selected in the order
+			if (store.selectedOrderItems.get(category)) {
+				const sizes = []
+				let totalQuantity = 0
+				let totalPrice = 0
+
+				// Get size quantities from the store
+				const sizeMap = store.orderSizeQuantities.get(category)
+				if (sizeMap) {
+					for (const [size, quantity] of sizeMap.entries()) {
+						if (quantity > 0) {
+							const price = 125 * quantity // $125 per item
+							sizes.push({
+								size,
+								quantity,
+								price,
+							})
+							totalQuantity += quantity
+							totalPrice += price
+						}
+					}
+				}
+
+				if (totalQuantity > 0) {
+					orderItems.push({
+						templateCategory: category,
+						templateName: template.name || `${category} Item`,
+						templateId: template._id || category,
+						sizes,
+						totalQuantity,
+						totalPrice,
+					})
+				}
+			}
+		}
 
 		const orderData: OrderData = {
 			// Customer information
@@ -72,17 +95,10 @@ export class OrderView extends Element {
 			lastName: shippingAddress.lastName,
 			phone: shippingAddress.phone,
 
-			// Product information
-			productName: store.order.productName,
-			selectedSize: store.order.selectedSize,
-			isCustomSize: store.order.selectedSize === 'Custom',
-			customMeasurement: store.customMeasurement || undefined,
-			quantity: store.order.quantity,
+			orderItems,
 
 			// Shipping information
 			shippingAddress,
-			// Garments from current model
-			garments,
 		}
 
 		return orderData
@@ -110,8 +126,8 @@ export class OrderView extends Element {
 				throw new Error('Please fill in your shipping address')
 			}
 
-			if (!orderData.productName) {
-				throw new Error('Product name is required')
+			if (!orderData.orderItems || orderData.orderItems.length === 0) {
+				throw new Error('Please select at least one item to order')
 			}
 
 			console.log('📦 Submitting order:', orderData)
@@ -222,107 +238,6 @@ export class OrderView extends Element {
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-snap="0.88">
 			<div class="order-container">
-				<div class="product-info">
-					<div class="product-image">
-						<img src="../images/background.jpg" alt="Product" />
-					</div>
-					<div class="product-details">
-						<h2 class="product-name">${() => store.order.productName}</h2>
-						<p class="product-price">Custom price</p>
-					</div>
-					<div class="quantity-controls">
-						<button
-							class="quantity-btn"
-							onclick=${() => {
-								const newQty = store.order.quantity + 1
-								if (newQty <= 99) store.setQuantity = newQty
-							}}
-						>
-							+
-						</button>
-						<span class="quantity">${() => store.order.quantity}</span>
-						<button
-							class="quantity-btn"
-							onclick=${() => {
-								const newQty = store.order.quantity - 1
-								if (newQty >= 1) store.setQuantity = newQty
-							}}
-						>
-							−
-						</button>
-					</div>
-				</div>
-
-				<!-- Size Selection -->
-				<div class="size-section">
-					<h3 class="section-title">Size</h3>
-					<div class="size-options">
-						<button
-							class="size-btn"
-							classList=${() => ({selected: store.order.selectedSize === '34 (XS)' && !store.customMeasurement})}
-							onclick=${() => this.#onSizeButtonClick('34 (XS)')}
-						>
-							34 (XS)
-						</button>
-						<button
-							class="size-btn"
-							classList=${() => ({selected: store.order.selectedSize === '36 (S)' && !store.customMeasurement})}
-							onclick=${() => this.#onSizeButtonClick('36 (S)')}
-						>
-							36 (S)
-						</button>
-						<button
-							class="size-btn"
-							classList=${() => ({selected: store.order.selectedSize === '38 (M)' && !store.customMeasurement})}
-							onclick=${() => this.#onSizeButtonClick('38 (M)')}
-						>
-							38 (M)
-						</button>
-						<button
-							class="size-btn"
-							classList=${() => ({selected: store.order.selectedSize === '40/42 (L)' && !store.customMeasurement})}
-							onclick=${() => this.#onSizeButtonClick('40/42 (L)')}
-						>
-							40/42 (L)
-						</button>
-						<button
-							class="size-btn"
-							classList=${() => ({selected: store.order.selectedSize === '44 (XL)' && !store.customMeasurement})}
-							onclick=${() => this.#onSizeButtonClick('44 (XL)')}
-						>
-							44 (XL)
-						</button>
-						<button
-							class="size-btn"
-							classList=${() => ({selected: store.order.selectedSize === '48 (2XL)' && !store.customMeasurement})}
-							onclick=${() => this.#onSizeButtonClick('48 (2XL)')}
-						>
-							48 (2XL)
-						</button>
-						<button
-							class="size-btn"
-							classList=${() => ({selected: store.order.selectedSize === '50 (3XL)' && !store.customMeasurement})}
-							onclick=${() => this.#onSizeButtonClick('50 (3XL)')}
-						>
-							50 (3XL)
-						</button>
-						<button
-							class="size-btn"
-							classList=${() => ({selected: store.order.selectedSize === '52 (4XL)' && !store.customMeasurement})}
-							onclick=${() => this.#onSizeButtonClick('52 (4XL)')}
-						>
-							52 (4XL)
-						</button>
-						<button
-							class="size-btn custom"
-							classList=${() => ({selected: store.order.selectedSize === 'Custom' || !!store.customMeasurement})}
-							onclick=${() => this.#onSizeButtonClick('Custom')}
-						>
-							Custom size
-						</button>
-					</div>
-				</div>
-
 				<!-- Shipping Address -->
 				<div class="shipping-section">
 					<h3 class="section-title">Shipping address</h3>
@@ -412,7 +327,7 @@ export class OrderView extends Element {
 
 				<!-- Order Button -->
 				<button
-					class="order-button"
+					class="order-button order-button-moidien"
 					onclick=${this.#onBuyItClick}
 					disabled=${() => store.order.status === 'submitting'}
 				>
@@ -441,285 +356,27 @@ export class OrderView extends Element {
 	css = css/*css*/ `
 		${appStyles}
 
-		.order-container {
-			padding: var(--uiSpacing);
-			padding-top: 0;
-			padding-bottom: 5px;
-			background: var(--uiColorPrimaryWhite);
+		.order-button-moidien {
+			background: var(--uiColorAccentViolet);
 		}
 
-		.product-info {
+		/* Form Styles */
+		.form-fields {
 			display: flex;
-			align-items: center;
-			gap: var(--uiGapLarge);
-			margin-bottom: var(--uiSpacingLarge);
+			flex-direction: column;
+			gap: var(--uiSpacingMedium);
 		}
 
-		.product-image {
-			width: 60px;
-			height: 60px;
-			border-radius: var(--borderRadius);
-			overflow: hidden;
-		}
-
-		.product-image img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-		}
-
-		.product-details {
-			flex: 1;
-		}
-
-		.product-name {
-			font-size: var(--fontSizeTextSm);
-			font-weight: var(--fontWeightSemiBold);
-			color: var(--uiColorPrimaryBlack);
-			margin: 0 0 var(--uiSpacingTiny) 0;
-
-			:host-context([data-theme='dark']) & {
-				color: var(--uiColorPrimaryWhite);
-			}
-		}
-
-		.product-price {
-			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightNormal);
-			color: #666;
-			margin: 0;
-
-			:host-context([data-theme='dark']) & {
-				color: #ccc;
-			}
-		}
-
-		.quantity-controls {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			width: 80px;
-			height: var(--uiSpacingLarge);
-			background: #f5f5f5;
-			border-radius: var(--borderRadiusPill);
-			padding: 0 var(--uiSpacingSmall);
-
-			:host-context([data-theme='dark']) & {
-				background: #2a2a2a;
-			}
-		}
-
-		.quantity-btn {
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: var(--fontSizeTextSm);
-			font-weight: var(--fontWeightMedium);
-			transition: var(--transitionSlow);
-			user-select: none;
-			color: var(--uiColorPrimaryBlack);
-
-			:host-context([data-theme='dark']) & {
-				color: var(--uiColorPrimaryWhite);
-			}
-		}
-
-		.quantity-btn:hover {
-			opacity: 0.7;
-		}
-
-		.quantity-btn:active {
-			transform: scale(0.95);
-		}
-
-		.quantity {
-			font-size: 14px;
-			font-weight: 600;
-			text-align: center;
-			user-select: none;
-			flex: 1;
-			color: #000;
-
-			:host-context([data-theme='dark']) & {
-				color: #fff;
-			}
-		}
-
-		.size-section {
-			margin-bottom: 30px;
-		}
-
-		.size-options {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 10px;
-		}
-
-		.size-btn {
-			padding: 8px 16px;
-			border: 1px solid #ddd;
-			background: #f5f5f5;
-			border-radius: 20px;
-			cursor: pointer;
-			font-size: 12px;
-			font-weight: 400;
-			transition: all 0.2s;
-			color: #000;
-
-			:host-context([data-theme='dark']) & {
-				background: #2a2a2a;
-				border-color: #444;
-				color: #fff;
-			}
-		}
-
-		.size-btn:hover:not(.selected) {
-			background: #f5f5f5;
-			border-color: #bbb;
-
-			:host-context([data-theme='dark']) & {
-				background: #3a3a3a;
-				border-color: #555;
-			}
-		}
-
-		.size-btn.selected {
-			background: #000;
-			color: white;
-			border-color: #000;
-
-			:host-context([data-theme='dark']) & {
-				background: #fff;
-				color: #000;
-				border-color: #fff;
-			}
-		}
-
-		.size-btn.custom {
+		.field-group {
 			position: relative;
-			background: linear-gradient(136deg, #e56be8 1.67%, #495cff 100.68%);
-			background-clip: text;
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
-			border: none;
 		}
 
-		.size-btn.custom::before {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background: linear-gradient(136deg, #e56be8 1.67%, #495cff 100.68%);
-			border-radius: 20px;
-			z-index: -1;
-		}
-
-		.size-btn.custom::after {
-			content: '';
-			position: absolute;
-			top: 1px;
-			left: 1px;
-			right: 1px;
-			bottom: 1px;
-			background: white;
-			border-radius: 19px;
-			z-index: -1;
-		}
-
-		.size-btn.custom:active {
-			opacity: 0.8;
-			transition: opacity 0.1s ease;
-		}
-
-		.size-btn.custom:hover {
-			opacity: 0.9;
-			transform: translateY(-1px);
-		}
-
-		.size-btn.custom.selected {
-			background: linear-gradient(136deg, #e56be8 1.67%, #495cff 100.68%);
-			color: white;
-			border-color: transparent;
-			-webkit-text-fill-color: white;
-			background-clip: unset;
-		}
-
-		.shipping-section {
-			margin-bottom: 30px;
-		}
-
-		/* Dark mode for order button */
-		.order-button {
-			:host-context([data-theme='dark']) & {
-				background: #fff;
-				color: #000;
-			}
-		}
-
-		.quantity-btn {
-			width: var(--icon-button-size);
-			height: var(--icon-button-size);
-			border: 1px solid var(--color-border);
-			background: var(--color-background);
-			border-radius: 50%;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 18px;
-		}
-
-		.size-btn.selected {
-			background: #000;
-			color: white;
-			border-color: #000;
-		}
-
-		.shipping-section {
-			margin-bottom: 30px;
-		}
-
-		/* Loading spinner */
-		.loading-spinner {
-			width: 16px;
-			height: 16px;
-			border: 2px solid #ffffff40;
-			border-top: 2px solid #ffffff;
-			border-radius: 50%;
-			animation: spin 1s linear infinite;
-			margin-right: 8px;
-		}
-
-		@keyframes spin {
-			0% {
-				transform: rotate(0deg);
-			}
-			100% {
-				transform: rotate(360deg);
-			}
-		}
-
-		.order-button:disabled {
-			opacity: 0.7;
-			cursor: not-allowed;
-		}
-
-		.error-message {
-			margin-top: 10px;
-			padding: 10px;
-			background: #fee2e2;
-			color: #dc2626;
-			border-radius: 8px;
-			font-size: 14px;
-			text-align: center;
-
-			:host-context([data-theme='dark']) & {
-				background: #7f1d1d;
-				color: #fca5a5;
-			}
+		.section-title {
+			font-size: var(--fontSizeTextMd);
+			font-weight: var(--fontWeightSemiBold);
+			font-family: var(--fontFamily);
+			color: var(--uiColorPrimaryBlack);
+			margin: 0 0 var(--uiSpacingMedium) 0;
 		}
 	`
 }
