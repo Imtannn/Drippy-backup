@@ -24,7 +24,7 @@ import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import {store} from './store.js'
-import {textureManager} from '../texture-manager.js'
+import {textureManager} from './texture-manager.js'
 import {avatars} from '../consts/avatars.js'
 
 type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
