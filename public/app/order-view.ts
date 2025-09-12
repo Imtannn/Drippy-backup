@@ -107,7 +107,7 @@ export class OrderView extends Element {
 							quantity,
 							price,
 							totalPrice,
-							customMeasurement, // Include custom measurement if available
+							customMeasurement: customMeasurement || undefined, // Include custom measurement if available
 						})
 					}
 				}
