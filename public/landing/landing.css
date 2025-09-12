@@ -549,8 +549,7 @@ p {
 .landing-page-desktop .how-it-works__step {
 	position: relative;
 	width: 100%;
-	min-height: 562px;
-	margin-right: -2px;
+	min-height: 540px;
 }
 
 .landing-page-desktop .how-it-works__step-title {
@@ -1642,9 +1641,10 @@ p {
 	position: absolute;
 	width: 100%;
 	max-width: 300px;
-	height: 540px;
+	min-height: 540px;
 	top: 0;
-	left: 0;
+	left: 50%;
+	transform: translate(-50%, 0);
 	border-radius: 20px;
 	border: 1px solid;
 	border-color: var(--uiColorBorderColor);
@@ -1805,9 +1805,6 @@ p {
 }
 
 .landing-page-desktop .how-it-works__step-image {
-	width: 100%;
-	min-width: 100%;
-	height: 100%;
 	border-radius: 20px;
 	border: 1px solid;
 	border-color: var(--uiColorBorderColor);
@@ -2008,7 +2005,7 @@ p {
 		align-items: start;
 	}
 	.landing-page-desktop .how-it-works__step {
-		min-height: 876px;
+		/* min-height: 876px; */
 	}
 
 	.landing-page-desktop .how-it-works__item {
@@ -2017,7 +2014,6 @@ p {
 	}
 
 	.landing-page-desktop .how-it-works__item .how-it-works__step-image {
-		min-width: 100%;
 	}
 
 	/* Platform grid responsive for tablet - single column */
@@ -2046,7 +2042,7 @@ p {
 		min-width: 100%;
 	}
 	.landing-page-desktop .how-it-works__step {
-		min-height: 776px;
+		/* min-height: 776px; */
 	}
 }
 @media (max-width: 830px) {
@@ -2116,7 +2112,7 @@ p {
 		flex-direction: column;
 	}
 	.landing-page-desktop .how-it-works__step {
-		min-height: 576px;
+		/* min-height: 576px; */
 	}
 
 	.landing-page-desktop .cta__content {
@@ -2325,7 +2321,7 @@ p {
 		gap: 50px;
 	}
 	.landing-page-desktop .features__image {
-		max-width: 100%;
+		min-width: 300px;
 		min-height: 100%;
 	}
 	.landing-page-desktop .section-drippy .feature__item {
@@ -2371,10 +2367,10 @@ p {
 	}
 	.landing-page-desktop .how-it-works__grid .how-it-works__step {
 		max-width: 100%;
-		min-height: 720px;
+		min-height: 550px;
 	}
 	.landing-page-desktop .how-it-works__grid .how-it-works__step-image {
-		max-width: unset;
+		max-width: 300px;
 	}
 	.landing-page-desktop .how-it-works__grid .how-it-works__step-title {
 		max-width: unset;
@@ -2383,11 +2379,29 @@ p {
 		max-width: 100%;
 	}
 
+	.landing-page-desktop .platform__card-overlap {
+		height: 365px;
+	}
 	.landing-page-desktop .platform__grid {
 		flex-direction: column;
 	}
+	.landing-page-desktop .platform__card-image {
+		height: 215px;
+	}
+	.landing-page-desktop .platform__screenshot {
+		height: 100%;
+		object-fit: unset;
+	}
+	.landing-page-desktop .platform__device-image {
+		height: 100%;
+	}
+	.landing-page-desktop .platform__card-text {
+		top: 240px;
+	}
+
 	.landing-page-desktop .pricing__content .pricing__plans {
 		flex-direction: column;
+		margin-top: 0;
 	}
 
 	.landing-page-desktop .pricing__plan--digitize {
