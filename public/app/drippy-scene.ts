@@ -14,21 +14,47 @@ import {
 	signal,
 	untrack,
 } from 'lume'
-import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {spaces} from '../consts/spaces.js'
 import '../elements/loading-indicator.js'
+import '../elements/lume-animation.js'
+import '../elements/rig/lume-auto-rigger.js'
 import '../elements/logic/show-when.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import {store} from './store.js'
+import type {Accessor} from 'solid-js'
 
-const femaleAvatar = new URL('../models/EM-MoiDien.glb', import.meta.url)
+/* const femaleAvatar = new URL('../models/EM-MoiDien.glb', import.meta.url) */
+const femaleAvatar = new URL('../models/FV2_Yunaa-01.glb', import.meta.url)
 const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
 
 type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
+
+function excludeBonesFromBlock(block: Block) {
+	const baseBones = ['Right_Pectoral', 'Left_Pectoral', 'Neck', 'Right_Heel', 'Left_Heel']
+
+	const isDress = block.templateCategory === 'Dress' || block._id === '12' || block._id === '9'
+
+	if (isDress) {
+		return baseBones.concat(['Right_Arm', 'Left_Arm'])
+	}
+
+	if (block.templateCategory === 'Pants') {
+		// Could also exclude bones above the waist but I don't see it being an issue.
+		return baseBones.concat(['Right_Arm', 'Left_Arm'])
+	}
+
+	const isShortSleeves = block._id == '13' || block._id == '14'
+
+	if (isShortSleeves) {
+		return baseBones.concat(['Right_ForeArm', 'Left_ForeArm'])
+	}
+
+	return baseBones
+}
 
 @element
 export class DrippyScene extends Element {
@@ -46,6 +72,14 @@ export class DrippyScene extends Element {
 	@signal private backgroundModel: GltfModel | null = null
 
 	@signal private lumeScene: Scene | null = null
+
+	// When `false`, disable animations and rigging.
+	@signal private animsEnabled = true
+
+	@signal private animsStopped = true
+
+	@signal private animName: string | null = null
+	@signal private animSrc: string | null = null
 
 	async #getTexture(url: string, repete: [number, number], coef: number, offset: [number, number], rotate: number) {
 		const key = `${url}-${repete[0]}-${repete[1]}-${coef}-${offset[0]}-${offset[1]}-${rotate}`
@@ -482,6 +516,46 @@ export class DrippyScene extends Element {
 			})
 		})
 
+		// Play animation when blocks are added, pause animation when no blocks.
+		this.createEffect(() => {
+			// When rigging the garments to the skeleton, the model needs to be stationary,
+			// ideally in T-pose. We need to wait for all the blocks to be fully loaded before
+			// rigging.
+
+			if (this.loadingBlocks.length > 0) {
+				this.animsStopped = true
+			} else {
+				// Wait 1 more frame just for good measure. The rigging should happen as soon as
+				// the bocks are loaded, so this makes sure that the animations start on the next
+				// frame, when the rigging is finished.
+				if (this.animsEnabled) {
+					requestAnimationFrame(() => {
+						this.animsStopped = false
+					})
+				}
+			}
+		})
+
+		this.createEffect(() => {
+			if (store.selectedAnimation === 'none') {
+				this.animsEnabled = false
+				this.animsStopped = true
+
+				this.animName = null
+				this.animSrc = null
+			} else if (store.selectedAnimation === 'walk') {
+				this.animsEnabled = true
+
+				this.animName = 'FV2_Walking in place.mtn'
+				this.animSrc = '../models/Yuna-walkinplace.glb'
+			} else if (store.selectedAnimation === 'dance') {
+				this.animsEnabled = true
+
+				this.animName = 'FV2_Dancing_01.mtn'
+				this.animSrc = '../models/Yuna-dancing01.glb'
+			}
+		})
+
 		this.createEffect(() => {
 			// Force update the scene when the fabric changes
 			Motor?.addRenderTask(this.#renderTask)
@@ -617,8 +691,23 @@ export class DrippyScene extends Element {
 							position="0 -1 0"
 						></lume-camera-rig>
 
-						<${Show} when=${() => store.isShowAvatar}>
-							<lume-gltf-model
+						<${Show} when=${() => store.isShowAvatar} 
+							fallback=${() => html`
+								<${For} each=${() => this.renderBlocks}>
+									${(item: RenderBlock, index: Accessor<number>) => {
+										return html`
+											<lume-gltf-model
+												ref=${enableShadowOnModelLoad}
+												id=${item.id}
+												data-index=${index()}
+												data-cloth
+												src=${item.block.modelFile}
+												scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
+											></lume-gltf-model>
+										`
+									}}
+								</>`}>
+							<lume-gltf-model 
 								id="avatar"
 								src=${() =>
 									store.selectedAvatar !== null
@@ -628,11 +717,40 @@ export class DrippyScene extends Element {
 										: store.tempSelectedAvatar === 'female'
 											? femaleAvatar.href
 											: maleAvatar.href}
-								scale="1 1 1"
 								data-avatar
-							></lume-gltf-model>
+								scale="1 1 1"
+								position="0 0 0"
+								>
+									<${For} each=${() => this.renderBlocks}>
+										${(item: RenderBlock, index: Accessor<number>) => {
+											console.log(JSON.stringify(item, undefined, 4))
+											return html`
+												<lume-gltf-model
+													ref=${enableShadowOnModelLoad}
+													id=${item.id}
+													data-index=${index()}
+													data-cloth
+													src=${item.block.modelFile}
+													scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
+													><lume-auto-rigger
+														excluded-bones=${() => excludeBonesFromBlock(item.block)}
+														onrig=${() => {
+															this.animsStopped = false
+														}}
+														disabled=${() => {
+															//
+															return false
+															return !this.animsEnabled
+														}}
+													></lume-auto-rigger
+												></lume-gltf-model>
+											`
+										}}
+									</>
+								<lume-animation src=${() => this.animSrc} clip-name=${() => this.animName} stopped=${() => this.animsStopped || !this.animsEnabled}></lume-animation>
+							</lume-gltf-model>
 						</>
-
+						
 						<${Show} when=${() => store.isShowScene}>
 							<lume-gltf-model
 								ref=${(el: GltfModel) => (this.backgroundModel = el)}
@@ -642,23 +760,13 @@ export class DrippyScene extends Element {
 						</>
 
 						<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
-							${(item: Accessor<URL>) => html`
-								<lume-gltf-model ref=${enableShadowOnModelLoad} src=${() => item().href}></lume-gltf-model>
-							`}
+							${(item: Accessor<URL>) => {
+								return html`
+									<lume-gltf-model ref=${enableShadowOnModelLoad} src=${() => item().href}></lume-gltf-model>
+								`
+							}}
 						</>
-
-						<${For} each=${() => this.renderBlocks}>
-							${(item: RenderBlock, index: Accessor<number>) => html`
-								<lume-gltf-model
-									ref=${enableShadowOnModelLoad}
-									id=${item.id}
-									data-index=${index()}
-									data-cloth
-									src=${item.block.modelFile}
-									scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
-								></lume-gltf-model>
-							`}
-						</>
+					
 					</lume-element3d>
 				</lume-scene>
 			</div>
