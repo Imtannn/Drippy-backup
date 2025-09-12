@@ -160,6 +160,13 @@ export const EmailTemplates = {
 				sizes?: Array<{size: string; quantity: number; price: number}>
 				selectedSize?: string
 				orderType: 'wholesale' | 'retail'
+				customMeasurement?: {
+					bust: number
+					waist: number
+					hips: number
+					shoulder: number
+					shoulderToKnee: number
+				}
 			}>
 			totalAmount: string
 			isCustomSize?: boolean
@@ -216,6 +223,13 @@ export const EmailTemplates = {
 				sizes?: Array<{size: string; quantity: number; price: number}>
 				selectedSize?: string
 				orderType: 'wholesale' | 'retail'
+				customMeasurement?: {
+					bust: number
+					waist: number
+					hips: number
+					shoulder: number
+					shoulderToKnee: number
+				}
 			}>
 			totalAmount: string
 			isCustomSize?: boolean

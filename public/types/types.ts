@@ -92,6 +92,7 @@ export type OrderData = {
 		quantity: number
 		price: number
 		totalPrice: number
+		customMeasurement?: CustomMeasurement // Custom measurements if size is 'Custom'
 	}>
 
 	// Shipping information

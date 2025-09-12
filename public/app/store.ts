@@ -38,6 +38,10 @@ export const store = createMutable({
 	retailItemQuantities: new Map<TemplateCategory, number>(),
 	// For retail mode: selected size per category
 	retailItemSizes: new Map<TemplateCategory, string>(),
+	// For retail mode: custom measurements per category
+	retailItemCustomMeasurements: new Map<TemplateCategory, CustomMeasurement>(),
+	// Track which category is currently being customized
+	currentCustomMeasurementCategory: null as TemplateCategory | null,
 	order: {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -382,6 +386,20 @@ export const store = createMutable({
 		return this.retailItemSizes.get(category) || '34 (XS)' // Default size for retail
 	},
 
+	setRetailItemCustomMeasurement(category: TemplateCategory, measurement: CustomMeasurement) {
+		const newMeasurements = new Map(this.retailItemCustomMeasurements)
+		newMeasurements.set(category, measurement)
+		this.retailItemCustomMeasurements = newMeasurements
+	},
+
+	getRetailItemCustomMeasurement(category: TemplateCategory): CustomMeasurement | null {
+		return this.retailItemCustomMeasurements.get(category) || null
+	},
+
+	hasRetailItemCustomMeasurement(category: TemplateCategory): boolean {
+		return this.retailItemCustomMeasurements.has(category)
+	},
+
 	getRetailOrderTotalCost(): number {
 		let total = 0
 		for (const [category] of this.selectedOrderItems.entries()) {
@@ -424,6 +442,7 @@ export const store = createMutable({
 		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 		this.retailItemQuantities = new Map<TemplateCategory, number>()
 		this.retailItemSizes = new Map<TemplateCategory, string>()
+		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {
@@ -459,6 +478,7 @@ export const store = createMutable({
 		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 		this.retailItemQuantities = new Map<TemplateCategory, number>()
 		this.retailItemSizes = new Map<TemplateCategory, string>()
+		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {

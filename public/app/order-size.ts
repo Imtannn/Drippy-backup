@@ -46,7 +46,16 @@ export class OrderSize extends Element {
 
 	#onSizeButtonClick = (size: string, category?: TemplateCategory) => {
 		if (size === 'Custom') {
-			store.navigateTo = 'custom-measurement'
+			if (store.selectedSpace?.isWholesale) {
+				// Wholesale: use existing global custom measurement
+				store.navigateTo = 'custom-measurement'
+			} else {
+				// Retail: set current category and navigate to custom measurement
+				if (category) {
+					store.currentCustomMeasurementCategory = category
+				}
+				store.navigateTo = 'custom-measurement'
+			}
 		} else {
 			if (store.selectedSpace?.isWholesale) {
 				// Wholesale: use existing logic
@@ -299,7 +308,9 @@ export class OrderSize extends Element {
 												<button
 													class="size-btn custom"
 													classList=${() => ({
-														selected: store.getRetailItemSize(category) === 'Custom' || !!store.customMeasurement,
+														selected:
+															store.getRetailItemSize(category) === 'Custom' ||
+															store.hasRetailItemCustomMeasurement(category),
 													})}
 													onclick=${() => this.#onSizeButtonClick('Custom', category)}
 												>

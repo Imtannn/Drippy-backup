@@ -41,6 +41,13 @@ function processOrderForEmail(orderData: OrderData) {
 		sizes?: Array<{size: string; quantity: number; price: number}>
 		selectedSize?: string
 		orderType: 'wholesale' | 'retail'
+		customMeasurement?: {
+			bust: number
+			waist: number
+			hips: number
+			shoulder: number
+			shoulderToKnee: number
+		}
 	}> = []
 
 	if (orderData.orderType === 'wholesale') {
@@ -63,6 +70,7 @@ function processOrderForEmail(orderData: OrderData) {
 				price: item.totalPrice.toFixed(2),
 				selectedSize: item.selectedSize,
 				orderType: 'retail',
+				customMeasurement: item.customMeasurement, // Include custom measurements
 			})
 		}
 	}

@@ -94,6 +94,7 @@ export class OrderView extends Element {
 					// Retail order processing (new logic)
 					const quantity = store.getRetailItemQuantity(category)
 					const selectedSize = store.getRetailItemSize(category)
+					const customMeasurement = store.getRetailItemCustomMeasurement(category)
 					const price = 125 // Base price per item
 					const totalPrice = quantity * price
 
@@ -106,6 +107,7 @@ export class OrderView extends Element {
 							quantity,
 							price,
 							totalPrice,
+							customMeasurement, // Include custom measurement if available
 						})
 					}
 				}
