@@ -110,7 +110,7 @@ export class OrderSize extends Element {
 		</app-buttons-right>
 	</show-on-device>
 
-	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
+	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)"  default-snap="0.88">
 		<div class="order-container">
 			<div class="order-content">
 				<!-- Selected Items List -->
