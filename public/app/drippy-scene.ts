@@ -723,7 +723,6 @@ export class DrippyScene extends Element {
 								>
 									<${For} each=${() => this.renderBlocks}>
 										${(item: RenderBlock, index: Accessor<number>) => {
-											console.log(JSON.stringify(item, undefined, 4))
 											return html`
 												<lume-gltf-model
 													ref=${enableShadowOnModelLoad}
@@ -759,12 +758,14 @@ export class DrippyScene extends Element {
 							></lume-gltf-model>
 						</>
 
-						<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
-							${(item: Accessor<URL>) => {
-								return html`
-									<lume-gltf-model ref=${enableShadowOnModelLoad} src=${() => item().href}></lume-gltf-model>
-								`
-							}}
+						<${Show} when=${() => !this.animsEnabled}>
+							<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
+								${(item: Accessor<URL>) => {
+									return html`
+										<lume-gltf-model ref=${enableShadowOnModelLoad} src=${() => item().href}></lume-gltf-model>
+									`
+								}}
+							</>
 						</>
 					
 					</lume-element3d>
