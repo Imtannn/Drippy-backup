@@ -20,8 +20,8 @@ export const spaces: Space[] = [
 		isWholesale: true,
 	},
 	{
-		name: 'Baroudeuses',
-		slug: 'baroudeuses',
+		name: 'YALLAH',
+		slug: 'YALLAH',
 		description: 'Baroudeuses',
 		logo: '',
 		sceneThumbnail:
