@@ -56,6 +56,157 @@ export class OrderItems extends Element {
 		store.navigateTo = 'preview'
 	}
 
+	#captureItemScreenshot = (category: TemplateCategory): string => {
+		console.log('captureItemScreenshot for category:', category)
+
+		// Find the drippy-app element
+		const app = document.querySelector('drippy-app') as any
+		if (!app?.shadowRoot) return ''
+
+		// Get the drippy-scene
+		const scene = app.shadowRoot.querySelector('drippy-scene') as any
+		if (!scene?.shadowRoot) return ''
+
+		// Get the lume-scene
+		const lumeScene = scene.shadowRoot.querySelector('lume-scene') as any
+		if (!lumeScene?.shadowRoot) return ''
+
+		// Get all garment models (cloth items) - they're direct children of lume-scene
+		const clothModels = lumeScene.querySelectorAll('lume-gltf-model[data-cloth]')
+		console.log('found cloth models:', clothModels.length)
+		
+		// Debug: log model IDs
+		clothModels.forEach((model: any, index: number) => {
+			console.log(`model ${index} ID:`, model.getAttribute('id'))
+		})
+
+		// Simple approach: hide all garments except the target category
+		const modelsToHide: any[] = []
+		console.log(`hiding models that don't start with "${category}-"`)
+		
+		clothModels.forEach((model: any) => {
+			const modelId = model.getAttribute('id') || ''
+			const shouldKeep = modelId.startsWith(category + '-')
+			console.log(`model ${modelId}: ${shouldKeep ? 'KEEP' : 'HIDE'}`)
+			
+			if (!shouldKeep) {
+				// Hide the Three.js object instead of CSS display
+				console.log(`hiding model: ${modelId}`)
+				if (model.three) {
+					console.log(`setting model.three.visible = false for ${modelId}`)
+					model.three.visible = false
+					modelsToHide.push(model)
+				} else {
+					console.log(`no model.three found for ${modelId}`)
+				}
+			}
+		})
+		
+		console.log(`total models to hide: ${modelsToHide.length}`)
+
+		// Also hide avatar, scene, and other elements
+		const otherModelsToHide: any[] = []
+		
+		// Hide avatar
+		const avatarModel = lumeScene.querySelector('#avatar')
+		if (avatarModel?.three) {
+			console.log('hiding avatar')
+			avatarModel.three.visible = false
+			otherModelsToHide.push(avatarModel)
+		}
+		
+		// Hide scene/background
+		const sceneModel = lumeScene.querySelector('#scene')
+		if (sceneModel?.three) {
+			console.log('hiding scene')
+			sceneModel.three.visible = false
+			otherModelsToHide.push(sceneModel)
+		}
+		
+		// Hide shoes and any other non-cloth models
+		const allOtherModels = lumeScene.querySelectorAll('lume-gltf-model:not([data-cloth])')
+		console.log('found other models (non-cloth):', allOtherModels.length)
+		allOtherModels.forEach((model: any) => {
+			const modelId = model.getAttribute('id') || 'unnamed'
+			if (model.three && modelId !== 'avatar' && modelId !== 'scene') {
+				console.log(`hiding other model: ${modelId}`)
+				model.three.visible = false
+				otherModelsToHide.push(model)
+			}
+		})
+
+		// Move lume-camera-rig using position to focus on the item
+		const cameraRig = lumeScene.querySelector('lume-camera-rig')
+		let originalPosition: string | null = null
+		let originalDistance: string | null = null
+		
+		if (cameraRig) {
+			// Store original values
+			originalPosition = cameraRig.getAttribute('position') || '0 -1 0'
+			originalDistance = cameraRig.getAttribute('distance') || '9'
+			
+			console.log(`moving camera-rig for ${category} - original position: ${originalPosition}`)
+			
+			// Move camera-rig position to focus on the specific garment
+			if (category === 'Shirt') {
+				cameraRig.setAttribute('position', '0 0.5 0')  // Focus higher for shirt
+				cameraRig.setAttribute('distance', '4')
+			} else if (category === 'Pants') {
+				cameraRig.setAttribute('position', '0 -0.5 0')  // Focus lower for pants
+				cameraRig.setAttribute('distance', '4')
+			} else {
+				cameraRig.setAttribute('position', '0 0 0')  // Center for other items
+				cameraRig.setAttribute('distance', '4')
+			}
+		}
+
+		// Get canvas and renderer
+		const canvas = lumeScene.shadowRoot.querySelector('canvas')
+		if (!canvas) return ''
+
+		const renderer = lumeScene.glRenderer || lumeScene._glRenderer || lumeScene.renderer
+		let screenshot = ''
+
+		if (renderer) {
+			const threeScene = lumeScene.three || renderer.scene
+			const threeCamera = lumeScene.camera?.three || lumeScene.three?.camera
+
+			if (threeScene && threeCamera) {
+				renderer.render(threeScene, threeCamera)
+				screenshot = renderer.domElement.toDataURL('image/png')
+			}
+		}
+
+		if (!screenshot) {
+			screenshot = canvas.toDataURL('image/png')
+		}
+
+		// Restore hidden models
+		modelsToHide.forEach(model => {
+			if (model.three) {
+				console.log(`restoring model.three.visible = true for ${model.getAttribute('id')}`)
+				model.three.visible = true
+			}
+		})
+		
+		// Restore avatar and scene
+		otherModelsToHide.forEach(model => {
+			if (model.three) {
+				console.log(`restoring ${model.getAttribute('id')}`)
+				model.three.visible = true
+			}
+		})
+		
+		// Restore camera-rig position
+		if (cameraRig && originalPosition && originalDistance) {
+			console.log(`restoring camera-rig - position: ${originalPosition}, distance: ${originalDistance}`)
+			cameraRig.setAttribute('position', originalPosition)
+			cameraRig.setAttribute('distance', originalDistance)
+		}
+
+		return screenshot
+	}
+
 	template = () => html`
 	<app-buttons-left>
 		<app-buttons-group group-direction="row">
@@ -104,7 +255,7 @@ export class OrderItems extends Element {
 							</svg>
 						</div>
 						<div class="item-image">
-							<img src=${template.thumb} alt=${template.name} />
+							<img src=${() => this.#captureItemScreenshot(category) || template.thumb} alt=${template.name} />
 						</div>
 						<div class="item-details">
 							<div class="item-name">Product name</div>
