@@ -13,6 +13,7 @@ export const store = createMutable({
 	tempSelectedAvatar: 'female' as Avatar,
 	selectedAvatar: null as Avatar,
 	selectedSpace: null as Space | null,
+	selectedAnimation: 'none' as 'none' | 'walk' | 'dance',
 	isPreview: false,
 	selectedTemplates: new Map<TemplateCategory, Template>(),
 	selectedBlocks: new Map<TemplateCategory, Map<BlockCategory, Block>>(),

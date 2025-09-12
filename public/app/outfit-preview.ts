@@ -4,6 +4,7 @@ import '../elements/cube-button.js'
 import '../elements/home-button.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
+import '../elements/animation-select.js'
 
 import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
@@ -91,6 +92,7 @@ export class OutfitPreview extends Element {
 			<app-buttons-group>
 				<person-button disabled></person-button>
 				<cube-button disabled></cube-button>
+				<animation-select disabled></animation-select>
 			</app-buttons-group>
 		</app-buttons-right>
 

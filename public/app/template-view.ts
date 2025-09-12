@@ -14,6 +14,7 @@ import '../elements/theme-switch-button.js'
 import '../elements/back-button.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
+import '../elements/animation-select.js'
 import '../elements/cube-button.js'
 
 type TemplateViewAttributes = keyof {}
@@ -117,6 +118,7 @@ export class TemplateView extends Element {
 	<app-buttons-group>
 		<person-button ></person-button>
 		<cube-button ></cube-button>
+		<animation-select ></animation-select>
 	</app-buttons-group>
 </app-buttons-right>
 
