@@ -157,6 +157,9 @@ export const EmailTemplates = {
 				description: string
 				quantity: number
 				price: string
+				sizes?: Array<{size: string; quantity: number; price: number}>
+				selectedSize?: string
+				orderType: 'wholesale' | 'retail'
 			}>
 			totalAmount: string
 			isCustomSize?: boolean
@@ -176,6 +179,7 @@ export const EmailTemplates = {
 				country: string
 			}
 		},
+		orderType: 'wholesale' | 'retail' = 'wholesale',
 	): Promise<void> {
 		const options: HandlebarsTemplateOptions = {
 			to: userEmail,
@@ -185,6 +189,9 @@ export const EmailTemplates = {
 				userName,
 				userEmail,
 				orderId,
+				orderType,
+				isWholesale: orderType === 'wholesale',
+				isRetail: orderType === 'retail',
 				...orderDetails,
 			},
 		}
@@ -206,6 +213,9 @@ export const EmailTemplates = {
 				description: string
 				quantity: number
 				price: string
+				sizes?: Array<{size: string; quantity: number; price: number}>
+				selectedSize?: string
+				orderType: 'wholesale' | 'retail'
 			}>
 			totalAmount: string
 			isCustomSize?: boolean
@@ -225,15 +235,19 @@ export const EmailTemplates = {
 				country: string
 			}
 		},
+		orderType: 'wholesale' | 'retail' = 'wholesale',
 	): Promise<void> {
 		const options: HandlebarsTemplateOptions = {
 			to: ADMIN_EMAIL,
-			subject: `New Order Received - ${orderId} 📦`,
+			subject: `New ${orderType === 'retail' ? 'Retail' : 'Wholesale'} Order - ${orderId} 📦`,
 			templateName: 'admin-order-notification',
 			templateData: {
 				userName,
 				userEmail,
 				orderId,
+				orderType,
+				isWholesale: orderType === 'wholesale',
+				isRetail: orderType === 'retail',
 				...orderDetails,
 			},
 		}

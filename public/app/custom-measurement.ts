@@ -34,7 +34,7 @@ export class CustomMeasurement extends Element {
 	}
 
 	#onBackButtonClick = () => {
-		store.navigateTo = 'order'
+		store.navigateTo = 'order-size'
 	}
 
 	#onHomeButtonClick = () => {
@@ -58,7 +58,7 @@ export class CustomMeasurement extends Element {
 		// Set the selected size to 'Custom' when saving measurements
 		store.setSelectedSize = 'Custom'
 
-		store.navigateTo = 'order'
+		store.navigateTo = 'order-size'
 	}
 
 	#valueWithoutCm = (value: string) => {

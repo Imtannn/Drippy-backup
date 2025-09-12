@@ -1,39 +1,6 @@
 import {Meteor} from 'meteor/meteor'
+import type {OrderData} from '../../public/types/types.js'
 import {EmailTemplates} from './email-service.js'
-
-export interface OrderData {
-	// Customer information
-	email: string
-	customerEmail: string
-	firstName: string
-	lastName: string
-	phone: string
-
-	// Multi-size order items
-	orderItems: Array<{
-		templateCategory: string
-		templateName: string
-		templateId: string
-		sizes: Array<{
-			size: string
-			quantity: number
-			price: number
-		}>
-		totalQuantity: number
-		totalPrice: number
-	}>
-
-	// Shipping information
-	shippingAddress: {
-		firstName: string
-		lastName: string
-		address: string
-		apartment?: string
-		city: string
-		postalCode?: string
-		phone: string
-	}
-}
 
 // Helper function to generate order ID
 function generateOrderId(): string {
@@ -44,7 +11,14 @@ function generateOrderId(): string {
 
 // Helper function to calculate pricing
 function calculateOrderTotal(orderData: OrderData): string {
-	const total = orderData.orderItems.reduce((sum, item) => sum + item.totalPrice, 0)
+	let total = 0
+
+	if (orderData.orderType === 'wholesale') {
+		total = orderData.orderItems.reduce((sum, item) => sum + item.totalPrice, 0)
+	} else if (orderData.orderType === 'retail' && orderData.retailOrderItems) {
+		total = orderData.retailOrderItems.reduce((sum, item) => sum + item.totalPrice, 0)
+	}
+
 	return total.toFixed(2)
 }
 
@@ -64,17 +38,33 @@ function processOrderForEmail(orderData: OrderData) {
 		description: string
 		quantity: number
 		price: string
-		sizes: Array<{size: string; quantity: number; price: number}>
+		sizes?: Array<{size: string; quantity: number; price: number}>
+		selectedSize?: string
+		orderType: 'wholesale' | 'retail'
 	}> = []
 
-	for (const item of orderData.orderItems) {
-		items.push({
-			name: item.templateName,
-			description: `Category: ${item.templateCategory}`,
-			quantity: item.totalQuantity,
-			price: item.totalPrice.toFixed(2),
-			sizes: item.sizes,
-		})
+	if (orderData.orderType === 'wholesale') {
+		for (const item of orderData.orderItems) {
+			items.push({
+				name: item.templateName,
+				description: `Category: ${item.templateCategory}`,
+				quantity: item.totalQuantity,
+				price: item.totalPrice.toFixed(2),
+				sizes: item.sizes,
+				orderType: 'wholesale',
+			})
+		}
+	} else if (orderData.orderType === 'retail' && orderData.retailOrderItems) {
+		for (const item of orderData.retailOrderItems) {
+			items.push({
+				name: item.templateName,
+				description: `Category: ${item.templateCategory}`,
+				quantity: item.quantity,
+				price: item.totalPrice.toFixed(2),
+				selectedSize: item.selectedSize,
+				orderType: 'retail',
+			})
+		}
 	}
 
 	return {
@@ -97,15 +87,34 @@ Meteor.methods({
 			throw new Meteor.Error('validation-error', 'Shipping address is required')
 		}
 
-		if (!orderData.orderItems || orderData.orderItems.length === 0) {
-			throw new Meteor.Error('validation-error', 'At least one order item is required')
-		}
-
-		// Validate order items have quantities
-		for (const item of orderData.orderItems) {
-			if (item.totalQuantity <= 0) {
-				throw new Meteor.Error('validation-error', `Item "${item.templateName}" must have at least 1 quantity`)
+		// Validate order items based on order type
+		if (orderData.orderType === 'wholesale') {
+			if (!orderData.orderItems || orderData.orderItems.length === 0) {
+				throw new Meteor.Error('validation-error', 'At least one order item is required')
 			}
+
+			// Validate wholesale order items have quantities
+			for (const item of orderData.orderItems) {
+				if (item.totalQuantity <= 0) {
+					throw new Meteor.Error('validation-error', `Item "${item.templateName}" must have at least 1 quantity`)
+				}
+			}
+		} else if (orderData.orderType === 'retail') {
+			if (!orderData.retailOrderItems || orderData.retailOrderItems.length === 0) {
+				throw new Meteor.Error('validation-error', 'At least one retail order item is required')
+			}
+
+			// Validate retail order items have quantities and sizes
+			for (const item of orderData.retailOrderItems) {
+				if (item.quantity <= 0) {
+					throw new Meteor.Error('validation-error', `Item "${item.templateName}" must have at least 1 quantity`)
+				}
+				if (!item.selectedSize) {
+					throw new Meteor.Error('validation-error', `Item "${item.templateName}" must have a selected size`)
+				}
+			}
+		} else {
+			throw new Meteor.Error('validation-error', 'Order type must be either wholesale or retail')
 		}
 
 		try {
@@ -135,6 +144,7 @@ Meteor.methods({
 				orderData.firstName,
 				processedOrder.orderId,
 				emailOrderDetails,
+				orderData.orderType, // Pass order type for different email templates
 			)
 
 			// Send admin notification email
@@ -143,6 +153,7 @@ Meteor.methods({
 				orderData.firstName,
 				processedOrder.orderId,
 				emailOrderDetails,
+				orderData.orderType, // Pass order type for different email templates
 			)
 
 			// Return order confirmation
