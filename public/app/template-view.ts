@@ -1,20 +1,22 @@
-import {css, Element, element, html, signal, For, Show, type ElementAttributes, Index} from 'lume'
+import {css, Element, element, For, html, Index, Show, signal, untrack, type ElementAttributes} from 'lume'
 import type {Accessor} from 'solid-js'
-import {store} from './store.js'
+import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import {templates} from '../consts/templates.js'
-import type {Template, TemplateCategory} from '../types/template.js'
-import type {Block} from '../types/block.js'
-import {getBlocksForTemplate} from '../consts/relationships.js'
-import './app-buttons.js'
-import './item-card.js'
-import '../elements/bottom-sheet.js'
-import '../elements/tabs.js'
-import './drip-it-button.js'
-import '../elements/theme-switch-button.js'
 import '../elements/back-button.js'
+import '../elements/bottom-sheet.js'
+import '../elements/cube-button.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
-import '../elements/cube-button.js'
+import '../elements/tabs.js'
+import '../elements/theme-switch-button.js'
+import type {Block} from '../types/block.js'
+import type {Template, TemplateCategory} from '../types/template.js'
+import './app-buttons.js'
+import {blockManager} from './block-manager.js'
+import './drip-it-button.js'
+import './item-card.js'
+import {store} from './store.js'
+import {textureManager} from './texture-manager.js'
 
 type TemplateViewAttributes = keyof {}
 
@@ -69,16 +71,36 @@ export class TemplateView extends Element {
 		})
 	}
 
-	#onItemClick = (e: CustomEvent) => {
-		const template = e.detail.itemValue
+	#onItemClick = async (e: CustomEvent) => {
+		const template = e.detail.itemValue as Template
+
+		store.setSelectedTemplates = template
+
+		const templateFabric = getFabricForTemplate(template, store.selectSpace?.collection)
+
+		if (templateFabric) {
+			const loadingId = `${templateFabric._id}-${Date.now()}`
+			store.loadingMaterials = [...untrack(() => store.loadingMaterials), loadingId]
+			try {
+				// Preload base fabric textures into cache (most efficient - no config needed yet)
+				// Preload template blocks
+				await Promise.all([
+					textureManager.preloadFabricBaseTextures(templateFabric),
+					blockManager.preloadTemplateBlocks(template, store.selectedSpace!),
+				])
+			} catch (error) {
+				console.warn('Failed to preload fabric textures:', error)
+			} finally {
+				store.loadingMaterials = untrack(() => store.loadingMaterials).filter(id => id !== loadingId)
+			}
+		}
 
 		// Set the selected template using the new Map structure
-		store.setSelectedTemplates = template
 
 		// Get blocks for ALL selected templates, organized by template category
 		const templateBlockData: {blocks: Block[]; templateCategory: TemplateCategory; materialId: string}[] = []
 		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
-			const templateBlocks = getBlocksForTemplate(selectedTemplate, 'moidien')
+			const templateBlocks = getBlocksForTemplate(selectedTemplate, store.selectedSpace?.collection)
 			templateBlockData.push({
 				blocks: templateBlocks,
 				templateCategory: templateCategory,
@@ -230,6 +252,8 @@ export class TemplateView extends Element {
 		}
 
 		.template-item {
+			min-width: 0;
+			min-height: 0;
 			width: 100%;
 			height: 100%;
 			display: flex;

@@ -1,8 +1,9 @@
-import {css, Element, element, html, Index, signal} from 'lume'
+import {css, Element, element, html, Index, Show, signal} from 'lume'
 import type {Accessor} from 'solid-js'
 import {store} from './store.js'
 import type {Space} from '../types/types.js'
 import {spaces} from '../consts/spaces.js'
+import {avatars} from '../consts/avatars.js'
 
 @element
 export class SpacesSelection extends Element {
@@ -14,9 +15,8 @@ export class SpacesSelection extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
-			console.log(store.selectedAvatar, spaces)
-			this.filterdSpace = spaces.filter(space => space.gender === store.selectedAvatar)
-			console.log(this.filterdSpace)
+			const avatarGender = avatars.find(avatar => avatar.value === store.selectedAvatar)?.gender
+			this.filterdSpace = spaces.filter(space => space.gender === avatarGender && !space.isWholesale)
 		})
 	}
 
@@ -29,7 +29,7 @@ export class SpacesSelection extends Element {
 
 	#onSceneSelected = (space: Space) => {
 		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('scene', space.name)
+		searchParams.set('scene', space.slug)
 		window.history.replaceState({}, '', `?${searchParams.toString()}`)
 		store.selectSpace = space
 	}
@@ -51,7 +51,7 @@ export class SpacesSelection extends Element {
 				<div class="space-card">
 					<div class="scene-preview">
 						<div class="scene-placeholder">
-							<img src=${space().image} alt="Bloom Realm Scene" />
+							<img src=${space().sceneThumbnail} alt="Bloom Realm Scene" />
 						</div>
 						<div class="garments-count">${space().garmentsCount} garments</div>
 					</div>
@@ -66,22 +66,14 @@ export class SpacesSelection extends Element {
 			`}
 			</>
 
-				<!-- Neon Future Card -->
-				<!--<div class="space-card">
-					<div class="scene-preview">
-						<div class="scene-placeholder">
-							<img src="../images/space-one.png" alt="Neon Future Scene" />
-						</div>
-						<div class="garments-count">8 garments</div>
-					</div>
-					<div class="card-content">
-						<div class="text-content">
-							<h3 class="card-title">Neon future</h3>
-							<p class="card-subtitle">Neon chic</p>
-						</div>
-						<button class="explore-button" onclick=${this.#onSceneSelected}>Explore space →</button>
-					</div>
-				</div> -->
+			<${Show} when=${() => this.filterdSpace.length === 0}>
+				<div class="no-spaces-container">
+					<p class="no-spaces-text">Spaces for this avatar are coming soon!</p>
+					<button class="no-spaces-button" onclick=${() => (store.view = 'avatar')}>Select avatar →</button>
+				</div>
+			</>
+
+
 			</div>
 		</div>
 	`
@@ -124,6 +116,43 @@ export class SpacesSelection extends Element {
 
 		:host(.fade-out) {
 			animation: fadeOut 0.3s ease-out forwards;
+		}
+
+		.no-spaces-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100%;
+			width: 250px;
+			margin: auto;
+			gap: var(--uiGap);
+		}
+
+		.no-spaces-text {
+			font-size: var(--fontSizeTextMd);
+			font-weight: var(--fontWeightNormal);
+			color: var(--uiColorSecondaryLightGrey);
+			text-align: center;
+			margin: 0;
+		}
+
+		.no-spaces-button {
+			font-size: var(--fontSizeTextXs);
+			padding: 0.5rem 1rem;
+			background: var(--uiColorPrimaryBlack);
+			border: 2px solid var(--uiColorPrimaryBlack);
+			border-radius: var(--borderRadiusPill);
+			cursor: pointer;
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryWhite);
+			white-space: nowrap;
+
+			:host-context([data-theme='dark']) & {
+				background: #333;
+				border-color: var(--uiColorPrimaryWhite);
+				color: var(--uiColorPrimaryWhite);
+			}
 		}
 
 		/* SpacesPage-specific styles */

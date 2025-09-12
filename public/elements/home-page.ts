@@ -32,7 +32,7 @@ export class HomePage extends Element {
 			if (user === null) {
 				window.location.href = '/onboarding?step=step3'
 			} else {
-				window.location.href = '/app?avatar=female&scene=G%E1%BA%A4P'
+				window.location.href = '/app'
 			}
 		})
 	}
