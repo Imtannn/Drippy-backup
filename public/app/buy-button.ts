@@ -26,23 +26,23 @@ export class BuyButton extends Element {
 
 	css = css/*css*/ `
 		.buy-button {
-			border-radius: 999px;
+			border-radius: var(--borderRadiusCircular);
 			cursor: pointer;
 			padding: 0;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			gap: 10px;
+			gap: var(--uiSpacingSmall);
 			width: 100%;
 			border: none;
-			font-size: 16px;
-			font-weight: 600;
+			font-size: var(--fontSizeTextMdDesktop);
+			font-weight: var(--fontWeightSemiBold);
 			text-align: center;
 			width: 123px;
 			height: 32px;
 			text-wrap: nowrap;
-			background: #12131680;
-			color: #ffffff;
+			background: var(--uiColorPrimaryBlack) 80%;
+			color: var(--uiColorPrimaryWhite);
 			backdrop-filter: blur(50px);
 		}
 	`
