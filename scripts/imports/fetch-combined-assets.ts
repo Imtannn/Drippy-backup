@@ -26,9 +26,17 @@ const s3 = new AWS.S3()
 // Brand configurations with Google Drive folder IDs
 const BRAND_CONFIGS = [
 	{
-		brand: 'baroudeuses',
-		rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
+		brand: 'vaishnavi',
+		rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
 	},
+	{
+		brand: 'movement',
+		rootFolderId: '1-_x-GVUxGBn4S1VDI6t3dFN990IG-VWu',
+	},
+	// {
+	// 	brand: 'baroudeuses',
+	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
+	// },
 	// {
 	// 	brand: 'moidien',
 	// 	rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
@@ -239,7 +247,17 @@ async function processTemplateFolder(
 
 		// Add this category to the material's templateCategories
 		if (materialId && rootMaterials.has(materialId)) {
+			console.log(`     🔗 Adding category "${category}" to material "${materialId}"`)
+			console.log(
+				`     📊 Before: templateCategories = ${Array.from(rootMaterials.get(materialId)!.templateCategories)}`,
+			)
 			rootMaterials.get(materialId)!.templateCategories.add(category)
+			console.log(
+				`     📊 After: templateCategories = ${Array.from(rootMaterials.get(materialId)!.templateCategories)}`,
+			)
+		} else if (materialId) {
+			console.warn(`     ⚠️ Material "${materialId}" not found in rootMaterials`)
+			console.log(`     📋 Available materials: ${Array.from(rootMaterials.keys()).join(', ')}`)
 		}
 	}
 
@@ -379,10 +397,14 @@ function generateFabricData(brand: string): TODO {
 	const fabrics: TODO = {}
 	let idCounter = 1
 
+	console.log(`🎨 Generating fabric data for brand: ${brand}`)
+	console.log(`📦 Total root materials available: ${rootMaterials.size}`)
+
 	// Convert root materials to fabric data
-	rootMaterials.forEach(material => {
-		// Only include materials that are assigned to at least one category
-		if (material.templateCategories.size === 0) return
+	rootMaterials.forEach((material, materialKey) => {
+		console.log(`   📎 Processing material: ${materialKey}`)
+		console.log(`   📋 Template categories: ${Array.from(material.templateCategories).join(', ') || 'NONE'}`)
+		console.log(`   📏 Template categories size: ${material.templateCategories.size}`)
 
 		fabrics[brand] = fabrics[brand] || []
 		fabrics[brand].push({
@@ -395,7 +417,7 @@ function generateFabricData(brand: string): TODO {
 			alpha: material.alpha,
 			materialName: material.materialName,
 			category: material.category,
-			templateCategories: Array.from(material.templateCategories), // Convert Set to Array
+			templateCategories: material.templateCategories.size > 0 ? Array.from(material.templateCategories) : [], // Convert Set to Array
 		})
 		idCounter++
 	})
@@ -464,8 +486,7 @@ export const blocks: Record<string, Block[]> = {
 			([collectionName, blocksArray]) => `
 		${collectionName}: [
 ${blocksArray}
-],
-	`,
+]`,
 		)
 		.join(',\n')}
 }
@@ -647,7 +668,21 @@ async function scanCategoryMaterials(categoryMaterialsFolder: TODO, categoryName
 	console.log(`    Found ${materialReferenceFolders.length} material references`)
 
 	for (const materialRef of materialReferenceFolders) {
-		const materialKey = materialRef.name
+		// Parse and normalize the material folder name to match root materials format
+		const folderNameParts = materialRef.name.split(' - ')
+		if (folderNameParts.length < 2) {
+			console.warn(
+				`    ⚠️ Invalid category material reference format: ${materialRef.name}. Expected: "Category - Name"`,
+			)
+			continue
+		}
+
+		const materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
+		const materialName = capitalize(normalizeName(folderNameParts[1].trim()))
+		const materialKey = `${materialCategory} - ${materialName}`
+
+		console.log(`    🔧 Normalizing material reference: "${materialRef.name}" -> "${materialKey}"`)
+
 		if (!categoryMaterialAssignments.has(categoryName)) {
 			categoryMaterialAssignments.set(categoryName, new Set())
 		}
@@ -682,14 +717,24 @@ async function processCategoryMaterialsFolder(materialsFolder: TODO, categoryNam
 // Apply category material assignments to populate templateCategories
 function applyCategoryAssignments(): void {
 	console.log(`📋 Applying category material assignments to materials`)
+	console.log(`📦 Total category assignments: ${categoryMaterialAssignments.size}`)
+	console.log(`📦 Total root materials: ${rootMaterials.size}`)
 
 	categoryMaterialAssignments.forEach((materialKeys, categoryName) => {
+		console.log(`  📂 Processing category: ${categoryName} with ${materialKeys.size} materials`)
 		materialKeys.forEach(materialKey => {
 			if (rootMaterials.has(materialKey)) {
+				console.log(
+					`    📊 Before adding "${categoryName}": templateCategories = ${Array.from(rootMaterials.get(materialKey)!.templateCategories)}`,
+				)
 				rootMaterials.get(materialKey)!.templateCategories.add(categoryName)
+				console.log(
+					`    📊 After adding "${categoryName}": templateCategories = ${Array.from(rootMaterials.get(materialKey)!.templateCategories)}`,
+				)
 				console.log(`  ✅ Added category ${categoryName} to material ${materialKey}`)
 			} else {
 				console.warn(`  ⚠️ Material ${materialKey} not found in root materials`)
+				console.log(`  📋 Available materials: ${Array.from(rootMaterials.keys()).join(', ')}`)
 			}
 		})
 	})
@@ -788,6 +833,15 @@ async function main(): Promise<void> {
 
 			// Step 3: Apply category material assignments to materials
 			applyCategoryAssignments()
+
+			// Debug: Check final state of materials before generating fabric data
+			console.log(`🔍 Final state check before generating fabric data for brand: ${brand}`)
+			console.log(`📦 Total root materials: ${rootMaterials.size}`)
+			rootMaterials.forEach((material, materialKey) => {
+				console.log(`  📎 Material: ${materialKey}`)
+				console.log(`    📋 Template categories: ${Array.from(material.templateCategories).join(', ') || 'NONE'}`)
+				console.log(`    📏 Size: ${material.templateCategories.size}`)
+			})
 
 			// Generate data for this brand
 			const brandTemplates = generateTemplateData(brandProcessedData, brand)
