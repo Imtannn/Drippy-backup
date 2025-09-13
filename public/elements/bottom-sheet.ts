@@ -373,13 +373,6 @@ export class BottomSheet extends Element {
 			border-radius: 9999px;
 		}
 
-		.sheet-content {
-			padding: 0;
-			flex: 1 1 auto;
-			min-height: 0; /* allow overflow container to shrink */
-			overflow-y: auto;
-		}
-
 		/* Desktop styles: floating panel on the left, always full viewport height */
 		@media (min-width: 768px) {
 			:host {
@@ -424,12 +417,14 @@ export class BottomSheet extends Element {
 
 			.sheet-content {
 				/* Keep scroll behavior with flex container */
+				padding: 0;
 				flex: 1 1 auto;
 				min-height: 0;
 				overflow-y: auto;
 				/* Hide scrollbar for Webkit browsers */
 				scrollbar-width: none;
 				-ms-overflow-style: none;
+				border-radius: 1rem;
 			}
 
 			.sheet-content::-webkit-scrollbar {
