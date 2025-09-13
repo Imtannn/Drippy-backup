@@ -2,6 +2,13 @@ import {css, Element, element, For, html, Index, Show, signal, untrack, type Ele
 import type {Accessor} from 'solid-js'
 import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import {templates} from '../consts/templates.js'
+import type {Block} from '../types/block.js'
+import type {Template, TemplateCategory} from '../types/template.js'
+import {blockManager} from './block-manager.js'
+import {store} from './store.js'
+import {textureManager} from './texture-manager.js'
+
+import '../elements/animation-select.js'
 import '../elements/back-button.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
@@ -9,14 +16,9 @@ import '../elements/logo-button.js'
 import '../elements/person-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
-import type {Block} from '../types/block.js'
-import type {Template, TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
-import {blockManager} from './block-manager.js'
 import './drip-it-button.js'
 import './item-card.js'
-import {store} from './store.js'
-import {textureManager} from './texture-manager.js'
 
 type TemplateViewAttributes = keyof {}
 
@@ -140,6 +142,7 @@ export class TemplateView extends Element {
 	<app-buttons-group>
 		<person-button ></person-button>
 		<cube-button ></cube-button>
+		<animation-select ></animation-select>
 	</app-buttons-group>
 </app-buttons-right>
 
