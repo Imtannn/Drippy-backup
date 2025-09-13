@@ -8,6 +8,7 @@ import '../elements/cube-button.js'
 import '../elements/login-ui.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
+import '../elements/animation-select.js'
 import '../elements/preview-button.js'
 import '../elements/redo-button.js'
 import '../elements/refresh-button.js'
@@ -233,6 +234,7 @@ export class BlocksSelection extends Element {
 		<app-buttons-group>
 			<person-button></person-button>
 			<cube-button></cube-button>
+			<animation-select></animation-select>
 		</app-buttons-group>
 	</app-buttons-right>
 
