@@ -269,7 +269,7 @@ export class DrippyScene extends Element {
 
 		// Track scene loading state
 		this.createEffect(() => {
-			if (!store.selectedSpace || !store.isShowScene) return
+			if (!store.selectedSpace || !store.selectedSpace?.scene || !store.isShowScene) return
 			const scene = this.backgroundModel
 			if (!scene) return
 
@@ -281,6 +281,7 @@ export class DrippyScene extends Element {
 					store.loadingBlocks = [...untrack(() => store.loadingBlocks), sceneId]
 				}
 				if (!untrack(() => store.isDrippySceneLoading.includes(sceneId))) {
+					console.log('addIsDrippySceneLoading', sceneId)
 					store.addIsDrippySceneLoading = sceneId
 				}
 			}
@@ -662,11 +663,11 @@ export class DrippyScene extends Element {
 							</lume-gltf-model>
 						</>
 
-						<${Show} when=${() => store.isShowScene}>
+						<${Show} when=${() => store.isShowScene && store.selectedSpace?.scene}>
 							<lume-gltf-model
 								ref=${(el: GltfModel) => (this.backgroundModel = el)}
 								id="scene"
-								src=${() => store.selectedSpace?.scene ?? ''}
+								src=${() => store.selectedSpace?.scene}
 							></lume-gltf-model>
 						</>
 

@@ -198,7 +198,7 @@ export class SpacesSelection extends Element {
 		.cards-container {
 			display: flex;
 			flex-direction: column;
-			gap: 2rem;
+			gap: 25px;
 			max-width: 800px;
 			margin: 0 auto;
 		}
@@ -206,6 +206,8 @@ export class SpacesSelection extends Element {
 		.space-card {
 			background: var(--uiColorPrimaryWhite);
 			border-radius: var(--borderRadiusLarge);
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
 			overflow: hidden;
 			width: 100%;
 			max-width: 354px;
@@ -259,7 +261,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.card-content {
-			padding: 1.5rem;
+			padding-top: 15px;
 			padding-left: 0;
 			padding-right: 0;
 			display: flex;

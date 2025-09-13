@@ -119,6 +119,7 @@ export class TemplateView extends Element {
 	}
 
 	#onBackButtonClick = () => {
+		store.resetSelectedTemplates()
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.delete('scene')
 		window.history.replaceState({}, '', `?${searchParams.toString()}`)
