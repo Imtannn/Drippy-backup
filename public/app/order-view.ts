@@ -1,6 +1,6 @@
 import {css, Element, element, eventAttribute, html, type ElementAttributes} from 'lume'
 import {Meteor} from 'meteor/meteor'
-import type {OrderData} from '../../server/imports/order-service.js'
+import type {OrderData} from '../types/types.js'
 
 import '../elements/back-button.js'
 import '../elements/home-button.js'
@@ -48,40 +48,68 @@ export class OrderView extends Element {
 			phone: store.order.shippingAddress.phone || '',
 		}
 
+		const isWholesale = store.selectedSpace?.isWholesale || false
+		const orderType: 'wholesale' | 'retail' = isWholesale ? 'wholesale' : 'retail'
+
 		const orderItems = []
+		const retailOrderItems = []
+
 		for (const [category, template] of store.selectedTemplates.entries()) {
 			// Only include items that are selected in the order
 			if (store.selectedOrderItems.get(category)) {
-				const sizes = []
-				let totalQuantity = 0
-				let totalPrice = 0
+				if (isWholesale) {
+					// Wholesale order processing (existing logic)
+					const sizes = []
+					let totalQuantity = 0
+					let totalPrice = 0
 
-				// Get size quantities from the store
-				const sizeMap = store.orderSizeQuantities.get(category)
-				if (sizeMap) {
-					for (const [size, quantity] of sizeMap.entries()) {
-						if (quantity > 0) {
-							const price = 125 * quantity // $125 per item
-							sizes.push({
-								size,
-								quantity,
-								price,
-							})
-							totalQuantity += quantity
-							totalPrice += price
+					// Get size quantities from the store
+					const sizeMap = store.orderSizeQuantities.get(category)
+					if (sizeMap) {
+						for (const [size, quantity] of sizeMap.entries()) {
+							if (quantity > 0) {
+								const price = 125 * quantity // $125 per item
+								sizes.push({
+									size,
+									quantity,
+									price,
+								})
+								totalQuantity += quantity
+								totalPrice += price
+							}
 						}
 					}
-				}
 
-				if (totalQuantity > 0) {
-					orderItems.push({
-						templateCategory: category,
-						templateName: template.name || `${category} Item`,
-						templateId: template._id || category,
-						sizes,
-						totalQuantity,
-						totalPrice,
-					})
+					if (totalQuantity > 0) {
+						orderItems.push({
+							templateCategory: category,
+							templateName: template.name || `${category} Item`,
+							templateId: template._id || category,
+							sizes,
+							totalQuantity,
+							totalPrice,
+						})
+					}
+				} else {
+					// Retail order processing (new logic)
+					const quantity = store.getRetailItemQuantity(category)
+					const selectedSize = store.getRetailItemSize(category)
+					const customMeasurement = store.getRetailItemCustomMeasurement(category)
+					const price = 125 // Base price per item
+					const totalPrice = quantity * price
+
+					if (quantity > 0) {
+						retailOrderItems.push({
+							templateCategory: category,
+							templateName: template.name || `${category} Item`,
+							templateId: template._id || category,
+							selectedSize,
+							quantity,
+							price,
+							totalPrice,
+							customMeasurement: customMeasurement || undefined, // Include custom measurement if available
+						})
+					}
 				}
 			}
 		}
@@ -95,7 +123,14 @@ export class OrderView extends Element {
 			lastName: shippingAddress.lastName,
 			phone: shippingAddress.phone,
 
+			// Order type
+			orderType,
+
+			// Order items (wholesale)
 			orderItems,
+
+			// Retail order items (retail only)
+			retailOrderItems: retailOrderItems.length > 0 ? retailOrderItems : undefined,
 
 			// Shipping information
 			shippingAddress,
@@ -126,8 +161,21 @@ export class OrderView extends Element {
 				throw new Error('Please fill in your shipping address')
 			}
 
-			if (!orderData.orderItems || orderData.orderItems.length === 0) {
-				throw new Error('Please select at least one item to order')
+			// Validate order items based on order type
+			if (orderData.orderType === 'wholesale') {
+				if (!orderData.orderItems || orderData.orderItems.length === 0) {
+					throw new Error('Please select at least one item to order')
+				}
+			} else if (orderData.orderType === 'retail') {
+				if (!orderData.retailOrderItems || orderData.retailOrderItems.length === 0) {
+					throw new Error('Please select at least one item to order')
+				}
+				// Validate that retail items have selected sizes
+				for (const item of orderData.retailOrderItems) {
+					if (!item.selectedSize) {
+						throw new Error(`Please select a size for ${item.templateName}`)
+					}
+				}
 			}
 
 			console.log('📦 Submitting order:', orderData)

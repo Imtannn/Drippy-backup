@@ -54,13 +54,13 @@
 	<body>
 		<div class='header'>
 			<h1'>✅ Order Confirmed!</h1>
-			<p>Order #{{orderId}}</p>
+			<p>{{#if isRetail}}Retail {{/if}}{{#if isWholesale}}Wholesale {{/if}}Order #{{orderId}}</p>
 		</div>
 
 		<div class='content'>
 			<p>Hi {{userName}},</p>
 
-			<p>Thank you for your order!</p>
+			<p>Thank you for your {{#if isRetail}}retail{{/if}}{{#if isWholesale}}wholesale{{/if}} order!</p>
 
 			<div class='order-info'>
 				<h3>📦 Order Details</h3>
@@ -72,16 +72,39 @@
 					<div style='margin-left: 16px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee;'>
 						<div><strong>{{name}}</strong></div>
 						<div style='margin-left: 16px; color: #666;'><small>{{description}}</small></div>
-						{{#if sizes}}
-							{{#each sizes}}
-								<div style='margin-left: 16px; margin-top: 5px;'>
-									<span>Size {{size}}: </span>
-									<span>{{quantity}} pcs @ ${{price}} = ${{price}}</span>
+						
+						{{#if ../isWholesale}}
+							{{#if sizes}}
+								{{#each sizes}}
+									<div style='margin-left: 16px; margin-top: 5px;'>
+										<span>Size {{size}}: </span>
+										<span>{{quantity}} pcs @ ${{price}} = ${{price}}</span>
+									</div>
+								{{/each}}
+								<div style='margin-left: 16px; margin-top: 8px; font-weight: bold;'>
+									Item Total: {{quantity}} pcs - ${{price}}
 								</div>
-							{{/each}}
-							<div style='margin-left: 16px; margin-top: 8px; font-weight: bold;'>
-								Item Total: {{quantity}} pcs - ${{price}}
+							{{/if}}
+						{{/if}}
+						
+						{{#if ../isRetail}}
+							<div style='margin-left: 16px; margin-top: 5px;'>
+								<span>Size: <strong>{{selectedSize}}</strong></span>
+								<span style='margin-left: 10px;'>Quantity: <strong>{{quantity}}</strong></span>
+								<span style='margin-left: 10px;'>Price: <strong>${{price}}</strong></span>
 							</div>
+							{{#if customMeasurement}}
+								<div style='margin-left: 16px; margin-top: 8px; padding: 8px; background: #f0f0f0; border-radius: 4px;'>
+									<div style='font-weight: bold; color: #e56be8;'>Custom Measurements:</div>
+									<div style='margin-top: 4px; font-size: 12px;'>
+										Bust: {{customMeasurement.bust}}cm | 
+										Waist: {{customMeasurement.waist}}cm | 
+										Hips: {{customMeasurement.hips}}cm<br>
+										Shoulder: {{customMeasurement.shoulder}}cm | 
+										Shoulder to Knee: {{customMeasurement.shoulderToKnee}}cm
+									</div>
+								</div>
+							{{/if}}
 						{{/if}}
 					</div>
 				{{/each}}

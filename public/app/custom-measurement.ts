@@ -24,7 +24,19 @@ export class CustomMeasurement extends Element {
 	// Load existing measurements from store when component connects
 	connectedCallback() {
 		super.connectedCallback()
-		if (store.customMeasurement) {
+
+		// Check if we're in retail mode with a specific category
+		if (!store.selectedSpace?.isWholesale && store.currentCustomMeasurementCategory) {
+			const categoryMeasurement = store.getRetailItemCustomMeasurement(store.currentCustomMeasurementCategory)
+			if (categoryMeasurement) {
+				this.bust = categoryMeasurement.bust
+				this.waist = categoryMeasurement.waist
+				this.hips = categoryMeasurement.hips
+				this.shoulder = categoryMeasurement.shoulder
+				this.shoulderToKnee = categoryMeasurement.shoulderToKnee
+			}
+		} else if (store.customMeasurement) {
+			// Wholesale mode: use global custom measurement
 			this.bust = store.customMeasurement.bust
 			this.waist = store.customMeasurement.waist
 			this.hips = store.customMeasurement.hips
@@ -34,7 +46,7 @@ export class CustomMeasurement extends Element {
 	}
 
 	#onBackButtonClick = () => {
-		store.navigateTo = 'order'
+		store.navigateTo = 'order-size'
 	}
 
 	#onHomeButtonClick = () => {
@@ -47,7 +59,7 @@ export class CustomMeasurement extends Element {
 	}
 
 	#onSaveClick = () => {
-		store.setCustomMeasurement = {
+		const measurement = {
 			bust: this.bust,
 			waist: this.waist,
 			hips: this.hips,
@@ -55,10 +67,20 @@ export class CustomMeasurement extends Element {
 			shoulderToKnee: this.shoulderToKnee,
 		}
 
-		// Set the selected size to 'Custom' when saving measurements
-		store.setSelectedSize = 'Custom'
+		// Check if we're in retail mode with a specific category
+		if (!store.selectedSpace?.isWholesale && store.currentCustomMeasurementCategory) {
+			// Retail mode: save measurement for specific category
+			store.setRetailItemCustomMeasurement(store.currentCustomMeasurementCategory, measurement)
+			store.setRetailItemSize(store.currentCustomMeasurementCategory, 'Custom')
+			// Clear the current category after saving
+			store.currentCustomMeasurementCategory = null
+		} else {
+			// Wholesale mode: save global custom measurement
+			store.setCustomMeasurement = measurement
+			store.setSelectedSize = 'Custom'
+		}
 
-		store.navigateTo = 'order'
+		store.navigateTo = 'order-size'
 	}
 
 	#valueWithoutCm = (value: string) => {

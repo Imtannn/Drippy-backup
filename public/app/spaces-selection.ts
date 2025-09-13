@@ -1,9 +1,9 @@
 import {css, Element, element, html, Index, Show, signal} from 'lume'
 import type {Accessor} from 'solid-js'
-import {store} from './store.js'
-import type {Space} from '../types/types.js'
-import {spaces} from '../consts/spaces.js'
 import {avatars} from '../consts/avatars.js'
+import {spaces} from '../consts/spaces.js'
+import type {Space} from '../types/types.js'
+import {store} from './store.js'
 
 @element
 export class SpacesSelection extends Element {
@@ -16,7 +16,7 @@ export class SpacesSelection extends Element {
 
 		this.createEffect(() => {
 			const avatarGender = avatars.find(avatar => avatar.value === store.selectedAvatar)?.gender
-			this.filterdSpace = spaces.filter(space => space.gender === avatarGender && !space.isWholesale)
+			this.filterdSpace = spaces.filter(space => space.gender === avatarGender)
 		})
 	}
 
