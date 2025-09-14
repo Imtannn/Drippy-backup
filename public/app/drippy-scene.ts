@@ -3,246 +3,122 @@ import {
 	css,
 	Element,
 	element,
+	Element3D,
 	For,
 	GltfModel,
 	html,
 	Index,
-	Motor,
 	onCleanup,
 	Scene,
 	Show,
 	signal,
 	untrack,
 } from 'lume'
-import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
+import type {Accessor} from 'solid-js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/loading-indicator.js'
+import '../elements/lume-animation.js'
+import '../elements/rig/lume-auto-rigger.js'
 import '../elements/logic/show-when.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import {store} from './store.js'
-
-const femaleAvatar = new URL('../models/EM-MoiDien.glb', import.meta.url)
-const maleAvatar = new URL('../models/ANH-Underwear.glb', import.meta.url)
+import {textureManager} from './texture-manager.js'
+import {avatars} from '../consts/avatars.js'
+import {
+	createMutationsSignal,
+	enableFrontsideOnModelLoad,
+	enableShadowOnModelLoad,
+	meshesInTree,
+	onModelLoad,
+} from '../utils.js'
 
 type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
+
+function excludeBonesFromBlock(block: Block) {
+	const baseBones = ['Right_Pectoral', 'Left_Pectoral', 'Neck', 'Right_Heel', 'Left_Heel']
+
+	const isDress = block.templateCategory === 'Dress' || block._id === '12' || block._id === '9'
+
+	if (isDress) {
+		return baseBones.concat(['Right_Arm', 'Left_Arm'])
+	}
+
+	if (block.templateCategory === 'Pants') {
+		// Could also exclude bones above the waist but I don't see it being an issue.
+		return baseBones.concat(['Right_Arm', 'Left_Arm'])
+	}
+
+	const isShortSleeves = block._id == '13' || block._id == '14'
+
+	if (isShortSleeves) {
+		return baseBones.concat(['Right_ForeArm', 'Left_ForeArm'])
+	}
+
+	return baseBones
+}
 
 @element
 export class DrippyScene extends Element {
 	static elementName = 'drippy-scene'
 
 	@signal isDark = false
-	@signal loadingBlocks: string[] = []
-	@signal loadingMaterials: string[] = []
 	@signal sceneUrl = ''
 	@signal renderBlocks: RenderBlock[] = []
 
-	// Cache for textures per URL so we don't reload repeatedly
-	#textureCache = new Map<string, any>()
-
 	@signal private backgroundModel: GltfModel | null = null
-
+	@signal private avatarModel: GltfModel | null = null
 	@signal private lumeScene: Scene | null = null
 
-	async #getTexture(url: string, repete: [number, number], coef: number, offset: [number, number], rotate: number) {
-		const key = `${url}-${repete[0]}-${repete[1]}-${coef}-${offset[0]}-${offset[1]}-${rotate}`
-		if (this.#textureCache.has(key)) return this.#textureCache.get(key) as THREE.Texture
+	// When `false`, disable animations and rigging.
+	@signal private animsEnabled = false
 
-		const texture = await this.#createTexture(url, repete, coef, offset, rotate)
-		if (!texture) return undefined
-		this.#textureCache.set(key, texture)
-		return texture
-	}
+	@signal private animsStopped = true
 
-	#extractMeshesFromObj(obj: THREE.Object3D): THREE.Mesh[] {
-		const meshes: THREE.Mesh[] = []
+	@signal private animName: string | null = null
+	@signal private animSrc: string | null = null
 
-		// Recursive function to traverse the scene graph
-		const traverse = (node: THREE.Object3D) => {
-			if (node instanceof THREE.Mesh) {
-				meshes.push(node)
-			}
+	async #applyFabric(el: Element3D, fabric: Fabric, isCanceled: () => boolean, loadingId: symbol) {
+		const root = el.three
+		store.addLoadingMaterial(loadingId)
 
-			if (node.children?.length > 0) {
-				node.children.forEach(child => traverse(child))
-			}
+		try {
+			// Extract UV data for proper texture scaling
+			const meshes = [...meshesInTree(root)]
+			const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
+				? Array.from(meshes[0].geometry.attributes.uv.array)
+						.slice(0, 5)
+						.map((el: any) => Math.abs(el))
+				: []
+
+			// Load textures with UV-aware scaling using texture manager
+			const textureSet = await textureManager.loadFabricTexturesWithUV(fabric, uvArray)
+			if (isCanceled()) return
+
+			for (const mesh of meshesInTree(root)) textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+			el.needsUpdate()
+		} catch (error) {
+			console.warn('Failed to apply fabric to object:', error)
+		} finally {
+			store.removeLoadingMaterial(loadingId)
 		}
-
-		// Start traversal from the root node of the GLTF scene
-		traverse(obj)
-
-		return meshes
-	}
-
-	#getCoef(arr: number[]) {
-		const max = Math.max(...arr)
-		return max > 1 ? 1000 : 1
-	}
-
-	// TODO: If the same fabric with same key is already fetching, wait for it to finish and use the same texture
-	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, isCanceled: () => boolean, blockId?: string) {
-		if (!fabric || !root) return
-
-		const loadingId = blockId || `${fabric._id}-${Date.now()}`
-		this.loadingMaterials = [...untrack(() => this.loadingMaterials), loadingId]
-		const repete: [number, number] = [60 / 3, 60 / 3]
-		const offset: [number, number] = [1, 1]
-		const rotate = 0
-		const meshes = this.#extractMeshesFromObj(root)
-		const arr = Array.from(meshes[0]?.geometry?.attributes?.uv?.array)
-			.slice(0, 5)
-			.map((el: any) => Math.abs(el))
-		const coef = arr.length > 0 ? this.#getCoef(arr) : 1
-
-		const [baseColorTex, normalTex, displacementTex, roughnessTex] = await Promise.all([
-			this.#getTexture(fabric.baseColor || '', repete, coef, offset, rotate),
-			this.#getTexture(fabric.normal || '', repete, coef, offset, rotate),
-			this.#getTexture(fabric.displacement || '', repete, coef, offset, rotate),
-			this.#getTexture(fabric.roughness || '', repete, coef, offset, rotate),
-		])
-
-		if (isCanceled()) {
-			this.loadingMaterials = untrack(() => this.loadingMaterials).filter(id => id !== loadingId)
-			return
-		}
-
-		// Configure textures
-		if (baseColorTex) baseColorTex.colorSpace = THREE.SRGBColorSpace as any
-		for (const tex of [baseColorTex, normalTex, displacementTex, roughnessTex]) {
-			if (!tex) continue
-			tex.wrapS = THREE.RepeatWrapping
-			tex.wrapT = THREE.RepeatWrapping
-		}
-
-		const group = root.children?.[0] ?? root
-		group.traverse?.((obj: any) => {
-			if (obj?.isMesh && obj.material) {
-				const material = obj.material
-				material.map = baseColorTex
-				material.normalMap = normalTex
-				// material.displacementMap = displacementTex
-				material.roughnessMap = roughnessTex
-				material.roughnessIntensity = 1
-				material.transparent = true
-				material.emissive = new THREE.Color(0x000000)
-				material.emissiveIntensity = 0
-				material.aoMapIntensity = 1
-				material.side = THREE.DoubleSide
-				material.normalScale = new THREE.Vector2(2, 2)
-				material.blending = THREE.NormalBlending
-				// Ensure GPU-side texture state updates immediately
-				if (material.map) material.map.needsUpdate = true
-				if (material.normalMap) material.normalMap.needsUpdate = true
-				if (material.roughnessMap) material.roughnessMap.needsUpdate = true
-				// if (material.displacementMap) material.displacementMap.needsUpdate = true
-				material.needsUpdate = true
-			}
-		})
-
-		this.loadingMaterials = untrack(() => this.loadingMaterials).filter(id => id !== loadingId)
 	}
 
 	// Reset materials to default state (no textures)
-	#resetMaterialsToDefault(root: any) {
-		if (!root) return
-
-		const group = root.children?.[0] ?? root
-		group.traverse?.((obj: any) => {
-			if (obj?.isMesh && obj.material) {
-				const material = obj.material
-				material.map = null
-				material.normalMap = null
-				material.roughnessMap = null
-				// material.displacementMap = null
-				material.needsUpdate = true
-			}
-		})
-	}
-
-	#renderTask = () => {
-		if (!this.shadowRoot) return
-		const models = Array.from(this.shadowRoot.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
-		for (const el of models) {
-			el.needsUpdate?.()
-			el.scene?.needsRender?.()
+	#resetMaterialsToDefault(el: Element3D) {
+		for (const mesh of meshesInTree(el.three)) {
+			const material = mesh.material as THREE.MeshPhysicalMaterial
+			material.map = null
+			material.normalMap = null
+			material.roughnessMap = null
+			// material.displacementMap = null
+			material.needsUpdate = true
 		}
-	}
 
-	async #createTexture(
-		image: string | undefined,
-		repeat: [number, number],
-		coef?: number,
-		offset?: [number, number],
-		rotate?: number,
-	): Promise<THREE.Texture | null> {
-		return new Promise<THREE.Texture | null>((resolve, reject) => {
-			if (!image) {
-				resolve(null)
-			} else {
-				const loader = new THREE.TextureLoader()
-
-				loader.load(
-					this.#uncacheImage(image),
-					(texture: any) => {
-						texture.needsUpdate = true
-						texture.wrapS = THREE.RepeatWrapping
-						texture.wrapT = THREE.RepeatWrapping
-						texture.flipY = false
-						if (offset) {
-							texture.offset.set(offset[0], offset[1])
-						}
-						if (rotate) {
-							texture.rotation = rotate
-						}
-
-						// Calculate repeat based on the texture's aspect ratio
-						const aspectRatio = texture.image.width / texture.image.height
-						let repeatX = repeat[0]
-						let repeatY = repeat[1]
-
-						if (coef) {
-							repeatX /= coef
-							repeatY /= coef
-						}
-
-						// Adjust for aspect ratio
-						if (aspectRatio > 1) {
-							repeatY /= aspectRatio
-						} else {
-							repeatX *= aspectRatio
-						}
-
-						// Update texture repeat
-						texture.repeat.set(repeatX, repeatY)
-
-						// Optional: mipmapping for better performance and quality
-						texture.generateMipmaps = true
-						texture.minFilter = THREE.LinearMipmapLinearFilter
-						texture.magFilter = THREE.LinearFilter
-						texture.format = THREE.RGBAFormat
-						resolve(texture)
-					},
-					undefined,
-					err => {
-						console.error('An error happened while loading the texture:', err)
-						reject(null)
-					},
-				)
-			}
-		})
-	}
-
-	#uncacheImage(img: string) {
-		try {
-			const url = new URL(img)
-			url.searchParams.set('v', new Date().getTime().toString())
-			return url.toString()
-		} catch (e) {
-			return img
-		}
+		el.needsUpdate()
 	}
 
 	connectedCallback() {
@@ -277,81 +153,73 @@ export class DrippyScene extends Element {
 
 		this.createEffect(() => {
 			if (store.selectedSpace) {
-				const space = spaces.find(space => space.name === store.selectedSpace?.name)
+				const space = spaces.find(space => space.slug === store.selectedSpace?.slug)
 				if (space) {
-					this.sceneUrl = space.image.href
+					this.sceneUrl = space.scene
 				}
 			}
 		})
 
-		this.isDark = document.documentElement.dataset.theme === 'dark'
-
-		const onThemeChange = () => (this.isDark = document.documentElement.dataset.theme === 'dark')
-
 		this.createEffect(() => {
-			const mo = new MutationObserver(onThemeChange)
-			mo.observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']})
-			onCleanup(() => mo.disconnect())
+			const mutations = createMutationsSignal(document.documentElement, {
+				attributes: true,
+				attributeFilter: ['data-theme'],
+			})
+
+			this.createEffect(() => {
+				mutations()
+				this.isDark = document.documentElement.dataset.theme === 'dark'
+			})
 		})
 
-		// Track avatar loading state
+		const avatarId = Symbol('avatar')
+
+		// FIXME The following two effects are almost identical, running some of
+		// the same code twice.
+
+		// Track selected avatar loading state
 		this.createEffect(() => {
-			if (!store.selectedAvatar || !store.tempSelectedAvatar || !store.isShowAvatar) return
-			const avatar = this.shadowRoot?.querySelector('lume-gltf-model[data-avatar]') as any
+			if (!store.isShowAvatar || store.selectedAvatar) return
+
+			const avatar = this.avatarModel
 			if (!avatar) return
 
-			const behavior = avatar.behaviors?.get?.('gltf-model')
-			const avatarId = 'avatar'
+			const avatarLoaded = onModelLoad(avatar)
 
-			if (!behavior?.model && avatar.three) {
-				if (!untrack(() => this.loadingBlocks.includes(avatarId))) {
-					this.loadingBlocks = [...untrack(() => this.loadingBlocks), avatarId]
+			createEffect(() => {
+				if (!avatarLoaded()) {
+					store.addLoadingBlock(avatarId)
+					store.addIsDrippySceneLoading(avatarId)
+
+					return
 				}
 
-				if (!untrack(() => store.isDrippySceneLoading.includes(avatarId))) {
-					store.addIsDrippySceneLoading = avatarId
-				}
-
-				const loaded = () => {
-					this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== avatarId)
-					store.removeIsDrippySceneLoading = avatarId
-				}
-
-				avatar.on?.('MODEL_LOAD', loaded)
-				onCleanup(() => {
-					avatar.off?.('MODEL_LOAD', loaded)
-				})
-
-				enableShadowOnModelLoad(avatar)
-			}
+				store.removeLoadingBlock(avatarId)
+				store.removeIsDrippySceneLoading(avatarId)
+			})
 		})
 
-		// Track scene loading state
+		const sceneId = Symbol('scene')
+
+		// Track background scene loading state
 		this.createEffect(() => {
-			if (!store.selectedSpace || !store.isShowScene) return
+			if (!store.selectedSpace || !store.selectedSpace?.scene || !store.isShowScene) return
+
 			const scene = this.backgroundModel
 			if (!scene) return
 
-			const behavior = scene.behaviors?.get?.('gltf-model')
-			const sceneId = 'scene'
+			const backgroundLoaded = onModelLoad(scene)
 
-			if (!behavior?.model && scene.three) {
-				if (!untrack(() => this.loadingBlocks.includes(sceneId))) {
-					this.loadingBlocks = [...untrack(() => this.loadingBlocks), sceneId]
+			createEffect(() => {
+				if (!backgroundLoaded()) {
+					store.addLoadingBlock(sceneId)
+					store.addIsDrippySceneLoading(sceneId)
+
+					return
 				}
-				if (!untrack(() => store.isDrippySceneLoading.includes(sceneId))) {
-					store.addIsDrippySceneLoading = sceneId
-				}
-			}
 
-			const loaded = () => {
-				this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== sceneId)
-				store.removeIsDrippySceneLoading = sceneId
-			}
-
-			scene.on?.('MODEL_LOAD', loaded)
-			onCleanup(() => {
-				scene.off?.('MODEL_LOAD', loaded)
+				store.removeLoadingBlock(sceneId)
+				store.removeIsDrippySceneLoading(sceneId)
 			})
 		})
 
@@ -360,30 +228,24 @@ export class DrippyScene extends Element {
 			const totalBlockCount = this.renderBlocks.length
 
 			if (totalBlockCount === 0) {
-				this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== 'avatar')
+				store.removeLoadingBlock(avatarId) // why remove avatarId when no blocks?
 				return
 			}
 
-			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
+			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as GltfModel[]
 
 			for (const [index, el] of models.entries()) {
-				const behavior = el.behaviors?.get?.('gltf-model')
-				const blockId = `block-${index}`
+				const blockId = Symbol(`block-${index}`)
+				const modelLoaded = onModelLoad(el)
 
-				if (!behavior?.model && el.three) {
-					if (!untrack(() => this.loadingBlocks.includes(blockId))) {
-						this.loadingBlocks = [...untrack(() => this.loadingBlocks), blockId]
+				createEffect(() => {
+					if (!modelLoaded()) {
+						store.addLoadingBlock(blockId)
+						return
 					}
 
-					const loaded = () => {
-						this.loadingBlocks = untrack(() => this.loadingBlocks).filter(id => id !== blockId)
-					}
-
-					el?.on?.('MODEL_LOAD', loaded)
-					onCleanup(() => {
-						el?.off?.('MODEL_LOAD', loaded)
-					})
-				}
+					store.removeLoadingBlock(blockId)
+				})
 			}
 		})
 
@@ -432,8 +294,9 @@ export class DrippyScene extends Element {
 			let shouldCancel = false
 			const isCanceled = () => shouldCancel
 
-			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
-			const handlers: Array<{el: any; fn: () => void}> = []
+			const models: GltfModel[] = Array.from(
+				this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? [],
+			) as GltfModel[]
 
 			// Process each model using its data-blockid to find the correct fabric
 			for (const el of models) {
@@ -454,57 +317,68 @@ export class DrippyScene extends Element {
 				// Find the fabric for this block
 				const templateFabrics = selectedFabrics.get(templateCategory)
 				const fabric = templateFabrics?.get(blockCategory)
-				const loadingId = `material-${blockId}`
+				const loadingId = Symbol(`material-${blockId}`)
+				const modelLoaded = onModelLoad(el)
 
-				const applyOrReset = () => {
-					if (isCanceled()) return
+				createEffect(() => {
+					if (!modelLoaded()) return
 
 					if (fabric) {
-						this.#applyFabricToThreeObject((el as any).three, fabric, isCanceled, loadingId)
+						this.#applyFabric(el, fabric, isCanceled, loadingId)
 					} else {
 						// Reset to default material if no fabric selected for this block category
-						this.#resetMaterialsToDefault((el as any).three)
+						this.#resetMaterialsToDefault(el)
 					}
-				}
-
-				const behavior = el.behaviors?.get?.('gltf-model')
-				if (!behavior?.model || !el.three) {
-					el.on?.('MODEL_LOAD', applyOrReset)
-					handlers.push({el, fn: applyOrReset})
-				} else {
-					applyOrReset()
-				}
+				})
 			}
 
-			onCleanup(() => {
-				shouldCancel = true
-				for (const {el, fn} of handlers) {
-					el.off?.('MODEL_LOAD', fn)
+			onCleanup(() => (shouldCancel = true))
+		})
+
+		// Play animation when blocks are added, pause animation when no blocks.
+		this.createEffect(() => {
+			// When rigging the garments to the skeleton, the model needs to be stationary,
+			// ideally in T-pose. We need to wait for all the blocks to be fully loaded before
+			// rigging.
+
+			if (store.loadingBlocks.size > 0) {
+				this.animsStopped = true
+			} else {
+				// Wait 1 more frame just for good measure. The rigging should happen as soon as
+				// the bocks are loaded, so this makes sure that the animations start on the next
+				// frame, when the rigging is finished.
+				if (this.animsEnabled) {
+					requestAnimationFrame(() => {
+						this.animsStopped = false
+					})
 				}
-			})
+			}
 		})
 
 		this.createEffect(() => {
-			// Force update the scene when the fabric changes
-			Motor?.addRenderTask(this.#renderTask)
-			onCleanup(() => Motor?.removeRenderTask(this.#renderTask))
-		})
+			if (store.selectedAnimation === 'none') {
+				this.animsEnabled = false
+				this.animsStopped = true
 
-		this.createEffect(() => {
-			if (!this.backgroundModel) return
-			enableShadowOnModelLoad(this.backgroundModel)
-			enableFrontsideOnlyRenderLoad(this.backgroundModel)
+				this.animName = null
+				this.animSrc = null
+			} else if (store.selectedAnimation === 'walk') {
+				this.animsEnabled = true
+
+				this.animName = 'FV2_Walking in place.mtn'
+				this.animSrc = '../models/Yuna-walkinplace.glb'
+			} else if (store.selectedAnimation === 'dance') {
+				this.animsEnabled = true
+
+				this.animName = 'FV2_Dancing_01.mtn'
+				this.animSrc = '../models/Yuna-dancing01.glb'
+			}
 		})
 
 		this.createEffect(() => {
 			if (!this.lumeScene) return
 			this.lumeScene.glRenderer!.toneMapping = THREE.ACESFilmicToneMapping
 		})
-	}
-
-	disconnectedCallback() {
-		super.disconnectedCallback()
-		Motor?.removeRenderTask(this.#renderTask)
 	}
 
 	template = () => {
@@ -517,15 +391,18 @@ export class DrippyScene extends Element {
 		const shadowRadius = 4
 
 		return html`
-			<show-when condition=${() => store.view === 'blocks' || store.view === 'avatar' || store.view === 'template'} content=${() => html`
-				<app-buttons-left layout="bottom">
-					<app-buttons-group>
-						<loading-indicator
-							is-visible=${() => this.loadingBlocks.length > 0 || this.loadingMaterials.length > 0}
-						></loading-indicator>
-					</app-buttons-group>
-				</app-buttons-left>
-			`}></show-when>
+			<show-when
+				condition=${() => store.view === 'blocks' || store.view === 'avatar' || store.view === 'template'}
+				content=${() => html`
+					<app-buttons-left layout="bottom">
+						<app-buttons-group>
+							<loading-indicator
+								is-visible=${() => store.loadingBlocks.size > 0 || store.loadingMaterials.size > 0}
+							></loading-indicator>
+						</app-buttons-group>
+					</app-buttons-left>
+				`}
+			></show-when>
 
 			<div id="lume-scene-container">
 				<lume-scene
@@ -619,47 +496,90 @@ export class DrippyScene extends Element {
 							position="0 -1 0"
 						></lume-camera-rig>
 
-						<${Show} when=${() => store.isShowAvatar}>
+						<${Show}
+							when=${() => store.isShowAvatar}
+							fallback=${() => html`
+								<${For} each=${() => this.renderBlocks}>
+									${(item: RenderBlock, index: Accessor<number>) => html`
+										<lume-gltf-model
+											ref=${enableShadowOnModelLoad}
+											id=${item.id}
+											data-index=${index()}
+											data-cloth
+											src=${item.block.modelFile}
+											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
+										></lume-gltf-model>
+									`}
+								</>
+							`}
+						>
 							<lume-gltf-model
 								id="avatar"
-								src=${() =>
-									store.selectedAvatar !== null
-										? store.selectedAvatar === 'female'
-											? femaleAvatar.href
-											: maleAvatar.href
-										: store.tempSelectedAvatar === 'female'
-											? femaleAvatar.href
-											: maleAvatar.href}
+								ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el))}
+								src=${() => avatars.find(avatar => avatar.value === (store.selectedAvatar ?? store.tempSelectedAvatar))?.src}
 								scale="1 1 1"
 								data-avatar
-							></lume-gltf-model>
+							>
+								<${For} each=${() => this.renderBlocks}>
+									${(item: RenderBlock, index: Accessor<number>) => html`
+										<lume-gltf-model
+											ref=${enableShadowOnModelLoad}
+											id=${item.id}
+											data-index=${index()}
+											data-cloth
+											src=${item.block.modelFile}
+											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
+										>
+											<lume-auto-rigger
+												excluded-bones=${() => excludeBonesFromBlock(item.block)}
+												onrig=${() => {
+													this.animsStopped = false
+												}}
+												disabled=${() => {
+													//
+													return false
+													return !this.animsEnabled
+												}}
+											></lume-auto-rigger>
+										</lume-gltf-model>
+									`}
+								</>
+
+								<lume-animation
+									src=${() => this.animSrc}
+									clip-name=${() => this.animName}
+									stopped=${() => this.animsStopped || !this.animsEnabled}
+								></lume-animation>
+							</lume-gltf-model>
 						</>
 
-						<${Show} when=${() => store.isShowScene}>
+						<${Show} when=${() => store.isShowScene && store.selectedSpace?.scene}>
 							<lume-gltf-model
-								ref=${(el: GltfModel) => (this.backgroundModel = el)}
+								ref=${(el: GltfModel) => ((this.backgroundModel = el), enableShadowOnModelLoad(el), enableFrontsideOnModelLoad(el))}
 								id="scene"
-								src=${() => store.selectedSpace?.scene.href ?? ''}
+								src=${() => store.selectedSpace?.scene}
 							></lume-gltf-model>
 						</>
 
 						<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
-							${(item: Accessor<URL>) => html`
-								<lume-gltf-model ref=${enableShadowOnModelLoad} src=${() => item().href}></lume-gltf-model>
+							${(item: Accessor<string>) => html`
+								<lume-gltf-model ref=${enableShadowOnModelLoad} src=${() => item()}></lume-gltf-model>
 							`}
 						</>
 
-						<${For} each=${() => this.renderBlocks}>
-							${(item: RenderBlock, index: Accessor<number>) => html`
-								<lume-gltf-model
-									ref=${enableShadowOnModelLoad}
-									id=${item.id}
-									data-index=${index()}
-									data-cloth
-									src=${item.block.modelFile}
-									scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
-								></lume-gltf-model>
-							`}
+						<${Show} when=${() => !this.animsEnabled}>
+							<${For} each=${() => this.renderBlocks}>
+								${(item: RenderBlock, index: Accessor<number>) => html`
+									<lume-gltf-model
+										ref=${enableShadowOnModelLoad}
+										id=${item.id}
+										data-index=${index()}
+										data-cloth
+										src=${item.block.modelFile}
+										scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
+									></lume-gltf-model>
+								`}
+							</>
 						</>
 					</lume-element3d>
 				</lume-scene>
@@ -699,47 +619,4 @@ export class DrippyScene extends Element {
 			}
 		}
 	`
-}
-
-function isMesh(obj: THREE.Object3D): obj is THREE.Mesh {
-	return obj instanceof THREE.Mesh
-}
-
-const enableFrontsideOnlyRenderLoad = (obj: GltfModel) => {
-	createEffect(() => {
-		const onFrontSideRender = () => enableFrontsideRendering(obj.three)
-		obj.on('MODEL_LOAD', onFrontSideRender)
-		onCleanup(() => obj.off('MODEL_LOAD', onFrontSideRender))
-	})
-}
-
-function enableFrontsideRendering(obj: THREE.Object3D) {
-	obj.traverse((child: THREE.Object3D) => {
-		if (!isMesh(child)) return
-		if (child.material instanceof THREE.Material) {
-			child.material.side = THREE.FrontSide
-			child.material.needsUpdate = true
-		} else {
-			child.material.map(material => {
-				material.side = THREE.FrontSide
-				material.needsUpdate = true
-			})
-		}
-	})
-}
-
-const enableShadowOnModelLoad = (el: GltfModel) => {
-	createEffect(() => {
-		const onload = () => enableShadows(el.three)
-		el.on('MODEL_LOAD', onload)
-		onCleanup(() => el.off('MODEL_LOAD', onload))
-	})
-}
-
-function enableShadows(obj: THREE.Object3D) {
-	obj.traverse((child: THREE.Object3D) => {
-		if (!isMesh(child)) return
-		child.castShadow = true
-		child.receiveShadow = true
-	})
 }

@@ -1,26 +1,20 @@
 import {Meteor} from 'meteor/meteor'
 import {createMutable} from 'solid-js/store'
-import {fabrics} from '../consts/fabrics.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {
-	AppRoute,
-	Avatar,
-	CustomMeasurement,
-	OrderState,
-	OrderStatus,
-	ShippingAddress,
-	Space,
-} from '../types/types.js'
+import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {toSolidSignal} from '../utils.js'
+import {blockManager} from './block-manager.js'
+import {untrack} from 'solid-js'
 
 export const store = createMutable({
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
-	tempSelectedAvatar: 'female' as Avatar,
-	selectedAvatar: null as Avatar,
+	tempSelectedAvatar: null as string | null,
+	selectedAvatar: null as string | null,
 	selectedSpace: null as Space | null,
+	selectedAnimation: 'none' as 'none' | 'walk' | 'dance',
 	isPreview: false,
 	selectedTemplates: new Map<TemplateCategory, Template>(),
 	selectedBlocks: new Map<TemplateCategory, Map<BlockCategory, Block>>(),
@@ -28,7 +22,9 @@ export const store = createMutable({
 	customMeasurement: null as CustomMeasurement | null,
 	isShowAvatar: true,
 	isShowScene: true,
-	isDrippySceneLoading: [] as string[],
+	isDrippySceneLoading: new Set<symbol>(),
+	loadingBlocks: new Set<symbol>(),
+	loadingMaterials: new Set<symbol>(),
 
 	// Order-related state
 	selectedOrderItems: new Map<TemplateCategory, boolean>(),
@@ -133,36 +129,9 @@ export const store = createMutable({
 		this.selectedBlocks = newBlocks
 	},
 	set replaceSelectedBlocks(blockData: {blocks: Block[]; templateCategory: TemplateCategory; materialId: string}[]) {
-		// Completely replace selectedBlocks with new blocks (used for template selection)
-		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		const newFabrics: {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}[] = []
-
-		for (const {blocks, templateCategory, materialId} of blockData) {
-			const templateBlocks = new Map<BlockCategory, Block>()
-			for (const block of blocks) {
-				templateBlocks.set(block.category, block)
-				if (materialId) {
-					const fabric = fabrics[this.selectedSpace?.collection ?? 'moidien']?.find(
-						fabric => `${fabric.materialName} ${fabric.category} ${fabric.templateCategory}` === materialId,
-					)
-					if (fabric) {
-						newFabrics.push({
-							fabric: fabric,
-							blockCategory: block.category,
-							templateCategory: templateCategory,
-						})
-					}
-				}
-			}
-			if (templateBlocks.size > 0) {
-				newBlocks.set(templateCategory, templateBlocks)
-			}
-		}
+		const {newBlocks, newFabrics} = blockManager.replaceSelectedBlocks(blockData, this.selectedSpace!)
 		this.selectedBlocks = newBlocks
 		this.replaceSelectedFabrics = newFabrics
-	},
-	set removeSelectedFabrics(fabricData: {blockCategory: BlockCategory; templateCategory: TemplateCategory}) {
-		this.selectedFabrics.get(fabricData.templateCategory)?.delete(fabricData.blockCategory)
 	},
 	set replaceSelectedFabrics(
 		fabricData:
@@ -204,18 +173,7 @@ export const store = createMutable({
 				newFabrics.set(templateCategory, templateFabrics)
 			}
 
-			// Check if the fabric for this block category already exists in this template
-			if (templateFabrics.has(blockCategory)) {
-				// if it exists, check if the fabric is the same, if so, remove it
-				if (templateFabrics.get(blockCategory)?._id === fabric._id) {
-					templateFabrics.delete(blockCategory)
-				} else {
-					templateFabrics.set(blockCategory, fabric)
-				}
-			} else {
-				// if not, add it
-				templateFabrics.set(blockCategory, fabric)
-			}
+			templateFabrics.set(blockCategory, fabric)
 
 			// If template has no fabrics left, remove the template entry
 			if (templateFabrics.size === 0) {
@@ -234,11 +192,11 @@ export const store = createMutable({
 			selectedTemplates: Map<TemplateCategory, Template>,
 		) => {
 			const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
-				Dress: ['Shirt'],
+				Dress: ['Shirt', 'Pants', 'Skirt'],
 				Shirt: ['Dress'],
 				Jacket: [],
-				Skirt: ['Pants'],
-				Pants: ['Skirt'],
+				Skirt: ['Pants', 'Dress'],
+				Pants: ['Skirt', 'Dress'],
 			}
 
 			const interchangeableCategories = interchangeableCategoriesMapping[category]
@@ -272,10 +230,10 @@ export const store = createMutable({
 	set navigateTo(route: AppRoute) {
 		this.view = route
 	},
-	set setTempSelectedAvatar(avatar: Avatar) {
+	set setTempSelectedAvatar(avatar: string) {
 		this.tempSelectedAvatar = avatar
 	},
-	set selectAvatar(avatar: Avatar) {
+	set selectAvatar(avatar: string) {
 		this.selectedAvatar = avatar
 	},
 	set selectSpace(space: Space | null) {
@@ -469,7 +427,7 @@ export const store = createMutable({
 
 	resetState() {
 		this.view = 'avatar' as AppRoute
-		this.selectedAvatar = null as Avatar
+		this.selectedAvatar = null as string | null
 		this.selectedSpace = null as Space | null
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
@@ -503,11 +461,43 @@ export const store = createMutable({
 		} as OrderState
 	},
 
-	set addIsDrippySceneLoading(key: string) {
-		this.isDrippySceneLoading = [...this.isDrippySceneLoading, key]
+	addIsDrippySceneLoading(key: symbol) {
+		untrack(() => {
+			this.isDrippySceneLoading.add(key)
+			this.isDrippySceneLoading = new Set(this.isDrippySceneLoading) // trigger reactivity
+		})
 	},
-	set removeIsDrippySceneLoading(key: string) {
-		this.isDrippySceneLoading = this.isDrippySceneLoading.filter(k => k !== key)
+	removeIsDrippySceneLoading(key: symbol) {
+		untrack(() => {
+			this.isDrippySceneLoading.delete(key)
+			this.isDrippySceneLoading = new Set(this.isDrippySceneLoading) // trigger reactivity
+		})
+	},
+
+	addLoadingBlock(key: symbol) {
+		untrack(() => {
+			this.loadingBlocks.add(key)
+			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+		})
+	},
+	removeLoadingBlock(key: symbol) {
+		untrack(() => {
+			this.loadingBlocks.delete(key)
+			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+		})
+	},
+
+	addLoadingMaterial(key: symbol) {
+		untrack(() => {
+			this.loadingMaterials.add(key)
+			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+		})
+	},
+	removeLoadingMaterial(key: symbol) {
+		untrack(() => {
+			this.loadingMaterials.delete(key)
+			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+		})
 	},
 })
 

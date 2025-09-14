@@ -31,11 +31,7 @@ export function getFabricForTemplate(template: Template, brand: string = 'moidie
 	if (!template.materialId) return null
 
 	const brandFabrics = (fabrics as BrandData<Fabric>)[brand] || []
-	return (
-		brandFabrics.find(
-			fabric => `${fabric.materialName} ${fabric.category} ${fabric.templateCategory}` === template.materialId,
-		) || null
-	)
+	return brandFabrics.find(fabric => `${fabric.category} - ${fabric.materialName}` === template.materialId) || null
 }
 
 /**
@@ -65,7 +61,7 @@ export function getTemplateForBlock(block: Block, brand: string = 'moidien'): Te
  */
 export function getFabricsForTemplateCategory(category: string, brand: string = 'moidien'): Fabric[] {
 	const brandFabrics = (fabrics as BrandData<Fabric>)[brand] || []
-	return brandFabrics.filter(fabric => fabric.templateCategory === category)
+	return brandFabrics.filter(fabric => fabric.templateCategories?.includes(category))
 }
 
 /**
@@ -126,7 +122,7 @@ export function getDataSummary(brand: string = 'moidien') {
 	// Count fabrics by template category
 	const fabricsByTemplateCategory = brandFabrics.reduce(
 		(acc, fabric) => {
-			const category = fabric.templateCategory || 'Unknown'
+			const category = fabric.templateCategories?.[0] || 'Unknown'
 			acc[category] = (acc[category] || 0) + 1
 			return acc
 		},
@@ -207,7 +203,7 @@ export function validateRelationships(brand: string = 'moidien') {
 
 	// Check for orphaned fabrics (no template references them)
 	brandFabrics.forEach(fabric => {
-		const fabricId = `${fabric.materialName} ${fabric.category} ${fabric.templateCategory}`
+		const fabricId = `${fabric.category} - ${fabric.materialName}`
 		const isReferenced = brandTemplates.some(template => template.materialId === fabricId)
 		if (!isReferenced) {
 			issues.push(`Fabric "${fabricId}" is not referenced by any template`)

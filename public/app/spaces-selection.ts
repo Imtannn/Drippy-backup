@@ -1,8 +1,12 @@
-import {css, Element, element, html, Index, signal} from 'lume'
+import {css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
-import {store} from './store.js'
-import type {Space} from '../types/types.js'
+import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
+import type {Space} from '../types/types.js'
+import {store} from './store.js'
+
+import '../elements/logic/index-each.js'
+import '../elements/logic/show-when.js'
 
 @element
 export class SpacesSelection extends Element {
@@ -14,9 +18,8 @@ export class SpacesSelection extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
-			console.log(store.selectedAvatar, spaces)
-			this.filterdSpace = spaces.filter(space => space.gender === store.selectedAvatar)
-			console.log(this.filterdSpace)
+			const avatarGender = avatars.find(avatar => avatar.value === store.selectedAvatar)?.gender
+			this.filterdSpace = spaces.filter(space => space.gender === avatarGender)
 		})
 	}
 
@@ -29,7 +32,7 @@ export class SpacesSelection extends Element {
 
 	#onSceneSelected = (space: Space) => {
 		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('scene', space.name)
+		searchParams.set('scene', space.slug)
 		window.history.replaceState({}, '', `?${searchParams.toString()}`)
 		store.selectSpace = space
 	}
@@ -45,43 +48,37 @@ export class SpacesSelection extends Element {
 
 			<!-- Space Cards -->
 			<div class="cards-container">
-			<${Index} each=${() => this.filterdSpace}>
-			${(space: Accessor<Space>) => html`
-				<!-- Bloom Realm Card -->
-				<div class="space-card">
-					<div class="scene-preview">
-						<div class="scene-placeholder">
-							<img src=${space().image} alt="Bloom Realm Scene" />
+				<index-each
+					items=${() => this.filterdSpace}
+					content=${() => (space: Accessor<Space>) => html`
+						<!-- Bloom Realm Card -->
+						<div class="space-card">
+							<div class="scene-preview">
+								<div class="scene-placeholder">
+									<img src=${space().sceneThumbnail} alt="Bloom Realm Scene" />
+								</div>
+								<div class="garments-count">${space().garmentsCount} garments</div>
+							</div>
+							<div class="card-content">
+								<div class="text-content">
+									<h3 class="card-title">${space().name}</h3>
+									<p class="card-subtitle">${space().description}</p>
+								</div>
+								<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>Explore space →</button>
+							</div>
 						</div>
-						<div class="garments-count">${space().garmentsCount} garments</div>
-					</div>
-					<div class="card-content">
-						<div class="text-content">
-							<h3 class="card-title">${space().name}</h3>
-							<p class="card-subtitle">${space().description}</p>
-						</div>
-						<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>Explore space →</button>
-					</div>
-				</div>
-			`}
-			</>
+					`}
+				></index-each>
 
-				<!-- Neon Future Card -->
-				<!--<div class="space-card">
-					<div class="scene-preview">
-						<div class="scene-placeholder">
-							<img src="../images/space-one.png" alt="Neon Future Scene" />
+				<show-when
+					condition=${() => this.filterdSpace.length === 0}
+					content=${() => html`
+						<div class="no-spaces-container">
+							<p class="no-spaces-text">Spaces for this avatar are coming soon!</p>
+							<button class="no-spaces-button" onclick=${() => (store.view = 'avatar')}>Select avatar →</button>
 						</div>
-						<div class="garments-count">8 garments</div>
-					</div>
-					<div class="card-content">
-						<div class="text-content">
-							<h3 class="card-title">Neon future</h3>
-							<p class="card-subtitle">Neon chic</p>
-						</div>
-						<button class="explore-button" onclick=${this.#onSceneSelected}>Explore space →</button>
-					</div>
-				</div> -->
+					`}
+				></show-when>
 			</div>
 		</div>
 	`
@@ -124,6 +121,43 @@ export class SpacesSelection extends Element {
 
 		:host(.fade-out) {
 			animation: fadeOut 0.3s ease-out forwards;
+		}
+
+		.no-spaces-container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100%;
+			width: 250px;
+			margin: auto;
+			gap: var(--uiGap);
+		}
+
+		.no-spaces-text {
+			font-size: var(--fontSizeTextMd);
+			font-weight: var(--fontWeightNormal);
+			color: var(--uiColorSecondaryLightGrey);
+			text-align: center;
+			margin: 0;
+		}
+
+		.no-spaces-button {
+			font-size: var(--fontSizeTextXs);
+			padding: 0.5rem 1rem;
+			background: var(--uiColorPrimaryBlack);
+			border: 2px solid var(--uiColorPrimaryBlack);
+			border-radius: var(--borderRadiusPill);
+			cursor: pointer;
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryWhite);
+			white-space: nowrap;
+
+			:host-context([data-theme='dark']) & {
+				background: #333;
+				border-color: var(--uiColorPrimaryWhite);
+				color: var(--uiColorPrimaryWhite);
+			}
 		}
 
 		/* SpacesPage-specific styles */
@@ -169,7 +203,7 @@ export class SpacesSelection extends Element {
 		.cards-container {
 			display: flex;
 			flex-direction: column;
-			gap: 2rem;
+			gap: 25px;
 			max-width: 800px;
 			margin: 0 auto;
 		}
@@ -177,6 +211,8 @@ export class SpacesSelection extends Element {
 		.space-card {
 			background: var(--uiColorPrimaryWhite);
 			border-radius: var(--borderRadiusLarge);
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
 			overflow: hidden;
 			width: 100%;
 			max-width: 354px;
@@ -230,7 +266,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.card-content {
-			padding: 1.5rem;
+			padding-top: 15px;
 			padding-left: 0;
 			padding-right: 0;
 			display: flex;

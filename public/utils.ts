@@ -1,4 +1,4 @@
-import type {Element3D, Mesh} from 'lume'
+import type {Element3D, GltfModel, Mesh} from 'lume'
 import * as THREE from 'three'
 import {batch, createEffect, createMemo, createSignal, getOwner, onCleanup, untrack, type Signal} from 'solid-js'
 import {Easing} from '@tweenjs/tween.js'
@@ -285,4 +285,122 @@ export function hasDescendant(a: MaybeElement, b: MaybeElement): boolean {
 	if (!a || !b) return false
 	for (const parent of ancestorElements(b)) if (a === parent) return true
 	return false
+}
+
+export async function preloadImage(image: string) {
+	return new Promise<void>(resolve => {
+		const img = new Image()
+		img.src = image
+		img.onload = () => {
+			img.remove()
+			resolve()
+		}
+	})
+}
+
+/**
+ * Signal version of MutationObserver. Given an element and mutation observer
+ * options, returns a signal that contains the latest set of MutationRecords,
+ * initially empty.
+ */
+export function createMutationsSignal(target: Element, options: MutationObserverInit) {
+	const [signal, setSignal] = createSignal<MutationRecord[]>([])
+
+	const mo = new MutationObserver(records => setSignal(records))
+	mo.observe(target, options)
+	onCleanup(() => mo.disconnect())
+
+	return signal
+}
+
+export function isMesh(obj: THREE.Object3D): obj is THREE.Mesh {
+	return obj instanceof THREE.Mesh
+}
+
+export function onModelLoad(model: GltfModel) {
+	// Having to do this dance with the MODEL_LOAD event is not great. We'll
+	// clean this up with behaviors-as-child-elements, and ensure the state is
+	// easy to access and signal-based.
+	// Good example though, of how to map some none-signal pattern to a signal.
+
+	const [loaded, setLoaded] = createSignal(false)
+
+	createEffect(() => {
+		// Wait until the gtf-model behavior instance is present on the model element.
+		const gltfModelBehavior = model.behaviors.get('gltf-model') // signal
+		if (!gltfModelBehavior) return
+
+		// Now wait until the model is loaded.
+		const threeModel = gltfModelBehavior.model
+		if (threeModel) {
+			setLoaded(true)
+		} else {
+			const modelLoad = () => {
+				model.off('MODEL_LOAD', modelLoad)
+				setLoaded(true)
+			}
+
+			model.on('MODEL_LOAD', modelLoad)
+			onCleanup(() => model.off('MODEL_LOAD', modelLoad))
+		}
+
+		onCleanup(() => setLoaded(false))
+	})
+
+	return loaded
+}
+
+export function enableShadowOnModelLoad(el: GltfModel) {
+	const loaded = onModelLoad(el)
+
+	createEffect(() => {
+		if (!loaded()) return
+		enableShadows(el)
+	})
+}
+
+export function enableShadows(el: Element3D) {
+	el.three.traverse((child: THREE.Object3D) => {
+		if (!isMesh(child)) return
+		child.castShadow = true
+		child.receiveShadow = true
+	})
+
+	el.needsUpdate()
+}
+
+export function enableFrontsideRendering(el: Element3D) {
+	el.three.traverse((child: THREE.Object3D) => {
+		if (!isMesh(child)) return
+		if (child.material instanceof THREE.Material) {
+			child.material.side = THREE.FrontSide
+			child.material.needsUpdate = true
+		} else {
+			child.material.map(material => {
+				material.side = THREE.FrontSide
+				material.needsUpdate = true
+			})
+		}
+	})
+
+	el.needsUpdate()
+}
+
+export function enableFrontsideOnModelLoad(el: GltfModel) {
+	const loaded = onModelLoad(el)
+
+	createEffect(() => {
+		if (!loaded()) return
+		enableFrontsideRendering(el)
+	})
+}
+
+export function* meshesInTree(root: THREE.Object3D): Generator<THREE.Mesh> {
+	if (root instanceof THREE.Mesh) {
+		yield root
+	}
+
+	for (const child of root.children) {
+		yield* meshesInTree(child)
+	}
 }

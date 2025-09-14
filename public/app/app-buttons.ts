@@ -182,6 +182,7 @@ export class AppButtonsGroup extends Element {
 
 		.app-buttons-group {
 			display: flex;
+			align-items: flex-end;
 			flex-direction: var(--app-buttons-group-direction);
 			gap: 5px;
 		}

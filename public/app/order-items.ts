@@ -1,7 +1,8 @@
-import {css, Element, element, For, html} from 'lume'
+import {css, Element, element, html} from 'lume'
 import '../elements/back-button.js'
 import '../elements/bottom-sheet.js'
 import '../elements/home-button.js'
+import '../elements/logic/for-each.js'
 import '../elements/logo-button.js'
 import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
@@ -74,7 +75,7 @@ export class OrderItems extends Element {
 		// Get all garment models (cloth items) - they're direct children of lume-scene
 		const clothModels = lumeScene.querySelectorAll('lume-gltf-model[data-cloth]')
 		console.log('found cloth models:', clothModels.length)
-		
+
 		// Debug: log model IDs
 		clothModels.forEach((model: any, index: number) => {
 			console.log(`model ${index} ID:`, model.getAttribute('id'))
@@ -83,12 +84,12 @@ export class OrderItems extends Element {
 		// Simple approach: hide all garments except the target category
 		const modelsToHide: any[] = []
 		console.log(`hiding models that don't start with "${category}-"`)
-		
+
 		clothModels.forEach((model: any) => {
 			const modelId = model.getAttribute('id') || ''
 			const shouldKeep = modelId.startsWith(category + '-')
 			console.log(`model ${modelId}: ${shouldKeep ? 'KEEP' : 'HIDE'}`)
-			
+
 			if (!shouldKeep) {
 				// Hide the Three.js object instead of CSS display
 				console.log(`hiding model: ${modelId}`)
@@ -101,12 +102,12 @@ export class OrderItems extends Element {
 				}
 			}
 		})
-		
+
 		console.log(`total models to hide: ${modelsToHide.length}`)
 
 		// Also hide avatar, scene, and other elements
 		const otherModelsToHide: any[] = []
-		
+
 		// Hide avatar
 		const avatarModel = lumeScene.querySelector('#avatar')
 		if (avatarModel?.three) {
@@ -114,7 +115,7 @@ export class OrderItems extends Element {
 			avatarModel.three.visible = false
 			otherModelsToHide.push(avatarModel)
 		}
-		
+
 		// Hide scene/background
 		const sceneModel = lumeScene.querySelector('#scene')
 		if (sceneModel?.three) {
@@ -122,7 +123,7 @@ export class OrderItems extends Element {
 			sceneModel.three.visible = false
 			otherModelsToHide.push(sceneModel)
 		}
-		
+
 		// Hide shoes and any other non-cloth models
 		const allOtherModels = lumeScene.querySelectorAll('lume-gltf-model:not([data-cloth])')
 		console.log('found other models (non-cloth):', allOtherModels.length)
@@ -139,23 +140,23 @@ export class OrderItems extends Element {
 		const cameraRig = lumeScene.querySelector('lume-camera-rig')
 		let originalPosition: string | null = null
 		let originalDistance: string | null = null
-		
+
 		if (cameraRig) {
 			// Store original values
 			originalPosition = cameraRig.getAttribute('position') || '0 -1 0'
 			originalDistance = cameraRig.getAttribute('distance') || '9'
-			
+
 			console.log(`moving camera-rig for ${category} - original position: ${originalPosition}`)
-			
+
 			// Move camera-rig position to focus on the specific garment
 			if (category === 'Shirt') {
-				cameraRig.setAttribute('position', '0 0.5 0')  // Focus higher for shirt
+				cameraRig.setAttribute('position', '0 0.5 0') // Focus higher for shirt
 				cameraRig.setAttribute('distance', '4')
 			} else if (category === 'Pants') {
-				cameraRig.setAttribute('position', '0 -0.5 0')  // Focus lower for pants
+				cameraRig.setAttribute('position', '0 -0.5 0') // Focus lower for pants
 				cameraRig.setAttribute('distance', '4')
 			} else {
-				cameraRig.setAttribute('position', '0 0 0')  // Center for other items
+				cameraRig.setAttribute('position', '0 0 0') // Center for other items
 				cameraRig.setAttribute('distance', '4')
 			}
 		}
@@ -188,7 +189,7 @@ export class OrderItems extends Element {
 				model.three.visible = true
 			}
 		})
-		
+
 		// Restore avatar and scene
 		otherModelsToHide.forEach(model => {
 			if (model.three) {
@@ -196,7 +197,7 @@ export class OrderItems extends Element {
 				model.three.visible = true
 			}
 		})
-		
+
 		// Restore camera-rig position
 		if (cameraRig && originalPosition && originalDistance) {
 			console.log(`restoring camera-rig - position: ${originalPosition}, distance: ${originalDistance}`)
@@ -208,75 +209,77 @@ export class OrderItems extends Element {
 	}
 
 	template = () => html`
-	<app-buttons-left>
-		<app-buttons-group group-direction="row">
-			<back-button onclick=${this.#onBackButtonClick}></back-button>
-			<home-button onclick=${this.#onHomeButtonClick}></home-button>
-		</app-buttons-group>
-	</app-buttons-left>
+		<app-buttons-left>
+			<app-buttons-group group-direction="row">
+				<back-button onclick=${this.#onBackButtonClick}></back-button>
+				<home-button onclick=${this.#onHomeButtonClick}></home-button>
+			</app-buttons-group>
+		</app-buttons-left>
 
-	<app-buttons-right>
-		<app-buttons-group>
-			<!-- <theme-switch-button></theme-switch-button> -->
-			<logo-button brand-name="MoiDien"></logo-button>
-		</app-buttons-group>
-	</app-buttons-right>
-
-	<show-on-device device="desktop">
-		<app-buttons-right layout="bottom">
-			<app-buttons-group custom-style="gap: 34px;" group-direction="row">
-				<share-button onclick=${this.#onShareClick}></share-button>
-				<buy-button onclick=${this.#onBuyItClick}></buy-button>
+		<app-buttons-right>
+			<app-buttons-group>
+				<!-- <theme-switch-button></theme-switch-button> -->
+				<logo-button brand-name="MoiDien"></logo-button>
 			</app-buttons-group>
 		</app-buttons-right>
-	</show-on-device>
 
-	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
-		<div class="order-container">
-			<!-- Items List -->
-			<div class="items-list">
-				<${For} each=${() => Array.from(store.selectedTemplates.entries())}>
-				${([category, template]: [TemplateCategory, Template]) => html`
-					<div class="item-row">
-						<div
-							class="checkbox-icon"
-							classList=${() => ({checked: store.selectedOrderItems.get(category) || false})}
-							onclick=${() => this.#onItemToggle(category)}
-						>
-							<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<rect y="0.569336" width="15" height="15" rx="7.5" fill="var(--uiColorAccentViolet)" />
-								<path
-									d="M11 5.56934L7.64637 9.63434C7.24639 10.1192 6.50361 10.1192 6.10363 9.63434L5 8.29661"
-									stroke="white"
-									stroke-width="1.2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
-						</div>
-						<div class="item-image">
-							<img src=${() => this.#captureItemScreenshot(category) || template.thumb} alt=${template.name} />
-						</div>
-						<div class="item-details">
-							<div class="item-name">Product name</div>
-							<div class="item-price-row">
-								<span class="item-price">$125.00</span>
-								<span class="item-moq" classList=${() => ({visible: store.selectedSpace?.isWholesale})}
-									>MOQ: 5 pcs</span
-								>
-							</div>
-						</div>
-					</div>
-				`}
-				</>
+		<show-on-device device="desktop">
+			<app-buttons-right layout="bottom">
+				<app-buttons-group custom-style="gap: 34px;" group-direction="row">
+					<share-button onclick=${this.#onShareClick}></share-button>
+					<buy-button onclick=${this.#onBuyItClick}></buy-button>
+				</app-buttons-group>
+			</app-buttons-right>
+		</show-on-device>
+
+		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
+			<div class="order-container">
+				<!-- Items List -->
+				<div class="items-list">
+					<for-each
+						items=${() => Array.from(store.selectedTemplates.entries())}
+						content=${() =>
+							([category, template]: [TemplateCategory, Template]) => html`
+								<div class="item-row">
+									<div
+										class="checkbox-icon"
+										classList=${() => ({checked: store.selectedOrderItems.get(category) || false})}
+										onclick=${() => this.#onItemToggle(category)}
+									>
+										<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect y="0.569336" width="15" height="15" rx="7.5" fill="var(--uiColorAccentViolet)" />
+											<path
+												d="M11 5.56934L7.64637 9.63434C7.24639 10.1192 6.50361 10.1192 6.10363 9.63434L5 8.29661"
+												stroke="white"
+												stroke-width="1.2"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+											/>
+										</svg>
+									</div>
+									<div class="item-image">
+										<img src=${() => this.#captureItemScreenshot(category) || template.thumb} alt=${template.name} />
+									</div>
+									<div class="item-details">
+										<div class="item-name">Product name</div>
+										<div class="item-price-row">
+											<span class="item-price">$125.00</span>
+											<span class="item-moq" classList=${() => ({visible: store.selectedSpace?.isWholesale})}
+												>MOQ: 5 pcs</span
+											>
+										</div>
+									</div>
+								</div>
+							`}
+					></for-each>
+				</div>
+
+				<!-- Spacer to push button to bottom -->
+				<div class="button-spacer"></div>
+
+				<button class="order-button" onclick=${this.#onNextClick}>Continue to order</button>
 			</div>
-
-			<!-- Spacer to push button to bottom -->
-			<div class="button-spacer"></div>
-
-			<button class="order-button" onclick=${this.#onNextClick}>Continue to order</button>
-		</div>
-	</bottom-sheet>
+		</bottom-sheet>
 	`
 
 	css = css/*css*/ `

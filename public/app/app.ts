@@ -5,7 +5,6 @@ import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
 import '../routes.js' // track page visits
-import type {Avatar} from '../types/types.js'
 import './app-guard.js'
 import './avatar-selection.js'
 import './blocks-selection.js'
@@ -26,6 +25,7 @@ export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
 
 	@signal appLoaded = false
+	@signal showLoadingCover = false
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -40,7 +40,7 @@ export class DrippyApp extends Element {
 				// If no avatar is selected and no avatar is provided in search params, navigate to avatar selection. Else, use the provided avatar.
 				if (!store.selectedAvatar) {
 					if (avatar) {
-						store.selectAvatar = avatar as Avatar
+						store.selectAvatar = avatar
 					} else {
 						store.navigateTo = 'avatar'
 						return
@@ -50,7 +50,7 @@ export class DrippyApp extends Element {
 				// If no scene is selected and no scene is provided in search params, navigate to scene selection. Else, use the provided scene.
 				if (!store.selectedSpace) {
 					if (scene) {
-						const space = spaces.find(space => space.name === scene)
+						const space = spaces.find(space => space.slug === scene)
 						if (space) {
 							store.selectSpace = space
 						} else {
@@ -76,6 +76,20 @@ export class DrippyApp extends Element {
 				this.appLoaded = true
 			}
 		})
+
+		this.createEffect(() => {
+			if (
+				store.view !== 'avatar' &&
+				store.view !== 'scene' &&
+				store.selectedAvatar &&
+				store.selectedSpace &&
+				store.isDrippySceneLoading.size > 0
+			) {
+				this.showLoadingCover = true
+			} else {
+				this.showLoadingCover = false
+			}
+		})
 	}
 
 	template = () => html`
@@ -85,17 +99,8 @@ export class DrippyApp extends Element {
 				fallback=${() => html`<div class="loading">Loading...</div>`}
 				content=${() => html`
 					<show-when
-						condition=${() => {
-							const shouldShow =
-								store.view !== 'avatar' &&
-								store.view !== 'scene' &&
-								store.selectedAvatar &&
-								store.selectedSpace &&
-								store.isDrippySceneLoading.length > 0
-
-							return shouldShow
-						}}
-						content=${() => html`<video-loading></video-loading>`}
+						condition=${() => this.showLoadingCover}
+						content=${() => html` <video-loading></video-loading> `}
 					></show-when>
 
 					<div id="app-container">
@@ -104,67 +109,84 @@ export class DrippyApp extends Element {
 						<show-when
 							condition=${() => store.view === 'avatar'}
 							content=${() => html`<avatar-selection></avatar-selection>`}
-						>
-						</show-when>
+						></show-when>
 
 						<show-when
 							condition=${() => store.view === 'scene'}
 							content=${() => html`<spaces-selection></spaces-selection>`}
-						>
-						</show-when>
+						></show-when>
 
 						<show-when
 							condition=${() => store.view === 'template'}
 							content=${() => html`<template-view></template-view>`}
-						>
-						</show-when>
+						></show-when>
 
 						<show-when
 							condition=${() => store.view === 'blocks'}
 							content=${() => html`<blocks-selection></blocks-selection>`}
-						>
-						</show-when>
+						></show-when>
 
 						<show-when
 							condition=${() => store.view === 'preview'}
 							content=${() => html`<outfit-preview></outfit-preview>`}
-						>
-						</show-when>
-						<show-when condition=${() => store.view === 'share'} content=${() => html`<share-view></share-view>`}>
-						</show-when>
+						></show-when>
 
-						<show-when condition=${() => store.view === 'order-items'} content=${() => html`<order-items></order-items>`}>
-						</show-when>
+						<show-when
+							condition=${() => store.view === 'share'}
+							content=${() => html`<share-view></share-view>`}
+						></show-when>
 
-						<show-when condition=${() => store.view === 'order-size'} content=${() => html`<order-size></order-size>`}>
-						</show-when>
+						<show-when
+							condition=${() => store.view === 'order-items'}
+							content=${() => html`<order-items></order-items>`}
+						></show-when>
 
-						<show-when condition=${() => store.view === 'order'} content=${() => html`<order-view></order-view>`}>
-						</show-when>
+						<show-when
+							condition=${() => store.view === 'order-size'}
+							content=${() => html`<order-size></order-size>`}
+						></show-when>
+
+						<show-when
+							condition=${() => store.view === 'order'}
+							content=${() => html`<order-view></order-view>`}
+						></show-when>
 
 						<show-when
 							condition=${() => store.view === 'custom-measurement'}
 							content=${() => html`<custom-measurement></custom-measurement>`}
-						>
-						</show-when>
+						></show-when>
 
-						<show-when condition=${() => store.view === 'success'} content=${() => html`<success-view></success-view>`}>
-						</show-when>
+						<show-when
+							condition=${() => store.view === 'success'}
+							content=${() => html`<success-view></success-view>`}
+						></show-when>
 					</div>
 				`}
-			>
-			</show-when>
+			></show-when>
 		</app-guard>
 	`
 
 	css = css`
 		* {
 			box-sizing: border-box;
+			user-select: none;
 		}
 
 		:host {
 			width: var(--appWidth);
 			height: var(--appHeight);
+		}
+
+		.loading-cover {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			width: 100%;
+			height: 100%;
+			background: var(--appBackground);
+			z-index: 1000;
 		}
 
 		drippy-scene {
@@ -179,33 +201,6 @@ export class DrippyApp extends Element {
 			width: 100%;
 			height: 100%;
 			overflow: hidden;
-		}
-
-		#loadingCover {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			transition: opacity 0.5s;
-
-			/* TODO Perhaps put the loading cover in the :modal layer so z-index is never needed.  */
-			z-index: 1000;
-
-			loading-icon {
-				--loading-icon-color: 76, 169, 195;
-				--loading-icon-outer-radius: 60px;
-				--loading-icon-inner-radius: 30px;
-			}
-
-			background: var(--appBackground);
-
-			[data-theme='dark'] & {
-				background: var(--appBackgroundDark);
-			}
 		}
 	`
 }
