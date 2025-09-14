@@ -339,8 +339,7 @@ export class OrderSize extends Element {
 										></show-when>
 									</div>
 								`}
-						>
-						</for-each>
+						></for-each>
 					</div>
 
 					<!-- Total Order -->

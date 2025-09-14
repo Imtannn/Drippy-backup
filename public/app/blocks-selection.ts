@@ -301,7 +301,7 @@ export class BlocksSelection extends Element {
 														<!-- Block category tabs -->
 														<for-each
 															items=${() => this.blocksCategories}
-															content=${(category: BlockCategory) => html`
+															content=${() => (category: BlockCategory) => html`
 																<button
 																	class="category-tab"
 																	classList=${() => ({active: this.selectedSubTab === category})}
@@ -388,8 +388,7 @@ export class BlocksSelection extends Element {
 													></for-each>
 												</tabs-provider>
 											`}
-										>
-										</show-when>
+										></show-when>
 									</tabs-content>
 								`}
 							></for-each>

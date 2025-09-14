@@ -45,7 +45,13 @@ export class ForEach extends Element {
 
 	template = () => html`
 		<${For} each=${() => this.items}>
-			${(item: unknown, index: () => number) => this.content(item, index)}
+			${(item: unknown, index: () => number) => {
+				if (typeof this.content !== 'function')
+					throw new Error(
+						'<for-each>: content must be a function value. Make sure you assing it with a wrapper function: content=${() => (item, index) => html`...`}.',
+					)
+				return this.content(item, index)
+			}}
 		</>
 	`
 
