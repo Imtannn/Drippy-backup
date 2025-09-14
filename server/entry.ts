@@ -238,6 +238,20 @@ Accounts.onCreateUser((options, user) => {
 	return user
 })
 
+// Migration: ensure all existing users that signed up with Google have their emails in the correct spot.
+// TODO remove this after a while. Handle migrations better later.
+const users = await Meteor.users.find({}).fetchAsync()
+for (const user of users) {
+	const googleEmail = user.services?.google?.email
+
+	if (googleEmail && !user.emails?.map(e => e.address).includes(googleEmail)) {
+		console.log('Migrating user to add Google email to emails[]:', user._id, googleEmail)
+		await Meteor.users.updateAsync(user._id, {
+			$set: {emails: [...(user.emails || []), {address: googleEmail, verified: true}]},
+		})
+	}
+}
+
 const promises = [] as Promise<any>[]
 
 // Make all existing users with a known admin email admins.
