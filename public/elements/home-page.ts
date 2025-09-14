@@ -75,6 +75,7 @@ export class HomePage extends Element {
 			justify-content: center;
 			flex-direction: column;
 			gap: 1rem;
+			opacity: 0;
 		}
 
 		* {

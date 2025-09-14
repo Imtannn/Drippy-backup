@@ -1,4 +1,4 @@
-import {css, Element, element, html, signal, untrack, type ElementAttributes} from 'lume'
+import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import type {Accessor} from 'solid-js'
 import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import {templates} from '../consts/templates.js'
@@ -145,7 +145,10 @@ export class TemplateView extends Element {
 			<app-buttons-group>
 				<person-button></person-button>
 				<cube-button></cube-button>
-				<animation-select></animation-select>
+				<show-when
+					condition=${() => store.selectedSpace?.collection === 'moidien'}
+					content=${() => html` <animation-select></animation-select> `}
+				></show-when>
 			</app-buttons-group>
 		</app-buttons-right>
 
