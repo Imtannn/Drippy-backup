@@ -6,6 +6,7 @@ import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {toSolidSignal} from '../utils.js'
 import {blockManager} from './block-manager.js'
+import {untrack} from 'solid-js'
 
 export const store = createMutable({
 	// key is the block category, value is the block
@@ -461,10 +462,10 @@ export const store = createMutable({
 	},
 
 	set addIsDrippySceneLoading(key: string) {
-		this.isDrippySceneLoading = [...this.isDrippySceneLoading, key]
+		this.isDrippySceneLoading = [...untrack(() => this.isDrippySceneLoading), key]
 	},
 	set removeIsDrippySceneLoading(key: string) {
-		this.isDrippySceneLoading = this.isDrippySceneLoading.filter(k => k !== key)
+		this.isDrippySceneLoading = untrack(() => this.isDrippySceneLoading.filter(k => k !== key))
 	},
 })
 

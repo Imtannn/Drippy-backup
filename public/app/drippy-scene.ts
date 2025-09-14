@@ -3,11 +3,11 @@ import {
 	css,
 	Element,
 	element,
+	Element3D,
 	For,
 	GltfModel,
 	html,
 	Index,
-	Motor,
 	onCleanup,
 	Scene,
 	Show,
@@ -28,6 +28,13 @@ import './app-buttons.js'
 import {store} from './store.js'
 import {textureManager} from './texture-manager.js'
 import {avatars} from '../consts/avatars.js'
+import {
+	createMutationsSignal,
+	enableFrontsideOnModelLoad,
+	enableShadowOnModelLoad,
+	meshesInTree,
+	onModelLoad,
+} from '../utils.js'
 
 type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
 
@@ -74,35 +81,14 @@ export class DrippyScene extends Element {
 	@signal private animName: string | null = null
 	@signal private animSrc: string | null = null
 
-	#extractMeshesFromObj(obj: THREE.Object3D): THREE.Mesh[] {
-		const meshes: THREE.Mesh[] = []
-
-		// Recursive function to traverse the scene graph
-		const traverse = (node: THREE.Object3D) => {
-			if (node instanceof THREE.Mesh) {
-				meshes.push(node)
-			}
-
-			if (node.children?.length > 0) {
-				node.children.forEach(child => traverse(child))
-			}
-		}
-
-		// Start traversal from the root node of the GLTF scene
-		traverse(obj)
-
-		return meshes
-	}
-
-	async #applyFabricToThreeObject(root: any, fabric: Fabric | null, isCanceled: () => boolean, blockId?: string) {
-		if (!fabric || !root) return
-
+	async #applyFabric(el: Element3D, fabric: Fabric, isCanceled: () => boolean, blockId?: string) {
+		const root = el.three
 		const loadingId = blockId || `${fabric._id}-${Date.now()}`
 		store.loadingMaterials = [...untrack(() => store.loadingMaterials), loadingId]
 
 		try {
 			// Extract UV data for proper texture scaling
-			const meshes = this.#extractMeshesFromObj(root)
+			const meshes = [...meshesInTree(root)]
 			const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
 				? Array.from(meshes[0].geometry.attributes.uv.array)
 						.slice(0, 5)
@@ -111,18 +97,10 @@ export class DrippyScene extends Element {
 
 			// Load textures with UV-aware scaling using texture manager
 			const textureSet = await textureManager.loadFabricTexturesWithUV(fabric, uvArray)
+			if (isCanceled()) return
 
-			if (isCanceled()) {
-				return
-			}
-
-			// Apply textures to all meshes in the object
-			const group = root.children?.[0] ?? root
-			group.traverse?.((obj: any) => {
-				if (obj?.isMesh && obj.material) {
-					textureManager.applyTexturesToMaterial(obj.material, textureSet)
-				}
-			})
+			for (const mesh of meshesInTree(root)) textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+			el.needsUpdate()
 		} catch (error) {
 			console.warn('Failed to apply fabric to object:', error)
 		} finally {
@@ -131,29 +109,17 @@ export class DrippyScene extends Element {
 	}
 
 	// Reset materials to default state (no textures)
-	#resetMaterialsToDefault(root: any) {
-		if (!root) return
-
-		const group = root.children?.[0] ?? root
-		group.traverse?.((obj: any) => {
-			if (obj?.isMesh && obj.material) {
-				const material = obj.material
-				material.map = null
-				material.normalMap = null
-				material.roughnessMap = null
-				// material.displacementMap = null
-				material.needsUpdate = true
-			}
-		})
-	}
-
-	#renderTask = () => {
-		if (!this.shadowRoot) return
-		const models = Array.from(this.shadowRoot.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
-		for (const el of models) {
-			el.needsUpdate?.()
-			el.scene?.needsRender?.()
+	#resetMaterialsToDefault(el: Element3D) {
+		for (const mesh of meshesInTree(el.three)) {
+			const material = mesh.material as THREE.MeshPhysicalMaterial
+			material.map = null
+			material.normalMap = null
+			material.roughnessMap = null
+			// material.displacementMap = null
+			material.needsUpdate = true
 		}
+
+		el.needsUpdate()
 	}
 
 	connectedCallback() {
@@ -195,105 +161,70 @@ export class DrippyScene extends Element {
 			}
 		})
 
-		this.isDark = document.documentElement.dataset.theme === 'dark'
-
-		const onThemeChange = () => (this.isDark = document.documentElement.dataset.theme === 'dark')
-
 		this.createEffect(() => {
-			const mo = new MutationObserver(onThemeChange)
-			mo.observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']})
-			onCleanup(() => mo.disconnect())
+			const mutations = createMutationsSignal(document.documentElement, {
+				attributes: true,
+				attributeFilter: ['data-theme'],
+			})
+
+			this.createEffect(() => {
+				mutations()
+				this.isDark = document.documentElement.dataset.theme === 'dark'
+			})
 		})
+
+		const avatarId = 'avatar'
+
+		// FIXME The following two effects are almost identical, running some of
+		// the same code twice.
 
 		// Track selected avatar loading state
 		this.createEffect(() => {
-			if (!store.isShowAvatar) return
-			if (store.selectedAvatar) {
-				const avatar = this.avatarModel
-				if (!avatar) return
+			if (!store.isShowAvatar || store.selectedAvatar) return
 
-				const avatarId = 'avatar'
-				const behavior = avatar.behaviors?.get?.('gltf-model')
+			const avatar = this.avatarModel
+			if (!avatar) return
 
-				if (!behavior?.model && avatar.three) {
-					if (!untrack(() => store.loadingBlocks.includes(avatarId))) {
-						store.loadingBlocks = [...untrack(() => store.loadingBlocks), avatarId]
-					}
+			const avatarLoaded = onModelLoad(avatar)
 
-					if (!untrack(() => store.isDrippySceneLoading.includes(avatarId))) {
-						store.addIsDrippySceneLoading = avatarId
-					}
-
-					const loaded = () => {
-						store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== avatarId)
-						store.removeIsDrippySceneLoading = avatarId
-					}
-
-					avatar.on?.('MODEL_LOAD', loaded)
-					onCleanup(() => {
-						avatar.off?.('MODEL_LOAD', loaded)
+			createEffect(() => {
+				if (!avatarLoaded()) {
+					untrack(() => {
+						if (!store.loadingBlocks.includes(avatarId)) store.loadingBlocks = [...store.loadingBlocks, avatarId]
+						if (!store.isDrippySceneLoading.includes(avatarId)) store.addIsDrippySceneLoading = avatarId
 					})
 
-					enableShadowOnModelLoad(avatar)
+					return
 				}
-			}
+
+				store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== avatarId)
+				store.removeIsDrippySceneLoading = avatarId
+			})
 		})
 
-		// Track temp selected avatar loading state
-		this.createEffect(() => {
-			if (!store.isShowAvatar || store.selectedAvatar) return
-			if (store.tempSelectedAvatar) {
-				const avatar = this.avatarModel
-				if (!avatar) return
+		const sceneId = 'scene'
 
-				const avatarId = 'avatar'
-
-				if (avatar.three) {
-					if (!untrack(() => store.loadingBlocks.includes(avatarId))) {
-						store.loadingBlocks = [...untrack(() => store.loadingBlocks), avatarId]
-					}
-				}
-
-				const loaded = () => {
-					store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== avatarId)
-				}
-
-				avatar.on?.('MODEL_LOAD', loaded)
-				onCleanup(() => {
-					avatar.off?.('MODEL_LOAD', loaded)
-				})
-
-				enableShadowOnModelLoad(avatar)
-			}
-		})
-
-		// Track scene loading state
+		// Track background scene loading state
 		this.createEffect(() => {
 			if (!store.selectedSpace || !store.selectedSpace?.scene || !store.isShowScene) return
+
 			const scene = this.backgroundModel
 			if (!scene) return
 
-			const behavior = scene.behaviors?.get?.('gltf-model')
-			const sceneId = 'scene'
+			const backgroundLoaded = onModelLoad(scene)
 
-			if (!behavior?.model && scene.three) {
-				if (!untrack(() => store.loadingBlocks.includes(sceneId))) {
-					store.loadingBlocks = [...untrack(() => store.loadingBlocks), sceneId]
-				}
-				if (!untrack(() => store.isDrippySceneLoading.includes(sceneId))) {
-					console.log('addIsDrippySceneLoading', sceneId)
-					store.addIsDrippySceneLoading = sceneId
-				}
-			}
+			createEffect(() => {
+				if (!backgroundLoaded()) {
+					untrack(() => {
+						if (!store.loadingBlocks.includes(sceneId)) store.loadingBlocks = [...store.loadingBlocks, sceneId]
+						if (!store.isDrippySceneLoading.includes(sceneId)) store.addIsDrippySceneLoading = sceneId
+					})
 
-			const loaded = () => {
+					return
+				}
+
 				store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== sceneId)
 				store.removeIsDrippySceneLoading = sceneId
-			}
-
-			scene.on?.('MODEL_LOAD', loaded)
-			onCleanup(() => {
-				scene.off?.('MODEL_LOAD', loaded)
 			})
 		})
 
@@ -306,26 +237,20 @@ export class DrippyScene extends Element {
 				return
 			}
 
-			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as any[]
+			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as GltfModel[]
 
 			for (const [index, el] of models.entries()) {
-				const behavior = el.behaviors?.get?.('gltf-model')
 				const blockId = `block-${index}`
+				const modelLoaded = onModelLoad(el)
 
-				if (!behavior?.model && el.three) {
-					if (!untrack(() => store.loadingBlocks.includes(blockId))) {
+				createEffect(() => {
+					if (!modelLoaded()) {
 						store.loadingBlocks = [...untrack(() => store.loadingBlocks), blockId]
+						return
 					}
 
-					const loaded = () => {
-						store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== blockId)
-					}
-
-					el?.on?.('MODEL_LOAD', loaded)
-					onCleanup(() => {
-						el?.off?.('MODEL_LOAD', loaded)
-					})
-				}
+					store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== blockId)
+				})
 			}
 		})
 
@@ -376,8 +301,7 @@ export class DrippyScene extends Element {
 
 			const models: GltfModel[] = Array.from(
 				this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? [],
-			) as any[]
-			const handlers: Array<{el: any; fn: () => void}> = []
+			) as GltfModel[]
 
 			// Process each model using its data-blockid to find the correct fabric
 			for (const el of models) {
@@ -399,33 +323,21 @@ export class DrippyScene extends Element {
 				const templateFabrics = selectedFabrics.get(templateCategory)
 				const fabric = templateFabrics?.get(blockCategory)
 				const loadingId = `material-${blockId}`
+				const modelLoaded = onModelLoad(el)
 
-				const applyOrReset = () => {
-					if (isCanceled()) return
+				createEffect(() => {
+					if (!modelLoaded()) return
 
 					if (fabric) {
-						this.#applyFabricToThreeObject(el.three, fabric, isCanceled, loadingId)
+						this.#applyFabric(el, fabric, isCanceled, loadingId)
 					} else {
 						// Reset to default material if no fabric selected for this block category
-						this.#resetMaterialsToDefault(el.three)
+						this.#resetMaterialsToDefault(el)
 					}
-				}
-
-				const behavior = el.behaviors?.get?.('gltf-model')
-				if (!behavior?.model || !el.three) {
-					el.on?.('MODEL_LOAD', applyOrReset)
-					handlers.push({el, fn: applyOrReset})
-				} else {
-					applyOrReset()
-				}
+				})
 			}
 
-			onCleanup(() => {
-				shouldCancel = true
-				for (const {el, fn} of handlers) {
-					el.off?.('MODEL_LOAD', fn)
-				}
-			})
+			onCleanup(() => (shouldCancel = true))
 		})
 
 		// Play animation when blocks are added, pause animation when no blocks.
@@ -469,26 +381,9 @@ export class DrippyScene extends Element {
 		})
 
 		this.createEffect(() => {
-			// Force update the scene when the fabric changes
-			Motor?.addRenderTask(this.#renderTask)
-			onCleanup(() => Motor?.removeRenderTask(this.#renderTask))
-		})
-
-		this.createEffect(() => {
-			if (!this.backgroundModel) return
-			enableShadowOnModelLoad(this.backgroundModel)
-			enableFrontsideOnlyRenderLoad(this.backgroundModel)
-		})
-
-		this.createEffect(() => {
 			if (!this.lumeScene) return
 			this.lumeScene.glRenderer!.toneMapping = THREE.ACESFilmicToneMapping
 		})
-	}
-
-	disconnectedCallback() {
-		super.disconnectedCallback()
-		Motor?.removeRenderTask(this.#renderTask)
 	}
 
 	template = () => {
@@ -625,7 +520,7 @@ export class DrippyScene extends Element {
 						>
 							<lume-gltf-model
 								id="avatar"
-								ref=${(el: GltfModel) => (this.avatarModel = el)}
+								ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el))}
 								src=${() => avatars.find(avatar => avatar.value === (store.selectedAvatar ?? store.tempSelectedAvatar))?.src}
 								scale="1 1 1"
 								data-avatar
@@ -665,7 +560,7 @@ export class DrippyScene extends Element {
 
 						<${Show} when=${() => store.isShowScene && store.selectedSpace?.scene}>
 							<lume-gltf-model
-								ref=${(el: GltfModel) => (this.backgroundModel = el)}
+								ref=${(el: GltfModel) => ((this.backgroundModel = el), enableShadowOnModelLoad(el), enableFrontsideOnModelLoad(el))}
 								id="scene"
 								src=${() => store.selectedSpace?.scene}
 							></lume-gltf-model>
@@ -729,47 +624,4 @@ export class DrippyScene extends Element {
 			}
 		}
 	`
-}
-
-function isMesh(obj: THREE.Object3D): obj is THREE.Mesh {
-	return obj instanceof THREE.Mesh
-}
-
-const enableFrontsideOnlyRenderLoad = (obj: GltfModel) => {
-	createEffect(() => {
-		const onFrontSideRender = () => enableFrontsideRendering(obj.three)
-		obj.on('MODEL_LOAD', onFrontSideRender)
-		onCleanup(() => obj.off('MODEL_LOAD', onFrontSideRender))
-	})
-}
-
-function enableFrontsideRendering(obj: THREE.Object3D) {
-	obj.traverse((child: THREE.Object3D) => {
-		if (!isMesh(child)) return
-		if (child.material instanceof THREE.Material) {
-			child.material.side = THREE.FrontSide
-			child.material.needsUpdate = true
-		} else {
-			child.material.map(material => {
-				material.side = THREE.FrontSide
-				material.needsUpdate = true
-			})
-		}
-	})
-}
-
-const enableShadowOnModelLoad = (el: GltfModel) => {
-	createEffect(() => {
-		const onload = () => enableShadows(el.three)
-		el.on('MODEL_LOAD', onload)
-		onCleanup(() => el.off('MODEL_LOAD', onload))
-	})
-}
-
-function enableShadows(obj: THREE.Object3D) {
-	obj.traverse((child: THREE.Object3D) => {
-		if (!isMesh(child)) return
-		child.castShadow = true
-		child.receiveShadow = true
-	})
 }

@@ -1,7 +1,6 @@
 import {
 	attribute,
 	booleanAttribute,
-	createSignal,
 	css,
 	Element,
 	element,
@@ -14,34 +13,7 @@ import {
 import type {Element3D, GltfModel} from 'lume'
 
 import {AutoRigger} from './AutoRigger.js'
-
-function onModelLoad(model: GltfModel) {
-	// Having to do this dance with the MODEL_LOAD event is not great. We'll
-	// clean this up with behaviors-as-child-elements, and ensure the state is
-	// easy to access and signal-based.
-	// Good example though, of how to map some none-signal pattern to a signal.
-
-	const gltfModelBehavior = model.behaviors?.get?.('gltf-model')
-	const threeModel = gltfModelBehavior?.model
-
-	const [loaded, setLoaded] = createSignal(false)
-
-	if (threeModel) {
-		setLoaded(true)
-	} else {
-		const modelLoad = () => {
-			model.off('MODEL_LOAD', modelLoad)
-			setLoaded(true)
-		}
-
-		model.on('MODEL_LOAD', modelLoad)
-		onCleanup(() => model.off('MODEL_LOAD', modelLoad))
-	}
-
-	onCleanup(() => setLoaded(false))
-
-	return loaded
-}
+import {onModelLoad} from '../../utils.js'
 
 type LumeAutoRiggerAttributes = keyof {}
 
