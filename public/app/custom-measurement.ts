@@ -124,31 +124,31 @@ export class CustomMeasurement extends Element {
 	}
 
 	template = () => html`
-	<app-buttons-left>
-	<app-buttons-group group-direction="row">
-		<back-button onclick=${this.#onBackButtonClick}></back-button>
-		<home-button onclick=${this.#onHomeButtonClick}></home-button>
-	</app-buttons-group>
-</app-buttons-left>
+		<app-buttons-left>
+			<app-buttons-group group-direction="row">
+				<back-button onclick=${this.#onBackButtonClick}></back-button>
+				<home-button onclick=${this.#onHomeButtonClick}></home-button>
+			</app-buttons-group>
+		</app-buttons-left>
 
-<app-buttons-right>
-	<app-buttons-group>
-		<!-- <theme-switch-button></theme-switch-button> -->
-		<logo-button brand-name="MoiDien"></logo-button>
-	</app-buttons-group>
-	</app-buttons-right>
+		<app-buttons-right>
+			<app-buttons-group>
+				<!-- <theme-switch-button></theme-switch-button> -->
+				<logo-button brand-name="MoiDien"></logo-button>
+			</app-buttons-group>
+		</app-buttons-right>
 
-	<show-on-device device="desktop">
-	<app-buttons-right layout="bottom">
-		<app-buttons-group custom-style="gap: 34px;" group-direction="row">
-			<share-button onclick=${this.#onShareClick}></share-button>
-			<buy-button onclick=${this.#onBuyItClick}></buy-button>
-		</app-buttons-group>
-	</app-buttons-right>
-</show-on-device>
+		<show-on-device device="desktop">
+			<app-buttons-right layout="bottom">
+				<app-buttons-group custom-style="gap: 34px;" group-direction="row">
+					<share-button onclick=${this.#onShareClick}></share-button>
+					<buy-button onclick=${this.#onBuyItClick}></buy-button>
+				</app-buttons-group>
+			</app-buttons-right>
+		</show-on-device>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
-		<div class="measurement-container">
+			<div class="measurement-container">
 				<!-- Header -->
 				<div class="measurement-header">
 					<div class="back-icon" onclick=${this.#onBackButtonClick}>
@@ -166,29 +166,59 @@ export class CustomMeasurement extends Element {
 				<div class="measurement-fields">
 					<div class="field-row">
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " value=${() => `${this.bust} cm`} oninput=${this.#onBustChange} />
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
+								value=${() => `${this.bust} cm`}
+								oninput=${this.#onBustChange}
+							/>
 							<label class="floating-label">Bust</label>
 						</div>
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " value=${() => `${this.waist} cm`} oninput=${this.#onWaistChange} />
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
+								value=${() => `${this.waist} cm`}
+								oninput=${this.#onWaistChange}
+							/>
 							<label class="floating-label">Waist</label>
 						</div>
 					</div>
 
 					<div class="field-row">
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " value=${() => `${this.hips} cm`} oninput=${this.#onHipsChange} />
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
+								value=${() => `${this.hips} cm`}
+								oninput=${this.#onHipsChange}
+							/>
 							<label class="floating-label">Hips</label>
 						</div>
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " value=${() => `${this.shoulder} cm`} oninput=${this.#onShoulderChange} />
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
+								value=${() => `${this.shoulder} cm`}
+								oninput=${this.#onShoulderChange}
+							/>
 							<label class="floating-label">Shoulder</label>
 						</div>
 					</div>
 
 					<div class="field-row">
 						<div class="field-group">
-							<input type="text" class="form-input" placeholder=" " value=${() => `${this.shoulderToKnee} cm`} oninput=${this.#onShoulderToKneeChange} />
+							<input
+								type="text"
+								class="form-input"
+								placeholder=" "
+								value=${() => `${this.shoulderToKnee} cm`}
+								oninput=${this.#onShoulderToKneeChange}
+							/>
 							<label class="floating-label">Shoulder to knee</label>
 						</div>
 					</div>
@@ -197,8 +227,7 @@ export class CustomMeasurement extends Element {
 				<!-- Spacer to push button to bottom -->
 				<div class="button-spacer"></div>
 
-					<button class="measurement-button" onclick=${this.#onSaveClick}>Save my measurements</button>
-				</div>
+				<button class="measurement-button" onclick=${this.#onSaveClick}>Save my measurements</button>
 			</div>
 		</bottom-sheet>
 	`

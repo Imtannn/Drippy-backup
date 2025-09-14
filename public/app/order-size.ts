@@ -1,4 +1,4 @@
-import {css, Element, element, For, html} from 'lume'
+import {css, Element, element, html} from 'lume'
 import '../elements/back-button.js'
 import '../elements/bottom-sheet.js'
 import '../elements/home-button.js'
@@ -87,254 +87,277 @@ export class OrderSize extends Element {
 	}
 
 	template = () => html`
-	<app-buttons-left>
-		<app-buttons-group group-direction="row">
-			<back-button onclick=${this.#onBackButtonClick}></back-button>
-			<home-button onclick=${this.#onHomeButtonClick}></home-button>
-		</app-buttons-group>
-	</app-buttons-left>
+		<app-buttons-left>
+			<app-buttons-group group-direction="row">
+				<back-button onclick=${this.#onBackButtonClick}></back-button>
+				<home-button onclick=${this.#onHomeButtonClick}></home-button>
+			</app-buttons-group>
+		</app-buttons-left>
 
-	<app-buttons-right>
-		<app-buttons-group>
-			<!-- <theme-switch-button></theme-switch-button> -->
-			<logo-button brand-name="MoiDien"></logo-button>
-		</app-buttons-group>
-	</app-buttons-right>
-
-	<show-on-device device="desktop">
-		<app-buttons-right layout="bottom">
-			<app-buttons-group custom-style="gap: 34px;" group-direction="row">
-				<share-button onclick=${this.#onShareClick}></share-button>
-				<buy-button onclick=${this.#onBuyItClick}></buy-button>
+		<app-buttons-right>
+			<app-buttons-group>
+				<!-- <theme-switch-button></theme-switch-button> -->
+				<logo-button brand-name="MoiDien"></logo-button>
 			</app-buttons-group>
 		</app-buttons-right>
-	</show-on-device>
 
-	<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)"  default-snap="0.88">
-		<div class="order-container">
-			<div class="order-content">
-				<!-- Selected Items List -->
-				<div class="selected-items">
-				<${For} each=${() => Array.from(store.selectedTemplates.entries()).filter(([category]) => store.selectedOrderItems.get(category))}>
-				${([category, template]: [TemplateCategory, Template]) => html`
-					<div class="item-section">
-						<!-- Item Header -->
-						<div class="item-header">
-							<div class="item-image">
-								<img src=${template.thumb} alt=${template.name} />
-							</div>
-							<div class="item-details">
-								<div class="item-name">Product name</div>
-								<div class="item-price-row">
-									<span class="item-price">$125.00</span>
-									<span class="item-moq" classList=${() => ({visible: store.selectedSpace?.isWholesale})}
-										>MOQ: 5 pcs</span
-									>
-								</div>
-							</div>
-							<!-- Conditional quantity controls based on wholesale/retail -->
-							${() =>
-								store.selectedSpace?.isWholesale
-									? html`<div class="quantity-controls">
-											<span class="quantity">${() => store.getItemTotalQuantity(category)}</span>
-										</div>`
-									: html`<div class="quantity-controls">
-											<button class="quantity-btn" onclick=${() => this.#onIncreaseItemQuantity(category)}>+</button>
-											<span class="quantity">${() => store.getRetailItemQuantity(category)}</span>
-											<button class="quantity-btn" onclick=${() => this.#onDecreaseItemQuantity(category)}>−</button>
-										</div>`}
-						</div>
+		<show-on-device device="desktop">
+			<app-buttons-right layout="bottom">
+				<app-buttons-group custom-style="gap: 34px;" group-direction="row">
+					<share-button onclick=${this.#onShareClick}></share-button>
+					<buy-button onclick=${this.#onBuyItClick}></buy-button>
+				</app-buttons-group>
+			</app-buttons-right>
+		</show-on-device>
 
-						<!-- Conditional Size Options based on wholesale/retail -->
-						${() =>
-							store.selectedSpace?.isWholesale
-								? html`<!-- Wholesale: Size-specific quantity controls -->
-										<div class="size-section">
-											<h4>Size</h4>
-											<div class="size-options">
-												<div class="size-row">
-													<span class="size-label">S (52)</span>
-													<span class="size-price">$125</span>
-													<div class="quantity-controls">
-														<button
-															class="quantity-btn"
-															onclick=${() => {
-																const newQty = store.getSizeQuantity(category, 'S') + 1
-																store.setSizeQuantity(category, 'S', newQty)
-															}}
-														>
-															+
-														</button>
-														<span class="quantity">${() => store.getSizeQuantity(category, 'S')}</span>
-														<button
-															class="quantity-btn"
-															onclick=${() => {
-																const newQty = store.getSizeQuantity(category, 'S') - 1
-																if (newQty >= 0) store.setSizeQuantity(category, 'S', newQty)
-															}}
-														>
-															−
-														</button>
-													</div>
-												</div>
-												<div class="size-row">
-													<span class="size-label">M (54)</span>
-													<span class="size-price">$125</span>
-													<div class="quantity-controls">
-														<button
-															class="quantity-btn"
-															onclick=${() => {
-																const newQty = store.getSizeQuantity(category, 'M') + 1
-																store.setSizeQuantity(category, 'M', newQty)
-															}}
-														>
-															+
-														</button>
-														<span class="quantity">${() => store.getSizeQuantity(category, 'M')}</span>
-														<button
-															class="quantity-btn"
-															onclick=${() => {
-																const newQty = store.getSizeQuantity(category, 'M') - 1
-																if (newQty >= 0) store.setSizeQuantity(category, 'M', newQty)
-															}}
-														>
-															−
-														</button>
-													</div>
-												</div>
-												<div class="size-row">
-													<span class="size-label">L (56)</span>
-													<span class="size-price">$125</span>
-													<div class="quantity-controls">
-														<button
-															class="quantity-btn"
-															onclick=${() => {
-																const newQty = store.getSizeQuantity(category, 'L') + 1
-																store.setSizeQuantity(category, 'L', newQty)
-															}}
-														>
-															+
-														</button>
-														<span class="quantity">${() => store.getSizeQuantity(category, 'L')}</span>
-														<button
-															class="quantity-btn"
-															onclick=${() => {
-																const newQty = store.getSizeQuantity(category, 'L') - 1
-																if (newQty >= 0) store.setSizeQuantity(category, 'L', newQty)
-															}}
-														>
-															−
-														</button>
-													</div>
+		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-snap="0.88">
+			<div class="order-container">
+				<div class="order-content">
+					<!-- Selected Items List -->
+					<div class="selected-items">
+						<for-each
+							items=${() =>
+								Array.from(store.selectedTemplates.entries()).filter(([category]) =>
+									store.selectedOrderItems.get(category),
+								)}
+							content=${() =>
+								([category, template]: [TemplateCategory, Template]) => html`
+									<div class="item-section">
+										<!-- Item Header -->
+										<div class="item-header">
+											<div class="item-image">
+												<img src=${template.thumb} alt=${template.name} />
+											</div>
+											<div class="item-details">
+												<div class="item-name">Product name</div>
+												<div class="item-price-row">
+													<span class="item-price">$125.00</span>
+													<span class="item-moq" classList=${() => ({visible: store.selectedSpace?.isWholesale})}
+														>MOQ: 5 pcs</span
+													>
 												</div>
 											</div>
-										</div>`
-								: html`<!-- Retail: Size selection buttons -->
-										<div class="size-section">
-											<h3 class="section-title">Size</h3>
-											<div class="retail-size-options">
-												<button
-													class="size-btn"
-													classList=${() => ({
-														selected: store.getRetailItemSize(category) === '34 (XS)' && !store.customMeasurement,
-													})}
-													onclick=${() => this.#onSizeButtonClick('34 (XS)', category)}
-												>
-													34 (XS)
-												</button>
-												<button
-													class="size-btn"
-													classList=${() => ({
-														selected: store.getRetailItemSize(category) === '36 (S)' && !store.customMeasurement,
-													})}
-													onclick=${() => this.#onSizeButtonClick('36 (S)', category)}
-												>
-													36 (S)
-												</button>
-												<button
-													class="size-btn"
-													classList=${() => ({
-														selected: store.getRetailItemSize(category) === '38 (M)' && !store.customMeasurement,
-													})}
-													onclick=${() => this.#onSizeButtonClick('38 (M)', category)}
-												>
-													38 (M)
-												</button>
-												<button
-													class="size-btn"
-													classList=${() => ({
-														selected: store.getRetailItemSize(category) === '40/42 (L)' && !store.customMeasurement,
-													})}
-													onclick=${() => this.#onSizeButtonClick('40/42 (L)', category)}
-												>
-													40/42 (L)
-												</button>
-												<button
-													class="size-btn"
-													classList=${() => ({
-														selected: store.getRetailItemSize(category) === '44 (XL)' && !store.customMeasurement,
-													})}
-													onclick=${() => this.#onSizeButtonClick('44 (XL)', category)}
-												>
-													44 (XL)
-												</button>
-												<button
-													class="size-btn"
-													classList=${() => ({
-														selected: store.getRetailItemSize(category) === '48 (2XL)' && !store.customMeasurement,
-													})}
-													onclick=${() => this.#onSizeButtonClick('48 (2XL)', category)}
-												>
-													48 (2XL)
-												</button>
-												<button
-													class="size-btn"
-													classList=${() => ({
-														selected: store.getRetailItemSize(category) === '50 (3XL)' && !store.customMeasurement,
-													})}
-													onclick=${() => this.#onSizeButtonClick('50 (3XL)', category)}
-												>
-													50 (3XL)
-												</button>
-												<button
-													class="size-btn"
-													classList=${() => ({
-														selected: store.getRetailItemSize(category) === '52 (4XL)' && !store.customMeasurement,
-													})}
-													onclick=${() => this.#onSizeButtonClick('52 (4XL)', category)}
-												>
-													52 (4XL)
-												</button>
-												<button
-													class="size-btn custom"
-													classList=${() => ({
-														selected:
-															store.getRetailItemSize(category) === 'Custom' ||
-															store.hasRetailItemCustomMeasurement(category),
-													})}
-													onclick=${() => this.#onSizeButtonClick('Custom', category)}
-												>
-													Custom size
-												</button>
-											</div>
-										</div>`}
+											<!-- Conditional quantity controls based on wholesale/retail -->
+											<show-when
+												condition=${store.selectedSpace?.isWholesale}
+												content=${() => html`
+													<div class="quantity-controls">
+														<span class="quantity">${() => store.getItemTotalQuantity(category)}</span>
+													</div>
+												`}
+												fallback=${() => html`
+													<div class="quantity-controls">
+														<button class="quantity-btn" onclick=${() => this.#onIncreaseItemQuantity(category)}>
+															+
+														</button>
+														<span class="quantity">${() => store.getRetailItemQuantity(category)}</span>
+														<button class="quantity-btn" onclick=${() => this.#onDecreaseItemQuantity(category)}>
+															−
+														</button>
+													</div>
+												`}
+											></show-when>
+										</div>
+
+										<!-- Conditional Size Options based on wholesale/retail -->
+										<show-when
+											condition=${store.selectedSpace?.isWholesale}
+											content=${() => html`
+												<!-- Wholesale: Size-specific quantity controls -->
+												<div class="size-section">
+													<h4>Size</h4>
+													<div class="size-options">
+														<div class="size-row">
+															<span class="size-label">S (52)</span>
+															<span class="size-price">$125</span>
+															<div class="quantity-controls">
+																<button
+																	class="quantity-btn"
+																	onclick=${() => {
+																		const newQty = store.getSizeQuantity(category, 'S') + 1
+																		store.setSizeQuantity(category, 'S', newQty)
+																	}}
+																>
+																	+
+																</button>
+																<span class="quantity">${() => store.getSizeQuantity(category, 'S')}</span>
+																<button
+																	class="quantity-btn"
+																	onclick=${() => {
+																		const newQty = store.getSizeQuantity(category, 'S') - 1
+																		if (newQty >= 0) store.setSizeQuantity(category, 'S', newQty)
+																	}}
+																>
+																	−
+																</button>
+															</div>
+														</div>
+														<div class="size-row">
+															<span class="size-label">M (54)</span>
+															<span class="size-price">$125</span>
+															<div class="quantity-controls">
+																<button
+																	class="quantity-btn"
+																	onclick=${() => {
+																		const newQty = store.getSizeQuantity(category, 'M') + 1
+																		store.setSizeQuantity(category, 'M', newQty)
+																	}}
+																>
+																	+
+																</button>
+																<span class="quantity">${() => store.getSizeQuantity(category, 'M')}</span>
+																<button
+																	class="quantity-btn"
+																	onclick=${() => {
+																		const newQty = store.getSizeQuantity(category, 'M') - 1
+																		if (newQty >= 0) store.setSizeQuantity(category, 'M', newQty)
+																	}}
+																>
+																	−
+																</button>
+															</div>
+														</div>
+														<div class="size-row">
+															<span class="size-label">L (56)</span>
+															<span class="size-price">$125</span>
+															<div class="quantity-controls">
+																<button
+																	class="quantity-btn"
+																	onclick=${() => {
+																		const newQty = store.getSizeQuantity(category, 'L') + 1
+																		store.setSizeQuantity(category, 'L', newQty)
+																	}}
+																>
+																	+
+																</button>
+																<span class="quantity">${() => store.getSizeQuantity(category, 'L')}</span>
+																<button
+																	class="quantity-btn"
+																	onclick=${() => {
+																		const newQty = store.getSizeQuantity(category, 'L') - 1
+																		if (newQty >= 0) store.setSizeQuantity(category, 'L', newQty)
+																	}}
+																>
+																	−
+																</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											`}
+											fallback=${() => html`
+												<!-- Retail: Size selection buttons -->
+												<div class="size-section">
+													<h3 class="section-title">Size</h3>
+													<div class="retail-size-options">
+														<button
+															class="size-btn"
+															classList=${() => ({
+																selected: store.getRetailItemSize(category) === '34 (XS)' && !store.customMeasurement,
+															})}
+															onclick=${() => this.#onSizeButtonClick('34 (XS)', category)}
+														>
+															34 (XS)
+														</button>
+														<button
+															class="size-btn"
+															classList=${() => ({
+																selected: store.getRetailItemSize(category) === '36 (S)' && !store.customMeasurement,
+															})}
+															onclick=${() => this.#onSizeButtonClick('36 (S)', category)}
+														>
+															36 (S)
+														</button>
+														<button
+															class="size-btn"
+															classList=${() => ({
+																selected: store.getRetailItemSize(category) === '38 (M)' && !store.customMeasurement,
+															})}
+															onclick=${() => this.#onSizeButtonClick('38 (M)', category)}
+														>
+															38 (M)
+														</button>
+														<button
+															class="size-btn"
+															classList=${() => ({
+																selected: store.getRetailItemSize(category) === '40/42 (L)' && !store.customMeasurement,
+															})}
+															onclick=${() => this.#onSizeButtonClick('40/42 (L)', category)}
+														>
+															40/42 (L)
+														</button>
+														<button
+															class="size-btn"
+															classList=${() => ({
+																selected: store.getRetailItemSize(category) === '44 (XL)' && !store.customMeasurement,
+															})}
+															onclick=${() => this.#onSizeButtonClick('44 (XL)', category)}
+														>
+															44 (XL)
+														</button>
+														<button
+															class="size-btn"
+															classList=${() => ({
+																selected: store.getRetailItemSize(category) === '48 (2XL)' && !store.customMeasurement,
+															})}
+															onclick=${() => this.#onSizeButtonClick('48 (2XL)', category)}
+														>
+															48 (2XL)
+														</button>
+														<button
+															class="size-btn"
+															classList=${() => ({
+																selected: store.getRetailItemSize(category) === '50 (3XL)' && !store.customMeasurement,
+															})}
+															onclick=${() => this.#onSizeButtonClick('50 (3XL)', category)}
+														>
+															50 (3XL)
+														</button>
+														<button
+															class="size-btn"
+															classList=${() => ({
+																selected: store.getRetailItemSize(category) === '52 (4XL)' && !store.customMeasurement,
+															})}
+															onclick=${() => this.#onSizeButtonClick('52 (4XL)', category)}
+														>
+															52 (4XL)
+														</button>
+														<button
+															class="size-btn custom"
+															classList=${() => ({
+																selected:
+																	store.getRetailItemSize(category) === 'Custom' ||
+																	store.hasRetailItemCustomMeasurement(category),
+															})}
+															onclick=${() => this.#onSizeButtonClick('Custom', category)}
+														>
+															Custom size
+														</button>
+													</div>
+												</div>
+											`}
+										></show-when>
+									</div>
+								`}
+						>
+						</for-each>
 					</div>
-				`}
-				</>
-			</div>
 
-				<!-- Total Order -->
-				<div class="order-summary">
-					<div class="total-section">
-						<span class="total-label">Total order</span>
-						<span class="total-amount">$${() => (store.selectedSpace?.isWholesale ? store.getOrderTotalCost() : store.getRetailOrderTotalCost())}</span>
+					<!-- Total Order -->
+					<div class="order-summary">
+						<div class="total-section">
+							<span class="total-label">Total order</span>
+							<span class="total-amount">
+								$${() =>
+									store.selectedSpace?.isWholesale ? store.getOrderTotalCost() : store.getRetailOrderTotalCost()}
+							</span>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<button class="order-button" onclick=${this.#onNextClick}>Continue to order</button>
-		</div>
-	</bottom-sheet>
+				<button class="order-button" onclick=${this.#onNextClick}>Continue to order</button>
+			</div>
+		</bottom-sheet>
 	`
 
 	css = css/*css*/ `

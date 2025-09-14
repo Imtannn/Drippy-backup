@@ -1,5 +1,6 @@
-import {Element, element, html, Show, signal} from 'lume'
+import {Element, element, html, signal} from 'lume'
 import {currentUser} from './store.js'
+import '../elements/logic/show-when.js'
 
 @element
 export class AppGuard extends Element {
@@ -26,8 +27,6 @@ export class AppGuard extends Element {
 	}
 
 	template = () => html`
-		<${Show} when=${() => this.isUserLoggedIn}>
-			<slot></slot>
-		</>
+		<show-when condition=${() => this.isUserLoggedIn} content=${() => html` <slot></slot> `}></show-when>
 	`
 }

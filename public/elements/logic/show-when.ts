@@ -1,23 +1,25 @@
 import {attribute, booleanAttribute, Element, element, type ElementAttributes} from '@lume/element'
 import {Show} from 'solid-js'
 import html from 'solid-js/html'
+import type {TemplateFunction} from './types'
 
 export type ShowWhenAttributes = 'condition' | 'content' | 'fallback'
 
 /**
- * This is a small wrapper around Solid.js <For> to make it a custom element so
- * that we don't have to use <${For}> syntax any time we need it, and prettier
- * formatting will also work.
+ * This is a small wrapper around Solid.js <Show> to make it a custom element so
+ * that we don't have to use <${Show}> syntax any time we need it, and prettier
+ * formatting will also work (it currently breaks on <${Show}> syntax,
+ * https://github.com/prettier/prettier/issues/17849).
  *
  * Example:
  *
  * ```js
  * return html`
- *  <show-when
+ *   <show-when
  *     condition=${() => someCondition}
  *     content=${() => html`<p>Content to show when condition is true</p>`}
  *     fallback=${() => html`<p>Fallback content when condition is false</p>`}
- *  ></show-when>
+ *   ></show-when>
  * `
  * ```
  */
@@ -29,10 +31,10 @@ export class ShowWhen extends Element {
 	@booleanAttribute condition = false
 
 	/** A function that returns a template for content when condition is truthy. */
-	@attribute content = () => []
+	@attribute content: TemplateFunction = () => []
 
 	/** A function that returns a template for fallback content when condition is falsy. */
-	@attribute fallback = () => []
+	@attribute fallback: TemplateFunction = () => []
 
 	hasShadow = false
 

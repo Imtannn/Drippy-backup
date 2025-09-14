@@ -1,9 +1,12 @@
-import {css, Element, element, html, Index, Show, signal} from 'lume'
+import {css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import type {Space} from '../types/types.js'
 import {store} from './store.js'
+
+import '../elements/logic/index-each.js'
+import '../elements/logic/show-when.js'
 
 @element
 export class SpacesSelection extends Element {
@@ -45,35 +48,37 @@ export class SpacesSelection extends Element {
 
 			<!-- Space Cards -->
 			<div class="cards-container">
-			<${Index} each=${() => this.filterdSpace}>
-			${(space: Accessor<Space>) => html`
-				<!-- Bloom Realm Card -->
-				<div class="space-card">
-					<div class="scene-preview">
-						<div class="scene-placeholder">
-							<img src=${space().sceneThumbnail} alt="Bloom Realm Scene" />
+				<index-each
+					items=${() => this.filterdSpace}
+					content=${() => (space: Accessor<Space>) => html`
+						<!-- Bloom Realm Card -->
+						<div class="space-card">
+							<div class="scene-preview">
+								<div class="scene-placeholder">
+									<img src=${space().sceneThumbnail} alt="Bloom Realm Scene" />
+								</div>
+								<div class="garments-count">${space().garmentsCount} garments</div>
+							</div>
+							<div class="card-content">
+								<div class="text-content">
+									<h3 class="card-title">${space().name}</h3>
+									<p class="card-subtitle">${space().description}</p>
+								</div>
+								<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>Explore space →</button>
+							</div>
 						</div>
-						<div class="garments-count">${space().garmentsCount} garments</div>
-					</div>
-					<div class="card-content">
-						<div class="text-content">
-							<h3 class="card-title">${space().name}</h3>
-							<p class="card-subtitle">${space().description}</p>
+					`}
+				></index-each>
+
+				<show-when
+					condition=${() => this.filterdSpace.length === 0}
+					content=${() => html`
+						<div class="no-spaces-container">
+							<p class="no-spaces-text">Spaces for this avatar are coming soon!</p>
+							<button class="no-spaces-button" onclick=${() => (store.view = 'avatar')}>Select avatar →</button>
 						</div>
-						<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>Explore space →</button>
-					</div>
-				</div>
-			`}
-			</>
-
-			<${Show} when=${() => this.filterdSpace.length === 0}>
-				<div class="no-spaces-container">
-					<p class="no-spaces-text">Spaces for this avatar are coming soon!</p>
-					<button class="no-spaces-button" onclick=${() => (store.view = 'avatar')}>Select avatar →</button>
-				</div>
-			</>
-
-
+					`}
+				></show-when>
 			</div>
 		</div>
 	`

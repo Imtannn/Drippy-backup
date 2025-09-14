@@ -97,6 +97,7 @@ export class ShareView extends Element {
 				<logo-button brand-name="MoiDien"></logo-button>
 			</app-buttons-group>
 		</app-buttons-right>
+
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
 			<div class="share-container">
 				<!-- Header -->
