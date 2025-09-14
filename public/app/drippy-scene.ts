@@ -74,7 +74,7 @@ export class DrippyScene extends Element {
 	@signal private lumeScene: Scene | null = null
 
 	// When `false`, disable animations and rigging.
-	@signal private animsEnabled = true
+	@signal private animsEnabled = false
 
 	@signal private animsStopped = true
 
