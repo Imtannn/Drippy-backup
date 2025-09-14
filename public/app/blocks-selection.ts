@@ -249,144 +249,153 @@ export class BlocksSelection extends Element {
 			<show-when
 				condition=${() => this.availableTemplateCategories.length > 0}
 				content=${() => html`
+					<tabs-provider
+						default-value=${() => this.selectedTemplateCategory}
+						ontabchange=${(e: CustomEvent) => {
+							this.selectedTemplateCategory = e.detail.value
+						}}
+					>
+						<bottom-sheet-header>
+							<div class="tabs-container">
+								<tabs-list>
+									<for-each
+										items=${() => this.availableTemplateCategories}
+										content=${() => (category: TemplateCategory) => html`
+											<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
+										`}
+									></for-each>
+								</tabs-list>
+							</div>
+						</bottom-sheet-header>
 
-				<tabs-provider
-					default-value=${() => this.selectedTemplateCategory}
-					ontabchange=${(e: CustomEvent) => {
-						this.selectedTemplateCategory = e.detail.value
-					}}
-				>
-					<bottom-sheet-header>
-						<div class="tabs-container">
-							<tabs-list>
-							<for-each items=${() => this.availableTemplateCategories} content=${() => (category: TemplateCategory) => html`
-								<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
-							`}></for-each>
-							</tabs-list>
-						</div>
-					</bottom-sheet-header>
+						<div class="tabs-content-container">
+							<for-each
+								items=${() => this.availableTemplateCategories}
+								content=${() => (templateCategory: TemplateCategory) => html`
+									<tabs-content selected-value=${templateCategory}>
+										<!-- Sub-tabs within each template category -->
+										<show-when
+											condition=${() => this.selectedTemplateCategory === templateCategory}
+											content=${() => html`
+												<tabs-provider
+													default-value=${() => this.selectedSubTab}
+													ontabchange=${(e: CustomEvent) => {
+														this.selectedSubTab = e.detail.value
+													}}
+												>
+													<div class="category-tabs">
+														<!-- Fabric tab at the end if fabrics are available -->
+														<show-when
+															condition=${() => this.availableFabrics.length > 0}
+															content=${() => html`
+																<button
+																	class="category-tab"
+																	classList=${() => ({active: this.selectedSubTab === 'fabric'})}
+																	onclick=${() => (this.selectedSubTab = 'fabric')}
+																>
+																	Fabric
+																</button>
+															`}
+														></show-when>
 
-					<div class="tabs-content-container">
-						<for-each items=${() => this.availableTemplateCategories} content=${() => (templateCategory: TemplateCategory) => html`
-							<tabs-content selected-value=${templateCategory}>
-								<!-- Sub-tabs within each template category -->
-								<show-when
-									condition=${() => this.selectedTemplateCategory === templateCategory}
-									content=${() => html`
-										<tabs-provider
-											default-value=${() => this.selectedSubTab}
-											ontabchange=${(e: CustomEvent) => {
-												this.selectedSubTab = e.detail.value
-											}}
-										>
-											<div class="category-tabs">
-												<!-- Fabric tab at the end if fabrics are available -->
-												<show-when
-													condition=${() => this.availableFabrics.length > 0}
-													content=${() => html`
-														<button
-															class="category-tab"
-															classList=${() => ({active: this.selectedSubTab === 'fabric'})}
-															onclick=${() => (this.selectedSubTab = 'fabric')}
-														>
-															Fabric
-														</button>
-													`}
-												></show-when>
-
-												<!-- Block category tabs -->
-												<for-each
-													items=${() => this.blocksCategories}
-													content=${(category: BlockCategory) => html`
-														<button
-															class="category-tab"
-															classList=${() => ({active: this.selectedSubTab === category})}
-															onclick=${() => {
-																this.selectedSubTab = category
-																this.selectedBlockCategory = category
-															}}
-														>
-															${category}
-														</button>
-													`}
-												></for-each>
-											</div>
-
-											<!-- Fabric content -->
-											<show-when
-												condition="${() => this.selectedSubTab === 'fabric'}"
-												content=${() => html`
-													<div class="items-grid">
+														<!-- Block category tabs -->
 														<for-each
-															items=${() => this.availableFabrics}
-															content=${() => (fabric: Fabric) => html`
-																<item-card
-																	item-active=${() => {
-																		// Check if this fabric is applied to any block of current template
-																		const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory!)
-																		const templateFabrics = store.selectedFabrics.get(this.selectedTemplateCategory!)
-																		if (!templateBlocks || !templateFabrics) return false
-
-																		const actualBlockCategories = Array.from(templateBlocks.keys())
-																		return actualBlockCategories.some(
-																			blockCategory => templateFabrics.get(blockCategory)?._id === fabric._id,
-																		)
+															items=${() => this.blocksCategories}
+															content=${(category: BlockCategory) => html`
+																<button
+																	class="category-tab"
+																	classList=${() => ({active: this.selectedSubTab === category})}
+																	onclick=${() => {
+																		this.selectedSubTab = category
+																		this.selectedBlockCategory = category
 																	}}
-																	item-src=${() => fabric.thumb}
-																	item-alt=${() => fabric.materialName}
-																	item-value=${() => fabric}
-																	oncardselected=${this.#onFabricClick}
-																></item-card>
+																>
+																	${category}
+																</button>
 															`}
 														></for-each>
 													</div>
-												`}
-											></show-when>
 
-											<!-- Block content -->
-											<for-each
-												items=${() => this.blocksCategories}
-												content=${() => (blockCategory: BlockCategory) => html`
+													<!-- Fabric content -->
 													<show-when
-														condition=${() => this.selectedSubTab === blockCategory}
+														condition="${() => this.selectedSubTab === 'fabric'}"
 														content=${() => html`
 															<div class="items-grid">
 																<for-each
-																	items=${() => this.availableBlocks.filter(block => block.category === blockCategory)}
-																	content=${() => (block: Block) => html`
+																	items=${() => this.availableFabrics}
+																	content=${() => (fabric: Fabric) => html`
 																		<item-card
 																			item-active=${() => {
+																				// Check if this fabric is applied to any block of current template
 																				const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory!)
-																				return templateBlocks?.get(block.category)?._id === block._id
+																				const templateFabrics = store.selectedFabrics.get(
+																					this.selectedTemplateCategory!,
+																				)
+																				if (!templateBlocks || !templateFabrics) return false
+
+																				const actualBlockCategories = Array.from(templateBlocks.keys())
+																				return actualBlockCategories.some(
+																					blockCategory => templateFabrics.get(blockCategory)?._id === fabric._id,
+																				)
 																			}}
-																			item-src=${() => block.thumb}
-																			item-alt=${() => block.blockName}
-																			item-value=${() => block}
-																			oncardselected=${(e: CustomEvent) => {
-																				if (!this.selectedTemplateCategory) return
-																				store.setSelectedBlocks = {
-																					block: e.detail.itemValue,
-																					templateCategory: this.selectedTemplateCategory,
-																				}
-																			}}
+																			item-src=${() => fabric.thumb}
+																			item-alt=${() => fabric.materialName}
+																			item-value=${() => fabric}
+																			oncardselected=${this.#onFabricClick}
 																		></item-card>
 																	`}
 																></for-each>
 															</div>
 														`}
 													></show-when>
-												`}
-											></for-each>
-										</tabs-provider>
-									`}
-								>
-								</show-when>
-							</tabs-content>
-						`}
-						</for-each>
-					</div>
-				</tabs-provider>
-			`}
+
+													<!-- Block content -->
+													<for-each
+														items=${() => this.blocksCategories}
+														content=${() => (blockCategory: BlockCategory) => html`
+															<show-when
+																condition=${() => this.selectedSubTab === blockCategory}
+																content=${() => html`
+																	<div class="items-grid">
+																		<for-each
+																			items=${() =>
+																				this.availableBlocks.filter(block => block.category === blockCategory)}
+																			content=${() => (block: Block) => html`
+																				<item-card
+																					item-active=${() => {
+																						const templateBlocks = store.selectedBlocks.get(
+																							this.selectedTemplateCategory!,
+																						)
+																						return templateBlocks?.get(block.category)?._id === block._id
+																					}}
+																					item-src=${() => block.thumb}
+																					item-alt=${() => block.blockName}
+																					item-value=${() => block}
+																					oncardselected=${(e: CustomEvent) => {
+																						if (!this.selectedTemplateCategory) return
+																						store.setSelectedBlocks = {
+																							block: e.detail.itemValue,
+																							templateCategory: this.selectedTemplateCategory,
+																						}
+																					}}
+																				></item-card>
+																			`}
+																		></for-each>
+																	</div>
+																`}
+															></show-when>
+														`}
+													></for-each>
+												</tabs-provider>
+											`}
+										>
+										</show-when>
+									</tabs-content>
+								`}
+							></for-each>
+						</div>
+					</tabs-provider>
+				`}
 			></show-when>
 		</bottom-sheet>
 	`
