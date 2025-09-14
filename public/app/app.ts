@@ -83,7 +83,7 @@ export class DrippyApp extends Element {
 				store.view !== 'scene' &&
 				store.selectedAvatar &&
 				store.selectedSpace &&
-				store.isDrippySceneLoading.length > 0
+				store.isDrippySceneLoading.size > 0
 			) {
 				this.showLoadingCover = true
 			} else {

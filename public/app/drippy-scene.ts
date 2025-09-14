@@ -81,10 +81,9 @@ export class DrippyScene extends Element {
 	@signal private animName: string | null = null
 	@signal private animSrc: string | null = null
 
-	async #applyFabric(el: Element3D, fabric: Fabric, isCanceled: () => boolean, blockId?: string) {
+	async #applyFabric(el: Element3D, fabric: Fabric, isCanceled: () => boolean, loadingId: symbol) {
 		const root = el.three
-		const loadingId = blockId || `${fabric._id}-${Date.now()}`
-		store.loadingMaterials = [...untrack(() => store.loadingMaterials), loadingId]
+		store.addLoadingMaterial(loadingId)
 
 		try {
 			// Extract UV data for proper texture scaling
@@ -104,7 +103,7 @@ export class DrippyScene extends Element {
 		} catch (error) {
 			console.warn('Failed to apply fabric to object:', error)
 		} finally {
-			store.loadingMaterials = untrack(() => store.loadingMaterials).filter(id => id !== loadingId)
+			store.removeLoadingMaterial(loadingId)
 		}
 	}
 
@@ -173,7 +172,7 @@ export class DrippyScene extends Element {
 			})
 		})
 
-		const avatarId = 'avatar'
+		const avatarId = Symbol('avatar')
 
 		// FIXME The following two effects are almost identical, running some of
 		// the same code twice.
@@ -189,20 +188,18 @@ export class DrippyScene extends Element {
 
 			createEffect(() => {
 				if (!avatarLoaded()) {
-					untrack(() => {
-						if (!store.loadingBlocks.includes(avatarId)) store.loadingBlocks = [...store.loadingBlocks, avatarId]
-						if (!store.isDrippySceneLoading.includes(avatarId)) store.addIsDrippySceneLoading = avatarId
-					})
+					store.addLoadingBlock(avatarId)
+					store.addIsDrippySceneLoading(avatarId)
 
 					return
 				}
 
-				store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== avatarId)
-				store.removeIsDrippySceneLoading = avatarId
+				store.removeLoadingBlock(avatarId)
+				store.removeIsDrippySceneLoading(avatarId)
 			})
 		})
 
-		const sceneId = 'scene'
+		const sceneId = Symbol('scene')
 
 		// Track background scene loading state
 		this.createEffect(() => {
@@ -215,16 +212,14 @@ export class DrippyScene extends Element {
 
 			createEffect(() => {
 				if (!backgroundLoaded()) {
-					untrack(() => {
-						if (!store.loadingBlocks.includes(sceneId)) store.loadingBlocks = [...store.loadingBlocks, sceneId]
-						if (!store.isDrippySceneLoading.includes(sceneId)) store.addIsDrippySceneLoading = sceneId
-					})
+					store.addLoadingBlock(sceneId)
+					store.addIsDrippySceneLoading(sceneId)
 
 					return
 				}
 
-				store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== sceneId)
-				store.removeIsDrippySceneLoading = sceneId
+				store.removeLoadingBlock(sceneId)
+				store.removeIsDrippySceneLoading(sceneId)
 			})
 		})
 
@@ -233,23 +228,23 @@ export class DrippyScene extends Element {
 			const totalBlockCount = this.renderBlocks.length
 
 			if (totalBlockCount === 0) {
-				store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== 'avatar')
+				store.removeLoadingBlock(avatarId) // why remove avatarId when no blocks?
 				return
 			}
 
 			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as GltfModel[]
 
 			for (const [index, el] of models.entries()) {
-				const blockId = `block-${index}`
+				const blockId = Symbol(`block-${index}`)
 				const modelLoaded = onModelLoad(el)
 
 				createEffect(() => {
 					if (!modelLoaded()) {
-						store.loadingBlocks = [...untrack(() => store.loadingBlocks), blockId]
+						store.addLoadingBlock(blockId)
 						return
 					}
 
-					store.loadingBlocks = untrack(() => store.loadingBlocks).filter(id => id !== blockId)
+					store.removeLoadingBlock(blockId)
 				})
 			}
 		})
@@ -322,7 +317,7 @@ export class DrippyScene extends Element {
 				// Find the fabric for this block
 				const templateFabrics = selectedFabrics.get(templateCategory)
 				const fabric = templateFabrics?.get(blockCategory)
-				const loadingId = `material-${blockId}`
+				const loadingId = Symbol(`material-${blockId}`)
 				const modelLoaded = onModelLoad(el)
 
 				createEffect(() => {
@@ -346,7 +341,7 @@ export class DrippyScene extends Element {
 			// ideally in T-pose. We need to wait for all the blocks to be fully loaded before
 			// rigging.
 
-			if (store.loadingBlocks.length > 0) {
+			if (store.loadingBlocks.size > 0) {
 				this.animsStopped = true
 			} else {
 				// Wait 1 more frame just for good measure. The rigging should happen as soon as
@@ -402,7 +397,7 @@ export class DrippyScene extends Element {
 					<app-buttons-left layout="bottom">
 						<app-buttons-group>
 							<loading-indicator
-								is-visible=${() => store.loadingBlocks.length > 0 || store.loadingMaterials.length > 0}
+								is-visible=${() => store.loadingBlocks.size > 0 || store.loadingMaterials.size > 0}
 							></loading-indicator>
 						</app-buttons-group>
 					</app-buttons-left>

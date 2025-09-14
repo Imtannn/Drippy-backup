@@ -22,9 +22,9 @@ export const store = createMutable({
 	customMeasurement: null as CustomMeasurement | null,
 	isShowAvatar: true,
 	isShowScene: true,
-	isDrippySceneLoading: [] as string[],
-	loadingBlocks: [] as string[],
-	loadingMaterials: [] as string[],
+	isDrippySceneLoading: new Set<symbol>(),
+	loadingBlocks: new Set<symbol>(),
+	loadingMaterials: new Set<symbol>(),
 
 	// Order-related state
 	selectedOrderItems: new Map<TemplateCategory, boolean>(),
@@ -461,11 +461,43 @@ export const store = createMutable({
 		} as OrderState
 	},
 
-	set addIsDrippySceneLoading(key: string) {
-		this.isDrippySceneLoading = [...untrack(() => this.isDrippySceneLoading), key]
+	addIsDrippySceneLoading(key: symbol) {
+		untrack(() => {
+			this.isDrippySceneLoading.add(key)
+			this.isDrippySceneLoading = new Set(this.isDrippySceneLoading) // trigger reactivity
+		})
 	},
-	set removeIsDrippySceneLoading(key: string) {
-		this.isDrippySceneLoading = untrack(() => this.isDrippySceneLoading.filter(k => k !== key))
+	removeIsDrippySceneLoading(key: symbol) {
+		untrack(() => {
+			this.isDrippySceneLoading.delete(key)
+			this.isDrippySceneLoading = new Set(this.isDrippySceneLoading) // trigger reactivity
+		})
+	},
+
+	addLoadingBlock(key: symbol) {
+		untrack(() => {
+			this.loadingBlocks.add(key)
+			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+		})
+	},
+	removeLoadingBlock(key: symbol) {
+		untrack(() => {
+			this.loadingBlocks.delete(key)
+			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+		})
+	},
+
+	addLoadingMaterial(key: symbol) {
+		untrack(() => {
+			this.loadingMaterials.add(key)
+			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+		})
+	},
+	removeLoadingMaterial(key: symbol) {
+		untrack(() => {
+			this.loadingMaterials.delete(key)
+			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+		})
 	},
 })
 

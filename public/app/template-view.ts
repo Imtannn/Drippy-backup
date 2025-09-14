@@ -84,8 +84,8 @@ export class TemplateView extends Element {
 		const templateFabric = getFabricForTemplate(template, store.selectSpace?.collection)
 
 		if (templateFabric) {
-			const loadingId = `${templateFabric._id}-${Date.now()}`
-			store.loadingMaterials = [...untrack(() => store.loadingMaterials), loadingId]
+			const loadingId = Symbol(`fabric-${templateFabric._id}`)
+			store.addLoadingMaterial(loadingId)
 			try {
 				// Preload base fabric textures into cache (most efficient - no config needed yet)
 				// Preload template blocks
@@ -96,7 +96,7 @@ export class TemplateView extends Element {
 			} catch (error) {
 				console.warn('Failed to preload fabric textures:', error)
 			} finally {
-				store.loadingMaterials = untrack(() => store.loadingMaterials).filter(id => id !== loadingId)
+				store.removeLoadingMaterial(loadingId)
 			}
 		}
 
