@@ -1,5 +1,9 @@
 import './elements/video-loading.js'
 
+// For now import all collections. In the future we can import only the ones
+// needed per page.
+import './imports/collections/index.js'
+
 // Render the UI only when on the home page domain (or localhost), but
 // not for HTML files because they render their own content (they can
 // still use Meteor APIs), and not when in an iframe (because if we're

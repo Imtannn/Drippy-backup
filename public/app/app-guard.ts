@@ -11,6 +11,7 @@ export class AppGuard extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
+			// FIXME keep code maintainable, unduplicate this auth logic (same as in home-page.ts and onboarding-flow.ts)
 			const user = currentUser()
 			// If undefined, means the user is still loading
 			if (user === undefined) return

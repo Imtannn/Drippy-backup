@@ -7,8 +7,38 @@ import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddre
 import {toSolidSignal} from '../utils.js'
 import {blockManager} from './block-manager.js'
 import {untrack} from 'solid-js'
+import {Visits, type Visit} from '../imports/collections/Visits.js'
+
+export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
+export const username = () => currentUser()?.username ?? ''
+export const dateOfBirth = () => currentUser()?.profile?.dateOfBirth ?? ''
+export const isAdmin = () => !!currentUser()?.profile?.isAdmin
+
+export const visits = toSolidSignal(() => Visits.find({}).fetch() as readonly Visit[])
+export const usersCount = toSolidSignal(() => Counts.get('users'))
 
 export const store = createMutable({
+	// convenience properties for signals
+	get user() {
+		return currentUser()
+	},
+	get username() {
+		return username()
+	},
+	get dateOfBirth() {
+		return dateOfBirth()
+	},
+	get isAdmin() {
+		return isAdmin()
+	},
+
+	get visits() {
+		return visits()
+	},
+	get usersCount() {
+		return usersCount()
+	},
+
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
 	tempSelectedAvatar: null as string | null,
@@ -500,5 +530,3 @@ export const store = createMutable({
 		})
 	},
 })
-
-export const currentUser = toSolidSignal(() => Meteor.user())
