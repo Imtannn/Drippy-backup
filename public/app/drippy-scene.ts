@@ -12,22 +12,18 @@ import {
 	Scene,
 	Show,
 	signal,
-	untrack,
 } from 'lume'
-import * as THREE from 'three'
 import type {Accessor} from 'solid-js'
+import * as THREE from 'three'
+import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/loading-indicator.js'
+import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
 import '../elements/rig/lume-auto-rigger.js'
-import '../elements/logic/show-when.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
-import './app-buttons.js'
-import {store} from './store.js'
-import {textureManager} from './texture-manager.js'
-import {avatars} from '../consts/avatars.js'
 import {
 	createMutationsSignal,
 	enableFrontsideOnModelLoad,
@@ -35,6 +31,9 @@ import {
 	meshesInTree,
 	onModelLoad,
 } from '../utils.js'
+import './app-buttons.js'
+import {store} from './store.js'
+import {textureManager} from './texture-manager.js'
 
 type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
 

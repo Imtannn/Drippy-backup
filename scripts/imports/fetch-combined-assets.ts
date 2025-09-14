@@ -30,8 +30,12 @@ const BRAND_CONFIGS = [
 		rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
 	},
 	{
-		brand: 'movement',
+		brand: 'haruki',
 		rootFolderId: '1-_x-GVUxGBn4S1VDI6t3dFN990IG-VWu',
+	},
+	{
+		brand: 'lostCause',
+		rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
 	},
 	// {
 	// 	brand: 'baroudeuses',
