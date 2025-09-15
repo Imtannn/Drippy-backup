@@ -98,7 +98,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 7',
 			avatar: 'Female',
 			category: 'Dress',
-			materialId: 'Silk - Chiffon  (2ab4c8)',
+			materialId: 'Silk - Chiffon (2ab4c8)',
 		},
 		{
 			_id: '7',
@@ -177,7 +177,7 @@ export const templates: Record<string, Template[]> = {
 		{
 			_id: '3',
 			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/templates/Top/Item__5.png',
-			name: 'Item  5',
+			name: 'Item 5',
 			avatar: 'Female',
 			category: 'Top',
 			materialId: 'Silk - Organza Print',
