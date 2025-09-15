@@ -277,7 +277,9 @@ class TextureManager {
 		// Ensure GPU-side texture state updates
 		if (material.map) material.map.needsUpdate = true
 		if (material.normalMap) material.normalMap.needsUpdate = true
+		// if (material.displacementMap) material.displacementMap.needsUpdate = true
 		if (material.roughnessMap) material.roughnessMap.needsUpdate = true
+		if (material.alphaMap) material.alphaMap.needsUpdate = true
 		material.needsUpdate = true
 	}
 

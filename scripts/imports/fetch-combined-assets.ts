@@ -150,7 +150,8 @@ async function fetchFolderContents(folderId: string): Promise<TODO[]> {
 
 function normalizeName(name: string): string {
 	// Remove _ characters in name and trim all spaces
-	return name.replace(/_/g, ' ').trim()
+	// Trim double spaces
+	return name.replace(/_/g, ' ').trim().replace(/\s+/g, ' ')
 }
 
 function capitalize(name: string): string {
@@ -636,7 +637,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 					textureUrls.displacement = fileS3Url
 				} else if (fileName.includes('rough')) {
 					textureUrls.roughness = fileS3Url
-				} else if (fileName.includes('opacity')) {
+				} else if (fileName.includes('alpha')) {
 					textureUrls.alpha = fileS3Url
 				}
 
