@@ -51,6 +51,7 @@ export class BlocksSelection extends Element {
 		Accessories: [],
 		Dress: [],
 		Skirt: [],
+		Top: [],
 	}
 
 	connectedCallback() {
@@ -235,7 +236,10 @@ export class BlocksSelection extends Element {
 			<app-buttons-group>
 				<person-button></person-button>
 				<cube-button></cube-button>
-				<animation-select></animation-select>
+				<show-when
+					condition=${() => store.selectedSpace?.collection === 'moidien'}
+					content=${() => html` <animation-select></animation-select> `}
+				></show-when>
 			</app-buttons-group>
 		</app-buttons-right>
 

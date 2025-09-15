@@ -118,6 +118,7 @@ export class TabsList extends Element {
 	private provider: TabsProvider | null = null
 	private indicatorRef: HTMLElement | null = null
 	private hoverIndicatorRef: HTMLElement | null = null
+	private listElementRef: HTMLElement | null = null
 	private resizeTimeout: NodeJS.Timeout | null = null
 	connectedCallback() {
 		super.connectedCallback()
@@ -176,10 +177,16 @@ export class TabsList extends Element {
 
 	#addEventListeners() {
 		window.addEventListener('resize', this.#handleResize)
+		if (this.listElementRef) {
+			this.listElementRef.addEventListener('scroll', this.#handleScroll)
+		}
 	}
 
 	#removeEventListeners() {
 		window.removeEventListener('resize', this.#handleResize)
+		if (this.listElementRef) {
+			this.listElementRef.removeEventListener('scroll', this.#handleScroll)
+		}
 	}
 
 	#handleResize = () => {
@@ -189,6 +196,10 @@ export class TabsList extends Element {
 		this.resizeTimeout = setTimeout(() => {
 			this.updateIndicators()
 		}, 100)
+	}
+
+	#handleScroll = () => {
+		this.updateIndicators()
 	}
 
 	updateIndicators() {
@@ -218,7 +229,7 @@ export class TabsList extends Element {
 			const listRect = this.getBoundingClientRect()
 			const triggerRect = trigger.getBoundingClientRect()
 
-			const left = triggerRect.left - listRect.left
+			const left = triggerRect.left - listRect.left + (this.listElementRef?.scrollLeft || 0)
 			const width = triggerRect.width
 
 			indicator.style.transform = `translateX(${left}px)`
@@ -227,7 +238,12 @@ export class TabsList extends Element {
 	}
 
 	template = () => html`
-		<div class="tabs-list" role="tablist" aria-orientation="${this.provider?.tabOrientation || 'horizontal'}">
+		<div
+			class="tabs-list"
+			role="tablist"
+			aria-orientation="${this.provider?.tabOrientation || 'horizontal'}"
+			ref="${(el: HTMLElement) => (this.listElementRef = el)}"
+		>
 			<slot></slot>
 			<div class="tab-indicator active-indicator" ref="${(el: HTMLElement) => (this.indicatorRef = el)}"></div>
 			<div class="tab-indicator hover-indicator" ref="${(el: HTMLElement) => (this.hoverIndicatorRef = el)}"></div>
