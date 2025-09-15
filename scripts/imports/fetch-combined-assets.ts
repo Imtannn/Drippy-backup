@@ -511,6 +511,7 @@ function generateFabricsFileContent(fabrics: TODO): string {
 		baseColor: '${fabric.baseColor || ''}',
 		displacement: '${fabric.displacement || ''}',
 		roughness: '${fabric.roughness || ''}',
+		alpha: '${fabric.alpha || ''}',
 		materialName: '${fabric.materialName}',
 		category: '${fabric.category || ''}',
 		templateCategories: [${fabric.templateCategories.map((cat: string) => `'${cat}'`).join(', ')}],
@@ -571,7 +572,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 		let thumbUrl = ''
 
 		// Parse material name from folder name: "${materialCategory} - ${materialName}"
-		const folderNameParts = materialFolder.name.split(' - ')
+		const folderNameParts = materialFolder.name.split('-')
 		if (folderNameParts.length < 2) {
 			console.warn(`    ⚠️ Invalid material folder name format: ${materialFolder.name}. Expected: "Category - Name"`)
 			continue
@@ -629,6 +630,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 
 				// Map files based on name
 				const fileName = path.basename(file.name, path.extname(file.name)).toLowerCase()
+				console.log('fileName', fileName)
 				if (fileName.includes('normal')) {
 					textureUrls.normal = fileS3Url
 				} else if (fileName.includes('base')) {
@@ -674,7 +676,7 @@ async function scanCategoryMaterials(categoryMaterialsFolder: TODO, categoryName
 
 	for (const materialRef of materialReferenceFolders) {
 		// Parse and normalize the material folder name to match root materials format
-		const folderNameParts = materialRef.name.split(' - ')
+		const folderNameParts = materialRef.name.split('-')
 		if (folderNameParts.length < 2) {
 			console.warn(
 				`    ⚠️ Invalid category material reference format: ${materialRef.name}. Expected: "Category - Name"`,
@@ -700,7 +702,7 @@ async function scanCategoryMaterials(categoryMaterialsFolder: TODO, categoryName
 async function getTemplateMaterialReference(materialFolder: TODO): Promise<string | null> {
 	// Template material folders are just reference folders (empty)
 	// The folder name is the material key: "${materialCategory} - ${materialName}"
-	const folderNameParts = materialFolder.name.split(' - ')
+	const folderNameParts = materialFolder.name.split('-')
 	if (folderNameParts.length < 2) {
 		console.warn(
 			`    ⚠️ Invalid template material reference format: ${materialFolder.name}. Expected: "Category - Name"`,

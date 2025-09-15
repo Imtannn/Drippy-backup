@@ -204,7 +204,7 @@ export class TemplateView extends Element {
 															object-position="center"
 															aspect-ratio="0.79"
 														></item-card>
-														<div class="template-product-name">Product Name</div>
+														<div class="template-product-name">${template.name}</div>
 														<div class="template-product-price-container">
 															<div
 																class="template-product-price"
