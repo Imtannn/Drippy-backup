@@ -180,10 +180,10 @@ export class OrderItems extends Element {
 			// Focus camera on specific garment areas for close-up shots
 			if (category === 'Shirt') {
 				cameraRig.setAttribute('position', '0 -1.1 0') // Focus on chest/torso area
-				cameraRig.setAttribute('distance', '6') // Very close for detail
+				cameraRig.setAttribute('distance', '2') // Very close for detail
 			} else if (category === 'Pants') {
 				cameraRig.setAttribute('position', '0 -0.6 0') // Focus on hip/thigh area
-				cameraRig.setAttribute('distance', '6') // Very close for detail
+				cameraRig.setAttribute('distance', '2') // Very close for detail
 			} else if (category === 'Accessories') {
 				cameraRig.setAttribute('position', '0 0.7 0') // Focus on neck/shoulder area
 				cameraRig.setAttribute('distance', '1.5') // Extra close for small accessories
