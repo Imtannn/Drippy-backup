@@ -271,7 +271,7 @@ class TextureManager {
 		material.emissiveIntensity = 0
 		material.aoMapIntensity = 1
 		material.side = THREE.DoubleSide
-		material.normalScale = new THREE.Vector2(2, 2)
+		// material.normalScale = new THREE.Vector2(2, 2)
 		material.blending = THREE.NormalBlending
 
 		// Ensure GPU-side texture state updates
