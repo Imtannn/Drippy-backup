@@ -1,4 +1,5 @@
-import {css, Element, element, html} from 'lume'
+import {css, Element, element, html, signal} from 'lume'
+import * as THREE from 'three'
 import '../elements/back-button.js'
 import '../elements/bottom-sheet.js'
 import '../elements/home-button.js'
@@ -17,12 +18,36 @@ import {store} from './store.js'
 export class OrderItems extends Element {
 	static elementName = 'order-items'
 
+	// Cache for screenshots using Lume signals
+	@signal private screenshotCache = new Map<TemplateCategory, string>()
+
 	// Load existing selections when component connects
 	connectedCallback() {
 		super.connectedCallback()
 
 		// Initialize all selected templates as checked
 		store.initializeOrderItems()
+
+		// Pre-generate screenshots for all selected templates
+		this.generateScreenshots()
+	}
+
+	private async generateScreenshots() {
+		for (const [category] of store.selectedTemplates.entries()) {
+			try {
+				const screenshot = await this.#captureItemScreenshot(category)
+				console.log(`Generated screenshot for ${category}, length: ${screenshot.length}`)
+
+				// Update the signal to trigger reactive updates
+				const newCache = new Map(this.screenshotCache)
+				newCache.set(category, screenshot)
+				this.screenshotCache = newCache
+
+				console.log(`Cache updated for ${category}, cache size: ${this.screenshotCache.size}`)
+			} catch (error) {
+				console.warn(`Failed to generate screenshot for ${category}:`, error)
+			}
+		}
 	}
 
 	#onBackButtonClick = () => {
@@ -57,7 +82,7 @@ export class OrderItems extends Element {
 		store.navigateTo = 'preview'
 	}
 
-	#captureItemScreenshot = (category: TemplateCategory): string => {
+	#captureItemScreenshot = async (category: TemplateCategory): Promise<string> => {
 		console.log('captureItemScreenshot for category:', category)
 
 		// Find the drippy-app element
@@ -81,7 +106,7 @@ export class OrderItems extends Element {
 			console.log(`model ${index} ID:`, model.getAttribute('id'))
 		})
 
-		// Simple approach: hide all garments except the target category
+		// Simple approach: hide all garments except the target category (no scaling)
 		const modelsToHide: any[] = []
 		console.log(`hiding models that don't start with "${category}-"`)
 
@@ -100,6 +125,8 @@ export class OrderItems extends Element {
 				} else {
 					console.log(`no model.three found for ${modelId}`)
 				}
+			} else {
+				console.log(`keeping model: ${modelId} at original scale`)
 			}
 		})
 
@@ -107,12 +134,14 @@ export class OrderItems extends Element {
 
 		// Also hide avatar, scene, and other elements
 		const otherModelsToHide: any[] = []
+		let originalAvatarPosition: THREE.Vector3 | null = null
 
-		// Hide avatar
+		// Move avatar far away instead of hiding it (to keep skeleton for garments)
 		const avatarModel = lumeScene.querySelector('#avatar')
 		if (avatarModel?.three) {
-			console.log('hiding avatar')
-			avatarModel.three.visible = false
+			console.log('moving avatar out of view')
+			originalAvatarPosition = avatarModel.three.position.clone()
+			avatarModel.three.position.set(1000, 1000, 1000) // Move very far away
 			otherModelsToHide.push(avatarModel)
 		}
 
@@ -148,39 +177,84 @@ export class OrderItems extends Element {
 
 			console.log(`moving camera-rig for ${category} - original position: ${originalPosition}`)
 
-			// Move camera-rig position to focus on the specific garment
+			// Focus camera on specific garment areas for close-up shots
 			if (category === 'Shirt') {
-				cameraRig.setAttribute('position', '0 0.5 0') // Focus higher for shirt
-				cameraRig.setAttribute('distance', '4')
+				cameraRig.setAttribute('position', '0 -1.1 0') // Focus on chest/torso area
+				cameraRig.setAttribute('distance', '6') // Very close for detail
 			} else if (category === 'Pants') {
-				cameraRig.setAttribute('position', '0 -0.5 0') // Focus lower for pants
-				cameraRig.setAttribute('distance', '4')
+				cameraRig.setAttribute('position', '0 -0.6 0') // Focus on hip/thigh area
+				cameraRig.setAttribute('distance', '6') // Very close for detail
+			} else if (category === 'Accessories') {
+				cameraRig.setAttribute('position', '0 0.7 0') // Focus on neck/shoulder area
+				cameraRig.setAttribute('distance', '1.5') // Extra close for small accessories
 			} else {
 				cameraRig.setAttribute('position', '0 0 0') // Center for other items
-				cameraRig.setAttribute('distance', '4')
+				cameraRig.setAttribute('distance', '2')
 			}
 		}
 
+		// Add delay to ensure 3D scene is rendered after scaling
+		await new Promise(resolve => setTimeout(resolve, 100))
+
 		// Get canvas and renderer
 		const canvas = lumeScene.shadowRoot.querySelector('canvas')
-		if (!canvas) return ''
+		if (!canvas) {
+			console.log('ERROR: Canvas not found')
+			return ''
+		}
+
+		console.log('Canvas found:', canvas.width, 'x', canvas.height)
 
 		const renderer = lumeScene.glRenderer || lumeScene._glRenderer || lumeScene.renderer
 		let screenshot = ''
 
 		if (renderer) {
+			console.log('Renderer found:', renderer.constructor.name)
 			const threeScene = lumeScene.three || renderer.scene
 			const threeCamera = lumeScene.camera?.three || lumeScene.three?.camera
 
 			if (threeScene && threeCamera) {
+				console.log('Rendering with Three.js scene and camera')
+
+				// Set a clean light background for product shots
+				const originalBackground = renderer.getClearColor(new THREE.Color())
+				const originalAlpha = renderer.getClearAlpha()
+				renderer.setClearColor(0xf5f5f5, 1.0) // Light gray background
+
 				renderer.render(threeScene, threeCamera)
 				screenshot = renderer.domElement.toDataURL('image/png')
+
+				// Restore original background
+				renderer.setClearColor(originalBackground, originalAlpha)
+			} else {
+				console.log('Missing Three.js scene or camera')
 			}
+		} else {
+			console.log('No renderer found, using canvas directly')
 		}
 
 		if (!screenshot) {
+			console.log('Using canvas toDataURL fallback')
 			screenshot = canvas.toDataURL('image/png')
 		}
+
+		console.log('Screenshot length:', screenshot.length)
+		console.log('Screenshot preview:', screenshot.substring(0, 50))
+
+		// Check if screenshot is just empty/transparent
+		if (
+			screenshot ===
+			'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
+		) {
+			console.log('WARNING: Screenshot appears to be empty/transparent')
+		}
+
+		// Test if the image data is valid by creating a test image
+		const testImg = new Image()
+		testImg.onload = () =>
+			console.log(`✅ Screenshot for ${category} is a valid image: ${testImg.width}x${testImg.height}`)
+		testImg.onerror = () => console.log(`❌ Screenshot for ${category} is corrupted or invalid`)
+		testImg.src = screenshot
 
 		// Restore hidden models
 		modelsToHide.forEach(model => {
@@ -190,11 +264,19 @@ export class OrderItems extends Element {
 			}
 		})
 
+		// No scaling restoration needed anymore
+
 		// Restore avatar and scene
 		otherModelsToHide.forEach(model => {
+			const modelId = model.getAttribute('id')
 			if (model.three) {
-				console.log(`restoring ${model.getAttribute('id')}`)
-				model.three.visible = true
+				console.log(`restoring ${modelId}`)
+				if (modelId === 'avatar' && originalAvatarPosition) {
+					// Restore avatar position
+					model.three.position.copy(originalAvatarPosition)
+				} else {
+					model.three.visible = true
+				}
 			}
 		})
 
@@ -258,7 +340,14 @@ export class OrderItems extends Element {
 										</svg>
 									</div>
 									<div class="item-image">
-										<img src=${() => this.#captureItemScreenshot(category) || template.thumb} alt=${template.name} />
+										<img
+											src=${() => {
+												const cached = this.screenshotCache.get(category)
+												console.log(`Template render for ${category}: cached=${!!cached}, fallback=${template.thumb}`)
+												return cached || template.thumb
+											}}
+											alt=${template.name}
+										/>
 									</div>
 									<div class="item-details">
 										<div class="item-name">Product name</div>
