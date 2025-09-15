@@ -120,6 +120,7 @@ export class TabsList extends Element {
 	private hoverIndicatorRef: HTMLElement | null = null
 	private listElementRef: HTMLElement | null = null
 	private resizeTimeout: NodeJS.Timeout | null = null
+	private updateIndicatorsTimeout: NodeJS.Timeout | null = null
 	connectedCallback() {
 		super.connectedCallback()
 		this.provider = this.closest('tabs-provider') as TabsProvider
@@ -203,7 +204,11 @@ export class TabsList extends Element {
 	}
 
 	updateIndicators() {
+		console.log('updateIndicators')
 		if (!this.provider) return
+		if (this.updateIndicatorsTimeout) {
+			clearTimeout(this.updateIndicatorsTimeout)
+		}
 
 		const triggers = this.querySelectorAll('tabs-trigger') as NodeListOf<TabsTrigger>
 		const activeTrigger = Array.from(triggers).find(trigger => {
@@ -212,6 +217,10 @@ export class TabsList extends Element {
 		})
 		if (activeTrigger && this.indicatorRef) {
 			this.positionIndicator(this.indicatorRef, activeTrigger)
+		} else {
+			this.updateIndicatorsTimeout = setTimeout(() => {
+				this.updateIndicators()
+			}, 200)
 		}
 	}
 

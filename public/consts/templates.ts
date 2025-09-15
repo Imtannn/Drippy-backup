@@ -212,7 +212,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 1',
 			avatar: 'Female',
 			category: 'Top',
-			materialId: '',
+			materialId: 'Wool - Yarn',
 		},
 		{
 			_id: '8',
@@ -220,7 +220,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 3',
 			avatar: 'Female',
 			category: 'Accessories',
-			materialId: 'Abtract - Black Face',
+			materialId: 'Silk - Black Organza',
 		},
 		{
 			_id: '9',
