@@ -43,7 +43,7 @@ const stepImage1 = new URL('../images/landing/step-1.png', import.meta.url).href
 
 const cta__background = new URL('../images/landing/cta-background.png', import.meta.url).href
 const cta_model = new URL('../images/landing/cta-model.png', import.meta.url).href
-// Social media icons
+
 const instagramIcon = new URL('../images/landing/discord.png', import.meta.url).href
 const discordIcon = new URL('../images/landing/instagram.png', import.meta.url).href
 const redditIcon = new URL('../images/landing/reddit.png', import.meta.url).href
@@ -384,19 +384,21 @@ const mainContent = html`
 								<div class="section-title text-lg">Built like a game, feel like a game.</div>
 								<div class="section-subtitle text-md-2">Here&#39;s how it work from your shoppers' POV.</div>
 							</div>
-							<div class="how-it-works__grid">
-								${steps.map(
-									(step: any) => html`
-										<div class="how-it-works__item">
-											<div class="how-it-works__step">
-												<img class="how-it-works__step-image" src=${step.logo} />
+
+								<div class="how-it-works__grid">
+									${steps.map(
+										(step: any) => html`
+											<div class="how-it-works__item">
+												<div class="how-it-works__step">
+													<img class="how-it-works__step-image" src=${step.logo} />
+												</div>
+												<div class="how-it-works__step-title text-md-1">${step.name}</div>
+												<p class="how-it-works__description text-sm">${step.des}</p>
 											</div>
-											<div class="how-it-works__step-title text-md-1">${step.name}</div>
-											<p class="how-it-works__description text-sm">${step.des}</p>
-										</div>
-									`,
-								)}
-							</div>
+										`,
+									)}
+									</div>
+
 							<div class="hero__actions">
 								<custom-button variant="secondary">See it live</custom-button>
 								<custom-button variant="primary">Book a demo</custom-button>
@@ -422,7 +424,7 @@ const mainContent = html`
 												</div>
 											</div>
 											<div class="platform__card-image">
-												<img class="platform__device-image" src="https://c.animaapp.com/mejigj1rAIvhIh/img/device-14pm-1.png" />
+												<div class="platform__screenshot studio-1"></div>
 											</div>
 										</div>
 									</div>
@@ -437,10 +439,9 @@ const mainContent = html`
 												</div>
 											</div>
 											<div class="platform__card-image">
-												<img class="platform__device-image" src="https://c.animaapp.com/mejigj1rAIvhIh/img/device-14pm-2.png" />
+												<div class="platform__screenshot studio-2"></div>
 											</div>
 										</div>
-
 									</div>
 									<div class="platform__card">
 										<div class="platform__card-overlap">
@@ -454,7 +455,7 @@ const mainContent = html`
 												</div>
 											</div>
 											<div class="platform__card-image">
-												<img class="platform__screenshot" src="https://c.animaapp.com/mejigj1rAIvhIh/img/screenshot-2025-08-05-at-18-41-55-1.png" />
+												<div class="platform__screenshot studio-3"></div>
 											</div>
 										</div>
 									</div>
@@ -765,13 +766,19 @@ setTimeout(() => {
 	})
 }, 100)
 
-// Carousel functionality
-function initCarousel() {
-	const track = document.querySelector('.pricing__plans') as HTMLElement
-	const items = document.querySelectorAll('.pricing__plans--item') as NodeListOf<HTMLElement>
-	const carousel = document.querySelector('.pricing__content') as HTMLElement
+// Generic carousel functionality - Can be used for any section
+function initGenericCarousel(config: {
+	trackSelector: string
+	itemSelector: string
+	containerSelector: string
+	minWidth: number
+	maxWidth: number
+}) {
+	const track = document.querySelector(config.trackSelector) as HTMLElement
+	const items = document.querySelectorAll(config.itemSelector) as NodeListOf<HTMLElement>
+	const container = document.querySelector(config.containerSelector) as HTMLElement
 
-	if (!track || !items.length || !carousel) return
+	if (!track || !items.length || !container) return
 
 	let activeIndex = 1
 	let startX = 0
@@ -784,21 +791,21 @@ function initCarousel() {
 		clearTimeout(resizeTimeout)
 		resizeTimeout = setTimeout(() => {
 			const wasActive = isActive
-			isActive = window.innerWidth >= 430 && window.innerWidth <= 830
+			isActive = window.innerWidth >= config.minWidth && window.innerWidth <= config.maxWidth
 
 			if (wasActive !== isActive) {
 				if (isActive) {
-					carousel.classList.add('carousel')
+					container.classList.add('carousel')
 					items.forEach(item => {
 						item.classList.add('carousel-item')
 					})
 
-					if (carousel.classList.contains('carousel') && document.querySelectorAll('.carousel-item').length > 0) {
+					if (container.classList.contains('carousel') && document.querySelectorAll('.carousel-item').length > 0) {
 						addEventListeners()
 						updateCarousel()
 					}
 				} else {
-					carousel.classList.remove('carousel')
+					container.classList.remove('carousel')
 					items.forEach(item => {
 						item.classList.remove('carousel-item')
 					})
@@ -821,12 +828,12 @@ function initCarousel() {
 	function updateCarousel() {
 		if (
 			!isActive ||
-			!carousel.classList.contains('carousel') ||
+			!container.classList.contains('carousel') ||
 			document.querySelectorAll('.carousel-item').length === 0
 		)
 			return
 
-		const offset = -(activeIndex - 1) * (250 + 32)
+		const offset = -(activeIndex - 1) * (320 + 32) // Using same dimensions as pricing carousel
 		track.style.transform = `translateX(${offset}px)`
 
 		items.forEach((item, i) => {
@@ -837,7 +844,7 @@ function initCarousel() {
 	function handleSwipe(deltaX: number) {
 		if (
 			!isActive ||
-			!carousel.classList.contains('carousel') ||
+			!container.classList.contains('carousel') ||
 			document.querySelectorAll('.carousel-item').length === 0
 		)
 			return
@@ -851,25 +858,25 @@ function initCarousel() {
 	}
 
 	const touchStartHandler = (e: TouchEvent) => {
-		if (!isActive || !carousel.classList.contains('carousel')) return
+		if (!isActive || !container.classList.contains('carousel')) return
 		startX = e.touches[0].clientX
 	}
 
 	const touchEndHandler = (e: TouchEvent) => {
-		if (!isActive || !carousel.classList.contains('carousel')) return
+		if (!isActive || !container.classList.contains('carousel')) return
 		const deltaX = e.changedTouches[0].clientX - startX
 		handleSwipe(deltaX)
 	}
 
 	// Mouse events
 	const mouseDownHandler = (e: MouseEvent) => {
-		if (!isActive || !carousel.classList.contains('carousel')) return
+		if (!isActive || !container.classList.contains('carousel')) return
 		isDragging = true
 		startX = e.clientX
 	}
 
 	const mouseUpHandler = (e: MouseEvent) => {
-		if (!isDragging || !isActive || !carousel.classList.contains('carousel')) return
+		if (!isDragging || !isActive || !container.classList.contains('carousel')) return
 		isDragging = false
 		const deltaX = e.clientX - startX
 		handleSwipe(deltaX)
@@ -882,18 +889,18 @@ function initCarousel() {
 	function addEventListeners() {
 		removeEventListeners()
 
-		if (!carousel.classList.contains('carousel')) return
+		if (!container.classList.contains('carousel')) return
 
-		carousel.addEventListener('touchstart', touchStartHandler, {passive: true})
-		carousel.addEventListener('touchend', touchEndHandler, {passive: true})
-		carousel.addEventListener('mousedown', mouseDownHandler)
-		carousel.addEventListener('mouseup', mouseUpHandler)
+		container.addEventListener('touchstart', touchStartHandler, {passive: true})
+		container.addEventListener('touchend', touchEndHandler, {passive: true})
+		container.addEventListener('mousedown', mouseDownHandler)
+		container.addEventListener('mouseup', mouseUpHandler)
 
 		eventListeners = [
-			{element: carousel, event: 'touchstart', handler: touchStartHandler},
-			{element: carousel, event: 'touchend', handler: touchEndHandler},
-			{element: carousel, event: 'mousedown', handler: mouseDownHandler},
-			{element: carousel, event: 'mouseup', handler: mouseUpHandler},
+			{element: container, event: 'touchstart', handler: touchStartHandler},
+			{element: container, event: 'touchend', handler: touchEndHandler},
+			{element: container, event: 'mousedown', handler: mouseDownHandler},
+			{element: container, event: 'mouseup', handler: mouseUpHandler},
 		]
 	}
 
@@ -909,4 +916,23 @@ function initCarousel() {
 	window.addEventListener('resize', resizeHandler, {passive: true})
 }
 
-setTimeout(initCarousel, 100)
+// Initialize carousel for Platform section
+setTimeout(() => {
+	initGenericCarousel({
+		trackSelector: '.platform__grid',
+		itemSelector: '.platform__card',
+		containerSelector: '.platform__content',
+		minWidth: 430,
+		maxWidth: 830,
+	})
+}, 200)
+// Initialize carousel for Pricing section
+setTimeout(() => {
+	initGenericCarousel({
+		trackSelector: '.pricing__plans',
+		itemSelector: '.pricing__plans--item',
+		containerSelector: '.pricing__content',
+		minWidth: 430,
+		maxWidth: 830,
+	})
+}, 200)
