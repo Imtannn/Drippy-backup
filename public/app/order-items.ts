@@ -36,14 +36,11 @@ export class OrderItems extends Element {
 		for (const [category] of store.selectedTemplates.entries()) {
 			try {
 				const screenshot = await this.#captureItemScreenshot(category)
-				console.log(`Generated screenshot for ${category}, length: ${screenshot.length}`)
 
 				// Update the signal to trigger reactive updates
 				const newCache = new Map(this.screenshotCache)
 				newCache.set(category, screenshot)
 				this.screenshotCache = newCache
-
-				console.log(`Cache updated for ${category}, cache size: ${this.screenshotCache.size}`)
 			} catch (error) {
 				console.warn(`Failed to generate screenshot for ${category}:`, error)
 			}
@@ -73,7 +70,6 @@ export class OrderItems extends Element {
 
 	#onShareClick = () => {
 		// copy current url to clipboard
-		console.log('Share my drip clicked')
 		navigator.clipboard.writeText(window.location.href)
 		alert('Link copied to clipboard')
 	}
@@ -83,8 +79,6 @@ export class OrderItems extends Element {
 	}
 
 	#captureItemScreenshot = async (category: TemplateCategory): Promise<string> => {
-		console.log('captureItemScreenshot for category:', category)
-
 		// Find the drippy-app element
 		const app = document.querySelector('drippy-app') as any
 		if (!app?.shadowRoot) return ''
@@ -99,38 +93,22 @@ export class OrderItems extends Element {
 
 		// Get all garment models (cloth items) - they're direct children of lume-scene
 		const clothModels = lumeScene.querySelectorAll('lume-gltf-model[data-cloth]')
-		console.log('found cloth models:', clothModels.length)
-
-		// Debug: log model IDs
-		clothModels.forEach((model: any, index: number) => {
-			console.log(`model ${index} ID:`, model.getAttribute('id'))
-		})
 
 		// Simple approach: hide all garments except the target category (no scaling)
 		const modelsToHide: any[] = []
-		console.log(`hiding models that don't start with "${category}-"`)
 
 		clothModels.forEach((model: any) => {
 			const modelId = model.getAttribute('id') || ''
 			const shouldKeep = modelId.startsWith(category + '-')
-			console.log(`model ${modelId}: ${shouldKeep ? 'KEEP' : 'HIDE'}`)
 
 			if (!shouldKeep) {
 				// Hide the Three.js object instead of CSS display
-				console.log(`hiding model: ${modelId}`)
 				if (model.three) {
-					console.log(`setting model.three.visible = false for ${modelId}`)
 					model.three.visible = false
 					modelsToHide.push(model)
-				} else {
-					console.log(`no model.three found for ${modelId}`)
 				}
-			} else {
-				console.log(`keeping model: ${modelId} at original scale`)
 			}
 		})
-
-		console.log(`total models to hide: ${modelsToHide.length}`)
 
 		// Hide scene and other elements
 		const otherModelsToHide: any[] = []
@@ -139,55 +117,10 @@ export class OrderItems extends Element {
 		const drippyScene = scene as any
 
 		if (drippyScene && drippyScene.avatarModel) {
-			console.log('🔍 EXTENSIVE AVATAR MODEL DEBUG:')
-			console.log('avatarModel type:', typeof drippyScene.avatarModel)
-			console.log('avatarModel constructor:', drippyScene.avatarModel.constructor?.name)
-			console.log('avatarModel properties:', Object.getOwnPropertyNames(drippyScene.avatarModel))
-
-			// Check if it has three property
-			if (drippyScene.avatarModel.three) {
-				console.log('📊 avatarModel.three analysis:')
-				console.log('  - three type:', typeof drippyScene.avatarModel.three)
-				console.log('  - three constructor:', drippyScene.avatarModel.three.constructor?.name)
-				console.log('  - children count:', drippyScene.avatarModel.three.children?.length)
-				console.log('  - visible:', drippyScene.avatarModel.three.visible)
-
-				// Analyze children
-				if (drippyScene.avatarModel.three.children) {
-					drippyScene.avatarModel.three.children.forEach((child: any, index: number) => {
-						console.log(`  - Child ${index}:`, {
-							name: child.name,
-							type: child.constructor?.name,
-							visible: child.visible,
-							childrenCount: child.children?.length || 0,
-						})
-
-						// Look deeper into children for garments
-						if (child.children && child.children.length > 0) {
-							child.children.forEach((subChild: any, subIndex: number) => {
-								const hasGarmentName =
-									subChild.name &&
-									(subChild.name.toLowerCase().includes('shirt') ||
-										subChild.name.toLowerCase().includes('pants') ||
-										subChild.name.toLowerCase().includes('accessories') ||
-										subChild.name.toLowerCase().includes(category.toLowerCase()))
-								console.log(`    - SubChild ${subIndex}:`, {
-									name: subChild.name,
-									type: subChild.constructor?.name,
-									hasGarmentName,
-									visible: subChild.visible,
-								})
-							})
-						}
-					})
-				}
-			}
-
 			// Selectively hide only avatar body (not garments)
-			console.log('🎯 SELECTIVELY HIDING AVATAR BODY ONLY')
 			let hiddenAvatarParts: any[] = []
 
-			drippyScene.avatarModel.three.children.forEach((child: any, index: number) => {
+			drippyScene.avatarModel.three.children.forEach((child: any) => {
 				const childName = child.name || ''
 				const isGarment =
 					childName.includes('LUME-GLTF-MODEL#') &&
@@ -195,15 +128,10 @@ export class OrderItems extends Element {
 						childName.toLowerCase().includes('pants') ||
 						childName.toLowerCase().includes('accessories'))
 
-				console.log(`Child ${index}: "${childName}", isGarment: ${isGarment}`)
-
 				if (!isGarment) {
 					// This is avatar body - hide it
-					console.log(`hiding avatar body part: ${childName}`)
 					child.visible = false
 					hiddenAvatarParts.push(child)
-				} else {
-					console.log(`keeping garment visible: ${childName}`)
 				}
 			})
 
@@ -211,34 +139,27 @@ export class OrderItems extends Element {
 				otherModelsToHide.push({restore: 'avatarParts', parts: hiddenAvatarParts})
 				// Wait for the change to take effect
 				await new Promise(resolve => requestAnimationFrame(resolve))
-				console.log(`waited one frame after hiding ${hiddenAvatarParts.length} avatar parts`)
 			}
-		} else {
-			console.log('avatarModel not found on drippy-scene')
 		}
 
 		// Hide scene/background
 		const sceneModel = lumeScene.querySelector('#scene')
 		if (sceneModel?.three) {
-			console.log('hiding scene')
 			sceneModel.three.visible = false
 			otherModelsToHide.push(sceneModel)
 		}
 
 		// Hide shoes and any other non-cloth models
 		const allOtherModels = lumeScene.querySelectorAll('lume-gltf-model:not([data-cloth])')
-		console.log('found other models (non-cloth):', allOtherModels.length)
 		allOtherModels.forEach((model: any) => {
 			const modelId = model.getAttribute('id') || 'unnamed'
 			if (model.three && modelId !== 'avatar' && modelId !== 'scene') {
-				console.log(`hiding other model: ${modelId}`)
 				model.three.visible = false
 				otherModelsToHide.push(model)
 			}
 		})
 
 		// Create a new lume-perspective-camera for screenshot
-		console.log('🎥 Creating separate lume-perspective-camera for screenshot')
 		const screenshotCamera = document.createElement('lume-perspective-camera')
 
 		// Set camera attributes based on garment type - using smaller values since Lume transforms them
@@ -246,17 +167,14 @@ export class OrderItems extends Element {
 		screenshotCamera.setAttribute('near', '0.1') // Near clipping
 		screenshotCamera.setAttribute('far', '1000') // Far clipping
 
-		if (category === 'Shirt') {
-			screenshotCamera.setAttribute('position', '0 -1.1 0.8') // Close to chest/torso area
+		if (category === 'Shirt' || category === 'Dress') {
+			screenshotCamera.setAttribute('position', '0 -1.1 0.5') // Closer to chest/torso area
 			screenshotCamera.setAttribute('look-at', '0 -0.3 0') // Look at torso area
-		} else if (category === 'Pants') {
-			screenshotCamera.setAttribute('position', '0 -0.6 0.8') // Close to legs area
+		} else if (category === 'Pants' || category === 'Skirt') {
+			screenshotCamera.setAttribute('position', '0 -0.6 0.5') // Closer to legs area
 			screenshotCamera.setAttribute('look-at', '0 -0.8 0') // Look at legs area
-		} else if (category === 'Accessories') {
-			screenshotCamera.setAttribute('position', '0 0.3 0.6') // Close to head/neck area
-			screenshotCamera.setAttribute('look-at', '0 0.3 0') // Look at head area
 		} else {
-			screenshotCamera.setAttribute('position', '0 0 1') // Default position
+			screenshotCamera.setAttribute('position', '0 0 0.7') // Closer default position
 			screenshotCamera.setAttribute('look-at', '0 0 0') // Look at center
 		}
 
@@ -264,77 +182,31 @@ export class OrderItems extends Element {
 		lumeScene.appendChild(screenshotCamera)
 		screenshotCamera.setAttribute('active', 'true')
 
-		console.log(`📍 Screenshot camera positioned for ${category}`)
-
 		// Wait for camera to be positioned and activated
 		await new Promise(resolve => requestAnimationFrame(resolve))
-		console.log('waited one frame for screenshot camera to activate')
 
 		// Directly manipulate the Three.js camera object to override Lume transforms
 		const threeCamera = (screenshotCamera as any).three
 		if (threeCamera) {
-			console.log('🎯 Directly setting Three.js camera position')
-			console.log('  - before position:', threeCamera.position)
-
 			// Set position directly on Three.js camera - adjust Y position to frame garments properly
-			console.log(`Positioning camera for ${category}`)
-			if (category === 'Shirt') {
-				threeCamera.position.set(0, 1.2, 3) // Move camera up more to show shirt lower in frame
-				threeCamera.lookAt(0, 0, 0) // Look at center
-			} else if (category === 'Pants') {
-				threeCamera.position.set(0, 0.7, 3) // Move camera up to show pants lower in frame
-				threeCamera.lookAt(0, -0.3, 0) // Look at lower center
-			} else if (category === 'Accessories') {
-				threeCamera.position.set(0, 1.1, 3) // Move camera up to show accessories lower in frame
-				threeCamera.lookAt(0, 0.8, 0) // Look at upper center
+			if (category === 'Shirt' || category === 'Dress') {
+				threeCamera.position.set(0, 1.2, 1) // Much closer for bigger appearance
+				threeCamera.lookAt(0, 0, 0)
+			} else if (category === 'Pants' || category === 'Skirt') {
+				threeCamera.position.set(0, 0.7, 1) // Much closer for bigger appearance
+				threeCamera.lookAt(0, -0.3, 0)
 			} else {
-				threeCamera.position.set(0, 0.4, 4) // Move camera up for default view
+				threeCamera.position.set(0, 0.4, 1) // Closer for default view
 				threeCamera.lookAt(0, 0, 0) // Look at center
 			}
 
 			// Reset rotation to look straight ahead
-			console.log('  - rotation before reset:', threeCamera.rotation)
 			threeCamera.rotation.set(0, 0, 0) // Reset rotation to look straight
 			threeCamera.updateMatrix()
 			threeCamera.updateMatrixWorld(true)
-			console.log('  - rotation after reset:', threeCamera.rotation)
-
-			console.log('  - after position:', threeCamera.position)
-			console.log('  - camera rotation:', threeCamera.rotation)
 
 			// Wait another frame for the direct position change
 			await new Promise(resolve => requestAnimationFrame(resolve))
-			console.log('waited one frame after direct positioning')
-
-			// Debug: Check what's actually in the scene for the camera to see
-			console.log('🔍 Scene content analysis:')
-			const threeScene = lumeScene.three
-			if (threeScene && threeScene.children) {
-				console.log('  - scene children count:', threeScene.children.length)
-				threeScene.children.forEach((child: any, i: number) => {
-					console.log(`    - Scene child ${i}:`, {
-						name: child.name,
-						type: child.constructor?.name,
-						visible: child.visible,
-						position: child.position,
-						childrenCount: child.children?.length || 0,
-					})
-
-					// Look at children of each scene child
-					if (child.children && child.children.length > 0) {
-						child.children.forEach((subChild: any, j: number) => {
-							console.log(`      - SubChild ${j}:`, {
-								name: subChild.name,
-								type: subChild.constructor?.name,
-								visible: subChild.visible,
-								position: subChild.position,
-							})
-						})
-					}
-				})
-			}
-		} else {
-			console.log('❌ No three camera object found')
 		}
 
 		// Add delay to ensure 3D scene is rendered after scaling
@@ -343,34 +215,17 @@ export class OrderItems extends Element {
 		// Get canvas and renderer
 		const canvas = lumeScene.shadowRoot.querySelector('canvas')
 		if (!canvas) {
-			console.log('ERROR: Canvas not found')
 			return ''
 		}
-
-		console.log('Canvas found:', canvas.width, 'x', canvas.height)
 
 		const renderer = lumeScene.glRenderer || lumeScene._glRenderer || lumeScene.renderer
 		let screenshot = ''
 
 		if (renderer) {
-			console.log('Renderer found:', renderer.constructor.name)
 			const threeScene = lumeScene.three || renderer.scene
 			const threeCamera = (screenshotCamera as any).three || lumeScene.camera?.three || lumeScene.three?.camera
 
-			console.log('📊 Renderer debug:')
-			console.log('  - threeScene:', !!threeScene)
-			console.log('  - screenshot camera three object:', !!(screenshotCamera as any).three)
-			console.log('  - fallback camera:', !!lumeScene.camera?.three)
-			console.log('  - using camera:', threeCamera?.constructor?.name)
-
 			if (threeScene && threeCamera) {
-				console.log('Rendering with Three.js scene and camera')
-
-				// Debug camera position before rendering
-				console.log('  - camera position:', threeCamera.position)
-				console.log('  - camera rotation:', threeCamera.rotation)
-				console.log('  - scene children count:', threeScene.children?.length)
-
 				// Set a clean light background for product shots
 				const originalBackground = renderer.getClearColor(new THREE.Color())
 				const originalAlpha = renderer.getClearAlpha()
@@ -381,70 +236,36 @@ export class OrderItems extends Element {
 
 				// Restore original background
 				renderer.setClearColor(originalBackground, originalAlpha)
-			} else {
-				console.log('Missing Three.js scene or camera')
-				console.log('  - threeScene exists:', !!threeScene)
-				console.log('  - threeCamera exists:', !!threeCamera)
 			}
-		} else {
-			console.log('No renderer found, using canvas directly')
 		}
 
 		if (!screenshot) {
-			console.log('Using canvas toDataURL fallback')
 			screenshot = canvas.toDataURL('image/png')
 		}
-
-		console.log('Screenshot length:', screenshot.length)
-		console.log('Screenshot preview:', screenshot.substring(0, 50))
-
-		// Check if screenshot is just empty/transparent
-		if (
-			screenshot ===
-			'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
-		) {
-			console.log('WARNING: Screenshot appears to be empty/transparent')
-		}
-
-		// Test if the image data is valid by creating a test image
-		const testImg = new Image()
-		testImg.onload = () =>
-			console.log(`✅ Screenshot for ${category} is a valid image: ${testImg.width}x${testImg.height}`)
-		testImg.onerror = () => console.log(`❌ Screenshot for ${category} is corrupted or invalid`)
-		testImg.src = screenshot
 
 		// Restore hidden models
 		modelsToHide.forEach(model => {
 			if (model.three) {
-				console.log(`restoring model.three.visible = true for ${model.getAttribute('id')}`)
 				model.three.visible = true
 			}
 		})
 
-		// No scaling restoration needed anymore
-
 		// Restore avatar and scene
 		otherModelsToHide.forEach(model => {
 			if (model.restore === 'avatarParts') {
-				console.log('restoring avatar parts visibility')
 				model.parts.forEach((part: any) => {
-					console.log(`restoring avatar part: ${part.name}`)
 					part.visible = true
 				})
 			} else {
-				const modelId = model.getAttribute('id')
 				if (model.three) {
-					console.log(`restoring ${modelId}`)
 					model.three.visible = true
 				}
 			}
 		})
 
 		// Remove screenshot camera and revert to main camera
-		console.log('🎥 Removing screenshot camera and reverting to main camera')
 		screenshotCamera.removeAttribute('active')
 		lumeScene.removeChild(screenshotCamera)
-		console.log('screenshot camera removed and main camera restored')
 
 		return screenshot
 	}
@@ -501,8 +322,10 @@ export class OrderItems extends Element {
 									<div class="item-image">
 										<img
 											src=${() => {
+												if (category === 'Accessories') {
+													return template.thumb
+												}
 												const cached = this.screenshotCache.get(category)
-												console.log(`Template render for ${category}: cached=${!!cached}, fallback=${template.thumb}`)
 												return cached || template.thumb
 											}}
 											alt=${template.name}
