@@ -374,10 +374,19 @@ export class BottomSheet extends Element {
 		}
 
 		.sheet-content {
+			/* Keep scroll behavior with flex container */
 			padding: 0;
 			flex: 1 1 auto;
-			min-height: 0; /* allow overflow container to shrink */
+			min-height: 0;
 			overflow-y: auto;
+			/* Hide scrollbar for Webkit browsers */
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+			border-radius: 1rem;
+		}
+
+		.sheet-content::-webkit-scrollbar {
+			display: none;
 		}
 
 		/* Desktop styles: floating panel on the left, always full viewport height */
@@ -419,20 +428,6 @@ export class BottomSheet extends Element {
 			}
 
 			.drag-handle {
-				display: none;
-			}
-
-			.sheet-content {
-				/* Keep scroll behavior with flex container */
-				flex: 1 1 auto;
-				min-height: 0;
-				overflow-y: auto;
-				/* Hide scrollbar for Webkit browsers */
-				scrollbar-width: none;
-				-ms-overflow-style: none;
-			}
-
-			.sheet-content::-webkit-scrollbar {
 				display: none;
 			}
 		}

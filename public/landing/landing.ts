@@ -6,7 +6,6 @@ import '../routes.js' // track page visits
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
-import '../routes.js' // track page visits
 
 // Show video loading initially
 function showVideoLoading() {

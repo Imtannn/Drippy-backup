@@ -34,6 +34,13 @@ class TextureManager {
 
 	/**
 	 * Create a base THREE.js texture from URL without any scaling applied
+	 *
+	 * TODO: Make this abortable, and on abort set src to empty string to stop
+	 * loading. Then, instead of simply returning on isCanceled in
+	 * #applyFabricToThreeObject while previous images are still loading, we can
+	 * abort them for better performance.
+	 * For example if the user clicks three materials, we don't want all three
+	 * of them to load fully, just the last one.
 	 */
 	private async createBaseTexture(url: string): Promise<CachedTexture | null> {
 		if (!url) return null

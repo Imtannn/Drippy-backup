@@ -1,5 +1,6 @@
-import {Element, element, html, Show, signal} from 'lume'
+import {Element, element, html, signal} from 'lume'
 import {currentUser} from './store.js'
+import '../elements/logic/show-when.js'
 
 @element
 export class AppGuard extends Element {
@@ -10,6 +11,7 @@ export class AppGuard extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
+			// FIXME keep code maintainable, unduplicate this auth logic (same as in home-page.ts and onboarding-flow.ts)
 			const user = currentUser()
 			// If undefined, means the user is still loading
 			if (user === undefined) return
@@ -26,8 +28,6 @@ export class AppGuard extends Element {
 	}
 
 	template = () => html`
-		<${Show} when=${() => this.isUserLoggedIn}>
-			<slot></slot>
-		</>
+		<show-when condition=${() => this.isUserLoggedIn} content=${() => html` <slot></slot> `}></show-when>
 	`
 }

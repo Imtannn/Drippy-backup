@@ -9,3 +9,5 @@ export const ReactiveVar = global.Package['reactive-var'].ReactiveVar
 export const Blaze = global.Package.blaze.Blaze
 export const Template = global.Package.templating.Template
 export const Accounts = global.Package['accounts-base'].Accounts
+export const check = global.Package.check.check
+export const Match = global.Package.check.Match

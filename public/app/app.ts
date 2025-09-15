@@ -83,7 +83,7 @@ export class DrippyApp extends Element {
 				store.view !== 'scene' &&
 				store.selectedAvatar &&
 				store.selectedSpace &&
-				store.isDrippySceneLoading.length > 0
+				store.isDrippySceneLoading.size > 0
 			) {
 				this.showLoadingCover = true
 			} else {
@@ -109,59 +109,60 @@ export class DrippyApp extends Element {
 						<show-when
 							condition=${() => store.view === 'avatar'}
 							content=${() => html`<avatar-selection></avatar-selection>`}
-						>
-						</show-when>
+						></show-when>
 
 						<show-when
 							condition=${() => store.view === 'scene'}
 							content=${() => html`<spaces-selection></spaces-selection>`}
-						>
-						</show-when>
+						></show-when>
 
 						<show-when
 							condition=${() => store.view === 'template'}
 							content=${() => html`<template-view></template-view>`}
-						>
-						</show-when>
+						></show-when>
 
 						<show-when
 							condition=${() => store.view === 'blocks'}
 							content=${() => html`<blocks-selection></blocks-selection>`}
-						>
-						</show-when>
+						></show-when>
 
 						<show-when
 							condition=${() => store.view === 'preview'}
 							content=${() => html`<outfit-preview></outfit-preview>`}
-						>
-						</show-when>
-						<show-when condition=${() => store.view === 'share'} content=${() => html`<share-view></share-view>`}>
-						</show-when>
+						></show-when>
+
+						<show-when
+							condition=${() => store.view === 'share'}
+							content=${() => html`<share-view></share-view>`}
+						></show-when>
 
 						<show-when
 							condition=${() => store.view === 'order-items'}
 							content=${() => html`<order-items></order-items>`}
-						>
-						</show-when>
+						></show-when>
 
-						<show-when condition=${() => store.view === 'order-size'} content=${() => html`<order-size></order-size>`}>
-						</show-when>
+						<show-when
+							condition=${() => store.view === 'order-size'}
+							content=${() => html`<order-size></order-size>`}
+						></show-when>
 
-						<show-when condition=${() => store.view === 'order'} content=${() => html`<order-view></order-view>`}>
-						</show-when>
+						<show-when
+							condition=${() => store.view === 'order'}
+							content=${() => html`<order-view></order-view>`}
+						></show-when>
 
 						<show-when
 							condition=${() => store.view === 'custom-measurement'}
 							content=${() => html`<custom-measurement></custom-measurement>`}
-						>
-						</show-when>
+						></show-when>
 
-						<show-when condition=${() => store.view === 'success'} content=${() => html`<success-view></success-view>`}>
-						</show-when>
+						<show-when
+							condition=${() => store.view === 'success'}
+							content=${() => html`<success-view></success-view>`}
+						></show-when>
 					</div>
 				`}
-			>
-			</show-when>
+			></show-when>
 		</app-guard>
 	`
 

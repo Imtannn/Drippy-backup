@@ -79,6 +79,10 @@ export class SuccessView extends Element {
 		.success-container {
 			padding: 20px;
 			padding-top: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
 		}
 
 		.panel-content {

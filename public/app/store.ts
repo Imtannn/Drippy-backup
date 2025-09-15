@@ -6,13 +6,45 @@ import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {toSolidSignal} from '../utils.js'
 import {blockManager} from './block-manager.js'
+import {untrack} from 'solid-js'
+import {Visits, type Visit} from '../imports/collections/Visits.js'
+
+export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
+export const username = () => currentUser()?.username ?? ''
+export const dateOfBirth = () => currentUser()?.profile?.dateOfBirth ?? ''
+export const isAdmin = () => !!currentUser()?.profile?.isAdmin
+
+export const visits = toSolidSignal(() => Visits.find({}).fetch() as readonly Visit[])
+export const usersCount = toSolidSignal(() => Counts.get('users'))
 
 export const store = createMutable({
+	// convenience properties for signals
+	get user() {
+		return currentUser()
+	},
+	get username() {
+		return username()
+	},
+	get dateOfBirth() {
+		return dateOfBirth()
+	},
+	get isAdmin() {
+		return isAdmin()
+	},
+
+	get visits() {
+		return visits()
+	},
+	get usersCount() {
+		return usersCount()
+	},
+
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
 	tempSelectedAvatar: null as string | null,
 	selectedAvatar: null as string | null,
 	selectedSpace: null as Space | null,
+	selectedAnimation: 'none' as 'none' | 'walk' | 'dance',
 	isPreview: false,
 	selectedTemplates: new Map<TemplateCategory, Template>(),
 	selectedBlocks: new Map<TemplateCategory, Map<BlockCategory, Block>>(),
@@ -20,14 +52,22 @@ export const store = createMutable({
 	customMeasurement: null as CustomMeasurement | null,
 	isShowAvatar: true,
 	isShowScene: true,
-	isDrippySceneLoading: [] as string[],
-	loadingBlocks: [] as string[],
-	loadingMaterials: [] as string[],
+	isDrippySceneLoading: new Set<symbol>(),
+	loadingBlocks: new Set<symbol>(),
+	loadingMaterials: new Set<symbol>(),
 
 	// Order-related state
 	selectedOrderItems: new Map<TemplateCategory, boolean>(),
 	// Size-specific quantities: Map<TemplateCategory, Map<Size, quantity>>
 	orderSizeQuantities: new Map<TemplateCategory, Map<string, number>>(),
+	// For retail mode: overall item quantities (not per size)
+	retailItemQuantities: new Map<TemplateCategory, number>(),
+	// For retail mode: selected size per category
+	retailItemSizes: new Map<TemplateCategory, string>(),
+	// For retail mode: custom measurements per category
+	retailItemCustomMeasurements: new Map<TemplateCategory, CustomMeasurement>(),
+	// Track which category is currently being customized
+	currentCustomMeasurementCategory: null as TemplateCategory | null,
 	order: {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -309,6 +349,55 @@ export const store = createMutable({
 		return this.getOrderTotalQuantity() * 125
 	},
 
+	// Retail mode methods (for non-wholesale)
+	setOrderSelectedSize(size: string) {
+		this.order.selectedSize = size
+	},
+
+	setRetailItemQuantity(category: TemplateCategory, quantity: number) {
+		const newQuantities = new Map(this.retailItemQuantities)
+		newQuantities.set(category, quantity)
+		this.retailItemQuantities = newQuantities
+	},
+
+	getRetailItemQuantity(category: TemplateCategory): number {
+		return this.retailItemQuantities.get(category) || 1 // Default to 1 for retail
+	},
+
+	setRetailItemSize(category: TemplateCategory, size: string) {
+		const newSizes = new Map(this.retailItemSizes)
+		newSizes.set(category, size)
+		this.retailItemSizes = newSizes
+	},
+
+	getRetailItemSize(category: TemplateCategory): string {
+		return this.retailItemSizes.get(category) || '34 (XS)' // Default size for retail
+	},
+
+	setRetailItemCustomMeasurement(category: TemplateCategory, measurement: CustomMeasurement) {
+		const newMeasurements = new Map(this.retailItemCustomMeasurements)
+		newMeasurements.set(category, measurement)
+		this.retailItemCustomMeasurements = newMeasurements
+	},
+
+	getRetailItemCustomMeasurement(category: TemplateCategory): CustomMeasurement | null {
+		return this.retailItemCustomMeasurements.get(category) || null
+	},
+
+	hasRetailItemCustomMeasurement(category: TemplateCategory): boolean {
+		return this.retailItemCustomMeasurements.has(category)
+	},
+
+	getRetailOrderTotalCost(): number {
+		let total = 0
+		for (const [category] of this.selectedOrderItems.entries()) {
+			if (this.selectedOrderItems.get(category)) {
+				total += this.getRetailItemQuantity(category) * 125
+			}
+		}
+		return total
+	},
+
 	toggleOrderItem(category: TemplateCategory) {
 		const newSelectedItems = new Map(this.selectedOrderItems)
 		const currentlySelected = newSelectedItems.get(category) || false
@@ -339,6 +428,9 @@ export const store = createMutable({
 		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
 		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
+		this.retailItemQuantities = new Map<TemplateCategory, number>()
+		this.retailItemSizes = new Map<TemplateCategory, string>()
+		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {
@@ -372,6 +464,9 @@ export const store = createMutable({
 		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
 		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
+		this.retailItemQuantities = new Map<TemplateCategory, number>()
+		this.retailItemSizes = new Map<TemplateCategory, string>()
+		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {
@@ -396,12 +491,42 @@ export const store = createMutable({
 		} as OrderState
 	},
 
-	set addIsDrippySceneLoading(key: string) {
-		this.isDrippySceneLoading = [...this.isDrippySceneLoading, key]
+	addIsDrippySceneLoading(key: symbol) {
+		untrack(() => {
+			this.isDrippySceneLoading.add(key)
+			this.isDrippySceneLoading = new Set(this.isDrippySceneLoading) // trigger reactivity
+		})
 	},
-	set removeIsDrippySceneLoading(key: string) {
-		this.isDrippySceneLoading = this.isDrippySceneLoading.filter(k => k !== key)
+	removeIsDrippySceneLoading(key: symbol) {
+		untrack(() => {
+			this.isDrippySceneLoading.delete(key)
+			this.isDrippySceneLoading = new Set(this.isDrippySceneLoading) // trigger reactivity
+		})
+	},
+
+	addLoadingBlock(key: symbol) {
+		untrack(() => {
+			this.loadingBlocks.add(key)
+			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+		})
+	},
+	removeLoadingBlock(key: symbol) {
+		untrack(() => {
+			this.loadingBlocks.delete(key)
+			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+		})
+	},
+
+	addLoadingMaterial(key: symbol) {
+		untrack(() => {
+			this.loadingMaterials.add(key)
+			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+		})
+	},
+	removeLoadingMaterial(key: symbol) {
+		untrack(() => {
+			this.loadingMaterials.delete(key)
+			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+		})
 	},
 })
-
-export const currentUser = toSolidSignal(() => Meteor.user())

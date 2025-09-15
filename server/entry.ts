@@ -9,7 +9,7 @@ import './imports/email-service.js'
 import './imports/load-env.js'
 import './imports/oauth-config.js'
 import './imports/order-service.js'
-import './imports/user-service.js'
+import {Visits} from '../imports/collections/Visits.js'
 
 // @ts-expect-error missing type (TODO update away from @types/meteor? Ask
 // Meteor's AI "How to set up TypeScript", there's some good docs.)
@@ -207,6 +207,7 @@ function permRedirect(res: ServerResponse, newPath: string) {
 // TODO define admins.
 const admins = [
 	'joe@lume.io',
+	'trusktr@gmail.com',
 	'tan@drippy3d.com',
 	'ruby@drippy3d.com',
 	'dinhthinh.ng@gmail.com',
@@ -214,29 +215,78 @@ const admins = [
 	'thidieuanhle@gmail.com',
 ]
 
+// Workaround for incorrect function signature in type definition
 Accounts.findUserByEmailTmp = Accounts.findUserByEmail as any
 
 // If a user signs up with a known admin email, make them an admin.
 Accounts.onCreateUser((options, user) => {
-	const isAdmin = user.emails?.some(email => admins.includes(email.address.toLowerCase()))
+	const googleEmail = user.services?.google?.email.toLowerCase()
+
+	if (!user.emails) user.emails = []
+
+	// If the user signed up using Google OAuth, make sure their Google email is
+	// in the emails array too. Meteor should just do this automatically,
+	// tracking issue: https://github.com/meteor/meteor/issues/13929
+	if (googleEmail && !user.emails.map(e => e.address.toLowerCase()).includes(googleEmail))
+		user.emails.push({address: googleEmail, verified: true})
+
+	const adminEmails = admins.map(email => email.toLowerCase())
+	const userEmails = (user.emails || []).map(email => email.address.toLowerCase())
+	const isAdmin = userEmails.some(email => adminEmails.includes(email))
 
 	user.profile = {...user.profile, ...options.profile, isAdmin}
 
 	return user
 })
 
-const promises = [] as Promise<any>[]
+// Migration: ensure all existing users that signed up with Google have their emails in the correct spot.
+// TODO remove this after a while. Handle migrations better later.
+const users = await Meteor.users.find({}).fetchAsync()
+const emailMigrationPromises: Promise<unknown>[] = []
+for (const user of users) {
+	const googleEmail = user.services?.google?.email.toLowerCase()
 
-// Make all existing users with a known admin email admins.
-for (const email of admins) {
-	promises.push(
-		Accounts.findUserByEmailTmp(email).then(user => {
-			if (user) return Meteor.users.updateAsync({_id: user._id}, {$set: {profile: {...user.profile, isAdmin: true}}})
+	if (!(googleEmail && !user.emails?.map(e => e.address.toLowerCase()).includes(googleEmail))) continue
+
+	console.log('Migrating user to add Google email to emails[]:', user._id, googleEmail)
+	emailMigrationPromises.push(
+		Meteor.users.updateAsync(user._id, {
+			$set: {emails: [...(user.emails || []), {address: googleEmail, verified: true}]},
 		}),
 	)
 }
 
-await Promise.all(promises)
+await Promise.all(emailMigrationPromises)
+
+const makeAdminPromises = [] as Promise<unknown>[]
+
+// Make all existing users with a known admin email admins.
+for (const email of admins) {
+	makeAdminPromises.push(
+		Accounts.findUserByEmailTmp(email).then((user: Meteor.User) => {
+			if (user) return Meteor.users.updateAsync(user._id, {$set: {profile: {...user.profile, isAdmin: true}}})
+		}),
+	)
+}
+
+// Migration: ensure previous Visits documents have their host fields renamed to origin.
+// TODO remove this after a while. Handle migrations better later.
+const visits = await Visits.find({}).fetchAsync()
+const visitsMigrationPromises: Promise<unknown>[] = []
+for (const visit of visits) {
+	if (!((visit as any).host && !visit.origin)) continue
+
+	const {_id, host} = visit as any
+	console.log('Migrating visit to rename host to origin:', host)
+	visitsMigrationPromises.push(
+		Visits.updateAsync(_id, {
+			$set: {origin: (host.includes('localhost') ? 'http://' : 'https://') + host},
+			$unset: {host: ''},
+		}),
+	)
+}
+
+await Promise.all([...makeAdminPromises, ...visitsMigrationPromises])
 
 // TODO configure default field selector.
 // Accounts.config({ defaultFieldSelector: { includeThisOne: 1, excludeThisOne: 0 } })

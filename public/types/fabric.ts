@@ -27,5 +27,9 @@ export type Fabric = {
 		| 'Pleated Fabric'
 		| 'Seersucker Fabric'
 		| 'Silk'
+		| 'Sequin'
+		| 'Fur'
+		| 'Abtract'
+		| 'Twisted'
 	templateCategories?: string[]
 }

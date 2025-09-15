@@ -30,14 +30,15 @@
 			three: 'https://cdn.jsdelivr.net/npm/three@0.174.0/src/Three.js',
 			'three/': 'https://cdn.jsdelivr.net/npm/three@0.174.0/',
 
-			'meteor/meteor': '/meteor-packages.js',
-			'meteor/tracker': '/meteor-packages.js',
-			'meteor/blaze': '/meteor-packages.js',
-			'meteor/templating': '/meteor-packages.js',
-			'meteor/mongo': '/meteor-packages.js',
-			'meteor/session': '/meteor-packages.js',
-			'meteor/reactive-var': '/meteor-packages.js',
 			'meteor/accounts-base': '/meteor-packages.js',
+			'meteor/blaze': '/meteor-packages.js',
+			'meteor/check': '/meteor-packages.js',
+			'meteor/meteor': '/meteor-packages.js',
+			'meteor/mongo': '/meteor-packages.js',
+			'meteor/reactive-var': '/meteor-packages.js',
+			'meteor/session': '/meteor-packages.js',
+			'meteor/templating': '/meteor-packages.js',
+			'meteor/tracker': '/meteor-packages.js',
 		},
 	}
 

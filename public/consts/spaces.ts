@@ -20,8 +20,8 @@ export const spaces: Space[] = [
 		isWholesale: true,
 	},
 	{
-		name: 'Baroudeuses',
-		slug: 'baroudeuses',
+		name: 'YALLAH',
+		slug: 'YALLAH',
 		description: 'Baroudeuses',
 		logo: '',
 		sceneThumbnail:
@@ -34,6 +34,54 @@ export const spaces: Space[] = [
 		gender: 'female',
 		garmentsCount: blocks.baroudeuses?.length ?? 0,
 		collection: 'baroudeuses',
+		isWholesale: false,
+	},
+	{
+		name: 'Movement',
+		slug: 'movement',
+		description: 'Haruki',
+		logo: '',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/movement/scene-thumbnail.jpeg',
+		scene: '',
+		includedModelFiles: [],
+		gender: 'female',
+		garmentsCount: blocks.haruki?.length ?? 0,
+		collection: 'haruki',
+		isWholesale: false,
+	},
+	{
+		name: 'Essence of her',
+		slug: 'essence-of-her',
+		description: 'Vaishnavi',
+		logo: '',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/naishnavi/scene-thumbnail.png',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/naishnavi/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/naishnavi/extras/shoes.glb',
+		],
+		gender: 'female',
+		garmentsCount: blocks.vaishnavi?.length ?? 0,
+		collection: 'vaishnavi',
+		isWholesale: false,
+	},
+	{
+		name: 'Shadow Grace',
+		slug: 'shadow-grace',
+		description: 'Lost Cause',
+		logo: '',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/lost-cause/scene-thumbnail.png',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/lost-cause/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/lost-cause/extras/shoes.glb',
+		],
+		gender: 'female',
+		garmentsCount: blocks.lostCause?.length ?? 0,
+		collection: 'lostCause',
 		isWholesale: false,
 	},
 ]

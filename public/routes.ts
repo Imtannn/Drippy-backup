@@ -12,7 +12,22 @@ export const appTitle = () => _appTitle.get()
 // visits to the page.
 
 const _url = new ReactiveVar(new URL(location.href))
+
 export const url = () => _url.get()
+export const pathname = () => url().pathname
+export const searchParams = () => url().searchParams
+export const host = () => url().host
+export const origin = () => url().origin
+export const protocol = () => url().protocol
+export const href = () => url().href
+export const search = () => url().search
+export const hash = () => url().hash
+export const port = () => url().port
+export const hostname = () => url().hostname
+export const username = () => url().username
+export const password = () => url().password
+
+export const hrefMinusOrigin = () => url().href.replace(url().origin, '')
 
 window.addEventListener('popstate', () => _url.set(new URL(location.href)))
 
@@ -34,8 +49,8 @@ history.replaceState = History.prototype.replaceState = function (...args) {
 // can count unique visits.
 
 interface Visited {
-	[host: string]: {
-		[pathname: string]: boolean
+	[origin: string]: {
+		[route: string]: boolean
 	}
 }
 
@@ -50,15 +65,9 @@ if (!visited()) setVisited({})
 effect(() => {
 	url() // re-run on route change
 
-	if (visited()[location.host]?.[location.pathname]) return
+	if (visited()[origin()]?.[hrefMinusOrigin()]) return
 
-	setVisited({
-		...visited(),
-		[location.host]: {
-			...(visited()[location.host] ?? {}),
-			[location.pathname]: true,
-		},
-	})
+	setVisited({...visited(), [origin()]: {...(visited()[origin()] ?? {}), [hrefMinusOrigin()]: true}})
 
-	Meteor.call('visits.increment', location.href)
+	Meteor.call('visits.increment', href())
 })

@@ -53,12 +53,12 @@
 	</head>
 	<body>
 		<div class='header'>
-			<h1>📦 New Order Received!</h1>
+			<h1>📦 New {{#if isRetail}}Retail{{/if}}{{#if isWholesale}}Wholesale{{/if}} Order!</h1>
 			<p>Order #{{orderId}}</p>
 		</div>
 
 		<div class='content'>
-			<p>We have an order from {{userEmail}}</p>
+			<p>We have a {{#if isRetail}}retail{{/if}}{{#if isWholesale}}wholesale{{/if}} order from {{userEmail}}</p>
 
 			<div class='order-info'>
 				<h3>📦 Order Details</h3>
@@ -72,11 +72,33 @@
 						<div>
 							<strong>{{name}}</strong><br />
 							<small>{{description}}</small><br />
-							{{#if sizes}}
-								{{#each sizes}}
-									<small style="margin-left: 16px;">Size {{size}}: {{quantity}} pcs @ ${{price}}</small><br />
-								{{/each}}
-								<small><strong>Total Qty: {{../quantity}}</strong></small>
+							
+							{{#if ../isWholesale}}
+								{{#if sizes}}
+									{{#each sizes}}
+										<small style="margin-left: 16px;">Size {{size}}: {{quantity}} pcs @ ${{price}}</small><br />
+									{{/each}}
+									<small><strong>Total Qty: {{../quantity}}</strong></small>
+								{{/if}}
+							{{/if}}
+							
+							{{#if ../isRetail}}
+								<small style="margin-left: 16px;">
+									<strong>Size:</strong> {{selectedSize}} | 
+									<strong>Qty:</strong> {{quantity}} pcs
+								</small><br />
+								{{#if customMeasurement}}
+									<div style="margin-left: 16px; margin-top: 8px; padding: 6px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px;">
+										<small style="font-weight: bold; color: #856404;">⚠️ Custom Measurements Required:</small><br />
+										<small style="color: #856404;">
+											Bust: {{customMeasurement.bust}}cm | 
+											Waist: {{customMeasurement.waist}}cm | 
+											Hips: {{customMeasurement.hips}}cm<br />
+											Shoulder: {{customMeasurement.shoulder}}cm | 
+											Shoulder to Knee: {{customMeasurement.shoulderToKnee}}cm
+										</small>
+									</div>
+								{{/if}}
 							{{/if}}
 						</div>
 						<div>${{price}}</div>

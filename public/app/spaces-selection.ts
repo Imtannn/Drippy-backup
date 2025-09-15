@@ -1,9 +1,12 @@
-import {css, Element, element, html, Index, Show, signal} from 'lume'
+import {css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
-import {store} from './store.js'
-import type {Space} from '../types/types.js'
-import {spaces} from '../consts/spaces.js'
 import {avatars} from '../consts/avatars.js'
+import {spaces} from '../consts/spaces.js'
+import type {Space} from '../types/types.js'
+import {store} from './store.js'
+
+import '../elements/logic/index-each.js'
+import '../elements/logic/show-when.js'
 
 @element
 export class SpacesSelection extends Element {
@@ -16,7 +19,7 @@ export class SpacesSelection extends Element {
 
 		this.createEffect(() => {
 			const avatarGender = avatars.find(avatar => avatar.value === store.selectedAvatar)?.gender
-			this.filterdSpace = spaces.filter(space => space.gender === avatarGender && !space.isWholesale)
+			this.filterdSpace = spaces.filter(space => space.gender === avatarGender)
 		})
 	}
 
@@ -45,35 +48,37 @@ export class SpacesSelection extends Element {
 
 			<!-- Space Cards -->
 			<div class="cards-container">
-			<${Index} each=${() => this.filterdSpace}>
-			${(space: Accessor<Space>) => html`
-				<!-- Bloom Realm Card -->
-				<div class="space-card">
-					<div class="scene-preview">
-						<div class="scene-placeholder">
-							<img src=${space().sceneThumbnail} alt="Bloom Realm Scene" />
+				<index-each
+					items=${() => this.filterdSpace}
+					content=${() => (space: Accessor<Space>) => html`
+						<!-- Bloom Realm Card -->
+						<div class="space-card">
+							<div class="scene-preview">
+								<div class="scene-placeholder">
+									<img src=${space().sceneThumbnail} alt="Bloom Realm Scene" />
+								</div>
+								<div class="garments-count">${space().garmentsCount} garments</div>
+							</div>
+							<div class="card-content">
+								<div class="text-content">
+									<h3 class="card-title">${space().name}</h3>
+									<p class="card-subtitle">${space().description}</p>
+								</div>
+								<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>Explore space →</button>
+							</div>
 						</div>
-						<div class="garments-count">${space().garmentsCount} garments</div>
-					</div>
-					<div class="card-content">
-						<div class="text-content">
-							<h3 class="card-title">${space().name}</h3>
-							<p class="card-subtitle">${space().description}</p>
+					`}
+				></index-each>
+
+				<show-when
+					condition=${() => this.filterdSpace.length === 0}
+					content=${() => html`
+						<div class="no-spaces-container">
+							<p class="no-spaces-text">Spaces for this avatar are coming soon!</p>
+							<button class="no-spaces-button" onclick=${() => (store.view = 'avatar')}>Select avatar →</button>
 						</div>
-						<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>Explore space →</button>
-					</div>
-				</div>
-			`}
-			</>
-
-			<${Show} when=${() => this.filterdSpace.length === 0}>
-				<div class="no-spaces-container">
-					<p class="no-spaces-text">Spaces for this avatar are coming soon!</p>
-					<button class="no-spaces-button" onclick=${() => (store.view = 'avatar')}>Select avatar →</button>
-				</div>
-			</>
-
-
+					`}
+				></show-when>
 			</div>
 		</div>
 	`
@@ -198,7 +203,7 @@ export class SpacesSelection extends Element {
 		.cards-container {
 			display: flex;
 			flex-direction: column;
-			gap: 2rem;
+			gap: 25px;
 			max-width: 800px;
 			margin: 0 auto;
 		}
@@ -206,6 +211,8 @@ export class SpacesSelection extends Element {
 		.space-card {
 			background: var(--uiColorPrimaryWhite);
 			border-radius: var(--borderRadiusLarge);
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
 			overflow: hidden;
 			width: 100%;
 			max-width: 354px;
@@ -259,7 +266,7 @@ export class SpacesSelection extends Element {
 		}
 
 		.card-content {
-			padding: 1.5rem;
+			padding-top: 15px;
 			padding-left: 0;
 			padding-right: 0;
 			display: flex;

@@ -66,3 +66,52 @@ export type OrderState = {
 	customerLastName: string
 	shippingAddress: ShippingAddress
 }
+
+export type OrderData = {
+	// Customer information
+	email: string
+	customerEmail: string
+	firstName: string
+	lastName: string
+	phone: string
+
+	// Order type
+	orderType: 'wholesale' | 'retail'
+
+	// Multi-size order items (for wholesale)
+	orderItems: Array<{
+		templateCategory: string
+		templateName: string
+		templateId: string
+		sizes: Array<{
+			size: string
+			quantity: number
+			price: number
+		}>
+		totalQuantity: number
+		totalPrice: number
+	}>
+
+	// Retail order items (for retail)
+	retailOrderItems?: Array<{
+		templateCategory: string
+		templateName: string
+		templateId: string
+		selectedSize: string
+		quantity: number
+		price: number
+		totalPrice: number
+		customMeasurement?: CustomMeasurement // Custom measurements if size is 'Custom'
+	}>
+
+	// Shipping information
+	shippingAddress: {
+		firstName: string
+		lastName: string
+		address: string
+		apartment?: string
+		city: string
+		postalCode?: string
+		phone: string
+	}
+}
