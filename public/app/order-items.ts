@@ -132,17 +132,90 @@ export class OrderItems extends Element {
 
 		console.log(`total models to hide: ${modelsToHide.length}`)
 
-		// Also hide avatar, scene, and other elements
+		// Hide scene and other elements
 		const otherModelsToHide: any[] = []
-		let originalAvatarPosition: THREE.Vector3 | null = null
 
-		// Move avatar far away instead of hiding it (to keep skeleton for garments)
-		const avatarModel = lumeScene.querySelector('#avatar')
-		if (avatarModel?.three) {
-			console.log('moving avatar out of view')
-			originalAvatarPosition = avatarModel.three.position.clone()
-			avatarModel.three.position.set(1000, 1000, 1000) // Move very far away
-			otherModelsToHide.push(avatarModel)
+		// Use drippy-scene's avatarModel property to hide avatar
+		const drippyScene = scene as any
+		let originalAvatarVisible: boolean | undefined
+
+		if (drippyScene && drippyScene.avatarModel) {
+			console.log('🔍 EXTENSIVE AVATAR MODEL DEBUG:')
+			console.log('avatarModel type:', typeof drippyScene.avatarModel)
+			console.log('avatarModel constructor:', drippyScene.avatarModel.constructor?.name)
+			console.log('avatarModel properties:', Object.getOwnPropertyNames(drippyScene.avatarModel))
+
+			// Check if it has three property
+			if (drippyScene.avatarModel.three) {
+				console.log('📊 avatarModel.three analysis:')
+				console.log('  - three type:', typeof drippyScene.avatarModel.three)
+				console.log('  - three constructor:', drippyScene.avatarModel.three.constructor?.name)
+				console.log('  - children count:', drippyScene.avatarModel.three.children?.length)
+				console.log('  - visible:', drippyScene.avatarModel.three.visible)
+
+				// Analyze children
+				if (drippyScene.avatarModel.three.children) {
+					drippyScene.avatarModel.three.children.forEach((child: any, index: number) => {
+						console.log(`  - Child ${index}:`, {
+							name: child.name,
+							type: child.constructor?.name,
+							visible: child.visible,
+							childrenCount: child.children?.length || 0,
+						})
+
+						// Look deeper into children for garments
+						if (child.children && child.children.length > 0) {
+							child.children.forEach((subChild: any, subIndex: number) => {
+								const hasGarmentName =
+									subChild.name &&
+									(subChild.name.toLowerCase().includes('shirt') ||
+										subChild.name.toLowerCase().includes('pants') ||
+										subChild.name.toLowerCase().includes('accessories') ||
+										subChild.name.toLowerCase().includes(category.toLowerCase()))
+								console.log(`    - SubChild ${subIndex}:`, {
+									name: subChild.name,
+									type: subChild.constructor?.name,
+									hasGarmentName,
+									visible: subChild.visible,
+								})
+							})
+						}
+					})
+				}
+			}
+
+			// Selectively hide only avatar body (not garments)
+			console.log('🎯 SELECTIVELY HIDING AVATAR BODY ONLY')
+			let hiddenAvatarParts: any[] = []
+
+			drippyScene.avatarModel.three.children.forEach((child: any, index: number) => {
+				const childName = child.name || ''
+				const isGarment =
+					childName.includes('LUME-GLTF-MODEL#') &&
+					(childName.toLowerCase().includes('shirt') ||
+						childName.toLowerCase().includes('pants') ||
+						childName.toLowerCase().includes('accessories'))
+
+				console.log(`Child ${index}: "${childName}", isGarment: ${isGarment}`)
+
+				if (!isGarment) {
+					// This is avatar body - hide it
+					console.log(`hiding avatar body part: ${childName}`)
+					child.visible = false
+					hiddenAvatarParts.push(child)
+				} else {
+					console.log(`keeping garment visible: ${childName}`)
+				}
+			})
+
+			if (hiddenAvatarParts.length > 0) {
+				otherModelsToHide.push({restore: 'avatarParts', parts: hiddenAvatarParts})
+				// Wait for the change to take effect
+				await new Promise(resolve => requestAnimationFrame(resolve))
+				console.log(`waited one frame after hiding ${hiddenAvatarParts.length} avatar parts`)
+			}
+		} else {
+			console.log('avatarModel not found on drippy-scene')
 		}
 
 		// Hide scene/background
@@ -180,10 +253,10 @@ export class OrderItems extends Element {
 			// Focus camera on specific garment areas for close-up shots
 			if (category === 'Shirt') {
 				cameraRig.setAttribute('position', '0 -1.1 0') // Focus on chest/torso area
-				cameraRig.setAttribute('distance', '2') // Very close for detail
+				cameraRig.setAttribute('distance', '2.5') // Very close for detail
 			} else if (category === 'Pants') {
 				cameraRig.setAttribute('position', '0 -0.6 0') // Focus on hip/thigh area
-				cameraRig.setAttribute('distance', '2') // Very close for detail
+				cameraRig.setAttribute('distance', '2.5') // Very close for detail
 			} else if (category === 'Accessories') {
 				cameraRig.setAttribute('position', '0 0.7 0') // Focus on neck/shoulder area
 				cameraRig.setAttribute('distance', '1.5') // Extra close for small accessories
@@ -268,13 +341,16 @@ export class OrderItems extends Element {
 
 		// Restore avatar and scene
 		otherModelsToHide.forEach(model => {
-			const modelId = model.getAttribute('id')
-			if (model.three) {
-				console.log(`restoring ${modelId}`)
-				if (modelId === 'avatar' && originalAvatarPosition) {
-					// Restore avatar position
-					model.three.position.copy(originalAvatarPosition)
-				} else {
+			if (model.restore === 'avatarParts') {
+				console.log('restoring avatar parts visibility')
+				model.parts.forEach((part: any) => {
+					console.log(`restoring avatar part: ${part.name}`)
+					part.visible = true
+				})
+			} else {
+				const modelId = model.getAttribute('id')
+				if (model.three) {
+					console.log(`restoring ${modelId}`)
 					model.three.visible = true
 				}
 			}
