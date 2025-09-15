@@ -137,7 +137,6 @@ export class OrderItems extends Element {
 
 		// Use drippy-scene's avatarModel property to hide avatar
 		const drippyScene = scene as any
-		let originalAvatarVisible: boolean | undefined
 
 		if (drippyScene && drippyScene.avatarModel) {
 			console.log('🔍 EXTENSIVE AVATAR MODEL DEBUG:')
