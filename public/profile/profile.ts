@@ -1,10 +1,10 @@
 import {css, element, Element, type ElementAttributes} from '@lume/element'
-import {createEffect, html, signal} from 'lume'
+import {html, signal} from 'lume'
 import {Meteor} from 'meteor/meteor'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../routes.js' // track page visits
-import {currentUser} from '../app/store.js'
+import {dateOfBirth, username} from '../app/store.js'
 
 export type UserProfileAttributes = keyof {} // no attributes yet
 
@@ -25,32 +25,24 @@ export class UserProfile extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
-		createEffect(() => {
-			const user = currentUser()
-			if (!user) return
-
-			this.username = user.profile?.username ?? ''
-		})
+		this.createEffect(() => (this.username = username()))
 
 		// Hide the loading cover
 		const loadingCover = document.getElementById('loadingCover')!
-		loadingCover.classList.add('invisible')
-		loadingCover.addEventListener('transitionend', () => loadingCover.remove())
+		if (!loadingCover) console.error('loading cover is broke')
+		loadingCover?.classList.add('invisible')
+		loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
 	}
 
 	#saveChanges() {
-		Meteor.call('users.updateProfile', {
-			username: this.username,
-			dateOfBirth: currentUser()?.profile?.dateOfBirth ?? '',
-		})
+		Meteor.call('users.updateProfile', {username: this.username, dateOfBirth: dateOfBirth()})
 
 		this.editing = false
 	}
 
 	#cancel() {
 		// Reset to current username
-		this.username = currentUser()?.profile?.username ?? ''
-
+		this.username = username()
 		this.editing = false
 	}
 
@@ -84,20 +76,16 @@ export class UserProfile extends Element {
 				condition=${() => this.editing}
 				content=${() => () => html`
 					<div>
-						<input
-							type="text"
-							value=${() => currentUser()?.profile?.username ?? ''}
-							onchange="${(ev: any) => (this.username = ev.target.value)}"
-						/>
+						<input type="text" value=${username} oninput="${(ev: any) => (this.username = ev.target.value)}" />
 					</div>
 					<div>
-						<button onclick="${() => this.#saveChanges()}">Save</button
-						><button onclick="${() => this.#cancel()}">Cancel</button>
+						<button onclick="${() => this.#saveChanges()}">Save</button>
+						<button onclick="${() => this.#cancel()}">Cancel</button>
 					</div>
 				`}
 				fallback=${() => html`
 					<div style="display: flex; justify-content: space-between;">
-						<div>${() => currentUser()?.profile?.username ?? ''}</div>
+						<div>${username}</div>
 						<div>
 							<button onclick="${() => (this.editing = true)}">Edit profile</button>
 						</div>

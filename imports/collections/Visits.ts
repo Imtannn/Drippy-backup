@@ -2,7 +2,7 @@ import {Meteor} from 'meteor/meteor'
 import {Mongo} from 'meteor/mongo'
 
 export interface Visit {
-	host: string
+	origin: string
 	route: string // The route is the path of the URL, e.g. '/foo/bar'
 	visits: number
 }
@@ -21,9 +21,9 @@ if (Meteor.isServer) {
 	Meteor.methods({
 		async 'visits.increment'(href: string) {
 			const url = new URL(href)
-			const route = url.pathname
-			const host = url.host
-			await Visits.upsertAsync({host, route}, {$inc: {visits: 1}})
+			const hrefMinusOrigin = url.href.replace(url.origin, '')
+			const origin = url.origin
+			await Visits.upsertAsync({origin, route: hrefMinusOrigin}, {$inc: {visits: 1}})
 		},
 	})
 } else {
