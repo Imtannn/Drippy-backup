@@ -37,6 +37,10 @@ const BRAND_CONFIGS = [
 		brand: 'lostCause',
 		rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
 	},
+	{
+		brand: 'shri',
+		rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
+	},
 	// {
 	// 	brand: 'baroudeuses',
 	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
@@ -56,24 +60,48 @@ const allFabrics: TODO[] = []
 const rootMaterials: Map<string, TODO> = new Map() // materialName -> material data
 const categoryMaterialAssignments: Map<string, Set<string>> = new Map() // categoryName -> Set of materialNames
 
+// Retry wrapper function
+async function withRetry<T>(operation: () => Promise<T>, maxRetries: number = 3, delayMs: number = 1000): Promise<T> {
+	let lastError: Error
+
+	for (let attempt = 1; attempt <= maxRetries; attempt++) {
+		try {
+			return await operation()
+		} catch (error) {
+			lastError = error as Error
+			console.log(`⚠️  Attempt ${attempt}/${maxRetries} failed: ${lastError.message}`)
+
+			if (attempt < maxRetries) {
+				const delay = delayMs * attempt // Exponential backoff
+				console.log(`   Retrying in ${delay}ms...`)
+				await new Promise(resolve => setTimeout(resolve, delay))
+			}
+		}
+	}
+
+	throw lastError!
+}
+
 // Helper function to make HTTP requests
 function makeRequest<T = unknown>(url: string): Promise<T> {
-	return new Promise((resolve, reject) => {
-		https
-			.get(url, res => {
-				let data = ''
-				res.on('data', chunk => {
-					data += chunk
+	return withRetry(() => {
+		return new Promise<T>((resolve, reject) => {
+			https
+				.get(url, res => {
+					let data = ''
+					res.on('data', chunk => {
+						data += chunk
+					})
+					res.on('end', () => {
+						try {
+							resolve(JSON.parse(data))
+						} catch (e) {
+							reject(e)
+						}
+					})
 				})
-				res.on('end', () => {
-					try {
-						resolve(JSON.parse(data))
-					} catch (e) {
-						reject(e)
-					}
-				})
-			})
-			.on('error', reject)
+				.on('error', reject)
+		})
 	})
 }
 
@@ -103,37 +131,39 @@ async function uploadToS3(buffer: Buffer, key: string, contentType: string): Pro
 
 // Download file to buffer instead of saving locally
 function downloadToBuffer(url: string): Promise<Buffer> {
-	return new Promise((resolve, reject) => {
-		https
-			.get(url, response => {
-				// Handle redirects
-				if (response.statusCode === 302 || response.statusCode === 301 || response.statusCode === 303) {
-					const location = response.headers.location
-					if (!location) {
-						reject(new Error('Redirect location not provided'))
+	return withRetry(() => {
+		return new Promise<Buffer>((resolve, reject) => {
+			https
+				.get(url, response => {
+					// Handle redirects
+					if (response.statusCode === 302 || response.statusCode === 301 || response.statusCode === 303) {
+						const location = response.headers.location
+						if (!location) {
+							reject(new Error('Redirect location not provided'))
+							return
+						}
+						return downloadToBuffer(location).then(resolve).catch(reject)
+					}
+
+					if (response.statusCode !== 200) {
+						reject(new Error(`Download failed with status ${response.statusCode}`))
 						return
 					}
-					return downloadToBuffer(location).then(resolve).catch(reject)
-				}
 
-				if (response.statusCode !== 200) {
-					reject(new Error(`Download failed with status ${response.statusCode}`))
-					return
-				}
+					const chunks: Buffer[] = []
+					response.on('data', chunk => {
+						chunks.push(chunk)
+					})
 
-				const chunks: Buffer[] = []
-				response.on('data', chunk => {
-					chunks.push(chunk)
+					response.on('end', () => {
+						const buffer = Buffer.concat(chunks)
+						resolve(buffer)
+					})
+
+					response.on('error', reject)
 				})
-
-				response.on('end', () => {
-					const buffer = Buffer.concat(chunks)
-					resolve(buffer)
-				})
-
-				response.on('error', reject)
-			})
-			.on('error', reject)
+				.on('error', reject)
+		})
 	})
 }
 
@@ -630,7 +660,6 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 
 				// Map files based on name
 				const fileName = path.basename(file.name, path.extname(file.name)).toLowerCase()
-				console.log('fileName', fileName)
 				if (fileName.includes('normal')) {
 					textureUrls.normal = fileS3Url
 				} else if (fileName.includes('base')) {
