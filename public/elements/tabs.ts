@@ -7,6 +7,7 @@ import {
 	eventAttribute,
 	html,
 	onCleanup,
+	signal,
 	type ElementAttributes,
 } from 'lume'
 import '../styleVars.js'
@@ -28,9 +29,10 @@ export class TabsProvider extends Element {
 
 	@eventAttribute ontabchange = null
 
-	private _activeValue = ''
-	private triggers: TabsTrigger[] = []
-	private contents: TabsContent[] = []
+	@signal _activeValue = ''
+	@signal triggers: TabsTrigger[] = []
+	@signal contents: TabsContent[] = []
+	@signal isMounted: boolean = false
 
 	get activeValue() {
 		return this.selectedValue || this._activeValue || this.defaultValue
@@ -44,6 +46,42 @@ export class TabsProvider extends Element {
 		setTimeout(() => {
 			this.updateActiveTab()
 		}, 0)
+
+		this.createEffect(() => {
+			if (this.triggers.length && this.contents.length) {
+				this.selectedValue = ''
+				this._activeValue = this.defaultValue
+				setTimeout(() => {
+					this.updateActiveTab()
+				}, 0)
+			}
+		})
+
+		this.createEffect(() => {
+			if (this.isMounted === false) {
+				this.intersectedCallback()
+			}
+		})
+	}
+
+	intersectedCallback() {
+		// use IntersectionObserver to check if the tabs provider is mounted
+		const observer = new IntersectionObserver(
+			entries => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						this.isMounted = true
+						observer.disconnect()
+					}
+				})
+			},
+			{
+				threshold: 0.1,
+				rootMargin: '0px',
+			},
+		)
+		observer.observe(this)
+		onCleanup(() => observer.disconnect())
 	}
 
 	attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null) {
@@ -204,7 +242,6 @@ export class TabsList extends Element {
 	}
 
 	updateIndicators() {
-		console.log('updateIndicators')
 		if (!this.provider) return
 		if (this.updateIndicatorsTimeout) {
 			clearTimeout(this.updateIndicatorsTimeout)
@@ -215,12 +252,12 @@ export class TabsList extends Element {
 			const button = trigger.shadowRoot?.querySelector('button')
 			return button?.getAttribute('aria-label') === this.provider?.activeValue
 		})
-		if (activeTrigger && this.indicatorRef) {
+		if (activeTrigger && this.indicatorRef && this.provider.isMounted) {
 			this.positionIndicator(this.indicatorRef, activeTrigger)
 		} else {
 			this.updateIndicatorsTimeout = setTimeout(() => {
 				this.updateIndicators()
-			}, 200)
+			}, 100)
 		}
 	}
 

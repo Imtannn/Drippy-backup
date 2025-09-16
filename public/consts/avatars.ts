@@ -8,8 +8,8 @@ export const avatars: Avatar[] = [
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/moidien/thumbnail.webp',
 
 		// Temporary replacement for testing animation.
-		// src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/moidien/model.glb',
-		src: animationTestAvatar,
+		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/moidien/model.glb',
+		// src: animationTestAvatar,
 
 		gender: 'female',
 		value: 'moidien',

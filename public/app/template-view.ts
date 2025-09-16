@@ -1,5 +1,4 @@
 import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
-import type {Accessor} from 'solid-js'
 import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import {templates} from '../consts/templates.js'
 import type {Block} from '../types/block.js'
@@ -172,12 +171,12 @@ export class TemplateView extends Element {
 						<bottom-sheet-header>
 							<div class="tabs-container">
 								<tabs-list>
-									<index-each
+									<for-each
 										items=${() => Object.keys(this.templateCategories)}
-										content=${() => (category: Accessor<TemplateCategory>) => html`
-											<tabs-trigger selected-value=${category()}>${category()}</tabs-trigger>
+										content=${() => (category: TemplateCategory) => html`
+											<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
 										`}
-									></index-each>
+									></for-each>
 								</tabs-list>
 							</div>
 						</bottom-sheet-header>
