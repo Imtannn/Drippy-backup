@@ -408,10 +408,12 @@ export class DrippyScene extends Element {
 							min="0"
 							max="3"
 							step="0.1"
-							value="1"
+							value="0.3"
 							oninput=${(e: Event) => {
 								const input = e.target as HTMLInputElement
-								this.lumeScene!.three.environmentIntensity = Number(input.value) || 0
+								const value = Number(input.value) || 0
+								console.log('Environment intensity changed to:', value)
+								this.lumeScene!.three.environmentIntensity = value
 								this.lumeScene!.needsUpdate()
 							}}
 						/>
@@ -434,7 +436,7 @@ export class DrippyScene extends Element {
 
 			<div id="lume-scene-container">
 				<lume-scene
-					ref=${(el: Scene) => ((this.lumeScene = el), el && (el.three.environmentIntensity = 1))}
+					ref=${(el: Scene) => ((this.lumeScene = el), el && (el.three.environmentIntensity = 0.3))}
 					id="drippy-scene"
 					webgl
 					perspective="2200"
