@@ -128,9 +128,6 @@ export class OrderSize extends Element {
 											<div class="item-image">
 												<img
 													src=${() => {
-														if (category === 'Accessories') {
-															return template.thumb
-														}
 														const cached = store.screenshotCache.get(category)
 														return cached || template.thumb
 													}}

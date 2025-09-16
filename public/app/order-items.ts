@@ -135,13 +135,6 @@ export class OrderItems extends Element {
 											const cached = store.screenshotCache.get(category)
 											const isLoading = store.loadingScreenshots.has(category)
 
-											console.log(
-												`[OrderItems] Screenshot for ${category}:`,
-												cached ? `${cached.length} chars` : 'NULL/UNDEFINED',
-												'Loading:',
-												isLoading,
-											)
-
 											if (isLoading) {
 												return html`<div class="screenshot-loader">
 													<div class="spinner"></div>

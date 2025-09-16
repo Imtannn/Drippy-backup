@@ -575,21 +575,9 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 
 	// Create a new lume-perspective-camera for screenshot
 	const screenshotCamera = document.createElement('lume-perspective-camera')
-
-	// Set camera attributes based on garment type - using smaller values since Lume transforms them
 	screenshotCamera.setAttribute('fov', '50')
 	screenshotCamera.setAttribute('near', '0.1')
 	screenshotCamera.setAttribute('far', '1000')
-	if (category === 'Shirt' || category === 'Dress') {
-		screenshotCamera.setAttribute('position', '0 -1.1 0.5')
-		screenshotCamera.setAttribute('look-at', '0 -0.3 0')
-	} else if (category === 'Pants' || category === 'Skirt') {
-		screenshotCamera.setAttribute('position', '0 -0.6 0.5')
-		screenshotCamera.setAttribute('look-at', '0 -0.8 0')
-	} else {
-		screenshotCamera.setAttribute('position', '0 0 0.7')
-		screenshotCamera.setAttribute('look-at', '0 0 0')
-	}
 
 	// Add camera to scene and make it active
 	lumeScene.appendChild(screenshotCamera)
@@ -598,94 +586,58 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 	// Wait for camera to be positioned and activated
 	await new Promise(resolve => requestAnimationFrame(resolve))
 
-	// Directly manipulate the Three.js camera object to override Lume transforms
+	// Use bounding box to position camera optimally
 	const threeCamera = (screenshotCamera as any).three
 	if (threeCamera) {
-		// Calculate optimal camera position using bounding box
 		const boundingBox = calculateGarmentBoundingBox(category, lumeScene)
 		const optimalCamera = calculateCameraFromBoundingBox(boundingBox, 50)
 
-		// Debug logging to verify bounding box calculation
-		console.log(`[Screenshot] Category: ${category}`)
-		console.log(`[Screenshot] Bounding box:`, boundingBox)
-		console.log(`[Screenshot] Optimal camera:`, optimalCamera)
+		const pos = optimalCamera.position.clone()
+		const lookAt = optimalCamera.lookAt.clone()
 
-		// Use bounding box calculation if valid, otherwise fall back to hardcoded positions
-		if (!boundingBox.isEmpty() && optimalCamera.position.distanceTo(new THREE.Vector3(0, 0, 0)) > 0.1) {
-			console.log(`[Screenshot] Using bounding box positioning for ${category}`)
-			// Use calculated position with some manual adjustments based on category
-			const pos = optimalCamera.position.clone()
-			const lookAt = optimalCamera.lookAt.clone()
-
-			// Apply category-specific adjustments to maintain the good framing you achieved
-			if (category === 'Shirt' || category === 'Dress') {
-				// Keep the working Y offset and distance that works well for upper body
-				pos.y = Math.max(pos.y, 1.0) // Ensure minimum Y for good upper body framing
-				pos.z = Math.max(pos.z, 0.8) // Ensure minimum distance
-			} else if (category === 'Pants' || category === 'Skirt') {
-				// Adjust for lower body items
-				pos.y = Math.min(pos.y, 0.8) // Lower camera for better pants/skirt view
-				pos.z = Math.max(pos.z, 0.8) // Ensure minimum distance
-				lookAt.y = Math.min(lookAt.y, -0.2) // Look slightly down for lower body
-			}
-
-			threeCamera.position.copy(pos)
-			threeCamera.lookAt(lookAt)
-		} else {
-			console.log(`[Screenshot] Falling back to hardcoded positioning for ${category}`)
-			// Fall back to your proven hardcoded positions if bounding box calculation fails
-			if (category === 'Shirt' || category === 'Dress') {
-				threeCamera.position.set(0, 1.2, 1)
-				threeCamera.lookAt(0, 0, 0)
-			} else if (category === 'Pants' || category === 'Skirt') {
-				threeCamera.position.set(0, 0.7, 1)
-				threeCamera.lookAt(0, -0.3, 0)
-			} else {
-				threeCamera.position.set(0, 0.4, 1)
-				threeCamera.lookAt(0, 0, 0)
-			}
+		// Apply category-specific adjustments for better framing
+		if (category === 'Shirt' || category === 'Dress') {
+			pos.y = Math.max(pos.y, 1.0)
+			pos.z = Math.max(pos.z, 0.8)
+		} else if (category === 'Pants' || category === 'Skirt') {
+			pos.y = Math.min(pos.y, 0.8)
+			pos.z = Math.max(pos.z, 0.8)
+			lookAt.y = Math.min(lookAt.y, -0.2)
 		}
 
-		// Reset rotation to look straight ahead
+		threeCamera.position.copy(pos)
+		threeCamera.lookAt(lookAt)
 		threeCamera.rotation.set(0, 0, 0)
 		threeCamera.updateMatrix()
 		threeCamera.updateMatrixWorld(true)
 
-		// Wait multiple frames for the position change to take effect
+		// Wait for camera positioning to take effect
 		await new Promise(resolve => requestAnimationFrame(resolve))
 		await new Promise(resolve => requestAnimationFrame(resolve))
-		console.log(`[Screenshot] Camera positioned at:`, threeCamera.position, 'looking at:', threeCamera.getWorldDirection(new THREE.Vector3()))
 	}
 
-	// Add longer delay to ensure 3D scene is fully rendered after camera repositioning
+	// Wait for scene to fully render
 	await new Promise(resolve => setTimeout(resolve, 300))
 
 	// Get canvas and renderer
 	const canvas = lumeScene.shadowRoot.querySelector('canvas')
-	console.log(`[Screenshot] Canvas found:`, !!canvas, canvas?.width, 'x', canvas?.height)
-	if (!canvas) {
-		return ''
-	}
+	if (!canvas) return ''
 
 	const renderer = lumeScene.glRenderer || lumeScene._glRenderer || lumeScene.renderer
-	console.log(`[Screenshot] Renderer found:`, !!renderer)
 	let screenshot = ''
 
 	if (renderer) {
 		const threeScene = lumeScene.three || renderer.scene
 		const threeCamera = (screenshotCamera as any).three || lumeScene.camera?.three || lumeScene.three?.camera
-		console.log(`[Screenshot] Scene and camera:`, !!threeScene, !!threeCamera)
 
 		if (threeScene && threeCamera) {
 			// Set a clean light background for product shots
 			const originalBackground = renderer.getClearColor(new THREE.Color())
 			const originalAlpha = renderer.getClearAlpha()
-			renderer.setClearColor(0xf5f5f5, 1.0) // Light gray background
+			renderer.setClearColor(0xf5f5f5, 1.0)
 
-			console.log(`[Screenshot] About to render scene...`)
 			renderer.render(threeScene, threeCamera)
 			screenshot = renderer.domElement.toDataURL('image/png')
-			console.log(`[Screenshot] Screenshot from renderer:`, screenshot.length > 0 ? `${screenshot.length} chars` : 'EMPTY')
 
 			// Restore original background
 			renderer.setClearColor(originalBackground, originalAlpha)
@@ -693,9 +645,7 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 	}
 
 	if (!screenshot) {
-		console.log(`[Screenshot] Fallback to canvas toDataURL...`)
 		screenshot = canvas.toDataURL('image/png')
-		console.log(`[Screenshot] Screenshot from canvas:`, screenshot.length > 0 ? `${screenshot.length} chars` : 'EMPTY')
 	}
 
 	// Restore hidden models
