@@ -7,6 +7,7 @@ export const spaces: Space[] = [
 		slug: 'GAP',
 		description: 'MoiDien',
 		logo: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/moidien/logo.webp',
+		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/moidien/scene-thumbnail.png',
 		scene:
@@ -24,6 +25,7 @@ export const spaces: Space[] = [
 		slug: 'YALLAH',
 		description: 'Baroudeuses',
 		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/baroudeuses/scene-thumbnail.png',
 		scene:
@@ -41,6 +43,7 @@ export const spaces: Space[] = [
 		slug: 'movement',
 		description: 'Haruki',
 		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/movement/scene-thumbnail.jpeg',
 		scene: '',
@@ -55,6 +58,7 @@ export const spaces: Space[] = [
 		slug: 'essence-of-her',
 		description: 'Vaishnavi',
 		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/naishnavi/scene-thumbnail.png',
 		scene:
@@ -72,6 +76,7 @@ export const spaces: Space[] = [
 		slug: 'shadow-grace',
 		description: 'Lost Cause',
 		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/lost-cause/scene-thumbnail.png',
 		scene:

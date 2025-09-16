@@ -56,9 +56,9 @@ function makeSkinnedMesh(mesh: THREE.Mesh, skeleton: THREE.Skeleton) {
 
 interface AutoRiggerParams {
 	/**
-	 * The avatar Lume element.
+	 * A model with a rig (skeleton).
 	 */
-	avatar: GltfModel
+	riggedModel: GltfModel
 
 	/**
 	 * Array of bone names to exclude from rigging (also excludes each bone's children).
@@ -72,10 +72,14 @@ interface AutoRiggerParams {
 	maxBoneDist?: number
 }
 
-export class AutoRigger {
+/**
+ * This is internal, containing implementation details of the <lume-auto-rigger>
+ * element, separating the rigging logic from the element definition.
+ */
+export class _AutoRigger {
 	skinnedMeshes: THREE.SkinnedMesh[] = []
 
-	avatar: GltfModel
+	private riggedModel: GltfModel
 
 	private skeleton: THREE.Skeleton | null = null
 
@@ -86,9 +90,9 @@ export class AutoRigger {
 	private originalMeshes: THREE.Mesh[] = []
 
 	constructor(params: AutoRiggerParams) {
-		this.avatar = params.avatar
+		this.riggedModel = params.riggedModel
 
-		this.skeleton = getSkeleton(this.avatar)
+		this.skeleton = getSkeleton(this.riggedModel)
 
 		this.excludedBones = params.excludedBones?.flatMap(val => getChildBoneNames(val, this.skeleton!.bones[0])) ?? []
 
