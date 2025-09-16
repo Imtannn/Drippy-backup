@@ -86,6 +86,16 @@ const styleVars = {
 	breakpointDesktop: 769,
 	breakpointTablet: 768,
 	breakpointMobile: 480,
+
+	// Grid spacing
+	gridGapMobile: 25,
+	gridGapTablet: 25,
+	gridGapDesktop: 30,
+
+	// Card heights
+	cardHeightMobile: 220,
+	cardHeightDesktop: 280,
+	cardHeightLarge: 310,
 }
 
 interface Window {

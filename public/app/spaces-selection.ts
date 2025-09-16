@@ -201,11 +201,27 @@ export class SpacesSelection extends Element {
 		}
 
 		.cards-container {
-			display: flex;
-			flex-direction: column;
-			gap: 25px;
-			max-width: 800px;
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: var(--gridGapMobile);
+			max-width: var(--breakpointLargeDesktop);
 			margin: 0 auto;
+		}
+
+		/* Desktop: 3 columns */
+		@media (min-width: 1024px) {
+			.cards-container {
+				grid-template-columns: repeat(3, 1fr);
+				gap: var(--gridGapDesktop);
+			}
+		}
+
+		/* Tablet: 2 columns */
+		@media (min-width: 768px) and (max-width: 1023px) {
+			.cards-container {
+				grid-template-columns: repeat(2, 1fr);
+				gap: var(--gridGapTablet);
+			}
 		}
 
 		.space-card {
@@ -215,8 +231,6 @@ export class SpacesSelection extends Element {
 			border-bottom-right-radius: 0;
 			overflow: hidden;
 			width: 100%;
-			max-width: 354px;
-			margin: 0 auto;
 
 			:host-context([data-theme='dark']) & {
 				background: #333;
@@ -226,7 +240,7 @@ export class SpacesSelection extends Element {
 		.scene-preview {
 			position: relative;
 			width: 100%;
-			height: 220px;
+			height: var(--cardHeightMobile);
 			overflow: hidden;
 		}
 
@@ -323,22 +337,8 @@ export class SpacesSelection extends Element {
 
 		/* Large screen scaling */
 		@media (min-width: 1200px) {
-			.space-card {
-				max-width: 500px;
-			}
-
 			.scene-preview {
-				height: 310px;
-			}
-		}
-
-		@media (min-width: 1600px) {
-			.space-card {
-				max-width: 600px;
-			}
-
-			.scene-preview {
-				height: 372px;
+				height: var(--cardHeightLarge);
 			}
 		}
 
