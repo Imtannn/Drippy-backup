@@ -40,6 +40,8 @@ export const store = createMutable({
 	currentCustomMeasurementCategory: null as TemplateCategory | null,
 	// Screenshot cache for garment images
 	screenshotCache: new Map<TemplateCategory, string>(),
+	// Track which screenshots are currently being generated
+	loadingScreenshots: new Set<TemplateCategory>(),
 	order: {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -440,6 +442,7 @@ export const store = createMutable({
 		this.retailItemSizes = new Map<TemplateCategory, string>()
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.screenshotCache = new Map<TemplateCategory, string>()
+		this.loadingScreenshots = new Set<TemplateCategory>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {
@@ -500,6 +503,19 @@ export const store = createMutable({
 		untrack(() => {
 			this.loadingMaterials.delete(key)
 			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+		})
+	},
+
+	addLoadingScreenshot(category: TemplateCategory) {
+		untrack(() => {
+			this.loadingScreenshots.add(category)
+			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
+		})
+	},
+	removeLoadingScreenshot(category: TemplateCategory) {
+		untrack(() => {
+			this.loadingScreenshots.delete(category)
+			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
 		})
 	},
 })

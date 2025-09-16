@@ -406,6 +406,88 @@ export function* meshesInTree(root: THREE.Object3D): Generator<THREE.Mesh> {
 }
 
 /**
+ * Calculate bounding box for visible garment models of a specific category
+ * @param category - The template category to get bounding box for
+ * @param lumeScene - The lume scene element
+ * @returns THREE.Box3 - Bounding box containing all visible garments of the category
+ */
+function calculateGarmentBoundingBox(category: string, lumeScene: any): THREE.Box3 {
+	const boundingBox = new THREE.Box3()
+
+	// Get all garment models for this category
+	const clothModels = lumeScene.querySelectorAll('lume-gltf-model[data-cloth]')
+
+	clothModels.forEach((model: any) => {
+		const modelId = model.getAttribute('id') || ''
+		const shouldInclude = modelId.startsWith(category + '-')
+
+		if (shouldInclude && model.three && model.three.visible) {
+			// Calculate bounding box for this model
+			const modelBox = new THREE.Box3()
+
+			// Traverse all meshes in the model
+			model.three.traverse((child: THREE.Object3D) => {
+				if (child instanceof THREE.Mesh && child.geometry) {
+					// Ensure geometry has bounding box
+					child.geometry.computeBoundingBox()
+					if (child.geometry.boundingBox) {
+						// Transform the bounding box by the mesh's world matrix
+						const transformedBox = child.geometry.boundingBox.clone()
+						child.updateWorldMatrix(true, false)
+						transformedBox.applyMatrix4(child.matrixWorld)
+						modelBox.union(transformedBox)
+					}
+				}
+			})
+
+			// Union with the overall bounding box
+			boundingBox.union(modelBox)
+		}
+	})
+
+	// If no models found, return a default bounding box
+	if (boundingBox.isEmpty()) {
+		boundingBox.setFromCenterAndSize(
+			new THREE.Vector3(0, 0, 0),
+			new THREE.Vector3(0.5, 1, 0.5)
+		)
+	}
+
+	return boundingBox
+}
+
+/**
+ * Calculate optimal camera position based on bounding box
+ * @param boundingBox - The bounding box of the target objects
+ * @param fov - Camera field of view in degrees
+ * @returns Object with position and lookAt vectors
+ */
+function calculateCameraFromBoundingBox(boundingBox: THREE.Box3, fov: number = 50) {
+	const center = boundingBox.getCenter(new THREE.Vector3())
+	const size = boundingBox.getSize(new THREE.Vector3())
+
+	// Calculate distance needed to fit the object in view
+	const maxDim = Math.max(size.x, size.y)
+	const fovRadians = (fov * Math.PI) / 180
+	const distance = maxDim / (2 * Math.tan(fovRadians / 2))
+
+	// Add some padding (20% extra distance)
+	const paddedDistance = distance * 1.2
+
+	// Position camera in front of the center
+	const cameraPosition = new THREE.Vector3(
+		center.x,
+		center.y,
+		center.z + paddedDistance
+	)
+
+	return {
+		position: cameraPosition,
+		lookAt: center
+	}
+}
+
+/**
  * Capture a screenshot of a specific garment category from the Lume scene
  * @param category - The template category to capture (Shirt, Pants, etc.)
  * @returns Promise<string> - Base64 data URL of the screenshot
@@ -519,42 +601,80 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 	// Directly manipulate the Three.js camera object to override Lume transforms
 	const threeCamera = (screenshotCamera as any).three
 	if (threeCamera) {
-		// Set position directly on Three.js camera - adjust Y position to frame garments properly
-		if (category === 'Shirt' || category === 'Dress') {
-			threeCamera.position.set(0, 1.2, 1)
-			threeCamera.lookAt(0, 0, 0)
-		} else if (category === 'Pants' || category === 'Skirt') {
-			threeCamera.position.set(0, 0.7, 1)
-			threeCamera.lookAt(0, -0.3, 0)
+		// Calculate optimal camera position using bounding box
+		const boundingBox = calculateGarmentBoundingBox(category, lumeScene)
+		const optimalCamera = calculateCameraFromBoundingBox(boundingBox, 50)
+
+		// Debug logging to verify bounding box calculation
+		console.log(`[Screenshot] Category: ${category}`)
+		console.log(`[Screenshot] Bounding box:`, boundingBox)
+		console.log(`[Screenshot] Optimal camera:`, optimalCamera)
+
+		// Use bounding box calculation if valid, otherwise fall back to hardcoded positions
+		if (!boundingBox.isEmpty() && optimalCamera.position.distanceTo(new THREE.Vector3(0, 0, 0)) > 0.1) {
+			console.log(`[Screenshot] Using bounding box positioning for ${category}`)
+			// Use calculated position with some manual adjustments based on category
+			const pos = optimalCamera.position.clone()
+			const lookAt = optimalCamera.lookAt.clone()
+
+			// Apply category-specific adjustments to maintain the good framing you achieved
+			if (category === 'Shirt' || category === 'Dress') {
+				// Keep the working Y offset and distance that works well for upper body
+				pos.y = Math.max(pos.y, 1.0) // Ensure minimum Y for good upper body framing
+				pos.z = Math.max(pos.z, 0.8) // Ensure minimum distance
+			} else if (category === 'Pants' || category === 'Skirt') {
+				// Adjust for lower body items
+				pos.y = Math.min(pos.y, 0.8) // Lower camera for better pants/skirt view
+				pos.z = Math.max(pos.z, 0.8) // Ensure minimum distance
+				lookAt.y = Math.min(lookAt.y, -0.2) // Look slightly down for lower body
+			}
+
+			threeCamera.position.copy(pos)
+			threeCamera.lookAt(lookAt)
 		} else {
-			threeCamera.position.set(0, 0.4, 1) // Closer for default view
-			threeCamera.lookAt(0, 0, 0) // Look at center
+			console.log(`[Screenshot] Falling back to hardcoded positioning for ${category}`)
+			// Fall back to your proven hardcoded positions if bounding box calculation fails
+			if (category === 'Shirt' || category === 'Dress') {
+				threeCamera.position.set(0, 1.2, 1)
+				threeCamera.lookAt(0, 0, 0)
+			} else if (category === 'Pants' || category === 'Skirt') {
+				threeCamera.position.set(0, 0.7, 1)
+				threeCamera.lookAt(0, -0.3, 0)
+			} else {
+				threeCamera.position.set(0, 0.4, 1)
+				threeCamera.lookAt(0, 0, 0)
+			}
 		}
 
 		// Reset rotation to look straight ahead
-		threeCamera.rotation.set(0, 0, 0) // Reset rotation to look straight
+		threeCamera.rotation.set(0, 0, 0)
 		threeCamera.updateMatrix()
 		threeCamera.updateMatrixWorld(true)
 
-		// Wait another frame for the direct position change
+		// Wait multiple frames for the position change to take effect
 		await new Promise(resolve => requestAnimationFrame(resolve))
+		await new Promise(resolve => requestAnimationFrame(resolve))
+		console.log(`[Screenshot] Camera positioned at:`, threeCamera.position, 'looking at:', threeCamera.getWorldDirection(new THREE.Vector3()))
 	}
 
-	// Add delay to ensure 3D scene is rendered after scaling
-	await new Promise(resolve => setTimeout(resolve, 100))
+	// Add longer delay to ensure 3D scene is fully rendered after camera repositioning
+	await new Promise(resolve => setTimeout(resolve, 300))
 
 	// Get canvas and renderer
 	const canvas = lumeScene.shadowRoot.querySelector('canvas')
+	console.log(`[Screenshot] Canvas found:`, !!canvas, canvas?.width, 'x', canvas?.height)
 	if (!canvas) {
 		return ''
 	}
 
 	const renderer = lumeScene.glRenderer || lumeScene._glRenderer || lumeScene.renderer
+	console.log(`[Screenshot] Renderer found:`, !!renderer)
 	let screenshot = ''
 
 	if (renderer) {
 		const threeScene = lumeScene.three || renderer.scene
 		const threeCamera = (screenshotCamera as any).three || lumeScene.camera?.three || lumeScene.three?.camera
+		console.log(`[Screenshot] Scene and camera:`, !!threeScene, !!threeCamera)
 
 		if (threeScene && threeCamera) {
 			// Set a clean light background for product shots
@@ -562,8 +682,10 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 			const originalAlpha = renderer.getClearAlpha()
 			renderer.setClearColor(0xf5f5f5, 1.0) // Light gray background
 
+			console.log(`[Screenshot] About to render scene...`)
 			renderer.render(threeScene, threeCamera)
 			screenshot = renderer.domElement.toDataURL('image/png')
+			console.log(`[Screenshot] Screenshot from renderer:`, screenshot.length > 0 ? `${screenshot.length} chars` : 'EMPTY')
 
 			// Restore original background
 			renderer.setClearColor(originalBackground, originalAlpha)
@@ -571,7 +693,9 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 	}
 
 	if (!screenshot) {
+		console.log(`[Screenshot] Fallback to canvas toDataURL...`)
 		screenshot = canvas.toDataURL('image/png')
+		console.log(`[Screenshot] Screenshot from canvas:`, screenshot.length > 0 ? `${screenshot.length} chars` : 'EMPTY')
 	}
 
 	// Restore hidden models
