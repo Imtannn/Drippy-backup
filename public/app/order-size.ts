@@ -44,66 +44,6 @@ export class OrderSize extends Element {
 		store.navigateTo = 'order'
 	}
 
-	// #captureSceneScreenshot = (): string => {
-	// 	console.log('captureSceneScreenshot')
-
-	// 	// Find the drippy-app element
-	// 	const app = document.querySelector('drippy-app') as any
-	// 	console.log('drippy-app found:', !!app)
-
-	// 	if (!app?.shadowRoot) {
-	// 		console.log('no shadowRoot on drippy-app')
-	// 		return ''
-	// 	}
-
-	// 	// Look for drippy-scene inside the app's shadow root
-	// 	const scene = app.shadowRoot.querySelector('drippy-scene') as any
-	// 	console.log('scene found in app shadowRoot:', !!scene)
-
-	// 	if (!scene?.shadowRoot) {
-	// 		console.log('no shadowRoot on drippy-scene')
-	// 		return ''
-	// 	}
-
-	// 	// Look for the lume-scene inside drippy-scene's shadow root
-	// 	const lumeScene = scene.shadowRoot.querySelector('lume-scene') as any
-	// 	console.log('lume-scene found:', !!lumeScene)
-
-	// 	if (!lumeScene?.shadowRoot) {
-	// 		console.log('no shadowRoot on lume-scene')
-	// 		return ''
-	// 	}
-
-	// 	// Finally, get the canvas from lume-scene's shadow root
-	// 	const canvas = lumeScene.shadowRoot.querySelector('canvas')
-	// 	console.log('canvas found:', !!canvas)
-	// 	if (!canvas) return ''
-
-	// 	// Try to access the three.js renderer directly
-	// 	const renderer = lumeScene.glRenderer || lumeScene._glRenderer || lumeScene.renderer
-	// 	if (renderer) {
-	// 		console.log('renderer found, trying to get scene and camera')
-
-	// 		// Get the Three.js scene and camera objects
-	// 		const threeScene = lumeScene.three || renderer.scene
-	// 		const threeCamera = lumeScene.camera?.three || lumeScene.three?.camera
-
-	// 		console.log('threeScene:', !!threeScene, 'threeCamera:', !!threeCamera)
-
-	// 		if (threeScene && threeCamera) {
-	// 			console.log('forcing render with proper scene and camera')
-	// 			renderer.render(threeScene, threeCamera)
-
-	// 			// Immediately capture after render
-	// 			return renderer.domElement.toDataURL('image/png')
-	// 		}
-	// 	}
-
-	// 	// Fallback to direct canvas capture
-	// 	console.log('no renderer found, using canvas directly')
-	// 	return canvas.toDataURL('image/png')
-	// }
-
 	#onSizeButtonClick = (size: string, category?: TemplateCategory) => {
 		if (size === 'Custom') {
 			if (store.selectedSpace?.isWholesale) {
@@ -186,7 +126,16 @@ export class OrderSize extends Element {
 										<!-- Item Header -->
 										<div class="item-header">
 											<div class="item-image">
-												<img src=${template.thumb} alt=${template.name} />
+												<img
+													src=${() => {
+														if (category === 'Accessories') {
+															return template.thumb
+														}
+														const cached = store.screenshotCache.get(category)
+														return cached || template.thumb
+													}}
+													alt=${template.name}
+												/>
 											</div>
 											<div class="item-details">
 												<div class="item-name">Product name</div>

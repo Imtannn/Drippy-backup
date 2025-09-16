@@ -1,4 +1,5 @@
 import {Meteor} from 'meteor/meteor'
+import {untrack} from 'solid-js'
 import {createMutable} from 'solid-js/store'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -6,7 +7,6 @@ import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {toSolidSignal} from '../utils.js'
 import {blockManager} from './block-manager.js'
-import {untrack} from 'solid-js'
 
 export const store = createMutable({
 	// key is the block category, value is the block
@@ -38,6 +38,8 @@ export const store = createMutable({
 	retailItemCustomMeasurements: new Map<TemplateCategory, CustomMeasurement>(),
 	// Track which category is currently being customized
 	currentCustomMeasurementCategory: null as TemplateCategory | null,
+	// Screenshot cache for garment images
+	screenshotCache: new Map<TemplateCategory, string>(),
 	order: {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -437,6 +439,7 @@ export const store = createMutable({
 		this.retailItemQuantities = new Map<TemplateCategory, number>()
 		this.retailItemSizes = new Map<TemplateCategory, string>()
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
+		this.screenshotCache = new Map<TemplateCategory, string>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {

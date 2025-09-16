@@ -1,4 +1,4 @@
-import {css, Element, element, html, signal, untrack, type ElementAttributes} from 'lume'
+import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import type {Accessor} from 'solid-js'
 import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import {templates} from '../consts/templates.js'
