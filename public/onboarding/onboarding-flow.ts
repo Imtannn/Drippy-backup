@@ -58,6 +58,7 @@ export class OnboardingFlow extends Element {
 
 		// Track login state and handle step visibility
 		this.createEffect(async () => {
+			// FIXME keep code maintainable, unduplicate this auth logic (same as in app-guard.ts and home-page.ts)
 			const user = currentUser()
 
 			// If undefined, means the user is still loading
@@ -164,15 +165,9 @@ export class OnboardingFlow extends Element {
 
 	#loadUserProfile = async () => {
 		const user = currentUser()
-		if (user?.profile) {
-			// Load existing username and dateOfBirth if they exist
-			if (user.profile.username) {
-				this.username = user.profile.username
-			}
-			if (user.profile.dateOfBirth) {
-				this.dateOfBirth = user.profile.dateOfBirth
-			}
-		}
+		// Load existing username and dateOfBirth if they exist
+		this.username = user?.username ?? ''
+		this.dateOfBirth = user?.profile?.dateOfBirth ?? ''
 	}
 
 	#goToApp = () => {

@@ -1,7 +1,18 @@
-import {Easing} from '@tweenjs/tween.js'
 import type {Element3D, GltfModel, Mesh} from 'lume'
-import {batch, createEffect, createMemo, createSignal, getOwner, onCleanup, untrack, type Signal} from 'solid-js'
+import {
+	batch,
+	createEffect,
+	createMemo,
+	createSignal,
+	getOwner,
+	onCleanup,
+	untrack,
+	type Accessor,
+	type Signal,
+} from 'solid-js'
 import * as THREE from 'three'
+
+import {Easing} from '@tweenjs/tween.js'
 import {effect} from './meteor-signals.js'
 
 export async function svgTexture(
@@ -317,6 +328,53 @@ export function isMesh(obj: THREE.Object3D): obj is THREE.Mesh {
 	return obj instanceof THREE.Mesh
 }
 
+/**
+ * Iterate all Object3Ds in the tree, including the root.
+ * @param root The root Object3D to start iterating from.
+ * @param skip Optional Object3Ds to skip (including their descendants).
+ */
+export function* object3DsInTree(root: THREE.Object3D, ...skip: THREE.Object3D[]): Generator<THREE.Object3D> {
+	if (skip.includes(root)) return
+	yield root
+	for (const child of root.children) yield* object3DsInTree(child, ...skip)
+}
+
+/**
+ * Iterate all meshes in the tree, including the root.
+ * @param root The root Object3D to start iterating from.
+ * @param skip Optional Object3Ds to skip (including their descendants).
+ */
+export function* meshesInTree(root: THREE.Object3D, ...skip: THREE.Object3D[]): Generator<THREE.Mesh> {
+	for (const obj of object3DsInTree(root, ...skip)) if (isMesh(obj)) yield obj
+}
+
+/**
+ * Iterate all materials of a mesh.
+ * @param mesh The mesh whose materials will be iterated.
+ */
+export function* materialsOfMesh(mesh: THREE.Mesh): Generator<THREE.Material> {
+	if (Array.isArray(mesh.material)) yield* mesh.material
+	else yield mesh.material
+}
+
+/**
+ * Iterate all materials in the tree, including the root.
+ * @param root The root Object3D to start iterating from.
+ * @param skip Optional Object3Ds to skip (including their descendants).
+ */
+export function* materialsInTree(root: THREE.Object3D, ...skip: THREE.Object3D[]): Generator<THREE.Material> {
+	for (const mesh of meshesInTree(root, ...skip)) yield* materialsOfMesh(mesh)
+}
+
+export function findInTree(root: THREE.Object3D, predicate: (obj: THREE.Object3D) => boolean): THREE.Object3D | null {
+	for (const obj of object3DsInTree(root)) if (predicate(obj)) return obj
+	return null
+}
+
+/**
+ * Returns a signal that is true when the model is loaded, false otherwise.
+ * @param model The GltfModel element to monitor for loading completion.
+ */
 export function onModelLoad(model: GltfModel) {
 	// Having to do this dance with the MODEL_LOAD event is not great. We'll
 	// clean this up with behaviors-as-child-elements, and ensure the state is
@@ -350,6 +408,15 @@ export function onModelLoad(model: GltfModel) {
 	return loaded
 }
 
+export function enableShadows(el: Element3D) {
+	for (const child of meshesInTree(el.three)) {
+		child.castShadow = true
+		child.receiveShadow = true
+	}
+
+	el.needsUpdate()
+}
+
 export function enableShadowOnModelLoad(el: GltfModel) {
 	const loaded = onModelLoad(el)
 
@@ -359,29 +426,11 @@ export function enableShadowOnModelLoad(el: GltfModel) {
 	})
 }
 
-export function enableShadows(el: Element3D) {
-	el.three.traverse((child: THREE.Object3D) => {
-		if (!isMesh(child)) return
-		child.castShadow = true
-		child.receiveShadow = true
-	})
-
-	el.needsUpdate()
-}
-
 export function enableFrontsideRendering(el: Element3D) {
-	el.three.traverse((child: THREE.Object3D) => {
-		if (!isMesh(child)) return
-		if (child.material instanceof THREE.Material) {
-			child.material.side = THREE.FrontSide
-			child.material.needsUpdate = true
-		} else {
-			child.material.map(material => {
-				material.side = THREE.FrontSide
-				material.needsUpdate = true
-			})
-		}
-	})
+	for (const material of materialsInTree(el.three)) {
+		material.side = THREE.FrontSide
+		material.needsUpdate = true
+	}
 
 	el.needsUpdate()
 }
@@ -395,14 +444,73 @@ export function enableFrontsideOnModelLoad(el: GltfModel) {
 	})
 }
 
-export function* meshesInTree(root: THREE.Object3D): Generator<THREE.Mesh> {
-	if (root instanceof THREE.Mesh) {
-		yield root
+export function setEnvMap(el: Element3D, env: string) {
+	let cleaned = false
+
+	if (!env) return
+
+	for (let material of materialsInTree(el.three)) {
+		const mat = material as THREE.MeshPhysicalMaterial
+
+		mat.envMap = new THREE.TextureLoader().load(env, () => {
+			if (cleaned) return
+			mat.needsUpdate = true
+			el.needsUpdate()
+		})
+		mat.envMap.mapping = THREE.EquirectangularReflectionMapping
+		mat.envMap.colorSpace = THREE.SRGBColorSpace
+		mat.envMapIntensity = 1.3
 	}
 
-	for (const child of root.children) {
-		yield* meshesInTree(child)
+	el.needsUpdate()
+
+	onCleanup(() => (cleaned = true))
+}
+
+export function setEnvMapOnModelLoad(el: GltfModel, env: string) {
+	// XXX For now this is disabled, and we're using the scene's env map
+	// instead.  If we need to adjust the env map per model, we can re-enable
+	// this.
+	return
+
+	const loaded = onModelLoad(el)
+
+	createEffect(() => {
+		if (!loaded()) return
+		setEnvMap(el, env)
+	})
+}
+
+/**
+ * Set the visibility of all materials within an Element3D.
+ * @param el The Element3D whose materials' visibility will be set.
+ * @param visible A boolean indicating whether the materials should be visible or not.
+ * @param skip Optional Element3Ds to skip (including their descendants).
+ */
+export function setMaterialsVisible(el: Element3D, visible: boolean, ...skip: Element3D[]) {
+	for (const material of materialsInTree(el.three, ...skip.map(s => s.three))) {
+		material.visible = visible
+		material.needsUpdate = true
 	}
+
+	el.needsUpdate()
+}
+
+/**
+ * Set the visibility of all materials within an Element3D when the model is loaded.
+ * @param el The GltfModel whose materials' visibility will be set.
+ * @param visible A boolean getter indicating whether the materials should be
+ * visible or not. If it is a signal, the visibility will be updated whenever
+ * the signal changes.
+ * @param skip Optional Element3Ds to skip (including their descendants).
+ */
+export function setMaterialsVisibleOnModelLoad(el: GltfModel, visible: Accessor<boolean>, ...skip: Element3D[]) {
+	const loaded = onModelLoad(el)
+
+	createEffect(() => {
+		if (!loaded()) return
+		setMaterialsVisible(el, visible(), ...skip)
+	})
 }
 
 /**

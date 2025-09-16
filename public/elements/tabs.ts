@@ -7,6 +7,7 @@ import {
 	eventAttribute,
 	html,
 	onCleanup,
+	signal,
 	type ElementAttributes,
 } from 'lume'
 import '../styleVars.js'
@@ -28,9 +29,10 @@ export class TabsProvider extends Element {
 
 	@eventAttribute ontabchange = null
 
-	private _activeValue = ''
-	private triggers: TabsTrigger[] = []
-	private contents: TabsContent[] = []
+	@signal _activeValue = ''
+	@signal triggers: TabsTrigger[] = []
+	@signal contents: TabsContent[] = []
+	@signal isMounted: boolean = false
 
 	get activeValue() {
 		return this.selectedValue || this._activeValue || this.defaultValue
@@ -44,6 +46,42 @@ export class TabsProvider extends Element {
 		setTimeout(() => {
 			this.updateActiveTab()
 		}, 0)
+
+		this.createEffect(() => {
+			if (this.triggers.length && this.contents.length) {
+				this.selectedValue = ''
+				this._activeValue = this.defaultValue
+				setTimeout(() => {
+					this.updateActiveTab()
+				}, 0)
+			}
+		})
+
+		this.createEffect(() => {
+			if (this.isMounted === false) {
+				this.intersectedCallback()
+			}
+		})
+	}
+
+	intersectedCallback() {
+		// use IntersectionObserver to check if the tabs provider is mounted
+		const observer = new IntersectionObserver(
+			entries => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						this.isMounted = true
+						observer.disconnect()
+					}
+				})
+			},
+			{
+				threshold: 0.1,
+				rootMargin: '0px',
+			},
+		)
+		observer.observe(this)
+		onCleanup(() => observer.disconnect())
 	}
 
 	attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null) {
@@ -118,7 +156,9 @@ export class TabsList extends Element {
 	private provider: TabsProvider | null = null
 	private indicatorRef: HTMLElement | null = null
 	private hoverIndicatorRef: HTMLElement | null = null
+	private listElementRef: HTMLElement | null = null
 	private resizeTimeout: NodeJS.Timeout | null = null
+	private updateIndicatorsTimeout: NodeJS.Timeout | null = null
 	connectedCallback() {
 		super.connectedCallback()
 		this.provider = this.closest('tabs-provider') as TabsProvider
@@ -176,10 +216,16 @@ export class TabsList extends Element {
 
 	#addEventListeners() {
 		window.addEventListener('resize', this.#handleResize)
+		if (this.listElementRef) {
+			this.listElementRef.addEventListener('scroll', this.#handleScroll)
+		}
 	}
 
 	#removeEventListeners() {
 		window.removeEventListener('resize', this.#handleResize)
+		if (this.listElementRef) {
+			this.listElementRef.removeEventListener('scroll', this.#handleScroll)
+		}
 	}
 
 	#handleResize = () => {
@@ -191,16 +237,27 @@ export class TabsList extends Element {
 		}, 100)
 	}
 
+	#handleScroll = () => {
+		this.updateIndicators()
+	}
+
 	updateIndicators() {
 		if (!this.provider) return
+		if (this.updateIndicatorsTimeout) {
+			clearTimeout(this.updateIndicatorsTimeout)
+		}
 
 		const triggers = this.querySelectorAll('tabs-trigger') as NodeListOf<TabsTrigger>
 		const activeTrigger = Array.from(triggers).find(trigger => {
 			const button = trigger.shadowRoot?.querySelector('button')
 			return button?.getAttribute('aria-label') === this.provider?.activeValue
 		})
-		if (activeTrigger && this.indicatorRef) {
+		if (activeTrigger && this.indicatorRef && this.provider.isMounted) {
 			this.positionIndicator(this.indicatorRef, activeTrigger)
+		} else {
+			this.updateIndicatorsTimeout = setTimeout(() => {
+				this.updateIndicators()
+			}, 100)
 		}
 	}
 
@@ -218,7 +275,7 @@ export class TabsList extends Element {
 			const listRect = this.getBoundingClientRect()
 			const triggerRect = trigger.getBoundingClientRect()
 
-			const left = triggerRect.left - listRect.left
+			const left = triggerRect.left - listRect.left + (this.listElementRef?.scrollLeft || 0)
 			const width = triggerRect.width
 
 			indicator.style.transform = `translateX(${left}px)`
@@ -227,7 +284,12 @@ export class TabsList extends Element {
 	}
 
 	template = () => html`
-		<div class="tabs-list" role="tablist" aria-orientation="${this.provider?.tabOrientation || 'horizontal'}">
+		<div
+			class="tabs-list"
+			role="tablist"
+			aria-orientation="${this.provider?.tabOrientation || 'horizontal'}"
+			ref="${(el: HTMLElement) => (this.listElementRef = el)}"
+		>
 			<slot></slot>
 			<div class="tab-indicator active-indicator" ref="${(el: HTMLElement) => (this.indicatorRef = el)}"></div>
 			<div class="tab-indicator hover-indicator" ref="${(el: HTMLElement) => (this.hoverIndicatorRef = el)}"></div>

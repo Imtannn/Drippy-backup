@@ -30,8 +30,16 @@ const BRAND_CONFIGS = [
 		rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
 	},
 	{
-		brand: 'movement',
+		brand: 'haruki',
 		rootFolderId: '1-_x-GVUxGBn4S1VDI6t3dFN990IG-VWu',
+	},
+	{
+		brand: 'lostCause',
+		rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
+	},
+	{
+		brand: 'shri',
+		rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
 	},
 	// {
 	// 	brand: 'baroudeuses',
@@ -52,24 +60,48 @@ const allFabrics: TODO[] = []
 const rootMaterials: Map<string, TODO> = new Map() // materialName -> material data
 const categoryMaterialAssignments: Map<string, Set<string>> = new Map() // categoryName -> Set of materialNames
 
+// Retry wrapper function
+async function withRetry<T>(operation: () => Promise<T>, maxRetries: number = 3, delayMs: number = 1000): Promise<T> {
+	let lastError: Error
+
+	for (let attempt = 1; attempt <= maxRetries; attempt++) {
+		try {
+			return await operation()
+		} catch (error) {
+			lastError = error as Error
+			console.log(`⚠️  Attempt ${attempt}/${maxRetries} failed: ${lastError.message}`)
+
+			if (attempt < maxRetries) {
+				const delay = delayMs * attempt // Exponential backoff
+				console.log(`   Retrying in ${delay}ms...`)
+				await new Promise(resolve => setTimeout(resolve, delay))
+			}
+		}
+	}
+
+	throw lastError!
+}
+
 // Helper function to make HTTP requests
 function makeRequest<T = unknown>(url: string): Promise<T> {
-	return new Promise((resolve, reject) => {
-		https
-			.get(url, res => {
-				let data = ''
-				res.on('data', chunk => {
-					data += chunk
+	return withRetry(() => {
+		return new Promise<T>((resolve, reject) => {
+			https
+				.get(url, res => {
+					let data = ''
+					res.on('data', chunk => {
+						data += chunk
+					})
+					res.on('end', () => {
+						try {
+							resolve(JSON.parse(data))
+						} catch (e) {
+							reject(e)
+						}
+					})
 				})
-				res.on('end', () => {
-					try {
-						resolve(JSON.parse(data))
-					} catch (e) {
-						reject(e)
-					}
-				})
-			})
-			.on('error', reject)
+				.on('error', reject)
+		})
 	})
 }
 
@@ -99,37 +131,39 @@ async function uploadToS3(buffer: Buffer, key: string, contentType: string): Pro
 
 // Download file to buffer instead of saving locally
 function downloadToBuffer(url: string): Promise<Buffer> {
-	return new Promise((resolve, reject) => {
-		https
-			.get(url, response => {
-				// Handle redirects
-				if (response.statusCode === 302 || response.statusCode === 301 || response.statusCode === 303) {
-					const location = response.headers.location
-					if (!location) {
-						reject(new Error('Redirect location not provided'))
+	return withRetry(() => {
+		return new Promise<Buffer>((resolve, reject) => {
+			https
+				.get(url, response => {
+					// Handle redirects
+					if (response.statusCode === 302 || response.statusCode === 301 || response.statusCode === 303) {
+						const location = response.headers.location
+						if (!location) {
+							reject(new Error('Redirect location not provided'))
+							return
+						}
+						return downloadToBuffer(location).then(resolve).catch(reject)
+					}
+
+					if (response.statusCode !== 200) {
+						reject(new Error(`Download failed with status ${response.statusCode}`))
 						return
 					}
-					return downloadToBuffer(location).then(resolve).catch(reject)
-				}
 
-				if (response.statusCode !== 200) {
-					reject(new Error(`Download failed with status ${response.statusCode}`))
-					return
-				}
+					const chunks: Buffer[] = []
+					response.on('data', chunk => {
+						chunks.push(chunk)
+					})
 
-				const chunks: Buffer[] = []
-				response.on('data', chunk => {
-					chunks.push(chunk)
+					response.on('end', () => {
+						const buffer = Buffer.concat(chunks)
+						resolve(buffer)
+					})
+
+					response.on('error', reject)
 				})
-
-				response.on('end', () => {
-					const buffer = Buffer.concat(chunks)
-					resolve(buffer)
-				})
-
-				response.on('error', reject)
-			})
-			.on('error', reject)
+				.on('error', reject)
+		})
 	})
 }
 
@@ -146,7 +180,8 @@ async function fetchFolderContents(folderId: string): Promise<TODO[]> {
 
 function normalizeName(name: string): string {
 	// Remove _ characters in name and trim all spaces
-	return name.replace(/_/g, ' ').trim()
+	// Trim double spaces
+	return name.replace(/_/g, ' ').trim().replace(/\s+/g, ' ')
 }
 
 function capitalize(name: string): string {
@@ -506,6 +541,7 @@ function generateFabricsFileContent(fabrics: TODO): string {
 		baseColor: '${fabric.baseColor || ''}',
 		displacement: '${fabric.displacement || ''}',
 		roughness: '${fabric.roughness || ''}',
+		alpha: '${fabric.alpha || ''}',
 		materialName: '${fabric.materialName}',
 		category: '${fabric.category || ''}',
 		templateCategories: [${fabric.templateCategories.map((cat: string) => `'${cat}'`).join(', ')}],
@@ -566,7 +602,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 		let thumbUrl = ''
 
 		// Parse material name from folder name: "${materialCategory} - ${materialName}"
-		const folderNameParts = materialFolder.name.split(' - ')
+		const folderNameParts = materialFolder.name.split('-')
 		if (folderNameParts.length < 2) {
 			console.warn(`    ⚠️ Invalid material folder name format: ${materialFolder.name}. Expected: "Category - Name"`)
 			continue
@@ -632,7 +668,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 					textureUrls.displacement = fileS3Url
 				} else if (fileName.includes('rough')) {
 					textureUrls.roughness = fileS3Url
-				} else if (fileName.includes('opacity')) {
+				} else if (fileName.includes('alpha')) {
 					textureUrls.alpha = fileS3Url
 				}
 
@@ -669,7 +705,7 @@ async function scanCategoryMaterials(categoryMaterialsFolder: TODO, categoryName
 
 	for (const materialRef of materialReferenceFolders) {
 		// Parse and normalize the material folder name to match root materials format
-		const folderNameParts = materialRef.name.split(' - ')
+		const folderNameParts = materialRef.name.split('-')
 		if (folderNameParts.length < 2) {
 			console.warn(
 				`    ⚠️ Invalid category material reference format: ${materialRef.name}. Expected: "Category - Name"`,
@@ -695,7 +731,7 @@ async function scanCategoryMaterials(categoryMaterialsFolder: TODO, categoryName
 async function getTemplateMaterialReference(materialFolder: TODO): Promise<string | null> {
 	// Template material folders are just reference folders (empty)
 	// The folder name is the material key: "${materialCategory} - ${materialName}"
-	const folderNameParts = materialFolder.name.split(' - ')
+	const folderNameParts = materialFolder.name.split('-')
 	if (folderNameParts.length < 2) {
 		console.warn(
 			`    ⚠️ Invalid template material reference format: ${materialFolder.name}. Expected: "Category - Name"`,

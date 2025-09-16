@@ -3,8 +3,8 @@ import {store} from '../app/store.js'
 
 @element
 export class AnimationSelect extends Element {
-	template = () =>
-		html`<div>
+	template = () => html`
+		<div style=${() => (store.isAdmin ? '' : 'display: none;')}>
 			<select
 				id="animation-select"
 				onchange=${(ev: any) => {
@@ -15,5 +15,6 @@ export class AnimationSelect extends Element {
 				<option value="walk">Walk</option>
 				<option value="dance">Dance</option>
 			</select>
-		</div>`
+		</div>
+	`
 }

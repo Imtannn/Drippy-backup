@@ -7,6 +7,7 @@ export const spaces: Space[] = [
 		slug: 'GAP',
 		description: 'MoiDien',
 		logo: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/moidien/logo.webp',
+		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/moidien/scene-thumbnail.png',
 		scene:
@@ -24,6 +25,7 @@ export const spaces: Space[] = [
 		slug: 'YALLAH',
 		description: 'Baroudeuses',
 		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/baroudeuses/scene-thumbnail.png',
 		scene:
@@ -39,22 +41,24 @@ export const spaces: Space[] = [
 	{
 		name: 'Movement',
 		slug: 'movement',
-		description: 'Movement',
+		description: 'Haruki',
 		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/movement/scene-thumbnail.jpeg',
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/movement/scene-thumbnail.jpg',
 		scene: '',
 		includedModelFiles: [],
 		gender: 'female',
-		garmentsCount: blocks.movement?.length ?? 0,
-		collection: 'movement',
+		garmentsCount: blocks.haruki?.length ?? 0,
+		collection: 'haruki',
 		isWholesale: false,
 	},
 	{
-		name: 'Vaishnavi',
-		slug: 'vaishnavi',
+		name: 'Essence of her',
+		slug: 'essence-of-her',
 		description: 'Vaishnavi',
 		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/naishnavi/scene-thumbnail.png',
 		scene:
@@ -65,6 +69,41 @@ export const spaces: Space[] = [
 		gender: 'female',
 		garmentsCount: blocks.vaishnavi?.length ?? 0,
 		collection: 'vaishnavi',
+		isWholesale: false,
+	},
+	{
+		name: 'Shadow Grace',
+		slug: 'shadow-grace',
+		description: 'Lost Cause',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/lost-cause/scene-thumbnail.png',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/lost-cause/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/lost-cause/extras/shoes.glb',
+		],
+		gender: 'female',
+		garmentsCount: blocks.lostCause?.length ?? 0,
+		collection: 'lostCause',
+		isWholesale: false,
+	},
+	{
+		name: 'Duality in Radiance',
+		slug: 'duality-in-radiance',
+		description: 'SHRI',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/shri/scene-thumbnail.png',
+		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/shri/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/shri/extras/shoes.glb',
+		],
+		gender: 'female',
+		garmentsCount: blocks.shri?.length ?? 0,
+		collection: 'shri',
 		isWholesale: false,
 	},
 ]
