@@ -8,6 +8,7 @@ import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
 import {appStyles} from '../styles/app-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
+import {captureGarmentScreenshot} from '../utils.js'
 import './app-buttons.js'
 import './buy-button.js'
 import './share-button.js'
@@ -23,6 +24,30 @@ export class OrderItems extends Element {
 
 		// Initialize all selected templates as checked
 		store.initializeOrderItems()
+
+		// Pre-generate screenshots for all selected templates
+		this.generateScreenshots()
+	}
+
+	private async generateScreenshots() {
+		for (const [category] of store.selectedTemplates.entries()) {
+			try {
+				// Mark this category as loading
+				store.addLoadingScreenshot(category)
+
+				const screenshot = await captureGarmentScreenshot(category)
+
+				// Update the store's screenshot cache
+				store.screenshotCache.set(category, screenshot)
+
+				// Remove loading state
+				store.removeLoadingScreenshot(category)
+			} catch (error) {
+				console.warn(`Failed to generate screenshot for ${category}:`, error)
+				// Remove loading state even if failed
+				store.removeLoadingScreenshot(category)
+			}
+		}
 	}
 
 	#onBackButtonClick = () => {
@@ -48,7 +73,6 @@ export class OrderItems extends Element {
 
 	#onShareClick = () => {
 		// copy current url to clipboard
-		console.log('Share my drip clicked')
 		navigator.clipboard.writeText(window.location.href)
 		alert('Link copied to clipboard')
 	}
@@ -107,7 +131,18 @@ export class OrderItems extends Element {
 										</svg>
 									</div>
 									<div class="item-image">
-										<img src=${template.thumb} alt=${template.name} />
+										${() => {
+											const cached = store.screenshotCache.get(category)
+											const isLoading = store.loadingScreenshots.has(category)
+
+											if (isLoading) {
+												return html`<div class="screenshot-loader">
+													<div class="spinner"></div>
+												</div>`
+											}
+
+											return html`<img src=${cached || template.thumb} alt=${template.name} />`
+										}}
 									</div>
 									<div class="item-details">
 										<div class="item-name">Product name</div>
@@ -269,6 +304,33 @@ export class OrderItems extends Element {
 
 			&.visible {
 				opacity: 1;
+			}
+		}
+
+		.screenshot-loader {
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: var(--uiColorPrimaryLightGrey);
+		}
+
+		.spinner {
+			width: 24px;
+			height: 24px;
+			border: 2px solid var(--uiColorSecondaryLightGrey);
+			border-top: 2px solid var(--uiColorAccentViolet);
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+		}
+
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
 			}
 		}
 	`

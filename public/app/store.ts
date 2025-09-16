@@ -1,4 +1,5 @@
 import {Meteor} from 'meteor/meteor'
+import {untrack} from 'solid-js'
 import {createMutable} from 'solid-js/store'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -6,7 +7,7 @@ import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {toSolidSignal} from '../utils.js'
 import {blockManager} from './block-manager.js'
-import {untrack} from 'solid-js'
+
 import {Visits, type Visit} from '../imports/collections/Visits.js'
 
 export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
@@ -68,6 +69,10 @@ export const store = createMutable({
 	retailItemCustomMeasurements: new Map<TemplateCategory, CustomMeasurement>(),
 	// Track which category is currently being customized
 	currentCustomMeasurementCategory: null as TemplateCategory | null,
+	// Screenshot cache for garment images
+	screenshotCache: new Map<TemplateCategory, string>(),
+	// Track which screenshots are currently being generated
+	loadingScreenshots: new Set<TemplateCategory>(),
 	order: {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -467,6 +472,8 @@ export const store = createMutable({
 		this.retailItemQuantities = new Map<TemplateCategory, number>()
 		this.retailItemSizes = new Map<TemplateCategory, string>()
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
+		this.screenshotCache = new Map<TemplateCategory, string>()
+		this.loadingScreenshots = new Set<TemplateCategory>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {
@@ -527,6 +534,19 @@ export const store = createMutable({
 		untrack(() => {
 			this.loadingMaterials.delete(key)
 			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+		})
+	},
+
+	addLoadingScreenshot(category: TemplateCategory) {
+		untrack(() => {
+			this.loadingScreenshots.add(category)
+			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
+		})
+	},
+	removeLoadingScreenshot(category: TemplateCategory) {
+		untrack(() => {
+			this.loadingScreenshots.delete(category)
+			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
 		})
 	},
 })
