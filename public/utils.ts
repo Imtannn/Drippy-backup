@@ -447,10 +447,7 @@ function calculateGarmentBoundingBox(category: string, lumeScene: any): THREE.Bo
 
 	// If no models found, return a default bounding box
 	if (boundingBox.isEmpty()) {
-		boundingBox.setFromCenterAndSize(
-			new THREE.Vector3(0, 0, 0),
-			new THREE.Vector3(0.5, 1, 0.5)
-		)
+		boundingBox.setFromCenterAndSize(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.5, 1, 0.5))
 	}
 
 	return boundingBox
@@ -475,15 +472,11 @@ function calculateCameraFromBoundingBox(boundingBox: THREE.Box3, fov: number = 5
 	const paddedDistance = distance * 1.2
 
 	// Position camera in front of the center
-	const cameraPosition = new THREE.Vector3(
-		center.x,
-		center.y,
-		center.z + paddedDistance
-	)
+	const cameraPosition = new THREE.Vector3(center.x, center.y, center.z + paddedDistance)
 
 	return {
 		position: cameraPosition,
-		lookAt: center
+		lookAt: center,
 	}
 }
 
@@ -493,22 +486,14 @@ function calculateCameraFromBoundingBox(boundingBox: THREE.Box3, fov: number = 5
  * @returns Promise<string> - Base64 data URL of the screenshot
  */
 export async function captureGarmentScreenshot(category: string): Promise<string> {
-	// Find the drippy-app element
-	const app = document.querySelector('drippy-app') as any
-	if (!app?.shadowRoot) return ''
+	const drippyScene = document.querySelector('drippy-app')?.shadowRoot?.querySelector('drippy-scene') as any
+	if (!drippyScene?.shadowRoot) return ''
 
-	// Get the drippy-scene
-	const scene = app.shadowRoot.querySelector('drippy-scene') as any
-	if (!scene?.shadowRoot) return ''
-
-	// Get the lume-scene
-	const lumeScene = scene.shadowRoot.querySelector('lume-scene') as any
+	const lumeScene = drippyScene.shadowRoot.querySelector('lume-scene') as any
 	if (!lumeScene?.shadowRoot) return ''
 
-	// Get all garment models (cloth items) - they're direct children of lume-scene
-	const clothModels = lumeScene.querySelectorAll('lume-gltf-model[data-cloth]')
+	const clothModels = Array.from(drippyScene.shadowRoot.querySelectorAll('lume-gltf-model[data-cloth]') ?? [])
 
-	// Simple approach: hide all garments except the target category (no scaling)
 	const modelsToHide: any[] = []
 
 	clothModels.forEach((model: any) => {
@@ -516,7 +501,6 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 		const shouldKeep = modelId.startsWith(category + '-')
 
 		if (!shouldKeep) {
-			// Hide the Three.js object instead of CSS display
 			if (model.three) {
 				model.three.visible = false
 				modelsToHide.push(model)
@@ -528,8 +512,6 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 	const otherModelsToHide: any[] = []
 
 	// Use drippy-scene's avatarModel property to hide avatar
-	const drippyScene = scene as any
-
 	if (drippyScene && drippyScene.avatarModel) {
 		// Selectively hide only avatar body (not garments)
 		let hiddenAvatarParts: any[] = []
@@ -539,7 +521,10 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 			const isGarment =
 				childName.includes('LUME-GLTF-MODEL#') &&
 				(childName.toLowerCase().includes('shirt') ||
+					childName.toLowerCase().includes('dress') ||
 					childName.toLowerCase().includes('pants') ||
+					childName.toLowerCase().includes('skirt') ||
+					childName.toLowerCase().includes('jacket') ||
 					childName.toLowerCase().includes('accessories'))
 
 			if (!isGarment) {
@@ -590,23 +575,13 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 	const threeCamera = (screenshotCamera as any).three
 	if (threeCamera) {
 		const boundingBox = calculateGarmentBoundingBox(category, lumeScene)
-		const optimalCamera = calculateCameraFromBoundingBox(boundingBox, 50)
+		const {position, lookAt} = calculateCameraFromBoundingBox(boundingBox, 50)
 
-		const pos = optimalCamera.position.clone()
-		const lookAt = optimalCamera.lookAt.clone()
-
-		// Apply category-specific adjustments for better framing
-		if (category === 'Shirt' || category === 'Dress') {
-			pos.y = Math.max(pos.y, 1.0)
-			pos.z = Math.max(pos.z, 0.8)
-		} else if (category === 'Pants' || category === 'Skirt') {
-			pos.y = Math.min(pos.y, 0.8)
-			pos.z = Math.max(pos.z, 0.8)
-			lookAt.y = Math.min(lookAt.y, -0.2)
-		}
+		const pos = position.clone()
+		const lookAtVec = lookAt.clone()
 
 		threeCamera.position.copy(pos)
-		threeCamera.lookAt(lookAt)
+		threeCamera.lookAt(lookAtVec)
 		threeCamera.rotation.set(0, 0, 0)
 		threeCamera.updateMatrix()
 		threeCamera.updateMatrixWorld(true)
@@ -617,7 +592,7 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 	}
 
 	// Wait for scene to fully render
-	await new Promise(resolve => setTimeout(resolve, 300))
+	await new Promise(resolve => setTimeout(resolve, 100))
 
 	// Get canvas and renderer
 	const canvas = lumeScene.shadowRoot.querySelector('canvas')
