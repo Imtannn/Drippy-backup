@@ -1,5 +1,5 @@
 export type BlockCategory = 'Bodice' | 'Sleeves' | 'Pants' | 'Bag' | 'Hat' | 'Full Body' | 'Accessory' | 'Skirt'
-export type TemplateCategory = 'Jacket' | 'Shirt' | 'Pants' | 'Accessories' | 'Dress' | 'Skirt'
+export type TemplateCategory = 'Jacket' | 'Shirt' | 'Pants' | 'Accessories' | 'Dress' | 'Skirt' | 'Top'
 
 export type BlockAvatar = 'Male' | 'Female'
 

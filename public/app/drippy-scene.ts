@@ -183,23 +183,24 @@ export class DrippyScene extends Element {
 		// Track selected avatar loading state
 		this.createEffect(() => {
 			if (!store.isShowAvatar || store.selectedAvatar) return
+			if (store.tempSelectedAvatar) {
+				const avatar = this.avatarModel
+				if (!avatar) return
 
-			const avatar = this.avatarModel
-			if (!avatar) return
+				const avatarLoaded = onModelLoad(avatar)
 
-			const avatarLoaded = onModelLoad(avatar)
+				createEffect(() => {
+					if (!avatarLoaded()) {
+						store.addLoadingBlock(avatarId)
+						store.addIsDrippySceneLoading(avatarId)
 
-			createEffect(() => {
-				if (!avatarLoaded()) {
-					store.addLoadingBlock(avatarId)
-					store.addIsDrippySceneLoading(avatarId)
+						return
+					}
 
-					return
-				}
-
-				store.removeLoadingBlock(avatarId)
-				store.removeIsDrippySceneLoading(avatarId)
-			})
+					store.removeLoadingBlock(avatarId)
+					store.removeIsDrippySceneLoading(avatarId)
+				})
+			}
 		})
 
 		const sceneId = Symbol('scene')

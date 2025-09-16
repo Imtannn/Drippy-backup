@@ -45,8 +45,8 @@ export class TemplateView extends Element {
 		// Update template categories when templates change
 		this.createEffect(() => {
 			if (!this.spaceCollection) return
-			// Define the category order: 'Dress' | 'Jacket' | 'Shirt' | 'Skirt' | 'Pants' | 'Accessories'
-			const categoryOrder: TemplateCategory[] = ['Dress', 'Shirt', 'Jacket', 'Skirt', 'Pants', 'Accessories']
+			// Define the category order: 'Dress' | 'Jacket' | 'Shirt' | 'Top' | 'Skirt' | 'Pants' | 'Accessories'
+			const categoryOrder: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants', 'Accessories']
 
 			// Get available categories from templates
 			const availableCategories = [
@@ -204,7 +204,7 @@ export class TemplateView extends Element {
 															object-position="center"
 															aspect-ratio="0.79"
 														></item-card>
-														<div class="template-product-name">Product Name</div>
+														<div class="template-product-name">${template.name}</div>
 														<div class="template-product-price-container">
 															<div
 																class="template-product-price"
