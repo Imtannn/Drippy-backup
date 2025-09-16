@@ -365,6 +365,11 @@ export function* materialsInTree(root: THREE.Object3D, ...skip: THREE.Object3D[]
 	for (const mesh of meshesInTree(root, ...skip)) yield* materialsOfMesh(mesh)
 }
 
+export function findInTree(root: THREE.Object3D, predicate: (obj: THREE.Object3D) => boolean): THREE.Object3D | null {
+	for (const obj of object3DsInTree(root)) if (predicate(obj)) return obj
+	return null
+}
+
 /**
  * Returns a signal that is true when the model is loaded, false otherwise.
  * @param model The GltfModel element to monitor for loading completion.
@@ -445,11 +450,9 @@ export function setEnvMap(el: Element3D, env: string) {
 
 	for (let material of materialsInTree(el.three)) {
 		const mat = material as THREE.MeshPhysicalMaterial
-		console.log('setting env map', env)
 
 		mat.envMap = new THREE.TextureLoader().load(env, () => {
 			if (cleaned) return
-			console.log('env map loaded', env)
 			mat.needsUpdate = true
 			el.needsUpdate()
 		})
@@ -470,7 +473,6 @@ export function setEnvMapOnModelLoad(el: GltfModel, env: string) {
 	return
 
 	const loaded = onModelLoad(el)
-	console.log('setEnvMapOnModelLoad', env)
 
 	createEffect(() => {
 		if (!loaded()) return
@@ -488,7 +490,6 @@ export function setMaterialsVisible(el: Element3D, visible: boolean, ...skip: El
 	for (const material of materialsInTree(el.three, ...skip.map(s => s.three))) {
 		material.visible = visible
 		material.needsUpdate = true
-		console.log('set material visible', material.name, visible)
 	}
 
 	el.needsUpdate()
