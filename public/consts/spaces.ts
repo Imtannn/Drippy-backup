@@ -89,4 +89,21 @@ export const spaces: Space[] = [
 		collection: 'lostCause',
 		isWholesale: false,
 	},
+	{
+		name: 'Duality in Radiance',
+		slug: 'duality-in-radiance',
+		description: 'SHRI',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/shri/scene-thumbnail.png',
+		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/shri/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/shri/extras/shoes.glb',
+		],
+		gender: 'female',
+		garmentsCount: blocks.shri?.length ?? 0,
+		collection: 'shri',
+		isWholesale: false,
+	},
 ]

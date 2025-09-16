@@ -58,7 +58,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 1',
 			avatar: 'Female',
 			category: 'Shirt',
-			materialId: 'Silk - Chiffon',
+			materialId: 'Silk - Chiffon (2ab4c8)',
 		},
 		{
 			_id: '2',
@@ -82,7 +82,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 9',
 			avatar: 'Female',
 			category: 'Dress',
-			materialId: '',
+			materialId: 'Silk - Crepe (D6e2ea)',
 		},
 		{
 			_id: '5',
@@ -130,7 +130,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 2',
 			avatar: 'Female',
 			category: 'Dress',
-			materialId: 'Silk - Chiffon Blend',
+			materialId: 'Silk - Chiffon (2ab4c8)',
 		},
 		{
 			_id: '11',
@@ -138,7 +138,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 1',
 			avatar: 'Female',
 			category: 'Dress',
-			materialId: 'Silk - Chiffon Blend',
+			materialId: 'Silk - Chiffon (2ab4c8)',
 		},
 		{
 			_id: '12',
@@ -146,7 +146,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 2',
 			avatar: 'Female',
 			category: 'Skirt',
-			materialId: 'Silk - Chiffon',
+			materialId: 'Silk - Chiffon (2ab4c8)',
 		},
 		{
 			_id: '13',
@@ -154,7 +154,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 1',
 			avatar: 'Female',
 			category: 'Skirt',
-			materialId: 'Silk - Chiffon',
+			materialId: 'Silk - Chiffon (2ab4c8)',
 		},
 	],
 	lostCause: [
@@ -164,7 +164,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 7',
 			avatar: 'Female',
 			category: 'Top',
-			materialId: 'Silk - Black Organza',
+			materialId: 'Wool - Yarn',
 		},
 		{
 			_id: '2',
@@ -180,7 +180,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 5',
 			avatar: 'Female',
 			category: 'Top',
-			materialId: 'Silk - Organza Print',
+			materialId: 'Wool - Twisted',
 		},
 		{
 			_id: '4',
@@ -196,7 +196,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 3',
 			avatar: 'Female',
 			category: 'Top',
-			materialId: 'Cotton - Jersey',
+			materialId: 'Wool - Black Twisted',
 		},
 		{
 			_id: '6',
@@ -260,7 +260,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 1',
 			avatar: 'Female',
 			category: 'Skirt',
-			materialId: 'Abtract - Navy Face',
+			materialId: 'Wool - Black Twisted',
 		},
 		{
 			_id: '14',
@@ -277,6 +277,48 @@ export const templates: Record<string, Template[]> = {
 			avatar: 'Female',
 			category: 'Pants',
 			materialId: 'Abtract - Black Face',
+		},
+	],
+	shri: [
+		{
+			_id: '1',
+			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_4.png',
+			name: 'Item 4',
+			avatar: 'Female',
+			category: 'Shirt',
+			materialId: '',
+		},
+		{
+			_id: '2',
+			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_3.png',
+			name: 'Item 3',
+			avatar: 'Female',
+			category: 'Shirt',
+			materialId: 'Scuba - 287',
+		},
+		{
+			_id: '3',
+			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_2.png',
+			name: 'Item 2',
+			avatar: 'Female',
+			category: 'Shirt',
+			materialId: '',
+		},
+		{
+			_id: '4',
+			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_1.png',
+			name: 'Item 1',
+			avatar: 'Female',
+			category: 'Shirt',
+			materialId: 'Velvet - Black',
+		},
+		{
+			_id: '5',
+			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Pants/Item_1.png',
+			name: 'Item 1',
+			avatar: 'Female',
+			category: 'Pants',
+			materialId: 'Silk - Bronze',
 		},
 	],
 	baroudeuses: [

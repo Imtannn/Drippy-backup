@@ -698,6 +698,100 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Pants',
 		},
 	],
+
+	shri: [
+		{
+			_id: '1',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/blocks/Shirt/Item_4___Bodice/bodice_1558.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/shri/blocks/Shirt/Item_4___Bodice/bodice_1558.gltf',
+			blockName: 'bodice 1558',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 4',
+			templateName: 'Item 4',
+			templateCategory: 'Shirt',
+		},
+		{
+			_id: '2',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/blocks/Shirt/Item_3___Sleeves/sleeves_1554.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/shri/blocks/Shirt/Item_3___Sleeves/sleeves_1554.gltf',
+			blockName: 'sleeves 1554',
+			avatar: 'Female',
+			category: 'Sleeves',
+			templateId: 'Item 3',
+			templateName: 'Item 3',
+			templateCategory: 'Shirt',
+		},
+		{
+			_id: '3',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/blocks/Shirt/Item_3___Bodice/bodice_1553.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/shri/blocks/Shirt/Item_3___Bodice/bodice_1553.gltf',
+			blockName: 'bodice 1553',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 3',
+			templateName: 'Item 3',
+			templateCategory: 'Shirt',
+		},
+		{
+			_id: '4',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/blocks/Shirt/Item_2___Sleeves/sleeves_1552.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/shri/blocks/Shirt/Item_2___Sleeves/sleeves_1552.gltf',
+			blockName: 'sleeves 1552',
+			avatar: 'Female',
+			category: 'Sleeves',
+			templateId: 'Item 2',
+			templateName: 'Item 2',
+			templateCategory: 'Shirt',
+		},
+		{
+			_id: '5',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/blocks/Shirt/Item_2___Bodice/bodice_1551.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/shri/blocks/Shirt/Item_2___Bodice/bodice_1551.gltf',
+			blockName: 'bodice 1551',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 2',
+			templateName: 'Item 2',
+			templateCategory: 'Shirt',
+		},
+		{
+			_id: '6',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/blocks/Shirt/Item_1___Bodice/bodice_1355.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/shri/blocks/Shirt/Item_1___Bodice/bodice_1355.gltf',
+			blockName: 'bodice 1355',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 1',
+			templateName: 'Item 1',
+			templateCategory: 'Shirt',
+		},
+		{
+			_id: '7',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/blocks/Pants/Item_1___Pants/pants_1360.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/shri/blocks/Pants/Item_1___Pants/pants_1360.gltf',
+			blockName: 'pants 1360',
+			avatar: 'Female',
+			category: 'Pants',
+			templateId: 'Item 1',
+			templateName: 'Item 1',
+			templateCategory: 'Pants',
+		},
+	],
 	baroudeuses: [
 		{
 			_id: '1',

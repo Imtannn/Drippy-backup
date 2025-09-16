@@ -50,14 +50,18 @@ export class TabsProvider extends Element {
 		this.createEffect(() => {
 			if (this.triggers.length && this.contents.length) {
 				this.selectedValue = ''
-				this._activeValue = ''
+				this._activeValue = this.defaultValue
 				setTimeout(() => {
 					this.updateActiveTab()
 				}, 0)
 			}
 		})
 
-		this.intersectedCallback()
+		this.createEffect(() => {
+			if (this.isMounted === false) {
+				this.intersectedCallback()
+			}
+		})
 	}
 
 	intersectedCallback() {

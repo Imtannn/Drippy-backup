@@ -31,5 +31,7 @@ export type Fabric = {
 		| 'Fur'
 		| 'Abtract'
 		| 'Twisted'
+		| 'Velvet'
+		| 'Scuba'
 	templateCategories?: string[]
 }
