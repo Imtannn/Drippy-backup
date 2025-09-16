@@ -4,8 +4,8 @@ import type {OrderData} from '../types/types.js'
 
 import '../elements/back-button.js'
 import '../elements/home-button.js'
-import '../elements/logo-button.js'
 import '../elements/logic/show-when.js'
+import '../elements/logo-button.js'
 import '../elements/person-button.js'
 import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
@@ -384,7 +384,7 @@ export class OrderView extends Element {
 						condition=${() => store.order.status === 'submitting'}
 						content=${() => html`
 							<div class="loading-spinner"></div>
-							Submitting order...
+							<span>Submitting order...</span>
 						`}
 						fallback=${() => html`
 							<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -396,7 +396,7 @@ export class OrderView extends Element {
 									stroke-linejoin="round"
 								/>
 							</svg>
-							Send my order to LOGO
+							<span>Send my order to LOGO</span>
 						`}
 					></show-when>
 				</button>
@@ -404,7 +404,7 @@ export class OrderView extends Element {
 				<!-- Error Display -->
 				<show-when
 					condition=${() => store.order.error}
-					content=${() => html`<div class="error-message">${store.order.error}</div>`}
+					content=${() => html`<div class="error-message">${() => store.order.error}</div>`}
 				></show-when>
 			</div>
 		</bottom-sheet>
