@@ -2233,6 +2233,18 @@ p {
 /* ======================================== */
 
 @media (max-width: 620px) {
+	.landing-page-desktop .showcase {
+		flex-direction: column;
+	}
+	.landing-page-desktop .showcase__item {
+		flex: unset;
+		max-width: 450px;
+		height: 500px;
+	}
+	.showcase .showcase__model-display {
+		width: 150px;
+		height: 450px;
+	}
 	.landing-page-desktop .how-it-works__step {
 		min-height: 510px;
 	}
