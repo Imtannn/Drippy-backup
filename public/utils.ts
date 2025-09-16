@@ -626,14 +626,7 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 
 		drippyScene.avatarModel.three.children.forEach((child: any) => {
 			const childName = child.name || ''
-			const isGarment =
-				childName.includes('LUME-GLTF-MODEL#') &&
-				(childName.toLowerCase().includes('shirt') ||
-					childName.toLowerCase().includes('dress') ||
-					childName.toLowerCase().includes('pants') ||
-					childName.toLowerCase().includes('skirt') ||
-					childName.toLowerCase().includes('jacket') ||
-					childName.toLowerCase().includes('accessories'))
+			const isGarment = childName.includes('LUME-ELEMENT3D')
 
 			if (!isGarment) {
 				// This is avatar body - hide it
