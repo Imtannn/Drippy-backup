@@ -6,13 +6,12 @@ import {
 	element,
 	eventAttribute,
 	onCleanup,
-	signal,
 	type ElementAttributes,
 } from 'lume'
 
-import type {Element3D, GltfModel} from 'lume'
+import {GltfModel, type Element3D} from 'lume'
 
-import {AutoRigger} from './AutoRigger.js'
+import {_AutoRigger} from './AutoRigger.js'
 import {onModelLoad} from '../../utils.js'
 
 type LumeAutoRiggerAttributes = keyof {}
@@ -33,38 +32,42 @@ export class LumeAutoRigger extends Element {
 
 	@eventAttribute onrig = () => {}
 
-	@signal private meshToRig: Element | null = null
-	@signal private riggedMesh: Element | null = null
-
 	connectedCallback() {
 		super.connectedCallback()
 
-		if (
-			!(
-				this.parentElement?.tagName === 'LUME-GLTF-MODEL' &&
-				this.parentElement?.parentElement?.tagName === 'LUME-GLTF-MODEL'
+		// Get the nearest lume-gltf-model ancestor for the rigged model.
+		// This is not robust to <slot> composition, but good enough for now.
+		let ancestorModel: Element | null | undefined = this.parentElement?.parentElement as Element | null | undefined
+		while (ancestorModel && !(ancestorModel instanceof GltfModel))
+			ancestorModel = ancestorModel.parentElement as Element | null
+
+		// For now, a particular structure is required: the parent of this
+		// element must be the model to rig, and that model must be a
+		// descendant of the rigged model.
+		// Later on we'll allow meshes in subtrees, and the rigged model to be
+		// specified by selector, etc.
+		if (!(this.parentElement instanceof GltfModel && ancestorModel instanceof GltfModel)) {
+			console.error(
+				`<${this.tagName.toLowerCase()}> must be a child of the model to rig, which must be a descendant of the rigged model.`,
 			)
-		) {
-			console.error('LumeAutoRigger must be a child of the model to rig, which must be a child of the rigged model.')
 			return
 		}
 
-		this.meshToRig = this.parentElement as Element
-		this.riggedMesh = this.parentElement.parentElement as Element
+		const riggedModel = ancestorModel
+		const modelToRig = this.parentElement
 
 		this.createEffect(() => {
-			// TODO this depends on the model (src) and needs to re-run if that changes.
 			if (this.disabled) return
-			if (!this.meshToRig || !this.riggedMesh) return
+			if (!modelToRig || !riggedModel) return
 
-			const meshToRigLoaded = onModelLoad(this.meshToRig as GltfModel)
-			const riggedMeshLoaded = onModelLoad(this.riggedMesh as GltfModel)
+			const modelToRigLoaded = onModelLoad(modelToRig)
+			const riggedModelLoaded = onModelLoad(riggedModel)
 
 			this.createEffect(() => {
-				if (!meshToRigLoaded() || !riggedMeshLoaded()) return
+				if (!modelToRigLoaded() || !riggedModelLoaded()) return
 
-				const autoRigger = new AutoRigger({avatar: this.riggedMesh as GltfModel, excludedBones: this.excludedBones})
-				autoRigger.rig((this.meshToRig as Element3D).three)
+				const autoRigger = new _AutoRigger({riggedModel, excludedBones: this.excludedBones})
+				autoRigger.rig((modelToRig as Element3D).three)
 				onCleanup(() => autoRigger.unrig())
 
 				if (autoRigger.skinnedMeshes.length == 0) return

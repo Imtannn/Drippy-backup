@@ -10,7 +10,6 @@ import {
 	Index,
 	onCleanup,
 	Scene,
-	Show,
 	signal,
 } from 'lume'
 import type {Accessor} from 'solid-js'
@@ -30,10 +29,15 @@ import {
 	enableShadowOnModelLoad,
 	meshesInTree,
 	onModelLoad,
+	setEnvMapOnModelLoad,
+	setMaterialsVisibleOnModelLoad,
 } from '../utils.js'
 import './app-buttons.js'
 import {store} from './store.js'
 import {textureManager} from './texture-manager.js'
+
+// TODO Use the env specified for each space.
+const env = '/images/envs/brown_photostudio_02.jpg'
 
 type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
 
@@ -179,23 +183,24 @@ export class DrippyScene extends Element {
 		// Track selected avatar loading state
 		this.createEffect(() => {
 			if (!store.isShowAvatar || store.selectedAvatar) return
+			if (store.tempSelectedAvatar) {
+				const avatar = this.avatarModel
+				if (!avatar) return
 
-			const avatar = this.avatarModel
-			if (!avatar) return
+				const avatarLoaded = onModelLoad(avatar)
 
-			const avatarLoaded = onModelLoad(avatar)
+				createEffect(() => {
+					if (!avatarLoaded()) {
+						store.addLoadingBlock(avatarId)
+						store.addIsDrippySceneLoading(avatarId)
 
-			createEffect(() => {
-				if (!avatarLoaded()) {
-					store.addLoadingBlock(avatarId)
-					store.addIsDrippySceneLoading(avatarId)
+						return
+					}
 
-					return
-				}
-
-				store.removeLoadingBlock(avatarId)
-				store.removeIsDrippySceneLoading(avatarId)
-			})
+					store.removeLoadingBlock(avatarId)
+					store.removeIsDrippySceneLoading(avatarId)
+				})
+			}
 		})
 
 		const sceneId = Symbol('scene')
@@ -391,6 +396,30 @@ export class DrippyScene extends Element {
 
 		return html`
 			<show-when
+				condition=${() => store.isAdmin}
+				content=${() => html`
+					<!-- debug slider for environment intensity -->
+					<div style="position: absolute; top: 1rem; left: 50%; transform: translateX(-50%); z-index: 10;">
+						<p>Environment Intensity (admin only)</p>
+						<input
+							id="env-intensity"
+							title="Environment Intensity"
+							type="range"
+							min="0"
+							max="3"
+							step="0.1"
+							value="1"
+							oninput=${(e: Event) => {
+								const input = e.target as HTMLInputElement
+								this.lumeScene!.three.environmentIntensity = Number(input.value) || 0
+								this.lumeScene!.needsUpdate()
+							}}
+						/>
+					</div>
+				`}
+			></show-when>
+
+			<show-when
 				condition=${() => store.view === 'blocks' || store.view === 'avatar' || store.view === 'template'}
 				content=${() => html`
 					<app-buttons-left layout="bottom">
@@ -405,17 +434,22 @@ export class DrippyScene extends Element {
 
 			<div id="lume-scene-container">
 				<lume-scene
-					ref=${(el: Scene) => (this.lumeScene = el)}
+					ref=${(el: Scene) => ((this.lumeScene = el), el && (el.three.environmentIntensity = 1))}
 					id="drippy-scene"
 					webgl
 					perspective="2200"
 					physically-correct-lights
 					shadow-mode="vsm"
+					environment="/images/envs/brown_photostudio_02.jpg"
 				>
 					<lume-element3d align-point="0.5 0.5 0.5">
-						<lume-ambient-light intensity="0.7" color="white"></lume-ambient-light>
+						<lume-ambient-light visible="true" intensity="0.7" color="white"></lume-ambient-light>
+
+						<!-- a sphere to debug/visualize the env map -->
+						<lume-sphere visible="${() => store.isAdmin}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
 
 						<lume-spot-light
+							visible="true"
 							target="#avatar"
 							position="5 -5 1"
 							intensity="3"
@@ -440,6 +474,7 @@ export class DrippyScene extends Element {
 						</lume-spot-light>
 
 						<lume-spot-light
+							visible="true"
 							target="#avatar"
 							position="-5 -5 1"
 							intensity="3"
@@ -464,6 +499,7 @@ export class DrippyScene extends Element {
 						</lume-spot-light>
 
 						<lume-spot-light
+							visible="true"
 							target="#avatar"
 							position="0 -5 5"
 							intensity="3"
@@ -495,40 +531,25 @@ export class DrippyScene extends Element {
 							position="0 -1 0"
 						></lume-camera-rig>
 
-						<${Show}
-							when=${() => store.isShowAvatar}
-							fallback=${() => html`
-								<${For} each=${() => this.renderBlocks}>
-									${(item: RenderBlock, index: Accessor<number>) => html`
-										<lume-gltf-model
-											ref=${enableShadowOnModelLoad}
-											id=${item.id}
-											data-index=${index()}
-											data-cloth
-											src=${item.block.modelFile}
-											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
-										></lume-gltf-model>
-									`}
-								</>
-							`}
+						<lume-gltf-model
+							id="avatar"
+							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
+							src=${() => avatars.find(avatar => avatar.value === (store.selectedAvatar ?? store.tempSelectedAvatar))?.src}
+							scale="1 1 1"
+							data-avatar
 						>
-							<lume-gltf-model
-								id="avatar"
-								ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el))}
-								src=${() => avatars.find(avatar => avatar.value === (store.selectedAvatar ?? store.tempSelectedAvatar))?.src}
-								scale="1 1 1"
-								data-avatar
-							>
+							<lume-element3d ref=${(el: Element3D) => setMaterialsVisibleOnModelLoad(el.parentElement as GltfModel, () => store.isShowAvatar, el)}>
 								<${For} each=${() => this.renderBlocks}>
 									${(item: RenderBlock, index: Accessor<number>) => html`
 										<lume-gltf-model
-											ref=${enableShadowOnModelLoad}
+											ref=${(el: GltfModel) => (enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
 											id=${item.id}
 											data-index=${index()}
 											data-cloth
 											src=${item.block.modelFile}
 											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
 										>
+											<!-- The lume-auto-rigger will rig the parent lume-gltf-model to the next nearest lume-gltf-model skeleton. -->
 											<lume-auto-rigger
 												excluded-bones=${() => excludeBonesFromBlock(item.block)}
 												onrig=${() => {
@@ -536,49 +557,36 @@ export class DrippyScene extends Element {
 												}}
 												disabled=${() => {
 													//
-													return false
+													// return false
 													return !this.animsEnabled
 												}}
 											></lume-auto-rigger>
 										</lume-gltf-model>
 									`}
 								</>
+							</lume-element3d>
 
-								<lume-animation
-									src=${() => this.animSrc}
-									clip-name=${() => this.animName}
-									stopped=${() => this.animsStopped || !this.animsEnabled}
-								></lume-animation>
-							</lume-gltf-model>
-						</>
+							<lume-animation
+								src=${() => this.animSrc}
+								clip-name=${() => this.animName}
+								stopped=${() => this.animsStopped || !this.animsEnabled}
+							></lume-animation>
+						</lume-gltf-model>
 
-						<${Show} when=${() => store.isShowScene && store.selectedSpace?.scene}>
-							<lume-gltf-model
-								ref=${(el: GltfModel) => ((this.backgroundModel = el), enableShadowOnModelLoad(el), enableFrontsideOnModelLoad(el))}
-								id="scene"
-								src=${() => store.selectedSpace?.scene}
-							></lume-gltf-model>
-						</>
+						<lume-gltf-model
+							ref=${(el: GltfModel) => ((this.backgroundModel = el), enableShadowOnModelLoad(el), enableFrontsideOnModelLoad(el), setEnvMapOnModelLoad(el, env), setMaterialsVisibleOnModelLoad(el, () => store.isShowScene))}
+							id="scene"
+							src=${() => store.selectedSpace?.scene ?? ''}
+						></lume-gltf-model>
 
 						<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
 							${(item: Accessor<string>) => html`
-								<lume-gltf-model ref=${enableShadowOnModelLoad} src=${() => item()}></lume-gltf-model>
+								<lume-gltf-model
+									ref=${(el: GltfModel) => (enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
+									attr:src=${() => item()}
+									class="extraObjects"
+								></lume-gltf-model>
 							`}
-						</>
-
-						<${Show} when=${() => !this.animsEnabled}>
-							<${For} each=${() => this.renderBlocks}>
-								${(item: RenderBlock, index: Accessor<number>) => html`
-									<lume-gltf-model
-										ref=${enableShadowOnModelLoad}
-										id=${item.id}
-										data-index=${index()}
-										data-cloth
-										src=${item.block.modelFile}
-										scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
-									></lume-gltf-model>
-								`}
-							</>
 						</>
 					</lume-element3d>
 				</lume-scene>

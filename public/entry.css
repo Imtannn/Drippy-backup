@@ -23,6 +23,7 @@ body,
 	margin: 0;
 	pointer-events: none;
 	box-sizing: border-box;
+	overscroll-behavior: none;
 
 	color: black;
 	background: var(--appBackground);

@@ -24,6 +24,8 @@ export type Space = {
 	name: string
 	slug: string
 	logo: string
+	/** Image used as an env map for global lighting and reflections. */
+	env: string
 	sceneThumbnail: string
 	collection: string
 	description: string

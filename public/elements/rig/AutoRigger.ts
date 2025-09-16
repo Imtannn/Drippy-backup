@@ -1,6 +1,7 @@
 import type {GltfModel} from 'lume'
 import type {Object3D} from 'three'
 import * as THREE from 'three'
+import {findInTree} from '../../utils.js'
 
 /**
  * Gets a list of child bones of `name`.
@@ -16,16 +17,9 @@ function getChildBoneNames(name: string, root: THREE.Bone) {
 	return boneNames
 }
 
-function getSkeleton(avatar: GltfModel): THREE.Skeleton | null {
-	let johnSkelton: THREE.Skeleton | null = null
-
-	avatar.three.traverse((obj: any) => {
-		if (johnSkelton) return
-
-		if (obj.skeleton) johnSkelton = obj.skeleton
-	})
-
-	return johnSkelton
+function getSkeleton(avatar: GltfModel) {
+	const johnSkelton = findInTree(avatar.three, obj => obj instanceof THREE.SkinnedMesh) as THREE.SkinnedMesh | null
+	return johnSkelton?.skeleton
 }
 
 function makeSkinnedMesh(mesh: THREE.Mesh, skeleton: THREE.Skeleton) {
@@ -43,22 +37,14 @@ function makeSkinnedMesh(mesh: THREE.Mesh, skeleton: THREE.Skeleton) {
 	// Bind skeleton
 	skinned.bind(skeleton)
 
-	// Replace in scene graph
-	const parent = mesh.parent
-	if (parent) {
-		parent.add(skinned)
-		/* parent.remove(mesh) */
-		mesh.visible = false
-	}
-
 	return skinned
 }
 
 interface AutoRiggerParams {
 	/**
-	 * The avatar Lume element.
+	 * A model with a rig (skeleton).
 	 */
-	avatar: GltfModel
+	riggedModel: GltfModel
 
 	/**
 	 * Array of bone names to exclude from rigging (also excludes each bone's children).
@@ -72,27 +58,35 @@ interface AutoRiggerParams {
 	maxBoneDist?: number
 }
 
-export class AutoRigger {
-	skinnedMeshes: THREE.SkinnedMesh[] = []
+/**
+ * This is internal, containing implementation details of the <lume-auto-rigger>
+ * element, separating the rigging logic from the element definition.
+ */
+export class _AutoRigger {
+	#skinnedMeshes: THREE.SkinnedMesh[] = []
 
-	avatar: GltfModel
+	get skinnedMeshes(): readonly THREE.SkinnedMesh[] {
+		return this.#skinnedMeshes
+	}
 
-	private skeleton: THREE.Skeleton | null = null
+	#riggedModel: GltfModel
 
-	private excludedBones: string[] = []
+	#skeleton: THREE.Skeleton | null = null
 
-	private maxBoneDist = -1
+	#excludedBones: string[] = []
 
-	private originalMeshes: THREE.Mesh[] = []
+	#maxBoneDist = -1
+
+	#originalMeshes: THREE.Mesh[] = []
 
 	constructor(params: AutoRiggerParams) {
-		this.avatar = params.avatar
+		this.#riggedModel = params.riggedModel
 
-		this.skeleton = getSkeleton(this.avatar)
+		this.#skeleton = getSkeleton(this.#riggedModel) ?? null
 
-		this.excludedBones = params.excludedBones?.flatMap(val => getChildBoneNames(val, this.skeleton!.bones[0])) ?? []
+		this.#excludedBones = params.excludedBones?.flatMap(val => getChildBoneNames(val, this.#skeleton!.bones[0])) ?? []
 
-		this.maxBoneDist = params.maxBoneDist ?? -1
+		this.#maxBoneDist = params.maxBoneDist ?? -1
 	}
 
 	/**
@@ -100,37 +94,45 @@ export class AutoRigger {
 	 * @param item The garment to rig to the avatar. This doesn't have to be a mesh itself, it
 	 * could also have children that are meshes.
 	 */
-	rig(item: Object3D) {
-		if (!this.skeleton) {
+	rig(item: Object3D): readonly THREE.SkinnedMesh[] {
+		if (this.#skinnedMeshes.length > 0) {
+			console.warn('Item is already rigged.')
+			return this.#skinnedMeshes
+		}
+
+		// Ensure we have a skeleton to rig to.
+		if (!this.#skeleton) {
 			console.warn('No skeleton found in avatar, cannot rig item.')
-
-			return null
+			return []
 		}
 
-		this.skinnedMeshes = []
-
-		if (item instanceof THREE.Mesh) {
-			return [this.rigMesh(item)]
-		}
+		if (item instanceof THREE.Mesh) return [this.rigMesh(item)]
 
 		// Rig each sub-mesh
 		item.traverse(obj => {
-			if (obj instanceof THREE.Mesh) {
-				this.skinnedMeshes.push(this.rigMesh(obj)!)
-			}
+			if (obj instanceof THREE.Mesh) this.#skinnedMeshes.push(this.rigMesh(obj)!)
 		})
+		// for (const mesh of meshesInTree(item)) this.#skinnedMeshes.push(this.rigMesh(mesh)!) // this one causes an infinite loop
 
-		return this.skinnedMeshes
+		return this.#skinnedMeshes
 	}
 
 	/**
-	 * Rig the `THREE.Mesh` to the avatar.
+	 * Rig the `mesh` to the model skeleton by making a new `THREE.SkinnedMesh`
+	 * and visibly hiding the original mesh. Keep the original mesh so we can
+	 * undo the rigging later.
 	 * @param mesh
 	 * @returns
 	 */
 	private rigMesh(mesh: THREE.Mesh) {
-		const skinnedMesh = makeSkinnedMesh(mesh, this.skeleton!)
-		this.originalMeshes.push(mesh)
+		this.#originalMeshes.push(mesh)
+
+		const skinnedMesh = makeSkinnedMesh(mesh, this.#skeleton!)
+
+		// Replace in scene graph
+		mesh.parent!.add(skinnedMesh)
+		/* parent.remove(mesh) */
+		mesh.visible = false
 
 		const geometry = skinnedMesh.geometry
 
@@ -143,8 +145,8 @@ export class AutoRigger {
 		// TODO: This can be done ahead of time, and only updated when the avatar or excludedBones
 		// is updated.
 		const bones: {pos: THREE.Vector3; index: number}[] = []
-		this.skeleton!.bones.forEach((bone, index) => {
-			if (this.excludedBones.includes(bone.name)) {
+		this.#skeleton!.bones.forEach((bone, index) => {
+			if (this.#excludedBones.includes(bone.name)) {
 				return
 			}
 
@@ -174,7 +176,7 @@ export class AutoRigger {
 			// Get the 4 closest bones.
 			const closest = boneDistances.slice(0, 4)
 			const invWeights = closest.map(b => {
-				if (this.maxBoneDist > 0 && b.dist > this.maxBoneDist) {
+				if (this.#maxBoneDist > 0 && b.dist > this.#maxBoneDist) {
 					return 0
 				}
 
@@ -198,10 +200,9 @@ export class AutoRigger {
 	 * Undos rigging of all meshes involved.
 	 */
 	unrig() {
-		this.originalMeshes.forEach(mesh => {
-			mesh.visible = true
-		})
-
-		this.originalMeshes = []
+		this.#originalMeshes.forEach(mesh => (mesh.visible = true))
+		this.#originalMeshes = []
+		for (const skinnedMesh of this.#skinnedMeshes) skinnedMesh.parent?.remove(skinnedMesh)
+		this.#skinnedMeshes = []
 	}
 }
