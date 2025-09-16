@@ -1,9 +1,12 @@
-import {attribute, css, Element, element, html} from 'lume'
+import {attribute, css, Element, element, html, signal} from 'lume'
+import {store} from '../app/store.js'
+import {avatars} from '../consts/avatars.js'
 
 interface AvatarOption {
 	value: string
 	label: string
 	image: string
+	gender: 'male' | 'female'
 }
 const maleAvatar = new URL('../images/landing/male.png', import.meta.url).href
 const femaleAvatar = new URL('../images/landing/female.png', import.meta.url).href
@@ -17,12 +20,13 @@ export class AvatarSelector extends Element {
 
 	@attribute targetModel = ''
 
-	private isOpen = false
+	@signal private isOpen = false
 	private dropdownElement: HTMLElement | null = null
-	private selectedOption: AvatarOption = {
+	@signal private selectedOption: AvatarOption = {
 		value: 'male',
 		label: 'Male avatar',
 		image: maleAvatar,
+		gender: 'male',
 	}
 
 	private options: AvatarOption[] = [
@@ -30,24 +34,54 @@ export class AvatarSelector extends Element {
 			value: 'male',
 			label: 'Male avatar',
 			image: maleAvatar,
+			gender: 'male',
 		},
 		{
 			value: 'female',
 			label: 'Female avatar',
 			image: femaleAvatar,
+			gender: 'female',
 		},
 	]
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		// Close dropdown when clicking outside
 		document.addEventListener('click', this.handleOutsideClick)
 
-		// Create dropdown manually as backup
 		setTimeout(() => {
 			this.createDropdownManually()
+			this.syncWithStore()
 		}, 100)
+
+		this.createEffect(() => {
+			const currentAvatar = store.selectedAvatar || store.tempSelectedAvatar
+			if (currentAvatar) {
+				this.syncWithStore()
+			}
+		})
+	}
+
+	/**
+	 * Find first avatar follow gender from avatars list
+	 */
+	private findAvatarByGender(gender: 'male' | 'female'): string | null {
+		const avatar = avatars.find(avatar => avatar.gender === gender)
+		return avatar ? avatar.value : null
+	}
+
+	private setDefaultMaleAvatar() {
+		if (!store.selectedAvatar && !store.tempSelectedAvatar) {
+			const maleAvatarValue = this.findAvatarByGender('male')
+			if (maleAvatarValue) {
+				console.log('👨 Setting default male avatar:', maleAvatarValue)
+
+				// Set vào store
+				store.setTempSelectedAvatar = maleAvatarValue
+				store.selectAvatar = maleAvatarValue
+
+				console.log('✅ Default male avatar set successfully')
+			}
+		}
 	}
 
 	private createDropdownManually() {
@@ -193,12 +227,6 @@ export class AvatarSelector extends Element {
 		this.selectedOption = option
 		this.isOpen = false
 
-		// Update text display
-		const text = this.querySelector('.avatar-selector__text')
-		if (text) {
-			text.textContent = option.label
-		}
-
 		// Hide dropdown
 		const dropdown = this.dropdownElement || (this.querySelector('.avatar-selector__dropdown') as HTMLElement)
 		const icon = this.querySelector('.avatar-selector__icon') as HTMLElement
@@ -207,6 +235,13 @@ export class AvatarSelector extends Element {
 		}
 		if (icon) {
 			icon.classList.remove('rotated')
+		}
+
+		const avatarValue = this.findAvatarByGender(option.gender)
+
+		if (avatarValue) {
+			store.setTempSelectedAvatar = avatarValue
+			store.selectAvatar = avatarValue
 		}
 
 		// Update target model if specified
@@ -229,8 +264,12 @@ export class AvatarSelector extends Element {
 
 	template = () => html`
 		<div class="avatar-selector__wrapper" onclick=${this.handleToggle}>
-			<img class="avatar-selector__avatar" src=${this.selectedOption.image} alt=${this.selectedOption.label} />
-			<span class="avatar-selector__text">${this.selectedOption.label}</span>
+			<img
+				class="avatar-selector__avatar"
+				src=${() => this.selectedOption.image}
+				alt=${() => this.selectedOption.label}
+			/>
+			<span class="avatar-selector__text">${() => this.selectedOption.label}</span>
 			<img
 				class="avatar-selector__icon"
 				src="https://c.animaapp.com/mejigj1rAIvhIh/img/vector-1.svg"
@@ -249,7 +288,7 @@ export class AvatarSelector extends Element {
 					>
 						<img class="avatar-selector__option-avatar" src=${option.image} alt=${option.label} />
 						<span>${option.label}</span>
-						${option.value === this.selectedOption.value ? html`<span class="checkmark">✓</span>` : ''}
+						${() => (option.value === this.selectedOption.value ? html`<span class="checkmark">✓</span>` : '')}
 					</div>
 				`,
 			)}
@@ -404,10 +443,73 @@ export class AvatarSelector extends Element {
 		return this.selectedOption.value
 	}
 
+	public getSelectedGender() {
+		return this.selectedOption.gender
+	}
+
 	public selectByValue(value: string) {
 		const option = this.options.find(opt => opt.value === value)
 		if (option) {
 			this.handleSelect(option)
 		}
+	}
+
+	public selectByGender(gender: 'male' | 'female') {
+		const option = this.options.find(opt => opt.gender === gender)
+		if (option) {
+			this.handleSelect(option)
+		}
+	}
+
+	/**
+	 * Sync với store hiện tại - set avatar selector theo avatar đã chọn trong store
+	 */
+	public syncWithStore() {
+		const currentAvatar = store.selectedAvatar || store.tempSelectedAvatar
+		console.log('🔍 Avatar Selector - Current store state:', {
+			selectedAvatar: store.selectedAvatar,
+			tempSelectedAvatar: store.tempSelectedAvatar,
+			currentAvatar: currentAvatar,
+		})
+
+		if (currentAvatar) {
+			const avatar = avatars.find(avatar => avatar.value === currentAvatar)
+			console.log('🎭 Found avatar in avatars list:', avatar)
+
+			if (avatar) {
+				const option = this.options.find(opt => opt.gender === avatar.gender)
+				if (option) {
+					this.selectedOption = option
+					console.log('✅ Synced avatar selector with:', option)
+					// UI sẽ tự động update thông qua reactive template
+				}
+			}
+		} else {
+			// Nếu không có avatar nào được chọn, set default male
+			console.log('⚠️ No avatar selected, setting default male')
+			this.setDefaultMaleAvatar()
+		}
+	}
+
+	/**
+	 * Public method để set default male avatar
+	 */
+	public setDefaultMale() {
+		this.setDefaultMaleAvatar()
+	}
+
+	/**
+	 * Debug method để kiểm tra trạng thái hiện tại
+	 */
+	public debugState() {
+		console.log('🔍 Avatar Selector Debug State:', {
+			selectedOption: this.selectedOption,
+			storeSelectedAvatar: store.selectedAvatar,
+			storeTempSelectedAvatar: store.tempSelectedAvatar,
+			currentAvatar: store.selectedAvatar || store.tempSelectedAvatar,
+			avatarFromStore: avatars.find(avatar => avatar.value === (store.selectedAvatar || store.tempSelectedAvatar)),
+			uiText: this.querySelector('.avatar-selector__text')?.textContent,
+			uiImageSrc: (this.querySelector('.avatar-selector__avatar') as HTMLImageElement)?.src,
+		})
 	}
 }

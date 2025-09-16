@@ -1567,12 +1567,80 @@ p {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transform: translate(-50%, 0);
-	-webkit-transform: translate(-50%, 0);
-	/* iOS specific fixes */
-	-webkit-backface-visibility: hidden;
-	backface-visibility: hidden;
-	will-change: transform;
+	transform: translateX(-50%);
+}
+
+/* New class to fix model centering */
+.showcase__model-center {
+	position: absolute;
+	top: 14px;
+	left: 50%;
+	width: 100%;
+	height: 625px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transform: translateX(-50%);
+}
+
+.showcase__model-center drippy-scene {
+	width: 100%;
+	height: 100%;
+	border-radius: 12px;
+	overflow: hidden;
+	background: transparent;
+	position: relative;
+	z-index: 1;
+	/* Force center the 3D model */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.showcase__model-center lume-gltf-model {
+	width: 100%;
+	height: 100%;
+	display: block;
+	/* Fix model scaling to show full model */
+	object-fit: contain;
+	transform: scale(0.8);
+	transform-origin: center;
+}
+
+/* Force center the 3D model within the scene */
+.showcase__model-center lume-scene {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.showcase__model-center lume-scene lume-gltf-model {
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+	/* Ensure full model is visible */
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+/* Debug: Add border to see positioning */
+.showcase__model-center {
+	border: 2px solid red;
+}
+
+.showcase__model-center drippy-scene {
+	border: 2px solid blue;
+}
+
+.showcase__model-center lume-gltf-model {
+	border: 2px solid green;
+	/* Force scale to show full model */
+	transform: scale(0.4) !important;
+	transform-origin: center !important;
+	/* Force center positioning */
+	margin: 0 auto !important;
+	display: block !important;
 }
 
 .showcase__avatar-model {
@@ -2109,13 +2177,6 @@ p {
 	.landing-page-desktop .statistics__grid {
 		gap: 15px;
 	}
-	/* .landing-page-desktop .platform__grid {
-		display: flex;
-		flex-direction: column;
-	} */
-	.landing-page-desktop .how-it-works__step {
-		/* min-height: 576px; */
-	}
 
 	.landing-page-desktop .cta__content {
 		display: flex;
@@ -2152,7 +2213,32 @@ p {
 	.landing-page-desktop .cta__description-text {
 		text-align: center;
 	}
-	.landing-page-desktop .platform__card-image {
+	.landing-page-desktop .footer__content {
+		flex-direction: column;
+		align-items: start;
+		gap: 50px;
+	}
+	.landing-page-desktop .footer__links {
+		gap: 25px;
+		flex-wrap: wrap;
+		flex: unset;
+	}
+	.landing-page-desktop .footer__main {
+		gap: 50px;
+	}
+}
+
+/* ======================================== */
+/* MOBILE BREAKPOINT (620px and below)      */
+/* ======================================== */
+
+@media (max-width: 620px) {
+	.landing-page-desktop .how-it-works__step {
+		min-height: 510px;
+	}
+	.landing-page-desktop .how-it-works__step-image {
+		max-width: 280px;
+		min-height: 510px;
 	}
 }
 
@@ -2419,6 +2505,7 @@ p {
 	.landing-page-desktop .footer__main {
 		flex-direction: column;
 		gap: 26px;
+		align-items: center;
 	}
 	.landing-page-desktop .footer__links {
 		flex-wrap: wrap;
