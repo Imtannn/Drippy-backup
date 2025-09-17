@@ -15,7 +15,15 @@ export const username = () => currentUser()?.username ?? ''
 export const dateOfBirth = () => currentUser()?.profile?.dateOfBirth ?? ''
 export const isAdmin = () => !!currentUser()?.profile?.isAdmin
 
-export const visits = toSolidSignal(() => Visits.find({}).fetch() as readonly Visit[])
+const pathname = location.pathname
+
+// TODO optimize: use a publication that only sends the count for total visits,
+// and paginate visits. For now, limit performance impact by exposing visits
+// only to the /stats page.
+export const visits = toSolidSignal(() => {
+	if (pathname === '/stats') return Visits.find({}).fetch() as readonly Visit[]
+	else return [] as readonly Visit[]
+})
 export const usersCount = toSolidSignal(() => Counts.get('users'))
 
 export const store = createMutable({
