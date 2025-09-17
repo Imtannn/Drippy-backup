@@ -527,26 +527,26 @@ function calculateGarmentBoundingBox(category: string, lumeScene: any): THREE.Bo
 
 	clothModels.forEach((model: any) => {
 		const modelId = model.getAttribute('id') || ''
-		const shouldInclude = modelId.startsWith(category + '-')
+		const shouldInclude = modelId.includes(category + '-')
 
 		if (shouldInclude && model.three && model.three.visible) {
 			// Calculate bounding box for this model
 			const modelBox = new THREE.Box3()
 
 			// Traverse all meshes in the model
-			model.three.traverse((child: THREE.Object3D) => {
-				if (child instanceof THREE.Mesh && child.geometry) {
+			for (const mesh of meshesInTree(model.three)) {
+				if (mesh.geometry) {
 					// Ensure geometry has bounding box
-					child.geometry.computeBoundingBox()
-					if (child.geometry.boundingBox) {
+					mesh.geometry.computeBoundingBox()
+					if (mesh.geometry.boundingBox) {
 						// Transform the bounding box by the mesh's world matrix
-						const transformedBox = child.geometry.boundingBox.clone()
-						child.updateWorldMatrix(true, false)
-						transformedBox.applyMatrix4(child.matrixWorld)
+						const transformedBox = mesh.geometry.boundingBox.clone()
+						mesh.updateWorldMatrix(true, false)
+						transformedBox.applyMatrix4(mesh.matrixWorld)
 						modelBox.union(transformedBox)
 					}
 				}
-			})
+			}
 
 			// Union with the overall bounding box
 			boundingBox.union(modelBox)
@@ -606,7 +606,7 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 
 	clothModels.forEach((model: any) => {
 		const modelId = model.getAttribute('id') || ''
-		const shouldKeep = modelId.startsWith(category + '-')
+		const shouldKeep = modelId.includes(category + '-')
 
 		if (!shouldKeep) {
 			if (model.three) {
