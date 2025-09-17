@@ -84,7 +84,7 @@ export class DrippyScene extends Element {
 	@signal private animName: string | null = null
 	@signal private animSrc: string | null = null
 
-	async #applyFabric(el: Element3D, fabric: Fabric, isCanceled: () => boolean, loadingId: symbol) {
+	async #applyFabrics(el: Element3D, fabrics: Fabric[], isCanceled: () => boolean, loadingId: symbol) {
 		const root = el.three
 		store.addLoadingMaterial(loadingId)
 
@@ -97,14 +97,48 @@ export class DrippyScene extends Element {
 						.map((el: any) => Math.abs(el))
 				: []
 
-			// Load textures with UV-aware scaling using texture manager
-			const textureSet = await textureManager.loadFabricTexturesWithUV(fabric, uvArray)
+			// Create a map of fabric assignments by mesh name
+			const fabricsByMesh = new Map<string, Fabric>()
+			let defaultFabric: Fabric | null = null
+
+			for (const fabric of fabrics) {
+				if (fabric.assignedMesh) {
+					fabricsByMesh.set(fabric.assignedMesh, fabric)
+				} else {
+					// Fabric without assignedMesh is the default fabric for unspecified meshes
+					defaultFabric = fabric
+				}
+			}
+
+			// Load texture sets for all fabrics
+			const textureSetsByFabric = new Map<Fabric, any>()
+			for (const fabric of fabrics) {
+				const textureSet = await textureManager.loadFabricTexturesWithUV(fabric, uvArray)
+				textureSetsByFabric.set(fabric, textureSet)
+			}
+
 			if (isCanceled()) return
 
-			for (const mesh of meshesInTree(root)) textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+			// Apply fabrics to meshes based on assignments
+			for (const mesh of meshes) {
+				const meshName = mesh.parent?.name.toLowerCase() || mesh.name.toLowerCase() || ''
+
+				// Check if there's a specific fabric assigned to this mesh
+				const assignedFabric = fabricsByMesh.get(meshName)
+				const fabricToUse = assignedFabric || defaultFabric
+
+				if (fabricToUse) {
+					const textureSet = textureSetsByFabric.get(fabricToUse)
+					if (textureSet) {
+						mesh.material = new THREE.MeshPhysicalMaterial()
+						textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+						console.log(`Applied fabric ${fabricToUse.materialName} to mesh ${meshName}`)
+					}
+				}
+			}
 			el.needsUpdate()
 		} catch (error) {
-			console.warn('Failed to apply fabric to object:', error)
+			console.warn('Failed to apply fabrics to object:', error)
 		} finally {
 			store.removeLoadingMaterial(loadingId)
 		}
@@ -267,7 +301,7 @@ export class DrippyScene extends Element {
 			const blocks = Array.from(store.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
 			this.renderBlocks = blocks.flatMap(block => {
 				if (block.category === 'Sleeves') {
-					const id = `${block.templateCategory}-${block.category}-${block._id}`
+					const id = `${store.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
 					let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
 					const idMirror = `${id}-mirror`
@@ -276,7 +310,7 @@ export class DrippyScene extends Element {
 					return [renderBlock, renderBlockMirror]
 				}
 
-				const id = `${block.templateCategory}-${block.category}-${block._id}`
+				const id = `${store.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
 				let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
 				return renderBlock
@@ -315,20 +349,20 @@ export class DrippyScene extends Element {
 
 				if (parts.length < 3) continue
 
-				const templateCategory = parts[0] as TemplateCategory
-				const blockCategory = parts[1] as BlockCategory
+				const templateCategory = parts[1] as TemplateCategory
+				const blockCategory = parts[2] as BlockCategory
 
-				// Find the fabric for this block
+				// Find the fabrics for this block
 				const templateFabrics = selectedFabrics.get(templateCategory)
-				const fabric = templateFabrics?.get(blockCategory)
+				const fabrics = templateFabrics?.get(blockCategory) || []
 				const loadingId = Symbol(`material-${blockId}`)
 				const modelLoaded = onModelLoad(el)
 
 				createEffect(() => {
 					if (!modelLoaded()) return
 
-					if (fabric) {
-						this.#applyFabric(el, fabric, isCanceled, loadingId)
+					if (fabrics.length > 0) {
+						this.#applyFabrics(el, fabrics, isCanceled, loadingId)
 					} else {
 						// Reset to default material if no fabric selected for this block category
 						this.#resetMaterialsToDefault(el)

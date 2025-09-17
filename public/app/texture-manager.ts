@@ -178,9 +178,9 @@ class TextureManager {
 	/**
 	 * Preload base fabric textures into cache (most efficient preloading)
 	 */
-	async preloadFabricBaseTextures(fabric: Fabric): Promise<void> {
+	async preloadFabricBaseTextures(fabric: Fabric): Promise<(CachedTexture | null)[]> {
 		// Just load base textures into cache, no configuration needed
-		await Promise.all([
+		return await Promise.all([
 			this.getBaseTexture(fabric.baseColor || ''),
 			this.getBaseTexture(fabric.normal || ''),
 			this.getBaseTexture(fabric.displacement || ''),
