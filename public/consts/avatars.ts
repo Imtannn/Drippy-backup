@@ -63,4 +63,18 @@ export const avatars: Avatar[] = [
 		value: 'with-underwear',
 		gender: 'male',
 	},
+	{
+		thumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/luka/thumbnail.png',
+		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/luka/model.glb',
+		value: 'luka',
+		gender: 'male',
+	},
+	{
+		thumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/jinho/thumbnail.png',
+		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/jinho/model.glb',
+		value: 'jinho',
+		gender: 'male',
+	},
 ]
