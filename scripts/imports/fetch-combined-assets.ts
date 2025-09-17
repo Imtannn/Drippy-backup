@@ -233,7 +233,7 @@ async function processTemplateFolder(
 	)
 
 	const materialFolders = templateContents.filter(
-		item => item.mimeType === 'application/vnd.google-apps.folder' && item.name.toLowerCase() === 'materials',
+		item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) === 'Materials',
 	)
 
 	let materialFolder = materialFolders?.[0] as TODO
@@ -245,7 +245,7 @@ async function processTemplateFolder(
 
 	// Find Extra Materials folder in template
 	const extraMaterialsFolders = templateContents.filter(
-		item => item.mimeType === 'application/vnd.google-apps.folder' && item.name === 'Extra Materials',
+		item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) === 'Extra Materials',
 	)
 
 	let extraMaterials: {mesh: string; materialId: string}[] = []
@@ -897,10 +897,10 @@ async function main(): Promise<void> {
 			// Get root contents (categories + root Materials folder)
 			const rootContents = await fetchFolderContents(rootFolderId)
 			const categoryFolders = rootContents.filter(
-				item => item.mimeType === 'application/vnd.google-apps.folder' && item.name !== 'Materials',
+				item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) !== 'Materials',
 			)
 			const rootMaterialsFolder = rootContents.find(
-				item => item.mimeType === 'application/vnd.google-apps.folder' && item.name === 'Materials',
+				item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) === 'Materials',
 			)
 
 			console.log(`📁 Found ${categoryFolders.length} category folders`)
@@ -920,10 +920,10 @@ async function main(): Promise<void> {
 
 				const categoryContents = await fetchFolderContents(categoryFolder.id)
 				const templateFolders = categoryContents.filter(
-					item => item.mimeType === 'application/vnd.google-apps.folder' && item.name !== 'Materials',
+					item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) !== 'Materials',
 				)
 				const categoryMaterialsFolder = categoryContents.find(
-					item => item.mimeType === 'application/vnd.google-apps.folder' && item.name === 'Materials',
+					item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) === 'Materials',
 				)
 
 				console.log(`  Found ${templateFolders.length} template folders`)
