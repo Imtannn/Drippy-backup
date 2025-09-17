@@ -255,31 +255,18 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '10',
 			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_7___Skirt/skirt_1417.png',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_7___Fullbody/fullbody_1416.png',
 			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/haruki/blocks/Dress/Item_7___Skirt/skirt_1417.gltf',
-			blockName: 'skirt 1417',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/haruki/blocks/Dress/Item_7___Fullbody/fullbody_1416.gltf',
+			blockName: 'fullbody 1416',
 			avatar: 'Female',
-			category: 'Skirt',
+			category: 'Full Body',
 			templateId: 'Item 7',
 			templateName: 'Item 7',
 			templateCategory: 'Dress',
 		},
 		{
 			_id: '11',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_7___Bodice/bodice_1416.png',
-			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/haruki/blocks/Dress/Item_7___Bodice/bodice_1416.gltf',
-			blockName: 'bodice 1416',
-			avatar: 'Female',
-			category: 'Bodice',
-			templateId: 'Item 7',
-			templateName: 'Item 7',
-			templateCategory: 'Dress',
-		},
-		{
-			_id: '12',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_5___Skirt/skirt_1423.png',
 			modelFile:
@@ -292,7 +279,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Dress',
 		},
 		{
-			_id: '13',
+			_id: '12',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_5___Bodice/bodice_1422.png',
 			modelFile:
@@ -305,7 +292,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Dress',
 		},
 		{
-			_id: '14',
+			_id: '13',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_4___Skirt/skirt_1419.png',
 			modelFile:
@@ -318,7 +305,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Dress',
 		},
 		{
-			_id: '15',
+			_id: '14',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_4___Bodice/bodice_1420.png',
 			modelFile:
@@ -331,7 +318,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Dress',
 		},
 		{
-			_id: '16',
+			_id: '15',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_3___Skirt/skirt_1404.png',
 			modelFile:
@@ -344,7 +331,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Dress',
 		},
 		{
-			_id: '17',
+			_id: '16',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_3___Bodice/bodice_1403.png',
 			modelFile:
@@ -357,7 +344,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Dress',
 		},
 		{
-			_id: '18',
+			_id: '17',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_2___Skirt/skirt_1408.png',
 			modelFile:
@@ -370,7 +357,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Dress',
 		},
 		{
-			_id: '19',
+			_id: '18',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_2___Bodice/bodice_1407.png',
 			modelFile:
@@ -383,7 +370,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Dress',
 		},
 		{
-			_id: '20',
+			_id: '19',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Dress/Item_1_Fullbody/fullbody_1405.png',
 			modelFile:
@@ -396,7 +383,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Dress',
 		},
 		{
-			_id: '21',
+			_id: '20',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Skirt/Item_2___Skirt/skirt_1414.png',
 			modelFile:
@@ -409,7 +396,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Skirt',
 		},
 		{
-			_id: '22',
+			_id: '21',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/haruki/blocks/Skirt/Item_1___Skirt/skirt_1427.png',
 			modelFile:
@@ -544,10 +531,10 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '10',
 			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_1___Sleeves/sleeves_1516.png',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_1___Sleeves/sleeves_139.png',
 			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/lostCause/blocks/Top/Item_1___Sleeves/sleeves_1516.gltf',
-			blockName: 'sleeves 1516',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/lostCause/blocks/Top/Item_1___Sleeves/sleeves_139.gltf',
+			blockName: 'sleeves 139',
 			avatar: 'Female',
 			category: 'Sleeves',
 			templateId: 'Item 1',

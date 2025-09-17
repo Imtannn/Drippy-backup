@@ -47,6 +47,7 @@ export class TabsProvider extends Element {
 			this.updateActiveTab()
 		}, 0)
 
+		// Reset indicator position  when triggers or contents change
 		this.createEffect(() => {
 			if (this.triggers.length && this.contents.length) {
 				this.selectedValue = ''

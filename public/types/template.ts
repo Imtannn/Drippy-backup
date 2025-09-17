@@ -9,6 +9,11 @@ export type TemplateCategory =
 	| 'Dress'
 	| 'Top'
 
+export type ExtraMaterial = {
+	mesh: string
+	materialId: string
+}
+
 export type Template = {
 	_id: string
 	thumb: string
@@ -17,4 +22,5 @@ export type Template = {
 	avatar: 'Male' | 'Female'
 	category: TemplateCategory
 	materialId?: string // References fabric by "${materialName} ${category}" format
+	extraMaterials?: ExtraMaterial[]
 }

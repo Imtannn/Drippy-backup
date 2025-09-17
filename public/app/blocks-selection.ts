@@ -338,8 +338,8 @@ export class BlocksSelection extends Element {
 																				if (!templateBlocks || !templateFabrics) return false
 
 																				const actualBlockCategories = Array.from(templateBlocks.keys())
-																				return actualBlockCategories.some(
-																					blockCategory => templateFabrics.get(blockCategory)?._id === fabric._id,
+																				return actualBlockCategories.some(blockCategory =>
+																					templateFabrics.get(blockCategory)?.some(f => f._id === fabric._id),
 																				)
 																			}}
 																			item-src=${() => fabric.thumb}

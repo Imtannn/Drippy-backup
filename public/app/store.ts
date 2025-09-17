@@ -57,7 +57,7 @@ export const store = createMutable({
 	isPreview: false,
 	selectedTemplates: new Map<TemplateCategory, Template>(),
 	selectedBlocks: new Map<TemplateCategory, Map<BlockCategory, Block>>(),
-	selectedFabrics: new Map<TemplateCategory, Map<BlockCategory, Fabric>>(),
+	selectedFabrics: new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>(),
 	customMeasurement: null as CustomMeasurement | null,
 	isShowAvatar: true,
 	isShowScene: true,
@@ -131,14 +131,14 @@ export const store = createMutable({
 					if (templateCategoryFabrics) {
 						// if the block category is Sleeves, check for bodice and add it to the fabric
 						if (block.category === 'Sleeves') {
-							const bodice = templateCategoryFabrics.get('Bodice')
-							if (!bodice) return
+							const bodiceFabrics = templateCategoryFabrics.get('Bodice')
+							if (!bodiceFabrics || bodiceFabrics.length === 0) return
 
-							this.setSelectedFabrics = {
-								fabric: bodice,
-								blockCategory: 'Sleeves',
+							this.setSelectedFabrics = bodiceFabrics.map(fabric => ({
+								fabric,
+								blockCategory: 'Sleeves' as BlockCategory,
 								templateCategory: templateCategory,
-							}
+							}))
 						}
 					}
 					templateBlocks.set(block.category, block)
@@ -149,14 +149,14 @@ export const store = createMutable({
 				if (templateCategoryFabrics) {
 					// if the block category is Sleeves, check for bodice and add it to the fabric
 					if (block.category === 'Sleeves') {
-						const bodice = templateCategoryFabrics.get('Bodice')
-						if (!bodice) return
+						const bodiceFabrics = templateCategoryFabrics.get('Bodice')
+						if (!bodiceFabrics || bodiceFabrics.length === 0) return
 
-						this.setSelectedFabrics = {
-							fabric: bodice,
-							blockCategory: 'Sleeves',
+						this.setSelectedFabrics = bodiceFabrics.map(fabric => ({
+							fabric,
+							blockCategory: 'Sleeves' as BlockCategory,
 							templateCategory: templateCategory,
-						}
+						}))
 					}
 				}
 				// if not, add it
@@ -171,7 +171,14 @@ export const store = createMutable({
 		}
 		this.selectedBlocks = newBlocks
 	},
-	set replaceSelectedBlocks(blockData: {blocks: Block[]; templateCategory: TemplateCategory; materialId: string}[]) {
+	set replaceSelectedBlocks(
+		blockData: {
+			blocks: Block[]
+			templateCategory: TemplateCategory
+			materialId: string
+			extraMaterials?: {mesh: string; materialId: string}[]
+		}[],
+	) {
 		const {newBlocks, newFabrics} = blockManager.replaceSelectedBlocks(blockData, this.selectedSpace!)
 		this.selectedBlocks = newBlocks
 		this.replaceSelectedFabrics = newFabrics
@@ -185,16 +192,38 @@ export const store = createMutable({
 			fabricData = [fabricData]
 		}
 
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>(this.selectedFabrics)
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>(this.selectedFabrics)
+
+		// Group fabrics by template category and block category
+		const groupedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>()
 
 		for (const {fabric, blockCategory, templateCategory} of fabricData) {
-			let templateFabrics = newFabrics.get(templateCategory)
+			let templateFabrics = groupedFabrics.get(templateCategory)
 			if (!templateFabrics) {
-				templateFabrics = new Map<BlockCategory, Fabric>()
-				newFabrics.set(templateCategory, templateFabrics)
+				templateFabrics = new Map<BlockCategory, Fabric[]>()
+				groupedFabrics.set(templateCategory, templateFabrics)
 			}
 
-			templateFabrics.set(blockCategory, fabric)
+			let blockFabrics = templateFabrics.get(blockCategory)
+			if (!blockFabrics) {
+				blockFabrics = []
+				templateFabrics.set(blockCategory, blockFabrics)
+			}
+
+			blockFabrics.push(fabric)
+		}
+
+		// Update the newFabrics map with grouped fabrics
+		for (const [templateCategory, templateFabrics] of groupedFabrics.entries()) {
+			let newTemplateFabrics = newFabrics.get(templateCategory)
+			if (!newTemplateFabrics) {
+				newTemplateFabrics = new Map<BlockCategory, Fabric[]>()
+				newFabrics.set(templateCategory, newTemplateFabrics)
+			}
+
+			for (const [blockCategory, fabrics] of templateFabrics.entries()) {
+				newTemplateFabrics.set(blockCategory, fabrics)
+			}
 		}
 		this.selectedFabrics = newFabrics
 	},
@@ -206,17 +235,18 @@ export const store = createMutable({
 		if (!Array.isArray(fabricData)) {
 			fabricData = [fabricData]
 		}
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>(this.selectedFabrics)
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>(this.selectedFabrics)
 
 		for (const {fabric, blockCategory, templateCategory} of fabricData) {
 			// Get or create the template's fabric map
 			let templateFabrics = newFabrics.get(templateCategory)
 			if (!templateFabrics) {
-				templateFabrics = new Map<BlockCategory, Fabric>()
+				templateFabrics = new Map<BlockCategory, Fabric[]>()
 				newFabrics.set(templateCategory, templateFabrics)
 			}
 
-			templateFabrics.set(blockCategory, fabric)
+			// For now, replace the entire array. This could be enhanced to merge/update based on assignedMesh
+			templateFabrics.set(blockCategory, [fabric])
 
 			// If template has no fabrics left, remove the template entry
 			if (templateFabrics.size === 0) {
@@ -438,7 +468,7 @@ export const store = createMutable({
 	resetSelectedTemplates() {
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
+		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>()
 		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 		this.retailItemQuantities = new Map<TemplateCategory, number>()
@@ -474,7 +504,7 @@ export const store = createMutable({
 		this.selectedSpace = null as Space | null
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
+		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>()
 		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 		this.retailItemQuantities = new Map<TemplateCategory, number>()

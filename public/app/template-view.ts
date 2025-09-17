@@ -1,7 +1,9 @@
 import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {fabrics} from '../consts/fabrics.js'
 import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import {templates} from '../consts/templates.js'
 import type {Block} from '../types/block.js'
+import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import {blockManager} from './block-manager.js'
 import {store} from './store.js'
@@ -80,35 +82,63 @@ export class TemplateView extends Element {
 
 		store.setSelectedTemplates = template
 
-		const templateFabric = getFabricForTemplate(template, store.selectSpace?.collection)
+		const selectedTemplate = store.selectedTemplates.get(template.category)
 
-		if (templateFabric) {
-			const loadingId = Symbol(`fabric-${templateFabric._id}`)
-			store.addLoadingMaterial(loadingId)
-			try {
-				// Preload base fabric textures into cache (most efficient - no config needed yet)
-				// Preload template blocks
-				await Promise.all([
-					textureManager.preloadFabricBaseTextures(templateFabric),
-					blockManager.preloadTemplateBlocks(template, store.selectedSpace!),
-				])
-			} catch (error) {
-				console.warn('Failed to preload fabric textures:', error)
-			} finally {
-				store.removeLoadingMaterial(loadingId)
+		if (selectedTemplate) {
+			const templateFabric = getFabricForTemplate(template, store.selectedSpace?.collection)
+
+			// Get extra fabrics if they exist
+			const extraFabrics: Fabric[] = []
+			if (selectedTemplate.extraMaterials) {
+				const brandFabrics = fabrics[store.selectedSpace?.collection ?? 'moidien'] || []
+				for (const extraMaterial of selectedTemplate.extraMaterials) {
+					const extraFabric = brandFabrics.find(
+						fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
+					)
+					if (extraFabric) {
+						extraFabrics.push(extraFabric)
+					}
+				}
+			}
+
+			// Collect all fabrics to preload (main + extras)
+			const fabricsToPreload = []
+			if (templateFabric) {
+				fabricsToPreload.push(templateFabric)
+			}
+			fabricsToPreload.push(...extraFabrics)
+
+			if (fabricsToPreload.length > 0) {
+				const loadingId = Symbol(`fabric-${templateFabric?._id || 'extra'}`)
+				store.addLoadingMaterial(loadingId)
+				try {
+					// Preload all fabric textures and template blocks separately
+					await Promise.all([
+						Promise.all(fabricsToPreload.map(fabric => textureManager.preloadFabricBaseTextures(fabric))),
+						blockManager.preloadTemplateBlocks(template, store.selectedSpace!),
+					])
+				} catch (error) {
+					console.warn('Failed to preload fabric textures:', error)
+				} finally {
+					store.removeLoadingMaterial(loadingId)
+				}
 			}
 		}
 
-		// Set the selected template using the new Map structure
-
 		// Get blocks for ALL selected templates, organized by template category
-		const templateBlockData: {blocks: Block[]; templateCategory: TemplateCategory; materialId: string}[] = []
+		const templateBlockData: {
+			blocks: Block[]
+			templateCategory: TemplateCategory
+			materialId: string
+			extraMaterials?: {mesh: string; materialId: string}[]
+		}[] = []
 		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
 			const templateBlocks = getBlocksForTemplate(selectedTemplate, store.selectedSpace?.collection)
 			templateBlockData.push({
 				blocks: templateBlocks,
 				templateCategory: templateCategory,
 				materialId: selectedTemplate.materialId ?? '',
+				extraMaterials: selectedTemplate.extraMaterials,
 			})
 		}
 

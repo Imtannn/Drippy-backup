@@ -66,7 +66,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 6',
 			avatar: 'Female',
 			category: 'Dress',
-			materialId: 'Silk - Crepe (E8bbca)',
+			materialId: 'Silk - Crepe (096372)',
 		},
 		{
 			_id: '3',
@@ -90,7 +90,33 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 8',
 			avatar: 'Female',
 			category: 'Dress',
-			materialId: 'Silk - Chiffon (2ab4c8)',
+			materialId: 'Silk - Crepe',
+			extraMaterials: [
+				{
+					mesh: 'base_drippy_tight_regular_shoulder_36',
+					materialId: 'Silk - Crepe (096372)',
+				},
+				{
+					mesh: 'base_drippy_tight_regular_shoulder_35',
+					materialId: 'Silk - Crepe (096372)',
+				},
+				{
+					mesh: 'base_drippy_tight_regular_shoulder_33',
+					materialId: 'Silk - Chiffon (2ab4c8)',
+				},
+				{
+					mesh: 'base_drippy_tight_regular_shoulder_34',
+					materialId: 'Silk - Chiffon (2ab4c8)',
+				},
+				{
+					mesh: 'base_drippy_tight_regular_shoulder_31',
+					materialId: 'Silk - Crepe (D6e2ea)',
+				},
+				{
+					mesh: 'base_drippy_tight_regular_shoulder_32',
+					materialId: 'Silk - Crepe (D6e2ea)',
+				},
+			],
 		},
 		{
 			_id: '6',
@@ -98,7 +124,21 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 7',
 			avatar: 'Female',
 			category: 'Dress',
-			materialId: 'Silk - Chiffon (2ab4c8)',
+			materialId: 'Silk - Crepe',
+			extraMaterials: [
+				{
+					mesh: 'pattern_621662',
+					materialId: 'Silk - Crepe (096372)',
+				},
+				{
+					mesh: 'pattern_578230',
+					materialId: 'Silk - Crepe (D6e2ea)',
+				},
+				{
+					mesh: 'pattern_599284',
+					materialId: 'Silk - Chiffon (2ab4c8)',
+				},
+			],
 		},
 		{
 			_id: '7',
@@ -106,7 +146,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 5',
 			avatar: 'Female',
 			category: 'Dress',
-			materialId: 'Silk - Crepe (E8bbca)',
+			materialId: 'Silk - Crepe (096372)',
 		},
 		{
 			_id: '8',
@@ -188,7 +228,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 4',
 			avatar: 'Female',
 			category: 'Top',
-			materialId: 'Leather - Print',
+			materialId: 'Wool - Black Twisted',
 		},
 		{
 			_id: '5',
@@ -244,7 +284,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 1',
 			avatar: 'Female',
 			category: 'Dress',
-			materialId: 'Abtract - Black Face',
+			materialId: 'Wool - Yarn',
 		},
 		{
 			_id: '12',
@@ -252,7 +292,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 2',
 			avatar: 'Female',
 			category: 'Skirt',
-			materialId: 'Silk - Black Organza',
+			materialId: 'Silk - Black',
 		},
 		{
 			_id: '13',
@@ -260,7 +300,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 1',
 			avatar: 'Female',
 			category: 'Skirt',
-			materialId: 'Wool - Black Twisted',
+			materialId: 'Twisted - Yarn',
 		},
 		{
 			_id: '14',
@@ -268,7 +308,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 2',
 			avatar: 'Female',
 			category: 'Pants',
-			materialId: '',
+			materialId: 'Leather - Print',
 		},
 		{
 			_id: '15',
@@ -302,7 +342,7 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 2',
 			avatar: 'Female',
 			category: 'Shirt',
-			materialId: '',
+			materialId: 'Fabric - Golden',
 		},
 		{
 			_id: '4',
