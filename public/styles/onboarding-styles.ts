@@ -187,7 +187,9 @@ export const onboardingStyles = css`
 	}
 
 	img {
-		transform: scale(1.6);
-		margin-top: 160px;
+		width: 100%;
+		height: 300%;
+		object-fit: contain;
+		margin-top: var(--uiSpacingLarge);
 	}
 `
