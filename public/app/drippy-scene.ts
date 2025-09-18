@@ -1,4 +1,5 @@
 import {
+	attribute,
 	createEffect,
 	css,
 	Element,
@@ -35,6 +36,7 @@ import {
 import './app-buttons.js'
 import {store} from './store.js'
 import {textureManager} from './texture-manager.js'
+import type {Space} from '../types/types.js'
 
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
@@ -67,6 +69,11 @@ function excludeBonesFromBlock(block: Block) {
 @element
 export class DrippyScene extends Element {
 	static elementName = 'drippy-scene'
+
+	@attribute selectedSpace: Space | null = null
+	@attribute selectedAvatar: string | null = null
+	@attribute selectedFabrics: Map<TemplateCategory, Map<BlockCategory, Fabric[]>> = new Map()
+	@attribute selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>> = new Map()
 
 	@signal isDark = false
 	@signal sceneUrl = ''
@@ -189,8 +196,8 @@ export class DrippyScene extends Element {
 		})
 
 		this.createEffect(() => {
-			if (store.selectedSpace) {
-				const space = spaces.find(space => space.slug === store.selectedSpace?.slug)
+			if (this.selectedSpace) {
+				const space = spaces.find(space => space.slug === this.selectedSpace?.slug)
 				if (space) {
 					this.sceneUrl = space.scene
 				}
@@ -216,7 +223,7 @@ export class DrippyScene extends Element {
 
 		// Track selected avatar loading state
 		this.createEffect(() => {
-			if (!store.isShowAvatar || store.selectedAvatar) return
+			if (!store.isShowAvatar || this.selectedAvatar) return
 			if (store.tempSelectedAvatar) {
 				const avatar = this.avatarModel
 				if (!avatar) return
@@ -241,7 +248,7 @@ export class DrippyScene extends Element {
 
 		// Track background scene loading state
 		this.createEffect(() => {
-			if (!store.selectedSpace || !store.selectedSpace?.scene || !store.isShowScene) return
+			if (!this.selectedSpace || !this.selectedSpace?.scene || !store.isShowScene) return
 
 			const scene = this.backgroundModel
 			if (!scene) return
@@ -298,10 +305,10 @@ export class DrippyScene extends Element {
 		}
 
 		this.createEffect(() => {
-			const blocks = Array.from(store.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
+			const blocks = Array.from(this.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
 			this.renderBlocks = blocks.flatMap(block => {
 				if (block.category === 'Sleeves') {
-					const id = `${store.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
+					const id = `${this.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
 					let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
 					const idMirror = `${id}-mirror`
@@ -310,7 +317,7 @@ export class DrippyScene extends Element {
 					return [renderBlock, renderBlockMirror]
 				}
 
-				const id = `${store.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
+				const id = `${this.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
 				let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
 				return renderBlock
@@ -319,7 +326,7 @@ export class DrippyScene extends Element {
 
 		// Re-apply materials whenever the selected fabrics change or models mount
 		this.createEffect(async () => {
-			const selectedFabrics = store.selectedFabrics
+			const selectedFabrics = this.selectedFabrics
 			// Add a delay of 100ms to ensure the lume-gltf-model are in the DOM
 			await new Promise(resolve => setTimeout(resolve, 100))
 
@@ -570,7 +577,7 @@ export class DrippyScene extends Element {
 						<lume-gltf-model
 							id="avatar"
 							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
-							src=${() => avatars.find(avatar => avatar.value === (store.selectedAvatar ?? store.tempSelectedAvatar))?.src}
+							src=${() => avatars.find(avatar => avatar.value === (this.selectedAvatar ?? store.tempSelectedAvatar))?.src}
 							scale="1 1 1"
 							data-avatar
 						>
@@ -612,10 +619,10 @@ export class DrippyScene extends Element {
 						<lume-gltf-model
 							ref=${(el: GltfModel) => ((this.backgroundModel = el), enableShadowOnModelLoad(el), enableFrontsideOnModelLoad(el), setEnvMapOnModelLoad(el, env), setMaterialsVisibleOnModelLoad(el, () => store.isShowScene))}
 							id="scene"
-							src=${() => store.selectedSpace?.scene ?? ''}
+							src=${() => this.selectedSpace?.scene ?? ''}
 						></lume-gltf-model>
 
-						<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
+						<${Index} each=${() => this.selectedSpace?.includedModelFiles}>
 							${(item: Accessor<string>) => html`
 								<lume-gltf-model
 									ref=${(el: GltfModel) => (enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
