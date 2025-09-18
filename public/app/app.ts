@@ -104,7 +104,13 @@ export class DrippyApp extends Element {
 					></show-when>
 
 					<div id="app-container">
-						<drippy-scene id="drippy-scene"></drippy-scene>
+						<drippy-scene
+							id="drippy-scene"
+							selected-space=${() => store.selectedSpace}
+							selected-avatar=${() => store.selectedAvatar}
+							selected-fabrics=${() => store.selectedFabrics}
+							selected-blocks=${() => store.selectedBlocks}
+						></drippy-scene>
 
 						<show-when
 							condition=${() => store.view === 'avatar'}
