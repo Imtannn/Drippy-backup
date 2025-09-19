@@ -53,6 +53,22 @@ export class LoginUI extends LumeElement {
 	#handleLoginUI = (el: HTMLElement) => {
 		let original = document.getElementById
 
+		// Set placeholders for email and password inputs
+		const setPlaceholders = () => {
+			const emailInput = querySelectorDeep(document, 'input[type="email"]') as HTMLInputElement | null
+			const passwordInput = querySelectorDeep(document, 'input[type="password"]') as HTMLInputElement | null
+
+			if (emailInput && !emailInput.placeholder) {
+				emailInput.placeholder = 'Email'
+			}
+			if (passwordInput && !passwordInput.placeholder) {
+				passwordInput.placeholder = 'Password'
+			}
+		}
+
+		// Set placeholders after Blaze renders the inputs
+		setTimeout(setPlaceholders, 100)
+
 		el.addEventListener(
 			'click',
 			event => {
@@ -143,6 +159,7 @@ export class LoginUI extends LumeElement {
 		<blaze-component
 			tmpl="loginButtons"
 			id="loginButtons"
+			class=${() => (this.expanded ? 'expanded' : '')}
 			disabled=${() => this.disabled}
 			data=${() => this.data}
 			ref=${this.#handleLoginUI}
@@ -159,6 +176,11 @@ export class LoginUI extends LumeElement {
 		#loginButtons {
 			user-select: none;
 			display: block;
+
+			#login-email-label,
+			#login-password-label {
+				display: none;
+			}
 
 			.login-link-text {
 				color: var(--uiColorPrimaryBlack);
@@ -241,6 +263,12 @@ export class LoginUI extends LumeElement {
 							linear-gradient(white, white) padding-box,
 							linear-gradient(45deg, #e56be8, #495cff) border-box;
 					}
+
+					&::placeholder {
+						color: var(--uiColorSecondaryLightGrey);
+						font-size: var(--fontSizeTextXs);
+						font-weight: var(--fontWeightNormal);
+					}
 				}
 
 				[id*='label-and-input'] {
@@ -277,26 +305,25 @@ export class LoginUI extends LumeElement {
 		}
 
 		/* Hide login-sign-in-link when expanded */
-		:host([expanded]) {
-			#loginButtons {
-				#login-sign-in-link {
-					display: none;
-				}
-
-				#login-dropdown-list {
-					position: relative !important;
-				}
-
-				.accounts-dialog {
-					/* Remove Meteor's default dialog styling */
-					box-shadow: none;
-					background: none;
-					border: none;
-				}
+		#loginButtons.expanded {
+			#login-sign-in-link {
+				display: none;
 			}
-			#login-buttons.login-buttons-dropdown-align-right {
-				margin-top: -20px;
+
+			#login-dropdown-list {
+				position: relative !important;
 			}
+
+			.accounts-dialog {
+				/* Remove Meteor's default dialog styling */
+				box-shadow: none;
+				background: none;
+				border: none;
+			}
+		}
+
+		#login-buttons.login-buttons-dropdown-align-right.expanded {
+			margin-top: -20px;
 		}
 	`
 }

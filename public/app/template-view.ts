@@ -2,24 +2,28 @@ import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import {fabrics} from '../consts/fabrics.js'
 import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import {templates} from '../consts/templates.js'
+import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import {blockManager} from './block-manager.js'
-import {store} from './store.js'
+import {currentUser, store} from './store.js'
 import {textureManager} from './texture-manager.js'
 
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
+import '../elements/dialog-element.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
+import '../elements/login-ui.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
+import '../onboarding/login-step.js'
 import './app-buttons.js'
 import './drip-it-button.js'
 import './item-card.js'
@@ -33,11 +37,18 @@ export class TemplateView extends Element {
 	@signal selectedTab: TemplateCategory | null = null
 	@signal templateCategories: Record<TemplateCategory, Template[]> = {} as Record<TemplateCategory, Template[]>
 	@signal spaceCollection: string | null = null
+	@signal showLoginDialog = false
+	@signal showLoginForm = false
 
 	private defaultCollection = 'moidien'
 
 	connectedCallback() {
 		super.connectedCallback()
+
+		// Listen for login form events on document (since dialog content is moved to document.body)
+		document.addEventListener('show-login-form', () => {
+			this.showLoginForm = true
+		})
 
 		this.createEffect(() => {
 			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
@@ -147,7 +158,15 @@ export class TemplateView extends Element {
 	}
 
 	#onDripItClick = () => {
-		store.navigateTo = 'blocks'
+		const user = currentUser()
+		// If undefined, means the user is still loading
+		if (user === undefined) return
+
+		if (user !== null) {
+			store.navigateTo = 'blocks'
+		} else {
+			this.showLoginDialog = true
+		}
 	}
 
 	#onBackButtonClick = () => {
@@ -260,9 +279,32 @@ export class TemplateView extends Element {
 				`}
 			></show-when>
 		</bottom-sheet>
+
+		<dialog-element open=${() => this.showLoginDialog}>
+			<show-when condition=${() => !this.showLoginForm} content=${() => html`<login-step></login-step>`}></show-when>
+			<show-when
+				condition=${() => this.showLoginForm}
+				content=${() => html`
+					<div style="display: flex; justify-content: center; align-items: flex-start; width: 100%; height: 100%;">
+						<login-ui expanded style="position: relative;"></login-ui>
+					</div>
+					<style>
+						#login-dropdown-list {
+							position: relative;
+							top: -200px;
+						}
+						.accounts-dialog {
+							position: relative;
+							transform: none;
+						}
+					</style>
+				`}
+			></show-when>
+		</dialog-element>
 	`
 
 	css = css/*css*/ `
+		${onboardingStyles}
 		:host {
 			display: contents;
 		}
