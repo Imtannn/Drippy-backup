@@ -7,7 +7,7 @@ import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import {blockManager} from './block-manager.js'
-import {store} from './store.js'
+import {currentUser, store} from './store.js'
 import {textureManager} from './texture-manager.js'
 
 import '../elements/animation-select.js'
@@ -158,9 +158,15 @@ export class TemplateView extends Element {
 	}
 
 	#onDripItClick = () => {
-		this.showLoginDialog = true
-		// Also navigate to blocks after login
-		// store.navigateTo = 'blocks'
+		const user = currentUser()
+		// If undefined, means the user is still loading
+		if (user === undefined) return
+
+		if (user !== null) {
+			store.navigateTo = 'blocks'
+		} else {
+			this.showLoginDialog = true
+		}
 	}
 
 	#onBackButtonClick = () => {
