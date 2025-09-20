@@ -2289,7 +2289,7 @@ p {
 	}
 
 	.showcase .showcase__item {
-		height: unset;
+		height: 640px;
 	}
 
 	/* Features responsive for mobile - single column */
