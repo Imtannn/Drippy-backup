@@ -12,6 +12,7 @@ import {textureManager} from './texture-manager.js'
 
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
+import '../elements/bottom-navigation.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
 import '../elements/dialog-element.js'
@@ -278,6 +279,7 @@ export class TemplateView extends Element {
 					</tabs-provider>
 				`}
 			></show-when>
+			<bottom-navigation></bottom-navigation>
 		</bottom-sheet>
 
 		<dialog-element open=${() => this.showLoginDialog}>
@@ -329,6 +331,13 @@ export class TemplateView extends Element {
 			padding-top: 0;
 			padding-bottom: 5px;
 			background: var(--uiColorPrimaryWhite);
+		}
+
+		/* Add bottom padding on desktop to prevent content hiding behind navigation */
+		@media (min-width: 768px) {
+			.tabs-content-container {
+				padding-bottom: 80px;
+			}
 		}
 
 		.items-grid {
