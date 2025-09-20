@@ -1542,6 +1542,12 @@ p {
 	background: linear-gradient(45deg, #e56be8, #495cff);
 }
 
+.showcase__avatar-option.selected {
+	border: 2px solid #8b5cf6;
+	background: linear-gradient(45deg, #8b5cf6, #8b5cf6);
+	box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
 .showcase__avatar-option img {
 	width: 100%;
 	height: 100%;
@@ -1573,10 +1579,9 @@ p {
 /* New class to fix model centering */
 .showcase__model-center {
 	position: absolute;
-	top: 14px;
 	left: 50%;
 	width: 100%;
-	height: 625px;
+	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1622,25 +1627,6 @@ p {
 	width: 100%;
 	height: 100%;
 	object-fit: contain;
-}
-
-/* Debug: Add border to see positioning */
-.showcase__model-center {
-	border: 2px solid red;
-}
-
-.showcase__model-center drippy-scene {
-	border: 2px solid blue;
-}
-
-.showcase__model-center lume-gltf-model {
-	border: 2px solid green;
-	/* Force scale to show full model */
-	transform: scale(0.4) !important;
-	transform-origin: center !important;
-	/* Force center positioning */
-	margin: 0 auto !important;
-	display: block !important;
 }
 
 .showcase__avatar-model {
@@ -1972,19 +1958,11 @@ p {
 	}
 
 	.brands__grid {
-		/* display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		grid-template-rows: repeat(3, 1fr); */
 		gap: 15px;
-		/* max-width: 100%;
-		padding: 0; */
 	}
 
 	.brands__logo {
 		height: 90px;
-	}
-
-	.landing-page-desktop .features__image {
 	}
 
 	.landing-page-desktop .showcase__container {
@@ -2081,9 +2059,6 @@ p {
 	.landing-page-desktop .how-it-works__item {
 		max-width: unset;
 		min-width: 100%;
-	}
-
-	.landing-page-desktop .how-it-works__item .how-it-works__step-image {
 	}
 
 	/* Platform grid responsive for tablet - single column */
@@ -2554,7 +2529,13 @@ p {
 		opacity: 1;
 		z-index: 2;
 	}
-
+	.carousel .platform__grid {
+		cursor: grab;
+		margin-top: 25px;
+	}
+	.carousel .pricing__plans {
+		cursor: grab;
+	}
 	.carousel .platform__card-overlap {
 		height: 350px;
 	}

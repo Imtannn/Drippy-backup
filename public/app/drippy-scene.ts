@@ -658,12 +658,20 @@ export class DrippyScene extends Element {
 			transition: transform var(--transitionFast);
 		}
 
+		:host-context(.showcase__model-center) lume-scene {
+			transform: unset !important;
+			transition: unset !important;
+		}
+
 		lume-scene {
 			transform: var(--scene-transform);
 			transition: transform var(--transitionFast);
 		}
 
 		@media (max-width: 767px) {
+			:host-context(.showcase__model-center) #lume-scene-container {
+				transform: unset !important;
+			}
 			#lume-scene-container {
 				transform: var(--scene-desktop-transform);
 			}

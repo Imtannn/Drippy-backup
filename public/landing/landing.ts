@@ -6,7 +6,11 @@ import '../routes.js' // track page visits
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
-
+import '../app/drippy-scene.js'
+import {store} from '../app/store.js'
+import type {Fabric} from '../types/fabric.js'
+import type {TemplateCategory} from '../types/template.js'
+import type {BlockCategory} from '../types/block.js'
 // Show video loading initially
 function showVideoLoading() {
 	const videoLoadingElement = html`<video-loading></video-loading>`
@@ -22,6 +26,34 @@ function hideVideoLoading(videoLoadingElement: any) {
 }
 const [isYearlyActive, setIsYearlyActive] = createSignal(true)
 
+// Handle material click to set selectedFabrics
+function handleMaterialClick(material: (typeof materials)[0]) {
+	const fabricData = []
+	// Convert material to Fabric format
+	const fabric: Fabric = {
+		_id: material.id,
+		thumb: material.thumb,
+		normal: material.normal,
+		baseColor: material.baseColor,
+		displacement: material.displacement,
+		roughness: material.roughness,
+		alpha: material.alpha,
+		materialName: material.materialName,
+		category: material.category as Fabric['category'],
+		templateCategories: material.templateCategories,
+	}
+
+	// Set fabric for Shirt template and Bodice block category
+	fabricData.push({
+		fabric: fabric,
+		blockCategory: 'Bodice' as BlockCategory,
+		templateCategory: 'Shirt' as TemplateCategory,
+	})
+	if (fabricData.length > 0) {
+		store.setSelectedFabrics = fabricData
+	}
+}
+
 // Hide the loading cover
 // const loadingCover = document.getElementById('loadingCover')
 // console.log('loadingCover', loadingCover)
@@ -34,10 +66,60 @@ const blingImage1 = new URL('../images/landing/bling-1.png', import.meta.url).hr
 const blingImage2 = new URL('../images/landing/bling-2.png', import.meta.url).href
 const blingImage3 = new URL('../images/landing/bling-3.png', import.meta.url).href
 const modelImage1 = new URL('../images/landing/model-1.png', import.meta.url).href
-const modelImage2 = new URL('../images/landing/model-2.png', import.meta.url).href
-const matImage1 = new URL('../images/landing/mat-1.png', import.meta.url).href
-const matImage2 = new URL('../images/landing/mat-2.png', import.meta.url).href
-const matImage3 = new URL('../images/landing/mat-3.png', import.meta.url).href
+
+// Materials data
+const materials = [
+	{
+		id: '5',
+		thumb:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_RENDER.png',
+		normal:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_NORMAL.jpg',
+		baseColor:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_BASE.jpg',
+		displacement:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_DISPLACE.jpg',
+		roughness:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_ROUGH.jpg',
+		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/SEERSUCKER+FABRIC+-+OPACITY.jpg',
+		materialName: 'Black',
+		category: 'Seersucker Fabric',
+		templateCategories: ['Shirt'],
+	},
+	{
+		id: '6',
+		thumb:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_RENDER.png',
+		normal:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_NORMAL.jpg',
+		baseColor:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_BASE.jpg',
+		displacement:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_DISPLACE.jpg',
+		roughness:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_ROUGH.jpg',
+		materialName: 'White',
+		category: 'Cotton',
+		templateCategories: ['Shirt'],
+	},
+	{
+		id: '7',
+		thumb:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_RENDER.png',
+		normal:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_NORMAL.jpg',
+		baseColor:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_BASE.jpg',
+		displacement:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_DISPLACE.jpg',
+		roughness:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_ROUGH.jpg',
+		materialName: 'Navy',
+		category: 'Crinkle Fabric',
+		templateCategories: ['Shirt'],
+	},
+]
+
 const stepImage1 = new URL('../images/landing/step-1.png', import.meta.url).href
 
 const cta__background = new URL('../images/landing/cta-background.png', import.meta.url).href
@@ -244,21 +326,29 @@ const mainContent = html`
 									<div class="showcase__item">
 										<div class="showcase__background">
 											<div class="showcase__controls">
-												<div class="showcase__avatar-option">
-													<img src=${matImage1} alt="Material option 1 for customization" />
-												</div>
-												<div class="showcase__avatar-option">
-													<img src=${matImage2} alt="Material option 2 for customization" />
-												</div>
-												<div class="showcase__avatar-option">
-													<img src=${matImage3} alt="Material option 3 for customization" />
-												</div>
+												${materials.map(
+													material => html`
+														<div
+															class="showcase__avatar-option"
+															data-material-id=${material.id}
+															onclick=${() => handleMaterialClick(material)}
+														>
+															<img src=${material.thumb} alt=${material.materialName} />
+														</div>
+													`,
+												)}
 											</div>
 
 											<avatar-selector target-model=".showcase__avatar-model" class="showcase__selector"></avatar-selector>
 
-											<div class="showcase__model-display">
-												<img class="showcase__model" src="${modelImage2}" alt="3D avatar model with interactive controls" />
+											<div class="showcase__model-center">
+												<drippy-scene
+													class="showcase__model"
+													selected-space=${() => store.selectedSpace}
+													selected-avatar=${() => store.selectedAvatar}
+													selected-fabrics=${() => store.selectedFabrics}
+													selected-blocks=${() => store.selectedBlocks}
+												></drippy-scene>
 											</div>
 											<div class="showcase__label text-xs">Interactive 3D with avatars</div>
 										</div>
