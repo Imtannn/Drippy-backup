@@ -1,5 +1,4 @@
 import {css, element, Element, html, signal} from 'lume'
-import {Meteor} from 'meteor/meteor'
 import '../app/app-buttons.js'
 import '../app/drippy-scene.js'
 import '../app/item-card.js'
@@ -99,6 +98,10 @@ export class UploadView extends Element {
 	}
 
 	#handleUploadClick = () => {
+		if (this.fileInput) {
+			this.fileInput.files = null
+		}
+
 		this.fileInput?.click()
 	}
 
@@ -281,40 +284,21 @@ export class UploadView extends Element {
 		// Add extra materials to the main materials list
 		materials.push(...extraMaterialFiles)
 
-		// Upload template thumbnail if it exists
+		// Create blob URL for template thumbnail if it exists
 		let templateThumbnailUrl: string | undefined
 		if (templateThumbnail) {
 			try {
-				// Validate file data before upload
+				// Validate file data
 				if (!templateThumbnail.name || !templateThumbnail.name.trim()) {
-					console.warn('Template thumbnail has no filename, skipping upload')
+					console.warn('Template thumbnail has no filename, skipping')
 					return null
 				}
 
-				const fileData = await this.#fileToBase64(templateThumbnail)
-
-				// Validate base64 data
-				const base64Data = this.#extractBase64Data(fileData)
-				if (!base64Data) {
-					console.warn('Failed to extract base64 data from template thumbnail, skipping upload')
-					return null
-				}
-
-				// Determine content type with fallback
-				const contentType = this.#getContentType(templateThumbnail)
-
-				const result = await this.#callMeteorMethod('files.upload', {
-					fileName: templateThumbnail.name.trim(),
-					fileData: base64Data,
-					contentType,
-					folder: `testing/templates/${templateName}`,
-				})
-				console.log(result)
-				if (result.success) {
-					templateThumbnailUrl = result.url
-				}
+				// Create blob URL for template thumbnail
+				templateThumbnailUrl = URL.createObjectURL(templateThumbnail)
+				console.log(`📸 Created blob URL for template thumbnail: ${templateThumbnailUrl}`)
 			} catch (error) {
-				console.error(`Failed to upload template thumbnail:`, error)
+				console.error(`Failed to create blob URL for template thumbnail:`, error)
 			}
 		}
 
@@ -363,65 +347,44 @@ export class UploadView extends Element {
 	#processMaterialFiles = async (
 		files: File[],
 		materialName: string,
-		templateName: string,
-		subfolder?: string,
+		_templateName: string,
+		_subfolder?: string,
 		meshName?: string,
 	): Promise<UploadedMaterial | null> => {
 		try {
 			const uploadedFiles = new Map<string, string>()
 
-			// Upload all material files
+			// Process all material files and create blob URLs
 			for (const file of files) {
-				// Validate file data before upload
+				// Validate file data
 				if (!file.name || !file.name.trim()) {
 					console.warn(`Skipping file with no name in material ${materialName}`)
 					continue
 				}
 
 				try {
-					const fileData = await this.#fileToBase64(file)
+					// Create blob URL for local file access
+					const blobUrl = URL.createObjectURL(file)
+					const fileName = file.name.toLowerCase()
 
-					// Validate base64 data
-					const base64Data = this.#extractBase64Data(fileData)
-					if (!base64Data) {
-						console.warn(`Failed to extract base64 data from ${file.name}, skipping upload`)
-						continue
+					// Categorize file by name patterns
+					if (fileName.includes('render') || fileName.includes('thumb')) {
+						uploadedFiles.set('thumb', blobUrl)
+					} else if (fileName.includes('normal')) {
+						uploadedFiles.set('normal', blobUrl)
+					} else if (fileName.includes('base')) {
+						uploadedFiles.set('baseColor', blobUrl)
+					} else if (fileName.includes('displace')) {
+						uploadedFiles.set('displacement', blobUrl)
+					} else if (fileName.includes('rough')) {
+						uploadedFiles.set('roughness', blobUrl)
+					} else if (fileName.includes('alpha')) {
+						uploadedFiles.set('alpha', blobUrl)
 					}
 
-					// Determine content type with fallback
-					const contentType = this.#getContentType(file)
-
-					const folderPath = subfolder
-						? `testing/templates/${templateName}/${subfolder}/${materialName}`
-						: `testing/templates/${templateName}/materials/${materialName}`
-
-					const result = await this.#callMeteorMethod('files.upload', {
-						fileName: file.name.trim(),
-						fileData: base64Data,
-						contentType,
-						folder: folderPath,
-					})
-
-					if (result.success) {
-						const fileName = file.name.toLowerCase()
-
-						// Categorize file by name patterns
-						if (fileName.includes('render') || fileName.includes('thumb')) {
-							uploadedFiles.set('thumb', result.url)
-						} else if (fileName.includes('normal')) {
-							uploadedFiles.set('normal', result.url)
-						} else if (fileName.includes('base')) {
-							uploadedFiles.set('baseColor', result.url)
-						} else if (fileName.includes('displace')) {
-							uploadedFiles.set('displacement', result.url)
-						} else if (fileName.includes('rough')) {
-							uploadedFiles.set('roughness', result.url)
-						} else if (fileName.includes('alpha')) {
-							uploadedFiles.set('alpha', result.url)
-						}
-					}
+					console.log(`Created blob URL for ${file.name}: ${blobUrl}`)
 				} catch (error) {
-					console.error(`Failed to upload ${file.name}:`, error)
+					console.error(`Failed to create blob URL for ${file.name}:`, error)
 				}
 			}
 
@@ -448,69 +411,6 @@ export class UploadView extends Element {
 			console.error(`Failed to process material ${materialName}:`, error)
 			return null
 		}
-	}
-
-	#fileToBase64 = (file: File): Promise<string> => {
-		return new Promise((resolve, reject) => {
-			const reader = new FileReader()
-			reader.onload = () => resolve(reader.result as string)
-			reader.onerror = reject
-			reader.readAsDataURL(file)
-		})
-	}
-
-	#extractBase64Data = (dataUrl: string): string | null => {
-		if (!dataUrl || typeof dataUrl !== 'string') {
-			return null
-		}
-
-		// Check if it's a proper data URL format
-		if (!dataUrl.startsWith('data:')) {
-			return null
-		}
-
-		const commaIndex = dataUrl.indexOf(',')
-		if (commaIndex === -1) {
-			return null
-		}
-
-		const base64Data = dataUrl.substring(commaIndex + 1)
-
-		// Validate that we have actual data
-		if (!base64Data || base64Data.trim().length === 0) {
-			return null
-		}
-
-		return base64Data
-	}
-
-	#getContentType = (file: File): string => {
-		// First try to use the file's type property
-		if (file.type && file.type.trim()) {
-			return file.type
-		}
-
-		// Fallback to determining content type from file extension
-		const fileName = file.name.toLowerCase()
-
-		if (fileName.endsWith('.png')) {
-			return 'image/png'
-		} else if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')) {
-			return 'image/jpeg'
-		} else if (fileName.endsWith('.gif')) {
-			return 'image/gif'
-		} else if (fileName.endsWith('.webp')) {
-			return 'image/webp'
-		} else if (fileName.endsWith('.svg')) {
-			return 'image/svg+xml'
-		} else if (fileName.endsWith('.bmp')) {
-			return 'image/bmp'
-		} else if (fileName.endsWith('.tiff') || fileName.endsWith('.tif')) {
-			return 'image/tiff'
-		}
-
-		// Default fallback for images
-		return 'application/octet-stream'
 	}
 
 	#processBlocksInTemplate = async (files: File[], templateName: string): Promise<UploadedBlock[]> => {
@@ -574,49 +474,22 @@ export class UploadView extends Element {
 				console.log(`    📥 Processing block: ${baseName}`)
 
 				try {
-					// Upload block files
-					const [pngBuffer, gltfBuffer] = await Promise.all([
-						this.#fileToBase64(matchingPng),
-						this.#fileToBase64(gltfFile),
-					])
+					// Create blob URLs for block files
+					const pngBlobUrl = URL.createObjectURL(matchingPng)
+					const gltfBlobUrl = URL.createObjectURL(gltfFile)
 
-					// Extract base64 data
-					const pngBase64 = this.#extractBase64Data(pngBuffer)
-					const gltfBase64 = this.#extractBase64Data(gltfBuffer)
+					blocks.push({
+						_id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+						blockName: this.#capitalize(baseName),
+						category: this.#normalizeBlockCategory(blockTypeFolder) as BlockCategory,
+						templateName: templateName,
+						thumbUrl: pngBlobUrl,
+						modelUrl: gltfBlobUrl,
+					})
 
-					if (!pngBase64 || !gltfBase64) {
-						console.warn(`Failed to extract base64 data for block ${baseName}`)
-						continue
-					}
-
-					// Upload to server
-					const [blockThumbResult, blockModelResult] = await Promise.all([
-						this.#callMeteorMethod('files.upload', {
-							fileName: matchingPng.name,
-							fileData: pngBase64,
-							contentType: this.#getContentType(matchingPng),
-							folder: `testing/templates/${templateName}/blocks/${blockTypeFolder}`,
-						}),
-						this.#callMeteorMethod('files.upload', {
-							fileName: gltfFile.name,
-							fileData: gltfBase64,
-							contentType: gltfFile.name.toLowerCase().endsWith('.gltf') ? 'model/gltf+json' : 'model/gltf-binary',
-							folder: `testing/templates/${templateName}/blocks/${blockTypeFolder}`,
-						}),
-					])
-
-					if (blockThumbResult.success && blockModelResult.success) {
-						blocks.push({
-							_id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-							blockName: this.#capitalize(baseName),
-							category: this.#normalizeBlockCategory(blockTypeFolder) as BlockCategory,
-							templateName: templateName,
-							thumbUrl: blockThumbResult.url,
-							modelUrl: blockModelResult.url,
-						})
-
-						console.log(`    ✅ Uploaded block ${baseName}`)
-					}
+					console.log(`    ✅ Created blob URLs for block ${baseName}`)
+					console.log(`    📸 Thumb: ${pngBlobUrl}`)
+					console.log(`    📦 Model: ${gltfBlobUrl}`)
 				} catch (error) {
 					console.error(`    ❌ Failed to process block ${baseName}:`, error)
 				}
@@ -926,18 +799,6 @@ export class UploadView extends Element {
 		console.log('🚀 Selected fabrics:', fabrics)
 
 		console.log('🚀 Auto-selected uploaded template')
-	}
-
-	#callMeteorMethod = (method: string, ...args: any[]): Promise<any> => {
-		return new Promise((resolve, reject) => {
-			Meteor.call(method, ...args, (error: any, result: any) => {
-				if (error) {
-					reject(error)
-				} else {
-					resolve(result)
-				}
-			})
-		})
 	}
 
 	template = () => html`
