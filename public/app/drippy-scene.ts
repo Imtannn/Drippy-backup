@@ -29,6 +29,7 @@ import {
 	createMutationsSignal,
 	enableFrontsideOnModelLoad,
 	enableShadowOnModelLoad,
+	hasAncestorWithName,
 	meshesInTree,
 	onModelLoad,
 	setEnvMapOnModelLoad,
@@ -120,13 +121,13 @@ export class DrippyScene extends Element {
 
 			if (isCanceled()) return
 
+			const allFabricMeses = [...fabricsByMesh.keys()]
 			// Apply fabrics to meshes based on assignments
 			for (const mesh of meshes) {
-				const meshName = mesh.parent?.name.toLowerCase() || mesh.name.toLowerCase() || ''
+				const meshFabric = allFabricMeses.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
 
 				// Check if there's a specific fabric assigned to this mesh
-				const assignedFabric = fabricsByMesh.get(meshName)
-				const fabricToUse = assignedFabric || fabricsByMesh.get('default')
+				const fabricToUse = fabricsByMesh.get(meshFabric || 'default')
 
 				if (fabricToUse) {
 					const textureSet = textureSetsByFabric.get(fabricToUse)

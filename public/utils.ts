@@ -750,3 +750,24 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 
 	return screenshot
 }
+
+/**
+ * Returns true if `object` has an ancestor with the given name.
+ * @param object - The object to check.
+ * @param targetName - The name of the ancestor to check for.
+ * @returns True if `object` has an ancestor with the given name, false otherwise.
+ */
+export function hasAncestorWithName(object: THREE.Object3D, targetName: string): boolean {
+	let current = object
+
+	while (current) {
+		if (
+			current.name.toLowerCase() === targetName.toLowerCase() ||
+			current.userData?.name?.toLowerCase() === targetName.toLowerCase()
+		) {
+			return true
+		}
+		current = current.parent as THREE.Object3D
+	}
+	return false
+}
