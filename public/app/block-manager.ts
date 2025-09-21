@@ -24,7 +24,12 @@ class BlockManager {
 	) {
 		// Completely replace selectedBlocks with new blocks (used for template selection)
 		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		const newFabrics: {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}[] = []
+		const newFabrics: {
+			fabric: Fabric
+			blockCategory: BlockCategory
+			templateCategory: TemplateCategory
+			assignedMesh: string
+		}[] = []
 
 		for (const {blocks, templateCategory, materialId, extraMaterials} of blockData) {
 			const templateBlocks = new Map<BlockCategory, Block>()
@@ -32,7 +37,7 @@ class BlockManager {
 				templateBlocks.set(block.category, block)
 
 				// Create fabrics array for this block category
-				const blockFabrics: Fabric[] = []
+				const blockFabrics: Record<string, Fabric> = {}
 
 				// Add the main fabric (without assignedMesh - will be default)
 				if (materialId) {
@@ -40,7 +45,7 @@ class BlockManager {
 						fabric => `${fabric.category} - ${fabric.materialName}` === materialId,
 					)
 					if (fabric) {
-						blockFabrics.push({...fabric, assignedMesh: undefined})
+						blockFabrics[fabric.assignedMesh || 'default'] = fabric
 					}
 				}
 
@@ -51,17 +56,18 @@ class BlockManager {
 							fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
 						)
 						if (extraFabric) {
-							blockFabrics.push({...extraFabric, assignedMesh: extraMaterial.mesh})
+							blockFabrics[extraMaterial.mesh] = extraFabric
 						}
 					}
 				}
 
 				// Add all fabrics for this block category
-				for (const fabric of blockFabrics) {
+				for (const [assignedMesh, fabric] of Object.entries(blockFabrics)) {
 					newFabrics.push({
 						fabric: fabric,
 						blockCategory: block.category,
 						templateCategory: templateCategory,
+						assignedMesh: assignedMesh,
 					})
 				}
 			}
@@ -71,6 +77,21 @@ class BlockManager {
 		}
 
 		return {newBlocks, newFabrics}
+	}
+
+	parseBlocksToMaterials(blocks: Block[]) {
+		// Completely replace selectedBlocks with new blocks (used for template selection)
+		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+
+		for (const block of blocks) {
+			const templateBlocks = new Map<BlockCategory, Block>()
+			templateBlocks.set(block.category, block)
+			if (templateBlocks.size > 0) {
+				newBlocks.set(block.templateCategory, templateBlocks)
+			}
+		}
+
+		return newBlocks
 	}
 }
 

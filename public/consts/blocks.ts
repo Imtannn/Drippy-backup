@@ -414,6 +414,45 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '1',
 			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_9___Bodice/bodice_214.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/lostCause/blocks/Top/Item_9___Bodice/bodice_214.gltf',
+			blockName: 'bodice 214',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 9',
+			templateName: 'Item 9',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '2',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_8___Sleeves/sleeves_214.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/lostCause/blocks/Top/Item_8___Sleeves/sleeves_214.gltf',
+			blockName: 'sleeves 214',
+			avatar: 'Female',
+			category: 'Sleeves',
+			templateId: 'Item 8',
+			templateName: 'Item 8',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '3',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_8___Bodice/bodice_214.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/lostCause/blocks/Top/Item_8___Bodice/bodice_214.gltf',
+			blockName: 'bodice 214',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 8',
+			templateName: 'Item 8',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '4',
+			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_7___Sleeves/sleeves_1461.png',
 			modelFile:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/lostCause/blocks/Top/Item_7___Sleeves/sleeves_1461.gltf',
@@ -425,7 +464,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 		{
-			_id: '2',
+			_id: '5',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_7___Bodice/bodice_137.png',
 			modelFile:
@@ -438,7 +477,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 		{
-			_id: '3',
+			_id: '6',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item__6___Sleeves/sleeves_140.png',
 			modelFile:
@@ -451,7 +490,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 		{
-			_id: '4',
+			_id: '7',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_6___Bodice/bodice_140.png',
 			modelFile:
@@ -464,7 +503,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 		{
-			_id: '5',
+			_id: '8',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item__5___Bodice/bodice_1514.png',
 			modelFile:
@@ -477,7 +516,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 		{
-			_id: '6',
+			_id: '9',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_4___Bodice/bodice_141.png',
 			modelFile:
@@ -490,7 +529,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 		{
-			_id: '7',
+			_id: '10',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_3___Bodice/bodice_140.png',
 			modelFile:
@@ -503,7 +542,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 		{
-			_id: '8',
+			_id: '11',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_2___Sleeves/sleeves_141.png',
 			modelFile:
@@ -516,7 +555,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 		{
-			_id: '9',
+			_id: '12',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_2___Bodice/jacket_141.png',
 			modelFile:
@@ -529,7 +568,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 		{
-			_id: '10',
+			_id: '13',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_1___Sleeves/sleeves_139.png',
 			modelFile:
@@ -542,7 +581,7 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 		{
-			_id: '11',
+			_id: '14',
 			thumb:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Top/Item_1___Bodice/bodice_139.png',
 			modelFile:
@@ -553,45 +592,6 @@ export const blocks: Record<string, Block[]> = {
 			templateId: 'Item 1',
 			templateName: 'Item 1',
 			templateCategory: 'Top',
-		},
-		{
-			_id: '12',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Accessories/Item_3___Accessory/vail_142.png',
-			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/lostCause/blocks/Accessories/Item_3___Accessory/vail_142.gltf',
-			blockName: 'vail 142',
-			avatar: 'Female',
-			category: 'Accessory',
-			templateId: 'Item 3',
-			templateName: 'Item 3',
-			templateCategory: 'Accessories',
-		},
-		{
-			_id: '13',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Accessories/Item_2___Accessory/accessory_137.png',
-			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/lostCause/blocks/Accessories/Item_2___Accessory/accessory_137.gltf',
-			blockName: 'accessory 137',
-			avatar: 'Female',
-			category: 'Accessory',
-			templateId: 'Item 2',
-			templateName: 'Item 2',
-			templateCategory: 'Accessories',
-		},
-		{
-			_id: '14',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/lostCause/blocks/Accessories/Item_1___Accessory/accessory_1555.png',
-			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/lostCause/blocks/Accessories/Item_1___Accessory/accessory_1555.gltf',
-			blockName: 'accessory 1555',
-			avatar: 'Female',
-			category: 'Accessory',
-			templateId: 'Item 1',
-			templateName: 'Item 1',
-			templateCategory: 'Accessories',
 		},
 		{
 			_id: '15',
@@ -772,6 +772,269 @@ export const blocks: Record<string, Block[]> = {
 			modelFile:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/shri/blocks/Pants/Item_1___Pants/pants_1360.gltf',
 			blockName: 'pants 1360',
+			avatar: 'Female',
+			category: 'Pants',
+			templateId: 'Item 1',
+			templateName: 'Item 1',
+			templateCategory: 'Pants',
+		},
+	],
+
+	eliseF: [
+		{
+			_id: '1',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.gltf',
+			blockName: 'sleeves 1592',
+			avatar: 'Female',
+			category: 'Sleeves',
+			templateId: 'Item 6',
+			templateName: 'Item 6',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '2',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.gltf',
+			blockName: 'bodice 1591',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 6',
+			templateName: 'Item 6',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '3',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_5_Bodice/bodice_1507_.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_5_Bodice/bodice_1507_.gltf',
+			blockName: 'bodice 1507',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 5',
+			templateName: 'Item 5',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '4',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_4_Sleeves/sleeves_1512.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_4_Sleeves/sleeves_1512.gltf',
+			blockName: 'sleeves 1512',
+			avatar: 'Female',
+			category: 'Sleeves',
+			templateId: 'Item 4',
+			templateName: 'Item 4',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '5',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_4_Bodice/bodice_1509.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_4_Bodice/bodice_1509.gltf',
+			blockName: 'bodice 1509',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 4',
+			templateName: 'Item 4',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '6',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_3_Sleeves/sleeves_1510.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_3_Sleeves/sleeves_1510.gltf',
+			blockName: 'sleeves 1510',
+			avatar: 'Female',
+			category: 'Sleeves',
+			templateId: 'Item 3',
+			templateName: 'Item 3',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '7',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_3_Bodice/bodice_1509.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_3_Bodice/bodice_1509.gltf',
+			blockName: 'bodice 1509',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 3',
+			templateName: 'Item 3',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '8',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_2___Sleeves/sleeves_1566.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_2___Sleeves/sleeves_1566.gltf',
+			blockName: 'sleeves 1566',
+			avatar: 'Female',
+			category: 'Sleeves',
+			templateId: 'Item 2',
+			templateName: 'Item 2',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '9',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_2___Bodice/bodice_1565.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_2___Bodice/bodice_1565.gltf',
+			blockName: 'bodice 1565',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 2',
+			templateName: 'Item 2',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '10',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_1___Sleeves/sleeves_1561.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_1___Sleeves/sleeves_1561.gltf',
+			blockName: 'sleeves 1561',
+			avatar: 'Female',
+			category: 'Sleeves',
+			templateId: 'Item 1',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '11',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_1___Bodice/bodice_1560.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_1___Bodice/bodice_1560.gltf',
+			blockName: 'bodice 1560',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 1',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '12',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_9___Pants/pants_1594.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_9___Pants/pants_1594.gltf',
+			blockName: 'pants 1594',
+			avatar: 'Female',
+			category: 'Pants',
+			templateId: 'Item 9',
+			templateName: 'Item 9',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: '13',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_8___Pants/pants_1593.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_8___Pants/pants_1593.gltf',
+			blockName: 'pants 1593',
+			avatar: 'Female',
+			category: 'Pants',
+			templateId: 'Item 8',
+			templateName: 'Item 8',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: '14',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_7___Pants/pants%2Cskirt_1590.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_7___Pants/pants%2Cskirt_1590.gltf',
+			blockName: 'pants,skirt 1590',
+			avatar: 'Female',
+			category: 'Pants',
+			templateId: 'Item 7',
+			templateName: 'Item 7',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: '15',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_6___Skirt/skirt_1589.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_6___Skirt/skirt_1589.gltf',
+			blockName: 'skirt 1589',
+			avatar: 'Female',
+			category: 'Skirt',
+			templateId: 'Item 6',
+			templateName: 'Item 6',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: '16',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_5_Pants/pants_1511.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_5_Pants/pants_1511.gltf',
+			blockName: 'pants 1511',
+			avatar: 'Female',
+			category: 'Pants',
+			templateId: 'Item 5',
+			templateName: 'Item 5',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: '17',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_4_Pants/pants_1508.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_4_Pants/pants_1508.gltf',
+			blockName: 'pants 1508',
+			avatar: 'Female',
+			category: 'Pants',
+			templateId: 'Item 4',
+			templateName: 'Item 4',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: '18',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_3___Pants/pants_1564.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_3___Pants/pants_1564.gltf',
+			blockName: 'pants 1564',
+			avatar: 'Female',
+			category: 'Pants',
+			templateId: 'Item 3',
+			templateName: 'Item 3',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: '19',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_2___Pants/pants_1563.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_2___Pants/pants_1563.gltf',
+			blockName: 'pants 1563',
+			avatar: 'Female',
+			category: 'Pants',
+			templateId: 'Item 2',
+			templateName: 'Item 2',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: '20',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_1___Pants/pants_1562.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_1___Pants/pants_1562.gltf',
+			blockName: 'pants 1562',
 			avatar: 'Female',
 			category: 'Pants',
 			templateId: 'Item 1',
