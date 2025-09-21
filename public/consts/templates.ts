@@ -457,6 +457,76 @@ export const templates: Record<string, Template[]> = {
 			avatar: 'Female',
 			category: 'Top',
 			materialId: 'Cotton - White',
+			extraMaterials: [
+				{
+					mesh: 'piece15',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'tie_8',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'piece14',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'piece11',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'piece10',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'pattern2d_81354',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'pattern_11338149',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'pattern_11338146',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'body_front_11',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'pattern_11338143',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'buttonhead',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'pattern_11338137',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'body_front_placket_12',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'pattern_11338140',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'body_front_9',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'body_front_placket_13',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'body_back_yoke_15',
+					materialId: 'Cotton - Orange',
+				},
+			],
 		},
 		{
 			_id: '4',
@@ -467,7 +537,15 @@ export const templates: Record<string, Template[]> = {
 			materialId: 'Cotton - White',
 			extraMaterials: [
 				{
-					mesh: 'body_back_yoke_15_piece14',
+					mesh: 'body_back_yoke_15',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'body_front_placket_12',
+					materialId: 'Cotton - Orange',
+				},
+				{
+					mesh: 'body_front_placket_13',
 					materialId: 'Cotton - Orange',
 				},
 				{
@@ -614,18 +692,22 @@ export const templates: Record<string, Template[]> = {
 			name: 'Item 9',
 			avatar: 'Female',
 			category: 'Pants',
-			materialId: 'Denim - 276',
+			materialId: 'Polyester - Navy',
 			extraMaterials: [
 				{
-					mesh: 'pattern_15153797',
+					mesh: 'pattern_15153799',
 					materialId: 'Poly - Dusty Blue',
+				},
+				{
+					mesh: '40',
+					materialId: 'Denim - Back',
 				},
 				{
 					mesh: '37',
 					materialId: 'Denim - Back',
 				},
 				{
-					mesh: '34',
+					mesh: '42',
 					materialId: 'Denim - Back',
 				},
 				{
@@ -633,92 +715,32 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'Denim - Back',
 				},
 				{
-					mesh: '29',
-					materialId: 'Denim - Back',
+					mesh: '26',
+					materialId: 'Denim - 276',
 				},
 				{
-					mesh: 'pattern_8429404',
-					materialId: 'Polyester - Navy',
+					mesh: '35',
+					materialId: 'Denim - 276',
 				},
 				{
-					mesh: 'pattern_8429402',
-					materialId: 'Polyester - Navy',
+					mesh: '33',
+					materialId: 'Denim - 276',
 				},
 				{
-					mesh: 'pattern_8429401',
-					materialId: 'Polyester - Navy',
+					mesh: '41',
+					materialId: 'Denim - 276',
 				},
 				{
-					mesh: 'pattern_8429400',
-					materialId: 'Polyester - Navy',
+					mesh: '38',
+					materialId: 'Denim - 276',
 				},
 				{
-					mesh: 'pattern_8429399',
-					materialId: 'Polyester - Navy',
+					mesh: '43',
+					materialId: 'Denim - 276',
 				},
 				{
-					mesh: 'pattern_8429403',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '28',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '11',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '24',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '54',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '5',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '14',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '6',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '16',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '15',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '7',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '4',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '55',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '52',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '56',
-					materialId: 'Polyester - Navy',
-				},
-				{
-					mesh: '53',
-					materialId: 'Polyester - Navy',
+					mesh: '34',
+					materialId: 'Denim - 276',
 				},
 			],
 		},
@@ -731,7 +753,7 @@ export const templates: Record<string, Template[]> = {
 			materialId: 'Polyester - Navy',
 			extraMaterials: [
 				{
-					mesh: 'pattern_15153797',
+					mesh: 'pattern_15153799',
 					materialId: 'Poly - Dusty Blue',
 				},
 			],
@@ -745,11 +767,15 @@ export const templates: Record<string, Template[]> = {
 			materialId: 'Denim - 276',
 			extraMaterials: [
 				{
-					mesh: '37',
+					mesh: '42',
 					materialId: 'Denim - Back',
 				},
 				{
-					mesh: '34',
+					mesh: '40',
+					materialId: 'Denim - Back',
+				},
+				{
+					mesh: '37',
 					materialId: 'Denim - Back',
 				},
 				{
@@ -758,7 +784,7 @@ export const templates: Record<string, Template[]> = {
 				},
 				{
 					mesh: '29',
-					materialId: 'Denim - Back',
+					materialId: 'Polyester - Navy',
 				},
 				{
 					mesh: '11',
@@ -871,15 +897,15 @@ export const templates: Record<string, Template[]> = {
 			materialId: 'Denim - 276',
 			extraMaterials: [
 				{
+					mesh: '42',
+					materialId: 'Denim - Back',
+				},
+				{
+					mesh: '39',
+					materialId: 'Denim - Back',
+				},
+				{
 					mesh: '37',
-					materialId: 'Denim - Back',
-				},
-				{
-					mesh: '34',
-					materialId: 'Denim - Back',
-				},
-				{
-					mesh: '31',
 					materialId: 'Denim - Back',
 				},
 				{
@@ -949,19 +975,19 @@ export const templates: Record<string, Template[]> = {
 			materialId: 'Denim - 276',
 			extraMaterials: [
 				{
-					mesh: '34',
-					materialId: 'Denim - Back',
-				},
-				{
-					mesh: '31',
-					materialId: 'Denim - Back',
-				},
-				{
-					mesh: '37',
+					mesh: '39',
 					materialId: 'Denim - Back',
 				},
 				{
 					mesh: '40',
+					materialId: 'Denim - Back',
+				},
+				{
+					mesh: '42',
+					materialId: 'Denim - Back',
+				},
+				{
+					mesh: '37',
 					materialId: 'Denim - Back',
 				},
 			],

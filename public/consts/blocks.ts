@@ -810,9 +810,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '3',
 			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_5_Bodice/bodice_1507_.png',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_5_Bodice/bodice_1507.png',
 			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_5_Bodice/bodice_1507_.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_5_Bodice/bodice_1507.gltf',
 			blockName: 'bodice 1507',
 			avatar: 'Female',
 			category: 'Bodice',
