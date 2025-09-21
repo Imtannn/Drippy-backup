@@ -515,6 +515,10 @@ p {
 	min-height: 960px;
 }
 
+.landing-page-desktop .how-it-works__content {
+	width: 100%;
+}
+
 .landing-page-desktop .how-it-works__grid {
 	display: flex;
 	align-items: flex-end;
@@ -2529,9 +2533,28 @@ p {
 		opacity: 1;
 		z-index: 2;
 	}
+	.carousel .how-it-works__content {
+		margin: 25px 0;
+	}
+	.carousel .how-it-works__grid {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.carousel .how-it-works__item {
+		flex: unset;
+		max-width: unset;
+		min-width: unset;
+		width: unset;
+	}
+	.carousel .how-it-works__step {
+		min-height: 460px;
+	}
+	.carousel .how-it-works__step .how-it-works__step-image {
+		min-height: 460px;
+	}
 	.carousel .platform__grid {
 		cursor: grab;
-		margin-top: 25px;
 	}
 	.carousel .pricing__plans {
 		cursor: grab;
