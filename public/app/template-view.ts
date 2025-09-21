@@ -11,6 +11,7 @@ import {currentUser, store} from './store.js'
 import {textureManager} from './texture-manager.js'
 
 import '../elements/animation-select.js'
+import '../elements/avatar-dropdown.js'
 import '../elements/back-button.js'
 import '../elements/bottom-navigation.js'
 import '../elements/bottom-sheet.js'
@@ -21,6 +22,7 @@ import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/logo-button.js'
+import '../elements/nav-items.js'
 import '../elements/person-button.js'
 import '../elements/save-button.js'
 import '../elements/tabs.js'
@@ -90,6 +92,7 @@ export class TemplateView extends Element {
 				this.selectedTab = categories[0] as TemplateCategory
 			}
 		})
+
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -200,6 +203,7 @@ export class TemplateView extends Element {
 		// Close avatar selection (chevron will auto-reset via prop)
 		this.showAvatarSelection = false
 	}
+
 
 	template = () => html`
 		<app-buttons-left>
@@ -314,10 +318,13 @@ export class TemplateView extends Element {
 					</tabs-provider>
 				`}
 			></show-when>
-			<bottom-navigation
-				avatar-selection-open=${() => this.showAvatarSelection}
-				onavatar-dropdown-click=${this.#onAvatarDropdownClick}
-			></bottom-navigation>
+			<bottom-navigation>
+				<avatar-dropdown
+					open=${() => this.showAvatarSelection}
+					onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+				></avatar-dropdown>
+				<nav-items></nav-items>
+			</bottom-navigation>
 		</bottom-sheet>
 
 		<dialog-element open=${() => this.showLoginDialog}>
@@ -437,6 +444,7 @@ export class TemplateView extends Element {
 			text-wrap: nowrap;
 			opacity: 1;
 		}
+
 	`
 }
 
