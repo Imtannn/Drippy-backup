@@ -1,5 +1,4 @@
 import type {Element3D, GltfModel, Mesh} from 'lume'
-import * as THREE from 'three'
 import {
 	batch,
 	createEffect,
@@ -11,6 +10,8 @@ import {
 	type Accessor,
 	type Signal,
 } from 'solid-js'
+import * as THREE from 'three'
+
 import {Easing} from '@tweenjs/tween.js'
 import {effect} from './meteor-signals.js'
 
@@ -510,4 +511,242 @@ export function setMaterialsVisibleOnModelLoad(el: GltfModel, visible: Accessor<
 		if (!loaded()) return
 		setMaterialsVisible(el, visible(), ...skip)
 	})
+}
+
+/**
+ * Calculate bounding box for visible garment models of a specific category
+ * @param category - The template category to get bounding box for
+ * @param lumeScene - The lume scene element
+ * @returns THREE.Box3 - Bounding box containing all visible garments of the category
+ */
+function calculateGarmentBoundingBox(category: string, lumeScene: any): THREE.Box3 {
+	const boundingBox = new THREE.Box3()
+
+	// Get all garment models for this category
+	const clothModels = lumeScene.querySelectorAll('lume-gltf-model[data-cloth]')
+
+	clothModels.forEach((model: any) => {
+		const modelId = model.getAttribute('id') || ''
+		const shouldInclude = modelId.includes(category + '-')
+
+		if (shouldInclude && model.three && model.three.visible) {
+			// Calculate bounding box for this model
+			const modelBox = new THREE.Box3()
+
+			// Traverse all meshes in the model
+			for (const mesh of meshesInTree(model.three)) {
+				if (mesh.geometry) {
+					// Ensure geometry has bounding box
+					mesh.geometry.computeBoundingBox()
+					if (mesh.geometry.boundingBox) {
+						// Transform the bounding box by the mesh's world matrix
+						const transformedBox = mesh.geometry.boundingBox.clone()
+						mesh.updateWorldMatrix(true, false)
+						transformedBox.applyMatrix4(mesh.matrixWorld)
+						modelBox.union(transformedBox)
+					}
+				}
+			}
+
+			// Union with the overall bounding box
+			boundingBox.union(modelBox)
+		}
+	})
+
+	// If no models found, return a default bounding box
+	if (boundingBox.isEmpty()) {
+		boundingBox.setFromCenterAndSize(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.5, 1, 0.5))
+	}
+
+	return boundingBox
+}
+
+/**
+ * Calculate optimal camera position based on bounding box
+ * @param boundingBox - The bounding box of the target objects
+ * @param fov - Camera field of view in degrees
+ * @returns Object with position and lookAt vectors
+ */
+function calculateCameraFromBoundingBox(boundingBox: THREE.Box3, fov: number = 50) {
+	const center = boundingBox.getCenter(new THREE.Vector3())
+	const size = boundingBox.getSize(new THREE.Vector3())
+
+	// Calculate distance needed to fit the object in view
+	const maxDim = Math.max(size.x, size.y)
+	const fovRadians = (fov * Math.PI) / 180
+	const distance = maxDim / (2 * Math.tan(fovRadians / 2))
+
+	// Add some padding (20% extra distance)
+	const paddedDistance = distance * 1.2
+
+	// Position camera in front of the center
+	const cameraPosition = new THREE.Vector3(center.x, center.y, center.z + paddedDistance)
+
+	return {
+		position: cameraPosition,
+		lookAt: center,
+	}
+}
+
+/**
+ * Capture a screenshot of a specific garment category from the Lume scene
+ * @param category - The template category to capture (Shirt, Pants, etc.)
+ * @returns Promise<string> - Base64 data URL of the screenshot
+ */
+export async function captureGarmentScreenshot(category: string): Promise<string> {
+	const drippyScene = document.querySelector('drippy-app')?.shadowRoot?.querySelector('drippy-scene') as any
+	if (!drippyScene?.shadowRoot) return ''
+
+	const lumeScene = drippyScene.shadowRoot.querySelector('lume-scene') as any
+	if (!lumeScene?.shadowRoot) return ''
+
+	const clothModels = Array.from(drippyScene.shadowRoot.querySelectorAll('lume-gltf-model[data-cloth]') ?? [])
+
+	const modelsToHide: any[] = []
+
+	clothModels.forEach((model: any) => {
+		const modelId = model.getAttribute('id') || ''
+		const shouldKeep = modelId.includes(category + '-')
+
+		if (!shouldKeep) {
+			if (model.three) {
+				model.three.visible = false
+				modelsToHide.push(model)
+			}
+		}
+	})
+
+	// Hide scene and other elements
+	const otherModelsToHide: any[] = []
+
+	// Use drippy-scene's avatarModel property to hide avatar
+	if (drippyScene && drippyScene.avatarModel) {
+		// Selectively hide only avatar body (not garments)
+		let hiddenAvatarParts: any[] = []
+
+		drippyScene.avatarModel.three.children.forEach((child: any) => {
+			const childName = child.name || ''
+			const isGarment = childName.includes('LUME-ELEMENT3D')
+
+			if (!isGarment) {
+				// This is avatar body - hide it
+				child.visible = false
+				hiddenAvatarParts.push(child)
+			}
+		})
+
+		if (hiddenAvatarParts.length > 0) {
+			otherModelsToHide.push({restore: 'avatarParts', parts: hiddenAvatarParts})
+			// Wait for the change to take effect
+			await new Promise(resolve => requestAnimationFrame(resolve))
+		}
+	}
+
+	// Hide scene/background
+	const sceneModel = lumeScene.querySelector('#scene')
+	if (sceneModel?.three) {
+		sceneModel.three.visible = false
+		otherModelsToHide.push(sceneModel)
+	}
+
+	// Hide shoes and any other non-cloth models
+	const allOtherModels = lumeScene.querySelectorAll('lume-gltf-model:not([data-cloth])')
+	allOtherModels.forEach((model: any) => {
+		const modelId = model.getAttribute('id') || 'unnamed'
+		if (model.three && modelId !== 'avatar' && modelId !== 'scene') {
+			model.three.visible = false
+			otherModelsToHide.push(model)
+		}
+	})
+
+	// Create a new lume-perspective-camera for screenshot
+	const screenshotCamera = document.createElement('lume-perspective-camera')
+	screenshotCamera.setAttribute('fov', '50')
+	screenshotCamera.setAttribute('near', '0.1')
+	screenshotCamera.setAttribute('far', '1000')
+
+	// Add camera to scene and make it active
+	lumeScene.appendChild(screenshotCamera)
+	screenshotCamera.setAttribute('active', 'true')
+
+	// Wait for camera to be positioned and activated
+	await new Promise(resolve => requestAnimationFrame(resolve))
+
+	// Use bounding box to position camera optimally
+	const threeCamera = (screenshotCamera as any).three
+	if (threeCamera) {
+		const boundingBox = calculateGarmentBoundingBox(category, lumeScene)
+		const {position, lookAt} = calculateCameraFromBoundingBox(boundingBox, 50)
+
+		const pos = position.clone()
+		const lookAtVec = lookAt.clone()
+
+		threeCamera.position.copy(pos)
+		threeCamera.lookAt(lookAtVec)
+		threeCamera.rotation.set(0, 0, 0)
+		threeCamera.updateMatrix()
+		threeCamera.updateMatrixWorld(true)
+
+		// Wait for camera positioning to take effect
+		await new Promise(resolve => requestAnimationFrame(resolve))
+		await new Promise(resolve => requestAnimationFrame(resolve))
+	}
+
+	// Wait for scene to fully render
+	await new Promise(resolve => setTimeout(resolve, 100))
+
+	// Get canvas and renderer
+	const canvas = lumeScene.shadowRoot.querySelector('canvas')
+	if (!canvas) return ''
+
+	const renderer = lumeScene.glRenderer || lumeScene._glRenderer || lumeScene.renderer
+	let screenshot = ''
+
+	if (renderer) {
+		const threeScene = lumeScene.three || renderer.scene
+		const threeCamera = (screenshotCamera as any).three || lumeScene.camera?.three || lumeScene.three?.camera
+
+		if (threeScene && threeCamera) {
+			// Set a clean light background for product shots
+			const originalBackground = renderer.getClearColor(new THREE.Color())
+			const originalAlpha = renderer.getClearAlpha()
+			renderer.setClearColor(0xf5f5f5, 1.0)
+
+			renderer.render(threeScene, threeCamera)
+			screenshot = renderer.domElement.toDataURL('image/png')
+
+			// Restore original background
+			renderer.setClearColor(originalBackground, originalAlpha)
+		}
+	}
+
+	if (!screenshot) {
+		screenshot = canvas.toDataURL('image/png')
+	}
+
+	// Restore hidden models
+	modelsToHide.forEach(model => {
+		if (model.three) {
+			model.three.visible = true
+		}
+	})
+
+	// Restore avatar and scene
+	otherModelsToHide.forEach(model => {
+		if (model.restore === 'avatarParts') {
+			model.parts.forEach((part: any) => {
+				part.visible = true
+			})
+		} else {
+			if (model.three) {
+				model.three.visible = true
+			}
+		}
+	})
+
+	// Remove screenshot camera and revert to main camera
+	screenshotCamera.removeAttribute('active')
+	lumeScene.removeChild(screenshotCamera)
+
+	return screenshot
 }

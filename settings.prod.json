@@ -1,0 +1,7 @@
+{
+	"galaxy.meteor.com": {
+		"env": {
+			"ROOT_URL": "https://drippy3d.com"
+		}
+	}
+}

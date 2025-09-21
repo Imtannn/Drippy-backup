@@ -432,9 +432,12 @@ export class DrippyScene extends Element {
 			<show-when
 				condition=${() => store.isAdmin}
 				content=${() => html`
-					<!-- debug slider for environment intensity -->
-					<div style="position: absolute; top: 1rem; left: 50%; transform: translateX(-50%); z-index: 10;">
-						<p>Environment Intensity (admin only)</p>
+					<div
+						style="position: absolute; top: 1rem; left: 50%; z-index: 1000; background: transparent; border-radius: 8px; padding: 6px 8px; display: flex; flex-direction: column; gap: 4px; min-width: 60px; backdrop-filter: blur(4px);"
+					>
+						<p style="color: black; font-size: 8px; font-weight: 500; margin: 0; text-align: center; line-height: 1;">
+							Env
+						</p>
 						<input
 							id="env-intensity"
 							title="Environment Intensity"
@@ -443,6 +446,7 @@ export class DrippyScene extends Element {
 							max="3"
 							step="0.1"
 							value="0.3"
+							style="width: 50px; height: 3px; background: #333; border-radius: 2px; outline: none; -webkit-appearance: none; appearance: none;"
 							oninput=${(e: Event) => {
 								const input = e.target as HTMLInputElement
 								const value = Number(input.value) || 0

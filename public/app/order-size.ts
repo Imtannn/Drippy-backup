@@ -126,7 +126,13 @@ export class OrderSize extends Element {
 										<!-- Item Header -->
 										<div class="item-header">
 											<div class="item-image">
-												<img src=${template.thumb} alt=${template.name} />
+												<img
+													src=${() => {
+														const cached = store.screenshotCache.get(category)
+														return cached || template.thumb
+													}}
+													alt=${template.name}
+												/>
 											</div>
 											<div class="item-details">
 												<div class="item-name">Product name</div>

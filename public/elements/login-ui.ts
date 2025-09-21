@@ -156,12 +156,6 @@ export class LoginUI extends LumeElement {
 			display: contents;
 		}
 
-		/* Hide the or and login form for demo purposes */
-		.or,
-		.login-form {
-			display: none;
-		}
-
 		#loginButtons {
 			user-select: none;
 			display: block;
