@@ -104,7 +104,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Chiffon (2ab4c8)',
 			category: 'Silk',
-			templateCategories: ['Shirt', 'Dress', 'Skirt'],
+			templateCategories: ['Dress'],
 		},
 		{
 			_id: '2',
@@ -172,7 +172,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Crepe',
 			category: 'Silk',
-			templateCategories: ['Dress', 'Shirt', 'Skirt'],
+			templateCategories: ['Shirt', 'Dress', 'Skirt'],
 		},
 	],
 	lostCause: [
@@ -429,6 +429,195 @@ export const fabrics: Record<string, Fabric[]> = {
 			materialName: '287',
 			category: 'Scuba',
 			templateCategories: ['Shirt'],
+		},
+	],
+	eliseF: [
+		{
+			_id: '1',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/KNIT_-_FLEECE/KNIT_-_FLEECE_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/KNIT_-_FLEECE/KNIT_-_FLEECE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/KNIT_-_FLEECE/KNIT_-_FLEECE_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/KNIT_-_FLEECE/KNIT_-_FLEECE_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/KNIT_-_FLEECE/KNIT_-_FLEECE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Fleece',
+			category: 'Knit',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '2',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_NORMAL_.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_DISPLACE_.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_ROUGH_.jpg',
+			alpha: '',
+			materialName: 'Dusty Blue',
+			category: 'Poly',
+			templateCategories: ['Pants'],
+		},
+		{
+			_id: '3',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/DENIM_-_BACK/DENIM_-_BACK_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/DENIM_-_BACK/DENIM_-_BACK_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/DENIM_-_BACK/DENIM_-_BACK_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/DENIM_-_BACK/DENIM_-_BACK_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/DENIM_-_BACK/DENIM_-_BACK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Back',
+			category: 'Denim',
+			templateCategories: ['Pants'],
+		},
+		{
+			_id: '4',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_CANVAS/STRIPED_-_CANVAS_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_CANVAS/STRIPED_-_CANVAS_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_CANVAS/STRIPED_-_CANVAS_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_CANVAS/STRIPED_-_CANVAS_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_CANVAS/STRIPED_-_CANVAS_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Canvas',
+			category: 'Striped',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '5',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/DENIM_-_276/DENIM_-_276_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/DENIM_-_276/DENIM_-_276_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/DENIM_-_276/DENIM_-_276_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/DENIM_-_276/DENIM_-_276_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/DENIM_-_276/DENIM_-_276_-_ROUGH.jpg',
+			alpha: '',
+			materialName: '276',
+			category: 'Denim',
+			templateCategories: ['Pants'],
+		},
+		{
+			_id: '6',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Navy',
+			category: 'Polyester',
+			templateCategories: ['Top', 'Pants'],
+		},
+		{
+			_id: '7',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/_COTTON_-_LAVENDER_BLUE_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON_-_LAVENDER_BLUE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON_-_LAVENDER_BLUE_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON__-_LAVENDER_BLUE_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON_-_LAVENDER_BLUE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Lavender Blue',
+			category: 'Cotton',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '8',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Orange',
+			category: 'Cotton',
+			templateCategories: ['Top', 'Pants'],
+		},
+		{
+			_id: '9',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Tanktop',
+			category: 'Striped',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '10',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_WHITE/COTTON_-_WHITE_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'White',
+			category: 'Cotton',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '11',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLY_-_TWILL/POLY_-_TWILL_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLY_-_TWILL/POLY_-_TWILL_-_NORMAL_.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLY_-_TWILL/POLY_-_TWILL_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLY_-_TWILL/POLY_-_TWILL_-_DISPLACE_.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLY_-_TWILL/POLY_-_TWILL_-_ROUGH_.jpg',
+			alpha: '',
+			materialName: 'Twill',
+			category: 'Poly',
+			templateCategories: ['Pants', 'Top'],
 		},
 	],
 	baroudeuses: [

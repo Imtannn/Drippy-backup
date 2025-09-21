@@ -1,3 +1,27 @@
+export type FabricCategory =
+	| 'Cotton'
+	| 'Leather'
+	| 'Denim'
+	| 'Spantex'
+	| 'Jean'
+	| 'Wool'
+	| 'Linen'
+	| 'Crinkle Fabric'
+	| 'Pleated Fabric'
+	| 'Seersucker Fabric'
+	| 'Silk'
+	| 'Sequin'
+	| 'Fur'
+	| 'Abtract'
+	| 'Twisted'
+	| 'Velvet'
+	| 'Scuba'
+	| 'Fabric'
+	| 'Poly'
+	| 'Striped'
+	| 'Polyester'
+	| 'Knit'
+
 export type Fabric = {
 	_id: string
 	thumb?: string
@@ -9,24 +33,7 @@ export type Fabric = {
 	assignedMesh?: string
 
 	materialName: string
-	category?:
-		| 'Cotton'
-		| 'Leather'
-		| 'Denim'
-		| 'Spantex'
-		| 'Jean'
-		| 'Wool'
-		| 'Linen'
-		| 'Crinkle Fabric'
-		| 'Pleated Fabric'
-		| 'Seersucker Fabric'
-		| 'Silk'
-		| 'Sequin'
-		| 'Fur'
-		| 'Abtract'
-		| 'Twisted'
-		| 'Velvet'
-		| 'Scuba'
-		| 'Fabric'
+	category?: FabricCategory
+
 	templateCategories?: string[]
 }

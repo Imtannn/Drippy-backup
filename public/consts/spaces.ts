@@ -106,4 +106,21 @@ export const spaces: Space[] = [
 		collection: 'shri',
 		isWholesale: false,
 	},
+	{
+		name: '9heure19heure',
+		slug: '9heure19heuree',
+		description: 'ELISE.F',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/eliseF/scene-thumbnail.png',
+		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/eliseF/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/eliseF/extras/shoes.glb',
+		],
+		gender: 'male',
+		garmentsCount: blocks.eliseF?.length ?? 0,
+		collection: 'eliseF',
+		isWholesale: false,
+	},
 ]

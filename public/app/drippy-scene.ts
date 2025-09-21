@@ -72,7 +72,7 @@ export class DrippyScene extends Element {
 
 	@attribute selectedSpace: Space | null = null
 	@attribute selectedAvatar: string | null = null
-	@attribute selectedFabrics: Map<TemplateCategory, Map<BlockCategory, Fabric[]>> = new Map()
+	@attribute selectedFabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>> = new Map()
 	@attribute selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>> = new Map()
 
 	@signal isDark = false
@@ -91,7 +91,7 @@ export class DrippyScene extends Element {
 	@signal private animName: string | null = null
 	@signal private animSrc: string | null = null
 
-	async #applyFabrics(el: Element3D, fabrics: Fabric[], isCanceled: () => boolean, loadingId: symbol) {
+	async #applyFabrics(el: Element3D, fabrics: Map<string, Fabric>, isCanceled: () => boolean, loadingId: symbol) {
 		const root = el.three
 		store.addLoadingMaterial(loadingId)
 
@@ -106,20 +106,14 @@ export class DrippyScene extends Element {
 
 			// Create a map of fabric assignments by mesh name
 			const fabricsByMesh = new Map<string, Fabric>()
-			let defaultFabric: Fabric | null = null
 
-			for (const fabric of fabrics) {
-				if (fabric.assignedMesh) {
-					fabricsByMesh.set(fabric.assignedMesh, fabric)
-				} else {
-					// Fabric without assignedMesh is the default fabric for unspecified meshes
-					defaultFabric = fabric
-				}
+			for (const [assignedMesh, fabric] of fabrics.entries()) {
+				fabricsByMesh.set(assignedMesh, fabric)
 			}
 
 			// Load texture sets for all fabrics
 			const textureSetsByFabric = new Map<Fabric, any>()
-			for (const fabric of fabrics) {
+			for (const fabric of fabricsByMesh.values()) {
 				const textureSet = await textureManager.loadFabricTexturesWithUV(fabric, uvArray)
 				textureSetsByFabric.set(fabric, textureSet)
 			}
@@ -132,14 +126,13 @@ export class DrippyScene extends Element {
 
 				// Check if there's a specific fabric assigned to this mesh
 				const assignedFabric = fabricsByMesh.get(meshName)
-				const fabricToUse = assignedFabric || defaultFabric
+				const fabricToUse = assignedFabric || fabricsByMesh.get('default')
 
 				if (fabricToUse) {
 					const textureSet = textureSetsByFabric.get(fabricToUse)
 					if (textureSet) {
 						mesh.material = new THREE.MeshPhysicalMaterial()
 						textureManager.applyTexturesToMaterial(mesh.material, textureSet)
-						console.log(`Applied fabric ${fabricToUse.materialName} to mesh ${meshName}`)
 					}
 				}
 			}
@@ -361,14 +354,14 @@ export class DrippyScene extends Element {
 
 				// Find the fabrics for this block
 				const templateFabrics = selectedFabrics.get(templateCategory)
-				const fabrics = templateFabrics?.get(blockCategory) || []
+				const fabrics = templateFabrics?.get(blockCategory) || new Map<string, Fabric>()
 				const loadingId = Symbol(`material-${blockId}`)
 				const modelLoaded = onModelLoad(el)
 
 				createEffect(() => {
 					if (!modelLoaded()) return
 
-					if (fabrics.length > 0) {
+					if (fabrics.size > 0) {
 						this.#applyFabrics(el, fabrics, isCanceled, loadingId)
 					} else {
 						// Reset to default material if no fabric selected for this block category

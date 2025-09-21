@@ -48,7 +48,7 @@ export const store = createMutable({
 	isPreview: false,
 	selectedTemplates: new Map<TemplateCategory, Template>(),
 	selectedBlocks: new Map<TemplateCategory, Map<BlockCategory, Block>>(),
-	selectedFabrics: new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>(),
+	selectedFabrics: new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(),
 	customMeasurement: null as CustomMeasurement | null,
 	isShowAvatar: true,
 	isShowScene: true,
@@ -119,9 +119,9 @@ export const store = createMutable({
 						// if the block category is Sleeves, check for bodice and add it to the fabric
 						if (block.category === 'Sleeves') {
 							const bodiceFabrics = templateCategoryFabrics.get('Bodice')
-							if (!bodiceFabrics || bodiceFabrics.length === 0) return
+							if (!bodiceFabrics || bodiceFabrics.size === 0) return
 
-							this.setSelectedFabrics = bodiceFabrics.map(fabric => ({
+							this.setSelectedFabrics = Array.from(bodiceFabrics.values()).map(fabric => ({
 								fabric,
 								blockCategory: 'Sleeves' as BlockCategory,
 								templateCategory: templateCategory,
@@ -137,9 +137,9 @@ export const store = createMutable({
 					// if the block category is Sleeves, check for bodice and add it to the fabric
 					if (block.category === 'Sleeves') {
 						const bodiceFabrics = templateCategoryFabrics.get('Bodice')
-						if (!bodiceFabrics || bodiceFabrics.length === 0) return
+						if (!bodiceFabrics || bodiceFabrics.size === 0) return
 
-						this.setSelectedFabrics = bodiceFabrics.map(fabric => ({
+						this.setSelectedFabrics = Array.from(bodiceFabrics.values()).map(fabric => ({
 							fabric,
 							blockCategory: 'Sleeves' as BlockCategory,
 							templateCategory: templateCategory,
@@ -172,39 +172,43 @@ export const store = createMutable({
 	},
 	set replaceSelectedFabrics(
 		fabricData:
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}[],
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}[],
 	) {
 		if (!Array.isArray(fabricData)) {
 			fabricData = [fabricData]
 		}
 
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>(this.selectedFabrics)
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
 
 		// Group fabrics by template category and block category
-		const groupedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>()
+		const groupedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
 
-		for (const {fabric, blockCategory, templateCategory} of fabricData) {
+		for (let {fabric, blockCategory, templateCategory, assignedMesh} of fabricData) {
+			if (!assignedMesh) {
+				assignedMesh = 'default'
+			}
+
 			let templateFabrics = groupedFabrics.get(templateCategory)
 			if (!templateFabrics) {
-				templateFabrics = new Map<BlockCategory, Fabric[]>()
+				templateFabrics = new Map<BlockCategory, Map<string, Fabric>>()
 				groupedFabrics.set(templateCategory, templateFabrics)
 			}
 
 			let blockFabrics = templateFabrics.get(blockCategory)
 			if (!blockFabrics) {
-				blockFabrics = []
+				blockFabrics = new Map<string, Fabric>()
 				templateFabrics.set(blockCategory, blockFabrics)
 			}
 
-			blockFabrics.push(fabric)
+			blockFabrics.set(assignedMesh, fabric)
 		}
 
 		// Update the newFabrics map with grouped fabrics
 		for (const [templateCategory, templateFabrics] of groupedFabrics.entries()) {
 			let newTemplateFabrics = newFabrics.get(templateCategory)
 			if (!newTemplateFabrics) {
-				newTemplateFabrics = new Map<BlockCategory, Fabric[]>()
+				newTemplateFabrics = new Map<BlockCategory, Map<string, Fabric>>()
 				newFabrics.set(templateCategory, newTemplateFabrics)
 			}
 
@@ -212,28 +216,45 @@ export const store = createMutable({
 				newTemplateFabrics.set(blockCategory, fabrics)
 			}
 		}
+
 		this.selectedFabrics = newFabrics
 	},
 	set setSelectedFabrics(
 		fabricData:
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}[],
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}[],
 	) {
 		if (!Array.isArray(fabricData)) {
 			fabricData = [fabricData]
 		}
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>(this.selectedFabrics)
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(this.selectedFabrics)
 
-		for (const {fabric, blockCategory, templateCategory} of fabricData) {
+		for (let {fabric, blockCategory, templateCategory, assignedMesh} of fabricData) {
+			if (!assignedMesh) {
+				assignedMesh = 'default'
+			}
+
 			// Get or create the template's fabric map
 			let templateFabrics = newFabrics.get(templateCategory)
 			if (!templateFabrics) {
-				templateFabrics = new Map<BlockCategory, Fabric[]>()
+				templateFabrics = new Map<BlockCategory, Map<string, Fabric>>()
 				newFabrics.set(templateCategory, templateFabrics)
 			}
 
-			// For now, replace the entire array. This could be enhanced to merge/update based on assignedMesh
-			templateFabrics.set(blockCategory, [fabric])
+			// Get existing fabrics for this block category
+			const existingFabrics = templateFabrics.get(blockCategory) || new Map<string, Fabric>()
+
+			// Replace only fabrics with the same assignedMesh value (including undefined)
+			const noMatchAssignedMeshKeys = Array.from(existingFabrics.keys()).filter(
+				assignedMeshKey => assignedMeshKey !== assignedMesh,
+			)
+
+			const updatedFabricsMap = new Map<string, Fabric>()
+			for (const assignedMeshKey of noMatchAssignedMeshKeys) {
+				updatedFabricsMap.set(assignedMeshKey, existingFabrics.get(assignedMeshKey)!)
+			}
+			updatedFabricsMap.set(assignedMesh, fabric)
+			templateFabrics.set(blockCategory, updatedFabricsMap)
 
 			// If template has no fabrics left, remove the template entry
 			if (templateFabrics.size === 0) {
@@ -455,7 +476,7 @@ export const store = createMutable({
 	resetSelectedTemplates() {
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>()
+		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
 		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 		this.retailItemQuantities = new Map<TemplateCategory, number>()
@@ -491,7 +512,7 @@ export const store = createMutable({
 		this.selectedSpace = null as Space | null
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric[]>>()
+		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
 		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 		this.retailItemQuantities = new Map<TemplateCategory, number>()

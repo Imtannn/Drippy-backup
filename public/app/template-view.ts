@@ -51,7 +51,7 @@ export class TemplateView extends Element {
 
 			// Get available categories from templates
 			const availableCategories = [
-				...new Set(templates[this.spaceCollection].map(template => template.category)),
+				...new Set(templates[this.spaceCollection]?.map(template => template.category) || []),
 			] as TemplateCategory[]
 
 			// Sort categories in the desired order
