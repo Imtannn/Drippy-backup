@@ -1,12 +1,33 @@
-import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {store} from '../app/store.js'
+import {avatars} from '../consts/avatars.js'
 
-type BottomNavigationAttributes = keyof {}
+type BottomNavigationAttributes = 'avatarSelectionOpen'
 
 @element
 export class BottomNavigation extends Element {
 	static readonly elementName = 'bottom-navigation'
 
 	@signal activeTab: string = 'items'
+	@signal currentAvatarThumbnail: string = '/images/avatar-placeholder.webp'
+	@booleanAttribute avatarSelectionOpen = false
+
+	connectedCallback() {
+		super.connectedCallback()
+
+		// Create a reactive effect to update avatar thumbnail
+		this.createEffect(() => {
+			// Prioritize confirmed selection over temporary preview
+			const selectedAvatarValue = store.selectedAvatar || store.tempSelectedAvatar
+			if (!selectedAvatarValue) {
+				this.currentAvatarThumbnail = '/images/avatar-placeholder.webp'
+				return
+			}
+
+			const avatar = avatars.find(a => a.value === selectedAvatarValue)
+			this.currentAvatarThumbnail = avatar?.thumbnail || '/images/avatar-placeholder.webp'
+		})
+	}
 
 	#onTabClick = (tabName: string) => {
 		this.activeTab = tabName
@@ -20,13 +41,32 @@ export class BottomNavigation extends Element {
 		)
 	}
 
+	#onAvatarDropdownClick = () => {
+		// Dispatch event for parent to handle avatar selection
+		this.dispatchEvent(
+			new CustomEvent('avatar-dropdown-click', {
+				bubbles: true,
+				composed: true,
+			}),
+		)
+	}
+
 	template = () => html`
 		<nav class="bottom-nav">
 			<div class="avatar-section">
 				<div class="avatar-container">
-					<img src="/images/avatar-placeholder.webp" alt="Avatar" class="avatar-image" />
-					<button class="avatar-dropdown-btn">
-						<img src="/images/chevron-down.svg" alt="Dropdown" />
+					<div class="avatar-image-wrapper">
+						<img src=${() => this.currentAvatarThumbnail} alt="Avatar" class="avatar-image" />
+					</div>
+					<button
+						class="avatar-dropdown-btn"
+						classList=${{active: () => this.avatarSelectionOpen}}
+						onclick=${this.#onAvatarDropdownClick}
+					>
+						<img
+							src=${() => (this.avatarSelectionOpen ? '/images/chevron-up-violet.svg' : '/images/chevron-down.svg')}
+							alt="Dropdown"
+						/>
 					</button>
 				</div>
 			</div>
@@ -111,15 +151,10 @@ export class BottomNavigation extends Element {
 			background: none;
 			border: none;
 			cursor: pointer;
-			padding: var(--uiSpacingSmall);
 			border-radius: var(--borderRadiusSmall);
 			transition: all 0.2s ease;
 			color: var(--uiColorSecondaryDark);
 			min-width: 27px;
-		}
-
-		.nav-item:hover {
-			background: var(--uiColorSecondaryLightGrey);
 		}
 
 		.nav-item.active {
@@ -150,19 +185,27 @@ export class BottomNavigation extends Element {
 			align-items: center;
 			cursor: pointer;
 			transition: background 0.2s ease;
-			padding: 5px;
+			border-radius: var(--borderRadius);
 		}
 
-		.avatar-container:hover {
-			background: var(--uiColorSecondaryLightGrey);
+		.avatar-image-wrapper {
+			position: relative;
+			width: 40px;
+			height: 40px;
+			overflow: hidden;
+			border-radius: var(--borderRadiusCircular);
+			border: 2px solid var(--uiColorBorderColor);
 		}
 
 		.avatar-image {
-			width: 40px;
-			height: 40px;
-			border-radius: var(--borderRadiusCircular);
+			width: 100%;
+			height: 100%;
 			object-fit: cover;
-			border: 2px solid var(--uiColorBorderColor);
+			object-position: top;
+			position: absolute;
+			scale: 2;
+			top: 52%;
+			left: 0;
 		}
 
 		.avatar-dropdown-btn {

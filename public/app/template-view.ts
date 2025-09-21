@@ -22,10 +22,12 @@ import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
+import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import '../onboarding/login-step.js'
 import './app-buttons.js'
+import './avatar-selection.js'
 import './drip-it-button.js'
 import './item-card.js'
 
@@ -40,6 +42,7 @@ export class TemplateView extends Element {
 	@signal spaceCollection: string | null = null
 	@signal showLoginDialog = false
 	@signal showLoginForm = false
+	@signal showAvatarSelection = false
 
 	private defaultCollection = 'moidien'
 
@@ -179,6 +182,25 @@ export class TemplateView extends Element {
 		store.navigateTo = 'scene'
 	}
 
+	#onAvatarDropdownClick = () => {
+		this.showAvatarSelection = !this.showAvatarSelection
+	}
+
+	#onAvatarSaveClick = () => {
+		// Save the temp selected avatar to the confirmed selection
+		const value = store.tempSelectedAvatar
+		if (!value) return
+
+		// Update URL params and store
+		const searchParams = new URLSearchParams(window.location.search)
+		searchParams.set('avatar', value)
+		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		store.selectAvatar = value
+
+		// Close avatar selection (chevron will auto-reset via prop)
+		this.showAvatarSelection = false
+	}
+
 	template = () => html`
 		<app-buttons-left>
 			<app-buttons-group>
@@ -203,16 +225,29 @@ export class TemplateView extends Element {
 
 		<app-buttons-right layout="bottom">
 			<app-buttons-group>
-				<drip-it-button
-					button-disabled=${() => store.selectedTemplates.size === 0}
-					onclick=${this.#onDripItClick}
-				></drip-it-button>
+				<show-when
+					condition=${() => this.showAvatarSelection}
+					content=${() => html`<save-button onclick=${this.#onAvatarSaveClick}></save-button>`}
+				></show-when>
+				<show-when
+					condition=${() => !this.showAvatarSelection}
+					content=${() => html`
+						<drip-it-button
+							button-disabled=${() => store.selectedTemplates.size === 0}
+							onclick=${this.#onDripItClick}
+						></drip-it-button>
+					`}
+				></show-when>
 			</app-buttons-group>
 		</app-buttons-right>
 
 		<bottom-sheet>
 			<show-when
-				condition=${() => this.selectedTab !== null}
+				condition=${() => this.showAvatarSelection}
+				content=${() => html`<avatar-selection content-only></avatar-selection>`}
+			></show-when>
+			<show-when
+				condition=${() => !this.showAvatarSelection && this.selectedTab !== null}
 				content=${() => html`
 					<tabs-provider
 						default-value=${() => this.selectedTab}
@@ -279,7 +314,10 @@ export class TemplateView extends Element {
 					</tabs-provider>
 				`}
 			></show-when>
-			<bottom-navigation></bottom-navigation>
+			<bottom-navigation
+				avatar-selection-open=${() => this.showAvatarSelection}
+				onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+			></bottom-navigation>
 		</bottom-sheet>
 
 		<dialog-element open=${() => this.showLoginDialog}>
