@@ -24,6 +24,7 @@ import '../elements/rig/lume-auto-rigger.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
+import type {Space} from '../types/types.js'
 import {
 	createMutationsSignal,
 	enableFrontsideOnModelLoad,
@@ -36,7 +37,6 @@ import {
 import './app-buttons.js'
 import {store} from './store.js'
 import {textureManager} from './texture-manager.js'
-import type {Space} from '../types/types.js'
 
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
@@ -417,6 +417,15 @@ export class DrippyScene extends Element {
 			if (!this.lumeScene) return
 			this.lumeScene.glRenderer!.toneMapping = THREE.ACESFilmicToneMapping
 		})
+
+		this.createEffect(() => {
+			if (this.selectedSpace?.scene && this.backgroundModel) {
+				enableFrontsideOnModelLoad(this.backgroundModel)
+				enableShadowOnModelLoad(this.backgroundModel)
+				setEnvMapOnModelLoad(this.backgroundModel, env)
+				setMaterialsVisibleOnModelLoad(this.backgroundModel, () => store.isShowScene)
+			}
+		})
 	}
 
 	template = () => {
@@ -614,7 +623,7 @@ export class DrippyScene extends Element {
 						</lume-gltf-model>
 
 						<lume-gltf-model
-							ref=${(el: GltfModel) => ((this.backgroundModel = el), enableShadowOnModelLoad(el), enableFrontsideOnModelLoad(el), setEnvMapOnModelLoad(el, env), setMaterialsVisibleOnModelLoad(el, () => store.isShowScene))}
+							ref=${(el: GltfModel) => (this.backgroundModel = el)}
 							id="scene"
 							src=${() => this.selectedSpace?.scene ?? ''}
 						></lume-gltf-model>
