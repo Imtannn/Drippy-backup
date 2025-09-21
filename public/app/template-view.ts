@@ -32,6 +32,7 @@ import './app-buttons.js'
 import './avatar-selection.js'
 import './drip-it-button.js'
 import './item-card.js'
+import './pose-selection.js'
 
 type TemplateViewAttributes = keyof {}
 
@@ -45,6 +46,7 @@ export class TemplateView extends Element {
 	@signal showLoginDialog = false
 	@signal showLoginForm = false
 	@signal showAvatarSelection = false
+	@signal showPoseSelection = false
 
 	private defaultCollection = 'moidien'
 
@@ -204,6 +206,32 @@ export class TemplateView extends Element {
 		this.showAvatarSelection = false
 	}
 
+	#onNavTabChange = (e: CustomEvent) => {
+		const tab = e.detail.tab
+		if (tab === 'pose') {
+			this.showPoseSelection = true
+			this.showAvatarSelection = false
+		} else {
+			this.showPoseSelection = false
+			this.showAvatarSelection = false
+		}
+	}
+
+	#onPoseSaveClick = () => {
+		// Save the temp selected pose to the confirmed selection
+		const value = store.tempSelectedPose
+		if (!value) return
+
+		// Update URL params and store
+		const searchParams = new URLSearchParams(window.location.search)
+		searchParams.set('pose', value)
+		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		store.selectPose = value
+
+		// Close pose selection
+		this.showPoseSelection = false
+	}
+
 
 	template = () => html`
 		<app-buttons-left>
@@ -234,7 +262,11 @@ export class TemplateView extends Element {
 					content=${() => html`<save-button onclick=${this.#onAvatarSaveClick}></save-button>`}
 				></show-when>
 				<show-when
-					condition=${() => !this.showAvatarSelection}
+					condition=${() => this.showPoseSelection}
+					content=${() => html`<save-button onclick=${this.#onPoseSaveClick}></save-button>`}
+				></show-when>
+				<show-when
+					condition=${() => !this.showAvatarSelection && !this.showPoseSelection}
 					content=${() => html`
 						<drip-it-button
 							button-disabled=${() => store.selectedTemplates.size === 0}
@@ -251,7 +283,11 @@ export class TemplateView extends Element {
 				content=${() => html`<avatar-selection content-only></avatar-selection>`}
 			></show-when>
 			<show-when
-				condition=${() => !this.showAvatarSelection && this.selectedTab !== null}
+				condition=${() => this.showPoseSelection}
+				content=${() => html`<pose-selection content-only></pose-selection>`}
+			></show-when>
+			<show-when
+				condition=${() => !this.showAvatarSelection && !this.showPoseSelection && this.selectedTab !== null}
 				content=${() => html`
 					<tabs-provider
 						default-value=${() => this.selectedTab}
@@ -323,7 +359,7 @@ export class TemplateView extends Element {
 					open=${() => this.showAvatarSelection}
 					onavatar-dropdown-click=${this.#onAvatarDropdownClick}
 				></avatar-dropdown>
-				<nav-items></nav-items>
+				<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
 			</bottom-navigation>
 		</bottom-sheet>
 

@@ -24,7 +24,10 @@ export class NavItems extends Element {
 				onclick=${() => this.#onTabClick('items')}
 			>
 				<div class="nav-icon">
-					<img src="/images/items.svg" alt="Items" />
+					<img
+						src=${() => this.activeTab === 'items' ? '/images/items.svg' : '/images/items-inactive.svg'}
+						alt="Items"
+					/>
 				</div>
 				<span class="nav-label">Items</span>
 			</button>
@@ -35,7 +38,10 @@ export class NavItems extends Element {
 				onclick=${() => this.#onTabClick('pose')}
 			>
 				<div class="nav-icon">
-					<img src="/images/pose.svg" alt="Pose" />
+					<img
+						src=${() => this.activeTab === 'pose' ? '/images/pose-active.svg' : '/images/pose.svg'}
+						alt="Pose"
+					/>
 				</div>
 				<span class="nav-label">Pose</span>
 			</button>
