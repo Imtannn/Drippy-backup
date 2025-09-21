@@ -109,8 +109,6 @@ export class UploadView extends Element {
 		this.convertedTemplate = null
 		this.convertedBlocks = []
 		this.convertedFabrics = []
-		this.selectedSpace = null
-		this.selectedAvatar = null
 		this.selectedFabrics = new Map()
 		this.selectedBlocks = new Map()
 		this.selectedTemplates = new Map()
