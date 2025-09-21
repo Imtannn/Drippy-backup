@@ -649,8 +649,8 @@ export class UploadView extends Element {
 		})
 
 		// Convert materials to fabrics
-		const convertedFabrics: Fabric[] = uploadedTemplate.materials.map((material, index) => ({
-			_id: (index + 1).toString(),
+		const convertedFabrics: Fabric[] = uploadedTemplate.materials.map(material => ({
+			_id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
 			thumb: material.thumb,
 			normal: material.normal || '',
 			baseColor: material.baseColor || '',
@@ -665,22 +665,24 @@ export class UploadView extends Element {
 
 		console.log(`✅ All extra materials processed and added to materials list`)
 
+		const templateId = Date.now().toString() + Math.random().toString(36).substr(2, 9)
+
 		// Convert blocks to system format
-		const convertedBlocks: Block[] = uploadedTemplate.blocks.map((block, index) => ({
-			_id: (index + 1).toString(),
+		const convertedBlocks: Block[] = uploadedTemplate.blocks.map(block => ({
+			_id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
 			thumb: block.thumbUrl,
 			modelFile: block.modelUrl,
 			blockName: block.blockName,
 			avatar: 'Female' as const,
 			category: block.category as BlockCategory,
-			templateId: '1', // Will be set properly
+			templateId: templateId, // Will be set properly
 			templateName: uploadedTemplate.templateName,
 			templateCategory: 'Dress' as BlockTemplateCategory, // Default category for uploaded templates
 		}))
 
 		// Convert template to system format
 		const convertedTemplate: Template = {
-			_id: '1',
+			_id: templateId,
 			thumb: uploadedTemplate.templateThumbnail || '',
 			name: uploadedTemplate.templateName,
 			avatar: 'Female' as const,
