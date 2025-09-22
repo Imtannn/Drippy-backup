@@ -924,7 +924,7 @@ function initGenericCarousel(config: {
 		)
 			return
 
-		const offset = -(activeIndex - 1) * (320 + 32) // Using same dimensions as pricing carousel
+		const offset = -(activeIndex - 1) * (config.minWidth + 32) // Using same dimensions as pricing carousel
 		track.style.transform = `translateX(${offset}px)`
 
 		items.forEach((item, i) => {
@@ -1013,7 +1013,7 @@ setTimeout(() => {
 		trackSelector: '.how-it-works__grid',
 		itemSelector: '.how-it-works__item',
 		containerSelector: '.how-it-works__content',
-		minWidth: 300,
+		minWidth: 230,
 		maxWidth: 830,
 	})
 }, 150)

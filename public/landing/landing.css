@@ -2536,12 +2536,12 @@ p {
 		opacity: 1;
 		z-index: 2;
 	}
-	.carousel .how-it-works__content {
+	.carousel.how-it-works__content {
 		margin: 25px 0;
 	}
 	.carousel .how-it-works__grid {
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
 		align-items: center;
 	}
 	.carousel .how-it-works__item {
