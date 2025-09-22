@@ -42,6 +42,10 @@ const BRAND_CONFIGS = [
 		brand: 'shri',
 		rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
 	},
+	{
+		brand: 'eliseF',
+		rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
+	},
 	// {
 	// 	brand: 'baroudeuses',
 	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
