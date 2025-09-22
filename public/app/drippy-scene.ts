@@ -217,8 +217,10 @@ export class DrippyScene extends Element {
 
 		// Track selected avatar loading state
 		this.createEffect(() => {
-			if (!store.isShowAvatar || this.selectedAvatar) return
-			if (store.tempSelectedAvatar) {
+			if (!store.isShowAvatar) return
+			// Allow tempSelectedAvatar to work as preview even when selectedAvatar exists
+			const currentAvatar = store.tempSelectedAvatar ?? this.selectedAvatar
+			if (currentAvatar) {
 				const avatar = this.avatarModel
 				if (!avatar) return
 
@@ -584,7 +586,12 @@ export class DrippyScene extends Element {
 						<lume-gltf-model
 							id="avatar"
 							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
-							src=${() => avatars.find(avatar => avatar.value === (this.selectedAvatar ?? store.tempSelectedAvatar))?.src}
+							src=${() => {
+								// Prioritize tempSelectedAvatar for preview functionality
+								const currentAvatar = store.tempSelectedAvatar ?? this.selectedAvatar
+								const foundAvatar = avatars.find(avatar => avatar.value === currentAvatar)
+								return foundAvatar?.src
+							}}
 							scale="1 1 1"
 							data-avatar
 						>

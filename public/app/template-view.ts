@@ -11,7 +11,9 @@ import {currentUser, store} from './store.js'
 import {textureManager} from './texture-manager.js'
 
 import '../elements/animation-select.js'
+import '../elements/avatar-dropdown.js'
 import '../elements/back-button.js'
+import '../elements/bottom-navigation.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
 import '../elements/dialog-element.js'
@@ -20,13 +22,17 @@ import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/logo-button.js'
+import '../elements/nav-items.js'
 import '../elements/person-button.js'
+import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import '../onboarding/login-step.js'
 import './app-buttons.js'
+import './avatar-selection.js'
 import './drip-it-button.js'
 import './item-card.js'
+import './pose-selection.js'
 
 type TemplateViewAttributes = keyof {}
 
@@ -39,6 +45,8 @@ export class TemplateView extends Element {
 	@signal spaceCollection: string | null = null
 	@signal showLoginDialog = false
 	@signal showLoginForm = false
+	@signal showAvatarSelection = false
+	@signal showPoseSelection = false
 
 	private defaultCollection = 'moidien'
 
@@ -86,6 +94,7 @@ export class TemplateView extends Element {
 				this.selectedTab = categories[0] as TemplateCategory
 			}
 		})
+
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -178,6 +187,52 @@ export class TemplateView extends Element {
 		store.navigateTo = 'scene'
 	}
 
+	#onAvatarDropdownClick = () => {
+		this.showAvatarSelection = !this.showAvatarSelection
+	}
+
+	#onAvatarSaveClick = () => {
+		// Save the temp selected avatar to the confirmed selection
+		const value = store.tempSelectedAvatar
+		if (!value) return
+
+		// Update URL params and store
+		const searchParams = new URLSearchParams(window.location.search)
+		searchParams.set('avatar', value)
+		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		store.selectAvatar = value
+
+		// Close avatar selection (chevron will auto-reset via prop)
+		this.showAvatarSelection = false
+	}
+
+	#onNavTabChange = (e: CustomEvent) => {
+		const tab = e.detail.tab
+		if (tab === 'pose') {
+			this.showPoseSelection = true
+			this.showAvatarSelection = false
+		} else {
+			this.showPoseSelection = false
+			this.showAvatarSelection = false
+		}
+	}
+
+	#onPoseSaveClick = () => {
+		// Save the temp selected pose to the confirmed selection
+		const value = store.tempSelectedPose
+		if (!value) return
+
+		// Update URL params and store
+		const searchParams = new URLSearchParams(window.location.search)
+		searchParams.set('pose', value)
+		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		store.selectPose = value
+
+		// Close pose selection
+		this.showPoseSelection = false
+	}
+
+
 	template = () => html`
 		<app-buttons-left>
 			<app-buttons-group>
@@ -202,16 +257,37 @@ export class TemplateView extends Element {
 
 		<app-buttons-right layout="bottom">
 			<app-buttons-group>
-				<drip-it-button
-					button-disabled=${() => store.selectedTemplates.size === 0}
-					onclick=${this.#onDripItClick}
-				></drip-it-button>
+				<show-when
+					condition=${() => this.showAvatarSelection}
+					content=${() => html`<save-button onclick=${this.#onAvatarSaveClick}></save-button>`}
+				></show-when>
+				<show-when
+					condition=${() => this.showPoseSelection}
+					content=${() => html`<save-button onclick=${this.#onPoseSaveClick}></save-button>`}
+				></show-when>
+				<show-when
+					condition=${() => !this.showAvatarSelection && !this.showPoseSelection}
+					content=${() => html`
+						<drip-it-button
+							button-disabled=${() => store.selectedTemplates.size === 0}
+							onclick=${this.#onDripItClick}
+						></drip-it-button>
+					`}
+				></show-when>
 			</app-buttons-group>
 		</app-buttons-right>
 
 		<bottom-sheet>
 			<show-when
-				condition=${() => this.selectedTab !== null}
+				condition=${() => this.showAvatarSelection}
+				content=${() => html`<avatar-selection content-only></avatar-selection>`}
+			></show-when>
+			<show-when
+				condition=${() => this.showPoseSelection}
+				content=${() => html`<pose-selection content-only></pose-selection>`}
+			></show-when>
+			<show-when
+				condition=${() => !this.showAvatarSelection && !this.showPoseSelection && this.selectedTab !== null}
 				content=${() => html`
 					<tabs-provider
 						default-value=${() => this.selectedTab}
@@ -278,6 +354,13 @@ export class TemplateView extends Element {
 					</tabs-provider>
 				`}
 			></show-when>
+			<bottom-navigation>
+				<avatar-dropdown
+					open=${() => this.showAvatarSelection}
+					onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+				></avatar-dropdown>
+				<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+			</bottom-navigation>
 		</bottom-sheet>
 
 		<dialog-element open=${() => this.showLoginDialog}>
@@ -329,6 +412,13 @@ export class TemplateView extends Element {
 			padding-top: 0;
 			padding-bottom: 5px;
 			background: var(--uiColorPrimaryWhite);
+		}
+
+		/* Add bottom padding on desktop to prevent content hiding behind navigation */
+		@media (min-width: 768px) {
+			.tabs-content-container {
+				padding-bottom: 80px;
+			}
 		}
 
 		.items-grid {
@@ -390,6 +480,7 @@ export class TemplateView extends Element {
 			text-wrap: nowrap;
 			opacity: 1;
 		}
+
 	`
 }
 
