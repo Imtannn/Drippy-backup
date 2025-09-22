@@ -49,4 +49,15 @@ Meteor.startup(() => {
 	if (missingVars.length > 0) {
 		console.warn('Missing required environment variables:', missingVars)
 	}
+
+	// Validate S3 configuration (optional but recommended)
+	const s3Vars = ['S3_BUCKET', 'S3_REGION', 'AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY']
+	const missingS3Vars = s3Vars.filter(varName => !process.env[varName])
+
+	if (missingS3Vars.length > 0) {
+		console.warn('S3 upload functionality will be disabled - missing environment variables:', missingS3Vars)
+		console.warn('To enable S3 uploads, configure:', missingS3Vars.join(', '))
+	} else {
+		console.log('✅ S3 upload service configured successfully')
+	}
 })

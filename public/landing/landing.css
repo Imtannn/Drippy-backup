@@ -384,7 +384,7 @@ p {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-start;
-	gap: 20;
+	gap: 20px;
 	position: relative;
 	align-self: stretch;
 	width: 100%;
@@ -513,6 +513,10 @@ p {
 	width: 100%;
 	max-width: 50%;
 	min-height: 960px;
+}
+
+.landing-page-desktop .how-it-works__content {
+	width: 100%;
 }
 
 .landing-page-desktop .how-it-works__grid {
@@ -2214,7 +2218,7 @@ p {
 	.landing-page-desktop .showcase__item {
 		flex: unset;
 		max-width: 450px;
-		height: 500px;
+		height: 600px;
 	}
 	.showcase .showcase__model-display {
 		width: 150px;
@@ -2289,7 +2293,7 @@ p {
 	}
 
 	.showcase .showcase__item {
-		height: unset;
+		height: 600px;
 	}
 
 	/* Features responsive for mobile - single column */
@@ -2409,6 +2413,8 @@ p {
 	}
 	.landing-page-desktop .section-drippy .feature__item .feature__description {
 		text-align: center;
+		width: 80%;
+		margin: 0 auto;
 	}
 
 	.landing-page-desktop .drippy-is-the-new {
@@ -2503,6 +2509,7 @@ p {
 	.landing-page-desktop .footer__content {
 		flex-direction: column;
 		gap: 26px;
+		align-items: center;
 	}
 	.landing-page-desktop .feature__number {
 		top: 3px;
@@ -2529,9 +2536,28 @@ p {
 		opacity: 1;
 		z-index: 2;
 	}
+	.carousel .how-it-works__content {
+		margin: 25px 0;
+	}
+	.carousel .how-it-works__grid {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.carousel .how-it-works__item {
+		flex: unset;
+		max-width: unset;
+		min-width: unset;
+		width: unset;
+	}
+	.carousel .how-it-works__step {
+		min-height: 460px;
+	}
+	.carousel .how-it-works__step .how-it-works__step-image {
+		min-height: 460px;
+	}
 	.carousel .platform__grid {
 		cursor: grab;
-		margin-top: 25px;
 	}
 	.carousel .pricing__plans {
 		cursor: grab;

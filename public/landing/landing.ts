@@ -410,7 +410,7 @@ const mainContent = html`
 												</div>
 												<div class="feature__content">
 													<p class="feature__title text-md-1">Turn store into a playground</p>
-													<p class="feature__description text-sm">Let shoppers explore 3D spaces, remix designs, styled avatars.</p>
+													<p class="feature__description text-md">Let shoppers explore 3D spaces, remix designs, styled avatars.</p>
 												</div>
 											</div>
 										</div>
@@ -423,7 +423,7 @@ const mainContent = html`
 												</div>
 												<div class="feature__content">
 													<div class="feature__title text-md-1">Sell what people want</div>
-													<p class="feature__description text-sm">
+													<p class="feature__description text-md">
 														Collect payments and orders directly - Fulfill on made-to-order basis.
 													</p>
 												</div>
@@ -438,7 +438,7 @@ const mainContent = html`
 												</div>
 												<div class="feature__content">
 													<div class="feature__title text-md-1">Collect powerful insights</div>
-													<p class="feature__description text-sm">Get real-time signals on what to produce — no more guesswork.</p>
+													<p class="feature__description text-md">Get real-time signals on what to produce — no more guesswork.</p>
 												</div>
 											</div>
 										</div>
@@ -451,7 +451,7 @@ const mainContent = html`
 												</div>
 												<div class="feature__item--fourth">
 													<div class="feature__title text-md-1">Build &amp; grow community</div>
-													<p class="feature__description text-sm">
+													<p class="feature__description text-md">
 														Host in-app challenges that turn your audience into fans &amp; co-creators
 													</p>
 												</div>
@@ -474,6 +474,7 @@ const mainContent = html`
 								<div class="section-subtitle text-md-2">Here&#39;s how it work from your shoppers' POV.</div>
 							</div>
 
+							<div class="how-it-works__content">
 								<div class="how-it-works__grid">
 									${steps.map(
 										(step: any) => html`
@@ -486,7 +487,8 @@ const mainContent = html`
 											</div>
 										`,
 									)}
-									</div>
+								</div>
+							</div>
 
 							<div class="hero__actions">
 								<custom-button variant="secondary">See it live</custom-button>
@@ -1005,6 +1007,17 @@ function initGenericCarousel(config: {
 	window.addEventListener('resize', resizeHandler, {passive: true})
 }
 
+// Initialize carousel for how it work section
+setTimeout(() => {
+	initGenericCarousel({
+		trackSelector: '.how-it-works__grid',
+		itemSelector: '.how-it-works__item',
+		containerSelector: '.how-it-works__content',
+		minWidth: 300,
+		maxWidth: 830,
+	})
+}, 150)
+
 // Initialize carousel for Platform section
 setTimeout(() => {
 	initGenericCarousel({
@@ -1014,7 +1027,7 @@ setTimeout(() => {
 		minWidth: 430,
 		maxWidth: 830,
 	})
-}, 200)
+}, 150)
 // Initialize carousel for Pricing section
 setTimeout(() => {
 	initGenericCarousel({
@@ -1024,4 +1037,4 @@ setTimeout(() => {
 		minWidth: 430,
 		maxWidth: 830,
 	})
-}, 200)
+}, 150)
