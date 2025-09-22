@@ -2218,7 +2218,7 @@ p {
 	.landing-page-desktop .showcase__item {
 		flex: unset;
 		max-width: 450px;
-		height: 500px;
+		height: 600px;
 	}
 	.showcase .showcase__model-display {
 		width: 150px;
