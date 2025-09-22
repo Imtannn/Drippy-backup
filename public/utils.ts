@@ -707,6 +707,17 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 		const threeCamera = (screenshotCamera as any).three || lumeScene.camera?.three || lumeScene.three?.camera
 
 		if (threeScene && threeCamera) {
+			// Store original renderer size
+			const originalSize = renderer.getSize(new THREE.Vector2())
+
+			// Set standardized screenshot dimensions (square format, good for product shots)
+			const screenshotSize = 512
+			renderer.setSize(screenshotSize, screenshotSize)
+
+			// Update camera aspect ratio for square format
+			threeCamera.aspect = 1
+			threeCamera.updateProjectionMatrix()
+
 			// Set a clean light background for product shots
 			const originalBackground = renderer.getClearColor(new THREE.Color())
 			const originalAlpha = renderer.getClearAlpha()
@@ -715,8 +726,13 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 			renderer.render(threeScene, threeCamera)
 			screenshot = renderer.domElement.toDataURL('image/png')
 
-			// Restore original background
+			// Restore original background and size
 			renderer.setClearColor(originalBackground, originalAlpha)
+			renderer.setSize(originalSize.x, originalSize.y)
+
+			// Restore original camera aspect ratio
+			threeCamera.aspect = originalSize.x / originalSize.y
+			threeCamera.updateProjectionMatrix()
 		}
 	}
 
