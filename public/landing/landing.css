@@ -67,7 +67,6 @@ p {
 	position: relative;
 	margin: 0 auto;
 	box-sizing: border-box;
-	padding: 0 15px;
 }
 
 .landing-page-desktop .overlap {
@@ -197,6 +196,7 @@ p {
 	align-self: stretch;
 	width: 100%;
 	flex: 0 0 auto;
+	padding: 0 15px;
 }
 
 .landing-page-desktop .footer__social-icon {
@@ -325,6 +325,7 @@ p {
 	align-self: stretch;
 	width: 100%;
 	flex: 0 0 auto;
+	padding: 0 15px;
 }
 .landing-page-desktop .section-drippy .hero__actions {
 	justify-content: start;
@@ -972,7 +973,6 @@ p {
 .landing-page-desktop .cta__content {
 	position: relative;
 	width: 100%;
-	max-width: 1340px;
 	min-height: 495px;
 	background-color: var(--uiColorPrimaryLightGrey);
 	border-radius: 20px;
@@ -1373,7 +1373,7 @@ p {
 .landing-page-desktop .showcase__container {
 	flex-direction: column;
 	gap: 24px;
-	padding: 40px 16px 80px 16px;
+	padding: 40px 0 80px 0;
 }
 
 .landing-page-desktop .stop-selling-clothes {
@@ -1929,7 +1929,6 @@ p {
 	/* Container adjustments for tablet */
 	.container {
 		max-width: 100%;
-		padding: 0 15px;
 	}
 
 	.landing-page-desktop {
