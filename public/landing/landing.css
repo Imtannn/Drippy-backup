@@ -384,7 +384,7 @@ p {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-start;
-	gap: 20;
+	gap: 20px;
 	position: relative;
 	align-self: stretch;
 	width: 100%;
@@ -2293,7 +2293,7 @@ p {
 	}
 
 	.showcase .showcase__item {
-		height: 640px;
+		height: 600px;
 	}
 
 	/* Features responsive for mobile - single column */
@@ -2413,6 +2413,8 @@ p {
 	}
 	.landing-page-desktop .section-drippy .feature__item .feature__description {
 		text-align: center;
+		width: 80%;
+		margin: 0 auto;
 	}
 
 	.landing-page-desktop .drippy-is-the-new {
@@ -2507,6 +2509,7 @@ p {
 	.landing-page-desktop .footer__content {
 		flex-direction: column;
 		gap: 26px;
+		align-items: center;
 	}
 	.landing-page-desktop .feature__number {
 		top: 3px;
