@@ -55,7 +55,7 @@ export class SpacesSelection extends Element {
 						<div class="space-card">
 							<div class="scene-preview">
 								<div class="scene-placeholder">
-									<img src=${space().sceneThumbnail} alt="Bloom Realm Scene" />
+									<img src=${space().sceneThumbnail} alt="Bloom Realm Scene" onclick=${() => this.#onSceneSelected(space())} />
 								</div>
 								<div class="garments-count">${space().garmentsCount} garments</div>
 							</div>
@@ -265,6 +265,7 @@ export class SpacesSelection extends Element {
 			object-fit: cover;
 			object-position: center;
 			border-radius: var(--borderRadiusLarge);
+			cursor: pointer;
 		}
 
 		.garments-count {

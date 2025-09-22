@@ -10,7 +10,7 @@ const logoUrlDark = new URL('../images/logo-dark.svg', import.meta.url)
 type HomePageAttributes = keyof {} // no attributes yet
 
 // Redirect to app immediately
-window.location.href = '/app'
+window.location.href = '/app/index.html?avatar=moidien'
 
 @element
 export class HomePage extends Element {
