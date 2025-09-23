@@ -30,6 +30,11 @@ export const password = () => url().password
 
 export const hrefMinusOrigin = () => url().href.replace(url().origin, '')
 
+// Utility function to update URL with search params while ensuring clean /app path
+export const updateUrlWithParams = (searchParams: URLSearchParams) => {
+	window.history.replaceState({}, '', `/app?${searchParams.toString()}`)
+}
+
 window.addEventListener('popstate', () => _url.set(new URL(location.href)))
 
 const pushState = history.pushState

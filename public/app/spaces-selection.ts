@@ -4,6 +4,7 @@ import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import type {Space} from '../types/types.js'
 import {store} from './store.js'
+import {updateUrlWithParams} from '../routes.js'
 
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
@@ -33,7 +34,7 @@ export class SpacesSelection extends Element {
 	#onSceneSelected = (space: Space) => {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('scene', space.slug)
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		updateUrlWithParams(searchParams)
 		store.selectSpace = space
 	}
 
