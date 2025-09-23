@@ -28,6 +28,7 @@ import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import '../onboarding/login-step.js'
+import {updateGarmentsInUrl} from '../routes.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './drip-it-button.js'
@@ -57,6 +58,7 @@ export class TemplateView extends Element {
 		document.addEventListener('show-login-form', () => {
 			this.showLoginForm = true
 		})
+
 
 		this.createEffect(() => {
 			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
@@ -94,6 +96,53 @@ export class TemplateView extends Element {
 				this.selectedTab = categories[0] as TemplateCategory
 			}
 		})
+
+		// Handle successful login - close dialog
+		this.createEffect(() => {
+			const user = currentUser()
+			// If user just logged in (not null and not undefined) and login dialog was open
+			if (user !== null && user !== undefined && this.showLoginDialog) {
+				this.showLoginDialog = false
+				this.showLoginForm = false
+			}
+		})
+
+		// Update URL when garments change
+		this.createEffect(() => {
+			const selectedTemplates = store.selectedTemplates
+			updateGarmentsInUrl(selectedTemplates)
+		})
+
+		// Convert templates to blocks for 3D rendering
+		this.createEffect(() => {
+			const selectedTemplates = store.selectedTemplates
+			if (selectedTemplates.size > 0) {
+				this.#convertTemplatesToBlocks()
+			}
+		})
+	}
+
+	#convertTemplatesToBlocks = async () => {
+		// Get blocks for ALL selected templates, organized by template category
+		const templateBlockData: {
+			blocks: Block[]
+			templateCategory: TemplateCategory
+			materialId: string
+			extraMaterials?: {mesh: string; materialId: string}[]
+		}[] = []
+
+		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
+			const templateBlocks = getBlocksForTemplate(selectedTemplate, store.selectedSpace?.collection)
+			templateBlockData.push({
+				blocks: templateBlocks,
+				templateCategory: templateCategory,
+				materialId: selectedTemplate.materialId ?? '',
+				extraMaterials: selectedTemplate.extraMaterials,
+			})
+		}
+
+		// Replace blocks with aggregated blocks from all selected templates
+		store.replaceSelectedBlocks = templateBlockData
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -144,25 +193,8 @@ export class TemplateView extends Element {
 			}
 		}
 
-		// Get blocks for ALL selected templates, organized by template category
-		const templateBlockData: {
-			blocks: Block[]
-			templateCategory: TemplateCategory
-			materialId: string
-			extraMaterials?: {mesh: string; materialId: string}[]
-		}[] = []
-		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
-			const templateBlocks = getBlocksForTemplate(selectedTemplate, store.selectedSpace?.collection)
-			templateBlockData.push({
-				blocks: templateBlocks,
-				templateCategory: templateCategory,
-				materialId: selectedTemplate.materialId ?? '',
-				extraMaterials: selectedTemplate.extraMaterials,
-			})
-		}
-
-		// Replace blocks with aggregated blocks from all selected templates
-		store.replaceSelectedBlocks = templateBlockData
+		// Convert templates to blocks (this will be handled by the effect automatically)
+		// The effect will trigger since we modified store.selectedTemplates above
 	}
 
 	#onDripItClick = () => {
