@@ -94,7 +94,6 @@ export class TemplateView extends Element {
 				this.selectedTab = categories[0] as TemplateCategory
 			}
 		})
-
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -232,7 +231,6 @@ export class TemplateView extends Element {
 		this.showPoseSelection = false
 	}
 
-
 	template = () => html`
 		<app-buttons-left>
 			<app-buttons-group>
@@ -363,7 +361,13 @@ export class TemplateView extends Element {
 			</bottom-navigation>
 		</bottom-sheet>
 
-		<dialog-element open=${() => this.showLoginDialog}>
+		<dialog-element
+			open=${() => this.showLoginDialog}
+			onclose=${() => {
+				this.showLoginDialog = false
+				this.showLoginForm = false
+			}}
+		>
 			<show-when condition=${() => !this.showLoginForm} content=${() => html`<login-step></login-step>`}></show-when>
 			<show-when
 				condition=${() => this.showLoginForm}
@@ -480,7 +484,6 @@ export class TemplateView extends Element {
 			text-wrap: nowrap;
 			opacity: 1;
 		}
-
 	`
 }
 

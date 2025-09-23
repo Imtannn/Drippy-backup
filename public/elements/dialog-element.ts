@@ -56,7 +56,7 @@ export class DialogElement extends Element {
 		}
 
 		// Close dialog when clicking backdrop
-		dialog.addEventListener('click', (e) => {
+		dialog.addEventListener('click', e => {
 			if (e.target === dialog) {
 				this.close()
 			}
@@ -87,6 +87,7 @@ export class DialogElement extends Element {
 
 	close = () => {
 		this.open = false
+		this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}))
 	}
 
 	show = () => {
