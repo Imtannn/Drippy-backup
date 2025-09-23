@@ -646,35 +646,7 @@ const mainContent = html`
 										</div>
 										<button class="pricing__button--pro"><div class="pricing__plan-button-text">Start free trial</div></button>
 									</div>
-									<div class="pricing__plan--digitize pricing__plans--item">
-										<div class="pricing__plan-content">
-											<div class="pricing__plan-header">
-												<div class="pricing__plan-name text-md">Digitize packs</div>
-												<div class="pricing__plan-price text-md">One-time</div>
-											</div>
-											<div class="pricing__features-list--digitize">
-												<p class="pricing__plan-price">
-													<span class="interactive__title text-md">Kickoff: </span>
-													<span class="pricing__plan-period text-md">12 garments → </span>
-													<span class="interactive__title text-md">€420/pack </span>
-													<span class="pricing__plan-period text-md">(€40/garment) <br /></span>
-												</p>
-												<p class="pricing__plan-price">
-													<span class="interactive__title text-md">Growth: </span>
-													<span class="pricing__plan-period text-md">24 garments → </span>
-													<span class="interactive__title text-md">€840/pack</span>
-													<span class="pricing__plan-period text-md"> (€35/garment) <br /></span>
-												</p>
-												<p class="pricing__plan-price">
-													<span class="interactive__title text-md">Scale: </span>
-													<span class="pricing__plan-period text-md">36 garments → </span>
-													<span class="interactive__title text-md">€1050/pack </span>
-													<span class="pricing__plan-period text-md">(€30/garment) </span>
-												</p>
-											</div>
-										</div>
-										<button class="pricing__button--digitize"><div class="hero__button-text">Get started</div></button>
-									</div>
+
 								</div>
 							</div>
 						</section>
@@ -864,6 +836,7 @@ function initGenericCarousel(config: {
 	containerSelector: string
 	minWidth: number
 	maxWidth: number
+	itemWidth: number
 }) {
 	const track = document.querySelector(config.trackSelector) as HTMLElement
 	const items = document.querySelectorAll(config.itemSelector) as NodeListOf<HTMLElement>
@@ -871,7 +844,7 @@ function initGenericCarousel(config: {
 
 	if (!track || !items.length || !container) return
 
-	let activeIndex = 1
+	let activeIndex = 0
 	let startX = 0
 	let isDragging = false
 	let isActive = false
@@ -882,23 +855,41 @@ function initGenericCarousel(config: {
 		clearTimeout(resizeTimeout)
 		resizeTimeout = setTimeout(() => {
 			const wasActive = isActive
-			isActive = window.innerWidth >= config.minWidth && window.innerWidth <= config.maxWidth
+			const currentWidth = window.innerWidth
+			isActive = currentWidth >= config.minWidth && currentWidth <= config.maxWidth
+
+			console.log(`Screen check for ${config.containerSelector}:`, {
+				currentWidth,
+				minWidth: config.minWidth,
+				maxWidth: config.maxWidth,
+				wasActive,
+				isActive,
+				willChange: wasActive !== isActive,
+			})
 
 			if (wasActive !== isActive) {
 				if (isActive) {
 					container.classList.add('carousel')
 					items.forEach(item => {
 						item.classList.add('carousel-item')
+						// Set item width dynamically
+						item.style.width = `${config.itemWidth}px`
+						item.style.flex = `0 0 ${config.itemWidth}px`
 					})
 
 					if (container.classList.contains('carousel') && document.querySelectorAll('.carousel-item').length > 0) {
 						addEventListeners()
+						// Initialize with first item centered
+						activeIndex = 0
 						updateCarousel()
 					}
 				} else {
 					container.classList.remove('carousel')
 					items.forEach(item => {
 						item.classList.remove('carousel-item')
+						// Reset item width to default
+						item.style.width = ''
+						item.style.flex = ''
 					})
 
 					removeEventListeners()
@@ -909,11 +900,39 @@ function initGenericCarousel(config: {
 	}
 
 	function resetCarousel() {
-		track.style.transform = 'translateX(0)'
-		items.forEach((item, i) => {
-			item.classList.toggle('active', i === 1)
-		})
-		activeIndex = 1
+		// Reset to first item with smart positioning
+		activeIndex = 0
+
+		if (isActive && container.classList.contains('carousel')) {
+			// Only apply carousel positioning when carousel is active
+			const containerWidth = container.offsetWidth
+			const itemWidth = config.itemWidth + 32 // item width + gap
+			const totalItems = items.length
+			let offset = 0
+
+			if (activeIndex === 0) {
+				// First item: align to left with small padding
+				offset = 20
+			} else if (activeIndex === totalItems - 1) {
+				// Last item: align to right with small padding
+				offset = -(activeIndex * itemWidth) + (containerWidth - itemWidth - 20)
+			} else {
+				// Middle items: center the active item
+				const centerOffset = (containerWidth - itemWidth) / 2
+				offset = -(activeIndex * itemWidth) + centerOffset
+			}
+
+			track.style.transform = `translateX(${offset}px)`
+			items.forEach((item, i) => {
+				item.classList.toggle('active', i === activeIndex)
+			})
+		} else {
+			// When carousel is not active, reset to default state
+			track.style.transform = 'translateX(0)'
+			items.forEach(item => {
+				item.classList.remove('active')
+			})
+		}
 	}
 
 	function updateCarousel() {
@@ -924,7 +943,24 @@ function initGenericCarousel(config: {
 		)
 			return
 
-		const offset = -(activeIndex - 1) * (config.minWidth + 32) // Using same dimensions as pricing carousel
+		// Calculate offset with smart positioning
+		const containerWidth = container.offsetWidth
+		const itemWidth = config.itemWidth + 32 // item width + gap
+		const totalItems = items.length
+		let offset = 0
+
+		if (activeIndex === 0) {
+			// First item: align to left with small padding
+			offset = 20
+		} else if (activeIndex === totalItems - 1) {
+			// Last item: align to right with small padding
+			offset = -(activeIndex * itemWidth) + (containerWidth - itemWidth - 20)
+		} else {
+			// Middle items: center the active item
+			const centerOffset = (containerWidth - itemWidth) / 2
+			offset = -(activeIndex * itemWidth) + centerOffset
+		}
+
 		track.style.transform = `translateX(${offset}px)`
 
 		items.forEach((item, i) => {
@@ -1002,7 +1038,27 @@ function initGenericCarousel(config: {
 		eventListeners = []
 	}
 
+	// Force check screen size immediately
 	checkScreenSize()
+
+	// Also check after a short delay to ensure DOM is ready
+	setTimeout(() => {
+		checkScreenSize()
+	}, 200)
+
+	// Expose force deactivate function for debugging
+	;(window as any).forceDeactivateCarousel = () => {
+		container.classList.remove('carousel')
+		items.forEach(item => {
+			item.classList.remove('carousel-item')
+		})
+		removeEventListeners()
+		track.style.transform = 'translateX(0)'
+		items.forEach(item => {
+			item.classList.remove('active')
+		})
+		isActive = false
+	}
 
 	window.addEventListener('resize', resizeHandler, {passive: true})
 }
@@ -1013,8 +1069,9 @@ setTimeout(() => {
 		trackSelector: '.how-it-works__grid',
 		itemSelector: '.how-it-works__item',
 		containerSelector: '.how-it-works__content',
-		minWidth: 230,
+		minWidth: 480,
 		maxWidth: 830,
+		itemWidth: 230,
 	})
 }, 150)
 
@@ -1024,8 +1081,9 @@ setTimeout(() => {
 		trackSelector: '.platform__grid',
 		itemSelector: '.platform__card',
 		containerSelector: '.platform__content',
-		minWidth: 430,
+		minWidth: 480,
 		maxWidth: 830,
+		itemWidth: 350,
 	})
 }, 150)
 // Initialize carousel for Pricing section
@@ -1034,7 +1092,8 @@ setTimeout(() => {
 		trackSelector: '.pricing__plans',
 		itemSelector: '.pricing__plans--item',
 		containerSelector: '.pricing__content',
-		minWidth: 430,
+		minWidth: 480,
 		maxWidth: 830,
+		itemWidth: 350,
 	})
 }, 150)

@@ -2089,6 +2089,15 @@ p {
 	.landing-page-desktop .features__image {
 		min-width: 100%;
 	}
+	.landing-page-desktop .feature__wrapper {
+		max-width: 100%;
+	}
+	.landing-page-desktop .feature__item--second {
+		max-width: 100%;
+	}
+	.landing-page-desktop .feature__item--third {
+		max-width: 100%;
+	}
 	.landing-page-desktop .how-it-works__step {
 		/* min-height: 776px; */
 	}
@@ -2329,11 +2338,9 @@ p {
 	}
 
 	.landing-page-desktop .section {
-		padding: 0;
 		gap: 25px;
 	}
 	.landing-page-desktop .section-drippy {
-		padding: 0;
 		flex-direction: column;
 		gap: 25px;
 	}
@@ -2517,18 +2524,34 @@ p {
 
 @media (min-width: 480px) and (max-width: 830px) {
 	.carousel {
-		/* overflow: hidden; */
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 	}
 	.carousel-item {
 		transition:
 			transform 0.4s ease,
 			opacity 0.4s ease,
 			filter 0.4s ease;
-		flex: 0 0 auto;
 		transform: scale(0.8);
 		opacity: 0.6;
-		width: 320px;
-		flex: 0 0 320px;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		/* width and flex will be set dynamically by JavaScript */
+	}
+	.carousel img {
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		-webkit-user-drag: none;
+		-khtml-user-drag: none;
+		-moz-user-drag: none;
+		-o-user-drag: none;
+		pointer-events: none;
 	}
 	.carousel-item.active {
 		transform: scale(1.1);
@@ -2538,10 +2561,20 @@ p {
 	.carousel.how-it-works__content {
 		margin: 25px 0;
 	}
+	.carousel.platform__content {
+		margin-top: 25px;
+	}
 	.carousel .how-it-works__grid {
 		display: flex;
-		justify-content: center;
+		justify-content: flex-start;
 		align-items: center;
+		transition: transform 0.4s ease;
+		width: max-content;
+		cursor: grab;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 	}
 	.carousel .how-it-works__item {
 		flex: unset;
@@ -2555,12 +2588,27 @@ p {
 	.carousel .how-it-works__step .how-it-works__step-image {
 		min-height: 460px;
 	}
-	.carousel .platform__grid {
+	.landing-page-desktop .carousel .platform__grid {
 		cursor: grab;
+		justify-content: flex-start !important;
+		transition: transform 0.4s ease;
+		width: max-content;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 	}
-	.carousel .pricing__plans {
+	.landing-page-desktop .carousel .pricing__plans {
 		cursor: grab;
+		justify-content: flex-start !important;
+		transition: transform 0.4s ease;
+		width: max-content;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 	}
+
 	.carousel .platform__card-overlap {
 		height: 350px;
 	}
