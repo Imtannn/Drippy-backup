@@ -86,24 +86,3 @@ export const updateGarmentsInUrl = (garments: Map<TemplateCategory, Template>) =
 	// Update URL without triggering page reload
 	history.replaceState({}, '', currentUrl.toString())
 }
-
-export const navigateWithGarments = (
-	garments: Map<TemplateCategory, Template>,
-	additionalParams: Record<string, string> = {},
-) => {
-	const currentUrl = new URL(location.href)
-
-	// Add garment data
-	if (garments.size > 0) {
-		const garmentIds = Array.from(garments.values()).map(garment => garment._id)
-		currentUrl.searchParams.set('garments', garmentIds.join(','))
-	}
-
-	// Add any additional parameters
-	Object.entries(additionalParams).forEach(([key, value]) => {
-		currentUrl.searchParams.set(key, value)
-	})
-
-	// Navigate to the URL
-	history.pushState({}, '', currentUrl.toString())
-}
