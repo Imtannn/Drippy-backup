@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor'
-import {check} from 'meteor/check'
+import {check, Match} from 'meteor/check'
 
 // Define what we will store in user.profile.
 declare module 'meteor/meteor' {
@@ -12,6 +12,7 @@ declare module 'meteor/meteor' {
 			// Custom
 			isAdmin?: boolean
 			dateOfBirth?: string
+			turnOffSettingsInSpace?: boolean
 
 			// Meteor's 3rd party login services (e.g. Google, Facebook, etc)
 			// will put stuff in profile too.
@@ -60,7 +61,7 @@ if (Meteor.isServer) {
 		async 'users.updateProfile'(profileData: Meteor.UserProfile & {username: string}) {
 			if (!this.userId) throw new Meteor.Error('not-authorized', 'You must be logged in to update your profile')
 
-			check(profileData, {username: String, dateOfBirth: String})
+			check(profileData, {username: String, dateOfBirth: String, turnOffSettingsInSpace: Match.Optional(Boolean)})
 
 			const {username, ...profile} = profileData
 

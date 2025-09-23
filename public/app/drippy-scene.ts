@@ -121,13 +121,24 @@ export class DrippyScene extends Element {
 
 			if (isCanceled()) return
 
-			const allFabricMeses = [...fabricsByMesh.keys()]
+			// Create a map for mesh to meshes key since we are grouping meshes with the same material by '-'
+			const meshToFabricMeshesMap = new Map<string, string>()
+			for (const meshes of fabricsByMesh.keys()) {
+				const meshArray = meshes.split('-')
+				for (const mesh of meshArray) {
+					meshToFabricMeshesMap.set(mesh, meshes)
+				}
+			}
+
+			// Get all the meshes keys
+			const allFabricMeses = [...meshToFabricMeshesMap.keys()]
+
 			// Apply fabrics to meshes based on assignments
 			for (const mesh of meshes) {
-				const meshFabric = allFabricMeses.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
-
 				// Check if there's a specific fabric assigned to this mesh
-				const fabricToUse = fabricsByMesh.get(meshFabric || 'default')
+				const meshKey = allFabricMeses.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
+				const meshesKey = meshToFabricMeshesMap.get(meshKey)
+				const fabricToUse = fabricsByMesh.get(meshesKey || 'default')
 
 				if (fabricToUse) {
 					const textureSet = textureSetsByFabric.get(fabricToUse)
@@ -440,7 +451,7 @@ export class DrippyScene extends Element {
 
 		return html`
 			<show-when
-				condition=${() => store.isAdmin}
+				condition=${() => store.isAdmin && !store.turnOffSettingsInSpace}
 				content=${() => html`
 					<div
 						style="position: absolute; top: 1rem; left: 50%; z-index: 1000; background: transparent; border-radius: 8px; padding: 6px 8px; display: flex; flex-direction: column; gap: 4px; min-width: 60px; backdrop-filter: blur(4px);"
@@ -496,7 +507,7 @@ export class DrippyScene extends Element {
 						<lume-ambient-light visible="true" intensity="0.7" color="white"></lume-ambient-light>
 
 						<!-- a sphere to debug/visualize the env map -->
-						<lume-sphere visible="${() => store.isAdmin}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
+						<lume-sphere visible="${() => store.isAdmin && !store.turnOffSettingsInSpace}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
 
 						<lume-spot-light
 							visible="true"
