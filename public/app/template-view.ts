@@ -28,7 +28,7 @@ import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import '../onboarding/login-step.js'
-import {updateGarmentsInUrl} from '../routes.js'
+import {updateGarmentsInUrl, updateUrlWithParams} from '../routes.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './drip-it-button.js'
@@ -213,7 +213,7 @@ export class TemplateView extends Element {
 		store.resetSelectedTemplates()
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.delete('scene')
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		updateUrlWithParams(searchParams)
 		store.selectSpace = null
 		store.navigateTo = 'scene'
 	}
@@ -230,7 +230,7 @@ export class TemplateView extends Element {
 		// Update URL params and store
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('avatar', value)
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		updateUrlWithParams(searchParams)
 		store.selectAvatar = value
 
 		// Close avatar selection (chevron will auto-reset via prop)
@@ -256,7 +256,7 @@ export class TemplateView extends Element {
 		// Update URL params and store
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('pose', value)
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		updateUrlWithParams(searchParams)
 		store.selectPose = value
 
 		// Close pose selection
