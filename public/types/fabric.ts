@@ -21,6 +21,7 @@ export type FabricCategory =
 	| 'Striped'
 	| 'Polyester'
 	| 'Knit'
+	| string // for custom fabrics
 
 export type Fabric = {
 	_id: string

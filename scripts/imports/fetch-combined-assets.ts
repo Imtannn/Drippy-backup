@@ -3,6 +3,7 @@ import * as path from 'path'
 import * as https from 'https'
 import * as AWS from 'aws-sdk'
 import * as THREE from 'three'
+import sharp from 'sharp'
 
 type TODO = any
 
@@ -46,14 +47,18 @@ const BRAND_CONFIGS = [
 		brand: 'eliseF',
 		rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
 	},
+	{
+		brand: 'OOFYA',
+		rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
+	},
 	// {
 	// 	brand: 'baroudeuses',
 	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
 	// },
-	// {
-	// 	brand: 'moidien',
-	// 	rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
-	// },
+	{
+		brand: 'moidien',
+		rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
+	},
 	// Add more brands here as needed
 	// {
 	//   brand: 'another-brand',
@@ -117,11 +122,25 @@ function getDriveDownloadUrl(fileId: string): string {
 
 // Upload buffer to S3 and return the public URL
 async function uploadToS3(buffer: Buffer, key: string, contentType: string): Promise<string> {
+	let uploadBuffer = buffer
+	let uploadKey = key
+	let uploadContentType = contentType
+
+	if (contentType.startsWith('image/')) {
+		try {
+			uploadBuffer = await sharp(buffer).webp({lossless: true}).toBuffer()
+			uploadContentType = 'image/webp'
+			uploadKey = path.extname(uploadKey) ? uploadKey.replace(/\.[^./]+$/, '.webp') : `${uploadKey}.webp`
+		} catch (error) {
+			console.error('Error converting image to WebP:', error)
+		}
+	}
+
 	const params = {
 		Bucket: S3_BUCKET,
-		Key: key.replace(/ /g, '_'),
-		Body: buffer,
-		ContentType: contentType,
+		Key: uploadKey.replace(/ /g, '_'),
+		Body: uploadBuffer,
+		ContentType: uploadContentType,
 		ACL: 'public-read',
 	}
 
@@ -311,8 +330,19 @@ async function processTemplateFolder(
 		}
 	}
 
+	// Parse template name and price from folder name
+	const folderNameParts = templateFolder.name.split('-')
+	let templateName = normalizeName(templateFolder.name)
+	let templatePrice = 'N/A'
+
+	if (folderNameParts.length >= 2) {
+		templateName = normalizeName(folderNameParts[0].trim())
+		templatePrice = folderNameParts[1].trim()
+	}
+
 	const template = {
-		name: normalizeName(templateFolder.name),
+		name: templateName,
+		price: templatePrice,
 		category,
 		thumbUrl: templateS3Url,
 		materialId,
@@ -409,6 +439,7 @@ function generateTemplateData(processedData: TODO[], brand: string): TODO {
 			_id: idCounter.toString(),
 			thumb: template.thumbUrl,
 			name: template.name,
+			price: template.price,
 			avatar: 'Female',
 			category: template.category,
 			materialId: template.materialId,
@@ -496,6 +527,7 @@ function generateTemplatesFileContent(templates: TODO): string {
 		_id: '${template._id}',
 		thumb: '${template.thumb}',
 		name: '${template.name}',
+		price: '${template.price}',
 		avatar: '${template.avatar}',
 		category: '${template.category}',
 		materialId: '${template.materialId || ''}'${extraMaterialsString}
@@ -778,7 +810,7 @@ async function processExtraMaterialsFolder(extraMaterialsFolder: TODO): Promise<
 
 	console.log(`    Found ${meshFolders.length} mesh folders`)
 
-	const extraMaterials: {mesh: string; materialId: string}[] = []
+	const materialToMeshes: Map<string, string[]> = new Map()
 
 	for (const meshFolder of meshFolders) {
 		console.log(`    📁 Processing mesh folder: ${meshFolder.name}`)
@@ -814,11 +846,25 @@ async function processExtraMaterialsFolder(extraMaterialsFolder: TODO): Promise<
 
 		console.log(`      ✅ Mesh "${meshName}" -> Material "${materialId}"`)
 
+		const sanitizedMeshName = THREE.PropertyBinding.sanitizeNodeName(meshName)
+
+		// Group meshes by materialId
+		if (!materialToMeshes.has(materialId)) {
+			materialToMeshes.set(materialId, [])
+		}
+		materialToMeshes.get(materialId)!.push(sanitizedMeshName)
+	}
+
+	// Convert grouped materials to final format
+	const extraMaterials: {mesh: string; materialId: string}[] = []
+	materialToMeshes.forEach((meshes, materialId) => {
+		const combinedMeshKey = meshes.join('-')
+		console.log(`      🔗 Grouped material "${materialId}" -> meshes: "${combinedMeshKey}"`)
 		extraMaterials.push({
-			mesh: THREE.PropertyBinding.sanitizeNodeName(meshName),
+			mesh: combinedMeshKey,
 			materialId: materialId,
 		})
-	}
+	})
 
 	return extraMaterials
 }

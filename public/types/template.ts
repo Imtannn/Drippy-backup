@@ -20,6 +20,7 @@ export type Template = {
 	modelFile?: string // Optional since we're getting from blocks now
 	name: string
 	avatar: 'Male' | 'Female'
+	price?: string
 	category: TemplateCategory
 	materialId?: string // References fabric by "${materialName} ${category}" format
 	extraMaterials?: ExtraMaterial[]
