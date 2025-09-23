@@ -17,10 +17,8 @@ export class SpacesSelection extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
-		this.createEffect(() => {
-			const avatarGender = avatars.find(avatar => avatar.value === store.selectedAvatar)?.gender
-			this.filterdSpace = spaces.filter(space => space.gender === avatarGender)
-		})
+		// Show all spaces regardless of gender
+		this.filterdSpace = spaces
 	}
 
 	fadeOut(callback?: () => void) {
@@ -33,7 +31,19 @@ export class SpacesSelection extends Element {
 	#onSceneSelected = (space: Space) => {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('scene', space.slug)
+
+		// Check if we need to switch avatars based on gender
+		const currentAvatarGender = avatars.find(avatar => avatar.value === store.selectedAvatar)?.gender
+		if (currentAvatarGender !== space.gender && store.selectedAvatar) {
+			// Find the default avatar for the space's gender
+			const defaultAvatar = avatars.find(avatar => avatar.gender === space.gender && avatar.default)
+			if (defaultAvatar) {
+				store.selectAvatar = defaultAvatar.value
+				searchParams.set('avatar', defaultAvatar.value)
+			}
+		}
 		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+
 		store.selectSpace = space
 	}
 

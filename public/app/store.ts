@@ -14,6 +14,7 @@ export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.
 export const username = () => currentUser()?.username ?? ''
 export const dateOfBirth = () => currentUser()?.profile?.dateOfBirth ?? ''
 export const isAdmin = () => !!currentUser()?.profile?.isAdmin
+export const turnOffSettingsInSpace = () => !!currentUser()?.profile?.turnOffSettingsInSpace
 
 const pathname = location.pathname
 
@@ -46,6 +47,10 @@ export const store = createMutable({
 	},
 	get usersCount() {
 		return usersCount()
+	},
+
+	get turnOffSettingsInSpace() {
+		return turnOffSettingsInSpace()
 	},
 
 	// key is the block category, value is the block
