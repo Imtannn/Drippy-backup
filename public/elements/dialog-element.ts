@@ -30,7 +30,7 @@ export class DialogElement extends Element {
 		dialog.style.cssText = `
 			border: none;
 			border-radius: var(--borderRadius);
-			padding: var(--uiSpacingSmall);
+			padding: var(--uiSpacingLarge);
 			background: var(--uiColorPrimaryWhite);
 			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 			width: min(90vw, 400px);

@@ -79,20 +79,20 @@ export class LoginUI extends LumeElement {
 		observer.observe(loginForm, {
 			childList: true,
 			subtree: true,
-			attributes: false
+			attributes: false,
 		})
 
 		// Clean up observer when element is removed
 		const cleanup = () => observer.disconnect()
 		if (el.parentNode) {
-			const parentObserver = new MutationObserver((mutations) => {
-				mutations.forEach((mutation) => {
-					mutation.removedNodes.forEach((node) => {
+			const parentObserver = new MutationObserver(mutations => {
+				mutations.forEach(mutation => {
+					mutation.removedNodes.forEach(node => {
 						if (node === el) cleanup()
 					})
 				})
 			})
-			parentObserver.observe(el.parentNode, { childList: true })
+			parentObserver.observe(el.parentNode, {childList: true})
 		}
 
 		el.addEventListener(
@@ -216,6 +216,14 @@ export class LoginUI extends LumeElement {
 			display: contents;
 		}
 
+		#login-buttons-google,
+		#login-email,
+		#login-password {
+			color: var(--uiColorPrimaryBlack) !important;
+			background-color: var(--uiColorPrimaryWhite) !important;
+			border: var(--borderWidth) solid var(--uiColorLightGrey) !important;
+		}
+
 		#loginButtons {
 			user-select: none;
 			display: block;
@@ -261,7 +269,7 @@ export class LoginUI extends LumeElement {
 
 				.login-button {
 					margin-bottom: var(--uiSpacingTiny);
-					border-radius: var(--borderRadiusSmall);
+					border-radius: var(--borderRadiusXxl);
 					background-color: var(--uiColorPrimaryBlack);
 					color: var(--uiColorPrimaryWhite);
 					font-weight: var(--fontWeightSemiBold);
@@ -289,13 +297,11 @@ export class LoginUI extends LumeElement {
 					width: 100%;
 					height: var(--uiSpacingXl);
 					padding: var(--uiGapSmall);
-					border-radius: var(--borderRadius);
+					border-radius: var(--borderRadiusXxl);
 					font-size: var(--fontSizeTextSm);
 					margin-bottom: var(--uiGap);
 					box-sizing: border-box;
 					background: #f8f8f8;
-					border: var(--borderWidth) solid #ccc;
-					color: #333;
 					transition: var(--transitionSlow);
 					pointer-events: auto;
 
