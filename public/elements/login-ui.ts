@@ -69,6 +69,32 @@ export class LoginUI extends LumeElement {
 		// Set placeholders after Blaze renders the inputs
 		setTimeout(setPlaceholders, 100)
 
+		// Watch for changes in the login form and re-apply placeholders
+		const observer = new MutationObserver(() => {
+			setTimeout(setPlaceholders, 50)
+		})
+
+		// Observe changes to the login form
+		const loginForm = el.querySelector('#loginButtons') || el
+		observer.observe(loginForm, {
+			childList: true,
+			subtree: true,
+			attributes: false
+		})
+
+		// Clean up observer when element is removed
+		const cleanup = () => observer.disconnect()
+		if (el.parentNode) {
+			const parentObserver = new MutationObserver((mutations) => {
+				mutations.forEach((mutation) => {
+					mutation.removedNodes.forEach((node) => {
+						if (node === el) cleanup()
+					})
+				})
+			})
+			parentObserver.observe(el.parentNode, { childList: true })
+		}
+
 		el.addEventListener(
 			'click',
 			event => {
