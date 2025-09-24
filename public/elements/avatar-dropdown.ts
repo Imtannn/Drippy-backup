@@ -1,6 +1,6 @@
 import {booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
-import {avatars} from '../consts/avatars.js'
 import {store} from '../app/store.js'
+import {avatars} from '../consts/avatars.js'
 
 type AvatarDropdownAttributes = 'open'
 
@@ -25,26 +25,24 @@ export class AvatarDropdown extends Element {
 	}
 
 	#onAvatarDropdownClick = () => {
-		this.dispatchEvent(new CustomEvent('avatar-dropdown-click', {
-			bubbles: true,
-			detail: {}
-		}))
+		this.dispatchEvent(
+			new CustomEvent('avatar-dropdown-click', {
+				bubbles: true,
+				composed: true,
+				detail: {
+					isOpening: !this.open, // Will be opening if currently closed
+				},
+			}),
+		)
 	}
 
 	template = () => html`
-		<div class="avatar-container">
+		<div class="avatar-container" onclick=${this.#onAvatarDropdownClick}>
 			<div class="avatar-image-wrapper">
 				<img src=${() => this.currentAvatarThumbnail} alt="Avatar" class="avatar-image" />
 			</div>
-			<button
-				class="avatar-dropdown-btn"
-				classList=${{active: () => this.open}}
-				onclick=${this.#onAvatarDropdownClick}
-			>
-				<img
-					src=${() => (this.open ? '/images/chevron-up-violet.svg' : '/images/chevron-down.svg')}
-					alt="Dropdown"
-				/>
+			<button class="avatar-dropdown-btn" classList=${{active: () => this.open}}>
+				<img src=${() => (this.open ? '/images/chevron-up-violet.svg' : '/images/chevron-down.svg')} alt="Dropdown" />
 			</button>
 		</div>
 	`
