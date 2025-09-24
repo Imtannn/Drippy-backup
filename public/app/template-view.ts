@@ -2,29 +2,40 @@ import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import {fabrics} from '../consts/fabrics.js'
 import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import {templates} from '../consts/templates.js'
+import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Block} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import {blockManager} from './block-manager.js'
-import {store} from './store.js'
+import {currentUser, store} from './store.js'
 import {textureManager} from './texture-manager.js'
 
 import '../elements/animation-select.js'
+import '../elements/avatar-dropdown.js'
 import '../elements/back-button.js'
+import '../elements/bottom-navigation.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
+import '../elements/dialog-element.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
+import '../elements/login-ui.js'
 import '../elements/logo-button.js'
+import '../elements/nav-items.js'
 import '../elements/person-button.js'
+import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
+import '../onboarding/login-step.js'
+import {updateGarmentsInUrl, updateUrlWithParams} from '../routes.js'
 import './app-buttons.js'
+import './avatar-selection.js'
 import './drip-it-button.js'
 import './item-card.js'
 import '../elements/placeholder-image.js'
 import {formatNumber} from '../utils.js'
+import './pose-selection.js'
 
 type TemplateViewAttributes = keyof {}
 
@@ -35,11 +46,20 @@ export class TemplateView extends Element {
 	@signal selectedTab: TemplateCategory | null = null
 	@signal templateCategories: Record<TemplateCategory, Template[]> = {} as Record<TemplateCategory, Template[]>
 	@signal spaceCollection: string | null = null
+	@signal showLoginDialog = false
+	@signal showLoginForm = false
+	@signal showAvatarSelection = false
+	@signal showPoseSelection = false
 
 	private defaultCollection = 'moidien'
 
 	connectedCallback() {
 		super.connectedCallback()
+
+		// Listen for login form events on document (since dialog content is moved to document.body)
+		document.addEventListener('show-login-form', () => {
+			this.showLoginForm = true
+		})
 
 		this.createEffect(() => {
 			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
@@ -77,6 +97,53 @@ export class TemplateView extends Element {
 				this.selectedTab = categories[0] as TemplateCategory
 			}
 		})
+
+		// Handle successful login - close dialog
+		this.createEffect(() => {
+			const user = currentUser()
+			// If user just logged in (not null and not undefined) and login dialog was open
+			if (user !== null && user !== undefined && this.showLoginDialog) {
+				this.showLoginDialog = false
+				this.showLoginForm = false
+			}
+		})
+
+		// Update URL when garments change
+		this.createEffect(() => {
+			const selectedTemplates = store.selectedTemplates
+			updateGarmentsInUrl(selectedTemplates)
+		})
+
+		// Convert templates to blocks for 3D rendering
+		this.createEffect(() => {
+			const selectedTemplates = store.selectedTemplates
+			if (selectedTemplates.size > 0) {
+				this.#convertTemplatesToBlocks()
+			}
+		})
+	}
+
+	#convertTemplatesToBlocks = async () => {
+		// Get blocks for ALL selected templates, organized by template category
+		const templateBlockData: {
+			blocks: Block[]
+			templateCategory: TemplateCategory
+			materialId: string
+			extraMaterials?: {mesh: string; materialId: string}[]
+		}[] = []
+
+		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
+			const templateBlocks = getBlocksForTemplate(selectedTemplate, store.selectedSpace?.collection)
+			templateBlockData.push({
+				blocks: templateBlocks,
+				templateCategory: templateCategory,
+				materialId: selectedTemplate.materialId ?? '',
+				extraMaterials: selectedTemplate.extraMaterials,
+			})
+		}
+
+		// Replace blocks with aggregated blocks from all selected templates
+		store.replaceSelectedBlocks = templateBlockData
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -127,38 +194,74 @@ export class TemplateView extends Element {
 			}
 		}
 
-		// Get blocks for ALL selected templates, organized by template category
-		const templateBlockData: {
-			blocks: Block[]
-			templateCategory: TemplateCategory
-			materialId: string
-			extraMaterials?: {mesh: string; materialId: string}[]
-		}[] = []
-		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
-			const templateBlocks = getBlocksForTemplate(selectedTemplate, store.selectedSpace?.collection)
-			templateBlockData.push({
-				blocks: templateBlocks,
-				templateCategory: templateCategory,
-				materialId: selectedTemplate.materialId ?? '',
-				extraMaterials: selectedTemplate.extraMaterials,
-			})
-		}
-
-		// Replace blocks with aggregated blocks from all selected templates
-		store.replaceSelectedBlocks = templateBlockData
+		// Convert templates to blocks (this will be handled by the effect automatically)
+		// The effect will trigger since we modified store.selectedTemplates above
 	}
 
 	#onDripItClick = () => {
-		store.navigateTo = 'blocks'
+		const user = currentUser()
+		// If undefined, means the user is still loading
+		if (user === undefined) return
+
+		if (user !== null) {
+			store.navigateTo = 'blocks'
+		} else {
+			this.showLoginDialog = true
+		}
 	}
 
 	#onBackButtonClick = () => {
 		store.resetSelectedTemplates()
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.delete('scene')
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		updateUrlWithParams(searchParams)
 		store.selectSpace = null
 		store.navigateTo = 'scene'
+	}
+
+	#onAvatarDropdownClick = () => {
+		this.showAvatarSelection = !this.showAvatarSelection
+	}
+
+	#onAvatarSaveClick = () => {
+		// Save the temp selected avatar to the confirmed selection
+		const value = store.tempSelectedAvatar
+		if (!value) return
+
+		// Update URL params and store
+		const searchParams = new URLSearchParams(window.location.search)
+		searchParams.set('avatar', value)
+		updateUrlWithParams(searchParams)
+		store.selectAvatar = value
+
+		// Close avatar selection (chevron will auto-reset via prop)
+		this.showAvatarSelection = false
+	}
+
+	#onNavTabChange = (e: CustomEvent) => {
+		const tab = e.detail.tab
+		if (tab === 'pose') {
+			this.showPoseSelection = true
+			this.showAvatarSelection = false
+		} else {
+			this.showPoseSelection = false
+			this.showAvatarSelection = false
+		}
+	}
+
+	#onPoseSaveClick = () => {
+		// Save the temp selected pose to the confirmed selection
+		const value = store.tempSelectedPose
+		if (!value) return
+
+		// Update URL params and store
+		const searchParams = new URLSearchParams(window.location.search)
+		searchParams.set('pose', value)
+		updateUrlWithParams(searchParams)
+		store.selectPose = value
+
+		// Close pose selection
+		this.showPoseSelection = false
 	}
 
 	template = () => html`
@@ -185,16 +288,37 @@ export class TemplateView extends Element {
 
 		<app-buttons-right layout="bottom">
 			<app-buttons-group>
-				<drip-it-button
-					button-disabled=${() => store.selectedTemplates.size === 0}
-					onclick=${this.#onDripItClick}
-				></drip-it-button>
+				<show-when
+					condition=${() => this.showAvatarSelection}
+					content=${() => html`<save-button onclick=${this.#onAvatarSaveClick}></save-button>`}
+				></show-when>
+				<show-when
+					condition=${() => this.showPoseSelection}
+					content=${() => html`<save-button onclick=${this.#onPoseSaveClick}></save-button>`}
+				></show-when>
+				<show-when
+					condition=${() => !this.showAvatarSelection && !this.showPoseSelection}
+					content=${() => html`
+						<drip-it-button
+							button-disabled=${() => store.selectedTemplates.size === 0}
+							onclick=${this.#onDripItClick}
+						></drip-it-button>
+					`}
+				></show-when>
 			</app-buttons-group>
 		</app-buttons-right>
 
 		<bottom-sheet>
 			<show-when
-				condition=${() => this.selectedTab !== null}
+				condition=${() => this.showAvatarSelection}
+				content=${() => html`<avatar-selection content-only></avatar-selection>`}
+			></show-when>
+			<show-when
+				condition=${() => this.showPoseSelection}
+				content=${() => html`<pose-selection content-only></pose-selection>`}
+			></show-when>
+			<show-when
+				condition=${() => !this.showAvatarSelection && !this.showPoseSelection && this.selectedTab !== null}
 				content=${() => html`
 					<tabs-provider
 						default-value=${() => this.selectedTab}
@@ -261,10 +385,46 @@ export class TemplateView extends Element {
 					</tabs-provider>
 				`}
 			></show-when>
+			<bottom-navigation>
+				<avatar-dropdown
+					open=${() => this.showAvatarSelection}
+					onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+				></avatar-dropdown>
+				<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+			</bottom-navigation>
 		</bottom-sheet>
+
+		<dialog-element
+			open=${() => this.showLoginDialog}
+			onclose=${() => {
+				this.showLoginDialog = false
+				this.showLoginForm = false
+			}}
+		>
+			<show-when condition=${() => !this.showLoginForm} content=${() => html`<login-step></login-step>`}></show-when>
+			<show-when
+				condition=${() => this.showLoginForm}
+				content=${() => html`
+					<div style="display: flex; justify-content: center; align-items: flex-start; width: 100%; height: 100%;">
+						<login-ui expanded style="position: relative;"></login-ui>
+					</div>
+					<style>
+						#login-dropdown-list {
+							position: relative;
+							top: -200px;
+						}
+						.accounts-dialog {
+							position: relative;
+							transform: none;
+						}
+					</style>
+				`}
+			></show-when>
+		</dialog-element>
 	`
 
 	css = css/*css*/ `
+		${onboardingStyles}
 		:host {
 			display: contents;
 		}
@@ -289,6 +449,13 @@ export class TemplateView extends Element {
 			padding-top: 0;
 			padding-bottom: 5px;
 			background: var(--uiColorPrimaryWhite);
+		}
+
+		/* Add bottom padding on desktop to prevent content hiding behind navigation */
+		@media (min-width: 768px) {
+			.tabs-content-container {
+				padding-bottom: 80px;
+			}
 		}
 
 		.items-grid {

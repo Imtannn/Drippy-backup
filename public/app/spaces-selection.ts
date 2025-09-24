@@ -5,6 +5,7 @@ import {spaces} from '../consts/spaces.js'
 import '../elements/placeholder-image.js'
 import type {Space} from '../types/types.js'
 import {store} from './store.js'
+import {updateUrlWithParams} from '../routes.js'
 
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
@@ -43,8 +44,7 @@ export class SpacesSelection extends Element {
 				searchParams.set('avatar', defaultAvatar.value)
 			}
 		}
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
-
+		updateUrlWithParams(searchParams)
 		store.selectSpace = space
 	}
 
@@ -65,7 +65,7 @@ export class SpacesSelection extends Element {
 						<!-- Bloom Realm Card -->
 						<div class="space-card">
 							<div class="scene-preview">
-								<div class="scene-placeholder">
+								<div class="scene-placeholder" onclick=${() => this.#onSceneSelected(space())}>
 									<placeholder-image src=${space().sceneThumbnail} alt="Bloom Realm Scene" object-fit="cover" />
 								</div>
 								<div class="garments-count">${space().garmentsCount} garments</div>
@@ -276,6 +276,7 @@ export class SpacesSelection extends Element {
 			object-fit: cover;
 			object-position: center;
 			border-radius: var(--borderRadiusLarge);
+			cursor: pointer;
 		}
 
 		.garments-count {

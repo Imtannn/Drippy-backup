@@ -1,7 +1,42 @@
 import {attribute, css, Element, element, html, signal} from 'lume'
 import {store} from '../app/store.js'
 import {avatars} from '../consts/avatars.js'
+import {fabrics} from '../consts/fabrics.js'
+import type {TemplateCategory} from '../types/template.js'
+import type {Block, BlockCategory} from '../types/block.js'
+// import type {Fabric} from '../types/fabric.js'
 
+const block3DLanding = {
+	male: [],
+	female: [
+		{
+			_id: '14',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455..gltf',
+			blockName: 'bodice 1455',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 8',
+			templateName: 'Item 8',
+			templateCategory: 'Shirt',
+		},
+		{
+			_id: '15',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Pants/Item_7_Pants/pants_130.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Pants/Item_7_Pants/pants_130..gltf',
+			blockName: 'pants 130',
+			avatar: 'Female',
+			category: 'Pants',
+			templateId: 'Item 7',
+			templateName: 'Item 7',
+			templateCategory: 'Pants',
+		},
+	],
+}
 interface AvatarOption {
 	value: string
 	label: string
@@ -73,14 +108,87 @@ export class AvatarSelector extends Element {
 		if (!store.selectedAvatar && !store.tempSelectedAvatar) {
 			const maleAvatarValue = this.findAvatarByGender('male')
 			if (maleAvatarValue) {
-				console.log('👨 Setting default male avatar:', maleAvatarValue)
-
-				// Set vào store
 				store.setTempSelectedAvatar = maleAvatarValue
 				store.selectAvatar = maleAvatarValue
-
-				console.log('✅ Default male avatar set successfully')
 			}
+		}
+	}
+
+	private setBlocksForGender(gender: 'male' | 'female') {
+		try {
+			const genderBlocks = block3DLanding[gender]
+
+			if (!genderBlocks || genderBlocks.length === 0) {
+				return
+			}
+
+			const shirtBlock = genderBlocks.find(block => block.templateCategory === 'Shirt' && block.category === 'Bodice')
+
+			const pantsBlock = genderBlocks.find(block => block.templateCategory === 'Pants' && block.category === 'Pants')
+
+			console.log(`👕 Found Shirt block for ${gender}:`, shirtBlock)
+			console.log(`👖 Found Pants block for ${gender}:`, pantsBlock)
+
+			// Check if blocks already exist
+			const existingShirt = store.selectedBlocks.get('Shirt')?.get('Bodice')
+			const existingPants = store.selectedBlocks.get('Pants')?.get('Pants')
+
+			// Only set if not already set
+			const blockData = []
+
+			if (shirtBlock && !existingShirt) {
+				blockData.push({
+					block: shirtBlock as Block,
+					templateCategory: 'Shirt' as TemplateCategory,
+				})
+			}
+
+			if (pantsBlock && !existingPants) {
+				blockData.push({
+					block: pantsBlock as Block,
+					templateCategory: 'Pants' as TemplateCategory,
+				})
+			}
+
+			if (blockData.length > 0) {
+				store.setSelectedBlocks = blockData
+				this.setDefaultFabricsForGender(gender)
+			} else {
+				console.log(`ℹ️ No new blocks to set for ${gender} avatar (already exist or none found)`)
+			}
+		} catch (error) {
+			console.error(`❌ Error setting blocks for ${gender}:`, error)
+		}
+	}
+
+	private setDefaultFabricsForGender(gender: 'male' | 'female') {
+		try {
+			const collection = store.selectedSpace?.collection ?? 'moidien'
+			const availableFabrics = fabrics[collection] || []
+
+			const fabricData = []
+
+			if (gender === 'female') {
+				const pantsFabric = availableFabrics.find(
+					f => f.materialName === 'Black' && f.category === 'Cotton' && f.templateCategories?.includes('Pants'),
+				)
+
+				if (pantsFabric) {
+					fabricData.push({
+						fabric: pantsFabric,
+						blockCategory: 'Pants' as BlockCategory,
+						templateCategory: 'Pants' as TemplateCategory,
+					})
+				}
+			}
+
+			if (fabricData.length > 0) {
+				store.setSelectedFabrics = fabricData
+			} else {
+				console.log(`ℹ️ No fabrics to set for ${gender} avatar`)
+			}
+		} catch (error) {
+			console.error(`❌ Error setting fabrics for ${gender}:`, error)
 		}
 	}
 
@@ -242,6 +350,9 @@ export class AvatarSelector extends Element {
 		if (avatarValue) {
 			store.setTempSelectedAvatar = avatarValue
 			store.selectAvatar = avatarValue
+
+			// Set default blocks cho gender được chọn
+			this.setBlocksForGender(option.gender)
 		}
 
 		// Update target model if specified

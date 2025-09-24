@@ -6,7 +6,11 @@ import '../routes.js' // track page visits
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
-
+import '../app/drippy-scene.js'
+import {store} from '../app/store.js'
+import type {Fabric} from '../types/fabric.js'
+import type {TemplateCategory} from '../types/template.js'
+import type {BlockCategory} from '../types/block.js'
 // Show video loading initially
 function showVideoLoading() {
 	const videoLoadingElement = html`<video-loading></video-loading>`
@@ -22,6 +26,34 @@ function hideVideoLoading(videoLoadingElement: any) {
 }
 const [isYearlyActive, setIsYearlyActive] = createSignal(true)
 
+// Handle material click to set selectedFabrics
+function handleMaterialClick(material: (typeof materials)[0]) {
+	const fabricData = []
+	// Convert material to Fabric format
+	const fabric: Fabric = {
+		_id: material.id,
+		thumb: material.thumb,
+		normal: material.normal,
+		baseColor: material.baseColor,
+		displacement: material.displacement,
+		roughness: material.roughness,
+		alpha: material.alpha,
+		materialName: material.materialName,
+		category: material.category as Fabric['category'],
+		templateCategories: material.templateCategories,
+	}
+
+	// Set fabric for Shirt template and Bodice block category
+	fabricData.push({
+		fabric: fabric,
+		blockCategory: 'Bodice' as BlockCategory,
+		templateCategory: 'Shirt' as TemplateCategory,
+	})
+	if (fabricData.length > 0) {
+		store.setSelectedFabrics = fabricData
+	}
+}
+
 // Hide the loading cover
 // const loadingCover = document.getElementById('loadingCover')
 // console.log('loadingCover', loadingCover)
@@ -34,10 +66,60 @@ const blingImage1 = new URL('../images/landing/bling-1.png', import.meta.url).hr
 const blingImage2 = new URL('../images/landing/bling-2.png', import.meta.url).href
 const blingImage3 = new URL('../images/landing/bling-3.png', import.meta.url).href
 const modelImage1 = new URL('../images/landing/model-1.png', import.meta.url).href
-const modelImage2 = new URL('../images/landing/model-2.png', import.meta.url).href
-const matImage1 = new URL('../images/landing/mat-1.png', import.meta.url).href
-const matImage2 = new URL('../images/landing/mat-2.png', import.meta.url).href
-const matImage3 = new URL('../images/landing/mat-3.png', import.meta.url).href
+
+// Materials data
+const materials = [
+	{
+		id: '5',
+		thumb:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_RENDER.png',
+		normal:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_NORMAL.jpg',
+		baseColor:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_BASE.jpg',
+		displacement:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_DISPLACE.jpg',
+		roughness:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_ROUGH.jpg',
+		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/SEERSUCKER+FABRIC+-+OPACITY.jpg',
+		materialName: 'Black',
+		category: 'Seersucker Fabric',
+		templateCategories: ['Shirt'],
+	},
+	{
+		id: '6',
+		thumb:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_RENDER.png',
+		normal:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_NORMAL.jpg',
+		baseColor:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_BASE.jpg',
+		displacement:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_DISPLACE.jpg',
+		roughness:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_ROUGH.jpg',
+		materialName: 'White',
+		category: 'Cotton',
+		templateCategories: ['Shirt'],
+	},
+	{
+		id: '7',
+		thumb:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_RENDER.png',
+		normal:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_NORMAL.jpg',
+		baseColor:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_BASE.jpg',
+		displacement:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_DISPLACE.jpg',
+		roughness:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_ROUGH.jpg',
+		materialName: 'Navy',
+		category: 'Crinkle Fabric',
+		templateCategories: ['Shirt'],
+	},
+]
+
 const stepImage1 = new URL('../images/landing/step-1.png', import.meta.url).href
 
 const cta__background = new URL('../images/landing/cta-background.png', import.meta.url).href
@@ -244,21 +326,29 @@ const mainContent = html`
 									<div class="showcase__item">
 										<div class="showcase__background">
 											<div class="showcase__controls">
-												<div class="showcase__avatar-option">
-													<img src=${matImage1} alt="Material option 1 for customization" />
-												</div>
-												<div class="showcase__avatar-option">
-													<img src=${matImage2} alt="Material option 2 for customization" />
-												</div>
-												<div class="showcase__avatar-option">
-													<img src=${matImage3} alt="Material option 3 for customization" />
-												</div>
+												${materials.map(
+													material => html`
+														<div
+															class="showcase__avatar-option"
+															data-material-id=${material.id}
+															onclick=${() => handleMaterialClick(material)}
+														>
+															<img src=${material.thumb} alt=${material.materialName} />
+														</div>
+													`,
+												)}
 											</div>
 
 											<avatar-selector target-model=".showcase__avatar-model" class="showcase__selector"></avatar-selector>
 
-											<div class="showcase__model-display">
-												<img class="showcase__model" src="${modelImage2}" alt="3D avatar model with interactive controls" />
+											<div class="showcase__model-center">
+												<drippy-scene
+													class="showcase__model"
+													selected-space=${() => store.selectedSpace}
+													selected-avatar=${() => store.selectedAvatar}
+													selected-fabrics=${() => store.selectedFabrics}
+													selected-blocks=${() => store.selectedBlocks}
+												></drippy-scene>
 											</div>
 											<div class="showcase__label text-xs">Interactive 3D with avatars</div>
 										</div>
@@ -320,7 +410,7 @@ const mainContent = html`
 												</div>
 												<div class="feature__content">
 													<p class="feature__title text-md-1">Turn store into a playground</p>
-													<p class="feature__description text-sm">Let shoppers explore 3D spaces, remix designs, styled avatars.</p>
+													<p class="feature__description text-md">Let shoppers explore 3D spaces, remix designs, styled avatars.</p>
 												</div>
 											</div>
 										</div>
@@ -333,7 +423,7 @@ const mainContent = html`
 												</div>
 												<div class="feature__content">
 													<div class="feature__title text-md-1">Sell what people want</div>
-													<p class="feature__description text-sm">
+													<p class="feature__description text-md">
 														Collect payments and orders directly - Fulfill on made-to-order basis.
 													</p>
 												</div>
@@ -348,7 +438,7 @@ const mainContent = html`
 												</div>
 												<div class="feature__content">
 													<div class="feature__title text-md-1">Collect powerful insights</div>
-													<p class="feature__description text-sm">Get real-time signals on what to produce — no more guesswork.</p>
+													<p class="feature__description text-md">Get real-time signals on what to produce — no more guesswork.</p>
 												</div>
 											</div>
 										</div>
@@ -361,7 +451,7 @@ const mainContent = html`
 												</div>
 												<div class="feature__item--fourth">
 													<div class="feature__title text-md-1">Build &amp; grow community</div>
-													<p class="feature__description text-sm">
+													<p class="feature__description text-md">
 														Host in-app challenges that turn your audience into fans &amp; co-creators
 													</p>
 												</div>
@@ -384,6 +474,7 @@ const mainContent = html`
 								<div class="section-subtitle text-md-2">Here&#39;s how it work from your shoppers' POV.</div>
 							</div>
 
+							<div class="how-it-works__content">
 								<div class="how-it-works__grid">
 									${steps.map(
 										(step: any) => html`
@@ -396,7 +487,8 @@ const mainContent = html`
 											</div>
 										`,
 									)}
-									</div>
+								</div>
+							</div>
 
 							<div class="hero__actions">
 								<custom-button variant="secondary">See it live</custom-button>
@@ -554,35 +646,7 @@ const mainContent = html`
 										</div>
 										<button class="pricing__button--pro"><div class="pricing__plan-button-text">Start free trial</div></button>
 									</div>
-									<div class="pricing__plan--digitize pricing__plans--item">
-										<div class="pricing__plan-content">
-											<div class="pricing__plan-header">
-												<div class="pricing__plan-name text-md">Digitize packs</div>
-												<div class="pricing__plan-price text-md">One-time</div>
-											</div>
-											<div class="pricing__features-list--digitize">
-												<p class="pricing__plan-price">
-													<span class="interactive__title text-md">Kickoff: </span>
-													<span class="pricing__plan-period text-md">12 garments → </span>
-													<span class="interactive__title text-md">€420/pack </span>
-													<span class="pricing__plan-period text-md">(€40/garment) <br /></span>
-												</p>
-												<p class="pricing__plan-price">
-													<span class="interactive__title text-md">Growth: </span>
-													<span class="pricing__plan-period text-md">24 garments → </span>
-													<span class="interactive__title text-md">€840/pack</span>
-													<span class="pricing__plan-period text-md"> (€35/garment) <br /></span>
-												</p>
-												<p class="pricing__plan-price">
-													<span class="interactive__title text-md">Scale: </span>
-													<span class="pricing__plan-period text-md">36 garments → </span>
-													<span class="interactive__title text-md">€1050/pack </span>
-													<span class="pricing__plan-period text-md">(€30/garment) </span>
-												</p>
-											</div>
-										</div>
-										<button class="pricing__button--digitize"><div class="hero__button-text">Get started</div></button>
-									</div>
+
 								</div>
 							</div>
 						</section>
@@ -772,6 +836,7 @@ function initGenericCarousel(config: {
 	containerSelector: string
 	minWidth: number
 	maxWidth: number
+	itemWidth: number
 }) {
 	const track = document.querySelector(config.trackSelector) as HTMLElement
 	const items = document.querySelectorAll(config.itemSelector) as NodeListOf<HTMLElement>
@@ -779,7 +844,7 @@ function initGenericCarousel(config: {
 
 	if (!track || !items.length || !container) return
 
-	let activeIndex = 1
+	let activeIndex = 0
 	let startX = 0
 	let isDragging = false
 	let isActive = false
@@ -790,23 +855,41 @@ function initGenericCarousel(config: {
 		clearTimeout(resizeTimeout)
 		resizeTimeout = setTimeout(() => {
 			const wasActive = isActive
-			isActive = window.innerWidth >= config.minWidth && window.innerWidth <= config.maxWidth
+			const currentWidth = window.innerWidth
+			isActive = currentWidth >= config.minWidth && currentWidth <= config.maxWidth
+
+			console.log(`Screen check for ${config.containerSelector}:`, {
+				currentWidth,
+				minWidth: config.minWidth,
+				maxWidth: config.maxWidth,
+				wasActive,
+				isActive,
+				willChange: wasActive !== isActive,
+			})
 
 			if (wasActive !== isActive) {
 				if (isActive) {
 					container.classList.add('carousel')
 					items.forEach(item => {
 						item.classList.add('carousel-item')
+						// Set item width dynamically
+						item.style.width = `${config.itemWidth}px`
+						item.style.flex = `0 0 ${config.itemWidth}px`
 					})
 
 					if (container.classList.contains('carousel') && document.querySelectorAll('.carousel-item').length > 0) {
 						addEventListeners()
+						// Initialize with first item centered
+						activeIndex = 0
 						updateCarousel()
 					}
 				} else {
 					container.classList.remove('carousel')
 					items.forEach(item => {
 						item.classList.remove('carousel-item')
+						// Reset item width to default
+						item.style.width = ''
+						item.style.flex = ''
 					})
 
 					removeEventListeners()
@@ -817,11 +900,39 @@ function initGenericCarousel(config: {
 	}
 
 	function resetCarousel() {
-		track.style.transform = 'translateX(0)'
-		items.forEach((item, i) => {
-			item.classList.toggle('active', i === 1)
-		})
-		activeIndex = 1
+		// Reset to first item with smart positioning
+		activeIndex = 0
+
+		if (isActive && container.classList.contains('carousel')) {
+			// Only apply carousel positioning when carousel is active
+			const containerWidth = container.offsetWidth
+			const itemWidth = config.itemWidth + 32 // item width + gap
+			const totalItems = items.length
+			let offset = 0
+
+			if (activeIndex === 0) {
+				// First item: align to left with small padding
+				offset = 20
+			} else if (activeIndex === totalItems - 1) {
+				// Last item: align to right with small padding
+				offset = -(activeIndex * itemWidth) + (containerWidth - itemWidth - 20)
+			} else {
+				// Middle items: center the active item
+				const centerOffset = (containerWidth - itemWidth) / 2
+				offset = -(activeIndex * itemWidth) + centerOffset
+			}
+
+			track.style.transform = `translateX(${offset}px)`
+			items.forEach((item, i) => {
+				item.classList.toggle('active', i === activeIndex)
+			})
+		} else {
+			// When carousel is not active, reset to default state
+			track.style.transform = 'translateX(0)'
+			items.forEach(item => {
+				item.classList.remove('active')
+			})
+		}
 	}
 
 	function updateCarousel() {
@@ -832,7 +943,24 @@ function initGenericCarousel(config: {
 		)
 			return
 
-		const offset = -(activeIndex - 1) * (320 + 32) // Using same dimensions as pricing carousel
+		// Calculate offset with smart positioning
+		const containerWidth = container.offsetWidth
+		const itemWidth = config.itemWidth + 32 // item width + gap
+		const totalItems = items.length
+		let offset = 0
+
+		if (activeIndex === 0) {
+			// First item: align to left with small padding
+			offset = 20
+		} else if (activeIndex === totalItems - 1) {
+			// Last item: align to right with small padding
+			offset = -(activeIndex * itemWidth) + (containerWidth - itemWidth - 20)
+		} else {
+			// Middle items: center the active item
+			const centerOffset = (containerWidth - itemWidth) / 2
+			offset = -(activeIndex * itemWidth) + centerOffset
+		}
+
 		track.style.transform = `translateX(${offset}px)`
 
 		items.forEach((item, i) => {
@@ -910,10 +1038,42 @@ function initGenericCarousel(config: {
 		eventListeners = []
 	}
 
+	// Force check screen size immediately
 	checkScreenSize()
+
+	// Also check after a short delay to ensure DOM is ready
+	setTimeout(() => {
+		checkScreenSize()
+	}, 200)
+
+	// Expose force deactivate function for debugging
+	;(window as any).forceDeactivateCarousel = () => {
+		container.classList.remove('carousel')
+		items.forEach(item => {
+			item.classList.remove('carousel-item')
+		})
+		removeEventListeners()
+		track.style.transform = 'translateX(0)'
+		items.forEach(item => {
+			item.classList.remove('active')
+		})
+		isActive = false
+	}
 
 	window.addEventListener('resize', resizeHandler, {passive: true})
 }
+
+// Initialize carousel for how it work section
+setTimeout(() => {
+	initGenericCarousel({
+		trackSelector: '.how-it-works__grid',
+		itemSelector: '.how-it-works__item',
+		containerSelector: '.how-it-works__content',
+		minWidth: 480,
+		maxWidth: 830,
+		itemWidth: 230,
+	})
+}, 150)
 
 // Initialize carousel for Platform section
 setTimeout(() => {
@@ -921,17 +1081,19 @@ setTimeout(() => {
 		trackSelector: '.platform__grid',
 		itemSelector: '.platform__card',
 		containerSelector: '.platform__content',
-		minWidth: 430,
+		minWidth: 480,
 		maxWidth: 830,
+		itemWidth: 350,
 	})
-}, 200)
+}, 150)
 // Initialize carousel for Pricing section
 setTimeout(() => {
 	initGenericCarousel({
 		trackSelector: '.pricing__plans',
 		itemSelector: '.pricing__plans--item',
 		containerSelector: '.pricing__content',
-		minWidth: 430,
+		minWidth: 480,
 		maxWidth: 830,
+		itemWidth: 350,
 	})
-}, 200)
+}, 150)
