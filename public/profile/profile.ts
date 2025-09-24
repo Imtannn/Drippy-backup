@@ -4,7 +4,7 @@ import {Meteor} from 'meteor/meteor'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../routes.js' // track page visits
-import {dateOfBirth, username} from '../app/store.js'
+import {dateOfBirth, username, turnOffSettingsInSpace, isAdmin} from '../app/store.js'
 
 export type UserProfileAttributes = keyof {} // no attributes yet
 
@@ -22,10 +22,14 @@ export class UserProfile extends Element {
 
 	@signal username = ''
 
+	@signal turnOffSettingsInSpace = false
+
 	connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => (this.username = username()))
+
+		this.createEffect(() => (this.turnOffSettingsInSpace = turnOffSettingsInSpace()))
 
 		// Hide the loading cover
 		const loadingCover = document.getElementById('loadingCover')!
@@ -35,7 +39,11 @@ export class UserProfile extends Element {
 	}
 
 	#saveChanges() {
-		Meteor.call('users.updateProfile', {username: this.username, dateOfBirth: dateOfBirth()})
+		Meteor.call('users.updateProfile', {
+			username: this.username,
+			dateOfBirth: dateOfBirth(),
+			turnOffSettingsInSpace: this.turnOffSettingsInSpace,
+		})
 
 		this.editing = false
 	}
@@ -43,6 +51,7 @@ export class UserProfile extends Element {
 	#cancel() {
 		// Reset to current username
 		this.username = username()
+		this.turnOffSettingsInSpace = turnOffSettingsInSpace()
 		this.editing = false
 	}
 
@@ -76,16 +85,36 @@ export class UserProfile extends Element {
 				condition=${() => this.editing}
 				content=${() => () => html`
 					<div>
-						<input type="text" value=${username} oninput="${(ev: any) => (this.username = ev.target.value)}" />
+						<label for="username">Username</label>
+						<input
+							id="username"
+							type="text"
+							value=${() => username()}
+							oninput="${(ev: any) => (this.username = ev.target.value)}"
+						/>
 					</div>
-					<div>
-						<button onclick="${() => this.#saveChanges()}">Save</button>
-						<button onclick="${() => this.#cancel()}">Cancel</button>
-					</div>
+					<show-when
+						condition=${() => isAdmin()}
+						content=${() => () => html`
+							<div>
+								<label for="turnOffSettingsInSpace">Turn off settings in space</label>
+								<input
+									id="turnOffSettingsInSpace"
+									type="checkbox"
+									checked=${() => turnOffSettingsInSpace()}
+									oninput="${(ev: any) => (this.turnOffSettingsInSpace = ev.target.checked)}"
+								/>
+							</div>
+							<div>
+								<button onclick="${() => this.#saveChanges()}">Save</button>
+								<button onclick="${() => this.#cancel()}">Cancel</button>
+							</div>
+						`}
+					></show-when>
 				`}
 				fallback=${() => html`
 					<div style="display: flex; justify-content: space-between;">
-						<div>${username}</div>
+						<div>${() => username()}</div>
 						<div>
 							<button onclick="${() => (this.editing = true)}">Edit profile</button>
 						</div>

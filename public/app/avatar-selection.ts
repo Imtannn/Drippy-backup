@@ -5,6 +5,7 @@ import {updateUrlWithParams} from '../routes.js'
 
 import '../elements/bottom-sheet.js'
 import '../elements/logic/for-each.js'
+import '../elements/placeholder-image.js'
 import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
