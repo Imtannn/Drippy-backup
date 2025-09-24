@@ -133,9 +133,16 @@ async function uploadToS3(
 
 	if (contentType.startsWith('image/')) {
 		try {
-			uploadBuffer = await sharp(buffer)
-				.webp({lossless: lossless, quality: lossless ? 100 : 75})
-				.toBuffer()
+			let sharpInstance = sharp(buffer)
+
+			// Resize to 200px width if not lossless
+			if (!lossless) {
+				sharpInstance = sharpInstance.resize(200, null, {
+					withoutEnlargement: true,
+				})
+			}
+
+			uploadBuffer = await sharpInstance.webp({lossless: lossless, quality: lossless ? 100 : 75}).toBuffer()
 			uploadContentType = 'image/webp'
 			uploadKey = path.extname(uploadKey) ? uploadKey.replace(/\.[^./]+$/, '.webp') : `${uploadKey}.webp`
 		} catch (error) {
