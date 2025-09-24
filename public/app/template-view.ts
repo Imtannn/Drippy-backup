@@ -212,6 +212,7 @@ export class TemplateView extends Element {
 
 	#onAvatarDropdownClick = () => {
 		this.showAvatarSelection = !this.showAvatarSelection
+		this.showPoseSelection = false
 	}
 
 	#onAvatarSaveClick = () => {
