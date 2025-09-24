@@ -136,22 +136,39 @@ export class LoginUI extends LumeElement {
 		this.createEffect(() => {
 			if (!this.expanded) return
 
-			const root = (this.shadowRoot ?? this.getRootNode()) as Document | ShadowRoot
+			// Observe all potential roots for changes
+			const observers: MutationObserver[] = []
+			const roots = [this.shadowRoot, this.getRootNode(), document].filter(Boolean) as (Document | ShadowRoot)[]
 
 			const tryClick = () => {
-				const signInLink = root.querySelector('#login-sign-in-link') as HTMLElement | null
-				if (signInLink) {
+				// Try multiple roots to find the sign-in link (handles dialog movement)
+				let signInLink: HTMLElement | null = null
+				let foundRoot: Document | ShadowRoot | null = null
+
+				for (const root of roots) {
+					signInLink = root.querySelector('#login-sign-in-link') as HTMLElement | null
+					if (signInLink) {
+						foundRoot = root
+						break
+					}
+				}
+
+				if (signInLink && foundRoot) {
 					signInLink.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-					observer.disconnect()
+					observers.forEach(observer => observer.disconnect())
 				}
 			}
 
-			const observer = new MutationObserver(() => tryClick())
-			observer.observe(root, {childList: true, subtree: true})
+			for (const root of roots) {
+				const observer = new MutationObserver(() => tryClick())
+				observer.observe(root, {childList: true, subtree: true})
+				observers.push(observer)
+			}
+
 			// Try immediately in case it's already there
 			setTimeout(tryClick, 0)
 
-			onCleanup(() => observer.disconnect())
+			onCleanup(() => observers.forEach(observer => observer.disconnect()))
 		})
 	}
 

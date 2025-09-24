@@ -27,7 +27,6 @@ import '../elements/person-button.js'
 import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
-import '../onboarding/login-step.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './drip-it-button.js'
@@ -44,7 +43,6 @@ export class TemplateView extends Element {
 	@signal templateCategories: Record<TemplateCategory, Template[]> = {} as Record<TemplateCategory, Template[]>
 	@signal spaceCollection: string | null = null
 	@signal showLoginDialog = false
-	@signal showLoginForm = false
 	@signal showAvatarSelection = false
 	@signal showPoseSelection = false
 
@@ -52,11 +50,6 @@ export class TemplateView extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		// Listen for login form events on document (since dialog content is moved to document.body)
-		document.addEventListener('show-login-form', () => {
-			this.showLoginForm = true
-		})
 
 		this.createEffect(() => {
 			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
@@ -365,28 +358,16 @@ export class TemplateView extends Element {
 			open=${() => this.showLoginDialog}
 			onclose=${() => {
 				this.showLoginDialog = false
-				this.showLoginForm = false
 			}}
 		>
-			<show-when condition=${() => !this.showLoginForm} content=${() => html`<login-step></login-step>`}></show-when>
-			<show-when
-				condition=${() => this.showLoginForm}
-				content=${() => html`
-					<div style="display: flex; justify-content: center; align-items: flex-start; width: 100%; height: 100%;">
-						<login-ui expanded style="position: relative;"></login-ui>
-					</div>
-					<style>
-						#login-dropdown-list {
-							position: relative;
-							top: -200px;
-						}
-						.accounts-dialog {
-							position: relative;
-							transform: none;
-						}
-					</style>
-				`}
-			></show-when>
+			<div style="display: flex; justify-content: center; align-items: flex-start; width: 100%; height: 100%;">
+				<login-ui expanded style="position: relative;"></login-ui>
+			</div>
+			<style>
+				login-ui {
+					display: contents;
+				}
+			</style>
 		</dialog-element>
 	`
 
