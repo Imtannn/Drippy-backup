@@ -205,7 +205,7 @@ export class LoginUI extends LumeElement {
 			}
 
 			.accounts-dialog {
-				width: 354px;
+				width: min(354px, calc(90vw - 2 * var(--uiSpacingSmall)));
 				pointer-events: auto;
 				text-transform: none;
 				font-family: var(--base-font-family);
@@ -213,7 +213,7 @@ export class LoginUI extends LumeElement {
 				letter-spacing: normal;
 				text-decoration: none;
 
-				transform: translate(0px, var(--uiSpacingLarge));
+				transform: translate(0px, 0px);
 
 				* {
 					font-family: inherit;
