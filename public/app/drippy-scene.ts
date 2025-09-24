@@ -286,8 +286,15 @@ export class DrippyScene extends Element {
 
 			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as GltfModel[]
 
+			// Track block loading symbols for cleanup
+			const blockLoadingSymbols = new Set<symbol>()
+
 			for (const [index, el] of models.entries()) {
-				const blockId = Symbol(`block-${index}`)
+				// Use element ID + index for more stable identification
+				const elementId = el.getAttribute('id') || `unknown-${index}`
+				const blockId = Symbol(`block-${elementId}-${index}`)
+				blockLoadingSymbols.add(blockId)
+
 				const modelLoaded = onModelLoad(el)
 
 				createEffect(() => {
@@ -299,6 +306,13 @@ export class DrippyScene extends Element {
 					store.removeLoadingBlock(blockId)
 				})
 			}
+
+			// Cleanup: Remove all tracked loading symbols when effect re-runs or component unmounts
+			onCleanup(() => {
+				for (const blockId of blockLoadingSymbols) {
+					store.removeLoadingBlock(blockId)
+				}
+			})
 		})
 
 		// This will cache render blocks by ID. This is a quick fix to make the
@@ -350,6 +364,9 @@ export class DrippyScene extends Element {
 				this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? [],
 			) as GltfModel[]
 
+			// Track material loading symbols for cleanup
+			const materialLoadingSymbols = new Set<symbol>()
+
 			// Process each model using its data-blockid to find the correct fabric
 			for (const el of models) {
 				const blockId = el.getAttribute('id')
@@ -370,6 +387,8 @@ export class DrippyScene extends Element {
 				const templateFabrics = selectedFabrics.get(templateCategory)
 				const fabrics = templateFabrics?.get(blockCategory) || new Map<string, Fabric>()
 				const loadingId = Symbol(`material-${blockId}`)
+				materialLoadingSymbols.add(loadingId)
+
 				const modelLoaded = onModelLoad(el)
 
 				createEffect(() => {
@@ -384,7 +403,13 @@ export class DrippyScene extends Element {
 				})
 			}
 
-			onCleanup(() => (shouldCancel = true))
+			onCleanup(() => {
+				shouldCancel = true
+				// Cleanup: Remove all tracked material loading symbols
+				for (const loadingId of materialLoadingSymbols) {
+					store.removeLoadingMaterial(loadingId)
+				}
+			})
 		})
 
 		// Play animation when blocks are added, pause animation when no blocks.

@@ -513,6 +513,11 @@ export const store = createMutable({
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
+		// Clear all loading states to prevent orphaned symbols
+		this.loadingBlocks.clear()
+		this.loadingMaterials.clear()
+		this.isDrippySceneLoading.clear()
+		this.loadingScreenshots.clear()
 		this.order = {
 			status: 'idle' as OrderStatus,
 			error: null as string | null,
@@ -549,6 +554,10 @@ export const store = createMutable({
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.screenshotCache = new Map<TemplateCategory, string>()
 		this.loadingScreenshots = new Set<TemplateCategory>()
+		// Clear all loading states to prevent orphaned symbols
+		this.loadingBlocks.clear()
+		this.loadingMaterials.clear()
+		this.isDrippySceneLoading.clear()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {
