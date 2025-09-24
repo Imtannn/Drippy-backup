@@ -87,6 +87,14 @@ export class TemplateView extends Element {
 				this.selectedTab = categories[0] as TemplateCategory
 			}
 		})
+
+		// Close login dialog when user successfully logs in
+		this.createEffect(() => {
+			const user = currentUser()
+			if (user !== null && this.showLoginDialog) {
+				this.showLoginDialog = false
+			}
+		})
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
