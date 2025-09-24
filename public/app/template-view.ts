@@ -202,6 +202,11 @@ export class TemplateView extends Element {
 	}
 
 	#onBackButtonClick = () => {
+		// Reset UI state
+		this.showAvatarSelection = false
+		this.showPoseSelection = false
+		this.showLoginDialog = false
+
 		store.resetSelectedTemplates()
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.delete('scene')
@@ -228,6 +233,17 @@ export class TemplateView extends Element {
 
 		// Close avatar selection (chevron will auto-reset via prop)
 		this.showAvatarSelection = false
+
+		// Dispatch event to reset nav activeTab back to 'items'
+		document.dispatchEvent(
+			new CustomEvent('avatar-dropdown-click', {
+				bubbles: true,
+				composed: true,
+				detail: {
+					isOpening: false, // Closing the avatar selection
+				},
+			}),
+		)
 	}
 
 	#onNavTabChange = (e: CustomEvent) => {
