@@ -60,7 +60,6 @@ export const store = createMutable({
 	view: 'avatar' as AppRoute,
 	tempSelectedAvatar: null as string | null,
 	selectedAvatar: null as string | null,
-	tempSelectedPose: null as string | null,
 	selectedPose: null as string | null,
 	selectedSpace: null as Space | null,
 	selectedAnimation: 'none' as 'none' | 'walk' | 'dance',
@@ -339,9 +338,6 @@ export const store = createMutable({
 	},
 	set selectAvatar(avatar: string) {
 		this.selectedAvatar = avatar
-	},
-	set setTempSelectedPose(pose: string) {
-		this.tempSelectedPose = pose
 	},
 	set selectPose(pose: string) {
 		this.selectedPose = pose
