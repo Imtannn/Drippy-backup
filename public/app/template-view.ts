@@ -23,6 +23,8 @@ import '../elements/theme-switch-button.js'
 import './app-buttons.js'
 import './drip-it-button.js'
 import './item-card.js'
+import '../elements/placeholder-image.js'
+import {formatNumber} from '../utils.js'
 
 type TemplateViewAttributes = keyof {}
 
@@ -239,7 +241,7 @@ export class TemplateView extends Element {
 																class="template-product-price"
 																classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
 															>
-																€ 125.00
+																${() => (template.price !== 'N/A' ? formatNumber(Number(template.price)) : 'N/A')}
 															</div>
 															<div
 																class="template-product-wholesale"
@@ -316,6 +318,9 @@ export class TemplateView extends Element {
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightSemiBold);
 			color: #424347;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 
 		.template-product-price-container {

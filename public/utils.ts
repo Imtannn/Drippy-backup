@@ -771,3 +771,15 @@ export function hasAncestorWithName(object: THREE.Object3D, targetName: string):
 	}
 	return false
 }
+
+// Format price without currency symbol
+export function formatNumber(amount: number, countryCode: string = 'eu') {
+	const formatter = new Intl.NumberFormat(countryCode, {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+		style: 'currency',
+		currency: 'EUR',
+	})
+
+	return formatter.format(amount)
+}

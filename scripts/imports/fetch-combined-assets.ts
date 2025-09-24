@@ -48,7 +48,7 @@ const BRAND_CONFIGS = [
 		rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
 	},
 	{
-		brand: 'OOFYA',
+		brand: 'oofya',
 		rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
 	},
 	// {
@@ -121,14 +121,21 @@ function getDriveDownloadUrl(fileId: string): string {
 }
 
 // Upload buffer to S3 and return the public URL
-async function uploadToS3(buffer: Buffer, key: string, contentType: string): Promise<string> {
+async function uploadToS3(
+	buffer: Buffer,
+	key: string,
+	contentType: string,
+	lossless: boolean = false,
+): Promise<string> {
 	let uploadBuffer = buffer
 	let uploadKey = key
 	let uploadContentType = contentType
 
 	if (contentType.startsWith('image/')) {
 		try {
-			uploadBuffer = await sharp(buffer).webp({lossless: true}).toBuffer()
+			uploadBuffer = await sharp(buffer)
+				.webp({lossless: lossless, quality: lossless ? 100 : 75})
+				.toBuffer()
 			uploadContentType = 'image/webp'
 			uploadKey = path.extname(uploadKey) ? uploadKey.replace(/\.[^./]+$/, '.webp') : `${uploadKey}.webp`
 		} catch (error) {
@@ -337,7 +344,9 @@ async function processTemplateFolder(
 
 	if (folderNameParts.length >= 2) {
 		templateName = normalizeName(folderNameParts[0].trim())
-		templatePrice = folderNameParts[1].trim()
+		// Extract only numeric part from price (including decimals)
+		const priceMatch = folderNameParts[1].trim().match(/\d+(\.\d+)?/)
+		templatePrice = priceMatch ? priceMatch[0] : 'N/A'
 	}
 
 	const template = {
@@ -346,6 +355,7 @@ async function processTemplateFolder(
 		category,
 		thumbUrl: templateS3Url,
 		materialId,
+		folderId: templateFolder.id, // Add unique Google Drive folder ID
 		...(extraMaterials.length > 0 && {extraMaterials}),
 	}
 
@@ -407,8 +417,9 @@ async function processTemplateFolder(
 					allBlocks.push({
 						blockName: normalizeName(baseName),
 						category: normalizeBlockCategory(blockTypeFolder.name),
-						templateName: normalizeName(templateFolder.name),
+						templateName: templateName,
 						templateCategory: category,
+						templateFolderId: templateFolder.id, // Add unique template folder ID
 						thumbUrl: blockThumbS3Url,
 						modelUrl: blockModelS3Url,
 					})
@@ -427,16 +438,21 @@ async function processTemplateFolder(
 	return {template, blocks: allBlocks, unsucceeded: unsucceeded}
 }
 
-function generateTemplateData(processedData: TODO[], brand: string): TODO {
+function generateTemplateData(
+	processedData: TODO[],
+	brand: string,
+): {templates: TODO; templateFolderIdToIdMap: Map<string, string>} {
 	const templates: TODO = {}
+	const templateFolderIdToIdMap = new Map<string, string>()
 	let idCounter = 1
 
 	processedData.forEach(({template}) => {
 		if (!template) return
 
+		const templateId = idCounter.toString()
 		templates[brand] = templates[brand] || []
 		templates[brand].push({
-			_id: idCounter.toString(),
+			_id: templateId,
 			thumb: template.thumbUrl,
 			name: template.name,
 			price: template.price,
@@ -445,19 +461,24 @@ function generateTemplateData(processedData: TODO[], brand: string): TODO {
 			materialId: template.materialId,
 			...(template.extraMaterials && {extraMaterials: template.extraMaterials}),
 		})
+
+		// Store mapping using unique Google Drive folder ID - guaranteed to be unique
+		templateFolderIdToIdMap.set(template.folderId, templateId)
 		idCounter++
 	})
 
-	return templates
+	return {templates, templateFolderIdToIdMap}
 }
 
-function generateBlockData(processedData: TODO[], brand: string): TODO {
+function generateBlockData(processedData: TODO[], brand: string, templateFolderIdToIdMap: Map<string, string>): TODO {
 	const blocks: TODO = {}
 	let idCounter = 1
 
 	processedData.forEach(({blocks: templateBlocks}) => {
 		templateBlocks.forEach((block: TODO) => {
 			blocks[brand] = blocks[brand] || []
+			// Use unique Google Drive folder ID to find the correct template ID
+			const templateId = templateFolderIdToIdMap.get(block.templateFolderId) || block.templateName // Fallback to name if ID not found
 			blocks[brand].push({
 				_id: idCounter.toString(),
 				thumb: block.thumbUrl,
@@ -465,7 +486,7 @@ function generateBlockData(processedData: TODO[], brand: string): TODO {
 				blockName: block.blockName,
 				avatar: 'Female',
 				category: block.category,
-				templateId: block.templateName, // Using template name as ID for now
+				templateId: templateId, // Now using actual template _id with guaranteed unique identification
 				templateName: block.templateName,
 				templateCategory: block.templateCategory,
 			})
@@ -714,6 +735,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 					fileBuffer,
 					`fabrics/${brand}/root/${materialFolder.name}/${file.name}`,
 					contentType,
+					true,
 				)
 
 				// Map files based on name
@@ -1006,8 +1028,8 @@ async function main(): Promise<void> {
 			})
 
 			// Generate data for this brand
-			const brandTemplates = generateTemplateData(brandProcessedData, brand)
-			const brandBlocks = generateBlockData(brandProcessedData, brand)
+			const {templates: brandTemplates, templateFolderIdToIdMap} = generateTemplateData(brandProcessedData, brand)
+			const brandBlocks = generateBlockData(brandProcessedData, brand, templateFolderIdToIdMap)
 			const brandFabricsData = generateFabricData(brand)
 
 			// Merge with combined data

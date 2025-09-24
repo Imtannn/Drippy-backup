@@ -23,6 +23,7 @@ import type {TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import './fabric-selection.js'
 import './item-card.js'
+import '../elements/placeholder-image.js'
 import {store} from './store.js'
 
 type BlocksSelectionAttributes = keyof {}

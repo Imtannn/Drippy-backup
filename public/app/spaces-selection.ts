@@ -2,6 +2,7 @@ import {css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
+import '../elements/placeholder-image.js'
 import type {Space} from '../types/types.js'
 import {store} from './store.js'
 
@@ -65,7 +66,7 @@ export class SpacesSelection extends Element {
 						<div class="space-card">
 							<div class="scene-preview">
 								<div class="scene-placeholder">
-									<img src=${space().sceneThumbnail} alt="Bloom Realm Scene" />
+									<placeholder-image src=${space().sceneThumbnail} alt="Bloom Realm Scene" object-fit="cover" />
 								</div>
 								<div class="garments-count">${space().garmentsCount} garments</div>
 							</div>

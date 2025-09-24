@@ -135,7 +135,7 @@ export const spaces: Space[] = [
 		includedModelFiles: [
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/oofya/extras/shoes.glb',
 		],
-		gender: 'male',
+		gender: 'female',
 		garmentsCount: blocks.oofya?.length ?? 0,
 		collection: 'oofya',
 		isWholesale: false,
