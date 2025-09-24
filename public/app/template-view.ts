@@ -367,12 +367,10 @@ export class TemplateView extends Element {
 															>
 																${() => (template.price !== 'N/A' ? formatNumber(Number(template.price)) : 'N/A')}
 															</div>
-															<div
-																class="template-product-wholesale"
-																classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
-															>
-																MOQ: 5pcs
-															</div>
+															<show-when
+																condition=${() => store.selectedSpace?.isWholesale}
+																content=${() => html` <div class="template-product-wholesale">MOQ: 5pcs</div> `}
+															></show-when>
 														</div>
 													</div>
 												`}
@@ -488,6 +486,7 @@ export class TemplateView extends Element {
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
+			height: 20px;
 		}
 
 		.template-product-price-container {
@@ -495,7 +494,7 @@ export class TemplateView extends Element {
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: center;
-			flex-wrap: wrap;
+			flex-wrap: nowrap;
 		}
 
 		.template-product-price {
@@ -510,15 +509,10 @@ export class TemplateView extends Element {
 		}
 
 		.template-product-wholesale {
-			opacity: 0;
-		}
-
-		.template-product-wholesale.wholesale {
 			font-size: var(--fontSizeTextXxs);
 			font-weight: var(--fontWeightNormal);
 			color: #424347;
-			text-wrap: nowrap;
-			opacity: 1;
+			text-wrap: wrap;
 		}
 	`
 }
