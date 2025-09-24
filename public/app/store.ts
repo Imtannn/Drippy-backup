@@ -14,6 +14,8 @@ export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.
 export const username = () => currentUser()?.username ?? ''
 export const dateOfBirth = () => currentUser()?.profile?.dateOfBirth ?? ''
 export const isAdmin = () => !!currentUser()?.profile?.isAdmin
+export const turnOffSettingsInSpace = () => !!currentUser()?.profile?.turnOffSettingsInSpace
+export const hideAnimationSelection = () => !!currentUser()?.profile?.hideAnimationSelection
 
 const pathname = location.pathname
 
@@ -40,12 +42,18 @@ export const store = createMutable({
 	get isAdmin() {
 		return isAdmin()
 	},
-
+	get hideAnimationSelection() {
+		return hideAnimationSelection()
+	},
 	get visits() {
 		return visits()
 	},
 	get usersCount() {
 		return usersCount()
+	},
+
+	get turnOffSettingsInSpace() {
+		return turnOffSettingsInSpace()
 	},
 
 	// key is the block category, value is the block
@@ -505,6 +513,11 @@ export const store = createMutable({
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
+		// Clear all loading states to prevent orphaned symbols
+		this.loadingBlocks.clear()
+		this.loadingMaterials.clear()
+		this.isDrippySceneLoading.clear()
+		this.loadingScreenshots.clear()
 		this.order = {
 			status: 'idle' as OrderStatus,
 			error: null as string | null,
@@ -541,6 +554,10 @@ export const store = createMutable({
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.screenshotCache = new Map<TemplateCategory, string>()
 		this.loadingScreenshots = new Set<TemplateCategory>()
+		// Clear all loading states to prevent orphaned symbols
+		this.loadingBlocks.clear()
+		this.loadingMaterials.clear()
+		this.isDrippySceneLoading.clear()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {

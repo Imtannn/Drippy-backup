@@ -1,7 +1,8 @@
-import {Session} from 'meteor/session'
-import {ReactiveVar} from 'meteor/reactive-var'
 import {Meteor} from 'meteor/meteor'
+import {ReactiveVar} from 'meteor/reactive-var'
+import {Session} from 'meteor/session'
 import {effect} from './meteor-signals.js'
+import type {Template, TemplateCategory} from './types/template.js'
 
 // We'll keep the title up to date once we add routing. For now it is constant.
 let appName = 'Drippy'
@@ -28,6 +29,11 @@ export const username = () => url().username
 export const password = () => url().password
 
 export const hrefMinusOrigin = () => url().href.replace(url().origin, '')
+
+// Utility function to update URL with search params while ensuring clean /app path
+export const updateUrlWithParams = (searchParams: URLSearchParams) => {
+	window.history.replaceState({}, '', `/app?${searchParams.toString()}`)
+}
 
 window.addEventListener('popstate', () => _url.set(new URL(location.href)))
 
@@ -71,3 +77,17 @@ effect(() => {
 
 	Meteor.call('visits.increment', href())
 })
+
+export const updateGarmentsInUrl = (garments: Map<TemplateCategory, Template>) => {
+	const currentUrl = new URL(location.href)
+
+	if (garments.size > 0) {
+		const garmentIds = Array.from(garments.values()).map(garment => garment._id)
+		currentUrl.searchParams.set('garments', garmentIds.join(','))
+	} else {
+		currentUrl.searchParams.delete('garments')
+	}
+
+	// Update URL without triggering page reload
+	history.replaceState({}, '', currentUrl.toString())
+}

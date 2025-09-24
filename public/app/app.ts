@@ -1,5 +1,6 @@
 import {css, Element, element, html, signal} from 'lume'
 import {spaces} from '../consts/spaces.js'
+import {templates} from '../consts/templates.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
@@ -68,6 +69,23 @@ export class DrippyApp extends Element {
 					return
 				}
 
+				// Load garments from URL parameters if present
+				const garmentsParam = searchParams.get('garments')
+				if (garmentsParam && store.selectedSpace && store.selectedTemplates.size === 0) {
+					const garmentIds = garmentsParam.split(',')
+					const spaceTemplates = templates[store.selectedSpace.collection]
+
+					if (spaceTemplates) {
+						// Find and select each garment by ID
+						for (const garmentId of garmentIds) {
+							const template = spaceTemplates.find(t => t._id === garmentId.trim())
+							if (template) {
+								store.setSelectedTemplates = template
+							}
+						}
+					}
+				}
+
 				// If both avatar and scene are selected, navigate to blocks.
 				store.navigateTo = 'template'
 			} catch (error) {
@@ -97,11 +115,6 @@ export class DrippyApp extends Element {
 			condition=${() => this.appLoaded}
 			fallback=${() => html`<div class="loading">Loading...</div>`}
 			content=${() => html`
-				<show-when
-					condition=${() => this.showLoadingCover}
-					content=${() => html` <video-loading></video-loading> `}
-				></show-when>
-
 				<div id="app-container">
 					<drippy-scene
 						id="drippy-scene"

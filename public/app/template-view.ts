@@ -24,9 +24,12 @@ import '../elements/login-ui.js'
 import '../elements/logo-button.js'
 import '../elements/nav-items.js'
 import '../elements/person-button.js'
+import '../elements/placeholder-image.js'
 import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
+import {updateGarmentsInUrl, updateUrlWithParams} from '../routes.js'
+import {formatNumber} from '../utils.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './drip-it-button.js'
@@ -95,6 +98,43 @@ export class TemplateView extends Element {
 				this.showLoginDialog = false
 			}
 		})
+
+		// Update URL when garments change
+		this.createEffect(() => {
+			const selectedTemplates = store.selectedTemplates
+			updateGarmentsInUrl(selectedTemplates)
+		})
+
+		// Convert templates to blocks for 3D rendering
+		this.createEffect(() => {
+			const selectedTemplates = store.selectedTemplates
+			if (selectedTemplates.size > 0) {
+				this.#convertTemplatesToBlocks()
+			}
+		})
+	}
+
+	#convertTemplatesToBlocks = async () => {
+		// Get blocks for ALL selected templates, organized by template category
+		const templateBlockData: {
+			blocks: Block[]
+			templateCategory: TemplateCategory
+			materialId: string
+			extraMaterials?: {mesh: string; materialId: string}[]
+		}[] = []
+
+		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
+			const templateBlocks = getBlocksForTemplate(selectedTemplate, store.selectedSpace?.collection)
+			templateBlockData.push({
+				blocks: templateBlocks,
+				templateCategory: templateCategory,
+				materialId: selectedTemplate.materialId ?? '',
+				extraMaterials: selectedTemplate.extraMaterials,
+			})
+		}
+
+		// Replace blocks with aggregated blocks from all selected templates
+		store.replaceSelectedBlocks = templateBlockData
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -145,25 +185,8 @@ export class TemplateView extends Element {
 			}
 		}
 
-		// Get blocks for ALL selected templates, organized by template category
-		const templateBlockData: {
-			blocks: Block[]
-			templateCategory: TemplateCategory
-			materialId: string
-			extraMaterials?: {mesh: string; materialId: string}[]
-		}[] = []
-		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
-			const templateBlocks = getBlocksForTemplate(selectedTemplate, store.selectedSpace?.collection)
-			templateBlockData.push({
-				blocks: templateBlocks,
-				templateCategory: templateCategory,
-				materialId: selectedTemplate.materialId ?? '',
-				extraMaterials: selectedTemplate.extraMaterials,
-			})
-		}
-
-		// Replace blocks with aggregated blocks from all selected templates
-		store.replaceSelectedBlocks = templateBlockData
+		// Convert templates to blocks (this will be handled by the effect automatically)
+		// The effect will trigger since we modified store.selectedTemplates above
 	}
 
 	#onDripItClick = () => {
@@ -182,7 +205,7 @@ export class TemplateView extends Element {
 		store.resetSelectedTemplates()
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.delete('scene')
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		updateUrlWithParams(searchParams)
 		store.selectSpace = null
 		store.navigateTo = 'scene'
 	}
@@ -199,7 +222,7 @@ export class TemplateView extends Element {
 		// Update URL params and store
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('avatar', value)
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		updateUrlWithParams(searchParams)
 		store.selectAvatar = value
 
 		// Close avatar selection (chevron will auto-reset via prop)
@@ -225,7 +248,7 @@ export class TemplateView extends Element {
 		// Update URL params and store
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('pose', value)
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		updateUrlWithParams(searchParams)
 		store.selectPose = value
 
 		// Close pose selection
@@ -333,14 +356,12 @@ export class TemplateView extends Element {
 																class="template-product-price"
 																classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
 															>
-																€ 125.00
+																${() => (template.price !== 'N/A' ? formatNumber(Number(template.price)) : 'N/A')}
 															</div>
-															<div
-																class="template-product-wholesale"
-																classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
-															>
-																MOQ: 5pcs
-															</div>
+															<show-when
+																condition=${() => store.selectedSpace?.isWholesale}
+																content=${() => html` <div class="template-product-wholesale">MOQ: 5pcs</div> `}
+															></show-when>
 														</div>
 													</div>
 												`}
@@ -441,6 +462,10 @@ export class TemplateView extends Element {
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightSemiBold);
 			color: #424347;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			height: 20px;
 		}
 
 		.template-product-price-container {
@@ -448,7 +473,7 @@ export class TemplateView extends Element {
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: center;
-			flex-wrap: wrap;
+			flex-wrap: nowrap;
 		}
 
 		.template-product-price {
@@ -463,15 +488,10 @@ export class TemplateView extends Element {
 		}
 
 		.template-product-wholesale {
-			opacity: 0;
-		}
-
-		.template-product-wholesale.wholesale {
 			font-size: var(--fontSizeTextXxs);
 			font-weight: var(--fontWeightNormal);
 			color: #424347;
-			text-wrap: nowrap;
-			opacity: 1;
+			text-wrap: wrap;
 		}
 	`
 }

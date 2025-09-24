@@ -1,6 +1,7 @@
 import {css, element, Element, html, signal, untrack, type ElementAttributes} from 'lume'
 import {blocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
+import {updateUrlWithParams} from '../routes.js'
 
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
@@ -23,6 +24,7 @@ import type {TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import './fabric-selection.js'
 import './item-card.js'
+import '../elements/placeholder-image.js'
 import {store} from './store.js'
 
 type BlocksSelectionAttributes = keyof {}
@@ -210,7 +212,7 @@ export class BlocksSelection extends Element {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('isPreview', 'true')
 		store.setIsPreview = true
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		updateUrlWithParams(searchParams)
 	}
 
 	template = () => html`
