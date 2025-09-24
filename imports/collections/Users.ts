@@ -13,6 +13,7 @@ declare module 'meteor/meteor' {
 			isAdmin?: boolean
 			dateOfBirth?: string
 			turnOffSettingsInSpace?: boolean
+			hideAnimationSelection?: boolean
 
 			// Meteor's 3rd party login services (e.g. Google, Facebook, etc)
 			// will put stuff in profile too.
@@ -61,7 +62,12 @@ if (Meteor.isServer) {
 		async 'users.updateProfile'(profileData: Meteor.UserProfile & {username: string}) {
 			if (!this.userId) throw new Meteor.Error('not-authorized', 'You must be logged in to update your profile')
 
-			check(profileData, {username: String, dateOfBirth: String, turnOffSettingsInSpace: Match.Optional(Boolean)})
+			check(profileData, {
+				username: String,
+				dateOfBirth: String,
+				turnOffSettingsInSpace: Match.Optional(Boolean),
+				hideAnimationSelection: Match.Optional(Boolean),
+			})
 
 			const {username, ...profile} = profileData
 

@@ -15,6 +15,7 @@ export const username = () => currentUser()?.username ?? ''
 export const dateOfBirth = () => currentUser()?.profile?.dateOfBirth ?? ''
 export const isAdmin = () => !!currentUser()?.profile?.isAdmin
 export const turnOffSettingsInSpace = () => !!currentUser()?.profile?.turnOffSettingsInSpace
+export const hideAnimationSelection = () => !!currentUser()?.profile?.hideAnimationSelection
 
 const pathname = location.pathname
 
@@ -41,7 +42,9 @@ export const store = createMutable({
 	get isAdmin() {
 		return isAdmin()
 	},
-
+	get hideAnimationSelection() {
+		return hideAnimationSelection()
+	},
 	get visits() {
 		return visits()
 	},
