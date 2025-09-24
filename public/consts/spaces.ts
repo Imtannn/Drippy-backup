@@ -18,7 +18,7 @@ export const spaces: Space[] = [
 		gender: 'female',
 		garmentsCount: blocks.moidien?.length ?? 0,
 		collection: 'moidien',
-		isWholesale: true,
+		isWholesale: false,
 	},
 	// {
 	// 	name: 'YALLAH',
