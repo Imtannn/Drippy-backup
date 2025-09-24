@@ -24,17 +24,16 @@ import '../elements/login-ui.js'
 import '../elements/logo-button.js'
 import '../elements/nav-items.js'
 import '../elements/person-button.js'
+import '../elements/placeholder-image.js'
 import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
-import '../onboarding/login-step.js'
 import {updateGarmentsInUrl, updateUrlWithParams} from '../routes.js'
+import {formatNumber} from '../utils.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './drip-it-button.js'
 import './item-card.js'
-import '../elements/placeholder-image.js'
-import {formatNumber} from '../utils.js'
 import './pose-selection.js'
 
 type TemplateViewAttributes = keyof {}
@@ -47,7 +46,6 @@ export class TemplateView extends Element {
 	@signal templateCategories: Record<TemplateCategory, Template[]> = {} as Record<TemplateCategory, Template[]>
 	@signal spaceCollection: string | null = null
 	@signal showLoginDialog = false
-	@signal showLoginForm = false
 	@signal showAvatarSelection = false
 	@signal showPoseSelection = false
 
@@ -55,11 +53,6 @@ export class TemplateView extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		// Listen for login form events on document (since dialog content is moved to document.body)
-		document.addEventListener('show-login-form', () => {
-			this.showLoginForm = true
-		})
 
 		this.createEffect(() => {
 			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
@@ -98,13 +91,11 @@ export class TemplateView extends Element {
 			}
 		})
 
-		// Handle successful login - close dialog
+		// Close login dialog when user successfully logs in
 		this.createEffect(() => {
 			const user = currentUser()
-			// If user just logged in (not null and not undefined) and login dialog was open
-			if (user !== null && user !== undefined && this.showLoginDialog) {
+			if (user !== null && this.showLoginDialog) {
 				this.showLoginDialog = false
-				this.showLoginForm = false
 			}
 		})
 
@@ -396,28 +387,16 @@ export class TemplateView extends Element {
 			open=${() => this.showLoginDialog}
 			onclose=${() => {
 				this.showLoginDialog = false
-				this.showLoginForm = false
 			}}
 		>
-			<show-when condition=${() => !this.showLoginForm} content=${() => html`<login-step></login-step>`}></show-when>
-			<show-when
-				condition=${() => this.showLoginForm}
-				content=${() => html`
-					<div style="display: flex; justify-content: center; align-items: flex-start; width: 100%; height: 100%;">
-						<login-ui expanded style="position: relative;"></login-ui>
-					</div>
-					<style>
-						#login-dropdown-list {
-							position: relative;
-							top: -200px;
-						}
-						.accounts-dialog {
-							position: relative;
-							transform: none;
-						}
-					</style>
-				`}
-			></show-when>
+			<div style="display: flex; justify-content: center; align-items: flex-start; width: 100%; height: 100%;">
+				<login-ui expanded style="position: relative;"></login-ui>
+			</div>
+			<style>
+				login-ui {
+					display: contents;
+				}
+			</style>
 		</dialog-element>
 	`
 
