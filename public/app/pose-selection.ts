@@ -1,10 +1,8 @@
 import {booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import {store} from './store.js'
-import {updateUrlWithParams} from '../routes.js'
 
 import '../elements/bottom-sheet.js'
 import '../elements/logic/for-each.js'
-import '../elements/save-button.js'
 import '../elements/tabs.js'
 import './item-card.js'
 
@@ -12,104 +10,26 @@ type PoseSelectionAttributes = 'contentOnly'
 
 type PoseCategory = 'Poses' | 'Motions' | 'Face'
 
-// Temporary pose data
 const poses = {
 	poses: [
 		{
-			thumbnail: 'https://picsum.photos/150/190?random=1',
-			name: 'Standing',
-			value: 'standing',
+			thumbnail: '/images/none.webp',
+			name: 'None',
+			value: 'none',
 		},
 		{
-			thumbnail: 'https://picsum.photos/150/190?random=2',
-			name: 'Walking',
-			value: 'walking',
+			thumbnail: '/images/walk.webp',
+			name: 'Walk',
+			value: 'walk',
 		},
 		{
-			thumbnail: 'https://picsum.photos/150/190?random=3',
-			name: 'Sitting',
-			value: 'sitting',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=4',
-			name: 'Casual',
-			value: 'casual',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=5',
-			name: 'Formal',
-			value: 'formal',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=6',
-			name: 'Athletic',
-			value: 'athletic',
-		},
-	],
-	motions: [
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=7',
-			name: 'Wave',
-			value: 'wave',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=8',
+			thumbnail: '/images/dance.webp',
 			name: 'Dance',
 			value: 'dance',
 		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=9',
-			name: 'Jump',
-			value: 'jump',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=10',
-			name: 'Run',
-			value: 'run',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=11',
-			name: 'Spin',
-			value: 'spin',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=12',
-			name: 'Clap',
-			value: 'clap',
-		},
 	],
-	face: [
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=13',
-			name: 'Smile',
-			value: 'smile',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=14',
-			name: 'Wink',
-			value: 'wink',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=15',
-			name: 'Surprised',
-			value: 'surprised',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=16',
-			name: 'Neutral',
-			value: 'neutral',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=17',
-			name: 'Happy',
-			value: 'happy',
-		},
-		{
-			thumbnail: 'https://picsum.photos/150/190?random=18',
-			name: 'Focused',
-			value: 'focused',
-		},
-	],
+	motions: [],
+	face: [],
 }
 
 @element
@@ -122,25 +42,17 @@ export class PoseSelection extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
-		this.createEffect(() => {
-			if (!store.tempSelectedPose) {
-				// Set default pose if none selected
-				store.setTempSelectedPose = poses.poses[0].value
-			}
-		})
+		if (!store.selectedAnimation) {
+			store.selectedAnimation = poses.poses[0].value as 'none' | 'walk' | 'dance'
+		}
 	}
 
 	#onItemClick = (e: CustomEvent) => {
-		store.setTempSelectedPose = e.detail.itemValue.value
-	}
+		const poseValue = e.detail.itemValue.value as 'none' | 'walk' | 'dance'
+		console.log('poseValue', poseValue)
 
-	#onSaveClick = () => {
-		const value = store.tempSelectedPose
-		if (!value) return
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('pose', value)
-		updateUrlWithParams(searchParams)
-		store.selectPose = value
+		// Trigger the animation effect directly (same as AnimationSelect)
+		store.selectedAnimation = poseValue
 	}
 
 	#renderPoseContent = () => html`
@@ -165,8 +77,8 @@ export class PoseSelection extends Element {
 							items=${poses.poses}
 							content=${() => (pose: (typeof poses.poses)[number]) => html`
 								<item-card
-									class=${() => (store.tempSelectedPose === pose.value ? 'item-preview' : '')}
-									item-active=${() => store.tempSelectedPose === pose.value}
+									class=${() => (store.selectedAnimation === pose.value ? 'item-preview' : '')}
+									item-active=${() => store.selectedAnimation === pose.value}
 									item-src=${pose.thumbnail}
 									item-alt=${pose.name}
 									item-value=${pose}
@@ -181,45 +93,11 @@ export class PoseSelection extends Element {
 				</tabs-content>
 
 				<tabs-content selected-value="Motions">
-					<div class="items-grid">
-						<for-each
-							items=${poses.motions}
-							content=${() => (motion: (typeof poses.motions)[number]) => html`
-								<item-card
-									class=${() => (store.tempSelectedPose === motion.value ? 'item-preview' : '')}
-									item-active=${() => store.tempSelectedPose === motion.value}
-									item-src=${motion.thumbnail}
-									item-alt=${motion.name}
-									item-value=${motion}
-									oncardselected=${this.#onItemClick}
-									object-fit="cover"
-									object-position="center"
-									aspect-ratio="0.79"
-								></item-card>
-							`}
-						></for-each>
-					</div>
+					<div class="items-grid"></div>
 				</tabs-content>
 
 				<tabs-content selected-value="Face">
-					<div class="items-grid">
-						<for-each
-							items=${poses.face}
-							content=${() => (face: (typeof poses.face)[number]) => html`
-								<item-card
-									class=${() => (store.tempSelectedPose === face.value ? 'item-preview' : '')}
-									item-active=${() => store.tempSelectedPose === face.value}
-									item-src=${face.thumbnail}
-									item-alt=${face.name}
-									item-value=${face}
-									oncardselected=${this.#onItemClick}
-									object-fit="cover"
-									object-position="center"
-									aspect-ratio="0.79"
-								></item-card>
-							`}
-						></for-each>
-					</div>
+					<div class="items-grid"></div>
 				</tabs-content>
 			</div>
 		</tabs-provider>
@@ -230,15 +108,7 @@ export class PoseSelection extends Element {
 			return this.#renderPoseContent()
 		}
 
-		return html`
-			<app-buttons-right layout="bottom">
-				<app-buttons-group>
-					<save-button onclick=${this.#onSaveClick}></save-button>
-				</app-buttons-group>
-			</app-buttons-right>
-
-			<bottom-sheet> ${this.#renderPoseContent()} </bottom-sheet>
-		`
+		return html` <bottom-sheet> ${this.#renderPoseContent()} </bottom-sheet> `
 	}
 
 	css = css/*css*/ `

@@ -257,21 +257,6 @@ export class TemplateView extends Element {
 		}
 	}
 
-	#onPoseSaveClick = () => {
-		// Save the temp selected pose to the confirmed selection
-		const value = store.tempSelectedPose
-		if (!value) return
-
-		// Update URL params and store
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('pose', value)
-		updateUrlWithParams(searchParams)
-		store.selectPose = value
-
-		// Close pose selection
-		this.showPoseSelection = false
-	}
-
 	template = () => html`
 		<app-buttons-left>
 			<app-buttons-group>
@@ -302,7 +287,7 @@ export class TemplateView extends Element {
 				></show-when>
 				<show-when
 					condition=${() => this.showPoseSelection}
-					content=${() => html`<save-button onclick=${this.#onPoseSaveClick}></save-button>`}
+					content=${() => html`<save-button></save-button>`}
 				></show-when>
 				<show-when
 					condition=${() => !this.showAvatarSelection && !this.showPoseSelection}
