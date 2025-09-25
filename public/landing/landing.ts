@@ -278,6 +278,7 @@ const mainContent = html`
 								<span class="highlight"> interactive 3D <br> studio </span>
 							that boosts engagement and sales.
 							</p>
+
 							<div class="hero__actions">
 								<custom-button variant="secondary">See it live</custom-button>
 								<custom-button variant="primary">Book a demo</custom-button>
@@ -286,6 +287,7 @@ const mainContent = html`
 								<img class="cta__cone-image--2" src=${blingImage1} />
 
 								<img class="cta__cone-image--3" src=${blingImage2} />
+								<img class="cta__cone-image--4" src=${blingImage3} />
 						</section>
 
 						<!-- Brands Section -->
@@ -355,7 +357,7 @@ const mainContent = html`
 									</div>
 								</div>
 							</div>
-							<img class="cta__cone-image--4" src=${blingImage3} />
+
 						</section>
 
 						<!-- Statistics Section -->
@@ -851,7 +853,120 @@ function initGenericCarousel(config: {
 	let eventListeners: Array<{element: HTMLElement | Window; event: string; handler: Function}> = []
 	let resizeTimeout: ReturnType<typeof setTimeout>
 
-	function checkScreenSize() {
+	// Helper function to check if carousel should be active
+	const isCarouselActive = () =>
+		isActive && container.classList.contains('carousel') && document.querySelectorAll('.carousel-item').length > 0
+
+	// Calculate offset for carousel positioning
+	const calculateOffset = (index: number) => {
+		const containerWidth = container.offsetWidth
+		const itemWidth = config.itemWidth + 32 // item width + gap
+		const totalItems = items.length
+
+		if (index === 0) return 20 // First item: align to left
+		if (index === totalItems - 1) return -(index * itemWidth) + (containerWidth - itemWidth - 20) // Last item: align to right
+		return -(index * itemWidth) + (containerWidth - itemWidth) / 2 // Middle items: center
+	}
+
+	// Update carousel position and active states
+	const updateCarousel = (index = activeIndex) => {
+		if (!isCarouselActive()) return
+
+		const offset = calculateOffset(index)
+		track.style.transform = `translateX(${offset}px)`
+		items.forEach((item, i) => item.classList.toggle('active', i === index))
+	}
+
+	// Reset carousel to default state
+	const resetCarousel = () => {
+		activeIndex = 0
+		if (isCarouselActive()) {
+			updateCarousel()
+		} else {
+			track.style.transform = 'translateX(0)'
+			items.forEach(item => item.classList.remove('active'))
+		}
+	}
+
+	// Handle swipe gestures
+	const handleSwipe = (deltaX: number) => {
+		if (!isCarouselActive()) return
+
+		if (deltaX > 50) activeIndex = Math.max(0, activeIndex - 1)
+		else if (deltaX < -50) activeIndex = Math.min(items.length - 1, activeIndex + 1)
+
+		updateCarousel()
+	}
+
+	// Event handlers
+	const touchStartHandler = (e: TouchEvent) => {
+		if (!isCarouselActive()) return
+		startX = e.touches[0].clientX
+	}
+
+	const touchEndHandler = (e: TouchEvent) => {
+		if (!isCarouselActive()) return
+		handleSwipe(e.changedTouches[0].clientX - startX)
+	}
+
+	const mouseDownHandler = (e: MouseEvent) => {
+		if (!isCarouselActive()) return
+		isDragging = true
+		startX = e.clientX
+	}
+
+	const mouseUpHandler = (e: MouseEvent) => {
+		if (!isDragging || !isCarouselActive()) return
+		isDragging = false
+		handleSwipe(e.clientX - startX)
+	}
+
+	// Event listener management
+	const addEventListeners = () => {
+		removeEventListeners()
+		if (!container.classList.contains('carousel')) return
+
+		const events = [
+			{event: 'touchstart', handler: touchStartHandler, options: {passive: true}},
+			{event: 'touchend', handler: touchEndHandler, options: {passive: true}},
+			{event: 'mousedown', handler: mouseDownHandler},
+			{event: 'mouseup', handler: mouseUpHandler},
+		]
+
+		eventListeners = events.map(({event, handler, options}) => {
+			container.addEventListener(event, handler as EventListener, options)
+			return {element: container, event, handler}
+		})
+	}
+
+	const removeEventListeners = () => {
+		eventListeners.forEach(({element, event, handler}) => {
+			element.removeEventListener(event, handler as EventListener)
+		})
+		eventListeners = []
+	}
+
+	// Toggle carousel state
+	const toggleCarousel = (activate: boolean) => {
+		container.classList.toggle('carousel', activate)
+		items.forEach(item => {
+			item.classList.toggle('carousel-item', activate)
+			item.style.width = activate ? `${config.itemWidth}px` : ''
+			item.style.flex = activate ? `0 0 ${config.itemWidth}px` : ''
+		})
+
+		if (activate) {
+			addEventListeners()
+			activeIndex = 0
+			updateCarousel()
+		} else {
+			removeEventListeners()
+			resetCarousel()
+		}
+	}
+
+	// Check screen size and toggle carousel accordingly
+	const checkScreenSize = () => {
 		clearTimeout(resizeTimeout)
 		resizeTimeout = setTimeout(() => {
 			const wasActive = isActive
@@ -867,200 +982,25 @@ function initGenericCarousel(config: {
 				willChange: wasActive !== isActive,
 			})
 
-			if (wasActive !== isActive) {
-				if (isActive) {
-					container.classList.add('carousel')
-					items.forEach(item => {
-						item.classList.add('carousel-item')
-						// Set item width dynamically
-						item.style.width = `${config.itemWidth}px`
-						item.style.flex = `0 0 ${config.itemWidth}px`
-					})
-
-					if (container.classList.contains('carousel') && document.querySelectorAll('.carousel-item').length > 0) {
-						addEventListeners()
-						// Initialize with first item centered
-						activeIndex = 0
-						updateCarousel()
-					}
-				} else {
-					container.classList.remove('carousel')
-					items.forEach(item => {
-						item.classList.remove('carousel-item')
-						// Reset item width to default
-						item.style.width = ''
-						item.style.flex = ''
-					})
-
-					removeEventListeners()
-					resetCarousel()
-				}
-			}
+			if (wasActive !== isActive) toggleCarousel(isActive)
 		}, 100)
 	}
 
-	function resetCarousel() {
-		// Reset to first item with smart positioning
-		activeIndex = 0
-
-		if (isActive && container.classList.contains('carousel')) {
-			// Only apply carousel positioning when carousel is active
-			const containerWidth = container.offsetWidth
-			const itemWidth = config.itemWidth + 32 // item width + gap
-			const totalItems = items.length
-			let offset = 0
-
-			if (activeIndex === 0) {
-				// First item: align to left with small padding
-				offset = 20
-			} else if (activeIndex === totalItems - 1) {
-				// Last item: align to right with small padding
-				offset = -(activeIndex * itemWidth) + (containerWidth - itemWidth - 20)
-			} else {
-				// Middle items: center the active item
-				const centerOffset = (containerWidth - itemWidth) / 2
-				offset = -(activeIndex * itemWidth) + centerOffset
-			}
-
-			track.style.transform = `translateX(${offset}px)`
-			items.forEach((item, i) => {
-				item.classList.toggle('active', i === activeIndex)
-			})
-		} else {
-			// When carousel is not active, reset to default state
-			track.style.transform = 'translateX(0)'
-			items.forEach(item => {
-				item.classList.remove('active')
-			})
-		}
-	}
-
-	function updateCarousel() {
-		if (
-			!isActive ||
-			!container.classList.contains('carousel') ||
-			document.querySelectorAll('.carousel-item').length === 0
-		)
-			return
-
-		// Calculate offset with smart positioning
-		const containerWidth = container.offsetWidth
-		const itemWidth = config.itemWidth + 32 // item width + gap
-		const totalItems = items.length
-		let offset = 0
-
-		if (activeIndex === 0) {
-			// First item: align to left with small padding
-			offset = 20
-		} else if (activeIndex === totalItems - 1) {
-			// Last item: align to right with small padding
-			offset = -(activeIndex * itemWidth) + (containerWidth - itemWidth - 20)
-		} else {
-			// Middle items: center the active item
-			const centerOffset = (containerWidth - itemWidth) / 2
-			offset = -(activeIndex * itemWidth) + centerOffset
-		}
-
-		track.style.transform = `translateX(${offset}px)`
-
-		items.forEach((item, i) => {
-			item.classList.toggle('active', i === activeIndex)
-		})
-	}
-
-	function handleSwipe(deltaX: number) {
-		if (
-			!isActive ||
-			!container.classList.contains('carousel') ||
-			document.querySelectorAll('.carousel-item').length === 0
-		)
-			return
-
-		if (deltaX > 50) {
-			activeIndex = Math.max(0, activeIndex - 1)
-		} else if (deltaX < -50) {
-			activeIndex = Math.min(items.length - 1, activeIndex + 1)
-		}
-		updateCarousel()
-	}
-
-	const touchStartHandler = (e: TouchEvent) => {
-		if (!isActive || !container.classList.contains('carousel')) return
-		startX = e.touches[0].clientX
-	}
-
-	const touchEndHandler = (e: TouchEvent) => {
-		if (!isActive || !container.classList.contains('carousel')) return
-		const deltaX = e.changedTouches[0].clientX - startX
-		handleSwipe(deltaX)
-	}
-
-	// Mouse events
-	const mouseDownHandler = (e: MouseEvent) => {
-		if (!isActive || !container.classList.contains('carousel')) return
-		isDragging = true
-		startX = e.clientX
-	}
-
-	const mouseUpHandler = (e: MouseEvent) => {
-		if (!isDragging || !isActive || !container.classList.contains('carousel')) return
-		isDragging = false
-		const deltaX = e.clientX - startX
-		handleSwipe(deltaX)
-	}
-
-	const resizeHandler = () => {
-		checkScreenSize()
-	}
-
-	function addEventListeners() {
-		removeEventListeners()
-
-		if (!container.classList.contains('carousel')) return
-
-		container.addEventListener('touchstart', touchStartHandler, {passive: true})
-		container.addEventListener('touchend', touchEndHandler, {passive: true})
-		container.addEventListener('mousedown', mouseDownHandler)
-		container.addEventListener('mouseup', mouseUpHandler)
-
-		eventListeners = [
-			{element: container, event: 'touchstart', handler: touchStartHandler},
-			{element: container, event: 'touchend', handler: touchEndHandler},
-			{element: container, event: 'mousedown', handler: mouseDownHandler},
-			{element: container, event: 'mouseup', handler: mouseUpHandler},
-		]
-	}
-
-	function removeEventListeners() {
-		eventListeners.forEach(({element, event, handler}) => {
-			element.removeEventListener(event, handler as EventListener)
-		})
-		eventListeners = []
-	}
-
-	// Force check screen size immediately
+	// Initialize
 	checkScreenSize()
+	setTimeout(checkScreenSize, 200) // Ensure DOM is ready
 
-	// Also check after a short delay to ensure DOM is ready
-	setTimeout(() => {
-		checkScreenSize()
-	}, 200)
-
-	// Expose force deactivate function for debugging
+	// Debug function
 	;(window as any).forceDeactivateCarousel = () => {
 		container.classList.remove('carousel')
-		items.forEach(item => {
-			item.classList.remove('carousel-item')
-		})
+		items.forEach(item => item.classList.remove('carousel-item'))
 		removeEventListeners()
 		track.style.transform = 'translateX(0)'
-		items.forEach(item => {
-			item.classList.remove('active')
-		})
+		items.forEach(item => item.classList.remove('active'))
 		isActive = false
 	}
 
-	window.addEventListener('resize', resizeHandler, {passive: true})
+	window.addEventListener('resize', checkScreenSize, {passive: true})
 }
 
 // Initialize carousel for how it work section

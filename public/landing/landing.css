@@ -57,6 +57,7 @@ p {
 	width: 100%;
 	min-height: 100vh;
 	font-family: var(--fontFamilyPrimary);
+	position: relative;
 }
 
 .container {
@@ -64,13 +65,11 @@ p {
 	width: 100%;
 	max-width: 1440px;
 	min-height: 100vh;
-	position: relative;
 	margin: 0 auto;
 	box-sizing: border-box;
 }
 
 .landing-page-desktop .overlap {
-	position: relative;
 	width: 100%;
 	min-height: 100vh;
 	top: 80px;
@@ -86,7 +85,6 @@ p {
 	align-items: center;
 	justify-content: center;
 	gap: 100px;
-	position: relative;
 	top: 100px;
 	left: 0;
 	margin: 0 auto;
@@ -95,18 +93,18 @@ p {
 .landing-page-desktop .hero-header {
 	display: flex;
 	flex-direction: column;
-	min-height: 800px;
+	min-height: 950px;
 	align-items: center;
 	gap: 20px;
-	padding: 50px 20px 0px;
-	position: relative;
+	padding: 150px 20px 0px;
 	align-self: stretch;
 	width: 100%;
-	background-image: url('../images/landing/bg-main.png');
-	background-size: contain;
-	background-position: center;
-	background-repeat: no-repeat;
 	box-sizing: border-box;
+
+	background-image: url('../images/landing/bg-main.png');
+	background-size: cover;
+	background-position: 65% 50%;
+	background-repeat: no-repeat;
 }
 
 .landing-page-desktop .stop-selling-clothes {
@@ -1188,18 +1186,18 @@ p {
 .landing-page-desktop .hero-header .cta__cone-image--2 {
 	width: 253px;
 	height: 243px;
-	top: 0;
+	top: 2%;
 	right: 0;
 	position: absolute;
+	z-index: 2;
 	object-fit: cover;
 	display: block;
-	z-index: 2;
 }
 
 .landing-page-desktop .hero-header .cta__cone-image--3 {
 	width: 177px;
 	height: 118px;
-	bottom: 0;
+	top: 12%;
 	left: -2%;
 	position: absolute;
 	object-fit: cover;
@@ -1210,8 +1208,8 @@ p {
 .landing-page-desktop .cta__cone-image--4 {
 	width: 135px;
 	height: 186px;
-	bottom: -8%;
-	left: -2%;
+	top: 30%;
+	left: -1%;
 	position: absolute;
 	object-fit: cover;
 	display: block;
@@ -1876,6 +1874,9 @@ p {
 /* ======================================== */
 
 @media (max-width: 1300px) {
+	.landing-page-desktop .hero-header {
+		background-position: 85% 50%;
+	}
 	.landing-page-desktop .features__container {
 		width: 65%;
 	}
@@ -1902,6 +1903,9 @@ p {
 	.landing-page-desktop .how-it-works__item {
 		flex: 1 1 calc(33.33% - 60px);
 		max-width: calc(33.33% - 60px);
+	}
+	.landing-page-desktop .cta__cone-image--4 {
+		top: 32%;
 	}
 }
 
@@ -1940,9 +1944,7 @@ p {
 	}
 
 	.landing-page-desktop .hero-header {
-		padding: 0;
-		min-height: 550px;
-		background-position: bottom;
+		min-height: 950px;
 	}
 	.landing-page-desktop .hero-header .hero__subtitle {
 		margin-bottom: 0;
@@ -1950,14 +1952,15 @@ p {
 	}
 
 	.landing-page-desktop .hero-header .cta__cone-image--2 {
-		top: -10%;
 		width: 105px;
 		height: 81px;
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--3 {
-		bottom: -5%;
 		width: 101px;
 		height: 55px;
+	}
+	.landing-page-desktop .cta__cone-image--4 {
+		top: 26%;
 	}
 
 	.brands__grid {
@@ -2104,6 +2107,12 @@ p {
 	.landing-page-desktop .how-it-works__step {
 		/* min-height: 776px; */
 	}
+	.landing-page-desktop .cta__cone-image--3 {
+		top: 11%;
+	}
+	.landing-page-desktop .cta__cone-image--4 {
+		top: 22.5%;
+	}
 }
 @media (max-width: 830px) {
 	.landing-page-desktop .how-it-works__grid {
@@ -2162,7 +2171,8 @@ p {
 		display: none !important;
 	}
 	.landing-page-desktop .hero-header {
-		min-height: 475px;
+		padding: 100px 20px 0px;
+		background-position: 90% 50%;
 	}
 	.landing-page-desktop .statistics__grid {
 		gap: 15px;
@@ -2216,6 +2226,15 @@ p {
 	.landing-page-desktop .footer__main {
 		gap: 50px;
 	}
+	.landing-page-desktop .hero-header .cta__cone-image--2 {
+		top: 1%;
+	}
+	.landing-page-desktop .hero-header .cta__cone-image--3 {
+		top: 11.5%;
+	}
+	.landing-page-desktop .hero-header .cta__cone-image--4 {
+		top: 25%;
+	}
 }
 
 /* ======================================== */
@@ -2241,6 +2260,15 @@ p {
 	.landing-page-desktop .how-it-works__step-image {
 		max-width: 280px;
 		min-height: 510px;
+	}
+	.landing-page-desktop .hero-header .cta__cone-image--2 {
+		top: 1.5%;
+	}
+	.landing-page-desktop .hero-header .cta__cone-image--3 {
+		top: 10.5%;
+	}
+	.landing-page-desktop .hero-header .cta__cone-image--4 {
+		top: 32%;
 	}
 }
 
@@ -2289,6 +2317,9 @@ p {
 
 	.landing-page-desktop .frame {
 		gap: 50px;
+	}
+	.landing-page-desktop .hero-header {
+		min-height: 750px;
 	}
 	/* Statistics responsive for mobile */
 	.landing-page-desktop .statistics__grid {
@@ -2350,16 +2381,6 @@ p {
 
 	.landing-page-desktop .section-title {
 		min-height: 20px;
-	}
-
-	.landing-page-desktop .hero-header {
-		min-height: 347px;
-	}
-	.landing-page-desktop .hero-header .cta__cone-image--2 {
-		top: -20%;
-	}
-	.landing-page-desktop .hero-header .cta__cone-image--3 {
-		bottom: -10%;
 	}
 
 	.brands__logo {
@@ -2525,6 +2546,15 @@ p {
 	}
 	.landing-page-desktop .feature__number {
 		top: 3px;
+	}
+	.landing-page-desktop .hero-header .cta__cone-image--2 {
+		top: 0.5%;
+	}
+	.landing-page-desktop .hero-header .cta__cone-image--3 {
+		top: 7.5%;
+	}
+	.landing-page-desktop .hero-header .cta__cone-image--4 {
+		top: 23.5%;
 	}
 }
 
