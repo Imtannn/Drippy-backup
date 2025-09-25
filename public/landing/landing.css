@@ -2126,6 +2126,9 @@ p {
 		min-height: unset;
 		height: 532px;
 	}
+	.landing-page-desktop .cta__cone-image--4 {
+		top: 25.5%;
+	}
 }
 
 @media (max-width: 768px) {
@@ -2265,7 +2268,7 @@ p {
 		top: 1.5%;
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--3 {
-		top: 10.5%;
+		top: 11%;
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--4 {
 		top: 32%;
@@ -2526,6 +2529,7 @@ p {
 
 	.landing-page-desktop .footer__container {
 		gap: 0;
+		padding: 20px 0 0px;
 	}
 
 	.landing-page-desktop .footer__main {
@@ -2551,10 +2555,10 @@ p {
 		top: 0.5%;
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--3 {
-		top: 7.5%;
+		top: 6%;
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--4 {
-		top: 23.5%;
+		top: 22%;
 	}
 }
 
