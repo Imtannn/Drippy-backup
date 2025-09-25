@@ -166,8 +166,17 @@ export class LoginUI extends LumeElement {
 			const observers: MutationObserver[] = []
 			const roots = [this.shadowRoot, this.getRootNode(), document].filter(Boolean) as (Document | ShadowRoot)[]
 
-			const tryClick = () => {
-				// Try multiple roots to find the sign-in link (handles dialog movement)
+			const tryClick = (): boolean => {
+				// First check if login form is already visible
+				for (const root of roots) {
+					const loginForm = root.querySelector('.accounts-dialog') as HTMLElement | null
+					if (loginForm && loginForm.style.display !== 'none') {
+						observers.forEach(observer => observer.disconnect())
+						return true // Login form already visible
+					}
+				}
+
+				// Try to find and click the sign-in link
 				let signInLink: HTMLElement | null = null
 				let foundRoot: Document | ShadowRoot | null = null
 
@@ -181,8 +190,21 @@ export class LoginUI extends LumeElement {
 
 				if (signInLink && foundRoot) {
 					signInLink.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-					observers.forEach(observer => observer.disconnect())
+
+					// Check if the login form appeared after clicking
+					setTimeout(() => {
+						for (const root of roots) {
+							const loginForm = root.querySelector('.accounts-dialog') as HTMLElement | null
+							if (loginForm && loginForm.style.display !== 'none') {
+								observers.forEach(observer => observer.disconnect())
+							}
+						}
+					}, 50)
+
+					return false
 				}
+
+				return false
 			}
 
 			for (const root of roots) {
@@ -191,8 +213,26 @@ export class LoginUI extends LumeElement {
 				observers.push(observer)
 			}
 
-			// Try immediately in case it's already there
-			setTimeout(tryClick, 0)
+			let attempts = 0
+			const maxAttempts = 4
+			const retryDelays = [0, 100, 200, 500]
+
+			const tryClickWithRetry = () => {
+				if (attempts >= maxAttempts) return
+
+				const success = tryClick()
+				if (success) {
+					console.log('tryClick succeeded at attempt', attempts)
+					return
+				}
+
+				attempts++
+				if (attempts < maxAttempts) {
+					setTimeout(tryClickWithRetry, retryDelays[attempts])
+				}
+			}
+
+			setTimeout(tryClickWithRetry, 50)
 
 			onCleanup(() => observers.forEach(observer => observer.disconnect()))
 		})
