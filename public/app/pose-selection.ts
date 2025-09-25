@@ -79,7 +79,10 @@ export class PoseSelection extends Element {
 					<div class="items-grid">
 						<for-each
 							items=${() =>
-								store.selectedAvatar === 'moidien' && store.tempSelectedAvatar === 'moidien' ? poses.poses : []}
+								store.selectedAvatar === 'moidien' &&
+								(store.tempSelectedAvatar === 'moidien' || !store.tempSelectedAvatar)
+									? poses.poses
+									: []}
 							content=${() => (pose: (typeof poses.poses)[number]) => html`
 								<item-card
 									class=${() => (store.selectedAnimation === pose.value ? 'item-preview' : '')}
