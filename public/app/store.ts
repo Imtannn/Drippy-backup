@@ -14,6 +14,8 @@ export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.
 export const username = () => currentUser()?.username ?? ''
 export const dateOfBirth = () => currentUser()?.profile?.dateOfBirth ?? ''
 export const isAdmin = () => !!currentUser()?.profile?.isAdmin
+export const turnOffSettingsInSpace = () => !!currentUser()?.profile?.turnOffSettingsInSpace
+export const hideAnimationSelection = () => !!currentUser()?.profile?.hideAnimationSelection
 
 const pathname = location.pathname
 
@@ -40,7 +42,9 @@ export const store = createMutable({
 	get isAdmin() {
 		return isAdmin()
 	},
-
+	get hideAnimationSelection() {
+		return hideAnimationSelection()
+	},
 	get visits() {
 		return visits()
 	},
@@ -48,11 +52,14 @@ export const store = createMutable({
 		return usersCount()
 	},
 
+	get turnOffSettingsInSpace() {
+		return turnOffSettingsInSpace()
+	},
+
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
 	tempSelectedAvatar: null as string | null,
 	selectedAvatar: null as string | null,
-	tempSelectedPose: null as string | null,
 	selectedPose: null as string | null,
 	selectedSpace: null as Space | null,
 	selectedAnimation: 'none' as 'none' | 'walk' | 'dance',
@@ -332,9 +339,6 @@ export const store = createMutable({
 	set selectAvatar(avatar: string) {
 		this.selectedAvatar = avatar
 	},
-	set setTempSelectedPose(pose: string) {
-		this.tempSelectedPose = pose
-	},
 	set selectPose(pose: string) {
 		this.selectedPose = pose
 	},
@@ -505,6 +509,11 @@ export const store = createMutable({
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
+		// Clear all loading states to prevent orphaned symbols
+		this.loadingBlocks.clear()
+		this.loadingMaterials.clear()
+		this.isDrippySceneLoading.clear()
+		this.loadingScreenshots.clear()
 		this.order = {
 			status: 'idle' as OrderStatus,
 			error: null as string | null,
@@ -541,6 +550,10 @@ export const store = createMutable({
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.screenshotCache = new Map<TemplateCategory, string>()
 		this.loadingScreenshots = new Set<TemplateCategory>()
+		// Clear all loading states to prevent orphaned symbols
+		this.loadingBlocks.clear()
+		this.loadingMaterials.clear()
+		this.isDrippySceneLoading.clear()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {

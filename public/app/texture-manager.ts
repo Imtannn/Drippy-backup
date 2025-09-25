@@ -26,7 +26,7 @@ class TextureManager {
 	private textureCache = new Map<string, CachedTexture>()
 	private loadingPromises = new Map<string, Promise<CachedTexture | null>>()
 	private defaultConfig: TextureConfig = {
-		repeat: [60 / 3, 60 / 3],
+		repeat: [60 / 9, 60 / 9],
 		coef: 1,
 		offset: [1, 1],
 		rotate: 0,
@@ -271,7 +271,7 @@ class TextureManager {
 		material.emissiveIntensity = 0
 		material.aoMapIntensity = 1
 		material.side = THREE.DoubleSide
-		// material.normalScale = new THREE.Vector2(2, 2)
+		material.normalScale = new THREE.Vector2(2, 2)
 		material.blending = THREE.NormalBlending
 
 		// Ensure GPU-side texture state updates

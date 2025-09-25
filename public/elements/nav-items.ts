@@ -1,4 +1,5 @@
 import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {store} from '../app/store.js'
 
 type NavItemsAttributes = 'activeTab'
 
@@ -8,12 +9,32 @@ export class NavItems extends Element {
 
 	@signal activeTab = 'items'
 
+	connectedCallback() {
+		super.connectedCallback()
+
+		document.addEventListener('avatar-dropdown-click', (event: Event) => {
+			const customEvent = event as CustomEvent
+			if (customEvent.detail?.isOpening) {
+				this.activeTab = 'avatar'
+			} else {
+				this.activeTab = 'items'
+			}
+		})
+	}
+
 	#onTabClick = (tab: string) => {
+		// Only allow pose tab click when selectedSpace is 'moidien'
+		if (tab === 'pose' && store.selectedSpace?.collection !== 'moidien') {
+			return
+		}
+
 		this.activeTab = tab
-		this.dispatchEvent(new CustomEvent('tab-change', {
-			bubbles: true,
-			detail: { tab }
-		}))
+		this.dispatchEvent(
+			new CustomEvent('tab-change', {
+				bubbles: true,
+				detail: {tab},
+			}),
+		)
 	}
 
 	template = () => html`
@@ -25,7 +46,7 @@ export class NavItems extends Element {
 			>
 				<div class="nav-icon">
 					<img
-						src=${() => this.activeTab === 'items' ? '/images/items.svg' : '/images/items-inactive.svg'}
+						src=${() => (this.activeTab === 'items' ? '/images/items.svg' : '/images/items-inactive.svg')}
 						alt="Items"
 					/>
 				</div>
@@ -38,10 +59,7 @@ export class NavItems extends Element {
 				onclick=${() => this.#onTabClick('pose')}
 			>
 				<div class="nav-icon">
-					<img
-						src=${() => this.activeTab === 'pose' ? '/images/pose-active.svg' : '/images/pose.svg'}
-						alt="Pose"
-					/>
+					<img src=${() => (this.activeTab === 'pose' ? '/images/pose.svg' : '/images/pose-inactive.svg')} alt="Pose" />
 				</div>
 				<span class="nav-label">Pose</span>
 			</button>
@@ -88,7 +106,7 @@ export class NavItems extends Element {
 		}
 
 		.nav-label {
-			font-size: var(--fontSizeTextXs);
+			font-size: var(--fontSizeTextXxxs);
 			font-weight: var(--fontWeightMedium);
 			line-height: 1;
 		}

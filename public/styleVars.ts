@@ -26,6 +26,7 @@ const styleVars = {
 	uiColorSecondaryDarkGrey: '#2a2c31',
 	uiColorSecondaryLightGrey: '#99999a',
 	uiColorDarkGrey: '#292b30',
+	uiColorLightGrey: '#E0E1E4',
 	uiColorBorderColor: '#f6f6f6',
 	uiColorFocusColor: '#4a90e2',
 	uiColorShadowColor: 'rgba(0, 0, 0, 0.1)',
@@ -39,6 +40,7 @@ const styleVars = {
 	borderRadiusMedium: 12,
 	borderRadiusLarge: 15,
 	borderRadiusXl: 20,
+	borderRadiusXxl: 50,
 	borderRadiusCircular: '50%',
 	borderRadiusPill: 100,
 
@@ -55,6 +57,7 @@ const styleVars = {
 	fontSizeTextSm: 14,
 	fontSizeTextXs: 12,
 	fontSizeTextXxs: 10,
+	fontSizeTextXxxs: 9,
 	// Responsive sizes
 	fontSizeTextXlTablet: 44,
 	fontSizeTextLgTablet: 28,

@@ -18,6 +18,7 @@ export type Avatar = {
 	src: string
 	value: string
 	gender: Gender
+	default?: boolean
 }
 
 export type Space = {

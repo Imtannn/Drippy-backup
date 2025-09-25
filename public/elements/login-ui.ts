@@ -69,6 +69,32 @@ export class LoginUI extends LumeElement {
 		// Set placeholders after Blaze renders the inputs
 		setTimeout(setPlaceholders, 100)
 
+		// Watch for changes in the login form and re-apply placeholders
+		const observer = new MutationObserver(() => {
+			setTimeout(setPlaceholders, 50)
+		})
+
+		// Observe changes to the login form
+		const loginForm = el.querySelector('#loginButtons') || el
+		observer.observe(loginForm, {
+			childList: true,
+			subtree: true,
+			attributes: false,
+		})
+
+		// Clean up observer when element is removed
+		const cleanup = () => observer.disconnect()
+		if (el.parentNode) {
+			const parentObserver = new MutationObserver(mutations => {
+				mutations.forEach(mutation => {
+					mutation.removedNodes.forEach(node => {
+						if (node === el) cleanup()
+					})
+				})
+			})
+			parentObserver.observe(el.parentNode, {childList: true})
+		}
+
 		el.addEventListener(
 			'click',
 			event => {
@@ -136,22 +162,39 @@ export class LoginUI extends LumeElement {
 		this.createEffect(() => {
 			if (!this.expanded) return
 
-			const root = (this.shadowRoot ?? this.getRootNode()) as Document | ShadowRoot
+			// Observe all potential roots for changes
+			const observers: MutationObserver[] = []
+			const roots = [this.shadowRoot, this.getRootNode(), document].filter(Boolean) as (Document | ShadowRoot)[]
 
 			const tryClick = () => {
-				const signInLink = root.querySelector('#login-sign-in-link') as HTMLElement | null
-				if (signInLink) {
+				// Try multiple roots to find the sign-in link (handles dialog movement)
+				let signInLink: HTMLElement | null = null
+				let foundRoot: Document | ShadowRoot | null = null
+
+				for (const root of roots) {
+					signInLink = root.querySelector('#login-sign-in-link') as HTMLElement | null
+					if (signInLink) {
+						foundRoot = root
+						break
+					}
+				}
+
+				if (signInLink && foundRoot) {
 					signInLink.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-					observer.disconnect()
+					observers.forEach(observer => observer.disconnect())
 				}
 			}
 
-			const observer = new MutationObserver(() => tryClick())
-			observer.observe(root, {childList: true, subtree: true})
+			for (const root of roots) {
+				const observer = new MutationObserver(() => tryClick())
+				observer.observe(root, {childList: true, subtree: true})
+				observers.push(observer)
+			}
+
 			// Try immediately in case it's already there
 			setTimeout(tryClick, 0)
 
-			onCleanup(() => observer.disconnect())
+			onCleanup(() => observers.forEach(observer => observer.disconnect()))
 		})
 	}
 
@@ -173,6 +216,14 @@ export class LoginUI extends LumeElement {
 			display: contents;
 		}
 
+		#login-buttons-google,
+		#login-email,
+		#login-password {
+			color: var(--uiColorPrimaryBlack) !important;
+			background-color: var(--uiColorPrimaryWhite) !important;
+			border: var(--borderWidth) solid var(--uiColorLightGrey) !important;
+		}
+
 		#loginButtons {
 			user-select: none;
 			display: block;
@@ -188,7 +239,7 @@ export class LoginUI extends LumeElement {
 			}
 
 			.accounts-dialog {
-				width: 354px;
+				width: min(354px, calc(90vw - 2 * var(--uiSpacingSmall)));
 				pointer-events: auto;
 				text-transform: none;
 				font-family: var(--base-font-family);
@@ -196,7 +247,7 @@ export class LoginUI extends LumeElement {
 				letter-spacing: normal;
 				text-decoration: none;
 
-				transform: translate(0px, var(--uiSpacingLarge));
+				transform: translate(0px, 0px);
 
 				* {
 					font-family: inherit;
@@ -218,7 +269,7 @@ export class LoginUI extends LumeElement {
 
 				.login-button {
 					margin-bottom: var(--uiSpacingTiny);
-					border-radius: var(--borderRadiusSmall);
+					border-radius: var(--borderRadiusXxl);
 					background-color: var(--uiColorPrimaryBlack);
 					color: var(--uiColorPrimaryWhite);
 					font-weight: var(--fontWeightSemiBold);
@@ -246,13 +297,11 @@ export class LoginUI extends LumeElement {
 					width: 100%;
 					height: var(--uiSpacingXl);
 					padding: var(--uiGapSmall);
-					border-radius: var(--borderRadius);
+					border-radius: var(--borderRadiusXxl);
 					font-size: var(--fontSizeTextSm);
 					margin-bottom: var(--uiGap);
 					box-sizing: border-box;
 					background: #f8f8f8;
-					border: var(--borderWidth) solid #ccc;
-					color: #333;
 					transition: var(--transitionSlow);
 					pointer-events: auto;
 

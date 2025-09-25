@@ -4,7 +4,7 @@ import {store} from '../app/store.js'
 @element
 export class AnimationSelect extends Element {
 	template = () => html`
-		<div style=${() => (store.isAdmin ? '' : 'display: none;')}>
+		<div style=${() => (store.isAdmin && !store.hideAnimationSelection ? '' : 'display: none;')}>
 			<select
 				id="animation-select"
 				onchange=${(ev: any) => {

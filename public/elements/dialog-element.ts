@@ -30,13 +30,18 @@ export class DialogElement extends Element {
 		dialog.style.cssText = `
 			border: none;
 			border-radius: var(--borderRadius);
-			padding: var(--uiSpacing);
+			padding: var(--uiSpacingLarge);
 			background: var(--uiColorPrimaryWhite);
 			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-			width: 600px;
-			height: 60vh;
+			width: min(90vw, 400px);
+			max-width: 400px;
+			height: auto;
+			min-height: 0;
+			max-height: 40vh;
 			overflow-x: hidden;
+			overflow-y: auto;
 			box-sizing: border-box;
+			margin: auto;
 		`
 
 		// Add backdrop styles
@@ -56,7 +61,7 @@ export class DialogElement extends Element {
 		}
 
 		// Close dialog when clicking backdrop
-		dialog.addEventListener('click', (e) => {
+		dialog.addEventListener('click', e => {
 			if (e.target === dialog) {
 				this.close()
 			}
@@ -87,6 +92,7 @@ export class DialogElement extends Element {
 
 	close = () => {
 		this.open = false
+		this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}))
 	}
 
 	show = () => {

@@ -2,8 +2,10 @@ import {css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
+import '../elements/placeholder-image.js'
 import type {Space} from '../types/types.js'
 import {store} from './store.js'
+import {updateUrlWithParams} from '../routes.js'
 
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
@@ -17,10 +19,8 @@ export class SpacesSelection extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
-		this.createEffect(() => {
-			const avatarGender = avatars.find(avatar => avatar.value === store.selectedAvatar)?.gender
-			this.filterdSpace = spaces.filter(space => space.gender === avatarGender)
-		})
+		// Show all spaces regardless of gender
+		this.filterdSpace = spaces
 	}
 
 	fadeOut(callback?: () => void) {
@@ -33,7 +33,18 @@ export class SpacesSelection extends Element {
 	#onSceneSelected = (space: Space) => {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('scene', space.slug)
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+
+		// Check if we need to switch avatars based on gender
+		const currentAvatarGender = avatars.find(avatar => avatar.value === store.selectedAvatar)?.gender
+		if (currentAvatarGender !== space.gender && store.selectedAvatar) {
+			// Find the default avatar for the space's gender
+			const defaultAvatar = avatars.find(avatar => avatar.gender === space.gender && avatar.default)
+			if (defaultAvatar) {
+				store.selectAvatar = defaultAvatar.value
+				searchParams.set('avatar', defaultAvatar.value)
+			}
+		}
+		updateUrlWithParams(searchParams)
 		store.selectSpace = space
 	}
 
@@ -54,8 +65,8 @@ export class SpacesSelection extends Element {
 						<!-- Bloom Realm Card -->
 						<div class="space-card">
 							<div class="scene-preview">
-								<div class="scene-placeholder">
-									<img src=${space().sceneThumbnail} alt="Bloom Realm Scene" onclick=${() => this.#onSceneSelected(space())} />
+								<div class="scene-placeholder" onclick=${() => this.#onSceneSelected(space())}>
+									<placeholder-image src=${space().sceneThumbnail} alt="Bloom Realm Scene" object-fit="cover" />
 								</div>
 								<div class="garments-count">${space().garmentsCount} garments</div>
 							</div>

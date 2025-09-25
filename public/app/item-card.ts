@@ -10,6 +10,8 @@ import {
 	type ElementAttributes,
 } from 'lume'
 
+import '../elements/placeholder-image.js'
+
 type ItemCardAttributes =
 	| 'itemValue'
 	| 'itemSrc'
@@ -63,7 +65,13 @@ export class ItemCard extends Element {
 	template = () => html`
 		<div class="item-card" onclick=${this.#onClick} classList=${() => ({active: this.itemActive})}>
 			<div class="item-preview">
-				<img class="item-thumb" src=${() => this.itemSrc} alt=${() => this.itemAlt} style=${() => this.imageStyle} />
+				<placeholder-image
+					src=${() => this.itemSrc}
+					alt=${() => this.itemAlt}
+					object-fit=${() => this.objectFit}
+					object-position=${() => this.objectPosition}
+					image-style=${() => this.imageStyle}
+				></placeholder-image>
 			</div>
 		</div>
 	`
