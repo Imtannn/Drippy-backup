@@ -286,10 +286,6 @@ export class TemplateView extends Element {
 					content=${() => html`<save-button onclick=${this.#onAvatarSaveClick}></save-button>`}
 				></show-when>
 				<show-when
-					condition=${() => this.showPoseSelection}
-					content=${() => html`<save-button></save-button>`}
-				></show-when>
-				<show-when
 					condition=${() => !this.showAvatarSelection && !this.showPoseSelection}
 					content=${() => html`
 						<drip-it-button
