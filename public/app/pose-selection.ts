@@ -45,6 +45,10 @@ export class PoseSelection extends Element {
 		if (!store.selectedAnimation) {
 			store.selectedAnimation = poses.poses[0].value as 'none' | 'walk' | 'dance'
 		}
+
+		this.createEffect(() => {
+			this.selectedTab = 'Poses'
+		})
 	}
 
 	#onItemClick = (e: CustomEvent) => {
@@ -74,7 +78,8 @@ export class PoseSelection extends Element {
 				<tabs-content selected-value="Poses">
 					<div class="items-grid">
 						<for-each
-							items=${poses.poses}
+							items=${() =>
+								store.selectedAvatar === 'moidien' && store.tempSelectedAvatar === 'moidien' ? poses.poses : []}
 							content=${() => (pose: (typeof poses.poses)[number]) => html`
 								<item-card
 									class=${() => (store.selectedAnimation === pose.value ? 'item-preview' : '')}

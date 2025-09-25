@@ -1,5 +1,4 @@
 import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
-import {store} from '../app/store.js'
 
 type NavItemsAttributes = 'activeTab'
 
@@ -23,11 +22,6 @@ export class NavItems extends Element {
 	}
 
 	#onTabClick = (tab: string) => {
-		// Only allow pose tab click when selectedSpace is 'moidien'
-		if (tab === 'pose' && store.selectedSpace?.collection !== 'moidien') {
-			return
-		}
-
 		this.activeTab = tab
 		this.dispatchEvent(
 			new CustomEvent('tab-change', {
