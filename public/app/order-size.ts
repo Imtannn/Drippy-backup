@@ -368,6 +368,24 @@ export class OrderSize extends Element {
 	css = css/*css*/ `
 		${appStyles}
 
+		.order-summary {
+			position: fixed;
+			bottom: 70px;
+			left: 0;
+			right: 0;
+			background: var(--uiColorPrimaryWhite);
+			border-top: 1px solid var(--uiColorBorderColor);
+			padding: 0px var(--uiSpacing);
+			z-index: 100;
+		}
+
+		.total-section {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: var(--uiSpacingMedium);
+		}
+
 		.selected-items {
 			padding-top: var(--uiSpacing);
 		}
@@ -484,13 +502,6 @@ export class OrderSize extends Element {
 			border-top: var(--borderWidth) solid var(--uiColorBorderColor);
 		}
 
-		.total-section {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: var(--uiSpacing);
-		}
-
 		.total-label {
 			font-size: var(--fontSizeTextSm);
 			font-weight: var(--fontWeightSemiBold);
@@ -503,6 +514,12 @@ export class OrderSize extends Element {
 			font-weight: var(--fontWeightSemiBold);
 			font-family: var(--fontFamily);
 			color: var(--uiColorPrimaryBlack);
+		}
+
+		.order-button.disabled {
+			color: var(--uiColorSecondaryLightGrey);
+			cursor: not-allowed;
+			pointer-events: none;
 		}
 
 		.quantity-controls {
@@ -627,11 +644,11 @@ export class OrderSize extends Element {
 
 		.size-btn.custom {
 			position: relative;
+			border: 1px solid #ddd;
 			background: linear-gradient(136deg, #e56be8 1.67%, #495cff 100.68%);
 			background-clip: text;
 			-webkit-background-clip: text;
 			-webkit-text-fill-color: transparent;
-			border: none;
 		}
 
 		.size-btn.custom::before {
