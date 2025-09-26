@@ -25,7 +25,7 @@ export class OutfitPreview extends Element {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.delete('isPreview')
 		updateUrlWithParams(searchParams)
-		store.navigateTo = 'blocks'
+		store.navigateTo = 'template'
 	}
 
 	#onHomeButtonClick = () => {
