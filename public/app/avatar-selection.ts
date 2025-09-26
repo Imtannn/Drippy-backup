@@ -66,7 +66,13 @@ export class AvatarSelection extends Element {
 				<tabs-content selected-value="female">
 					<div class="items-grid">
 						<for-each
-							items=${avatars.filter(avatar => avatar.gender === 'female')}
+							items=${() => {
+								const femaleAvatars = avatars.filter(avatar => avatar.gender === 'female')
+								if (this.contentOnly && store.selectedSpace?.gender) {
+									return store.selectedSpace.gender === 'female' ? femaleAvatars : []
+								}
+								return femaleAvatars
+							}}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
 									class=${() => (store.tempSelectedAvatar === avatar.value ? 'item-preview' : '')}
@@ -88,7 +94,13 @@ export class AvatarSelection extends Element {
 				<tabs-content selected-value="male">
 					<div class="items-grid">
 						<for-each
-							items=${avatars.filter(avatar => avatar.gender === 'male')}
+							items=${() => {
+								const maleAvatars = avatars.filter(avatar => avatar.gender === 'male')
+								if (this.contentOnly && store.selectedSpace?.gender) {
+									return store.selectedSpace.gender === 'male' ? maleAvatars : []
+								}
+								return maleAvatars
+							}}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
 									class=${() => (store.tempSelectedAvatar === avatar.value ? 'item-preview' : '')}
