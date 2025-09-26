@@ -100,7 +100,7 @@ export class TemplateItemOverlay extends Element {
 		:host {
 			position: absolute;
 			top: 2px;
-			z-index: 100;
+			z-index: 5;
 			pointer-events: auto;
 			width: calc(100% - 4px);
 			height: calc(100% - 4px);
