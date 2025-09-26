@@ -6,7 +6,7 @@ import '../elements/avatar-dropdown.js'
 import '../elements/placeholder-image.js'
 import {updateUrlWithParams} from '../routes.js'
 import type {Space} from '../types/types.js'
-import {store} from './store.js'
+import {currentUser, store} from './store.js'
 
 import '../elements/dialog-element.js'
 import '../elements/logic/index-each.js'
@@ -52,7 +52,7 @@ export class SpacesSelection extends Element {
 		store.selectSpace = space
 	}
 
-	#onLogoutClick = () => {
+	#onSignInClick = () => {
 		this.showLoginDialog = true
 	}
 
@@ -64,8 +64,13 @@ export class SpacesSelection extends Element {
 					<avatar-dropdown hide-chevron></avatar-dropdown>
 				</a>
 				<div class="nav-links">
-					<a href="/landing" class="learn-more-button">Learn more</a>
-					<button class="logout-button" onclick=${this.#onLogoutClick}>Log out</button>
+					<a href="/landing" class="learn-more-link">Learn more</a>
+					${() => {
+						const user = currentUser()
+						return user !== null
+							? html`<login-ui></login-ui>`
+							: html`<button class="sign-in-button" onclick=${this.#onSignInClick}>Sign in</button>`
+					}}
 				</div>
 			</div>
 
@@ -235,7 +240,7 @@ export class SpacesSelection extends Element {
 			gap: 0.5rem;
 		}
 
-		.learn-more-button {
+		.learn-more-link {
 			font-size: var(--fontSizeTextXs);
 			padding: 0.5rem 1rem;
 			background: var(--uiColorPrimaryLightGrey);
@@ -256,22 +261,25 @@ export class SpacesSelection extends Element {
 			}
 		}
 
-		.logout-button {
+		.sign-in-button {
 			font-size: var(--fontSizeTextXs);
 			padding: 0.5rem 1rem;
 			background: var(--uiColorPrimaryBlack);
-			border: 1px solid var(--uiColorLightGrey);
+			border: 1px solid var(--uiColorPrimaryBlack);
 			border-radius: var(--borderRadiusPill);
 			cursor: pointer;
 			font-weight: var(--fontWeightNormal);
 			color: var(--uiColorPrimaryWhite);
 			white-space: nowrap;
+			text-decoration: none;
 
 			&:hover {
 				background: var(--uiColorLightGrey);
+				color: var(--uiColorPrimaryBlack);
 
 				:host-context([data-theme='dark']) & {
 					background: #333;
+					color: var(--uiColorPrimaryWhite);
 				}
 			}
 		}
@@ -457,10 +465,6 @@ export class SpacesSelection extends Element {
 
 			.nav-links {
 				gap: 0.5rem;
-			}
-
-			.logout-button {
-				padding: 0.3rem 0.8rem;
 			}
 
 			.main-title {

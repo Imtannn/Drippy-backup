@@ -256,6 +256,18 @@ export class LoginUI extends LumeElement {
 			display: contents;
 		}
 
+		#login-name-link {
+			font-size: var(--fontSizeTextXs);
+			padding: 0.5rem 1rem;
+			background: var(--uiColorPrimaryBlack);
+			border: 1px solid var(--uiColorPrimaryBlack);
+			border-radius: var(--borderRadiusPill);
+			cursor: pointer;
+			font-weight: var(--fontWeightNormal);
+			color: var(--uiColorPrimaryWhite);
+			white-space: nowrap;
+		}
+
 		#login-buttons-google,
 		#login-email,
 		#login-password {
@@ -274,7 +286,6 @@ export class LoginUI extends LumeElement {
 			}
 
 			.login-link-text {
-				color: var(--uiColorPrimaryBlack);
 				text-decoration: none;
 			}
 
@@ -314,7 +325,6 @@ export class LoginUI extends LumeElement {
 					color: var(--uiColorPrimaryWhite);
 					font-weight: var(--fontWeightSemiBold);
 					border: none;
-					font-size: var(--fontSizeTextMdDesktop);
 					height: var(--uiSpacingXl);
 					line-height: var(--uiSpacingXl);
 					padding: 0;
@@ -322,7 +332,8 @@ export class LoginUI extends LumeElement {
 					width: 100%;
 				}
 
-				.login-button-form-submit {
+				.login-button-form-submit,
+				.login-buttons-dropdown-align-right {
 					margin-top: var(--uiSpacingSmall);
 					font-size: var(--fontSizeTextSm);
 				}
