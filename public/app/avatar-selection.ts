@@ -1,7 +1,7 @@
 import {booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
-import {store} from './store.js'
 import {avatars} from '../consts/avatars.js'
 import {updateUrlWithParams} from '../routes.js'
+import {store} from './store.js'
 
 import '../elements/bottom-sheet.js'
 import '../elements/logic/for-each.js'
@@ -32,6 +32,10 @@ export class AvatarSelection extends Element {
 
 	#onItemClick = (e: CustomEvent) => {
 		store.setTempSelectedAvatar = e.detail.itemValue
+
+		if (this.contentOnly) {
+			this.#onSaveClick()
+		}
 	}
 
 	#onSaveClick = () => {
@@ -62,10 +66,16 @@ export class AvatarSelection extends Element {
 				<tabs-content selected-value="female">
 					<div class="items-grid">
 						<for-each
-							items=${avatars.filter(avatar => avatar.gender === 'female')}
+							items=${() => {
+								const femaleAvatars = avatars.filter(avatar => avatar.gender === 'female')
+								if (this.contentOnly && store.selectedSpace?.gender) {
+									return store.selectedSpace.gender === 'female' ? femaleAvatars : []
+								}
+								return femaleAvatars
+							}}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
-									class=${() => store.tempSelectedAvatar === avatar.value ? 'item-preview' : ''}
+									class=${() => (store.tempSelectedAvatar === avatar.value ? 'item-preview' : '')}
 									item-active=${() => store.tempSelectedAvatar === avatar.value}
 									item-src=${avatar.thumbnail}
 									item-alt=${avatar.value}
@@ -84,10 +94,16 @@ export class AvatarSelection extends Element {
 				<tabs-content selected-value="male">
 					<div class="items-grid">
 						<for-each
-							items=${avatars.filter(avatar => avatar.gender === 'male')}
+							items=${() => {
+								const maleAvatars = avatars.filter(avatar => avatar.gender === 'male')
+								if (this.contentOnly && store.selectedSpace?.gender) {
+									return store.selectedSpace.gender === 'male' ? maleAvatars : []
+								}
+								return maleAvatars
+							}}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
-									class=${() => store.tempSelectedAvatar === avatar.value ? 'item-preview' : ''}
+									class=${() => (store.tempSelectedAvatar === avatar.value ? 'item-preview' : '')}
 									item-active=${() => store.tempSelectedAvatar === avatar.value}
 									item-src=${avatar.thumbnail}
 									item-alt=${avatar.value}
@@ -118,9 +134,7 @@ export class AvatarSelection extends Element {
 				</app-buttons-group>
 			</app-buttons-right>
 
-			<bottom-sheet>
-				${this.#renderAvatarContent()}
-			</bottom-sheet>
+			<bottom-sheet> ${this.#renderAvatarContent()} </bottom-sheet>
 		`
 	}
 
