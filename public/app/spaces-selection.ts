@@ -2,19 +2,23 @@ import {css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
+import '../elements/avatar-dropdown.js'
 import '../elements/placeholder-image.js'
-import type {Space} from '../types/types.js'
-import {store} from './store.js'
 import {updateUrlWithParams} from '../routes.js'
+import type {Space} from '../types/types.js'
+import {currentUser, store} from './store.js'
 
+import '../elements/dialog-element.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
+import '../elements/login-ui.js'
 
 @element
 export class SpacesSelection extends Element {
 	static elementName = 'spaces-selection'
 
 	@signal filterdSpace: Space[] = []
+	@signal showLoginDialog = false
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -48,8 +52,28 @@ export class SpacesSelection extends Element {
 		store.selectSpace = space
 	}
 
+	#onSignInClick = () => {
+		this.showLoginDialog = true
+	}
+
 	template = () => html`
 		<div class="spaces-container">
+			<!-- Navigation -->
+			<div class="navigation">
+				<a href="/app" class="avatar-link">
+					<avatar-dropdown hide-chevron></avatar-dropdown>
+				</a>
+				<div class="nav-links">
+					<a href="/landing" class="learn-more-link">Learn more</a>
+					${() => {
+						const user = currentUser()
+						return user !== null
+							? html`<login-ui></login-ui>`
+							: html`<button class="sign-in-button" onclick=${this.#onSignInClick}>Sign in</button>`
+					}}
+				</div>
+			</div>
+
 			<!-- Main Title and Description -->
 			<div class="header">
 				<h1 class="main-title">Discover & immerse.</h1>
@@ -92,6 +116,22 @@ export class SpacesSelection extends Element {
 				></show-when>
 			</div>
 		</div>
+
+		<dialog-element
+			open=${() => this.showLoginDialog}
+			onclose=${() => {
+				this.showLoginDialog = false
+			}}
+		>
+			<div style="display: flex; justify-content: center; align-items: flex-start; width: 100%; height: 100%;">
+				<login-ui expanded style="position: relative;"></login-ui>
+			</div>
+			<style>
+				login-ui {
+					display: contents;
+				}
+			</style>
+		</dialog-element>
 	`
 
 	css = css/*css*/ `
@@ -179,6 +219,69 @@ export class SpacesSelection extends Element {
 
 			:host-context([data-theme='dark']) & {
 				background: #1a1a1a;
+			}
+		}
+
+		.navigation {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 2rem;
+			padding-top: var(--uiSpacing);
+		}
+
+		.avatar-link {
+			text-decoration: none;
+		}
+
+		.nav-links {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.learn-more-link,
+		.sign-in-button {
+			font-size: var(--fontSizeTextXs);
+			padding: 0.5rem 1rem;
+			border-radius: var(--borderRadiusPill);
+			cursor: pointer;
+			font-weight: var(--fontWeightNormal);
+			white-space: nowrap;
+			text-decoration: none;
+			display: inline-block;
+			box-sizing: border-box;
+			line-height: 1;
+			vertical-align: middle;
+		}
+
+		.learn-more-link {
+			background: var(--uiColorPrimaryLightGrey);
+			border: 1px solid var(--uiColorPrimaryLightGrey);
+			color: var(--uiColorPrimaryBlack);
+
+			&:hover {
+				background: var(--uiColorLightGrey);
+
+				:host-context([data-theme='dark']) & {
+					background: #333;
+				}
+			}
+		}
+
+		.sign-in-button {
+			background: var(--uiColorPrimaryBlack);
+			border: 1px solid var(--uiColorPrimaryBlack);
+			color: var(--uiColorPrimaryWhite);
+
+			&:hover {
+				background: var(--uiColorLightGrey);
+				color: var(--uiColorPrimaryBlack);
+
+				:host-context([data-theme='dark']) & {
+					background: #333;
+					color: var(--uiColorPrimaryWhite);
+				}
 			}
 		}
 
@@ -356,6 +459,15 @@ export class SpacesSelection extends Element {
 
 		/* Mobile responsive */
 		@media (max-width: 768px) {
+			.navigation {
+				padding: 0 1rem;
+				margin-bottom: 1.5rem;
+			}
+
+			.nav-links {
+				gap: 0.5rem;
+			}
+
 			.main-title {
 				// font-size: 2rem;
 			}

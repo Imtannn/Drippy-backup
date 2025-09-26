@@ -7,6 +7,7 @@ import {textureManager} from '../app/texture-manager.js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/bottom-sheet.js'
+import '../elements/home-button.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/tabs.js'
@@ -803,6 +804,11 @@ export class UploadView extends Element {
 		console.log('🚀 Auto-selected uploaded template')
 	}
 
+	#onHomeButtonClick = () => {
+		store.resetState()
+		window.location.href = '/app?avatar=moidien'
+	}
+
 	template = () => html`
 		<drippy-scene
 			selected-space=${() => this.selectedSpace}
@@ -848,6 +854,7 @@ export class UploadView extends Element {
 
 		<app-buttons-left class="show-on-desktop">
 			<app-buttons-group>
+				<home-button onclick=${this.#onHomeButtonClick}></home-button>
 				<button class="upload-button" onclick=${this.#handleUploadClick} disabled=${() => this.isUploading}>
 					${() => (this.isUploading ? 'Uploading...' : '📁 Upload Template Folder')}
 				</button>

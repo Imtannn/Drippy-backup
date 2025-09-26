@@ -43,8 +43,6 @@ export class HomePage extends Element {
 		<login-ui
 			custom-style=${() => css/*css*/ `
 				#loginButtons a.login-link-text {
-					color: black;
-
 					:host-context([data-theme='dark']) & {
 						color: white;
 					}

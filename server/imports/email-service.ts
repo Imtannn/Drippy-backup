@@ -13,7 +13,7 @@ const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY
 const SENDGRID_FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || 'noreply@drippy3d.com'
 
 // Admin email for order notifications
-const ADMIN_EMAIL = 'thidieuanhle@gmail.com'
+const ADMIN_EMAIL = 'tan@drippy3d.com'
 
 if (SENDGRID_API_KEY) {
 	sgMail.setApiKey(SENDGRID_API_KEY)
