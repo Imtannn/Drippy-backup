@@ -2,10 +2,11 @@ import {css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
+import '../elements/avatar-dropdown.js'
 import '../elements/placeholder-image.js'
+import {updateUrlWithParams} from '../routes.js'
 import type {Space} from '../types/types.js'
 import {store} from './store.js'
-import {updateUrlWithParams} from '../routes.js'
 
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
@@ -50,6 +51,15 @@ export class SpacesSelection extends Element {
 
 	template = () => html`
 		<div class="spaces-container">
+			<!-- Navigation -->
+			<div class="navigation">
+				<avatar-dropdown hide-chevron></avatar-dropdown>
+				<div class="nav-links">
+					<a href="/landing" class="learn-more-button">Learn more</a>
+					<button class="logout-button">Log out</button>
+				</div>
+			</div>
+
 			<!-- Main Title and Description -->
 			<div class="header">
 				<h1 class="main-title">Discover & immerse.</h1>
@@ -179,6 +189,61 @@ export class SpacesSelection extends Element {
 
 			:host-context([data-theme='dark']) & {
 				background: #1a1a1a;
+			}
+		}
+
+		.navigation {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 2rem;
+			padding-top: var(--uiSpacing);
+		}
+
+		.nav-links {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.learn-more-button {
+			font-size: var(--fontSizeTextXs);
+			padding: 0.5rem 1rem;
+			background: var(--uiColorPrimaryLightGrey);
+			border: 1px solid var(--uiColorPrimaryLightGrey);
+			border-radius: var(--borderRadiusPill);
+			cursor: pointer;
+			font-weight: var(--fontWeightNormal);
+			color: var(--uiColorPrimaryBlack);
+			white-space: nowrap;
+			text-decoration: none;
+
+			&:hover {
+				background: var(--uiColorLightGrey);
+
+				:host-context([data-theme='dark']) & {
+					background: #333;
+				}
+			}
+		}
+
+		.logout-button {
+			font-size: var(--fontSizeTextXs);
+			padding: 0.5rem 1rem;
+			background: var(--uiColorPrimaryBlack);
+			border: 1px solid var(--uiColorLightGrey);
+			border-radius: var(--borderRadiusPill);
+			cursor: pointer;
+			font-weight: var(--fontWeightNormal);
+			color: var(--uiColorPrimaryWhite);
+			white-space: nowrap;
+
+			&:hover {
+				background: var(--uiColorLightGrey);
+
+				:host-context([data-theme='dark']) & {
+					background: #333;
+				}
 			}
 		}
 
@@ -356,6 +421,19 @@ export class SpacesSelection extends Element {
 
 		/* Mobile responsive */
 		@media (max-width: 768px) {
+			.navigation {
+				padding: 0 1rem;
+				margin-bottom: 1.5rem;
+			}
+
+			.nav-links {
+				gap: 0.5rem;
+			}
+
+			.logout-button {
+				padding: 0.3rem 0.8rem;
+			}
+
 			.main-title {
 				// font-size: 2rem;
 			}
