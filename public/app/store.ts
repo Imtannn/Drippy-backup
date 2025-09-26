@@ -295,7 +295,8 @@ export const store = createMutable({
 			selectedTemplates: Map<TemplateCategory, Template>,
 		) => {
 			const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
-				Dress: ['Shirt', 'Pants', 'Skirt'],
+				Dress: ['Shirt', 'Top', 'Pants', 'Skirt'],
+				Top: ['Dress'],
 				Shirt: ['Dress'],
 				Jacket: [],
 				Skirt: ['Pants', 'Dress'],
