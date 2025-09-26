@@ -60,7 +60,7 @@ export class SpacesSelection extends Element {
 		<div class="spaces-container">
 			<!-- Navigation -->
 			<div class="navigation">
-				<a href="/app" class="avatar-link">
+				<a href="/" class="avatar-link">
 					<avatar-dropdown hide-chevron></avatar-dropdown>
 				</a>
 				<div class="nav-links">

@@ -1,5 +1,6 @@
 import type {ElementAttributes} from '@lume/element'
 import {css, Element, element, html, numberAttribute} from 'lume'
+import '../app/app.js'
 import '../imports/collections/Users.js'
 import './login-ui.js'
 import './theme-switch.js'
@@ -9,8 +10,12 @@ const logoUrlDark = new URL('../images/logo-dark.svg', import.meta.url)
 
 type HomePageAttributes = keyof {} // no attributes yet
 
-// Redirect to app immediately
-window.location.href = '/app?avatar=moidien'
+// If no query parameters, redirect to app with default avatar
+// If query parameters exist, show the app directly
+const hasParams = window.location.search
+if (!hasParams) {
+	window.location.href = '?avatar=moidien'
+}
 
 @element
 export class HomePage extends Element {
@@ -26,45 +31,64 @@ export class HomePage extends Element {
 		})
 	}
 
-	template = () => html`
-		<img src="${logoUrl.href}" alt="Lume logo" />
-		<img src="${logoUrlDark.href}" alt="Lume logo" class="dark" />
+	template = () => {
+		const hasParams = window.location.search
 
-		<h1>Drippy</h1>
+		if (hasParams) {
+			// Show the app when there are query parameters
+			return html`<drippy-app></drippy-app>`
+		} else {
+			// Show the dev navigation page when no parameters
+			return html`
+				<img src="${logoUrl.href}" alt="Lume logo" />
+				<img src="${logoUrlDark.href}" alt="Lume logo" class="dark" />
 
-		<nav>
-			<a href="/landing">Landing Page - Marketing page for Drippy</a>
-			<a href="/onboarding">Onboarding - Get started with Drippy</a>
-			<a href="/stats">Stats - View page visits and number of users</a>
-			<a href="/profile">Profile - View and edit your username</a>
-			<a href="/app">App - New app WIP</a>
-		</nav>
+				<h1>Drippy</h1>
 
-		<login-ui
-			custom-style=${() => css/*css*/ `
-				#loginButtons a.login-link-text {
-					color: black;
+				<nav>
+					<a href="/landing">Landing Page - Marketing page for Drippy</a>
+					<a href="/onboarding">Onboarding - Get started with Drippy</a>
+					<a href="/stats">Stats - View page visits and number of users</a>
+					<a href="/profile">Profile - View and edit your username</a>
+					<a href="/?avatar=moidien">App</a>
+				</nav>
 
-					:host-context([data-theme='dark']) & {
-						color: white;
-					}
-				}
-			`}
-		></login-ui>
+				<login-ui
+					custom-style=${() => css/*css*/ `
+						#loginButtons a.login-link-text {
+							color: black;
 
-		<theme-switch></theme-switch>
-	`
+							:host-context([data-theme='dark']) & {
+								color: white;
+							}
+						}
+					`}
+				></login-ui>
+
+				<theme-switch></theme-switch>
+			`
+		}
+	}
 
 	css = css/*css*/ `
 		:host {
 			width: 100%;
 			height: 100%;
+		}
+
+		/* Styles for the dev navigation page */
+		:host:not(:has(drippy-app)) {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			flex-direction: column;
 			gap: 1rem;
 			opacity: 0;
+		}
+
+		/* Styles for the app view */
+		:host:has(drippy-app) {
+			display: contents;
 		}
 
 		* {
