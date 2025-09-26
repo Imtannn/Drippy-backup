@@ -293,9 +293,18 @@ export class RemixOverlay extends Element {
 		}
 
 		.tabs-list-container {
+			position: absolute;
+			top: 15px;
+			right: 0;
+			left: 0;
+			z-index: 100;
+			background: var(--uiColorPrimaryWhite);
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
+			padding: var(--uiSpacing);
+			padding-top: 0;
+			padding-bottom: var(--uiSpacingSmall);
 		}
 
 		.close-button {
@@ -308,6 +317,12 @@ export class RemixOverlay extends Element {
 			border-radius: var(--borderRadiusCircular);
 			border: none;
 			cursor: pointer;
+		}
+
+		tabs-content {
+			padding: var(--uiSpacing);
+			padding-top: 33px;
+			padding-bottom: var(--uiSpacingXxl);
 		}
 	`
 }
