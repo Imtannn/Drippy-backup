@@ -25,6 +25,7 @@ import '../elements/logo-button.js'
 import '../elements/nav-items.js'
 import '../elements/person-button.js'
 import '../elements/placeholder-image.js'
+import '../elements/preview-button.js'
 import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
@@ -32,9 +33,10 @@ import {updateGarmentsInUrl, updateUrlWithParams} from '../routes.js'
 import {formatNumber} from '../utils.js'
 import './app-buttons.js'
 import './avatar-selection.js'
-import './drip-it-button.js'
 import './item-card.js'
 import './pose-selection.js'
+import './remix-overlay.js'
+import './template-item-overlay.js'
 
 type TemplateViewAttributes = keyof {}
 
@@ -49,11 +51,18 @@ export class TemplateView extends Element {
 	@signal showAvatarSelection = false
 	@signal showPoseSelection = false
 	@signal pendingActiveTemplateIds: Partial<Record<TemplateCategory, string | null>> = {}
+	@signal showRemixOverlay = false
+	@signal showTemplateOverlay: Template | null = null
+
+	private isOpeningOverlay = false
 
 	private defaultCollection = 'moidien'
 
 	connectedCallback() {
 		super.connectedCallback()
+
+		// Add click handler to close overlay when clicking outside
+		document.addEventListener('click', this.#onDocumentClick)
 
 		this.createEffect(() => {
 			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
@@ -146,54 +155,66 @@ export class TemplateView extends Element {
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
 
-		const currentSelectedTemplate = store.selectedTemplates.get(template.category)
-		const willToggleOff = currentSelectedTemplate?._id === template._id
+		const isCurrentlySelected = this.#isTemplateActive(template)
 
-		this.#setPendingActiveTemplate(template.category, willToggleOff ? null : template._id)
+		// If clicking on already selected template, show overlay instead of toggling
+		if (isCurrentlySelected) {
+			this.isOpeningOverlay = true
+			this.showTemplateOverlay = template
+			setTimeout(() => {
+				this.isOpeningOverlay = false
+			}, 0)
+			return
+		}
+
+		this.#setPendingActiveTemplate(template.category, template._id)
 
 		let loadingId: symbol | null = null
 
-		if (!willToggleOff) {
-			const templateFabric = getFabricForTemplate(template, store.selectedSpace?.collection)
+		const templateFabric = getFabricForTemplate(template, store.selectedSpace?.collection)
 
-			// Get extra fabrics if they exist
-			const extraFabrics: Fabric[] = []
-			if (template.extraMaterials) {
-				const brandFabrics = fabrics[store.selectedSpace?.collection ?? 'moidien'] || []
-				for (const extraMaterial of template.extraMaterials) {
-					const extraFabric = brandFabrics.find(
-						fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
-					)
-					if (extraFabric) {
-						extraFabrics.push(extraFabric)
-					}
+		// Get extra fabrics if they exist
+		const extraFabrics: Fabric[] = []
+		if (template.extraMaterials) {
+			const brandFabrics = fabrics[store.selectedSpace?.collection ?? 'moidien'] || []
+			for (const extraMaterial of template.extraMaterials) {
+				const extraFabric = brandFabrics.find(
+					fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
+				)
+				if (extraFabric) {
+					extraFabrics.push(extraFabric)
 				}
 			}
+		}
 
-			// Collect all fabrics to preload (main + extras)
-			const fabricsToPreload = []
-			if (templateFabric) {
-				fabricsToPreload.push(templateFabric)
-			}
-			fabricsToPreload.push(...extraFabrics)
+		// Collect all fabrics to preload (main + extras)
+		const fabricsToPreload = []
+		if (templateFabric) {
+			fabricsToPreload.push(templateFabric)
+		}
+		fabricsToPreload.push(...extraFabrics)
 
-			if (fabricsToPreload.length > 0) {
-				loadingId = Symbol(`fabric-${templateFabric?._id || 'extra'}`)
-				store.addLoadingMaterial(loadingId)
-				try {
-					// Preload all fabric textures and template blocks separately
-					await Promise.all([
-						Promise.all(fabricsToPreload.map(fabric => textureManager.preloadFabricBaseTextures(fabric))),
-						Promise.all(blockManager.preloadTemplateBlocks(template, store.selectedSpace!)),
-					])
-				} catch (error) {
-					console.warn('Failed to preload fabric textures:', error)
-				} finally {
-					if (loadingId) {
-						store.removeLoadingMaterial(loadingId)
-					}
+		if (fabricsToPreload.length > 0) {
+			loadingId = Symbol(`fabric-${templateFabric?._id || 'extra'}`)
+			store.addLoadingMaterial(loadingId)
+			try {
+				// Preload all fabric textures and template blocks separately
+				await Promise.all([
+					Promise.all(fabricsToPreload.map(fabric => textureManager.preloadFabricBaseTextures(fabric))),
+					Promise.all(blockManager.preloadTemplateBlocks(template, store.selectedSpace!)),
+				])
+			} catch (error) {
+				console.warn('Failed to preload fabric textures:', error)
+			} finally {
+				if (loadingId) {
+					store.removeLoadingMaterial(loadingId)
 				}
 			}
+		}
+
+		// If this is the first template selected, show remix overlay for this item
+		if (store.selectedTemplates.size === 0) {
+			this.#handleTemplateOverlayRemix(template.category)
 		}
 
 		store.setSelectedTemplates = template
@@ -221,16 +242,11 @@ export class TemplateView extends Element {
 		return store.selectedTemplates.get(template.category)?._id === template._id
 	}
 
-	#onDripItClick = () => {
-		const user = currentUser()
-		// If undefined, means the user is still loading
-		if (user === undefined) return
-
-		if (user !== null) {
-			store.navigateTo = 'blocks'
-		} else {
-			this.showLoginDialog = true
-		}
+	#onPreviewButtonClick = () => {
+		const searchParams = new URLSearchParams(window.location.search)
+		searchParams.set('isPreview', 'true')
+		store.setIsPreview = true
+		updateUrlWithParams(searchParams)
 	}
 
 	#onBackButtonClick = () => {
@@ -238,6 +254,8 @@ export class TemplateView extends Element {
 		this.showAvatarSelection = false
 		this.showPoseSelection = false
 		this.showLoginDialog = false
+		this.showRemixOverlay = false
+		this.showTemplateOverlay = null
 
 		store.resetSelectedTemplates()
 		const searchParams = new URLSearchParams(window.location.search)
@@ -289,6 +307,46 @@ export class TemplateView extends Element {
 		}
 	}
 
+	#closeRemixOverlay = () => {
+		this.showRemixOverlay = false
+		store.setRemixOverlayTemplateCategory = null
+	}
+
+	#onTemplateOverlayClose = () => {
+		this.showTemplateOverlay = null
+		this.isOpeningOverlay = false
+	}
+
+	#handleTemplateOverlayRemix = (templateCategory: TemplateCategory) => {
+		this.showTemplateOverlay = null
+		this.isOpeningOverlay = false
+		store.setRemixOverlayTemplateCategory = templateCategory
+		this.showRemixOverlay = true
+	}
+
+	#onTemplateOverlayRemix = (e: CustomEvent) => {
+		const templateCategory = e.detail.templateCategory
+		this.#handleTemplateOverlayRemix(templateCategory)
+	}
+
+	#onDocumentClick = (e: Event) => {
+		// Skip the first click that originated from opening the overlay
+		if (this.isOpeningOverlay) return
+
+		// Close overlay when clicking outside
+		if (
+			this.showTemplateOverlay &&
+			!e.composedPath().some(el => el instanceof Element && el.tagName === 'TEMPLATE-ITEM-OVERLAY')
+		) {
+			this.showTemplateOverlay = null
+		}
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback()
+		document.removeEventListener('click', this.#onDocumentClick)
+	}
+
 	template = () => html`
 		<app-buttons-left>
 			<app-buttons-group>
@@ -298,7 +356,6 @@ export class TemplateView extends Element {
 
 		<app-buttons-right>
 			<app-buttons-group>
-				<!-- <theme-switch-button></theme-switch-button> -->
 				<logo-button brand-name="MoiDien"></logo-button>
 			</app-buttons-group>
 			<app-buttons-group>
@@ -306,7 +363,7 @@ export class TemplateView extends Element {
 				<cube-button></cube-button>
 				<show-when
 					condition=${() => store.selectedSpace?.collection === 'moidien'}
-					content=${() => html` <animation-select></animation-select> `}
+					content=${() => html`<animation-select></animation-select>`}
 				></show-when>
 			</app-buttons-group>
 		</app-buttons-right>
@@ -320,10 +377,10 @@ export class TemplateView extends Element {
 				<show-when
 					condition=${() => !this.showAvatarSelection && !this.showPoseSelection}
 					content=${() => html`
-						<drip-it-button
+						<preview-button
 							button-disabled=${() => store.selectedTemplates.size === 0}
-							onclick=${this.#onDripItClick}
-						></drip-it-button>
+							onclick=${this.#onPreviewButtonClick}
+						></preview-button>
 					`}
 				></show-when>
 			</app-buttons-group>
@@ -339,7 +396,8 @@ export class TemplateView extends Element {
 				content=${() => html`<pose-selection content-only></pose-selection>`}
 			></show-when>
 			<show-when
-				condition=${() => !this.showAvatarSelection && !this.showPoseSelection && this.selectedTab !== null}
+				condition=${() =>
+					!this.showAvatarSelection && !this.showPoseSelection && this.selectedTab !== null && !this.showRemixOverlay}
 				content=${() => html`
 					<tabs-provider
 						default-value=${() => this.selectedTab}
@@ -368,16 +426,28 @@ export class TemplateView extends Element {
 													category === 'All' ? (this.templateCategories.All ?? []) : this.templateCategories[category]}
 												content=${() => (template: Template) => html`
 													<div class="template-item">
-														<item-card
-															item-active=${() => this.#isTemplateActive(template)}
-															item-src=${template.thumb}
-															item-alt=${template.name}
-															item-value=${template}
-															oncardselected=${this.#onItemClick}
-															object-fit="contain"
-															object-position="center"
-															aspect-ratio="0.79"
-														></item-card>
+														<div class="template-item-container">
+															<item-card
+																item-active=${() => this.#isTemplateActive(template)}
+																item-src=${template.thumb}
+																item-alt=${template.name}
+																item-value=${template}
+																oncardselected=${this.#onItemClick}
+																object-fit="contain"
+																object-position="center"
+																aspect-ratio="0.79"
+															></item-card>
+															<show-when
+																condition=${() => this.showTemplateOverlay?._id === template._id}
+																content=${() => html`
+																	<template-item-overlay
+																		selected-template=${() => template}
+																		onclose=${this.#onTemplateOverlayClose}
+																		onremix=${this.#onTemplateOverlayRemix}
+																	></template-item-overlay>
+																`}
+															></show-when>
+														</div>
 														<div class="template-product-name">${template.name}</div>
 														<div class="template-product-price-container">
 															<div
@@ -388,7 +458,7 @@ export class TemplateView extends Element {
 															</div>
 															<show-when
 																condition=${() => store.selectedSpace?.isWholesale}
-																content=${() => html` <div class="template-product-wholesale">MOQ: 5pcs</div> `}
+																content=${() => html`<div class="template-product-wholesale">MOQ: 5pcs</div>`}
 															></show-when>
 														</div>
 													</div>
@@ -400,6 +470,17 @@ export class TemplateView extends Element {
 							></for-each>
 						</div>
 					</tabs-provider>
+				`}
+			></show-when>
+			<show-when
+				condition=${() => this.showRemixOverlay && store.remixOverlayTemplateCategory !== null}
+				content=${() => html`
+					<div class="remix-overlay-container">
+						<remix-overlay
+							selected-template-category=${() => store.remixOverlayTemplateCategory}
+							onclose=${this.#closeRemixOverlay}
+						></remix-overlay>
+					</div>
 				`}
 			></show-when>
 			<bottom-navigation>
@@ -452,7 +533,7 @@ export class TemplateView extends Element {
 		.tabs-content-container {
 			padding: var(--uiSpacing);
 			padding-top: 0;
-			padding-bottom: 5px;
+			padding-bottom: var(--uiSpacingXxl);
 			background: var(--uiColorPrimaryWhite);
 		}
 
@@ -484,6 +565,12 @@ export class TemplateView extends Element {
 			display: flex;
 			flex-direction: column;
 			gap: var(--uiSpacingTiny);
+		}
+
+		.template-item-container {
+			position: relative;
+			width: 100%;
+			flex: 1;
 		}
 
 		.template-product-name {
@@ -520,6 +607,13 @@ export class TemplateView extends Element {
 			font-weight: var(--fontWeightNormal);
 			color: #424347;
 			text-wrap: wrap;
+		}
+
+		.remix-overlay-container {
+			padding: var(--uiSpacing);
+			padding-top: 0;
+			padding-bottom: var(--uiSpacingXxl);
+			background: var(--uiColorPrimaryWhite);
 		}
 	`
 }

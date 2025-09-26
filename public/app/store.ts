@@ -90,6 +90,7 @@ export const store = createMutable({
 	screenshotCache: new Map<TemplateCategory, string>(),
 	// Track which screenshots are currently being generated
 	loadingScreenshots: new Set<TemplateCategory>(),
+	remixOverlayTemplateCategory: null as TemplateCategory | null,
 	order: {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -334,6 +335,9 @@ export const store = createMutable({
 	set navigateTo(route: AppRoute) {
 		this.view = route
 	},
+	set setRemixOverlayTemplateCategory(category: TemplateCategory | null) {
+		this.remixOverlayTemplateCategory = category
+	},
 	set setTempSelectedAvatar(avatar: string) {
 		this.tempSelectedAvatar = avatar
 	},
@@ -551,6 +555,7 @@ export const store = createMutable({
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.screenshotCache = new Map<TemplateCategory, string>()
 		this.loadingScreenshots = new Set<TemplateCategory>()
+		this.remixOverlayTemplateCategory = null
 		// Clear all loading states to prevent orphaned symbols
 		this.loadingBlocks.clear()
 		this.loadingMaterials.clear()

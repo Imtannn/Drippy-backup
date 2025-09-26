@@ -1,4 +1,5 @@
 import {GLTFLoader, type GLTF} from 'three/examples/jsm/loaders/GLTFLoader.js'
+import {blocks as collectionBlocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
 import {getBlocksForTemplate} from '../consts/relationships.js'
 import type {Block, BlockCategory} from '../types/block.js'
@@ -7,6 +8,17 @@ import type {Template, TemplateCategory} from '../types/template.js'
 import type {Space} from '../types/types.js'
 
 class BlockManager {
+	private readonly availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
+		All: [],
+		Shirt: ['Sleeves'],
+		Jacket: ['Sleeves'],
+		Pants: [],
+		Accessories: [],
+		Dress: [],
+		Skirt: [],
+		Top: [],
+	}
+
 	preloadTemplateBlocks(template: Template, selectedSpace: Space): Promise<GLTF>[] {
 		const blocks = getBlocksForTemplate(template, selectedSpace?.collection)
 		const gltfLoader = new GLTFLoader()
@@ -92,6 +104,67 @@ class BlockManager {
 		}
 
 		return newBlocks
+	}
+
+	getBlockCategoriesForTemplateCategory(
+		templateCategory: TemplateCategory,
+		options: {
+			selectedBlocks?: Map<TemplateCategory, Map<BlockCategory, Block>> | undefined
+			selectedSpace?: Space | null | undefined
+			sourceCollection?: string | null | undefined
+		},
+		collectionOverride?: string | null | undefined,
+	): BlockCategory[] {
+		const mappingCategories = [...(this.availableBlocksMapping[templateCategory] || [])] as BlockCategory[]
+		const collection = collectionOverride ?? options.sourceCollection ?? options.selectedSpace?.collection ?? 'moidien'
+		const blocks = this.getBlocksForTemplateCategory(templateCategory, collection)
+		const categoriesFromBlocks = new Set<BlockCategory>(blocks.map(block => block.category))
+
+		if (templateCategory === 'Shirt') {
+			const selectedBlock = options.selectedBlocks?.get(templateCategory)?.get('Bodice')
+			if (selectedBlock?.templateId !== '13' && options.selectedSpace?.collection === 'moidien') {
+				return []
+			}
+		}
+
+		const filteredMapping = mappingCategories.filter(category => categoriesFromBlocks.has(category))
+
+		return filteredMapping
+	}
+
+	getAvailableFabricsForTemplateCategory(
+		sourceCollection: string | null | undefined,
+		templateCategory: TemplateCategory,
+	): Fabric[] {
+		const collection = sourceCollection ?? 'moidien'
+		return (fabrics[collection] ?? []).filter(fabric => fabric.templateCategories?.includes(templateCategory))
+	}
+
+	getBlocksForTemplateCategory(templateCategory: TemplateCategory, collection: string | null | undefined) {
+		const resolvedCollection = collection ?? 'moidien'
+		return (collectionBlocks[resolvedCollection] ?? []).filter(block => block.templateCategory === templateCategory)
+	}
+
+	isRemixAvailableForTemplate(
+		templateCategory: TemplateCategory,
+		options: {
+			selectedBlocks?: Map<TemplateCategory, Map<BlockCategory, Block>> | undefined
+			selectedSpace?: Space | null | undefined
+			sourceCollection?: string | null | undefined
+		},
+	) {
+		if (!['Shirt', 'Jacket', 'Pants', 'Dress', 'Skirt', 'Top'].includes(templateCategory))
+			return {available: false, blocksCategories: [], fabrics: []}
+		const blocksCategories = this.getBlockCategoriesForTemplateCategory(templateCategory, options)
+		const fabrics = this.getAvailableFabricsForTemplateCategory(
+			options.sourceCollection ?? options.selectedSpace?.collection,
+			templateCategory,
+		)
+		return {
+			available: blocksCategories.length > 0 || fabrics.length > 0,
+			blocksCategories,
+			fabrics,
+		}
 	}
 }
 
