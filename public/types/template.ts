@@ -8,6 +8,7 @@ export type TemplateCategory =
 	| 'Accessories'
 	| 'Dress'
 	| 'Top'
+	| string // For custom categories
 
 export type ExtraMaterial = {
 	mesh: string
