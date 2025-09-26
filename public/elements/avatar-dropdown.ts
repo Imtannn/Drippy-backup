@@ -2,13 +2,14 @@ import {booleanAttribute, css, Element, element, html, signal, type ElementAttri
 import {store} from '../app/store.js'
 import {avatars} from '../consts/avatars.js'
 
-type AvatarDropdownAttributes = 'open'
+type AvatarDropdownAttributes = 'open' | 'hideChevron'
 
 @element
 export class AvatarDropdown extends Element {
 	static readonly elementName = 'avatar-dropdown'
 
 	@booleanAttribute open = false
+	@booleanAttribute hideChevron = false
 	@signal currentAvatarThumbnail = ''
 
 	connectedCallback() {
@@ -37,13 +38,21 @@ export class AvatarDropdown extends Element {
 	}
 
 	template = () => html`
-		<div class="avatar-container" onclick=${this.#onAvatarDropdownClick}>
+		<div class="avatar-container" onclick=${() => (!this.hideChevron ? this.#onAvatarDropdownClick() : null)}>
 			<div class="avatar-image-wrapper">
 				<img src=${() => this.currentAvatarThumbnail} alt="Avatar" class="avatar-image" />
 			</div>
-			<button class="avatar-dropdown-btn" classList=${{active: () => this.open}}>
-				<img src=${() => (this.open ? '/images/chevron-up-violet.svg' : '/images/chevron-down.svg')} alt="Dropdown" />
-			</button>
+			${() =>
+				!this.hideChevron
+					? html`
+							<button class="avatar-dropdown-btn" classList=${{active: () => this.open}}>
+								<img
+									src=${() => (this.open ? '/images/chevron-up-violet.svg' : '/images/chevron-down.svg')}
+									alt="Dropdown"
+								/>
+							</button>
+						`
+					: ''}
 		</div>
 	`
 
@@ -67,7 +76,7 @@ export class AvatarDropdown extends Element {
 			height: 40px;
 			overflow: hidden;
 			border-radius: var(--borderRadiusCircular);
-			border: 2px solid var(--uiColorBorderColor);
+			border: 1px solid var(--uiColorBorderColor);
 		}
 
 		.avatar-image {
