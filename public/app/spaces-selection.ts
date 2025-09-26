@@ -240,17 +240,25 @@ export class SpacesSelection extends Element {
 			gap: 0.5rem;
 		}
 
-		.learn-more-link {
+		.learn-more-link,
+		.sign-in-button {
 			font-size: var(--fontSizeTextXs);
 			padding: 0.5rem 1rem;
-			background: var(--uiColorPrimaryLightGrey);
-			border: 1px solid var(--uiColorPrimaryLightGrey);
 			border-radius: var(--borderRadiusPill);
 			cursor: pointer;
 			font-weight: var(--fontWeightNormal);
-			color: var(--uiColorPrimaryBlack);
 			white-space: nowrap;
 			text-decoration: none;
+			display: inline-block;
+			box-sizing: border-box;
+			line-height: 1;
+			vertical-align: middle;
+		}
+
+		.learn-more-link {
+			background: var(--uiColorPrimaryLightGrey);
+			border: 1px solid var(--uiColorPrimaryLightGrey);
+			color: var(--uiColorPrimaryBlack);
 
 			&:hover {
 				background: var(--uiColorLightGrey);
@@ -262,16 +270,9 @@ export class SpacesSelection extends Element {
 		}
 
 		.sign-in-button {
-			font-size: var(--fontSizeTextXs);
-			padding: 0.5rem 1rem;
 			background: var(--uiColorPrimaryBlack);
 			border: 1px solid var(--uiColorPrimaryBlack);
-			border-radius: var(--borderRadiusPill);
-			cursor: pointer;
-			font-weight: var(--fontWeightNormal);
 			color: var(--uiColorPrimaryWhite);
-			white-space: nowrap;
-			text-decoration: none;
 
 			&:hover {
 				background: var(--uiColorLightGrey);

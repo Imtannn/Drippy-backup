@@ -266,6 +266,11 @@ export class LoginUI extends LumeElement {
 			font-weight: var(--fontWeightNormal);
 			color: var(--uiColorPrimaryWhite);
 			white-space: nowrap;
+			line-height: 1;
+			vertical-align: middle;
+			display: inline-block;
+			box-sizing: border-box;
+			text-decoration: none;
 		}
 
 		#login-buttons-google,
