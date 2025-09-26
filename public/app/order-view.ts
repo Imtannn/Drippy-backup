@@ -283,131 +283,156 @@ export class OrderView extends Element {
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-snap="0.88">
 			<div class="order-container">
-				<!-- Shipping Address -->
-				<div class="shipping-section">
-					<h3 class="section-title">Shipping address</h3>
-					<div class="form-fields">
-						<div class="field-group">
-							<input
-								type="text"
-								class="form-input"
-								placeholder=" "
-								value=${() => store.order.shippingAddress.firstName}
-								oninput=${this.#onFirstNameInput}
-							/>
-							<label class="floating-label">First name</label>
-						</div>
-						<div class="field-group">
-							<input
-								type="text"
-								class="form-input"
-								placeholder=" "
-								value=${() => store.order.shippingAddress.lastName}
-								oninput=${this.#onLastNameInput}
-							/>
-							<label class="floating-label">Last name</label>
-						</div>
-						<div class="field-group">
-							<input
-								type="email"
-								class="form-input"
-								placeholder=" "
-								value=${() => store.order.email || ''}
-								oninput=${this.#onEmailInput}
-							/>
-							<label class="floating-label">Email</label>
-						</div>
-						<div class="field-group">
-							<input
-								type="text"
-								class="form-input"
-								placeholder=" "
-								value=${() => store.order.shippingAddress.address}
-								oninput=${this.#onAddressInput}
-							/>
-							<label class="floating-label">Address</label>
-						</div>
-						<div class="field-group">
-							<input
-								type="text"
-								class="form-input"
-								placeholder=" "
-								value=${() => store.order.shippingAddress.apartment}
-								oninput=${this.#onApartmentInput}
-							/>
-							<label class="floating-label">Apartment, suite, etc. (optional)</label>
-						</div>
-						<div class="field-group">
-							<input
-								type="text"
-								class="form-input"
-								placeholder=" "
-								value=${() => store.order.shippingAddress.city}
-								oninput=${this.#onCityInput}
-							/>
-							<label class="floating-label">City</label>
-						</div>
-						<div class="field-group">
-							<input
-								type="text"
-								class="form-input"
-								placeholder=" "
-								value=${() => store.order.shippingAddress.postalCode}
-								oninput=${this.#onPostalCodeInput}
-							/>
-							<label class="floating-label">Postal code (optional)</label>
-						</div>
-						<div class="field-group">
-							<input
-								type="text"
-								class="form-input"
-								placeholder=" "
-								value=${() => store.order.shippingAddress.phone}
-								oninput=${this.#onPhoneInput}
-							/>
-							<label class="floating-label">Phone</label>
+				<!-- Scrollable content area -->
+				<div class="scrollable-content">
+					<!-- Shipping Address -->
+					<div class="shipping-section">
+						<h3 class="section-title">Shipping address</h3>
+						<div class="form-fields">
+							<div class="field-group">
+								<input
+									type="text"
+									class="form-input"
+									placeholder=" "
+									value=${() => store.order.shippingAddress.firstName}
+									oninput=${this.#onFirstNameInput}
+								/>
+								<label class="floating-label">First name</label>
+							</div>
+							<div class="field-group">
+								<input
+									type="text"
+									class="form-input"
+									placeholder=" "
+									value=${() => store.order.shippingAddress.lastName}
+									oninput=${this.#onLastNameInput}
+								/>
+								<label class="floating-label">Last name</label>
+							</div>
+							<div class="field-group">
+								<input
+									type="email"
+									class="form-input"
+									placeholder=" "
+									value=${() => store.order.email || ''}
+									oninput=${this.#onEmailInput}
+								/>
+								<label class="floating-label">Email</label>
+							</div>
+							<div class="field-group">
+								<input
+									type="text"
+									class="form-input"
+									placeholder=" "
+									value=${() => store.order.shippingAddress.address}
+									oninput=${this.#onAddressInput}
+								/>
+								<label class="floating-label">Address</label>
+							</div>
+							<div class="field-group">
+								<input
+									type="text"
+									class="form-input"
+									placeholder=" "
+									value=${() => store.order.shippingAddress.apartment}
+									oninput=${this.#onApartmentInput}
+								/>
+								<label class="floating-label">Apartment, suite, etc. (optional)</label>
+							</div>
+							<div class="field-group">
+								<input
+									type="text"
+									class="form-input"
+									placeholder=" "
+									value=${() => store.order.shippingAddress.city}
+									oninput=${this.#onCityInput}
+								/>
+								<label class="floating-label">City</label>
+							</div>
+							<div class="field-group">
+								<input
+									type="text"
+									class="form-input"
+									placeholder=" "
+									value=${() => store.order.shippingAddress.postalCode}
+									oninput=${this.#onPostalCodeInput}
+								/>
+								<label class="floating-label">Postal code (optional)</label>
+							</div>
+							<div class="field-group">
+								<input
+									type="text"
+									class="form-input"
+									placeholder=" "
+									value=${() => store.order.shippingAddress.phone}
+									oninput=${this.#onPhoneInput}
+								/>
+								<label class="floating-label">Phone</label>
+							</div>
 						</div>
 					</div>
 				</div>
 
-				<!-- Order Button -->
-				<button
-					class="order-button order-button-moidien"
-					onclick=${this.#onBuyItClick}
-					disabled=${() => store.order.status === 'submitting'}
-				>
-					<show-when
-						condition=${() => store.order.status === 'submitting'}
-						content=${() => html`
-							<div class="loading-spinner"></div>
-							<span>Submitting order...</span>
-						`}
-						fallback=${() => html`
-							<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-								<path
-									d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
-							<span>Send my order to LOGO</span>
-						`}
-					></show-when>
-				</button>
+				<!-- Sticky button at bottom -->
+				<div class="sticky-button-container">
+					<!-- Order Button -->
+					<button
+						class="order-button order-button-moidien"
+						onclick=${this.#onBuyItClick}
+						disabled=${() => store.order.status === 'submitting'}
+					>
+						<show-when
+							condition=${() => store.order.status === 'submitting'}
+							content=${() => html`
+								<div class="loading-spinner"></div>
+								<span>Submitting order...</span>
+							`}
+							fallback=${() => html`
+								<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+									<path
+										d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/>
+								</svg>
+								<span>Send my order to ${store.selectedSpace?.description}</span>
+							`}
+						></show-when>
+					</button>
 
-				<!-- Error Display -->
-				<show-when
-					condition=${() => store.order.error}
-					content=${() => html`<div class="error-message">${() => store.order.error}</div>`}
-				></show-when>
+					<!-- Error Display -->
+					<show-when
+						condition=${() => store.order.error}
+						content=${() => html`<div class="error-message">${() => store.order.error}</div>`}
+					></show-when>
+				</div>
 			</div>
 		</bottom-sheet>
 	`
 
 	css = css/*css*/ `
 		${appStyles}
+
+		.order-container {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+		}
+
+		.scrollable-content {
+			flex: 1;
+			overflow-y: auto;
+			padding-bottom: var(--uiSpacing);
+		}
+
+		.sticky-button-container {
+			position: sticky;
+			bottom: 0;
+			background: transparent;
+			margin-top: auto;
+		}
 
 		.order-button-moidien {
 			background: var(--uiColorAccentViolet);
