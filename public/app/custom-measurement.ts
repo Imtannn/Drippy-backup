@@ -50,12 +50,8 @@ export class CustomMeasurement extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		const url = window.location.pathname
-		let search = window.location.search
-		search = search.replace('isPreview=true', '')
-		window.history.replaceState({}, '', `${url}${search}`)
 		store.resetState()
-		store.navigateTo = 'template'
+		window.location.href = '/app?avatar=moidien'
 	}
 
 	#onSaveClick = () => {

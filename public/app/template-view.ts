@@ -13,6 +13,7 @@ import {textureManager} from './texture-manager.js'
 import '../elements/animation-select.js'
 import '../elements/avatar-dropdown.js'
 import '../elements/back-button.js'
+import '../elements/home-button.js'
 import '../elements/bottom-navigation.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
@@ -247,6 +248,11 @@ export class TemplateView extends Element {
 		store.navigateTo = 'scene'
 	}
 
+	#onHomeButtonClick = () => {
+		store.resetState()
+		window.location.href = '/app?avatar=moidien'
+	}
+
 	#onAvatarDropdownClick = () => {
 		this.showAvatarSelection = !this.showAvatarSelection
 		this.showPoseSelection = false
@@ -293,6 +299,7 @@ export class TemplateView extends Element {
 		<app-buttons-left>
 			<app-buttons-group>
 				<back-button onclick=${this.#onBackButtonClick}></back-button>
+				<home-button onclick=${this.#onHomeButtonClick}></home-button>
 			</app-buttons-group>
 		</app-buttons-left>
 
