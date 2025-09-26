@@ -51,14 +51,18 @@ const BRAND_CONFIGS = [
 		brand: 'oofya',
 		rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
 	},
-	// {
-	// 	brand: 'baroudeuses',
-	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
-	// },
+	{
+		brand: 'theSoul',
+		rootFolderId: '19Oq6abu1SnMTLSJHS0VY_GT1pAvpdU0T',
+	},
 	{
 		brand: 'moidien',
 		rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
 	},
+	// {
+	// 	brand: 'baroudeuses',
+	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
+	// },
 	// Add more brands here as needed
 	// {
 	//   brand: 'another-brand',
@@ -126,6 +130,7 @@ async function uploadToS3(
 	key: string,
 	contentType: string,
 	lossless: boolean = false,
+	toWebp: boolean = true,
 ): Promise<string> {
 	let uploadBuffer = buffer
 	let uploadKey = key
@@ -141,10 +146,11 @@ async function uploadToS3(
 					withoutEnlargement: true,
 				})
 			}
-
-			uploadBuffer = await sharpInstance.webp({lossless: lossless, quality: lossless ? 100 : 75}).toBuffer()
-			uploadContentType = 'image/webp'
-			uploadKey = path.extname(uploadKey) ? uploadKey.replace(/\.[^./]+$/, '.webp') : `${uploadKey}.webp`
+			if (toWebp) {
+				uploadBuffer = await sharpInstance.webp({lossless: lossless, quality: lossless ? 100 : 75}).toBuffer()
+				uploadContentType = 'image/webp'
+				uploadKey = path.extname(uploadKey) ? uploadKey.replace(/\.[^./]+$/, '.webp') : `${uploadKey}.webp`
+			}
 		} catch (error) {
 			console.error('Error converting image to WebP:', error)
 		}
@@ -743,6 +749,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 					`fabrics/${brand}/root/${materialFolder.name}/${file.name}`,
 					contentType,
 					true,
+					false,
 				)
 
 				// Map files based on name
