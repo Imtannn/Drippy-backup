@@ -48,6 +48,7 @@ export class TemplateView extends Element {
 	@signal showLoginDialog = false
 	@signal showAvatarSelection = false
 	@signal showPoseSelection = false
+	@signal pendingActiveTemplateIds: Partial<Record<TemplateCategory, string | null>> = {}
 
 	private defaultCollection = 'moidien'
 
@@ -148,6 +149,8 @@ export class TemplateView extends Element {
 		const currentSelectedTemplate = store.selectedTemplates.get(template.category)
 		const willToggleOff = currentSelectedTemplate?._id === template._id
 
+		this.#setPendingActiveTemplate(template.category, willToggleOff ? null : template._id)
+
 		let loadingId: symbol | null = null
 
 		if (!willToggleOff) {
@@ -194,6 +197,28 @@ export class TemplateView extends Element {
 		}
 
 		store.setSelectedTemplates = template
+		this.#clearPendingActiveTemplate(template.category)
+	}
+
+	#setPendingActiveTemplate = (category: TemplateCategory, templateId: string | null) => {
+		this.pendingActiveTemplateIds = {
+			...this.pendingActiveTemplateIds,
+			[category]: templateId,
+		}
+	}
+
+	#clearPendingActiveTemplate = (category: TemplateCategory) => {
+		if (!(category in this.pendingActiveTemplateIds)) return
+		const {[category]: _, ...rest} = this.pendingActiveTemplateIds
+		this.pendingActiveTemplateIds = rest
+	}
+
+	#isTemplateActive = (template: Template) => {
+		const pendingId = this.pendingActiveTemplateIds[template.category]
+		if (pendingId !== undefined) {
+			return pendingId === template._id
+		}
+		return store.selectedTemplates.get(template.category)?._id === template._id
 	}
 
 	#onDripItClick = () => {
@@ -344,7 +369,7 @@ export class TemplateView extends Element {
 												content=${() => (template: Template) => html`
 													<div class="template-item">
 														<item-card
-															item-active=${() => store.selectedTemplates.get(template.category)?._id === template._id}
+															item-active=${() => this.#isTemplateActive(template)}
 															item-src=${template.thumb}
 															item-alt=${template.name}
 															item-value=${template}
