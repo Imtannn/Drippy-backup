@@ -107,61 +107,64 @@ export class OrderItems extends Element {
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
 			<div class="order-container">
-				<!-- Items List -->
-				<div class="items-list">
-					<for-each
-						items=${() => Array.from(store.selectedTemplates.entries())}
-						content=${() =>
-							([category, template]: [TemplateCategory, Template]) => html`
-								<div class="item-row">
-									<div
-										class="checkbox-icon"
-										classList=${() => ({checked: store.selectedOrderItems.get(category) || false})}
-										onclick=${() => this.#onItemToggle(category)}
-									>
-										<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<rect y="0.569336" width="15" height="15" rx="7.5" fill="var(--uiColorAccentViolet)" />
-											<path
-												d="M11 5.56934L7.64637 9.63434C7.24639 10.1192 6.50361 10.1192 6.10363 9.63434L5 8.29661"
-												stroke="white"
-												stroke-width="1.2"
-												stroke-linecap="round"
-												stroke-linejoin="round"
-											/>
-										</svg>
-									</div>
-									<div class="item-image">
-										${() => {
-											const cached = store.screenshotCache.get(category)
-											const isLoading = store.loadingScreenshots.has(category)
+				<!-- Scrollable content area -->
+				<div class="scrollable-content">
+					<!-- Items List -->
+					<div class="items-list">
+						<for-each
+							items=${() => Array.from(store.selectedTemplates.entries())}
+							content=${() =>
+								([category, template]: [TemplateCategory, Template]) => html`
+									<div class="item-row">
+										<div
+											class="checkbox-icon"
+											classList=${() => ({checked: store.selectedOrderItems.get(category) || false})}
+											onclick=${() => this.#onItemToggle(category)}
+										>
+											<svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<rect y="0.569336" width="15" height="15" rx="7.5" fill="var(--uiColorAccentViolet)" />
+												<path
+													d="M11 5.56934L7.64637 9.63434C7.24639 10.1192 6.50361 10.1192 6.10363 9.63434L5 8.29661"
+													stroke="white"
+													stroke-width="1.2"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+												/>
+											</svg>
+										</div>
+										<div class="item-image">
+											${() => {
+												const cached = store.screenshotCache.get(category)
+												const isLoading = store.loadingScreenshots.has(category)
 
-											if (isLoading) {
-												return html`<div class="screenshot-loader">
-													<div class="spinner"></div>
-												</div>`
-											}
+												if (isLoading) {
+													return html`<div class="screenshot-loader">
+														<div class="spinner"></div>
+													</div>`
+												}
 
-											return html`<img src=${cached || template.thumb} alt=${template.name} />`
-										}}
-									</div>
-									<div class="item-details">
-										<div class="item-name">Product name</div>
-										<div class="item-price-row">
-											<span class="item-price">$125.00</span>
-											<span class="item-moq" classList=${() => ({visible: store.selectedSpace?.isWholesale})}
-												>MOQ: 5 pcs</span
-											>
+												return html`<img src=${cached || template.thumb} alt=${template.name} />`
+											}}
+										</div>
+										<div class="item-details">
+											<div class="item-name">Product name</div>
+											<div class="item-price-row">
+												<span class="item-price">$125.00</span>
+												<span class="item-moq" classList=${() => ({visible: store.selectedSpace?.isWholesale})}
+													>MOQ: 5 pcs</span
+												>
+											</div>
 										</div>
 									</div>
-								</div>
-							`}
-					></for-each>
+								`}
+						></for-each>
+					</div>
 				</div>
 
-				<!-- Spacer to push button to bottom -->
-				<div class="button-spacer"></div>
-
-				<button class="order-button" onclick=${this.#onNextClick}>Continue to order</button>
+				<!-- Sticky button at bottom -->
+				<div class="sticky-button-container">
+					<button class="order-button" onclick=${this.#onNextClick}>Continue to order</button>
+				</div>
 			</div>
 		</bottom-sheet>
 	`
@@ -169,11 +172,30 @@ export class OrderItems extends Element {
 	css = css/*css*/ `
 		${appStyles}
 
+		.order-container {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+		}
+
+		.scrollable-content {
+			flex: 1;
+			overflow-y: auto;
+			padding-bottom: var(--uiSpacing);
+		}
+
 		.items-list {
 			display: flex;
 			flex-direction: column;
 			gap: var(--uiSpacingMedium);
 			padding-top: var(--uiSpacing);
+		}
+
+		.sticky-button-container {
+			position: sticky;
+			bottom: 0;
+			background: transparent;
+			margin-top: auto;
 		}
 
 		.item-row {
@@ -251,11 +273,6 @@ export class OrderItems extends Element {
 			&.visible {
 				opacity: 1;
 			}
-		}
-
-		.button-spacer {
-			flex: 1;
-			min-height: 40px;
 		}
 
 		.item-image {
