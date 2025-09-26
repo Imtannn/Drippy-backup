@@ -8,14 +8,17 @@ import {updateUrlWithParams} from '../routes.js'
 import type {Space} from '../types/types.js'
 import {store} from './store.js'
 
+import '../elements/dialog-element.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
+import '../elements/login-ui.js'
 
 @element
 export class SpacesSelection extends Element {
 	static elementName = 'spaces-selection'
 
 	@signal filterdSpace: Space[] = []
+	@signal showLoginDialog = false
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -49,14 +52,20 @@ export class SpacesSelection extends Element {
 		store.selectSpace = space
 	}
 
+	#onLogoutClick = () => {
+		this.showLoginDialog = true
+	}
+
 	template = () => html`
 		<div class="spaces-container">
 			<!-- Navigation -->
 			<div class="navigation">
-				<avatar-dropdown hide-chevron></avatar-dropdown>
+				<a href="/app" class="avatar-link">
+					<avatar-dropdown hide-chevron></avatar-dropdown>
+				</a>
 				<div class="nav-links">
 					<a href="/landing" class="learn-more-button">Learn more</a>
-					<button class="logout-button">Log out</button>
+					<button class="logout-button" onclick=${this.#onLogoutClick}>Log out</button>
 				</div>
 			</div>
 
@@ -102,6 +111,22 @@ export class SpacesSelection extends Element {
 				></show-when>
 			</div>
 		</div>
+
+		<dialog-element
+			open=${() => this.showLoginDialog}
+			onclose=${() => {
+				this.showLoginDialog = false
+			}}
+		>
+			<div style="display: flex; justify-content: center; align-items: flex-start; width: 100%; height: 100%;">
+				<login-ui expanded style="position: relative;"></login-ui>
+			</div>
+			<style>
+				login-ui {
+					display: contents;
+				}
+			</style>
+		</dialog-element>
 	`
 
 	css = css/*css*/ `
@@ -198,6 +223,10 @@ export class SpacesSelection extends Element {
 			align-items: center;
 			margin-bottom: 2rem;
 			padding-top: var(--uiSpacing);
+		}
+
+		.avatar-link {
+			text-decoration: none;
 		}
 
 		.nav-links {
