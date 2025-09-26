@@ -61,26 +61,33 @@ export class TemplateView extends Element {
 		// Update template categories when templates change
 		this.createEffect(() => {
 			if (!this.spaceCollection) return
-			// Define the category order: 'Dress' | 'Jacket' | 'Shirt' | 'Top' | 'Skirt' | 'Pants' | 'Accessories'
-			const categoryOrder: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants', 'Accessories']
 
-			// Get available categories from templates
-			const availableCategories = [
-				...new Set(templates[this.spaceCollection]?.map(template => template.category) || []),
-			] as TemplateCategory[]
+			const defaultCategories: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants']
+			const collectionTemplates = templates[this.spaceCollection] ?? []
+			const orderedTemplates: Template[] = []
+			const categories = new Map<TemplateCategory, Template[]>()
+			categories.set('All', [])
 
-			// Sort categories in the desired order
-			const orderedCategories = categoryOrder.filter(category => availableCategories.includes(category))
+			for (const category of defaultCategories) {
+				const templatesForCategory = collectionTemplates.filter(template => template.category === category)
+				if (templatesForCategory.length > 0) {
+					orderedTemplates.push(...templatesForCategory)
+					categories.set(category, templatesForCategory)
+				}
+			}
 
-			this.templateCategories = ['All', ...orderedCategories].reduce(
-				(acc, category) => {
-					acc[category as TemplateCategory] = templates[this.spaceCollection!].filter(
-						template => template.category === category,
-					)
-					return acc
-				},
-				{} as Record<TemplateCategory, Template[]>,
+			const accessoryTemplates = collectionTemplates.filter(
+				template => !defaultCategories.includes(template.category as TemplateCategory),
 			)
+
+			if (accessoryTemplates.length > 0) {
+				orderedTemplates.push(...accessoryTemplates)
+				categories.set('Accessories', accessoryTemplates)
+			}
+
+			categories.set('All', orderedTemplates)
+
+			this.templateCategories = Object.fromEntries(categories) as Record<TemplateCategory, Template[]>
 		})
 
 		this.createEffect(() => {
@@ -140,18 +147,19 @@ export class TemplateView extends Element {
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
 
-		store.setSelectedTemplates = template
+		const currentSelectedTemplate = store.selectedTemplates.get(template.category)
+		const willToggleOff = currentSelectedTemplate?._id === template._id
 
-		const selectedTemplate = store.selectedTemplates.get(template.category)
+		let loadingId: symbol | null = null
 
-		if (selectedTemplate) {
+		if (!willToggleOff) {
 			const templateFabric = getFabricForTemplate(template, store.selectedSpace?.collection)
 
 			// Get extra fabrics if they exist
 			const extraFabrics: Fabric[] = []
-			if (selectedTemplate.extraMaterials) {
+			if (template.extraMaterials) {
 				const brandFabrics = fabrics[store.selectedSpace?.collection ?? 'moidien'] || []
-				for (const extraMaterial of selectedTemplate.extraMaterials) {
+				for (const extraMaterial of template.extraMaterials) {
 					const extraFabric = brandFabrics.find(
 						fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
 					)
@@ -169,24 +177,25 @@ export class TemplateView extends Element {
 			fabricsToPreload.push(...extraFabrics)
 
 			if (fabricsToPreload.length > 0) {
-				const loadingId = Symbol(`fabric-${templateFabric?._id || 'extra'}`)
+				loadingId = Symbol(`fabric-${templateFabric?._id || 'extra'}`)
 				store.addLoadingMaterial(loadingId)
 				try {
 					// Preload all fabric textures and template blocks separately
 					await Promise.all([
 						Promise.all(fabricsToPreload.map(fabric => textureManager.preloadFabricBaseTextures(fabric))),
-						blockManager.preloadTemplateBlocks(template, store.selectedSpace!),
+						Promise.all(blockManager.preloadTemplateBlocks(template, store.selectedSpace!)),
 					])
 				} catch (error) {
 					console.warn('Failed to preload fabric textures:', error)
 				} finally {
-					store.removeLoadingMaterial(loadingId)
+					if (loadingId) {
+						store.removeLoadingMaterial(loadingId)
+					}
 				}
 			}
 		}
 
-		// Convert templates to blocks (this will be handled by the effect automatically)
-		// The effect will trigger since we modified store.selectedTemplates above
+		store.setSelectedTemplates = template
 	}
 
 	#onDripItClick = () => {
@@ -333,9 +342,7 @@ export class TemplateView extends Element {
 										<div class="items-grid">
 											<for-each
 												items=${() =>
-													category === 'All'
-														? Object.values(this.templateCategories).flat()
-														: this.templateCategories[category]}
+													category === 'All' ? (this.templateCategories.All ?? []) : this.templateCategories[category]}
 												content=${() => (template: Template) => html`
 													<div class="template-item">
 														<item-card

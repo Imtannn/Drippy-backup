@@ -140,4 +140,22 @@ export const spaces: Space[] = [
 		collection: 'oofya',
 		isWholesale: false,
 	},
+	{
+		name: 'The Soul',
+		slug: 'the-soul',
+		description: 'The Soul',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/the-soul/scene-thumbnail_optimized.webp',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/the-soul/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/the-soul/extras/shoes.glb',
+		],
+		gender: 'female',
+		garmentsCount: blocks.theSoul?.length ?? 0,
+		collection: 'theSoul',
+		isWholesale: false,
+	},
 ]

@@ -7,10 +7,10 @@ import type {Template, TemplateCategory} from '../types/template.js'
 import type {Space} from '../types/types.js'
 
 class BlockManager {
-	preloadTemplateBlocks(template: Template, selectedSpace: Space): Promise<GLTF[]> {
+	preloadTemplateBlocks(template: Template, selectedSpace: Space): Promise<GLTF>[] {
 		const blocks = getBlocksForTemplate(template, selectedSpace?.collection)
 		const gltfLoader = new GLTFLoader()
-		return Promise.all(blocks.map(block => gltfLoader.loadAsync(block.modelFile)))
+		return blocks.map(block => gltfLoader.loadAsync(block.modelFile))
 	}
 
 	replaceSelectedBlocks(
