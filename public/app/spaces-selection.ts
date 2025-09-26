@@ -66,7 +66,7 @@ export class SpacesSelection extends Element {
 						<div class="space-card">
 							<div class="scene-preview">
 								<div class="scene-placeholder" onclick=${() => this.#onSceneSelected(space())}>
-									<placeholder-image src=${space().sceneThumbnail} alt="Bloom Realm Scene" object-fit="cover" />
+									<placeholder-image src=${space().sceneThumbnail} alt=${space().name} object-fit="cover" />
 								</div>
 								<div class="garments-count">${space().garmentsCount} garments</div>
 							</div>
