@@ -114,10 +114,8 @@ export class TemplateView extends Element {
 
 		// Convert templates to blocks for 3D rendering
 		this.createEffect(() => {
-			const selectedTemplates = store.selectedTemplates
-			if (selectedTemplates.size > 0) {
-				this.#convertTemplatesToBlocks()
-			}
+			void store.selectedTemplates
+			this.#convertTemplatesToBlocks()
 		})
 	}
 
