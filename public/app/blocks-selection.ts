@@ -5,6 +5,7 @@ import {updateUrlWithParams} from '../routes.js'
 
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
+import '../elements/home-button.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
 import '../elements/logic/for-each.js'
@@ -208,6 +209,11 @@ export class BlocksSelection extends Element {
 		store.navigateTo = 'template'
 	}
 
+	#onHomeButtonClick = () => {
+		store.resetState()
+		window.location.href = '/app?avatar=moidien'
+	}
+
 	#onPreviewButtonClick = () => {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('isPreview', 'true')
@@ -219,6 +225,7 @@ export class BlocksSelection extends Element {
 		<app-buttons-left>
 			<app-buttons-group>
 				<back-button onclick=${this.#onBackButtonClick}></back-button>
+				<home-button onclick=${this.#onHomeButtonClick}></home-button>
 			</app-buttons-group>
 		</app-buttons-left>
 
