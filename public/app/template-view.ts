@@ -247,6 +247,11 @@ export class TemplateView extends Element {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('isPreview', 'true')
 		store.setIsPreview = true
+		this.showAvatarSelection = false
+		this.showPoseSelection = false
+		this.showLoginDialog = false
+		this.showRemixOverlay = false
+		this.showTemplateOverlay = null
 		updateUrlWithParams(searchParams)
 	}
 
@@ -478,12 +483,10 @@ export class TemplateView extends Element {
 			<show-when
 				condition=${() => this.showRemixOverlay && store.remixOverlayTemplateCategory !== null}
 				content=${() => html`
-					<div class="remix-overlay-container">
-						<remix-overlay
-							selected-template-category=${() => store.remixOverlayTemplateCategory}
-							onclose=${this.#closeRemixOverlay}
-						></remix-overlay>
-					</div>
+					<remix-overlay
+						selected-template-category=${() => store.remixOverlayTemplateCategory}
+						onclose=${this.#closeRemixOverlay}
+					></remix-overlay>
 				`}
 			></show-when>
 			<bottom-navigation>
@@ -610,13 +613,6 @@ export class TemplateView extends Element {
 			font-weight: var(--fontWeightNormal);
 			color: #424347;
 			text-wrap: wrap;
-		}
-
-		.remix-overlay-container {
-			padding: var(--uiSpacing);
-			padding-top: 0;
-			padding-bottom: var(--uiSpacingXxl);
-			background: var(--uiColorPrimaryWhite);
 		}
 	`
 }
