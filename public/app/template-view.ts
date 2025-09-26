@@ -281,32 +281,6 @@ export class TemplateView extends Element {
 		this.showPoseSelection = false
 	}
 
-	#onAvatarSaveClick = () => {
-		// Save the temp selected avatar to the confirmed selection
-		const value = store.tempSelectedAvatar
-		if (!value) return
-
-		// Update URL params and store
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('avatar', value)
-		updateUrlWithParams(searchParams)
-		store.selectAvatar = value
-
-		// Close avatar selection (chevron will auto-reset via prop)
-		this.showAvatarSelection = false
-
-		// Dispatch event to reset nav activeTab back to 'items'
-		document.dispatchEvent(
-			new CustomEvent('avatar-dropdown-click', {
-				bubbles: true,
-				composed: true,
-				detail: {
-					isOpening: false, // Closing the avatar selection
-				},
-			}),
-		)
-	}
-
 	#onNavTabChange = (e: CustomEvent) => {
 		const tab = e.detail.tab
 		if (tab === 'pose') {
