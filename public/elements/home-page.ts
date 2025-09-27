@@ -1,6 +1,5 @@
 import type {ElementAttributes} from '@lume/element'
 import {css, Element, element, html, numberAttribute} from 'lume'
-import '../app/app.js'
 import '../imports/collections/Users.js'
 import './login-ui.js'
 import './theme-switch.js'
@@ -25,10 +24,6 @@ export class HomePage extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		this.createEffect(() => {
-			console.log(this.count)
-		})
 	}
 
 	template = () => {
@@ -36,7 +31,36 @@ export class HomePage extends Element {
 
 		if (hasParams) {
 			// Show the app when there are query parameters
-			return html`<drippy-app></drippy-app>`
+			return html`
+				<style>
+					/* Hide the #root we're not using from the imported HTML. */
+					#root:first-of-type {
+						display: none;
+					}
+
+					body {
+						overflow: auto;
+						pointer-events: auto;
+					}
+
+					login-ui {
+						pointer-events: auto;
+						display: block;
+						position: absolute;
+						top: 10px;
+						right: 10px;
+						z-index: 2;
+					}
+				</style>
+
+				<drippy-app></drippy-app>
+				<style>
+					drippy-app {
+						width: 100%;
+						height: 100%;
+					}
+				</style>
+			`
 		} else {
 			// Show the dev navigation page when no parameters
 			return html`
@@ -50,7 +74,7 @@ export class HomePage extends Element {
 					<a href="/onboarding">Onboarding - Get started with Drippy</a>
 					<a href="/stats">Stats - View page visits and number of users</a>
 					<a href="/profile">Profile - View and edit your username</a>
-					<a href="/app">App - New app WIP</a>
+					<a href="/">App - New app WIP</a>
 				</nav>
 
 				<login-ui

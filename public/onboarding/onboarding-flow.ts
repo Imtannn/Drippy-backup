@@ -171,7 +171,7 @@ export class OnboardingFlow extends Element {
 	}
 
 	#goToApp = () => {
-		window.location.href = '/app'
+		window.location.href = '/'
 	}
 
 	#goToHome = () => {

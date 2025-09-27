@@ -19,7 +19,7 @@ export class SuccessView extends Element {
 
 	#onHomeButtonClick = () => {
 		store.resetState()
-		window.location.href = '/app?avatar=moidien'
+		window.location.href = '/?avatar=moidien'
 	}
 
 	template = () => html`

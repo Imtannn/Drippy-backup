@@ -29,7 +29,7 @@ export class OrderView extends Element {
 
 	#onHomeButtonClick = () => {
 		store.resetState()
-		window.location.href = '/app?avatar=moidien'
+		window.location.href = '/?avatar=moidien'
 	}
 
 	// Helper function to collect all order data

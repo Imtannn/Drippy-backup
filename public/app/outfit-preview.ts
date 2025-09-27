@@ -30,7 +30,7 @@ export class OutfitPreview extends Element {
 
 	#onHomeButtonClick = () => {
 		store.resetState()
-		window.location.href = '/app?avatar=moidien'
+		window.location.href = '/?avatar=moidien'
 	}
 
 	#onBuyItClick = () => {

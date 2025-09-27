@@ -24,7 +24,7 @@ export class ShareView extends Element {
 
 	#onHomeButtonClick = () => {
 		store.resetState()
-		window.location.href = '/app?avatar=moidien'
+		window.location.href = '/?avatar=moidien'
 	}
 
 	#onCopyLink = async () => {
