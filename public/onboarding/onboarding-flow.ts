@@ -171,11 +171,11 @@ export class OnboardingFlow extends Element {
 	}
 
 	#goToApp = () => {
-		window.location.href = '/app'
+		history.pushState(null, '', '/')
 	}
 
 	#goToHome = () => {
-		window.location.href = '/'
+		history.pushState(null, '', '/')
 	}
 
 	template = () => html`

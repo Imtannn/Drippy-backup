@@ -694,6 +694,7 @@ export class DrippyScene extends Element {
 			background: var(--appBackground);
 			width: var(--appWidth);
 			height: var(--appHeight);
+			min-height: 100vh;
 			touch-action: none;
 			position: relative;
 		}
@@ -701,6 +702,7 @@ export class DrippyScene extends Element {
 		#lume-scene-container {
 			width: 100%;
 			height: 100%;
+			min-height: 100vh;
 			transition: transform var(--transitionFast);
 		}
 

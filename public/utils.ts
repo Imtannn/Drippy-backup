@@ -594,7 +594,10 @@ function calculateCameraFromBoundingBox(boundingBox: THREE.Box3, fov: number = 5
  * @returns Promise<string> - Base64 data URL of the screenshot
  */
 export async function captureGarmentScreenshot(category: string): Promise<string> {
-	const drippyScene = document.querySelector('drippy-app')?.shadowRoot?.querySelector('drippy-scene') as any
+	const drippyScene = document
+		.querySelector('home-page')
+		?.shadowRoot?.querySelector('drippy-app')
+		?.shadowRoot?.querySelector('drippy-scene') as any
 	if (!drippyScene?.shadowRoot) return ''
 
 	const lumeScene = drippyScene.shadowRoot.querySelector('lume-scene') as any

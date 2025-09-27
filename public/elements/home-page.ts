@@ -9,8 +9,12 @@ const logoUrlDark = new URL('../images/logo-dark.svg', import.meta.url)
 
 type HomePageAttributes = keyof {} // no attributes yet
 
-// Redirect to app immediately
-window.location.href = '/app?avatar=moidien'
+// If no query parameters, redirect to app with default avatar
+// If query parameters exist, show the app directly
+const hasParams = window.location.search
+if (!hasParams) {
+	window.location.href = '?avatar=moidien'
+}
 
 @element
 export class HomePage extends Element {
@@ -20,49 +24,93 @@ export class HomePage extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		this.createEffect(() => {
-			console.log(this.count)
-		})
 	}
 
-	template = () => html`
-		<img src="${logoUrl.href}" alt="Lume logo" />
-		<img src="${logoUrlDark.href}" alt="Lume logo" class="dark" />
+	template = () => {
+		const hasParams = window.location.search
 
-		<h1>Drippy</h1>
-
-		<nav>
-			<a href="/landing">Landing Page - Marketing page for Drippy</a>
-			<a href="/onboarding">Onboarding - Get started with Drippy</a>
-			<a href="/stats">Stats - View page visits and number of users</a>
-			<a href="/profile">Profile - View and edit your username</a>
-			<a href="/app">App - New app WIP</a>
-		</nav>
-
-		<login-ui
-			custom-style=${() => css/*css*/ `
-				#loginButtons a.login-link-text {
-					:host-context([data-theme='dark']) & {
-						color: white;
+		if (hasParams) {
+			// Show the app when there are query parameters
+			return html`
+				<style>
+					/* Hide the #root we're not using from the imported HTML. */
+					#root:first-of-type {
+						display: none;
 					}
-				}
-			`}
-		></login-ui>
 
-		<theme-switch></theme-switch>
-	`
+					body {
+						overflow: auto;
+						pointer-events: auto;
+					}
+
+					login-ui {
+						pointer-events: auto;
+						display: block;
+						position: absolute;
+						top: 10px;
+						right: 10px;
+						z-index: 2;
+					}
+				</style>
+
+				<drippy-app></drippy-app>
+				<style>
+					drippy-app {
+						width: 100%;
+						height: 100%;
+					}
+				</style>
+			`
+		} else {
+			// Show the dev navigation page when no parameters
+			return html`
+				<img src="${logoUrl.href}" alt="Lume logo" />
+				<img src="${logoUrlDark.href}" alt="Lume logo" class="dark" />
+
+				<h1>Drippy</h1>
+
+				<nav>
+					<a href="/landing">Landing Page - Marketing page for Drippy</a>
+					<a href="/onboarding">Onboarding - Get started with Drippy</a>
+					<a href="/stats">Stats - View page visits and number of users</a>
+					<a href="/profile">Profile - View and edit your username</a>
+					<a href="/">App - New app WIP</a>
+				</nav>
+
+				<login-ui
+					custom-style=${() => css/*css*/ `
+						#loginButtons a.login-link-text {
+							:host-context([data-theme='dark']) & {
+								color: white;
+							}
+						}
+					`}
+				></login-ui>
+
+				<theme-switch></theme-switch>
+			`
+		}
+	}
 
 	css = css/*css*/ `
 		:host {
 			width: 100%;
 			height: 100%;
+		}
+
+		/* Styles for the dev navigation page */
+		:host:not(:has(drippy-app)) {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			flex-direction: column;
 			gap: 1rem;
 			opacity: 0;
+		}
+
+		/* Styles for the app view */
+		:host:has(drippy-app) {
+			display: contents;
 		}
 
 		* {
