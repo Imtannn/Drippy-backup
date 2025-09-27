@@ -21,8 +21,9 @@ export class OrderSize extends Element {
 	}
 
 	#onHomeButtonClick = () => {
+		const currentAvatar = store.selectedAvatar || 'moidien'
+		history.pushState(null, '', `/?avatar=${currentAvatar}`)
 		store.resetState()
-		window.location.href = '/?avatar=moidien'
 	}
 
 	#onNextClick = () => {

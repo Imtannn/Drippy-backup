@@ -1,4 +1,5 @@
 import {css, element, Element, html, signal} from 'lume'
+import * as THREE from 'three'
 import '../app/app-buttons.js'
 import '../app/drippy-scene.js'
 import '../app/item-card.js'
@@ -15,7 +16,6 @@ import type {Block, BlockCategory, TemplateCategory as BlockTemplateCategory} fr
 import type {Fabric, FabricCategory} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {Space} from '../types/types.js'
-import * as THREE from 'three'
 
 interface UploadedMaterial {
 	_id: string
@@ -805,8 +805,9 @@ export class UploadView extends Element {
 	}
 
 	#onHomeButtonClick = () => {
+		const currentAvatar = store.selectedAvatar || 'moidien'
+		history.pushState(null, '', `/?avatar=${currentAvatar}`)
 		store.resetState()
-		window.location.href = '/?avatar=moidien'
 	}
 
 	template = () => html`

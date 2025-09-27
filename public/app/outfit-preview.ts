@@ -1,18 +1,18 @@
 import {css, Element, element, html, type ElementAttributes} from 'lume'
+import '../elements/animation-select.js'
 import '../elements/back-button.js'
 import '../elements/cube-button.js'
 import '../elements/home-button.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
-import '../elements/animation-select.js'
 
 import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
+import {updateUrlWithParams} from '../routes.js'
 import './app-buttons.js'
 import './buy-button.js'
 import './share-button.js'
 import {store} from './store.js'
-import {updateUrlWithParams} from '../routes.js'
 
 type OutfitPreviewAttributes = keyof {}
 
@@ -29,8 +29,9 @@ export class OutfitPreview extends Element {
 	}
 
 	#onHomeButtonClick = () => {
+		const currentAvatar = store.selectedAvatar || 'moidien'
+		history.pushState(null, '', `/?avatar=${currentAvatar}`)
 		store.resetState()
-		window.location.href = '/?avatar=moidien'
 	}
 
 	#onBuyItClick = () => {

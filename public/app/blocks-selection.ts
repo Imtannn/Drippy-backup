@@ -5,14 +5,15 @@ import {updateUrlWithParams} from '../routes.js'
 
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
-import '../elements/home-button.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
+import '../elements/home-button.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
+import '../elements/placeholder-image.js'
 import '../elements/preview-button.js'
 import '../elements/redo-button.js'
 import '../elements/refresh-button.js'
@@ -25,7 +26,6 @@ import type {TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import './fabric-selection.js'
 import './item-card.js'
-import '../elements/placeholder-image.js'
 import {store} from './store.js'
 
 type BlocksSelectionAttributes = keyof {}
@@ -210,8 +210,9 @@ export class BlocksSelection extends Element {
 	}
 
 	#onHomeButtonClick = () => {
+		const currentAvatar = store.selectedAvatar || 'moidien'
+		history.pushState(null, '', `/?avatar=${currentAvatar}`)
 		store.resetState()
-		window.location.href = '/?avatar=moidien'
 	}
 
 	#onPreviewButtonClick = () => {
