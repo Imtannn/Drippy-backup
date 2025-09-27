@@ -552,6 +552,12 @@ export class TemplateView extends Element {
 			aspect-ratio: 0.79;
 		}
 
+		@media (max-width: 768px) {
+			.template-item-container {
+				aspect-ratio: 1;
+			}
+		}
+
 		.template-product-name {
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightSemiBold);
