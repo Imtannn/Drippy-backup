@@ -271,11 +271,6 @@ export class TemplateView extends Element {
 		store.navigateTo = 'scene'
 	}
 
-	#onHomeButtonClick = () => {
-		store.resetState()
-		window.location.href = '/app?avatar=moidien'
-	}
-
 	#onAvatarDropdownClick = () => {
 		this.showAvatarSelection = !this.showAvatarSelection
 		this.showPoseSelection = false
@@ -550,6 +545,8 @@ export class TemplateView extends Element {
 			position: relative;
 			width: 100%;
 			aspect-ratio: 0.79;
+			isolation: isolate;
+			contain: layout;
 		}
 
 		@media (max-width: 768px) {
