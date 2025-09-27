@@ -544,6 +544,7 @@ export class TemplateView extends Element {
 			display: flex;
 			flex-direction: column;
 			gap: var(--uiSpacingTiny);
+			position: relative;
 		}
 
 		.template-item-container {
