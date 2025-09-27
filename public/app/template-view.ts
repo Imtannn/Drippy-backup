@@ -411,7 +411,7 @@ export class TemplateView extends Element {
 																oncardselected=${this.#onItemClick}
 																object-fit="contain"
 																object-position="center"
-																aspect-ratio=${() => (window.innerWidth <= 768 ? '1' : '0.79')}
+																aspect-ratio="0.79"
 															></item-card>
 															<show-when
 																condition=${() => this.showTemplateOverlay?._id === template._id}
@@ -545,14 +545,8 @@ export class TemplateView extends Element {
 			position: relative;
 			width: 100%;
 			aspect-ratio: 0.79;
-			isolation: isolate;
-			contain: layout;
-		}
-
-		@media (max-width: 768px) {
-			.template-item-container {
-				aspect-ratio: 1;
-			}
+			flex-shrink: 0;
+			height: auto;
 		}
 
 		.template-product-name {
