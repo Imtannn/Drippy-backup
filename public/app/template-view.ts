@@ -544,7 +544,6 @@ export class TemplateView extends Element {
 		.template-item-container {
 			position: relative;
 			width: 100%;
-			aspect-ratio: 0.79;
 			flex-shrink: 0;
 			height: auto;
 		}
