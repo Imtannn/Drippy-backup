@@ -541,7 +541,6 @@ export class TemplateView extends Element {
 			min-width: 0;
 			min-height: 0;
 			width: 100%;
-			height: 100%;
 			display: flex;
 			flex-direction: column;
 			gap: var(--uiSpacingTiny);
@@ -550,7 +549,7 @@ export class TemplateView extends Element {
 		.template-item-container {
 			position: relative;
 			width: 100%;
-			flex: 1;
+			aspect-ratio: 0.79;
 		}
 
 		.template-product-name {
