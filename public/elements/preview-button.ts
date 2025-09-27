@@ -1,10 +1,12 @@
-import {Element, html, css, element, type ElementAttributes, eventAttribute} from 'lume'
+import {Element, html, css, element, type ElementAttributes, eventAttribute, booleanAttribute} from 'lume'
 
-type PreviewButtonAttributes = 'onclick'
+type PreviewButtonAttributes = 'onclick' | 'buttonDisabled'
 
 @element
 export class PreviewButton extends Element {
 	static readonly elementName = 'preview-button'
+
+	@booleanAttribute buttonDisabled = false
 
 	@eventAttribute onclick = null
 
@@ -53,7 +55,9 @@ export class PreviewButton extends Element {
 		</svg>`
 
 	template = () => html`
-		<button class="preview-button" onclick=${this.#onClick}>${this.previewIcon()} Preview</button>
+		<button class="preview-button" onclick=${this.#onClick} disabled=${() => this.buttonDisabled}>
+			${this.previewIcon()} Preview
+		</button>
 	`
 
 	css = css/*css*/ `
@@ -72,6 +76,11 @@ export class PreviewButton extends Element {
 			outline: none;
 			font-weight: 600;
 			font-size: 14px;
+		}
+
+		.preview-button:disabled {
+			opacity: 0;
+			cursor: not-allowed;
 		}
 	`
 }

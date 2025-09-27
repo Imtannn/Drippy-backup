@@ -25,16 +25,12 @@ export class OutfitPreview extends Element {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.delete('isPreview')
 		updateUrlWithParams(searchParams)
-		store.navigateTo = 'blocks'
+		store.navigateTo = 'template'
 	}
 
 	#onHomeButtonClick = () => {
-		const url = window.location.pathname
-		let search = window.location.search
-		search = search.replace('isPreview=true', '')
-		window.history.replaceState({}, '', `${url}${search}`)
 		store.resetState()
-		store.navigateTo = 'template'
+		window.location.href = '/app?avatar=moidien'
 	}
 
 	#onBuyItClick = () => {

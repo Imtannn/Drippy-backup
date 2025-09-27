@@ -23,10 +23,8 @@ export class ShareView extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		const url = window.location.pathname
-		window.history.replaceState({}, '', url)
 		store.resetState()
-		store.navigateTo = 'avatar'
+		window.location.href = '/app?avatar=moidien'
 	}
 
 	#onCopyLink = async () => {
