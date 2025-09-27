@@ -2,6 +2,8 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as https from 'https'
 import * as AWS from 'aws-sdk'
+import * as THREE from 'three'
+import sharp from 'sharp'
 
 type TODO = any
 
@@ -41,13 +43,25 @@ const BRAND_CONFIGS = [
 		brand: 'shri',
 		rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
 	},
+	{
+		brand: 'eliseF',
+		rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
+	},
+	{
+		brand: 'oofya',
+		rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
+	},
+	{
+		brand: 'theSoul',
+		rootFolderId: '19Oq6abu1SnMTLSJHS0VY_GT1pAvpdU0T',
+	},
+	{
+		brand: 'moidien',
+		rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
+	},
 	// {
 	// 	brand: 'baroudeuses',
 	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
-	// },
-	// {
-	// 	brand: 'moidien',
-	// 	rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
 	// },
 	// Add more brands here as needed
 	// {
@@ -111,12 +125,42 @@ function getDriveDownloadUrl(fileId: string): string {
 }
 
 // Upload buffer to S3 and return the public URL
-async function uploadToS3(buffer: Buffer, key: string, contentType: string): Promise<string> {
+async function uploadToS3(
+	buffer: Buffer,
+	key: string,
+	contentType: string,
+	lossless: boolean = false,
+	toWebp: boolean = true,
+): Promise<string> {
+	let uploadBuffer = buffer
+	let uploadKey = key
+	let uploadContentType = contentType
+
+	if (contentType.startsWith('image/')) {
+		try {
+			let sharpInstance = sharp(buffer)
+
+			// Resize to 200px width if not lossless
+			if (!lossless) {
+				sharpInstance = sharpInstance.resize(200, null, {
+					withoutEnlargement: true,
+				})
+			}
+			if (toWebp) {
+				uploadBuffer = await sharpInstance.webp({lossless: lossless, quality: lossless ? 100 : 75}).toBuffer()
+				uploadContentType = 'image/webp'
+				uploadKey = path.extname(uploadKey) ? uploadKey.replace(/\.[^./]+$/, '.webp') : `${uploadKey}.webp`
+			}
+		} catch (error) {
+			console.error('Error converting image to WebP:', error)
+		}
+	}
+
 	const params = {
 		Bucket: S3_BUCKET,
-		Key: key.replace(/ /g, '_'),
-		Body: buffer,
-		ContentType: contentType,
+		Key: uploadKey.replace(/ /g, '_'),
+		Body: uploadBuffer,
+		ContentType: uploadContentType,
 		ACL: 'public-read',
 	}
 
@@ -232,7 +276,7 @@ async function processTemplateFolder(
 	)
 
 	const materialFolders = templateContents.filter(
-		item => item.mimeType === 'application/vnd.google-apps.folder' && item.name.toLowerCase().includes('material'),
+		item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) === 'Materials',
 	)
 
 	let materialFolder = materialFolders?.[0] as TODO
@@ -240,6 +284,16 @@ async function processTemplateFolder(
 		console.warn(`  ⚠️  No material folders found for ${templateFolder.name}`)
 	} else {
 		console.log(`    Found ${materialFolder.name} material folder`)
+	}
+
+	// Find Extra Materials folder in template
+	const extraMaterialsFolders = templateContents.filter(
+		item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) === 'Extra Materials',
+	)
+
+	let extraMaterials: {mesh: string; materialId: string}[] = []
+	if (extraMaterialsFolders.length > 0) {
+		extraMaterials = await processExtraMaterialsFolder(extraMaterialsFolders[0])
 	}
 
 	let materialContents: TODO[] = []
@@ -296,11 +350,26 @@ async function processTemplateFolder(
 		}
 	}
 
+	// Parse template name and price from folder name
+	const folderNameParts = templateFolder.name.split('-')
+	let templateName = normalizeName(templateFolder.name)
+	let templatePrice = 'N/A'
+
+	if (folderNameParts.length >= 2) {
+		templateName = normalizeName(folderNameParts[0].trim())
+		// Extract only numeric part from price (including decimals)
+		const priceMatch = folderNameParts[1].trim().match(/\d+(\.\d+)?/)
+		templatePrice = priceMatch ? priceMatch[0] : 'N/A'
+	}
+
 	const template = {
-		name: normalizeName(templateFolder.name),
+		name: templateName,
+		price: templatePrice,
 		category,
 		thumbUrl: templateS3Url,
 		materialId,
+		folderId: templateFolder.id, // Add unique Google Drive folder ID
+		...(extraMaterials.length > 0 && {extraMaterials}),
 	}
 
 	// Process blocks in each block type folder
@@ -361,8 +430,9 @@ async function processTemplateFolder(
 					allBlocks.push({
 						blockName: normalizeName(baseName),
 						category: normalizeBlockCategory(blockTypeFolder.name),
-						templateName: normalizeName(templateFolder.name),
+						templateName: templateName,
 						templateCategory: category,
+						templateFolderId: templateFolder.id, // Add unique template folder ID
 						thumbUrl: blockThumbS3Url,
 						modelUrl: blockModelS3Url,
 					})
@@ -381,35 +451,47 @@ async function processTemplateFolder(
 	return {template, blocks: allBlocks, unsucceeded: unsucceeded}
 }
 
-function generateTemplateData(processedData: TODO[], brand: string): TODO {
+function generateTemplateData(
+	processedData: TODO[],
+	brand: string,
+): {templates: TODO; templateFolderIdToIdMap: Map<string, string>} {
 	const templates: TODO = {}
+	const templateFolderIdToIdMap = new Map<string, string>()
 	let idCounter = 1
 
 	processedData.forEach(({template}) => {
 		if (!template) return
 
+		const templateId = idCounter.toString()
 		templates[brand] = templates[brand] || []
 		templates[brand].push({
-			_id: idCounter.toString(),
+			_id: templateId,
 			thumb: template.thumbUrl,
 			name: template.name,
+			price: template.price,
 			avatar: 'Female',
 			category: template.category,
 			materialId: template.materialId,
+			...(template.extraMaterials && {extraMaterials: template.extraMaterials}),
 		})
+
+		// Store mapping using unique Google Drive folder ID - guaranteed to be unique
+		templateFolderIdToIdMap.set(template.folderId, templateId)
 		idCounter++
 	})
 
-	return templates
+	return {templates, templateFolderIdToIdMap}
 }
 
-function generateBlockData(processedData: TODO[], brand: string): TODO {
+function generateBlockData(processedData: TODO[], brand: string, templateFolderIdToIdMap: Map<string, string>): TODO {
 	const blocks: TODO = {}
 	let idCounter = 1
 
 	processedData.forEach(({blocks: templateBlocks}) => {
 		templateBlocks.forEach((block: TODO) => {
 			blocks[brand] = blocks[brand] || []
+			// Use unique Google Drive folder ID to find the correct template ID
+			const templateId = templateFolderIdToIdMap.get(block.templateFolderId) || block.templateName // Fallback to name if ID not found
 			blocks[brand].push({
 				_id: idCounter.toString(),
 				thumb: block.thumbUrl,
@@ -417,7 +499,7 @@ function generateBlockData(processedData: TODO[], brand: string): TODO {
 				blockName: block.blockName,
 				avatar: 'Female',
 				category: block.category,
-				templateId: block.templateName, // Using template name as ID for now
+				templateId: templateId, // Now using actual template _id with guaranteed unique identification
 				templateName: block.templateName,
 				templateCategory: block.templateCategory,
 			})
@@ -465,16 +547,26 @@ function generateTemplatesFileContent(templates: TODO): string {
 	for (const collectionName in templates) {
 		const templatesArray = templates[collectionName]
 		finalTemplatesContent[collectionName] = templatesArray
-			.map(
-				(template: TODO) => `	{
+			.map((template: TODO) => {
+				const extraMaterialsString = template.extraMaterials
+					? `,\n\t\textraMaterials: [\n${template.extraMaterials
+							.map(
+								(extra: {mesh: string; materialId: string}) =>
+									`\t\t\t{\n\t\t\t\tmesh: '${extra.mesh}',\n\t\t\t\tmaterialId: '${extra.materialId}',\n\t\t\t}`,
+							)
+							.join(',\n')}\n\t\t]`
+					: ''
+
+				return `	{
 		_id: '${template._id}',
 		thumb: '${template.thumb}',
 		name: '${template.name}',
+		price: '${template.price}',
 		avatar: '${template.avatar}',
 		category: '${template.category}',
-		materialId: '${template.materialId || ''}',
-	}`,
-			)
+		materialId: '${template.materialId || ''}'${extraMaterialsString}
+	}`
+			})
 			.join(',\n')
 	}
 
@@ -656,6 +748,8 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 					fileBuffer,
 					`fabrics/${brand}/root/${materialFolder.name}/${file.name}`,
 					contentType,
+					true,
+					false,
 				)
 
 				// Map files based on name
@@ -743,6 +837,74 @@ async function getTemplateMaterialReference(materialFolder: TODO): Promise<strin
 	return `${materialCategory} - ${materialName}`
 }
 
+// Process 'Extra Materials' folder and return mesh -> materialId mappings
+async function processExtraMaterialsFolder(extraMaterialsFolder: TODO): Promise<{mesh: string; materialId: string}[]> {
+	console.log(`  📁 Processing Extra Materials folder`)
+
+	const extraMaterialsContents = await fetchFolderContents(extraMaterialsFolder.id)
+	const meshFolders = extraMaterialsContents.filter(item => item.mimeType === 'application/vnd.google-apps.folder')
+
+	console.log(`    Found ${meshFolders.length} mesh folders`)
+
+	const materialToMeshes: Map<string, string[]> = new Map()
+
+	for (const meshFolder of meshFolders) {
+		console.log(`    📁 Processing mesh folder: ${meshFolder.name}`)
+
+		// Mesh name should be trimmed and lowercase
+		const meshName = meshFolder.name.trim().toLowerCase()
+
+		// Get contents of mesh folder to find material reference folder
+		const meshContents = await fetchFolderContents(meshFolder.id)
+		const materialReferenceFolders = meshContents.filter(item => item.mimeType === 'application/vnd.google-apps.folder')
+
+		if (materialReferenceFolders.length === 0) {
+			console.warn(`      ⚠️ No material reference found in mesh folder: ${meshFolder.name}`)
+			continue
+		}
+
+		// Use the first material reference folder (assuming one per mesh)
+		const materialReferenceFolder = materialReferenceFolders[0]
+		console.log(`      📎 Found material reference: ${materialReferenceFolder.name}`)
+
+		// Parse and normalize the material folder name to match root materials format
+		const folderNameParts = materialReferenceFolder.name.split('-')
+		if (folderNameParts.length < 2) {
+			console.warn(
+				`      ⚠️ Invalid material reference format: ${materialReferenceFolder.name}. Expected: "Category - Name"`,
+			)
+			continue
+		}
+
+		const materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
+		const materialName = capitalize(normalizeName(folderNameParts[1].trim()))
+		const materialId = `${materialCategory} - ${materialName}`
+
+		console.log(`      ✅ Mesh "${meshName}" -> Material "${materialId}"`)
+
+		const sanitizedMeshName = THREE.PropertyBinding.sanitizeNodeName(meshName)
+
+		// Group meshes by materialId
+		if (!materialToMeshes.has(materialId)) {
+			materialToMeshes.set(materialId, [])
+		}
+		materialToMeshes.get(materialId)!.push(sanitizedMeshName)
+	}
+
+	// Convert grouped materials to final format
+	const extraMaterials: {mesh: string; materialId: string}[] = []
+	materialToMeshes.forEach((meshes, materialId) => {
+		const combinedMeshKey = meshes.join('-')
+		console.log(`      🔗 Grouped material "${materialId}" -> meshes: "${combinedMeshKey}"`)
+		extraMaterials.push({
+			mesh: combinedMeshKey,
+			materialId: materialId,
+		})
+	})
+
+	return extraMaterials
+}
+
 async function processCategoryMaterialsFolder(materialsFolder: TODO, categoryName: string): Promise<void> {
 	// Process category Materials folder for material assignments if it exists
 	if (materialsFolder) {
@@ -821,10 +983,10 @@ async function main(): Promise<void> {
 			// Get root contents (categories + root Materials folder)
 			const rootContents = await fetchFolderContents(rootFolderId)
 			const categoryFolders = rootContents.filter(
-				item => item.mimeType === 'application/vnd.google-apps.folder' && item.name !== 'Materials',
+				item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) !== 'Materials',
 			)
 			const rootMaterialsFolder = rootContents.find(
-				item => item.mimeType === 'application/vnd.google-apps.folder' && item.name === 'Materials',
+				item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) === 'Materials',
 			)
 
 			console.log(`📁 Found ${categoryFolders.length} category folders`)
@@ -844,10 +1006,10 @@ async function main(): Promise<void> {
 
 				const categoryContents = await fetchFolderContents(categoryFolder.id)
 				const templateFolders = categoryContents.filter(
-					item => item.mimeType === 'application/vnd.google-apps.folder' && item.name !== 'Materials',
+					item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) !== 'Materials',
 				)
 				const categoryMaterialsFolder = categoryContents.find(
-					item => item.mimeType === 'application/vnd.google-apps.folder' && item.name === 'Materials',
+					item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) === 'Materials',
 				)
 
 				console.log(`  Found ${templateFolders.length} template folders`)
@@ -880,8 +1042,8 @@ async function main(): Promise<void> {
 			})
 
 			// Generate data for this brand
-			const brandTemplates = generateTemplateData(brandProcessedData, brand)
-			const brandBlocks = generateBlockData(brandProcessedData, brand)
+			const {templates: brandTemplates, templateFolderIdToIdMap} = generateTemplateData(brandProcessedData, brand)
+			const brandBlocks = generateBlockData(brandProcessedData, brand, templateFolderIdToIdMap)
 			const brandFabricsData = generateFabricData(brand)
 
 			// Merge with combined data

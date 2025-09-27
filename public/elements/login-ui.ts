@@ -53,6 +53,48 @@ export class LoginUI extends LumeElement {
 	#handleLoginUI = (el: HTMLElement) => {
 		let original = document.getElementById
 
+		// Set placeholders for email and password inputs
+		const setPlaceholders = () => {
+			const emailInput = querySelectorDeep(document, 'input[type="email"]') as HTMLInputElement | null
+			const passwordInput = querySelectorDeep(document, 'input[type="password"]') as HTMLInputElement | null
+
+			if (emailInput && !emailInput.placeholder) {
+				emailInput.placeholder = 'Email'
+			}
+			if (passwordInput && !passwordInput.placeholder) {
+				passwordInput.placeholder = 'Password'
+			}
+		}
+
+		// Set placeholders after Blaze renders the inputs
+		setTimeout(setPlaceholders, 100)
+
+		// Watch for changes in the login form and re-apply placeholders
+		const observer = new MutationObserver(() => {
+			setTimeout(setPlaceholders, 50)
+		})
+
+		// Observe changes to the login form
+		const loginForm = el.querySelector('#loginButtons') || el
+		observer.observe(loginForm, {
+			childList: true,
+			subtree: true,
+			attributes: false,
+		})
+
+		// Clean up observer when element is removed
+		const cleanup = () => observer.disconnect()
+		if (el.parentNode) {
+			const parentObserver = new MutationObserver(mutations => {
+				mutations.forEach(mutation => {
+					mutation.removedNodes.forEach(node => {
+						if (node === el) cleanup()
+					})
+				})
+			})
+			parentObserver.observe(el.parentNode, {childList: true})
+		}
+
 		el.addEventListener(
 			'click',
 			event => {
@@ -120,22 +162,79 @@ export class LoginUI extends LumeElement {
 		this.createEffect(() => {
 			if (!this.expanded) return
 
-			const root = (this.shadowRoot ?? this.getRootNode()) as Document | ShadowRoot
+			// Observe all potential roots for changes
+			const observers: MutationObserver[] = []
+			const roots = [this.shadowRoot, this.getRootNode(), document].filter(Boolean) as (Document | ShadowRoot)[]
 
-			const tryClick = () => {
-				const signInLink = root.querySelector('#login-sign-in-link') as HTMLElement | null
-				if (signInLink) {
+			const tryClick = (): boolean => {
+				// First check if login form is already visible
+				for (const root of roots) {
+					const loginForm = root.querySelector('.accounts-dialog') as HTMLElement | null
+					if (loginForm && loginForm.style.display !== 'none') {
+						observers.forEach(observer => observer.disconnect())
+						return true // Login form already visible
+					}
+				}
+
+				// Try to find and click the sign-in link
+				let signInLink: HTMLElement | null = null
+				let foundRoot: Document | ShadowRoot | null = null
+
+				for (const root of roots) {
+					signInLink = root.querySelector('#login-sign-in-link') as HTMLElement | null
+					if (signInLink) {
+						foundRoot = root
+						break
+					}
+				}
+
+				if (signInLink && foundRoot) {
 					signInLink.dispatchEvent(new MouseEvent('click', {bubbles: true, composed: true}))
-					observer.disconnect()
+
+					// Check if the login form appeared after clicking
+					setTimeout(() => {
+						for (const root of roots) {
+							const loginForm = root.querySelector('.accounts-dialog') as HTMLElement | null
+							if (loginForm && loginForm.style.display !== 'none') {
+								observers.forEach(observer => observer.disconnect())
+							}
+						}
+					}, 50)
+
+					return false
+				}
+
+				return false
+			}
+
+			for (const root of roots) {
+				const observer = new MutationObserver(() => tryClick())
+				observer.observe(root, {childList: true, subtree: true})
+				observers.push(observer)
+			}
+
+			let attempts = 0
+			const maxAttempts = 4
+			const retryDelays = [0, 100, 200, 500]
+
+			const tryClickWithRetry = () => {
+				if (attempts >= maxAttempts) return
+
+				const success = tryClick()
+				if (success) {
+					console.log('tryClick succeeded at attempt', attempts)
+					return
+				}
+
+				attempts++
+				if (attempts < maxAttempts) {
+					setTimeout(tryClickWithRetry, retryDelays[attempts])
 				}
 			}
 
-			const observer = new MutationObserver(() => tryClick())
-			observer.observe(root, {childList: true, subtree: true})
-			// Try immediately in case it's already there
-			setTimeout(tryClick, 0)
+			setTimeout(tryClickWithRetry, 50)
 
-			onCleanup(() => observer.disconnect())
+			onCleanup(() => observers.forEach(observer => observer.disconnect()))
 		})
 	}
 
@@ -143,6 +242,7 @@ export class LoginUI extends LumeElement {
 		<blaze-component
 			tmpl="loginButtons"
 			id="loginButtons"
+			class=${() => (this.expanded ? 'expanded' : '')}
 			disabled=${() => this.disabled}
 			data=${() => this.data}
 			ref=${this.#handleLoginUI}
@@ -156,23 +256,46 @@ export class LoginUI extends LumeElement {
 			display: contents;
 		}
 
-		/* Hide the or and login form for demo purposes */
-		.or,
-		.login-form {
-			display: none;
+		#login-name-link {
+			font-size: var(--fontSizeTextXs);
+			padding: 0.5rem 1rem;
+			background: var(--uiColorPrimaryBlack);
+			border: 1px solid var(--uiColorPrimaryBlack);
+			border-radius: var(--borderRadiusPill);
+			cursor: pointer;
+			font-weight: var(--fontWeightNormal);
+			color: var(--uiColorPrimaryWhite);
+			white-space: nowrap;
+			line-height: 1;
+			vertical-align: middle;
+			display: inline-block;
+			box-sizing: border-box;
+			text-decoration: none;
+		}
+
+		#login-buttons-google,
+		#login-email,
+		#login-password {
+			color: var(--uiColorPrimaryBlack) !important;
+			background-color: var(--uiColorPrimaryWhite) !important;
+			border: var(--borderWidth) solid var(--uiColorLightGrey) !important;
 		}
 
 		#loginButtons {
 			user-select: none;
 			display: block;
 
+			#login-email-label,
+			#login-password-label {
+				display: none;
+			}
+
 			.login-link-text {
-				color: var(--uiColorPrimaryBlack);
 				text-decoration: none;
 			}
 
 			.accounts-dialog {
-				width: 354px;
+				width: min(354px, calc(90vw - 2 * var(--uiSpacingSmall)));
 				pointer-events: auto;
 				text-transform: none;
 				font-family: var(--base-font-family);
@@ -180,7 +303,7 @@ export class LoginUI extends LumeElement {
 				letter-spacing: normal;
 				text-decoration: none;
 
-				transform: translate(0px, var(--uiSpacingLarge));
+				transform: translate(0px, 0px);
 
 				* {
 					font-family: inherit;
@@ -202,12 +325,11 @@ export class LoginUI extends LumeElement {
 
 				.login-button {
 					margin-bottom: var(--uiSpacingTiny);
-					border-radius: var(--borderRadiusSmall);
+					border-radius: var(--borderRadiusXxl);
 					background-color: var(--uiColorPrimaryBlack);
 					color: var(--uiColorPrimaryWhite);
 					font-weight: var(--fontWeightSemiBold);
 					border: none;
-					font-size: var(--fontSizeTextMdDesktop);
 					height: var(--uiSpacingXl);
 					line-height: var(--uiSpacingXl);
 					padding: 0;
@@ -215,7 +337,8 @@ export class LoginUI extends LumeElement {
 					width: 100%;
 				}
 
-				.login-button-form-submit {
+				.login-button-form-submit,
+				.login-buttons-dropdown-align-right {
 					margin-top: var(--uiSpacingSmall);
 					font-size: var(--fontSizeTextSm);
 				}
@@ -230,13 +353,11 @@ export class LoginUI extends LumeElement {
 					width: 100%;
 					height: var(--uiSpacingXl);
 					padding: var(--uiGapSmall);
-					border-radius: var(--borderRadius);
+					border-radius: var(--borderRadiusXxl);
 					font-size: var(--fontSizeTextSm);
 					margin-bottom: var(--uiGap);
 					box-sizing: border-box;
 					background: #f8f8f8;
-					border: var(--borderWidth) solid #ccc;
-					color: #333;
 					transition: var(--transitionSlow);
 					pointer-events: auto;
 
@@ -246,6 +367,12 @@ export class LoginUI extends LumeElement {
 						background:
 							linear-gradient(white, white) padding-box,
 							linear-gradient(45deg, #e56be8, #495cff) border-box;
+					}
+
+					&::placeholder {
+						color: var(--uiColorSecondaryLightGrey);
+						font-size: var(--fontSizeTextXs);
+						font-weight: var(--fontWeightNormal);
 					}
 				}
 
@@ -283,26 +410,25 @@ export class LoginUI extends LumeElement {
 		}
 
 		/* Hide login-sign-in-link when expanded */
-		:host([expanded]) {
-			#loginButtons {
-				#login-sign-in-link {
-					display: none;
-				}
-
-				#login-dropdown-list {
-					position: relative !important;
-				}
-
-				.accounts-dialog {
-					/* Remove Meteor's default dialog styling */
-					box-shadow: none;
-					background: none;
-					border: none;
-				}
+		#loginButtons.expanded {
+			#login-sign-in-link {
+				display: none;
 			}
-			#login-buttons.login-buttons-dropdown-align-right {
-				margin-top: -20px;
+
+			#login-dropdown-list {
+				position: relative !important;
 			}
+
+			.accounts-dialog {
+				/* Remove Meteor's default dialog styling */
+				box-shadow: none;
+				background: none;
+				border: none;
+			}
+		}
+
+		#login-buttons.login-buttons-dropdown-align-right.expanded {
+			margin-top: -20px;
 		}
 	`
 }

@@ -5,11 +5,12 @@ import {Meteor} from 'meteor/meteor'
 import {WebApp} from 'meteor/webapp'
 import * as path from 'path'
 import '../imports/collections/index.js'
+import {Visits} from '../imports/collections/Visits.js'
 import './imports/email-service.js'
 import './imports/load-env.js'
 import './imports/oauth-config.js'
 import './imports/order-service.js'
-import {Visits} from '../imports/collections/Visits.js'
+import './imports/upload-service.js'
 
 // @ts-expect-error missing type (TODO update away from @types/meteor? Ask
 // Meteor's AI "How to set up TypeScript", there's some good docs.)
@@ -290,3 +291,6 @@ await Promise.all([...makeAdminPromises, ...visitsMigrationPromises])
 
 // TODO configure default field selector.
 // Accounts.config({ defaultFieldSelector: { includeThisOne: 1, excludeThisOne: 0 } })
+
+// Configure email templates for Meteor accounts system
+Accounts.emailTemplates.from = process.env.SENDGRID_FROM_EMAIL || 'noreply@drippy3d.com'

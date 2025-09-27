@@ -1,4 +1,27 @@
-import type {Texture} from 'three'
+export type FabricCategory =
+	| 'Cotton'
+	| 'Leather'
+	| 'Denim'
+	| 'Spantex'
+	| 'Jean'
+	| 'Wool'
+	| 'Linen'
+	| 'Crinkle Fabric'
+	| 'Pleated Fabric'
+	| 'Seersucker Fabric'
+	| 'Silk'
+	| 'Sequin'
+	| 'Fur'
+	| 'Abtract'
+	| 'Twisted'
+	| 'Velvet'
+	| 'Scuba'
+	| 'Fabric'
+	| 'Poly'
+	| 'Striped'
+	| 'Polyester'
+	| 'Knit'
+	| string // for custom fabrics
 
 export type Fabric = {
 	_id: string
@@ -8,30 +31,10 @@ export type Fabric = {
 	displacement?: string
 	roughness?: string
 	alpha?: string
-	baseColorTex?: Texture | undefined
-	normalTex?: Texture | undefined
-	displacementTex?: Texture | undefined
-	roughnessTex?: Texture | undefined
-	alphaTex?: Texture | undefined
+	assignedMesh?: string
 
 	materialName: string
-	category?:
-		| 'Cotton'
-		| 'Leather'
-		| 'Denim'
-		| 'Spantex'
-		| 'Jean'
-		| 'Wool'
-		| 'Linen'
-		| 'Crinkle Fabric'
-		| 'Pleated Fabric'
-		| 'Seersucker Fabric'
-		| 'Silk'
-		| 'Sequin'
-		| 'Fur'
-		| 'Abtract'
-		| 'Twisted'
-		| 'Velvet'
-		| 'Scuba'
+	category?: FabricCategory
+
 	templateCategories?: string[]
 }

@@ -1,15 +1,96 @@
 import {attribute, css, Element, element, html, signal} from 'lume'
 import {store} from '../app/store.js'
 import {avatars} from '../consts/avatars.js'
+import {fabrics} from '../consts/fabrics.js'
+import type {TemplateCategory} from '../types/template.js'
+import type {Block, BlockCategory} from '../types/block.js'
+// import type {Fabric} from '../types/fabric.js'
 
+const block3DLanding = {
+	male: [
+		{
+			_id: '4',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_4_Sleeves/sleeves_1512.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_4_Sleeves/sleeves_1512.gltf',
+			blockName: 'sleeves 1512',
+			avatar: 'Male',
+			category: 'Sleeves',
+			templateId: '3',
+			templateName: 'Item 4',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '5',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_4_Bodice/bodice_1509.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_4_Bodice/bodice_1509.gltf',
+			blockName: 'bodice 1509',
+			avatar: 'Male',
+			category: 'Bodice',
+			templateId: '3',
+			templateName: 'Item 4',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '14',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_7___Pants/pants%2Cskirt_1590.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_7___Pants/pants%2Cskirt_1590.gltf',
+			blockName: 'pants,skirt 1590',
+			avatar: 'Male',
+			category: 'Pants',
+			templateId: '9',
+			templateName: 'Item 7',
+			templateCategory: 'Pants',
+		},
+	],
+	female: [
+		{
+			_id: '14',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455..gltf',
+			blockName: 'bodice 1455',
+			avatar: 'Female',
+			category: 'Bodice',
+			templateId: 'Item 8',
+			templateName: 'Item 8',
+			templateCategory: 'Shirt',
+		},
+		{
+			_id: '15',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Pants/Item_7_Pants/pants_130.png',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Pants/Item_7_Pants/pants_130..gltf',
+			blockName: 'pants 130',
+			avatar: 'Female',
+			category: 'Pants',
+			templateId: 'Item 7',
+			templateName: 'Item 7',
+			templateCategory: 'Pants',
+		},
+	],
+}
 interface AvatarOption {
 	value: string
 	label: string
 	image: string
 	gender: 'male' | 'female'
 }
-const maleAvatar = new URL('../images/landing/male.png', import.meta.url).href
-const femaleAvatar = new URL('../images/landing/female.png', import.meta.url).href
+const maleAvatar = new URL(
+	'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/luka/thumbnail.webp',
+	import.meta.url,
+).href
+const femaleAvatar = new URL(
+	'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/moidien/thumbnail.webp',
+	import.meta.url,
+).href
 /**
  * Avatar Selector Custom Element with dropdown functionality
  * Allows users to select between different avatar options
@@ -65,7 +146,14 @@ export class AvatarSelector extends Element {
 	 * Find first avatar follow gender from avatars list
 	 */
 	private findAvatarByGender(gender: 'male' | 'female'): string | null {
-		const avatar = avatars.find(avatar => avatar.gender === gender)
+		let avatar
+
+		if (gender === 'male') {
+			avatar = avatars.find(avatar => avatar.gender === gender && avatar.value === 'luka')
+		} else {
+			avatar = avatars.find(avatar => avatar.gender === gender && avatar.value === 'moidien')
+		}
+
 		return avatar ? avatar.value : null
 	}
 
@@ -73,14 +161,106 @@ export class AvatarSelector extends Element {
 		if (!store.selectedAvatar && !store.tempSelectedAvatar) {
 			const maleAvatarValue = this.findAvatarByGender('male')
 			if (maleAvatarValue) {
-				console.log('👨 Setting default male avatar:', maleAvatarValue)
-
-				// Set vào store
 				store.setTempSelectedAvatar = maleAvatarValue
 				store.selectAvatar = maleAvatarValue
 
-				console.log('✅ Default male avatar set successfully')
+				// Set default blocks for male avatar
+				this.setBlocksForGender('male')
 			}
+		}
+	}
+
+	private setBlocksForGender(gender: 'male' | 'female') {
+		try {
+			// Clear existing blocks first
+			store.selectedBlocks.clear()
+
+			const genderBlocks = block3DLanding[gender]
+
+			if (!genderBlocks || genderBlocks.length === 0) {
+				return
+			}
+
+			const sleevesBlock = genderBlocks.find(block => block.templateCategory === 'Top' && block.category === 'Sleeves')
+			const topBlock = genderBlocks.find(block => block.templateCategory === 'Top' && block.category === 'Bodice')
+			const shirtBlock = genderBlocks.find(block => block.templateCategory === 'Shirt' && block.category === 'Bodice')
+			const pantsBlock = genderBlocks.find(block => block.templateCategory === 'Pants' && block.category === 'Pants')
+
+			// Force set blocks for selected gender
+			const blockData: Array<{block: Block; templateCategory: TemplateCategory}> = []
+			if (sleevesBlock) {
+				blockData.push({
+					block: sleevesBlock as Block,
+					templateCategory: sleevesBlock.templateCategory as TemplateCategory,
+				})
+			}
+			if (topBlock) {
+				blockData.push({
+					block: topBlock as Block,
+					templateCategory: topBlock.templateCategory as TemplateCategory,
+				})
+			}
+			if (shirtBlock) {
+				blockData.push({
+					block: shirtBlock as Block,
+					templateCategory: shirtBlock.templateCategory as TemplateCategory,
+				})
+			}
+			if (pantsBlock) {
+				blockData.push({
+					block: pantsBlock as Block,
+					templateCategory: 'Pants' as TemplateCategory,
+				})
+			}
+
+			if (blockData.length > 0) {
+				store.setSelectedBlocks = blockData
+				this.setDefaultFabricsForGender(gender)
+			}
+		} catch (error) {
+			console.error(`❌ Error setting blocks for ${gender}:`, error)
+		}
+	}
+
+	private setDefaultFabricsForGender(gender: 'male' | 'female') {
+		try {
+			const collection = gender === 'male' ? 'eliseF' : 'moidien'
+			const availableFabrics = fabrics[collection] || []
+
+			const fabricData = []
+
+			if (gender === 'female') {
+				const pantsFabric = availableFabrics.find(
+					f => f.materialName === 'Black' && f.templateCategories?.includes('Pants'),
+				)
+
+				if (pantsFabric) {
+					fabricData.push({
+						fabric: pantsFabric,
+						blockCategory: 'Pants' as BlockCategory,
+						templateCategory: 'Pants' as TemplateCategory,
+					})
+				}
+			} else if (gender === 'male') {
+				// Set default fabrics for male
+				const pantsFabric = availableFabrics.find(
+					f => f.materialName === 'Dusty Blue' && f.templateCategories?.includes('Pants'),
+				)
+
+				if (pantsFabric) {
+					fabricData.push({
+						fabric: pantsFabric,
+						blockCategory: 'Pants' as BlockCategory,
+						templateCategory: 'Pants' as TemplateCategory,
+					})
+				}
+			}
+
+			if (fabricData.length > 0) {
+				store.setSelectedFabrics = fabricData
+			}
+		} catch (error) {
+			console.error(`❌ Error setting fabrics for ${gender}:`, error)
 		}
 	}
 
@@ -137,11 +317,33 @@ export class AvatarSelector extends Element {
 			optionEl.style.fontSize = '0.75rem'
 			optionEl.style.color = '#111827'
 
-			optionEl.innerHTML = `
-				<div class="avatar-selector__option-dot" style="width: 8px; height: 8px; background-color: #8b5cf6; border-radius: 50%; flex-shrink: 0;"></div>
-				<span style="flex: 1;">${option.label}</span>
-				${option.value === this.selectedOption.value ? '<span class="checkmark" style="color: #8b5cf6; font-weight: bold; font-size: 14px;">✓</span>' : ''}
-			`
+			// Create dot element
+			const dotEl = document.createElement('div')
+			dotEl.className = 'avatar-selector__option-dot'
+			dotEl.style.width = '8px'
+			dotEl.style.height = '8px'
+			dotEl.style.backgroundColor = '#8b5cf6'
+			dotEl.style.borderRadius = '50%'
+			dotEl.style.flexShrink = '0'
+
+			// Create label span
+			const labelSpan = document.createElement('span')
+			labelSpan.style.flex = '1'
+			labelSpan.textContent = option.label
+
+			// Create checkmark span
+			const checkmarkSpan = document.createElement('span')
+			checkmarkSpan.className = 'checkmark'
+			checkmarkSpan.style.color = '#8b5cf6'
+			checkmarkSpan.style.fontWeight = 'bold'
+			checkmarkSpan.style.fontSize = '14px'
+			checkmarkSpan.textContent = '✓'
+			checkmarkSpan.style.display = option.value === this.selectedOption.value ? 'inline' : 'none'
+
+			// Append elements
+			optionEl.appendChild(dotEl)
+			optionEl.appendChild(labelSpan)
+			optionEl.appendChild(checkmarkSpan)
 
 			// Hover effect
 			optionEl.addEventListener('mouseenter', () => {
@@ -237,11 +439,17 @@ export class AvatarSelector extends Element {
 			icon.classList.remove('rotated')
 		}
 
+		// Update checkmarks in dropdown
+		this.updateCheckmarks()
+
 		const avatarValue = this.findAvatarByGender(option.gender)
 
 		if (avatarValue) {
 			store.setTempSelectedAvatar = avatarValue
 			store.selectAvatar = avatarValue
+
+			// Set default blocks cho gender được chọn
+			this.setBlocksForGender(option.gender)
 		}
 
 		// Update target model if specified
@@ -262,13 +470,26 @@ export class AvatarSelector extends Element {
 		)
 	}
 
+	private updateCheckmarks() {
+		const dropdown = this.dropdownElement || (this.querySelector('.avatar-selector__dropdown') as HTMLElement)
+		if (!dropdown) return
+
+		const options = dropdown.querySelectorAll('.avatar-selector__option')
+		options.forEach((optionEl, index) => {
+			const checkmark = optionEl.querySelector('.checkmark') as HTMLElement
+			const option = this.options[index]
+
+			if (checkmark && option) {
+				checkmark.style.display = option.value === this.selectedOption.value ? 'inline' : 'none'
+			}
+		})
+	}
+
 	template = () => html`
 		<div class="avatar-selector__wrapper" onclick=${this.handleToggle}>
-			<img
-				class="avatar-selector__avatar"
-				src=${() => this.selectedOption.image}
-				alt=${() => this.selectedOption.label}
-			/>
+			<div class="avatar-image-wrapper">
+				<img class="avatar-image" src=${() => this.selectedOption.image} alt=${() => this.selectedOption.label} />
+			</div>
 			<span class="avatar-selector__text">${() => this.selectedOption.label}</span>
 			<img
 				class="avatar-selector__icon"
@@ -297,7 +518,7 @@ export class AvatarSelector extends Element {
 
 	css = css`
 		:host {
-			height: 35px;
+			height: 43px;
 			padding: 0;
 			position: absolute;
 			top: 3%;
@@ -311,7 +532,7 @@ export class AvatarSelector extends Element {
 			overflow: visible;
 			cursor: pointer;
 			transition: all 0.3s ease;
-			z-index: 9;
+			z-index: 2;
 			min-width: 120px;
 		}
 
@@ -328,15 +549,26 @@ export class AvatarSelector extends Element {
 			align-items: center;
 			gap: 7px;
 			width: 100%;
-			padding: 15px;
+			padding-right: 15px;
 		}
 
-		.avatar-selector__avatar {
-			width: 24px;
-			height: 24px;
-			border-radius: 50%;
+		.avatar-image-wrapper {
+			position: relative;
+			width: 40px;
+			height: 40px;
+			overflow: hidden;
+			border-radius: var(--borderRadiusCircular);
+			border: 2px solid var(--uiColorBorderColor);
+		}
+		.avatar-image {
+			width: 100%;
+			height: 100%;
 			object-fit: cover;
-			flex-shrink: 0;
+			object-position: top;
+			position: absolute;
+			scale: 2;
+			top: 48%;
+			left: 0;
 		}
 
 		.avatar-selector__text {
@@ -466,27 +698,20 @@ export class AvatarSelector extends Element {
 	 */
 	public syncWithStore() {
 		const currentAvatar = store.selectedAvatar || store.tempSelectedAvatar
-		console.log('🔍 Avatar Selector - Current store state:', {
-			selectedAvatar: store.selectedAvatar,
-			tempSelectedAvatar: store.tempSelectedAvatar,
-			currentAvatar: currentAvatar,
-		})
 
 		if (currentAvatar) {
 			const avatar = avatars.find(avatar => avatar.value === currentAvatar)
-			console.log('🎭 Found avatar in avatars list:', avatar)
 
 			if (avatar) {
 				const option = this.options.find(opt => opt.gender === avatar.gender)
 				if (option) {
 					this.selectedOption = option
-					console.log('✅ Synced avatar selector with:', option)
-					// UI sẽ tự động update thông qua reactive template
+					// Update checkmarks in dropdown
+					this.updateCheckmarks()
 				}
 			}
 		} else {
 			// Nếu không có avatar nào được chọn, set default male
-			console.log('⚠️ No avatar selected, setting default male')
 			this.setDefaultMaleAvatar()
 		}
 	}

@@ -12,6 +12,7 @@ import './app-buttons.js'
 import './buy-button.js'
 import './share-button.js'
 import {store} from './store.js'
+import {updateUrlWithParams} from '../routes.js'
 
 type OutfitPreviewAttributes = keyof {}
 
@@ -23,17 +24,13 @@ export class OutfitPreview extends Element {
 		store.setIsPreview = false
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.delete('isPreview')
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
-		store.navigateTo = 'blocks'
+		updateUrlWithParams(searchParams)
+		store.navigateTo = 'template'
 	}
 
 	#onHomeButtonClick = () => {
-		const url = window.location.pathname
-		let search = window.location.search
-		search = search.replace('isPreview=true', '')
-		window.history.replaceState({}, '', `${url}${search}`)
 		store.resetState()
-		store.navigateTo = 'template'
+		window.location.href = '/app?avatar=moidien'
 	}
 
 	#onBuyItClick = () => {

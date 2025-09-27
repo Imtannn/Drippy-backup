@@ -3,6 +3,7 @@ import '../elements/back-button.js'
 import '../elements/home-button.js'
 import './app-buttons.js'
 import {store} from './store.js'
+import {updateUrlWithParams} from '../routes.js'
 
 type ShareViewAttributes = keyof {}
 
@@ -17,15 +18,13 @@ export class ShareView extends Element {
 		store.setIsPreview = false
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.delete('isPreview')
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
+		updateUrlWithParams(searchParams)
 		store.navigateTo = 'preview'
 	}
 
 	#onHomeButtonClick = () => {
-		const url = window.location.pathname
-		window.history.replaceState({}, '', url)
 		store.resetState()
-		store.navigateTo = 'avatar'
+		window.location.href = '/app?avatar=moidien'
 	}
 
 	#onCopyLink = async () => {

@@ -527,26 +527,26 @@ function calculateGarmentBoundingBox(category: string, lumeScene: any): THREE.Bo
 
 	clothModels.forEach((model: any) => {
 		const modelId = model.getAttribute('id') || ''
-		const shouldInclude = modelId.startsWith(category + '-')
+		const shouldInclude = modelId.includes(category + '-')
 
 		if (shouldInclude && model.three && model.three.visible) {
 			// Calculate bounding box for this model
 			const modelBox = new THREE.Box3()
 
 			// Traverse all meshes in the model
-			model.three.traverse((child: THREE.Object3D) => {
-				if (child instanceof THREE.Mesh && child.geometry) {
+			for (const mesh of meshesInTree(model.three)) {
+				if (mesh.geometry) {
 					// Ensure geometry has bounding box
-					child.geometry.computeBoundingBox()
-					if (child.geometry.boundingBox) {
+					mesh.geometry.computeBoundingBox()
+					if (mesh.geometry.boundingBox) {
 						// Transform the bounding box by the mesh's world matrix
-						const transformedBox = child.geometry.boundingBox.clone()
-						child.updateWorldMatrix(true, false)
-						transformedBox.applyMatrix4(child.matrixWorld)
+						const transformedBox = mesh.geometry.boundingBox.clone()
+						mesh.updateWorldMatrix(true, false)
+						transformedBox.applyMatrix4(mesh.matrixWorld)
 						modelBox.union(transformedBox)
 					}
 				}
-			})
+			}
 
 			// Union with the overall bounding box
 			boundingBox.union(modelBox)
@@ -606,7 +606,7 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 
 	clothModels.forEach((model: any) => {
 		const modelId = model.getAttribute('id') || ''
-		const shouldKeep = modelId.startsWith(category + '-')
+		const shouldKeep = modelId.includes(category + '-')
 
 		if (!shouldKeep) {
 			if (model.three) {
@@ -707,6 +707,17 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 		const threeCamera = (screenshotCamera as any).three || lumeScene.camera?.three || lumeScene.three?.camera
 
 		if (threeScene && threeCamera) {
+			// Store original renderer size
+			const originalSize = renderer.getSize(new THREE.Vector2())
+
+			// Set standardized screenshot dimensions (square format, good for product shots)
+			const screenshotSize = 512
+			renderer.setSize(screenshotSize, screenshotSize)
+
+			// Update camera aspect ratio for square format
+			threeCamera.aspect = 1
+			threeCamera.updateProjectionMatrix()
+
 			// Set a clean light background for product shots
 			const originalBackground = renderer.getClearColor(new THREE.Color())
 			const originalAlpha = renderer.getClearAlpha()
@@ -715,8 +726,13 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 			renderer.render(threeScene, threeCamera)
 			screenshot = renderer.domElement.toDataURL('image/png')
 
-			// Restore original background
+			// Restore original background and size
 			renderer.setClearColor(originalBackground, originalAlpha)
+			renderer.setSize(originalSize.x, originalSize.y)
+
+			// Restore original camera aspect ratio
+			threeCamera.aspect = originalSize.x / originalSize.y
+			threeCamera.updateProjectionMatrix()
 		}
 	}
 
@@ -749,4 +765,37 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 	lumeScene.removeChild(screenshotCamera)
 
 	return screenshot
+}
+
+/**
+ * Returns true if `object` has an ancestor with the given name.
+ * @param object - The object to check.
+ * @param targetName - The name of the ancestor to check for.
+ * @returns True if `object` has an ancestor with the given name, false otherwise.
+ */
+export function hasAncestorWithName(object: THREE.Object3D, targetName: string): boolean {
+	let current = object
+
+	while (current) {
+		if (
+			current.name.toLowerCase() === targetName.toLowerCase() ||
+			current.userData?.name?.toLowerCase() === targetName.toLowerCase()
+		) {
+			return true
+		}
+		current = current.parent as THREE.Object3D
+	}
+	return false
+}
+
+// Format price without currency symbol
+export function formatNumber(amount: number, countryCode: string = 'eu') {
+	const formatter = new Intl.NumberFormat(countryCode, {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+		style: 'currency',
+		currency: 'EUR',
+	})
+
+	return formatter.format(amount)
 }

@@ -26,7 +26,7 @@ class TextureManager {
 	private textureCache = new Map<string, CachedTexture>()
 	private loadingPromises = new Map<string, Promise<CachedTexture | null>>()
 	private defaultConfig: TextureConfig = {
-		repeat: [60 / 3, 60 / 3],
+		repeat: [60 / 9, 60 / 9],
 		coef: 1,
 		offset: [1, 1],
 		rotate: 0,
@@ -178,9 +178,9 @@ class TextureManager {
 	/**
 	 * Preload base fabric textures into cache (most efficient preloading)
 	 */
-	async preloadFabricBaseTextures(fabric: Fabric): Promise<void> {
+	async preloadFabricBaseTextures(fabric: Fabric): Promise<(CachedTexture | null)[]> {
 		// Just load base textures into cache, no configuration needed
-		await Promise.all([
+		return await Promise.all([
 			this.getBaseTexture(fabric.baseColor || ''),
 			this.getBaseTexture(fabric.normal || ''),
 			this.getBaseTexture(fabric.displacement || ''),
@@ -271,7 +271,7 @@ class TextureManager {
 		material.emissiveIntensity = 0
 		material.aoMapIntensity = 1
 		material.side = THREE.DoubleSide
-		// material.normalScale = new THREE.Vector2(2, 2)
+		material.normalScale = new THREE.Vector2(2, 2)
 		material.blending = THREE.NormalBlending
 
 		// Ensure GPU-side texture state updates

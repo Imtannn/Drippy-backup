@@ -1,4 +1,5 @@
 import {
+	attribute,
 	createEffect,
 	css,
 	Element,
@@ -23,10 +24,12 @@ import '../elements/rig/lume-auto-rigger.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
+import type {Space} from '../types/types.js'
 import {
 	createMutationsSignal,
 	enableFrontsideOnModelLoad,
 	enableShadowOnModelLoad,
+	hasAncestorWithName,
 	meshesInTree,
 	onModelLoad,
 	setEnvMapOnModelLoad,
@@ -68,6 +71,11 @@ function excludeBonesFromBlock(block: Block) {
 export class DrippyScene extends Element {
 	static elementName = 'drippy-scene'
 
+	@attribute selectedSpace: Space | null = null
+	@attribute selectedAvatar: string | null = null
+	@attribute selectedFabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>> = new Map()
+	@attribute selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>> = new Map()
+
 	@signal isDark = false
 	@signal sceneUrl = ''
 	@signal renderBlocks: RenderBlock[] = []
@@ -84,7 +92,7 @@ export class DrippyScene extends Element {
 	@signal private animName: string | null = null
 	@signal private animSrc: string | null = null
 
-	async #applyFabric(el: Element3D, fabric: Fabric, isCanceled: () => boolean, loadingId: symbol) {
+	async #applyFabrics(el: Element3D, fabrics: Map<string, Fabric>, isCanceled: () => boolean, loadingId: symbol) {
 		const root = el.three
 		store.addLoadingMaterial(loadingId)
 
@@ -97,14 +105,52 @@ export class DrippyScene extends Element {
 						.map((el: any) => Math.abs(el))
 				: []
 
-			// Load textures with UV-aware scaling using texture manager
-			const textureSet = await textureManager.loadFabricTexturesWithUV(fabric, uvArray)
+			// Create a map of fabric assignments by mesh name
+			const fabricsByMesh = new Map<string, Fabric>()
+
+			for (const [assignedMesh, fabric] of fabrics.entries()) {
+				fabricsByMesh.set(assignedMesh, fabric)
+			}
+
+			// Load texture sets for all fabrics
+			const textureSetsByFabric = new Map<Fabric, any>()
+			for (const fabric of fabricsByMesh.values()) {
+				const textureSet = await textureManager.loadFabricTexturesWithUV(fabric, uvArray)
+				textureSetsByFabric.set(fabric, textureSet)
+			}
+
 			if (isCanceled()) return
 
-			for (const mesh of meshesInTree(root)) textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+			// Create a map for mesh to meshes key since we are grouping meshes with the same material by '-'
+			const meshToFabricMeshesMap = new Map<string, string>()
+			for (const meshes of fabricsByMesh.keys()) {
+				const meshArray = meshes.split('-')
+				for (const mesh of meshArray) {
+					meshToFabricMeshesMap.set(mesh, meshes)
+				}
+			}
+
+			// Get all the meshes keys
+			const allFabricMeses = [...meshToFabricMeshesMap.keys()]
+
+			// Apply fabrics to meshes based on assignments
+			for (const mesh of meshes) {
+				// Check if there's a specific fabric assigned to this mesh
+				const meshKey = allFabricMeses.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
+				const meshesKey = meshToFabricMeshesMap.get(meshKey)
+				const fabricToUse = fabricsByMesh.get(meshesKey || 'default')
+
+				if (fabricToUse) {
+					const textureSet = textureSetsByFabric.get(fabricToUse)
+					if (textureSet) {
+						mesh.material = new THREE.MeshPhysicalMaterial()
+						textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+					}
+				}
+			}
 			el.needsUpdate()
 		} catch (error) {
-			console.warn('Failed to apply fabric to object:', error)
+			console.warn('Failed to apply fabrics to object:', error)
 		} finally {
 			store.removeLoadingMaterial(loadingId)
 		}
@@ -155,8 +201,8 @@ export class DrippyScene extends Element {
 		})
 
 		this.createEffect(() => {
-			if (store.selectedSpace) {
-				const space = spaces.find(space => space.slug === store.selectedSpace?.slug)
+			if (this.selectedSpace) {
+				const space = spaces.find(space => space.slug === this.selectedSpace?.slug)
 				if (space) {
 					this.sceneUrl = space.scene
 				}
@@ -182,8 +228,10 @@ export class DrippyScene extends Element {
 
 		// Track selected avatar loading state
 		this.createEffect(() => {
-			if (!store.isShowAvatar || store.selectedAvatar) return
-			if (store.tempSelectedAvatar) {
+			if (!store.isShowAvatar) return
+			// Allow tempSelectedAvatar to work as preview even when selectedAvatar exists
+			const currentAvatar = store.tempSelectedAvatar ?? this.selectedAvatar
+			if (currentAvatar) {
 				const avatar = this.avatarModel
 				if (!avatar) return
 
@@ -207,7 +255,7 @@ export class DrippyScene extends Element {
 
 		// Track background scene loading state
 		this.createEffect(() => {
-			if (!store.selectedSpace || !store.selectedSpace?.scene || !store.isShowScene) return
+			if (!this.selectedSpace || !this.selectedSpace?.scene || !store.isShowScene) return
 
 			const scene = this.backgroundModel
 			if (!scene) return
@@ -238,8 +286,15 @@ export class DrippyScene extends Element {
 
 			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as GltfModel[]
 
+			// Track block loading symbols for cleanup
+			const blockLoadingSymbols = new Set<symbol>()
+
 			for (const [index, el] of models.entries()) {
-				const blockId = Symbol(`block-${index}`)
+				// Use element ID + index for more stable identification
+				const elementId = el.getAttribute('id') || `unknown-${index}`
+				const blockId = Symbol(`block-${elementId}-${index}`)
+				blockLoadingSymbols.add(blockId)
+
 				const modelLoaded = onModelLoad(el)
 
 				createEffect(() => {
@@ -251,6 +306,13 @@ export class DrippyScene extends Element {
 					store.removeLoadingBlock(blockId)
 				})
 			}
+
+			// Cleanup: Remove all tracked loading symbols when effect re-runs or component unmounts
+			onCleanup(() => {
+				for (const blockId of blockLoadingSymbols) {
+					store.removeLoadingBlock(blockId)
+				}
+			})
 		})
 
 		// This will cache render blocks by ID. This is a quick fix to make the
@@ -264,10 +326,10 @@ export class DrippyScene extends Element {
 		}
 
 		this.createEffect(() => {
-			const blocks = Array.from(store.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
+			const blocks = Array.from(this.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
 			this.renderBlocks = blocks.flatMap(block => {
 				if (block.category === 'Sleeves') {
-					const id = `${block.templateCategory}-${block.category}-${block._id}`
+					const id = `${this.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
 					let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
 					const idMirror = `${id}-mirror`
@@ -276,7 +338,7 @@ export class DrippyScene extends Element {
 					return [renderBlock, renderBlockMirror]
 				}
 
-				const id = `${block.templateCategory}-${block.category}-${block._id}`
+				const id = `${this.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
 				let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
 				return renderBlock
@@ -285,7 +347,7 @@ export class DrippyScene extends Element {
 
 		// Re-apply materials whenever the selected fabrics change or models mount
 		this.createEffect(async () => {
-			const selectedFabrics = store.selectedFabrics
+			const selectedFabrics = this.selectedFabrics
 			// Add a delay of 100ms to ensure the lume-gltf-model are in the DOM
 			await new Promise(resolve => setTimeout(resolve, 100))
 
@@ -302,6 +364,9 @@ export class DrippyScene extends Element {
 				this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? [],
 			) as GltfModel[]
 
+			// Track material loading symbols for cleanup
+			const materialLoadingSymbols = new Set<symbol>()
+
 			// Process each model using its data-blockid to find the correct fabric
 			for (const el of models) {
 				const blockId = el.getAttribute('id')
@@ -315,20 +380,22 @@ export class DrippyScene extends Element {
 
 				if (parts.length < 3) continue
 
-				const templateCategory = parts[0] as TemplateCategory
-				const blockCategory = parts[1] as BlockCategory
+				const templateCategory = parts[1] as TemplateCategory
+				const blockCategory = parts[2] as BlockCategory
 
-				// Find the fabric for this block
+				// Find the fabrics for this block
 				const templateFabrics = selectedFabrics.get(templateCategory)
-				const fabric = templateFabrics?.get(blockCategory)
+				const fabrics = templateFabrics?.get(blockCategory) || new Map<string, Fabric>()
 				const loadingId = Symbol(`material-${blockId}`)
+				materialLoadingSymbols.add(loadingId)
+
 				const modelLoaded = onModelLoad(el)
 
 				createEffect(() => {
 					if (!modelLoaded()) return
 
-					if (fabric) {
-						this.#applyFabric(el, fabric, isCanceled, loadingId)
+					if (fabrics.size > 0) {
+						this.#applyFabrics(el, fabrics, isCanceled, loadingId)
 					} else {
 						// Reset to default material if no fabric selected for this block category
 						this.#resetMaterialsToDefault(el)
@@ -336,7 +403,13 @@ export class DrippyScene extends Element {
 				})
 			}
 
-			onCleanup(() => (shouldCancel = true))
+			onCleanup(() => {
+				shouldCancel = true
+				// Cleanup: Remove all tracked material loading symbols
+				for (const loadingId of materialLoadingSymbols) {
+					store.removeLoadingMaterial(loadingId)
+				}
+			})
 		})
 
 		// Play animation when blocks are added, pause animation when no blocks.
@@ -383,6 +456,15 @@ export class DrippyScene extends Element {
 			if (!this.lumeScene) return
 			this.lumeScene.glRenderer!.toneMapping = THREE.ACESFilmicToneMapping
 		})
+
+		this.createEffect(() => {
+			if (this.selectedSpace?.scene && this.backgroundModel) {
+				enableFrontsideOnModelLoad(this.backgroundModel)
+				enableShadowOnModelLoad(this.backgroundModel)
+				setEnvMapOnModelLoad(this.backgroundModel, env)
+				setMaterialsVisibleOnModelLoad(this.backgroundModel, () => store.isShowScene)
+			}
+		})
 	}
 
 	template = () => {
@@ -396,11 +478,14 @@ export class DrippyScene extends Element {
 
 		return html`
 			<show-when
-				condition=${() => store.isAdmin}
+				condition=${() => store.isAdmin && !store.turnOffSettingsInSpace}
 				content=${() => html`
-					<!-- debug slider for environment intensity -->
-					<div style="position: absolute; top: 1rem; left: 50%; transform: translateX(-50%); z-index: 10;">
-						<p>Environment Intensity (admin only)</p>
+					<div
+						style="position: absolute; top: 1rem; left: 50%; z-index: 1000; background: transparent; border-radius: 8px; padding: 6px 8px; display: flex; flex-direction: column; gap: 4px; min-width: 60px; backdrop-filter: blur(4px);"
+					>
+						<p style="color: black; font-size: 8px; font-weight: 500; margin: 0; text-align: center; line-height: 1;">
+							Env
+						</p>
 						<input
 							id="env-intensity"
 							title="Environment Intensity"
@@ -409,6 +494,7 @@ export class DrippyScene extends Element {
 							max="3"
 							step="0.1"
 							value="0.3"
+							style="width: 50px; height: 3px; background: #333; border-radius: 2px; outline: none; -webkit-appearance: none; appearance: none;"
 							oninput=${(e: Event) => {
 								const input = e.target as HTMLInputElement
 								const value = Number(input.value) || 0
@@ -448,7 +534,7 @@ export class DrippyScene extends Element {
 						<lume-ambient-light visible="true" intensity="0.7" color="white"></lume-ambient-light>
 
 						<!-- a sphere to debug/visualize the env map -->
-						<lume-sphere visible="${() => store.isAdmin}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
+						<lume-sphere visible="${() => store.isAdmin && !store.turnOffSettingsInSpace}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
 
 						<lume-spot-light
 							visible="true"
@@ -536,7 +622,12 @@ export class DrippyScene extends Element {
 						<lume-gltf-model
 							id="avatar"
 							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
-							src=${() => avatars.find(avatar => avatar.value === (store.selectedAvatar ?? store.tempSelectedAvatar))?.src}
+							src=${() => {
+								// Prioritize tempSelectedAvatar for preview functionality
+								const currentAvatar = store.tempSelectedAvatar ?? this.selectedAvatar
+								const foundAvatar = avatars.find(avatar => avatar.value === currentAvatar)
+								return foundAvatar?.src
+							}}
 							scale="1 1 1"
 							data-avatar
 						>
@@ -576,12 +667,12 @@ export class DrippyScene extends Element {
 						</lume-gltf-model>
 
 						<lume-gltf-model
-							ref=${(el: GltfModel) => ((this.backgroundModel = el), enableShadowOnModelLoad(el), enableFrontsideOnModelLoad(el), setEnvMapOnModelLoad(el, env), setMaterialsVisibleOnModelLoad(el, () => store.isShowScene))}
+							ref=${(el: GltfModel) => (this.backgroundModel = el)}
 							id="scene"
-							src=${() => store.selectedSpace?.scene ?? ''}
+							src=${() => this.selectedSpace?.scene ?? ''}
 						></lume-gltf-model>
 
-						<${Index} each=${() => store.selectedSpace?.includedModelFiles}>
+						<${Index} each=${() => this.selectedSpace?.includedModelFiles}>
 							${(item: Accessor<string>) => html`
 								<lume-gltf-model
 									ref=${(el: GltfModel) => (enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
@@ -613,12 +704,20 @@ export class DrippyScene extends Element {
 			transition: transform var(--transitionFast);
 		}
 
+		:host-context(.showcase__model-center) lume-scene {
+			transform: unset !important;
+			transition: unset !important;
+		}
+
 		lume-scene {
 			transform: var(--scene-transform);
 			transition: transform var(--transitionFast);
 		}
 
 		@media (max-width: 767px) {
+			:host-context(.showcase__model-center) #lume-scene-container {
+				transform: unset !important;
+			}
 			#lume-scene-container {
 				transform: var(--scene-desktop-transform);
 			}

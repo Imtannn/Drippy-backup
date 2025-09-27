@@ -10,7 +10,7 @@ const logoUrlDark = new URL('../images/logo-dark.svg', import.meta.url)
 type HomePageAttributes = keyof {} // no attributes yet
 
 // Redirect to app immediately
-window.location.href = '/app'
+window.location.href = '/app?avatar=moidien'
 
 @element
 export class HomePage extends Element {
@@ -43,8 +43,6 @@ export class HomePage extends Element {
 		<login-ui
 			custom-style=${() => css/*css*/ `
 				#loginButtons a.login-link-text {
-					color: black;
-
 					:host-context([data-theme='dark']) & {
 						color: white;
 					}

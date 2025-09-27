@@ -14,8 +14,18 @@ export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.
 export const username = () => currentUser()?.username ?? ''
 export const dateOfBirth = () => currentUser()?.profile?.dateOfBirth ?? ''
 export const isAdmin = () => !!currentUser()?.profile?.isAdmin
+export const turnOffSettingsInSpace = () => !!currentUser()?.profile?.turnOffSettingsInSpace
+export const hideAnimationSelection = () => !!currentUser()?.profile?.hideAnimationSelection
 
-export const visits = toSolidSignal(() => Visits.find({}).fetch() as readonly Visit[])
+const pathname = location.pathname
+
+// TODO optimize: use a publication that only sends the count for total visits,
+// and paginate visits. For now, limit performance impact by exposing visits
+// only to the /stats page.
+export const visits = toSolidSignal(() => {
+	if (pathname === '/stats') return Visits.find({}).fetch() as readonly Visit[]
+	else return [] as readonly Visit[]
+})
 export const usersCount = toSolidSignal(() => Counts.get('users'))
 
 export const store = createMutable({
@@ -32,7 +42,9 @@ export const store = createMutable({
 	get isAdmin() {
 		return isAdmin()
 	},
-
+	get hideAnimationSelection() {
+		return hideAnimationSelection()
+	},
 	get visits() {
 		return visits()
 	},
@@ -40,16 +52,21 @@ export const store = createMutable({
 		return usersCount()
 	},
 
+	get turnOffSettingsInSpace() {
+		return turnOffSettingsInSpace()
+	},
+
 	// key is the block category, value is the block
 	view: 'avatar' as AppRoute,
 	tempSelectedAvatar: null as string | null,
 	selectedAvatar: null as string | null,
+	selectedPose: null as string | null,
 	selectedSpace: null as Space | null,
 	selectedAnimation: 'none' as 'none' | 'walk' | 'dance',
 	isPreview: false,
 	selectedTemplates: new Map<TemplateCategory, Template>(),
 	selectedBlocks: new Map<TemplateCategory, Map<BlockCategory, Block>>(),
-	selectedFabrics: new Map<TemplateCategory, Map<BlockCategory, Fabric>>(),
+	selectedFabrics: new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(),
 	customMeasurement: null as CustomMeasurement | null,
 	isShowAvatar: true,
 	isShowScene: true,
@@ -73,6 +90,7 @@ export const store = createMutable({
 	screenshotCache: new Map<TemplateCategory, string>(),
 	// Track which screenshots are currently being generated
 	loadingScreenshots: new Set<TemplateCategory>(),
+	remixOverlayTemplateCategory: null as TemplateCategory | null,
 	order: {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -123,14 +141,14 @@ export const store = createMutable({
 					if (templateCategoryFabrics) {
 						// if the block category is Sleeves, check for bodice and add it to the fabric
 						if (block.category === 'Sleeves') {
-							const bodice = templateCategoryFabrics.get('Bodice')
-							if (!bodice) return
+							const bodiceFabrics = templateCategoryFabrics.get('Bodice')
+							if (!bodiceFabrics || bodiceFabrics.size === 0) return
 
-							this.setSelectedFabrics = {
-								fabric: bodice,
-								blockCategory: 'Sleeves',
+							this.setSelectedFabrics = Array.from(bodiceFabrics.values()).map(fabric => ({
+								fabric,
+								blockCategory: 'Sleeves' as BlockCategory,
 								templateCategory: templateCategory,
-							}
+							}))
 						}
 					}
 					templateBlocks.set(block.category, block)
@@ -141,14 +159,14 @@ export const store = createMutable({
 				if (templateCategoryFabrics) {
 					// if the block category is Sleeves, check for bodice and add it to the fabric
 					if (block.category === 'Sleeves') {
-						const bodice = templateCategoryFabrics.get('Bodice')
-						if (!bodice) return
+						const bodiceFabrics = templateCategoryFabrics.get('Bodice')
+						if (!bodiceFabrics || bodiceFabrics.size === 0) return
 
-						this.setSelectedFabrics = {
-							fabric: bodice,
-							blockCategory: 'Sleeves',
+						this.setSelectedFabrics = Array.from(bodiceFabrics.values()).map(fabric => ({
+							fabric,
+							blockCategory: 'Sleeves' as BlockCategory,
 							templateCategory: templateCategory,
-						}
+						}))
 					}
 				}
 				// if not, add it
@@ -163,52 +181,103 @@ export const store = createMutable({
 		}
 		this.selectedBlocks = newBlocks
 	},
-	set replaceSelectedBlocks(blockData: {blocks: Block[]; templateCategory: TemplateCategory; materialId: string}[]) {
+	set replaceSelectedBlocks(
+		blockData: {
+			blocks: Block[]
+			templateCategory: TemplateCategory
+			materialId: string
+			extraMaterials?: {mesh: string; materialId: string}[]
+		}[],
+	) {
 		const {newBlocks, newFabrics} = blockManager.replaceSelectedBlocks(blockData, this.selectedSpace!)
 		this.selectedBlocks = newBlocks
 		this.replaceSelectedFabrics = newFabrics
 	},
 	set replaceSelectedFabrics(
 		fabricData:
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}[],
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}[],
 	) {
 		if (!Array.isArray(fabricData)) {
 			fabricData = [fabricData]
 		}
 
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>(this.selectedFabrics)
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
 
-		for (const {fabric, blockCategory, templateCategory} of fabricData) {
-			let templateFabrics = newFabrics.get(templateCategory)
-			if (!templateFabrics) {
-				templateFabrics = new Map<BlockCategory, Fabric>()
-				newFabrics.set(templateCategory, templateFabrics)
+		// Group fabrics by template category and block category
+		const groupedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+
+		for (let {fabric, blockCategory, templateCategory, assignedMesh} of fabricData) {
+			if (!assignedMesh) {
+				assignedMesh = 'default'
 			}
 
-			templateFabrics.set(blockCategory, fabric)
+			let templateFabrics = groupedFabrics.get(templateCategory)
+			if (!templateFabrics) {
+				templateFabrics = new Map<BlockCategory, Map<string, Fabric>>()
+				groupedFabrics.set(templateCategory, templateFabrics)
+			}
+
+			let blockFabrics = templateFabrics.get(blockCategory)
+			if (!blockFabrics) {
+				blockFabrics = new Map<string, Fabric>()
+				templateFabrics.set(blockCategory, blockFabrics)
+			}
+
+			blockFabrics.set(assignedMesh, fabric)
 		}
+
+		// Update the newFabrics map with grouped fabrics
+		for (const [templateCategory, templateFabrics] of groupedFabrics.entries()) {
+			let newTemplateFabrics = newFabrics.get(templateCategory)
+			if (!newTemplateFabrics) {
+				newTemplateFabrics = new Map<BlockCategory, Map<string, Fabric>>()
+				newFabrics.set(templateCategory, newTemplateFabrics)
+			}
+
+			for (const [blockCategory, fabrics] of templateFabrics.entries()) {
+				newTemplateFabrics.set(blockCategory, fabrics)
+			}
+		}
+
 		this.selectedFabrics = newFabrics
 	},
 	set setSelectedFabrics(
 		fabricData:
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory}[],
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}
+			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}[],
 	) {
 		if (!Array.isArray(fabricData)) {
 			fabricData = [fabricData]
 		}
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>(this.selectedFabrics)
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(this.selectedFabrics)
 
-		for (const {fabric, blockCategory, templateCategory} of fabricData) {
+		for (let {fabric, blockCategory, templateCategory, assignedMesh} of fabricData) {
+			if (!assignedMesh) {
+				assignedMesh = 'default'
+			}
+
 			// Get or create the template's fabric map
 			let templateFabrics = newFabrics.get(templateCategory)
 			if (!templateFabrics) {
-				templateFabrics = new Map<BlockCategory, Fabric>()
+				templateFabrics = new Map<BlockCategory, Map<string, Fabric>>()
 				newFabrics.set(templateCategory, templateFabrics)
 			}
 
-			templateFabrics.set(blockCategory, fabric)
+			// Get existing fabrics for this block category
+			const existingFabrics = templateFabrics.get(blockCategory) || new Map<string, Fabric>()
+
+			// Replace only fabrics with the same assignedMesh value (including undefined)
+			const noMatchAssignedMeshKeys = Array.from(existingFabrics.keys()).filter(
+				assignedMeshKey => assignedMeshKey !== assignedMesh,
+			)
+
+			const updatedFabricsMap = new Map<string, Fabric>()
+			for (const assignedMeshKey of noMatchAssignedMeshKeys) {
+				updatedFabricsMap.set(assignedMeshKey, existingFabrics.get(assignedMeshKey)!)
+			}
+			updatedFabricsMap.set(assignedMesh, fabric)
+			templateFabrics.set(blockCategory, updatedFabricsMap)
 
 			// If template has no fabrics left, remove the template entry
 			if (templateFabrics.size === 0) {
@@ -227,7 +296,8 @@ export const store = createMutable({
 			selectedTemplates: Map<TemplateCategory, Template>,
 		) => {
 			const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
-				Dress: ['Shirt', 'Pants', 'Skirt'],
+				Dress: ['Shirt', 'Top', 'Pants', 'Skirt'],
+				Top: ['Dress'],
 				Shirt: ['Dress'],
 				Jacket: [],
 				Skirt: ['Pants', 'Dress'],
@@ -265,11 +335,17 @@ export const store = createMutable({
 	set navigateTo(route: AppRoute) {
 		this.view = route
 	},
+	set setRemixOverlayTemplateCategory(category: TemplateCategory | null) {
+		this.remixOverlayTemplateCategory = category
+	},
 	set setTempSelectedAvatar(avatar: string) {
 		this.tempSelectedAvatar = avatar
 	},
 	set selectAvatar(avatar: string) {
 		this.selectedAvatar = avatar
+	},
+	set selectPose(pose: string) {
+		this.selectedPose = pose
 	},
 	set selectSpace(space: Space | null) {
 		this.selectedSpace = space
@@ -430,7 +506,7 @@ export const store = createMutable({
 	resetSelectedTemplates() {
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
+		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
 		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 		this.retailItemQuantities = new Map<TemplateCategory, number>()
@@ -438,6 +514,11 @@ export const store = createMutable({
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
+		// Clear all loading states to prevent orphaned symbols
+		this.loadingBlocks.clear()
+		this.loadingMaterials.clear()
+		this.isDrippySceneLoading.clear()
+		this.loadingScreenshots.clear()
 		this.order = {
 			status: 'idle' as OrderStatus,
 			error: null as string | null,
@@ -466,7 +547,7 @@ export const store = createMutable({
 		this.selectedSpace = null as Space | null
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
 		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Fabric>>()
+		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
 		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 		this.retailItemQuantities = new Map<TemplateCategory, number>()
@@ -474,6 +555,11 @@ export const store = createMutable({
 		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 		this.screenshotCache = new Map<TemplateCategory, string>()
 		this.loadingScreenshots = new Set<TemplateCategory>()
+		this.remixOverlayTemplateCategory = null
+		// Clear all loading states to prevent orphaned symbols
+		this.loadingBlocks.clear()
+		this.loadingMaterials.clear()
+		this.isDrippySceneLoading.clear()
 		this.isPreview = false
 		this.customMeasurement = null as CustomMeasurement | null
 		this.order = {

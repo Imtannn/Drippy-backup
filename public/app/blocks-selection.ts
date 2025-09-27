@@ -1,28 +1,32 @@
 import {css, element, Element, html, signal, untrack, type ElementAttributes} from 'lume'
 import {blocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
+import {updateUrlWithParams} from '../routes.js'
 
+import '../elements/animation-select.js'
 import '../elements/back-button.js'
+import '../elements/home-button.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
+import '../elements/logic/for-each.js'
+import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
-import '../elements/animation-select.js'
 import '../elements/preview-button.js'
 import '../elements/redo-button.js'
 import '../elements/refresh-button.js'
-import '../elements/logic/for-each.js'
-import '../elements/logic/show-when.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import '../elements/undo-button.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
-import './app-buttons.js'
-import './item-card.js'
-import {store} from './store.js'
 import type {TemplateCategory} from '../types/template.js'
+import './app-buttons.js'
+import './fabric-selection.js'
+import './item-card.js'
+import '../elements/placeholder-image.js'
+import {store} from './store.js'
 
 type BlocksSelectionAttributes = keyof {}
 
@@ -40,6 +44,7 @@ export class BlocksSelection extends Element {
 	@signal availableBlocks: Block[] = []
 	@signal availableFabrics: Fabric[] = []
 	@signal spaceCollection: string | null = null
+	@signal pieceSelections: string[] = []
 
 	private defaultCollection = 'moidien'
 
@@ -99,10 +104,9 @@ export class BlocksSelection extends Element {
 
 			const selectedTemplate = store.selectedTemplates.get(this.selectedTemplateCategory)
 			if (selectedTemplate) {
-				this.availableFabrics =
-					fabrics[this.spaceCollection]?.filter(fabric =>
-						fabric.templateCategories?.includes(selectedTemplate.category),
-					) ?? []
+				this.availableFabrics = fabrics[this.spaceCollection]?.filter(fabric =>
+					fabric.templateCategories?.includes(selectedTemplate.category),
+				)
 			} else {
 				this.availableFabrics = []
 			}
@@ -178,6 +182,21 @@ export class BlocksSelection extends Element {
 				this.selectedFabricCategory = newCategories[0] as any
 			}
 		})
+
+		// Update piece selections when selected fabrics change
+		this.createEffect(() => {
+			const selectedFabrics = store.selectedFabrics.get(this.selectedTemplateCategory!)
+			if (!selectedFabrics) return []
+
+			const selectedBlocks = Array.from(selectedFabrics.keys())
+			if (!selectedBlocks) return []
+
+			const selectedPieces = selectedBlocks.map(block => selectedFabrics.get(block)?.keys())?.[0]
+
+			if (!selectedPieces) return []
+
+			this.pieceSelections = Array.from(selectedPieces).sort()
+		})
 	}
 
 	disconnectedCallback() {
@@ -190,36 +209,23 @@ export class BlocksSelection extends Element {
 		store.navigateTo = 'template'
 	}
 
+	#onHomeButtonClick = () => {
+		store.resetState()
+		window.location.href = '/app?avatar=moidien'
+	}
+
 	#onPreviewButtonClick = () => {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('isPreview', 'true')
 		store.setIsPreview = true
-		window.history.replaceState({}, '', `?${searchParams.toString()}`)
-	}
-
-	#onFabricClick = (e: CustomEvent) => {
-		const fabric = e.detail.itemValue
-		if (!this.selectedTemplateCategory) return
-
-		// Get ALL actually selected block categories for this template (not just the editable ones)
-		const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory)
-		if (!templateBlocks) return
-
-		const actualBlockCategories = Array.from(templateBlocks.keys())
-		// Apply fabric to ALL selected blocks of this template category
-		const fabricData = actualBlockCategories.map(blockCategory => ({
-			fabric,
-			blockCategory,
-			templateCategory: this.selectedTemplateCategory!,
-		}))
-
-		store.setSelectedFabrics = fabricData
+		updateUrlWithParams(searchParams)
 	}
 
 	template = () => html`
 		<app-buttons-left>
 			<app-buttons-group>
 				<back-button onclick=${this.#onBackButtonClick}></back-button>
+				<home-button onclick=${this.#onHomeButtonClick}></home-button>
 			</app-buttons-group>
 		</app-buttons-left>
 
@@ -324,32 +330,11 @@ export class BlocksSelection extends Element {
 													<show-when
 														condition="${() => this.selectedSubTab === 'fabric'}"
 														content=${() => html`
-															<div class="items-grid">
-																<for-each
-																	items=${() => this.availableFabrics}
-																	content=${() => (fabric: Fabric) => html`
-																		<item-card
-																			item-active=${() => {
-																				// Check if this fabric is applied to any block of current template
-																				const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory!)
-																				const templateFabrics = store.selectedFabrics.get(
-																					this.selectedTemplateCategory!,
-																				)
-																				if (!templateBlocks || !templateFabrics) return false
-
-																				const actualBlockCategories = Array.from(templateBlocks.keys())
-																				return actualBlockCategories.some(
-																					blockCategory => templateFabrics.get(blockCategory)?._id === fabric._id,
-																				)
-																			}}
-																			item-src=${() => fabric.thumb}
-																			item-alt=${() => fabric.materialName}
-																			item-value=${() => fabric}
-																			oncardselected=${this.#onFabricClick}
-																		></item-card>
-																	`}
-																></for-each>
-															</div>
+															<fabric-selection
+																piece-selections=${() => this.pieceSelections}
+																available-fabrics=${() => this.availableFabrics}
+																selected-template-category=${() => this.selectedTemplateCategory}
+															></fabric-selection>
 														`}
 													></show-when>
 
