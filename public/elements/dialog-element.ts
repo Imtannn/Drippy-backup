@@ -42,6 +42,7 @@ export class DialogElement extends Element {
 			overflow-y: auto;
 			box-sizing: border-box;
 			margin: auto;
+			pointer-events: auto;
 		`
 
 		// Add backdrop styles
