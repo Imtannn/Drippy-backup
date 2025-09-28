@@ -126,21 +126,17 @@ export class OutfitPreview extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			gap: var(--uiGap);
-			width: 100%;
-			padding: var(--uiSpacingMedium) 32px;
-			border-radius: var(--borderRadius);
-			border: none;
-			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightSemiBold);
-			cursor: pointer;
-			text-align: center;
-		}
-
-		.buy-button {
+			gap: 5px;
+			padding: 8.5px 20.5px;
+			border-radius: 100px;
+			color: #ffffff;
 			background: var(--uiColorPrimaryBlack);
-			color: var(--uiColorPrimaryWhite);
-			box-shadow: 0px 1px 2px 0px var(--uiColorWhiteShadow) inset;
+			box-shadow: 0px 1px 2px 0px #ffffff40 inset;
+			cursor: pointer;
+			border: none;
+			outline: none;
+			font-weight: var(--fontWeightSemiBold);
+			font-size: var(--fontSizeTextMdDesktop);
 		}
 
 		.share-button {
