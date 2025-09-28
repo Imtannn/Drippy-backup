@@ -386,7 +386,7 @@ export class SpacesSelection extends Element {
 			position: absolute;
 			top: var(--uiGap);
 			right: var(--uiGap);
-			background: rgba(0, 0, 0, 0.1);
+			background: rgba(0, 0, 0, 0.3);
 			color: var(--uiColorPrimaryWhite);
 			padding: 4px var(--uiSpacingSmall);
 			border-radius: 15px;
