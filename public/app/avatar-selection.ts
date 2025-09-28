@@ -25,7 +25,11 @@ export class AvatarSelection extends Element {
 
 		this.createEffect(() => {
 			if (!store.tempSelectedAvatar) {
-				store.setTempSelectedAvatar = avatars[0].value
+				if (store.selectedAvatar) {
+					store.setTempSelectedAvatar = store.selectedAvatar
+				} else {
+					store.setTempSelectedAvatar = avatars[0].value
+				}
 			}
 		})
 	}
@@ -75,8 +79,8 @@ export class AvatarSelection extends Element {
 							}}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
-									class=${() => (store.tempSelectedAvatar === avatar.value ? 'item-preview' : '')}
-									item-active=${() => store.tempSelectedAvatar === avatar.value}
+									class=${() => (store.selectedAvatar === avatar.value ? 'item-preview' : '')}
+									item-active=${() => store.selectedAvatar === avatar.value}
 									item-src=${avatar.thumbnail}
 									item-alt=${avatar.value}
 									item-value=${avatar.value}
@@ -103,8 +107,8 @@ export class AvatarSelection extends Element {
 							}}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
-									class=${() => (store.tempSelectedAvatar === avatar.value ? 'item-preview' : '')}
-									item-active=${() => store.tempSelectedAvatar === avatar.value}
+									class=${() => (store.selectedAvatar === avatar.value ? 'item-preview' : '')}
+									item-active=${() => store.selectedAvatar === avatar.value}
 									item-src=${avatar.thumbnail}
 									item-alt=${avatar.value}
 									item-value=${avatar.value}
