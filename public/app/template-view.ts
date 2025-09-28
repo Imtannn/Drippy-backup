@@ -274,6 +274,8 @@ export class TemplateView extends Element {
 	#onAvatarDropdownClick = () => {
 		this.showAvatarSelection = !this.showAvatarSelection
 		this.showPoseSelection = false
+		this.showRemixOverlay = false
+		this.showTemplateOverlay = null
 	}
 
 	#onNavTabChange = (e: CustomEvent) => {
@@ -285,6 +287,8 @@ export class TemplateView extends Element {
 			this.showPoseSelection = false
 			this.showAvatarSelection = false
 		}
+		this.showRemixOverlay = false
+		this.showTemplateOverlay = null
 	}
 
 	#closeRemixOverlay = () => {
