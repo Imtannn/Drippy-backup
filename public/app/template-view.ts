@@ -244,15 +244,20 @@ export class TemplateView extends Element {
 	}
 
 	#onPreviewButtonClick = () => {
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('isPreview', 'true')
-		store.setIsPreview = true
-		this.showAvatarSelection = false
-		this.showPoseSelection = false
-		this.showLoginDialog = false
-		this.showRemixOverlay = false
-		this.showTemplateOverlay = null
-		updateUrlWithParams(searchParams)
+		const user = currentUser()
+
+		if (user) {
+			const searchParams = new URLSearchParams(window.location.search)
+			searchParams.set('isPreview', 'true')
+			store.setIsPreview = true
+			this.showAvatarSelection = false
+			this.showPoseSelection = false
+			this.showRemixOverlay = false
+			this.showTemplateOverlay = null
+			updateUrlWithParams(searchParams)
+		} else {
+			this.showLoginDialog = true
+		}
 	}
 
 	#onBackButtonClick = () => {
