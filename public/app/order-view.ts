@@ -28,8 +28,9 @@ export class OrderView extends Element {
 	}
 
 	#onHomeButtonClick = () => {
+		const currentAvatar = store.selectedAvatar || 'moidien'
+		history.pushState(null, '', `/?avatar=${currentAvatar}`)
 		store.resetState()
-		window.location.href = '/app?avatar=moidien'
 	}
 
 	// Helper function to collect all order data

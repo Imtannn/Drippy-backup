@@ -244,15 +244,20 @@ export class TemplateView extends Element {
 	}
 
 	#onPreviewButtonClick = () => {
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('isPreview', 'true')
-		store.setIsPreview = true
-		this.showAvatarSelection = false
-		this.showPoseSelection = false
-		this.showLoginDialog = false
-		this.showRemixOverlay = false
-		this.showTemplateOverlay = null
-		updateUrlWithParams(searchParams)
+		const user = currentUser()
+
+		if (user) {
+			const searchParams = new URLSearchParams(window.location.search)
+			searchParams.set('isPreview', 'true')
+			store.setIsPreview = true
+			this.showAvatarSelection = false
+			this.showPoseSelection = false
+			this.showRemixOverlay = false
+			this.showTemplateOverlay = null
+			updateUrlWithParams(searchParams)
+		} else {
+			this.showLoginDialog = true
+		}
 	}
 
 	#onBackButtonClick = () => {
@@ -274,6 +279,8 @@ export class TemplateView extends Element {
 	#onAvatarDropdownClick = () => {
 		this.showAvatarSelection = !this.showAvatarSelection
 		this.showPoseSelection = false
+		this.showRemixOverlay = false
+		this.showTemplateOverlay = null
 	}
 
 	#onNavTabChange = (e: CustomEvent) => {
@@ -285,6 +292,8 @@ export class TemplateView extends Element {
 			this.showPoseSelection = false
 			this.showAvatarSelection = false
 		}
+		this.showRemixOverlay = false
+		this.showTemplateOverlay = null
 	}
 
 	#closeRemixOverlay = () => {
@@ -544,9 +553,8 @@ export class TemplateView extends Element {
 		.template-item-container {
 			position: relative;
 			width: 100%;
-			aspect-ratio: 0.79;
-			isolation: isolate;
-			contain: layout;
+			flex-shrink: 0;
+			height: auto;
 		}
 
 		.template-product-name {
