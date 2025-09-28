@@ -56,11 +56,16 @@ export class SpacesSelection extends Element {
 		this.showLoginDialog = true
 	}
 
+	#onAvatarClick = (e: Event) => {
+		e.preventDefault()
+		store.navigateTo = 'avatar'
+	}
+
 	template = () => html`
 		<div class="spaces-container">
 			<!-- Navigation -->
 			<div class="navigation">
-				<a href="/" class="avatar-link">
+				<a href="#" class="avatar-link" onclick=${this.#onAvatarClick}>
 					<avatar-dropdown hide-chevron></avatar-dropdown>
 				</a>
 				<div class="nav-links">

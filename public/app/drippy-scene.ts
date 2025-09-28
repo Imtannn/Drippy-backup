@@ -620,7 +620,13 @@ export class DrippyScene extends Element {
 						<lume-gltf-model
 							id="avatar"
 							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
-							src=${() => avatars.find(avatar => avatar.value === (this.selectedAvatar ?? store.tempSelectedAvatar))?.src}
+							src=${() => {
+								const avatarValue =
+									store.view === 'avatar'
+										? store.tempSelectedAvatar || this.selectedAvatar
+										: (this.selectedAvatar ?? store.tempSelectedAvatar)
+								return avatars.find(avatar => avatar.value === avatarValue)?.src
+							}}
 							scale="1 1 1"
 							data-avatar
 						>
