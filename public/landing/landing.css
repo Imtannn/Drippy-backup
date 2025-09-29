@@ -2207,7 +2207,7 @@ p {
 	.landing-page-desktop .cta__content {
 		display: flex;
 		flex-direction: column-reverse;
-		padding: 15px;
+		padding: 55px 15px 15px 15px;
 	}
 
 	.landing-page-desktop .cta__background {
@@ -2304,7 +2304,7 @@ p {
 
 @media (max-width: 480px) {
 	.header {
-		width: min(350px, 98vw);
+		width: min(400px, 98vw);
 		height: 55px;
 		padding: 0 15px;
 		top: 15px;
@@ -2404,10 +2404,12 @@ p {
 
 	.landing-page-desktop .section {
 		gap: 25px;
+		padding: 0 35px;
 	}
 	.landing-page-desktop .section-drippy {
 		flex-direction: column;
 		gap: 25px;
+		padding: 0 35px;
 	}
 
 	.landing-page-desktop .section-title {
@@ -2415,7 +2417,7 @@ p {
 	}
 
 	.brands__logo {
-		height: 100px;
+		height: 95px;
 	}
 
 	.landing-page-desktop .showcase__container {
@@ -2463,7 +2465,7 @@ p {
 		gap: 50px;
 	}
 	.landing-page-desktop .features__image {
-		min-width: 300px;
+		min-width: 350px;
 		min-height: 100%;
 	}
 	.landing-page-desktop .section-drippy .feature__item {
@@ -2589,7 +2591,7 @@ p {
 		top: 6%;
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--4 {
-		top: 22.5%;
+		top: 22%;
 	}
 }
 

@@ -702,14 +702,6 @@ const mainContent = html`
 												<p class="pricing__plan-price--pro">
 													<span class="pricing__plan-feature list-type text-md">Analytics dashboard<br /></span>
 												</p>
-												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature--highlight text-md">Add-on: <br /></span>
-												</p>
-												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature text-md">Includes</span>
-													<span class="pricing__plan-feature--highlight text-md"> 1 growth pack/year </span>
-													<span class="pricing__plan-feature text-md"> (24 garments = €840 value).</span>
-												</p>
 											</div>
 										</div>
 										<button class="pricing__button--pro"><div class="pricing__plan-button-text">Start free trial</div></button>
