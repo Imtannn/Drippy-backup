@@ -59,6 +59,10 @@ const BRAND_CONFIGS = [
 		brand: 'moidien',
 		rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
 	},
+	{
+		brand: 'emwear',
+		rootFolderId: '15zHjnYVfII_Z2cr17_6Vp7kscWm9UIAU',
+	},
 	// {
 	// 	brand: 'baroudeuses',
 	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
@@ -238,6 +242,7 @@ function normalizeBlockCategory(folderName: string): string {
 	if (folderName.toLowerCase().includes('pants')) return 'Pants'
 	if (folderName.toLowerCase().includes('sleeves')) return 'Sleeves'
 	if (folderName.toLowerCase().includes('dress')) return 'Dress'
+	if (folderName.toLowerCase().includes('coat')) return 'Coat'
 	if (folderName.toLowerCase().includes('skirt')) return 'Skirt'
 	if (folderName.toLowerCase().includes('fullbody')) return 'Full Body'
 	if (folderName.toLowerCase().includes('hat')) return 'Hat'
@@ -266,11 +271,11 @@ async function processTemplateFolder(
 		return {template: null, blocks: [], unsucceeded: []}
 	}
 
-	// Find block type folders (Bodice, Pants, Sleeves)
+	// Find block type folders
 	const blockTypeFolders = templateContents.filter(
 		item =>
 			item.mimeType === 'application/vnd.google-apps.folder' &&
-			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory'].some(blockType =>
+			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory', 'coat'].some(blockType =>
 				item.name.toLowerCase().includes(blockType.toLowerCase()),
 			),
 	)
