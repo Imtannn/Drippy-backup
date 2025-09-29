@@ -101,7 +101,7 @@ export class AvatarSelection extends Element {
 									object-fit="cover"
 									object-position="top"
 									aspect-ratio="0.79"
-									image-style="position: absolute; scale: 2; top: 42%;"
+									image-style="scale: 2; top: 42%;"
 								></item-card>
 							`}
 						></for-each>
