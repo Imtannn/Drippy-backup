@@ -546,8 +546,8 @@ export class TemplateView extends Element {
 		.template-item-container {
 			position: relative;
 			width: 100%;
-			flex-shrink: 0;
-			height: auto;
+			height: 100%;
+			flex: 1;
 		}
 
 		.template-product-name {

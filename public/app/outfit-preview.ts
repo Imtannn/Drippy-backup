@@ -136,7 +136,7 @@ export class OutfitPreview extends Element {
 			border: none;
 			outline: none;
 			font-weight: var(--fontWeightSemiBold);
-			font-size: var(--fontSizeTextMdDesktop);
+			font-size: var(--fontSizeTextSm);
 		}
 
 		.share-button {
