@@ -1,4 +1,13 @@
-export type BlockCategory = 'Bodice' | 'Sleeves' | 'Pants' | 'Bag' | 'Hat' | 'Full Body' | 'Accessory' | 'Skirt'
+export type BlockCategory =
+	| 'Bodice'
+	| 'Sleeves'
+	| 'Pants'
+	| 'Bag'
+	| 'Hat'
+	| 'Full Body'
+	| 'Accessory'
+	| 'Skirt'
+	| 'Coat'
 export type TemplateCategory = 'Jacket' | 'Shirt' | 'Pants' | 'Accessories' | 'Dress' | 'Skirt' | 'Top' | string // For custom categories
 
 export type BlockAvatar = 'Male' | 'Female'
