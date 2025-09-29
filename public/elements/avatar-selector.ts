@@ -217,7 +217,7 @@ export class AvatarSelector extends Element {
 
 			// Set templates to store
 			if (templateData.length > 0) {
-				store.setSelectedTemplates = templateData
+				store.selectedTemplates = new Map(templateData.map(t => [t.category, t]))
 			}
 
 			// Force set blocks for selected gender
