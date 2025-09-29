@@ -41,7 +41,7 @@ export class TemplateItemOverlay extends Element {
 		if (!this.selectedTemplate) return
 
 		// Unselect the template
-		store.setSelectedTemplates = this.selectedTemplate
+		store.unselectTemplate = this.selectedTemplate
 
 		// Dispatch close event
 		this.dispatchEvent(new CustomEvent('close', {bubbles: true}))

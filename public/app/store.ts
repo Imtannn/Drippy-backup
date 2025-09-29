@@ -6,7 +6,6 @@ import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {toSolidSignal} from '../utils.js'
-import {blockManager} from './block-manager.js'
 
 import {Visits, type Visit} from '../imports/collections/Visits.js'
 
@@ -181,67 +180,6 @@ export const store = createMutable({
 		}
 		this.selectedBlocks = newBlocks
 	},
-	set replaceSelectedBlocks(
-		blockData: {
-			blocks: Block[]
-			templateCategory: TemplateCategory
-			materialId: string
-			extraMaterials?: {mesh: string; materialId: string}[]
-		}[],
-	) {
-		const {newBlocks, newFabrics} = blockManager.replaceSelectedBlocks(blockData, this.selectedSpace!)
-		this.selectedBlocks = newBlocks
-		this.replaceSelectedFabrics = newFabrics
-	},
-	set replaceSelectedFabrics(
-		fabricData:
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}[],
-	) {
-		if (!Array.isArray(fabricData)) {
-			fabricData = [fabricData]
-		}
-
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
-
-		// Group fabrics by template category and block category
-		const groupedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
-
-		for (let {fabric, blockCategory, templateCategory, assignedMesh} of fabricData) {
-			if (!assignedMesh) {
-				assignedMesh = 'default'
-			}
-
-			let templateFabrics = groupedFabrics.get(templateCategory)
-			if (!templateFabrics) {
-				templateFabrics = new Map<BlockCategory, Map<string, Fabric>>()
-				groupedFabrics.set(templateCategory, templateFabrics)
-			}
-
-			let blockFabrics = templateFabrics.get(blockCategory)
-			if (!blockFabrics) {
-				blockFabrics = new Map<string, Fabric>()
-				templateFabrics.set(blockCategory, blockFabrics)
-			}
-
-			blockFabrics.set(assignedMesh, fabric)
-		}
-
-		// Update the newFabrics map with grouped fabrics
-		for (const [templateCategory, templateFabrics] of groupedFabrics.entries()) {
-			let newTemplateFabrics = newFabrics.get(templateCategory)
-			if (!newTemplateFabrics) {
-				newTemplateFabrics = new Map<BlockCategory, Map<string, Fabric>>()
-				newFabrics.set(templateCategory, newTemplateFabrics)
-			}
-
-			for (const [blockCategory, fabrics] of templateFabrics.entries()) {
-				newTemplateFabrics.set(blockCategory, fabrics)
-			}
-		}
-
-		this.selectedFabrics = newFabrics
-	},
 	set setSelectedFabrics(
 		fabricData:
 			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}
@@ -286,51 +224,17 @@ export const store = createMutable({
 		}
 		this.selectedFabrics = newFabrics
 	},
-	set setSelectedTemplates(template: Template | Template[]) {
-		if (!Array.isArray(template)) {
-			template = [template]
-		}
+	set unselectTemplate(template: Template) {
 		const newTemplates = new Map<TemplateCategory, Template>(this.selectedTemplates)
-		const checkInterchangeableCategories = (
-			category: TemplateCategory,
-			selectedTemplates: Map<TemplateCategory, Template>,
-		) => {
-			const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
-				Dress: ['Shirt', 'Top', 'Pants', 'Skirt'],
-				Top: ['Dress'],
-				Shirt: ['Dress'],
-				Jacket: [],
-				Skirt: ['Pants', 'Dress'],
-				Pants: ['Skirt', 'Dress'],
-			}
+		newTemplates.delete(template.category)
+		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(this.selectedBlocks)
+		newBlocks.delete(template.category)
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(this.selectedFabrics)
+		newFabrics.delete(template.category)
 
-			const interchangeableCategories = interchangeableCategoriesMapping[category]
-
-			return interchangeableCategories?.filter(c => selectedTemplates.has(c as TemplateCategory)) ?? []
-		}
-		// check if the template with same category already exists
-		for (const temp of template) {
-			const interchangeableCategories = checkInterchangeableCategories(temp.category, this.selectedTemplates)
-			if (interchangeableCategories.length > 0) {
-				for (const category of interchangeableCategories) {
-					if (this.selectedTemplates.has(category as TemplateCategory)) {
-						newTemplates.delete(category as TemplateCategory)
-					}
-				}
-			}
-			if (this.selectedTemplates.has(temp.category)) {
-				// if it exists, check if the template is the same, if so, remove it
-				if (this.selectedTemplates.get(temp.category)?._id === temp._id) {
-					newTemplates.delete(temp.category)
-				} else {
-					newTemplates.set(temp.category, temp)
-				}
-			} else {
-				// if not, add it
-				newTemplates.set(temp.category, temp)
-			}
-		}
+		this.selectedBlocks = newBlocks
 		this.selectedTemplates = newTemplates
+		this.selectedFabrics = newFabrics
 	},
 	set navigateTo(route: AppRoute) {
 		this.view = route

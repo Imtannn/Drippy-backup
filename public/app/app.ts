@@ -20,6 +20,11 @@ import './spaces-selection.js'
 import {store} from './store.js'
 import './success-view.js'
 import './template-view.js'
+import {blockManager} from './block-manager.js'
+import type {Template, TemplateCategory} from '../types/template.js'
+import type {Block, BlockCategory} from '../types/block.js'
+import type {Fabric} from '../types/fabric.js'
+import type {Space} from '../types/types.js'
 
 @element
 export class DrippyApp extends Element {
@@ -49,9 +54,10 @@ export class DrippyApp extends Element {
 				}
 
 				// If no scene is selected and no scene is provided in search params, navigate to scene selection. Else, use the provided scene.
+				let space: Space | undefined
 				if (!store.selectedSpace) {
 					if (scene) {
-						const space = spaces.find(space => space.slug === scene)
+						space = spaces.find(space => space.slug === scene)
 						if (space) {
 							store.selectSpace = space
 						} else {
@@ -64,11 +70,6 @@ export class DrippyApp extends Element {
 					}
 				}
 
-				if (store.isPreview || isPreview === 'true') {
-					store.navigateTo = 'preview'
-					return
-				}
-
 				// Load garments from URL parameters if present
 				const garmentsParam = searchParams.get('garments')
 				if (garmentsParam && store.selectedSpace && store.selectedTemplates.size === 0) {
@@ -76,14 +77,34 @@ export class DrippyApp extends Element {
 					const spaceTemplates = templates[store.selectedSpace.collection]
 
 					if (spaceTemplates) {
+						const templates = new Map<TemplateCategory, Template>()
+						const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+						const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+
 						// Find and select each garment by ID
 						for (const garmentId of garmentIds) {
 							const template = spaceTemplates.find(t => t._id === garmentId.trim())
 							if (template) {
-								store.setSelectedTemplates = template
+								templates.set(template.category, template)
+								const templateBlockData = blockManager.convertTemplateToBlockData(template, space!)
+								const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
+									templateBlockData,
+									space!,
+								)
+								newBlocks.set(template.category, newBlocksMap)
+								newFabrics.set(template.category, newFabricsMap)
 							}
 						}
+
+						store.selectedFabrics = newFabrics
+						store.selectedBlocks = newBlocks
+						store.selectedTemplates = templates
 					}
+				}
+
+				if (store.isPreview || isPreview === 'true') {
+					store.navigateTo = 'preview'
+					return
 				}
 
 				// If both avatar and scene are selected, navigate to blocks.
