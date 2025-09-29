@@ -384,25 +384,29 @@ export function onModelLoad(model: GltfModel) {
 	const [loaded, setLoaded] = createSignal(false)
 
 	createEffect(() => {
+		// Any time the src changes, we are no longer loaded (the MODEL_LOAD
+		// event will set it back to true).
+		model.src
+		setLoaded(false)
+	})
+
+	createEffect(() => {
 		// Wait until the gtf-model behavior instance is present on the model element.
 		const gltfModelBehavior = model.behaviors.get('gltf-model') // signal
 		if (!gltfModelBehavior) return
 
-		// Now wait until the model is loaded.
+		// Set initially true if the model is already loaded.
 		const threeModel = gltfModelBehavior.model
-		if (threeModel) {
-			setLoaded(true)
-		} else {
-			const modelLoad = () => {
-				model.off('MODEL_LOAD', modelLoad)
-				setLoaded(true)
-			}
+		if (threeModel) setLoaded(true)
 
-			model.on('MODEL_LOAD', modelLoad)
-			onCleanup(() => model.off('MODEL_LOAD', modelLoad))
-		}
+		// Set loaded any time a new model is loaded.
+		const modelLoad = () => setLoaded(true)
+		model.on('MODEL_LOAD', modelLoad)
 
-		onCleanup(() => setLoaded(false))
+		onCleanup(() => {
+			model.off('MODEL_LOAD', modelLoad)
+			setLoaded(false)
+		})
 	})
 
 	return loaded

@@ -1,20 +1,20 @@
 import {Meteor} from 'meteor/meteor'
-import {ReactiveVar} from 'meteor/reactive-var'
+import {createSignal} from 'solid-js'
 import {Session} from 'meteor/session'
 import {effect} from './meteor-signals.js'
 import type {Template, TemplateCategory} from './types/template.js'
 
 // We'll keep the title up to date once we add routing. For now it is constant.
 let appName = 'Drippy'
-const _appTitle = new ReactiveVar(appName)
-export const appTitle = () => _appTitle.get()
+const [_appTitle] = createSignal(appName)
+export const appTitle = () => _appTitle()
 
 // Track the url of the current page on route change. This is used to track
 // visits to the page.
 
-const _url = new ReactiveVar(new URL(location.href))
+const [_url, setUrl] = createSignal(new URL(location.href))
 
-export const url = () => _url.get()
+export const url = () => _url()
 export const pathname = () => url().pathname
 export const searchParams = () => url().searchParams
 export const host = () => url().host
@@ -35,19 +35,19 @@ export const updateUrlWithParams = (searchParams: URLSearchParams) => {
 	window.history.replaceState({}, '', `?${searchParams.toString()}`)
 }
 
-window.addEventListener('popstate', () => _url.set(new URL(location.href)))
+window.addEventListener('popstate', () => setUrl(new URL(location.href)))
 
 const pushState = history.pushState
 history.pushState = History.prototype.pushState = function (...args) {
 	const ret = pushState.apply(this, args)
-	_url.set(new URL(location.href))
+	setUrl(new URL(location.href))
 	return ret
 }
 
 const replaceState = history.replaceState
 history.replaceState = History.prototype.replaceState = function (...args) {
 	const ret = replaceState.apply(this, args)
-	_url.set(new URL(location.href))
+	setUrl(new URL(location.href))
 	return ret
 }
 
