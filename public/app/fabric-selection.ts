@@ -19,6 +19,7 @@ export class FabricSelection extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
+			void this.selectedTemplateCategory
 			if (!this._selectingPiece && this.pieceSelections.length > 0) {
 				this._selectingPiece = this.pieceSelections[0]
 			}
