@@ -1033,5 +1033,166 @@ export const templates: Record<string, Template[]> = {
 		category: 'Pants',
 		materialId: 'Twill - 235'
 	}
+	],
+	emwear: [
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Skirt/Silk_Bloom_Skirt_-_28.webp',
+		name: 'Silk Bloom Skirt',
+		price: '28',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Lace - White'
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Top/Silk_Bloom_Top_-_45.webp',
+		name: 'Silk Bloom Top',
+		price: '45',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Silk - White'
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Coat/Ocean_Wave_Slip_Robe_-_65.webp',
+		name: 'Ocean Wave Slip Robe',
+		price: '65',
+		avatar: 'Female',
+		category: 'Coat',
+		materialId: 'Mesh - Lavender Blush',
+		extraMaterials: [
+			{
+				mesh: '75-71-24-70',
+				materialId: 'Silk - Ffe6f2',
+			}
+		]
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Coat/Ocean_Wave_Sleep_Robe_-_57.webp',
+		name: 'Ocean Wave Sleep Robe',
+		price: '57',
+		avatar: 'Female',
+		category: 'Coat',
+		materialId: 'Mesh - Flower',
+		extraMaterials: [
+			{
+				mesh: '66-24-70-71',
+				materialId: 'Silk - Fffaed',
+			}
+		]
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Coat/New_Luna_Robe_-_45.webp',
+		name: 'New Luna Robe',
+		price: '45',
+		avatar: 'Female',
+		category: 'Coat',
+		materialId: 'Silk - Seethrough Cce9ff'
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Drape_Elegance_Dress_-_67.webp',
+		name: 'Drape Elegance Dress',
+		price: '67',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Silk - Ffebb7'
+	},
+	{
+		_id: '7',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Pure_Grace_Dress_-_60.webp',
+		name: 'Pure Grace Dress',
+		price: '60',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Silk - Off White',
+		extraMaterials: [
+			{
+				mesh: 'pattern_402783-pattern_402782-pattern_402780-pattern_402776-pattern_354302-pattern_354305-pattern_354304-pattern_354303-pattern_354295',
+				materialId: 'Lace - Light Cream',
+			}
+		]
+	},
+	{
+		_id: '8',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Swayrose_Dress_-_67.webp',
+		name: 'Swayrose Dress',
+		price: '67',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Silk - Ffc85a'
+	},
+	{
+		_id: '9',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Luxe_Reverie_Dress_-_55.webp',
+		name: 'Luxe Reverie Dress',
+		price: '55',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Silk - Ffe6f2',
+		extraMaterials: [
+			{
+				mesh: 'pattern_354307-pattern_354313-pattern_354306-pattern_354310',
+				materialId: 'Lace - Ffe6f2',
+			}
+		]
+	},
+	{
+		_id: '10',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Holi_Sunset_Dress_-_90.webp',
+		name: 'Holi Sunset Dress',
+		price: '90',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Silk - Fffaed',
+		extraMaterials: [
+			{
+				mesh: 'pattern_402772-pattern_402773-pattern_354294',
+				materialId: 'Silk - Seethrough Fffaed',
+			}
+		]
+	},
+	{
+		_id: '11',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Ocean_Wave_Slip_Dress_-_65.webp',
+		name: 'Ocean Wave Slip Dress',
+		price: '65',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Silk - Lavender Blush',
+		extraMaterials: [
+			{
+				mesh: 'pattern_402777-pattern_402779-pattern_354297',
+				materialId: 'Lace - Lavender Blush',
+			}
+		]
+	},
+	{
+		_id: '12',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Rosette_Dress_-_55.webp',
+		name: 'Rosette Dress',
+		price: '55',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Silk - Cce9ff'
+	},
+	{
+		_id: '13',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Lush_Dream_Dress_-_55.webp',
+		name: 'Lush Dream Dress',
+		price: '55',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Silk - Light Cream',
+		extraMaterials: [
+			{
+				mesh: 'pattern_402776-pattern_402775-pattern_354304-pattern_354305',
+				materialId: 'Lace - Light Cream',
+			}
+		]
+	}
 	]
 }

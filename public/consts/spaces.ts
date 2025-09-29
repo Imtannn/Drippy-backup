@@ -45,9 +45,12 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/movement/scene-thumbnail_optimized.webp',
-		scene: '',
-		includedModelFiles: [],
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/movement/scene-thumbnail.webp',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/movement/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/movement/extras/shoes.glb',
+		],
 		gender: 'female',
 		garmentsCount: blocks.haruki?.length ?? 0,
 		collection: 'haruki',
@@ -156,6 +159,23 @@ export const spaces: Space[] = [
 		gender: 'female',
 		garmentsCount: blocks.theSoul?.length ?? 0,
 		collection: 'theSoul',
+		isWholesale: false,
+	},
+	{
+		name: 'Emwear',
+		slug: 'emwear',
+		description: 'Emwear',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/emwear/scene-thumbnail.webp',
+		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/emwear/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/emwear/extras/shoes.glb',
+		],
+		gender: 'female',
+		garmentsCount: blocks.emwear?.length ?? 0,
+		collection: 'emwear',
 		isWholesale: false,
 	},
 ]

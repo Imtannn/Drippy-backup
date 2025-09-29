@@ -17,6 +17,7 @@ class BlockManager {
 		Dress: [],
 		Skirt: [],
 		Top: [],
+		Coat: ['Sleeves'],
 	}
 
 	preloadTemplateBlocks(template: Block): Promise<GLTF> {
