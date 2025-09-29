@@ -17,6 +17,7 @@ class BlockManager {
 		Dress: [],
 		Skirt: [],
 		Top: [],
+		Coat: ['Sleeves'],
 	}
 
 	preloadTemplateBlocks(template: Block): Promise<GLTF> {
@@ -35,9 +36,10 @@ class BlockManager {
 			Dress: ['Shirt', 'Top', 'Pants', 'Skirt'],
 			Top: ['Dress'],
 			Shirt: ['Dress'],
-			Jacket: [],
+			Jacket: ['Coat'],
 			Skirt: ['Pants', 'Dress'],
 			Pants: ['Skirt', 'Dress'],
+			Coat: ['Jacket'],
 		}
 
 		const interchangeableCategories = interchangeableCategoriesMapping[category]
