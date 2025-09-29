@@ -115,6 +115,11 @@ export class DrippyApp extends Element {
 			condition=${() => this.appLoaded}
 			fallback=${() => html`<div class="loading">Loading...</div>`}
 			content=${() => html`
+				<show-when
+					condition=${() => this.showLoadingCover}
+					content=${() => html` <video-loading></video-loading> `}
+				></show-when>
+
 				<div id="app-container">
 					<drippy-scene
 						id="drippy-scene"

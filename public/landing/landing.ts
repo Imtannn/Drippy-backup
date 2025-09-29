@@ -1,16 +1,125 @@
 import {html} from 'lume'
 import '../elements/avatar-selector.js'
 import '../elements/custom-button.js'
-import {createSignal} from 'solid-js'
+import {createSignal, createEffect} from 'solid-js'
 import '../routes.js' // track page visits
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
 import '../app/drippy-scene.js'
 import {store} from '../app/store.js'
+
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import type {BlockCategory} from '../types/block.js'
+
+// Materials data
+const materials = {
+	male: [
+		{
+			id: '6',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Navy',
+			category: 'Polyester',
+			templateCategories: ['Top', 'Pants'],
+		},
+		{
+			id: '7',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/_COTTON_-_LAVENDER_BLUE_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON_-_LAVENDER_BLUE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON_-_LAVENDER_BLUE_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON__-_LAVENDER_BLUE_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON_-_LAVENDER_BLUE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Lavender Blue',
+			category: 'Cotton',
+			templateCategories: ['Top'],
+		},
+		{
+			id: '9',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Tanktop',
+			category: 'Striped',
+			templateCategories: ['Top'],
+		},
+	],
+	female: [
+		{
+			id: '5',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_ROUGH.jpg',
+			alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/SEERSUCKER+FABRIC+-+OPACITY.jpg',
+			materialName: 'Black',
+			category: 'Seersucker Fabric',
+			templateCategories: ['Shirt'],
+		},
+		{
+			id: '6',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_ROUGH.jpg',
+			materialName: 'White',
+			category: 'Cotton',
+			templateCategories: ['Shirt'],
+		},
+		{
+			id: '7',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_RENDER.png',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_ROUGH.jpg',
+			materialName: 'Navy',
+			category: 'Crinkle Fabric',
+			templateCategories: ['Shirt'],
+		},
+	],
+}
 // Show video loading initially
 function showVideoLoading() {
 	const videoLoadingElement = html`<video-loading></video-loading>`
@@ -26,8 +135,18 @@ function hideVideoLoading(videoLoadingElement: any) {
 }
 const [isYearlyActive, setIsYearlyActive] = createSignal(true)
 
+// Tạo signal để track current materials
+const [currentMaterials, setCurrentMaterials] = createSignal(materials.male as any)
+
+// Effect để update materials khi avatar thay đổi
+createEffect(() => {
+	const currentAvatar = store.selectedAvatar || store.tempSelectedAvatar
+	const isMale = currentAvatar === 'luka' || !currentAvatar
+	setCurrentMaterials((isMale ? materials.male : materials.female) as any)
+})
+
 // Handle material click to set selectedFabrics
-function handleMaterialClick(material: (typeof materials)[0]) {
+function handleMaterialClick(material: (typeof materials.male)[0] | (typeof materials.female)[0]) {
 	const fabricData = []
 	// Convert material to Fabric format
 	const fabric: Fabric = {
@@ -66,59 +185,6 @@ const blingImage1 = new URL('../images/landing/bling-1.png', import.meta.url).hr
 const blingImage2 = new URL('../images/landing/bling-2.png', import.meta.url).href
 const blingImage3 = new URL('../images/landing/bling-3.png', import.meta.url).href
 const modelImage1 = new URL('../images/landing/model-1.png', import.meta.url).href
-
-// Materials data
-const materials = [
-	{
-		id: '5',
-		thumb:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_RENDER.png',
-		normal:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_NORMAL.jpg',
-		baseColor:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_BASE.jpg',
-		displacement:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_DISPLACE.jpg',
-		roughness:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_ROUGH.jpg',
-		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/SEERSUCKER+FABRIC+-+OPACITY.jpg',
-		materialName: 'Black',
-		category: 'Seersucker Fabric',
-		templateCategories: ['Shirt'],
-	},
-	{
-		id: '6',
-		thumb:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_RENDER.png',
-		normal:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_NORMAL.jpg',
-		baseColor:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_BASE.jpg',
-		displacement:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_DISPLACE.jpg',
-		roughness:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_ROUGH.jpg',
-		materialName: 'White',
-		category: 'Cotton',
-		templateCategories: ['Shirt'],
-	},
-	{
-		id: '7',
-		thumb:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_RENDER.png',
-		normal:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_NORMAL.jpg',
-		baseColor:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_BASE.jpg',
-		displacement:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_DISPLACE.jpg',
-		roughness:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_ROUGH.jpg',
-		materialName: 'Navy',
-		category: 'Crinkle Fabric',
-		templateCategories: ['Shirt'],
-	},
-]
 
 const stepImage1 = new URL('../images/landing/step-1.png', import.meta.url).href
 
@@ -254,7 +320,9 @@ const navbar = html`
 			<li class="header__menu-item"><a href="#pricing" class="header__menu-link">Pricing</a></li>
 		</ul>
 		<div class="header__actions">
-			<custom-button variant="primary" size="small">Book a demo</custom-button>
+			<custom-button variant="primary" size="small" href="https://calendly.com/rubydrippy3d/30min"
+				>Book a demo</custom-button
+			>
 		</div>
 		<button class="header__mobile-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
 			<span class="header__mobile-toggle-line"></span>
@@ -278,10 +346,11 @@ const mainContent = html`
 								<span class="highlight"> interactive 3D <br> studio </span>
 							that boosts engagement and sales.
 							</p>
+							<div class="bg-background"></div>
 
 							<div class="hero__actions">
-								<custom-button variant="secondary">See it live</custom-button>
-								<custom-button variant="primary">Book a demo</custom-button>
+								<custom-button variant="secondary" href="/">See it live</custom-button>
+								<custom-button variant="primary" href="https://calendly.com/rubydrippy3d/30min">Book a demo</custom-button>
 							</div>
 
 								<img class="cta__cone-image--2" src=${blingImage1} />
@@ -328,17 +397,18 @@ const mainContent = html`
 									<div class="showcase__item">
 										<div class="showcase__background">
 											<div class="showcase__controls">
-												${materials.map(
-													material => html`
-														<div
-															class="showcase__avatar-option"
-															data-material-id=${material.id}
-															onclick=${() => handleMaterialClick(material)}
-														>
-															<img src=${material.thumb} alt=${material.materialName} />
-														</div>
-													`,
-												)}
+												${() =>
+													currentMaterials().map(
+														(material: any) => html`
+															<div
+																class="showcase__avatar-option"
+																data-material-id=${material.id}
+																onclick=${() => handleMaterialClick(material)}
+															>
+																<img src=${material.thumb} alt=${material.materialName} />
+															</div>
+														`,
+													)}
 											</div>
 
 											<avatar-selector target-model=".showcase__avatar-model" class="showcase__selector"></avatar-selector>
@@ -462,8 +532,8 @@ const mainContent = html`
 									</div>
 								</div>
 								<div class="hero__actions">
-									<custom-button variant="secondary">See it live</custom-button>
-									<custom-button variant="primary">Book a demo</custom-button>
+									<custom-button variant="secondary" href="/">See it live</custom-button>
+									<custom-button variant="primary" href="https://calendly.com/rubydrippy3d/30min">Book a demo</custom-button>
 								</div>
 							</div>
 							<img class="features__image" src=${stepImage1} />
@@ -485,7 +555,7 @@ const mainContent = html`
 													<img class="how-it-works__step-image" src=${step.logo} />
 												</div>
 												<div class="how-it-works__step-title text-md-1">${step.name}</div>
-												<p class="how-it-works__description text-sm">${step.des}</p>
+												<p class="how-it-works__description text-md">${step.des}</p>
 											</div>
 										`,
 									)}
@@ -493,8 +563,8 @@ const mainContent = html`
 							</div>
 
 							<div class="hero__actions">
-								<custom-button variant="secondary">See it live</custom-button>
-								<custom-button variant="primary">Book a demo</custom-button>
+								<custom-button variant="secondary" href="/">See it live</custom-button>
+								<custom-button variant="primary" href="https://calendly.com/rubydrippy3d/30min">Book a demo</custom-button>
 							</div>
 						</section>
 
@@ -553,10 +623,6 @@ const mainContent = html`
 										</div>
 									</div>
 								</div>
-								<div class="hero__actions">
-									<custom-button variant="secondary">See it live</custom-button>
-									<custom-button variant="primary">Book a demo</custom-button>
-								</div>
 							</div>
 						</section>
 
@@ -594,13 +660,13 @@ const mainContent = html`
 											</div>
 											<div class="pricing__features-list">
 												<p class="pricing__plan-price">
-													<span class="pricing__plan-period text-md">3-month free trial <br /></span>
+													<span class="pricing__plan-period list-type text-md">3-month free trial <br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="pricing__plan-period text-md">1 space<br /></span>
+													<span class="pricing__plan-period list-type text-md">1 space<br /></span>
 												</p>
 												<p class="pricing__plan-price">
-													<span class="pricing__plan-period text-md">12 SKUs per space<br /></span>
+													<span class="pricing__plan-period list-type text-md">12 SKUs per space<br /></span>
 												</p>
 												<p class="pricing__plan-price">
 													<span class="pricing__plan-period text-md">Digitize service </span>
@@ -628,13 +694,13 @@ const mainContent = html`
 													<span class="pricing__plan-feature text-md">, plus:<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature text-md">Unlimited spaces &amp; SKUs<br /></span>
+													<span class="pricing__plan-feature list-type text-md">Unlimited spaces &amp; SKUs<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature text-md">Embed on website (custom URL)<br /></span>
+													<span class="pricing__plan-feature list-type text-md">Embed on website (custom URL)<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature text-md">Analytics dashboard<br /></span>
+													<span class="pricing__plan-feature list-type text-md">Analytics dashboard<br /></span>
 												</p>
 												<p class="pricing__plan-price--pro">
 													<span class="pricing__plan-feature--highlight text-md">Add-on: <br /></span>
@@ -721,6 +787,8 @@ const mainContent = html`
 			</div>
 		</div>
 	` as Node
+
+// No need to set default - let the reactive function handle it
 
 // Show video loading immediately when landing page starts loading
 const videoLoadingElement = showVideoLoading()
@@ -972,15 +1040,6 @@ function initGenericCarousel(config: {
 			const wasActive = isActive
 			const currentWidth = window.innerWidth
 			isActive = currentWidth >= config.minWidth && currentWidth <= config.maxWidth
-
-			console.log(`Screen check for ${config.containerSelector}:`, {
-				currentWidth,
-				minWidth: config.minWidth,
-				maxWidth: config.maxWidth,
-				wasActive,
-				isActive,
-				willChange: wasActive !== isActive,
-			})
 
 			if (wasActive !== isActive) toggleCarousel(isActive)
 		}, 100)

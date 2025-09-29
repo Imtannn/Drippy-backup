@@ -2,8 +2,9 @@ import {attribute, css, Element, element, html, signal} from 'lume'
 import {store} from '../app/store.js'
 import {avatars} from '../consts/avatars.js'
 import {fabrics} from '../consts/fabrics.js'
+import {templates} from '../consts/templates.js'
 import type {TemplateCategory} from '../types/template.js'
-import type {Block, BlockCategory} from '../types/block.js'
+import type {Block} from '../types/block.js'
 // import type {Fabric} from '../types/fabric.js'
 
 const block3DLanding = {
@@ -176,6 +177,7 @@ export class AvatarSelector extends Element {
 			store.selectedBlocks.clear()
 
 			const genderBlocks = block3DLanding[gender]
+			const collection = gender === 'male' ? 'eliseF' : 'moidien'
 
 			if (!genderBlocks || genderBlocks.length === 0) {
 				return
@@ -185,6 +187,38 @@ export class AvatarSelector extends Element {
 			const topBlock = genderBlocks.find(block => block.templateCategory === 'Top' && block.category === 'Bodice')
 			const shirtBlock = genderBlocks.find(block => block.templateCategory === 'Shirt' && block.category === 'Bodice')
 			const pantsBlock = genderBlocks.find(block => block.templateCategory === 'Pants' && block.category === 'Pants')
+
+			// Set templates first (giống blocks-selection logic) - dùng templateId từ blocks
+			const templateData: Array<any> = []
+			if (sleevesBlock || topBlock) {
+				// Find template by templateId from block
+				const templateId = sleevesBlock?.templateId || topBlock?.templateId
+				const topTemplate = templates[collection]?.find(t => t._id === templateId)
+				if (topTemplate) {
+					templateData.push(topTemplate)
+				}
+			}
+			if (shirtBlock) {
+				// Find template by templateId from block
+				const templateId = shirtBlock.templateId
+				const shirtTemplate = templates[collection]?.find(t => t._id === templateId)
+				if (shirtTemplate) {
+					templateData.push(shirtTemplate)
+				}
+			}
+			if (pantsBlock) {
+				// Find template by templateId from block
+				const templateId = pantsBlock.templateId
+				const pantsTemplate = templates[collection]?.find(t => t._id === templateId)
+				if (pantsTemplate) {
+					templateData.push(pantsTemplate)
+				}
+			}
+
+			// Set templates to store
+			if (templateData.length > 0) {
+				store.setSelectedTemplates = templateData
+			}
 
 			// Force set blocks for selected gender
 			const blockData: Array<{block: Block; templateCategory: TemplateCategory}> = []
@@ -215,52 +249,163 @@ export class AvatarSelector extends Element {
 
 			if (blockData.length > 0) {
 				store.setSelectedBlocks = blockData
-				this.setDefaultFabricsForGender(gender)
+				// Apply màu cho tất cả blocks sau khi set
+				this.applyFabricsToAllBlocks(gender)
 			}
 		} catch (error) {
-			console.error(`❌ Error setting blocks for ${gender}:`, error)
+			// Error setting blocks
 		}
 	}
 
-	private setDefaultFabricsForGender(gender: 'male' | 'female') {
+	// private setDefaultFabricsForGender(gender: 'male' | 'female') {
+	// 	try {
+	// 		const collection = gender === 'male' ? 'eliseF' : 'moidien'
+	// 		const availableFabrics = fabrics[collection] || []
+
+	// 		const fabricData = []
+
+	// 		if (gender === 'female') {
+	// 			// Find Black fabric for Pants - prioritize one with Pants in templateCategories
+	// 			const pantsFabric =
+	// 				availableFabrics.find(f => f.materialName === 'Black' && f.templateCategories?.includes('Pants')) ||
+	// 				availableFabrics.find(f => f.materialName === 'Black')
+
+	// 			if (pantsFabric) {
+	// 				fabricData.push({
+	// 					fabric: pantsFabric,
+	// 					blockCategory: 'Pants' as BlockCategory,
+	// 					templateCategory: 'Pants' as TemplateCategory,
+	// 				})
+	// 			}
+	// 		} else if (gender === 'male') {
+	// 			// Set default fabrics for male
+	// 			const pantsFabric = availableFabrics.find(
+	// 				f => f.materialName === 'Dusty Blue' && f.templateCategories?.includes('Pants'),
+	// 			)
+
+	// 			if (pantsFabric) {
+	// 				fabricData.push({
+	// 					fabric: pantsFabric,
+	// 					blockCategory: 'Pants' as BlockCategory,
+	// 					templateCategory: 'Pants' as TemplateCategory,
+	// 				})
+	// 			}
+	// 		}
+
+	// 		if (fabricData.length > 0) {
+	// 			store.setSelectedFabrics = fabricData
+	// 		}
+	// 	} catch (error) {
+	// 		console.error(`❌ Error setting fabrics for ${gender}:`, error)
+	// 	}
+	// }
+
+	private applyFabricsToAllBlocks(gender: 'male' | 'female') {
 		try {
 			const collection = gender === 'male' ? 'eliseF' : 'moidien'
 			const availableFabrics = fabrics[collection] || []
 
-			const fabricData = []
+			// Apply fabric cho tất cả blocks
+			const allBlocks = store.selectedBlocks
 
-			if (gender === 'female') {
-				const pantsFabric = availableFabrics.find(
-					f => f.materialName === 'Black' && f.templateCategories?.includes('Pants'),
-				)
+			for (const [templateCategory, blocksMap] of allBlocks) {
+				// Lấy selectedTemplate để có category chính xác
+				const selectedTemplate = store.selectedTemplates.get(templateCategory)
 
-				if (pantsFabric) {
-					fabricData.push({
-						fabric: pantsFabric,
-						blockCategory: 'Pants' as BlockCategory,
-						templateCategory: 'Pants' as TemplateCategory,
+				// Áp dụng fabric cho tất cả block categories của template này (giống blockManager logic)
+				const actualBlockCategories = Array.from(blocksMap.keys())
+
+				// Kiểm tra xem template này đã có fabric chưa
+				const existingFabrics = store.selectedFabrics.get(templateCategory)
+
+				// Chỉ apply fabric cho blocks chưa có fabric
+				const blocksNeedingFabric = actualBlockCategories.filter(blockCategory => {
+					const hasFabric = (existingFabrics?.get(blockCategory)?.size ?? 0) > 0
+					return !hasFabric
+				})
+
+				// Debug: Log để hiểu tại sao sleeves được apply
+				if (blocksNeedingFabric.includes('Sleeves')) {
+					console.log('Sleeves cần fabric:', {
+						gender,
+						templateCategory,
+						actualBlockCategories,
+						blocksNeedingFabric,
+						existingFabrics: existingFabrics?.get('Sleeves')?.size ?? 0,
 					})
 				}
-			} else if (gender === 'male') {
-				// Set default fabrics for male
-				const pantsFabric = availableFabrics.find(
-					f => f.materialName === 'Dusty Blue' && f.templateCategories?.includes('Pants'),
-				)
 
-				if (pantsFabric) {
-					fabricData.push({
-						fabric: pantsFabric,
-						blockCategory: 'Pants' as BlockCategory,
-						templateCategory: 'Pants' as TemplateCategory,
-					})
+				if (blocksNeedingFabric.length > 0 && selectedTemplate) {
+					const fabricData: Array<{fabric: any; blockCategory: any; templateCategory: any; assignedMesh?: string}> = []
+
+					// Apply main fabric từ materialId (giống blockManager logic)
+					if (selectedTemplate.materialId) {
+						const mainFabric = availableFabrics.find(
+							fabric => `${fabric.category} - ${fabric.materialName}` === selectedTemplate.materialId,
+						)
+
+						if (mainFabric) {
+							// Apply main fabric cho tất cả blocks cần fabric
+							for (const blockCategory of blocksNeedingFabric) {
+								fabricData.push({
+									fabric: mainFabric,
+									blockCategory: blockCategory,
+									templateCategory: templateCategory,
+									assignedMesh: 'default',
+								})
+							}
+						}
+					}
+
+					// Apply extra materials (giống blockManager logic)
+					if (selectedTemplate.extraMaterials) {
+						for (const extraMaterial of selectedTemplate.extraMaterials) {
+							const extraFabric = availableFabrics.find(
+								fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
+							)
+
+							if (extraFabric) {
+								// Apply extra fabric cho tất cả blocks cần fabric
+								for (const blockCategory of blocksNeedingFabric) {
+									fabricData.push({
+										fabric: extraFabric,
+										blockCategory: blockCategory,
+										templateCategory: templateCategory,
+										assignedMesh: extraMaterial.mesh,
+									})
+								}
+							}
+						}
+					}
+
+					// Fallback: nếu không tìm thấy fabric theo materialId, dùng templateCategories
+					if (fabricData.length === 0) {
+						const suitableFabrics = availableFabrics.filter(fabric =>
+							fabric.templateCategories?.includes(selectedTemplate.category || templateCategory),
+						)
+
+						if (suitableFabrics.length > 0) {
+							const selectedFabric = suitableFabrics[0]
+
+							for (const blockCategory of blocksNeedingFabric) {
+								fabricData.push({
+									fabric: selectedFabric,
+									blockCategory: blockCategory,
+									templateCategory: templateCategory,
+									assignedMesh: 'default',
+								})
+							}
+						}
+					}
+
+					// Set fabrics
+					if (fabricData.length > 0) {
+						store.setSelectedFabrics = fabricData
+					}
 				}
-			}
-
-			if (fabricData.length > 0) {
-				store.setSelectedFabrics = fabricData
 			}
 		} catch (error) {
-			console.error(`❌ Error setting fabrics for ${gender}:`, error)
+			// Error applying fabrics
 		}
 	}
 
@@ -727,14 +872,6 @@ export class AvatarSelector extends Element {
 	 * Debug method để kiểm tra trạng thái hiện tại
 	 */
 	public debugState() {
-		console.log('🔍 Avatar Selector Debug State:', {
-			selectedOption: this.selectedOption,
-			storeSelectedAvatar: store.selectedAvatar,
-			storeTempSelectedAvatar: store.tempSelectedAvatar,
-			currentAvatar: store.selectedAvatar || store.tempSelectedAvatar,
-			avatarFromStore: avatars.find(avatar => avatar.value === (store.selectedAvatar || store.tempSelectedAvatar)),
-			uiText: this.querySelector('.avatar-selector__text')?.textContent,
-			uiImageSrc: (this.querySelector('.avatar-selector__avatar') as HTMLImageElement)?.src,
-		})
+		// Debug state method
 	}
 }

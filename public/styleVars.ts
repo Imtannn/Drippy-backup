@@ -64,7 +64,7 @@ const styleVars = {
 	fontSizeTextMdTablet: 20,
 	fontSizeTextSmTablet: 16,
 	fontSizeTextXsTablet: 14,
-	fontSizeTextXlMobile: 24,
+	fontSizeTextXlMobile: 28,
 	fontSizeTextLgMobile: 20,
 	fontSizeTextMdDesktop: 18,
 	fontSizeTextSmDesktop: 21,

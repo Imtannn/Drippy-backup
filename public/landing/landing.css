@@ -48,6 +48,11 @@ p {
 .text-xs {
 	font-size: var(--fontSizeTextXs);
 }
+.list-type {
+	display: list-item;
+	list-style-type: disc; /* hoặc circle, square */
+	margin-left: 15px;
+}
 
 .landing-page-desktop {
 	background-color: var(--uiColorPrimaryWhite);
@@ -93,18 +98,22 @@ p {
 .landing-page-desktop .hero-header {
 	display: flex;
 	flex-direction: column;
-	min-height: 950px;
+	min-height: 850px;
 	align-items: center;
 	gap: 20px;
 	padding: 150px 20px 0px;
 	align-self: stretch;
 	width: 100%;
 	box-sizing: border-box;
-
+}
+.landing-page-desktop .hero-header .bg-background {
 	background-image: url('../images/landing/bg-main.png');
 	background-size: cover;
 	background-position: 65% 50%;
 	background-repeat: no-repeat;
+	min-height: 850px;
+	width: 100%;
+	position: absolute;
 }
 
 .landing-page-desktop .stop-selling-clothes {
@@ -806,6 +815,12 @@ p {
 
 .landing-page-desktop .pricing__features-list {
 	height: 138px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 15px;
+}
+.landing-page-desktop .pricing__features-list--pro {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -1874,8 +1889,9 @@ p {
 /* ======================================== */
 
 @media (max-width: 1300px) {
-	.landing-page-desktop .hero-header {
+	.landing-page-desktop .hero-header .bg-background {
 		background-position: 85% 50%;
+		min-height: 800px;
 	}
 	.landing-page-desktop .features__container {
 		width: 65%;
@@ -1903,6 +1919,9 @@ p {
 	.landing-page-desktop .how-it-works__item {
 		flex: 1 1 calc(33.33% - 60px);
 		max-width: calc(33.33% - 60px);
+	}
+	.landing-page-desktop .hero-header .cta__cone-image--3 {
+		top: 13%;
 	}
 	.landing-page-desktop .cta__cone-image--4 {
 		top: 32%;
@@ -2175,7 +2194,11 @@ p {
 	}
 	.landing-page-desktop .hero-header {
 		padding: 100px 20px 0px;
+		min-height: 825px;
+	}
+	.landing-page-desktop .hero-header .bg-background {
 		background-position: 90% 50%;
+		min-height: 725px;
 	}
 	.landing-page-desktop .statistics__grid {
 		gap: 15px;
@@ -2268,7 +2291,7 @@ p {
 		top: 1.5%;
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--3 {
-		top: 11%;
+		top: 10%;
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--4 {
 		top: 32%;
@@ -2296,7 +2319,7 @@ p {
 		font-size: var(--fontSizeTextXlMobile);
 	}
 	.text-lg {
-		font-size: var(--fontSizeTextLgMobile);
+		font-size: var(--fontSizeTextSmDesktop);
 		line-height: var(--lineHeightNormal);
 	}
 	.text-md {
@@ -2304,18 +2327,18 @@ p {
 		line-height: var(--lineHeightNormal);
 	}
 	.text-md-1 {
-		font-size: var(--fontSizeTextSm);
+		font-size: var(--fontSizeTextSmTablet);
 		line-height: var(--lineHeightNormal);
 	}
 	.text-md-2 {
-		font-size: var(--fontSizeTextSm);
+		font-size: var(--fontSizeTextMd);
 		line-height: var(--lineHeightNormal);
 	}
 	.text-sm {
 		font-size: var(--fontSizeTextSmMobile);
 	}
 	.text-xs {
-		font-size: var(--fontSizeTextXsMobile);
+		font-size: var(--fontSizeTextSm);
 	}
 
 	.landing-page-desktop .frame {
@@ -2323,6 +2346,11 @@ p {
 	}
 	.landing-page-desktop .hero-header {
 		min-height: 750px;
+	}
+	.landing-page-desktop .hero-header .bg-background {
+		background-position: 90% 50%;
+		min-height: 500px;
+		top: 1.5%;
 	}
 	/* Statistics responsive for mobile */
 	.landing-page-desktop .statistics__grid {
@@ -2510,6 +2538,9 @@ p {
 	.landing-page-desktop .platform__card-text {
 		top: 240px;
 	}
+	.landing-page-desktop .pricing__header {
+		gap: 15px;
+	}
 
 	.landing-page-desktop .pricing__content .pricing__plans {
 		flex-direction: column;
@@ -2558,7 +2589,7 @@ p {
 		top: 6%;
 	}
 	.landing-page-desktop .hero-header .cta__cone-image--4 {
-		top: 22%;
+		top: 22.5%;
 	}
 }
 
