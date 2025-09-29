@@ -71,7 +71,7 @@ export class EmailService {
 		const templateData = {
 			...data,
 			currentYear: new Date().getFullYear(),
-			appUrl: process.env.APP_URL || 'https://drippy3d.com/app',
+			appUrl: process.env.APP_URL || 'https://drippy3d.com',
 		}
 
 		return template(templateData)

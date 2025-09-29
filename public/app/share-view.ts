@@ -1,9 +1,9 @@
 import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import '../elements/back-button.js'
 import '../elements/home-button.js'
+import {updateUrlWithParams} from '../routes.js'
 import './app-buttons.js'
 import {store} from './store.js'
-import {updateUrlWithParams} from '../routes.js'
 
 type ShareViewAttributes = keyof {}
 
@@ -23,8 +23,9 @@ export class ShareView extends Element {
 	}
 
 	#onHomeButtonClick = () => {
+		const currentAvatar = store.selectedAvatar || 'moidien'
+		history.pushState(null, '', `/?avatar=${currentAvatar}`)
 		store.resetState()
-		window.location.href = '/app?avatar=moidien'
 	}
 
 	#onCopyLink = async () => {

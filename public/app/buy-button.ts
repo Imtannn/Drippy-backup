@@ -1,4 +1,4 @@
-import {Element, html, css, element} from 'lume'
+import {css, Element, element, html} from 'lume'
 
 @element
 export class BuyButton extends Element {
@@ -26,24 +26,20 @@ export class BuyButton extends Element {
 
 	css = css/*css*/ `
 		.buy-button {
-			border-radius: var(--borderRadiusCircular);
-			cursor: pointer;
-			padding: 0;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			gap: var(--uiSpacingSmall);
-			width: 100%;
+			gap: 5px;
+			padding: 8.5px 20.5px;
+			border-radius: 100px;
+			color: #ffffff;
+			background-color: #121316;
+			box-shadow: 0px 1px 2px 0px #ffffff40 inset;
+			cursor: pointer;
 			border: none;
-			font-size: var(--fontSizeTextMdDesktop);
+			outline: none;
 			font-weight: var(--fontWeightSemiBold);
-			text-align: center;
-			width: 123px;
-			height: 32px;
-			text-wrap: nowrap;
-			background: var(--uiColorPrimaryBlack) 80%;
-			color: var(--uiColorPrimaryWhite);
-			backdrop-filter: blur(50px);
+			font-size: var(--fontSizeTextSm);
 		}
 	`
 }

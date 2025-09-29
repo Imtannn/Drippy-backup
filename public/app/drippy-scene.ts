@@ -228,10 +228,8 @@ export class DrippyScene extends Element {
 
 		// Track selected avatar loading state
 		this.createEffect(() => {
-			if (!store.isShowAvatar) return
-			// Allow tempSelectedAvatar to work as preview even when selectedAvatar exists
-			const currentAvatar = store.tempSelectedAvatar ?? this.selectedAvatar
-			if (currentAvatar) {
+			if (!store.isShowAvatar || this.selectedAvatar) return
+			if (store.tempSelectedAvatar) {
 				const avatar = this.avatarModel
 				if (!avatar) return
 
@@ -623,10 +621,11 @@ export class DrippyScene extends Element {
 							id="avatar"
 							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
 							src=${() => {
-								// Prioritize tempSelectedAvatar for preview functionality
-								const currentAvatar = store.tempSelectedAvatar ?? this.selectedAvatar
-								const foundAvatar = avatars.find(avatar => avatar.value === currentAvatar)
-								return foundAvatar?.src
+								const avatarValue =
+									store.view === 'avatar'
+										? store.tempSelectedAvatar || this.selectedAvatar
+										: (this.selectedAvatar ?? store.tempSelectedAvatar)
+								return avatars.find(avatar => avatar.value === avatarValue)?.src
 							}}
 							scale="1 1 1"
 							data-avatar
@@ -694,6 +693,7 @@ export class DrippyScene extends Element {
 			background: var(--appBackground);
 			width: var(--appWidth);
 			height: var(--appHeight);
+			min-height: 100vh;
 			touch-action: none;
 			position: relative;
 		}
@@ -701,6 +701,7 @@ export class DrippyScene extends Element {
 		#lume-scene-container {
 			width: 100%;
 			height: 100%;
+			min-height: 100vh;
 			transition: transform var(--transitionFast);
 		}
 

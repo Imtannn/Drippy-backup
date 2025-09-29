@@ -384,25 +384,29 @@ export function onModelLoad(model: GltfModel) {
 	const [loaded, setLoaded] = createSignal(false)
 
 	createEffect(() => {
+		// Any time the src changes, we are no longer loaded (the MODEL_LOAD
+		// event will set it back to true).
+		model.src
+		setLoaded(false)
+	})
+
+	createEffect(() => {
 		// Wait until the gtf-model behavior instance is present on the model element.
 		const gltfModelBehavior = model.behaviors.get('gltf-model') // signal
 		if (!gltfModelBehavior) return
 
-		// Now wait until the model is loaded.
+		// Set initially true if the model is already loaded.
 		const threeModel = gltfModelBehavior.model
-		if (threeModel) {
-			setLoaded(true)
-		} else {
-			const modelLoad = () => {
-				model.off('MODEL_LOAD', modelLoad)
-				setLoaded(true)
-			}
+		if (threeModel) setLoaded(true)
 
-			model.on('MODEL_LOAD', modelLoad)
-			onCleanup(() => model.off('MODEL_LOAD', modelLoad))
-		}
+		// Set loaded any time a new model is loaded.
+		const modelLoad = () => setLoaded(true)
+		model.on('MODEL_LOAD', modelLoad)
 
-		onCleanup(() => setLoaded(false))
+		onCleanup(() => {
+			model.off('MODEL_LOAD', modelLoad)
+			setLoaded(false)
+		})
 	})
 
 	return loaded
@@ -594,7 +598,10 @@ function calculateCameraFromBoundingBox(boundingBox: THREE.Box3, fov: number = 5
  * @returns Promise<string> - Base64 data URL of the screenshot
  */
 export async function captureGarmentScreenshot(category: string): Promise<string> {
-	const drippyScene = document.querySelector('drippy-app')?.shadowRoot?.querySelector('drippy-scene') as any
+	const drippyScene = document
+		.querySelector('home-page')
+		?.shadowRoot?.querySelector('drippy-app')
+		?.shadowRoot?.querySelector('drippy-scene') as any
 	if (!drippyScene?.shadowRoot) return ''
 
 	const lumeScene = drippyScene.shadowRoot.querySelector('lume-scene') as any

@@ -25,7 +25,20 @@ export class AvatarSelection extends Element {
 
 		this.createEffect(() => {
 			if (!store.tempSelectedAvatar) {
-				store.setTempSelectedAvatar = avatars[0].value
+				if (store.selectedAvatar) {
+					store.setTempSelectedAvatar = store.selectedAvatar
+				} else {
+					store.setTempSelectedAvatar = avatars[0].value
+				}
+			}
+		})
+
+		this.createEffect(() => {
+			if (this.contentOnly && store.selectedAvatar) {
+				const avatar = avatars.find(a => a.value === store.selectedAvatar)
+				if (avatar) {
+					this.selectedTab = avatar.gender
+				}
 			}
 		})
 	}
@@ -56,8 +69,18 @@ export class AvatarSelection extends Element {
 			<bottom-sheet-header>
 				<div class="tabs-container">
 					<tabs-list>
-						<tabs-trigger selected-value="female">Female</tabs-trigger>
-						<tabs-trigger selected-value="male">Male</tabs-trigger>
+						<tabs-trigger
+							selected-value="female"
+							is-disabled=${() =>
+								this.contentOnly && store.selectedSpace?.gender && store.selectedSpace.gender !== 'female'}
+							>Female</tabs-trigger
+						>
+						<tabs-trigger
+							selected-value="male"
+							is-disabled=${() =>
+								this.contentOnly && store.selectedSpace?.gender && store.selectedSpace.gender !== 'male'}
+							>Male</tabs-trigger
+						>
 					</tabs-list>
 				</div>
 			</bottom-sheet-header>
@@ -66,17 +89,11 @@ export class AvatarSelection extends Element {
 				<tabs-content selected-value="female">
 					<div class="items-grid">
 						<for-each
-							items=${() => {
-								const femaleAvatars = avatars.filter(avatar => avatar.gender === 'female')
-								if (this.contentOnly && store.selectedSpace?.gender) {
-									return store.selectedSpace.gender === 'female' ? femaleAvatars : []
-								}
-								return femaleAvatars
-							}}
+							items=${() => avatars.filter(avatar => avatar.gender === 'female')}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
-									class=${() => (store.tempSelectedAvatar === avatar.value ? 'item-preview' : '')}
-									item-active=${() => store.tempSelectedAvatar === avatar.value}
+									class=${() => ((this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value ? 'item-preview' : '')}
+									item-active=${() => (this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value}
 									item-src=${avatar.thumbnail}
 									item-alt=${avatar.value}
 									item-value=${avatar.value}
@@ -94,17 +111,11 @@ export class AvatarSelection extends Element {
 				<tabs-content selected-value="male">
 					<div class="items-grid">
 						<for-each
-							items=${() => {
-								const maleAvatars = avatars.filter(avatar => avatar.gender === 'male')
-								if (this.contentOnly && store.selectedSpace?.gender) {
-									return store.selectedSpace.gender === 'male' ? maleAvatars : []
-								}
-								return maleAvatars
-							}}
+							items=${() => avatars.filter(avatar => avatar.gender === 'male')}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
-									class=${() => (store.tempSelectedAvatar === avatar.value ? 'item-preview' : '')}
-									item-active=${() => store.tempSelectedAvatar === avatar.value}
+									class=${() => ((this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value ? 'item-preview' : '')}
+									item-active=${() => (this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value}
 									item-src=${avatar.thumbnail}
 									item-alt=${avatar.value}
 									item-value=${avatar.value}

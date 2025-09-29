@@ -1,6 +1,6 @@
 import {attribute, booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
 
-export type CustomButtonAttributes = 'variant' | 'size' | 'disabled' | 'loading'
+export type CustomButtonAttributes = 'variant' | 'size' | 'disabled' | 'loading' | 'href'
 
 /**
  * Custom Button Element with different variants and sizes
@@ -13,6 +13,7 @@ export class CustomButton extends Element {
 
 	@attribute variant = 'primary' // primary, secondary, outline, ghost
 	@attribute size = 'medium' // small, medium, large
+	@attribute href = '' // URL to redirect to when clicked
 	@booleanAttribute disabled = false
 	@booleanAttribute loading = false
 
@@ -206,6 +207,12 @@ export class CustomButton extends Element {
 	handleClick = (e: Event) => {
 		if (this.disabled || this.loading) {
 			e.preventDefault()
+			return
+		}
+
+		// If href is provided, redirect to that URL
+		if (this.href) {
+			window.location.href = this.href
 			return
 		}
 

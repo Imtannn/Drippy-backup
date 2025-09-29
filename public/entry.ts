@@ -11,24 +11,20 @@ import './imports/collections/index.js'
 // domains and the primary domain's UI is not needed in that case).
 const renderHomePage = location.pathname === '/'
 
-import type {HomePage} from './elements/home-page.js'
-
 if (renderHomePage) {
 	// import './await-startup.js'
-	await import('./imports/collections/Visits.js')
-	const {appTitle} = await import('./routes.js')
-	const {effect} = await import('./meteor-signals.js')
-	await import('./elements/home-page.js')
+	const [{appTitle}, {createEffect}] = await Promise.all([
+		import('./routes.js'),
+		import('solid-js'),
+		import('./imports/collections/Visits.js'),
+		import('./elements/home-page.js'),
+	])
 
-	effect(() => (document.title = appTitle()))
+	createEffect(() => (document.title = appTitle()))
 
 	const root = document.getElementById('root')!
 	const html = String.raw // for syntax/formatting
 	root.innerHTML = html`<home-page></home-page>`
-
-	const el = root.querySelector<HomePage>('home-page')
-
-	setInterval(() => el!.count++, 1000)
 }
 
 export {} // merely so that TS treats the file as a module
