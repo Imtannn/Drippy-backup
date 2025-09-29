@@ -56,11 +56,16 @@ export class SpacesSelection extends Element {
 		this.showLoginDialog = true
 	}
 
+	#onAvatarClick = (e: Event) => {
+		e.preventDefault()
+		store.navigateTo = 'avatar'
+	}
+
 	template = () => html`
 		<div class="spaces-container">
 			<!-- Navigation -->
 			<div class="navigation">
-				<a href="/app" class="avatar-link">
+				<a href="#" class="avatar-link" onclick=${this.#onAvatarClick}>
 					<avatar-dropdown hide-chevron></avatar-dropdown>
 				</a>
 				<div class="nav-links">
@@ -366,6 +371,7 @@ export class SpacesSelection extends Element {
 			justify-content: center;
 			overflow: hidden;
 			border-radius: var(--borderRadiusLarge);
+			cursor: pointer;
 
 			img {
 				object-fit: cover;
@@ -386,7 +392,7 @@ export class SpacesSelection extends Element {
 			position: absolute;
 			top: var(--uiGap);
 			right: var(--uiGap);
-			background: rgba(0, 0, 0, 0.1);
+			background: rgba(0, 0, 0, 0.3);
 			color: var(--uiColorPrimaryWhite);
 			padding: 4px var(--uiSpacingSmall);
 			border-radius: 15px;

@@ -49,7 +49,7 @@ export class LandingPage extends Element {
 						<a href="#features">Features</a>
 						<a href="#about">About</a>
 						<a href="#contact">Contact</a>
-						<a href="/app" class="cta-button">Get Started</a>
+						<a href="/" class="cta-button">Get Started</a>
 					</div>
 				</div>
 			</div>
@@ -61,7 +61,7 @@ export class LandingPage extends Element {
 				<h1>Transform Your Fashion Business</h1>
 				<p>Create immersive 3D shopping experiences that engage customers and drive sales.</p>
 				<div class="hero-buttons">
-					<a href="/app" class="btn btn-primary">Try Demo</a>
+					<a href="/" class="btn btn-primary">Try Demo</a>
 					<a href="/contact" class="btn btn-secondary">Learn More</a>
 				</div>
 				<div class="hero-image">
@@ -108,7 +108,7 @@ export class LandingPage extends Element {
 				<div class="cta-content">
 					<h2>Ready to Get Started?</h2>
 					<p>Join thousands of fashion businesses already using Drippy to transform their online presence.</p>
-					<a href="/app" class="btn btn-primary">Start Free Trial</a>
+					<a href="/" class="btn btn-primary">Start Free Trial</a>
 				</div>
 			</div>
 		</section>

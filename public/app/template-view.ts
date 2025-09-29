@@ -1,23 +1,20 @@
 import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
-import {fabrics} from '../consts/fabrics.js'
-import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import {templates} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
-import type {Block} from '../types/block.js'
+import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import {blockManager} from './block-manager.js'
 import {currentUser, store} from './store.js'
-import {textureManager} from './texture-manager.js'
 
 import '../elements/animation-select.js'
 import '../elements/avatar-dropdown.js'
 import '../elements/back-button.js'
-import '../elements/home-button.js'
 import '../elements/bottom-navigation.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
 import '../elements/dialog-element.js'
+import '../elements/home-button.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
@@ -122,35 +119,6 @@ export class TemplateView extends Element {
 			const selectedTemplates = store.selectedTemplates
 			updateGarmentsInUrl(selectedTemplates)
 		})
-
-		// Convert templates to blocks for 3D rendering
-		this.createEffect(() => {
-			void store.selectedTemplates
-			this.#convertTemplatesToBlocks()
-		})
-	}
-
-	#convertTemplatesToBlocks = async () => {
-		// Get blocks for ALL selected templates, organized by template category
-		const templateBlockData: {
-			blocks: Block[]
-			templateCategory: TemplateCategory
-			materialId: string
-			extraMaterials?: {mesh: string; materialId: string}[]
-		}[] = []
-
-		for (const [templateCategory, selectedTemplate] of store.selectedTemplates.entries()) {
-			const templateBlocks = getBlocksForTemplate(selectedTemplate, store.selectedSpace?.collection)
-			templateBlockData.push({
-				blocks: templateBlocks,
-				templateCategory: templateCategory,
-				materialId: selectedTemplate.materialId ?? '',
-				extraMaterials: selectedTemplate.extraMaterials,
-			})
-		}
-
-		// Replace blocks with aggregated blocks from all selected templates
-		store.replaceSelectedBlocks = templateBlockData
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -168,71 +136,93 @@ export class TemplateView extends Element {
 			return
 		}
 
-		this.#setPendingActiveTemplate(template.category, template._id)
+		const newTemplates = new Map<TemplateCategory, Template>(store.selectedTemplates)
+		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(store.selectedBlocks)
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(store.selectedFabrics)
 
-		let loadingId: symbol | null = null
-
-		const templateFabric = getFabricForTemplate(template, store.selectedSpace?.collection)
-
-		// Get extra fabrics if they exist
-		const extraFabrics: Fabric[] = []
-		if (template.extraMaterials) {
-			const brandFabrics = fabrics[store.selectedSpace?.collection ?? 'moidien'] || []
-			for (const extraMaterial of template.extraMaterials) {
-				const extraFabric = brandFabrics.find(
-					fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
-				)
-				if (extraFabric) {
-					extraFabrics.push(extraFabric)
+		// check if the template with same category already exists
+		const interchangeableCategories = blockManager.checkInterchangeableCategories(
+			template.category,
+			store.selectedTemplates,
+		)
+		if (interchangeableCategories.length > 0) {
+			for (const category of interchangeableCategories) {
+				if (store.selectedTemplates.has(category as TemplateCategory)) {
+					newTemplates.delete(category as TemplateCategory)
+					newBlocks.delete(category as TemplateCategory)
+					newFabrics.delete(category as TemplateCategory)
 				}
 			}
 		}
 
-		// Collect all fabrics to preload (main + extras)
-		const fabricsToPreload = []
-		if (templateFabric) {
-			fabricsToPreload.push(templateFabric)
-		}
-		fabricsToPreload.push(...extraFabrics)
+		this.#setPendingActiveTemplateAndClear(template.category, template._id, interchangeableCategories)
 
-		if (fabricsToPreload.length > 0) {
-			loadingId = Symbol(`fabric-${templateFabric?._id || 'extra'}`)
-			store.addLoadingMaterial(loadingId)
-			try {
-				// Preload all fabric textures and template blocks separately
-				await Promise.all([
-					Promise.all(fabricsToPreload.map(fabric => textureManager.preloadFabricBaseTextures(fabric))),
-					Promise.all(blockManager.preloadTemplateBlocks(template, store.selectedSpace!)),
-				])
-			} catch (error) {
-				console.warn('Failed to preload fabric textures:', error)
-			} finally {
-				if (loadingId) {
-					store.removeLoadingMaterial(loadingId)
-				}
-			}
-		}
+		newTemplates.set(template.category, template)
+		const templateBlockData = blockManager.convertTemplateToBlockData(template, store.selectedSpace!)
+		const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
+			templateBlockData,
+			store.selectedSpace!,
+		)
+		newBlocks.set(template.category, newBlocksMap)
+		newFabrics.set(template.category, newFabricsMap)
 
-		// If this is the first template selected, show remix overlay for this item
-		if (store.selectedTemplates.size === 0) {
+		// let loadingId: symbol | null = null
+
+		// // Collect all fabrics to preload (main + extras)
+		// const fabricsToPreload = [...newFabricsMap.values()].flatMap(fabric => [...fabric.values()])
+		// const blocksToPreload = templateBlockData.blocks
+
+		// if (fabricsToPreload.length > 0) {
+		// 	loadingId = Symbol(`fabric-${template._id || 'extra'}`)
+		// 	store.addLoadingMaterial(loadingId)
+		// 	try {
+		// 		// Preload all fabric textures and template blocks separately
+		// 		await Promise.all([
+		// 			Promise.all(fabricsToPreload.map(fabric => textureManager.preloadFabricBaseTextures(fabric))),
+		// 			Promise.all(blocksToPreload.map(block => blockManager.preloadTemplateBlocks(block))),
+		// 		])
+		// 	} catch (error) {
+		// 		console.warn('Failed to preload fabric textures:', error)
+		// 	} finally {
+		// 		if (loadingId) {
+		// 			store.removeLoadingMaterial(loadingId)
+		// 		}
+		// 	}
+		// }
+		store.selectedFabrics = newFabrics
+		store.selectedBlocks = newBlocks
+		store.selectedTemplates = newTemplates
+
+		// Check if remix is available for this template
+		const {available} = blockManager.isRemixAvailableForTemplate(template.category, {
+			selectedBlocks: newBlocks,
+			selectedSpace: store.selectedSpace,
+		})
+
+		if (available) {
 			this.#handleTemplateOverlayRemix(template.category)
 		}
 
-		store.setSelectedTemplates = template
-		this.#clearPendingActiveTemplate(template.category)
+		this.#clearPendingActiveTemplateAndClear(template.category, interchangeableCategories)
 	}
 
-	#setPendingActiveTemplate = (category: TemplateCategory, templateId: string | null) => {
+	#setPendingActiveTemplateAndClear = (
+		category: TemplateCategory,
+		templateId: string | null,
+		interchangeableCategories: TemplateCategory[],
+	) => {
 		this.pendingActiveTemplateIds = {
 			...this.pendingActiveTemplateIds,
 			[category]: templateId,
+			...Object.fromEntries(interchangeableCategories.map(category => [category, null])),
 		}
 	}
 
-	#clearPendingActiveTemplate = (category: TemplateCategory) => {
-		if (!(category in this.pendingActiveTemplateIds)) return
-		const {[category]: _, ...rest} = this.pendingActiveTemplateIds
-		this.pendingActiveTemplateIds = rest
+	#clearPendingActiveTemplateAndClear = (category: TemplateCategory, interchangeableCategories: TemplateCategory[]) => {
+		const ids = Object.entries(this.pendingActiveTemplateIds).filter(
+			([id, _]) => !interchangeableCategories.includes(id as TemplateCategory) || id !== category,
+		)
+		this.pendingActiveTemplateIds = Object.fromEntries(ids)
 	}
 
 	#isTemplateActive = (template: Template) => {
@@ -244,15 +234,20 @@ export class TemplateView extends Element {
 	}
 
 	#onPreviewButtonClick = () => {
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('isPreview', 'true')
-		store.setIsPreview = true
-		this.showAvatarSelection = false
-		this.showPoseSelection = false
-		this.showLoginDialog = false
-		this.showRemixOverlay = false
-		this.showTemplateOverlay = null
-		updateUrlWithParams(searchParams)
+		const user = currentUser()
+
+		if (user) {
+			const searchParams = new URLSearchParams(window.location.search)
+			searchParams.set('isPreview', 'true')
+			store.setIsPreview = true
+			this.showAvatarSelection = false
+			this.showPoseSelection = false
+			this.showRemixOverlay = false
+			this.showTemplateOverlay = null
+			updateUrlWithParams(searchParams)
+		} else {
+			this.showLoginDialog = true
+		}
 	}
 
 	#onBackButtonClick = () => {
@@ -271,14 +266,11 @@ export class TemplateView extends Element {
 		store.navigateTo = 'scene'
 	}
 
-	#onHomeButtonClick = () => {
-		store.resetState()
-		window.location.href = '/app?avatar=moidien'
-	}
-
 	#onAvatarDropdownClick = () => {
 		this.showAvatarSelection = !this.showAvatarSelection
 		this.showPoseSelection = false
+		this.showRemixOverlay = false
+		this.showTemplateOverlay = null
 	}
 
 	#onNavTabChange = (e: CustomEvent) => {
@@ -290,6 +282,8 @@ export class TemplateView extends Element {
 			this.showPoseSelection = false
 			this.showAvatarSelection = false
 		}
+		this.showRemixOverlay = false
+		this.showTemplateOverlay = null
 	}
 
 	#closeRemixOverlay = () => {
@@ -336,7 +330,6 @@ export class TemplateView extends Element {
 		<app-buttons-left>
 			<app-buttons-group>
 				<back-button onclick=${this.#onBackButtonClick}></back-button>
-				<home-button onclick=${this.#onHomeButtonClick}></home-button>
 			</app-buttons-group>
 		</app-buttons-left>
 
@@ -463,7 +456,11 @@ export class TemplateView extends Element {
 					></remix-overlay>
 				`}
 			></show-when>
-			<bottom-navigation>
+			<bottom-navigation
+				classList=${() => ({
+					hidden: this.showRemixOverlay && store.remixOverlayTemplateCategory !== null,
+				})}
+			>
 				<avatar-dropdown
 					open=${() => this.showAvatarSelection}
 					onavatar-dropdown-click=${this.#onAvatarDropdownClick}
@@ -539,18 +536,18 @@ export class TemplateView extends Element {
 
 		.template-item {
 			min-width: 0;
-			min-height: 0;
 			width: 100%;
-			height: 100%;
 			display: flex;
 			flex-direction: column;
 			gap: var(--uiSpacingTiny);
+			position: relative;
 		}
 
 		.template-item-container {
 			position: relative;
 			width: 100%;
-			flex: 1;
+			flex-shrink: 0;
+			height: auto;
 		}
 
 		.template-product-name {
@@ -587,6 +584,10 @@ export class TemplateView extends Element {
 			font-weight: var(--fontWeightNormal);
 			color: #424347;
 			text-wrap: wrap;
+		}
+
+		.hidden {
+			display: none;
 		}
 	`
 }
