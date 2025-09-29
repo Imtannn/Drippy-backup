@@ -1,4 +1,15 @@
-import {attribute, css, Element, element, eventAttribute, html, signal, type ElementAttributes} from 'lume'
+import {
+	attribute,
+	css,
+	Element,
+	element,
+	eventAttribute,
+	html,
+	onCleanup,
+	signal,
+	type ElementAttributes,
+	untrack,
+} from 'lume'
 
 import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
@@ -37,6 +48,10 @@ export class RemixOverlay extends Element {
 
 		this.createEffect(() => {
 			this.spaceCollection = store.selectedSpace?.collection ?? 'moidien'
+
+			onCleanup(() => {
+				this.spaceCollection = null
+			})
 		})
 
 		// Update blocks for the selected template category
@@ -53,6 +68,10 @@ export class RemixOverlay extends Element {
 			}
 
 			this.availableBlocks = blockManager.getBlocksForTemplateCategory(selectedTemplate.category, this.spaceCollection)
+
+			onCleanup(() => {
+				this.availableBlocks = []
+			})
 		})
 
 		// Update block categories when template category changes (following blocks-selection logic)
@@ -63,8 +82,8 @@ export class RemixOverlay extends Element {
 			}
 
 			const {blocksCategories} = blockManager.isRemixAvailableForTemplate(this.selectedTemplateCategory, {
-				selectedBlocks: store.selectedBlocks,
-				selectedSpace: store.selectedSpace,
+				selectedBlocks: untrack(() => store.selectedBlocks),
+				selectedSpace: untrack(() => store.selectedSpace),
 				sourceCollection: this.spaceCollection,
 			})
 
@@ -72,10 +91,13 @@ export class RemixOverlay extends Element {
 
 			if (blocksCategories.length > 0) {
 				this.selectedSubTab = blocksCategories[0]
-				this.activeTab = STYLE_TAB
-			} else {
-				this.activeTab = FABRICS_TAB
 			}
+
+			this.activeTab = FABRICS_TAB
+
+			onCleanup(() => {
+				this.blocksCategories = []
+			})
 		})
 
 		// Update fabrics for the template category
@@ -89,6 +111,13 @@ export class RemixOverlay extends Element {
 				this.spaceCollection,
 				this.selectedTemplateCategory,
 			)
+
+			// Make sure the overlay is scrolled to the top on opening
+			this.shadowRoot?.querySelector('.scroll-content')?.scrollIntoView({behavior: 'instant', block: 'end'})
+
+			onCleanup(() => {
+				this.availableFabrics = []
+			})
 		})
 
 		// Update piece selections when selected fabrics change (following blocks-selection logic)
@@ -113,6 +142,10 @@ export class RemixOverlay extends Element {
 			}
 
 			this.pieceSelections = Array.from(selectedPieces).sort()
+
+			onCleanup(() => {
+				this.pieceSelections = []
+			})
 		})
 	}
 
@@ -154,11 +187,11 @@ export class RemixOverlay extends Element {
 					>
 						<div class="tabs-list-container">
 							<tabs-list>
+								<tabs-trigger selected-value=${FABRICS_TAB}> Fabrics </tabs-trigger>
 								<show-when
 									condition=${() => this.blocksCategories.length > 0}
 									content=${() => html`<tabs-trigger selected-value=${STYLE_TAB}>Style</tabs-trigger>`}
 								></show-when>
-								<tabs-trigger selected-value=${FABRICS_TAB}> Fabrics </tabs-trigger>
 							</tabs-list>
 							<button class="close-button" onclick=${this.#handleClose}>
 								<svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -180,7 +213,18 @@ export class RemixOverlay extends Element {
 							</button>
 						</div>
 
+						<tabs-content selected-value=${FABRICS_TAB}>
+							<div class="scroll-content"></div>
+
+							<fabric-selection
+								piece-selections=${() => this.pieceSelections}
+								available-fabrics=${() => this.availableFabrics}
+								selected-template-category=${() => this.selectedTemplateCategory}
+							></fabric-selection>
+						</tabs-content>
+
 						<tabs-content selected-value=${STYLE_TAB}>
+							<div class="scroll-content"></div>
 							<show-when
 								condition=${() => this.blocksCategories.length > 0}
 								content=${() => html`
@@ -230,14 +274,6 @@ export class RemixOverlay extends Element {
 								`}
 								fallback=${() => html`<div class="empty-state">No variations available.</div>`}
 							></show-when>
-						</tabs-content>
-
-						<tabs-content selected-value=${FABRICS_TAB}>
-							<fabric-selection
-								piece-selections=${() => this.pieceSelections}
-								available-fabrics=${() => this.availableFabrics}
-								selected-template-category=${() => this.selectedTemplateCategory}
-							></fabric-selection>
 						</tabs-content>
 					</tabs-provider>
 				`}
@@ -321,8 +357,13 @@ export class RemixOverlay extends Element {
 
 		tabs-content {
 			padding: var(--uiSpacing);
-			padding-top: 33px;
 			padding-bottom: var(--uiSpacingXxl);
+		}
+
+		@media (min-width: 769px) {
+			tabs-content {
+				padding-top: 25px;
+			}
 		}
 	`
 }

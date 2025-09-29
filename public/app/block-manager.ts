@@ -19,76 +19,139 @@ class BlockManager {
 		Top: [],
 	}
 
-	preloadTemplateBlocks(template: Template, selectedSpace: Space): Promise<GLTF>[] {
-		const blocks = getBlocksForTemplate(template, selectedSpace?.collection)
+	preloadTemplateBlocks(template: Block): Promise<GLTF> {
 		const gltfLoader = new GLTFLoader()
-		return blocks.map(block => gltfLoader.loadAsync(block.modelFile))
+		return gltfLoader.loadAsync(template.modelFile)
 	}
 
-	replaceSelectedBlocks(
-		blockData: {
+	/**
+	 * Check if the category is interchangeable with other categories
+	 * @param category - The category to check
+	 * @param selectedTemplates - The selected templates
+	 * @returns The interchangeable categories
+	 */
+	checkInterchangeableCategories(category: TemplateCategory, selectedTemplates: Map<TemplateCategory, Template>) {
+		const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
+			Dress: ['Shirt', 'Top', 'Pants', 'Skirt'],
+			Top: ['Dress'],
+			Shirt: ['Dress'],
+			Jacket: [],
+			Skirt: ['Pants', 'Dress'],
+			Pants: ['Skirt', 'Dress'],
+		}
+
+		const interchangeableCategories = interchangeableCategoriesMapping[category]
+
+		return interchangeableCategories?.filter(c => selectedTemplates.has(c as TemplateCategory)) ?? []
+	}
+
+	/**
+	 * Convert template to block data
+	 * @param selectedTemplate - The selected template
+	 * @param selectedSpace - The selected space
+	 * @returns The block data
+	 */
+	convertTemplateToBlockData(selectedTemplate: Template, selectedSpace: Space) {
+		const templateBlocks = getBlocksForTemplate(selectedTemplate, selectedSpace?.collection)
+		return {
+			blocks: templateBlocks,
+			materialId: selectedTemplate.materialId ?? '',
+			extraMaterials: selectedTemplate.extraMaterials,
+		}
+	}
+
+	/**
+	 * Parse fabric data to map
+	 * @param defaultFabrics - The default fabrics
+	 * @param fabricData - The fabric data
+	 * @returns The new fabrics
+	 */
+	parseFabricDataToMap(
+		fabricData:
+			| {fabric: Fabric; blockCategory: BlockCategory; assignedMesh?: string}
+			| {fabric: Fabric; blockCategory: BlockCategory; assignedMesh?: string}[],
+	) {
+		if (!Array.isArray(fabricData)) {
+			fabricData = [fabricData]
+		}
+		const newFabrics = new Map<BlockCategory, Map<string, Fabric>>()
+
+		for (let {fabric, blockCategory, assignedMesh} of fabricData) {
+			if (!assignedMesh) {
+				assignedMesh = 'default'
+			}
+
+			const existingFabricsMap = newFabrics.get(blockCategory) || new Map<string, Fabric>()
+			existingFabricsMap.set(assignedMesh, fabric)
+			newFabrics.set(blockCategory, existingFabricsMap)
+		}
+
+		return newFabrics
+	}
+
+	/**
+	 * Get blocks and fabrics from template data
+	 * @param blockData - The block data
+	 * @param selectedSpace - The selected space
+	 * @returns The new blocks and fabrics
+	 */
+	getBlocksAndFabricsMapFromTemplateData(
+		templateData: {
 			blocks: Block[]
-			templateCategory: TemplateCategory
 			materialId: string
 			extraMaterials?: {mesh: string; materialId: string}[]
-		}[],
+		},
 		selectedSpace: Space,
 	) {
 		// Completely replace selectedBlocks with new blocks (used for template selection)
-		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+		const newBlocksMap = new Map<BlockCategory, Block>()
 		const newFabrics: {
 			fabric: Fabric
 			blockCategory: BlockCategory
-			templateCategory: TemplateCategory
 			assignedMesh: string
 		}[] = []
 
-		for (const {blocks, templateCategory, materialId, extraMaterials} of blockData) {
-			const templateBlocks = new Map<BlockCategory, Block>()
-			for (const block of blocks) {
-				templateBlocks.set(block.category, block)
+		for (const block of templateData.blocks) {
+			newBlocksMap.set(block.category, block)
 
-				// Create fabrics array for this block category
-				const blockFabrics: Record<string, Fabric> = {}
+			// Create fabrics array for this block category
+			const blockFabrics: Record<string, Fabric> = {}
 
-				// Add the main fabric (without assignedMesh - will be default)
-				if (materialId) {
-					const fabric = fabrics[selectedSpace?.collection ?? 'moidien']?.find(
-						fabric => `${fabric.category} - ${fabric.materialName}` === materialId,
-					)
-					if (fabric) {
-						blockFabrics[fabric.assignedMesh || 'default'] = fabric
-					}
-				}
-
-				// Add extra materials with specific mesh assignments
-				if (extraMaterials) {
-					for (const extraMaterial of extraMaterials) {
-						const extraFabric = fabrics[selectedSpace?.collection ?? 'moidien']?.find(
-							fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
-						)
-						if (extraFabric) {
-							blockFabrics[extraMaterial.mesh] = extraFabric
-						}
-					}
-				}
-
-				// Add all fabrics for this block category
-				for (const [assignedMesh, fabric] of Object.entries(blockFabrics)) {
-					newFabrics.push({
-						fabric: fabric,
-						blockCategory: block.category,
-						templateCategory: templateCategory,
-						assignedMesh: assignedMesh,
-					})
+			// Add the main fabric (without assignedMesh - will be default)
+			if (templateData.materialId) {
+				const fabric = fabrics[selectedSpace?.collection ?? 'moidien']?.find(
+					fabric => `${fabric.category} - ${fabric.materialName}` === templateData.materialId,
+				)
+				if (fabric) {
+					blockFabrics[fabric.assignedMesh || 'default'] = fabric
 				}
 			}
-			if (templateBlocks.size > 0) {
-				newBlocks.set(templateCategory, templateBlocks)
+
+			// Add extra materials with specific mesh assignments
+			if (templateData.extraMaterials) {
+				for (const extraMaterial of templateData.extraMaterials) {
+					const extraFabric = fabrics[selectedSpace?.collection ?? 'moidien']?.find(
+						fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
+					)
+					if (extraFabric) {
+						blockFabrics[extraMaterial.mesh] = extraFabric
+					}
+				}
+			}
+
+			// Add all fabrics for this block category
+			for (const [assignedMesh, fabric] of Object.entries(blockFabrics)) {
+				newFabrics.push({
+					fabric: fabric,
+					blockCategory: block.category,
+					assignedMesh: assignedMesh,
+				})
 			}
 		}
 
-		return {newBlocks, newFabrics}
+		const newFabricsMap = this.parseFabricDataToMap(newFabrics)
+
+		return {newBlocksMap, newFabricsMap}
 	}
 
 	parseBlocksToMaterials(blocks: Block[]) {
