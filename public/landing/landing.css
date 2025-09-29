@@ -1603,6 +1603,11 @@ p {
 	align-items: center;
 	justify-content: center;
 	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+	/* iOS specific fixes */
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	will-change: transform;
 }
 
 .showcase__model-center drippy-scene {
@@ -1617,40 +1622,22 @@ p {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-}
-
-.showcase__model-center lume-gltf-model {
-	width: 100%;
-	height: 100%;
-	display: block;
-	/* Fix model scaling to show full model */
-	object-fit: contain;
-	transform: scale(0.8);
-	transform-origin: center;
-}
-
-/* Force center the 3D model within the scene */
-.showcase__model-center lume-scene {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.showcase__model-center lume-scene lume-gltf-model {
-	position: relative;
-	left: 50%;
-	transform: translateX(-50%);
-	/* Ensure full model is visible */
-	width: 100%;
-	height: 100%;
-	object-fit: contain;
+	/* iOS specific fixes */
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-transform: translateZ(0);
+	transform: translateZ(0);
 }
 
 .showcase__avatar-model {
 	width: 100%;
 	height: 100%;
 	object-fit: contain;
+	-webkit-object-fit: contain;
 	border-radius: 10px;
+	/* iOS specific fixes */
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
 }
 
 .showcase__label {
@@ -2476,7 +2463,7 @@ p {
 	}
 	.landing-page-desktop .section-drippy .feature__item .feature__description {
 		text-align: center;
-		width: 80%;
+		width: 83%;
 		margin: 0 auto;
 	}
 
