@@ -4,7 +4,7 @@ import '../app/app-buttons.js'
 import '../app/drippy-scene.js'
 import '../app/item-card.js'
 import {store} from '../app/store.js'
-import {textureManager} from '../app/texture-manager.js'
+import {textureManager, DEFAULT_TEXTURE_CONFIG} from '../app/texture-manager.js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/bottom-sheet.js'
@@ -80,8 +80,10 @@ export class UploadView extends Element {
 	@signal selectedTemplates: Map<TemplateCategory, Template> = new Map()
 	@signal fabricScaleX = 2
 	@signal fabricScaleY = 2
-	@signal fabricOffsetX = 1
-	@signal fabricOffsetY = 1
+	@signal fabricOffsetX = DEFAULT_TEXTURE_CONFIG.offset[0]
+	@signal fabricOffsetY = DEFAULT_TEXTURE_CONFIG.offset[1]
+	@signal fabricCoef = DEFAULT_TEXTURE_CONFIG.coef
+	@signal fabricRotate = DEFAULT_TEXTURE_CONFIG.rotate
 	@signal showConfigPanel = false
 	@signal isDragging = false
 	@signal panelX = -212
@@ -129,8 +131,10 @@ export class UploadView extends Element {
 		this.showConfigPanel = false
 		this.fabricScaleX = 9
 		this.fabricScaleY = 9
-		this.fabricOffsetX = 1
-		this.fabricOffsetY = 1
+		this.fabricOffsetX = DEFAULT_TEXTURE_CONFIG.offset[0]
+		this.fabricOffsetY = DEFAULT_TEXTURE_CONFIG.offset[1]
+		this.fabricCoef = DEFAULT_TEXTURE_CONFIG.coef
+		this.fabricRotate = DEFAULT_TEXTURE_CONFIG.rotate
 		this.isDragging = false
 		this.panelX = -212
 		this.panelY = -371
@@ -684,6 +688,8 @@ export class UploadView extends Element {
 			scaleY: this.fabricScaleY,
 			offsetX: this.fabricOffsetX,
 			offsetY: this.fabricOffsetY,
+			coef: this.fabricCoef,
+			rotate: this.fabricRotate,
 		}))
 
 		console.log(`✅ All extra materials processed and added to materials list`)
@@ -847,6 +853,8 @@ export class UploadView extends Element {
 			scaleY: this.fabricScaleY,
 			offsetX: this.fabricOffsetX,
 			offsetY: this.fabricOffsetY,
+			coef: this.fabricCoef,
+			rotate: this.fabricRotate,
 		}))
 
 		// Update selected fabrics as well
@@ -860,6 +868,8 @@ export class UploadView extends Element {
 						scaleY: this.fabricScaleY,
 						offsetX: this.fabricOffsetX,
 						offsetY: this.fabricOffsetY,
+						coef: this.fabricCoef,
+						rotate: this.fabricRotate,
 					})
 				}
 			}
@@ -871,6 +881,8 @@ export class UploadView extends Element {
 			scaleY: this.fabricScaleY,
 			offsetX: this.fabricOffsetX,
 			offsetY: this.fabricOffsetY,
+			coef: this.fabricCoef,
+			rotate: this.fabricRotate,
 		})
 		console.log('Updated selected fabrics:', this.selectedFabrics)
 	}
@@ -889,21 +901,35 @@ export class UploadView extends Element {
 
 	#handleOffsetXChange = (e: Event) => {
 		const value = parseFloat((e.target as HTMLInputElement).value)
-		this.fabricOffsetX = isNaN(value) ? 0 : value
+		this.fabricOffsetX = isNaN(value) ? DEFAULT_TEXTURE_CONFIG.offset[0] : value
 		this.#updateFabricProperties()
 	}
 
 	#handleOffsetYChange = (e: Event) => {
 		const value = parseFloat((e.target as HTMLInputElement).value)
-		this.fabricOffsetY = isNaN(value) ? 0 : value
+		this.fabricOffsetY = isNaN(value) ? DEFAULT_TEXTURE_CONFIG.offset[1] : value
+		this.#updateFabricProperties()
+	}
+
+	#handleCoefChange = (e: Event) => {
+		const value = parseFloat((e.target as HTMLInputElement).value)
+		this.fabricCoef = isNaN(value) ? DEFAULT_TEXTURE_CONFIG.coef : value
+		this.#updateFabricProperties()
+	}
+
+	#handleRotateChange = (e: Event) => {
+		const value = parseFloat((e.target as HTMLInputElement).value)
+		this.fabricRotate = isNaN(value) ? DEFAULT_TEXTURE_CONFIG.rotate : value
 		this.#updateFabricProperties()
 	}
 
 	#resetFabricProperties = () => {
 		this.fabricScaleX = 9
 		this.fabricScaleY = 9
-		this.fabricOffsetX = 0
-		this.fabricOffsetY = 0
+		this.fabricOffsetX = DEFAULT_TEXTURE_CONFIG.offset[0]
+		this.fabricOffsetY = DEFAULT_TEXTURE_CONFIG.offset[1]
+		this.fabricCoef = DEFAULT_TEXTURE_CONFIG.coef
+		this.fabricRotate = DEFAULT_TEXTURE_CONFIG.rotate
 		this.#updateFabricProperties()
 	}
 
@@ -1083,9 +1109,9 @@ export class UploadView extends Element {
 										<input
 											id="offset-x"
 											type="number"
-											min="-99"
-											max="99"
-											step="1"
+											min="0"
+											max="1"
+											step="0.0.1"
 											value=${() => this.fabricOffsetX}
 											oninput=${this.#handleOffsetXChange}
 										/>
@@ -1093,9 +1119,9 @@ export class UploadView extends Element {
 									<input
 										id="offset-x"
 										type="range"
-										min="-99"
-										max="99"
-										step="1"
+										min="0"
+										max="1"
+										step="0.01"
 										value=${() => this.fabricOffsetX}
 										oninput=${this.#handleOffsetXChange}
 									/>
@@ -1106,9 +1132,9 @@ export class UploadView extends Element {
 										<input
 											id="offset-y"
 											type="number"
-											min="-99"
-											max="99"
-											step="1"
+											min="0"
+											max="1"
+											step="0.01"
 											value=${() => this.fabricOffsetY}
 											oninput=${this.#handleOffsetYChange}
 										/>
@@ -1116,11 +1142,57 @@ export class UploadView extends Element {
 									<input
 										id="offset-y"
 										type="range"
-										min="-99"
-										max="99"
-										step="1"
+										min="0"
+										max="1"
+										step="0.01"
 										value=${() => this.fabricOffsetY}
 										oninput=${this.#handleOffsetYChange}
+									/>
+								</div>
+								<div class="config-row">
+									<div class="config-row-label">
+										<label for="coef">Coefficient:</label>
+										<input
+											id="coef"
+											type="number"
+											min="0.1"
+											max="1000"
+											step="0.1"
+											value=${() => this.fabricCoef}
+											oninput=${this.#handleCoefChange}
+										/>
+									</div>
+									<input
+										id="coef"
+										type="range"
+										min="0.1"
+										max="1000"
+										step="0.1"
+										value=${() => this.fabricCoef}
+										oninput=${this.#handleCoefChange}
+									/>
+								</div>
+								<div class="config-row">
+									<div class="config-row-label">
+										<label for="rotate">Rotation:</label>
+										<input
+											id="rotate"
+											type="number"
+											min="0"
+											max="6.28"
+											step="0.1"
+											value=${() => this.fabricRotate}
+											oninput=${this.#handleRotateChange}
+										/>
+									</div>
+									<input
+										id="rotate"
+										type="range"
+										min="0"
+										max="6.28"
+										step="0.1"
+										value=${() => this.fabricRotate}
+										oninput=${this.#handleRotateChange}
 									/>
 								</div>
 								<div class="config-actions">
@@ -1365,7 +1437,7 @@ export class UploadView extends Element {
 
 		.config-row input {
 			width: 100%;
-			padding: 8px 2px;
+			padding: 8px 0px;
 			border: 1px solid #ced4da;
 			border-radius: 6px;
 			font-size: 14px;

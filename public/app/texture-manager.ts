@@ -8,6 +8,13 @@ export interface TextureConfig {
 	rotate: number
 }
 
+export const DEFAULT_TEXTURE_CONFIG: TextureConfig = {
+	repeat: [60 / 9, 60 / 9],
+	coef: 1000,
+	offset: [0, 0],
+	rotate: 0,
+}
+
 export interface TextureSet {
 	baseColor?: THREE.Texture
 	normal?: THREE.Texture
@@ -25,12 +32,7 @@ export interface CachedTexture {
 class TextureManager {
 	private textureCache = new Map<string, CachedTexture>()
 	private loadingPromises = new Map<string, Promise<CachedTexture | null>>()
-	private defaultConfig: TextureConfig = {
-		repeat: [60 / 9, 60 / 9],
-		coef: 1,
-		offset: [1, 1],
-		rotate: 0,
-	}
+	private defaultConfig: TextureConfig = DEFAULT_TEXTURE_CONFIG
 
 	/**
 	 * Create a base THREE.js texture from URL without any scaling applied
@@ -193,7 +195,7 @@ class TextureManager {
 	 * Preload fabric textures using default configuration
 	 */
 	async preloadFabricTextures(fabric: Fabric): Promise<TextureSet> {
-		const config = this.defaultConfig
+		const config = {...this.defaultConfig}
 		if (fabric.scaleX) {
 			config.repeat[0] = 60 / fabric.scaleX
 		}
@@ -205,6 +207,12 @@ class TextureManager {
 		}
 		if (fabric.offsetY) {
 			config.offset[1] = fabric.offsetY
+		}
+		if (fabric.coef) {
+			config.coef = fabric.coef
+		}
+		if (fabric.rotate) {
+			config.rotate = fabric.rotate
 		}
 
 		const [baseColor, normal, displacement, roughness, alpha] = await Promise.all([
@@ -228,10 +236,10 @@ class TextureManager {
 	 * Load fabric textures with UV-aware configuration
 	 */
 	async loadFabricTexturesWithUV(fabric: Fabric, uvArray: number[]): Promise<TextureSet> {
-		const coef = this.calculateCoef(uvArray)
+		const defaultCoef = this.calculateCoef(uvArray)
 		const config: TextureConfig = {
 			...this.defaultConfig,
-			coef,
+			coef: fabric.coef || defaultCoef,
 		}
 
 		if (fabric.scaleX) {
@@ -245,6 +253,9 @@ class TextureManager {
 		}
 		if (fabric.offsetY) {
 			config.offset[1] = fabric.offsetY
+		}
+		if (fabric.rotate) {
+			config.rotate = fabric.rotate
 		}
 
 		const [baseColor, normal, displacement, roughness, alpha] = await Promise.all([
