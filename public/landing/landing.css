@@ -1614,20 +1614,6 @@ p {
 .showcase__model-center drippy-scene {
 	width: 100%;
 	height: 100%;
-	border-radius: 12px;
-	overflow: hidden;
-	background: transparent;
-	position: relative;
-	z-index: 1;
-	/* Force center the 3D model */
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	/* iOS specific fixes */
-	-webkit-backface-visibility: hidden;
-	backface-visibility: hidden;
-	-webkit-transform: translateZ(0);
-	transform: translateZ(0);
 }
 
 .showcase__avatar-model {
@@ -2392,12 +2378,12 @@ p {
 
 	.landing-page-desktop .section {
 		gap: 25px;
-		padding: 0 35px;
+		padding: 0 25px;
 	}
 	.landing-page-desktop .section-drippy {
 		flex-direction: column;
 		gap: 25px;
-		padding: 0 35px;
+		padding: 0 25px;
 	}
 
 	.landing-page-desktop .section-title {
@@ -2427,26 +2413,6 @@ p {
 		will-change: transform;
 		-webkit-backface-visibility: hidden;
 		backface-visibility: hidden;
-	}
-
-	/* Fix model centering on mobile - ensure vertical centering */
-	.showcase__model-center {
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		width: 100%;
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transform: translate(-50%, -50%);
-		-webkit-transform: translate(-50%, -50%);
-		-webkit-backface-visibility: hidden;
-		backface-visibility: hidden;
-		will-change: transform;
-		/* Additional iPhone specific fixes */
-		-webkit-perspective: 1000px;
-		perspective: 1000px;
 	}
 
 	.showcase .showcase__model {
@@ -2698,5 +2664,11 @@ p {
 	}
 	.carousel .platform__card-image {
 		height: 200px;
+	}
+}
+@supports (-webkit-touch-callout: none) {
+	.showcase__model-center {
+		transform: translate3d(-50%, -40%, 0) !important;
+		-webkit-transform: translate3d(-50%, -40%, 0) !important;
 	}
 }

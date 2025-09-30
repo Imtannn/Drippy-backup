@@ -1010,6 +1010,41 @@ setTimeout(() => {
 	})
 }, 150)
 
+// Handle <br> tags responsively (remove on mobile, restore on desktop)
+function handleResponsiveBreaks() {
+	const classes = ['.section-subtitle', '.highlight', '.cta__description--highlight']
+	const originalContent = new Map() // Store original content
+
+	function processBreaks() {
+		const isMobile = window.innerWidth < 480
+
+		classes.forEach(selector => {
+			document.querySelectorAll(selector).forEach((element, index) => {
+				const elementId = `${selector}-${index}`
+
+				if (isMobile) {
+					// Store original content if not already stored
+					if (!originalContent.has(elementId)) {
+						originalContent.set(elementId, element.innerHTML)
+					}
+					// Remove <br> tags on mobile
+					element.innerHTML = element.innerHTML.replace(/<br\s*\/?>/gi, ' ')
+				} else {
+					// Restore original content on desktop
+					if (originalContent.has(elementId)) {
+						element.innerHTML = originalContent.get(elementId)
+					}
+				}
+			})
+		})
+	}
+
+	processBreaks()
+	window.addEventListener('resize', processBreaks)
+}
+
+setTimeout(handleResponsiveBreaks, 100)
+
 // Initialize carousel for Platform section
 setTimeout(() => {
 	initGenericCarousel({
