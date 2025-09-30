@@ -134,6 +134,7 @@ Meteor.methods({
 				orderDate: processedOrder.orderDate,
 				items: processedOrder.items,
 				totalAmount: processedOrder.totalAmount,
+				designUrl: orderData.designUrl,
 				shippingAddress: {
 					name: `${orderData.shippingAddress.firstName} ${orderData.shippingAddress.lastName}`,
 					street:
@@ -152,7 +153,8 @@ Meteor.methods({
 				orderData.firstName,
 				processedOrder.orderId,
 				emailOrderDetails,
-				orderData.orderType, // Pass order type for different email templates
+				orderData.orderType,
+				orderData.spaceDescription,
 			)
 
 			// Send admin notification email
@@ -161,7 +163,8 @@ Meteor.methods({
 				orderData.firstName,
 				processedOrder.orderId,
 				emailOrderDetails,
-				orderData.orderType, // Pass order type for different email templates
+				orderData.orderType,
+				orderData.spaceDescription,
 			)
 
 			// Return order confirmation

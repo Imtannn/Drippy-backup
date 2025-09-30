@@ -54,13 +54,14 @@
 	<body>
 		<div class='header'>
 			<h1'>✅ Order Confirmed!</h1>
-			<p>{{#if isRetail}}Retail {{/if}}{{#if isWholesale}}Wholesale {{/if}}Order #{{orderId}}</p>
+			<p>Order #{{orderId}}</p>
 		</div>
 
 		<div class='content'>
 			<p>Hi {{userName}},</p>
 
-			<p>Thank you for your {{#if isRetail}}retail{{/if}}{{#if isWholesale}}wholesale{{/if}} order!</p>
+			<p>Thank you for your order!</p>
+			<p>{{brandName}} will contact you soon for more details of your order.</p>
 
 			<div class='order-info'>
 				<h3>📦 Order Details</h3>
@@ -73,21 +74,17 @@
 						<div><strong>{{name}}</strong></div>
 						<div style='margin-left: 16px; color: #666;'><small>{{description}}</small></div>
 						
-						{{#if ../isWholesale}}
-							{{#if sizes}}
-								{{#each sizes}}
-									<div style='margin-left: 16px; margin-top: 5px;'>
-										<span>Size {{size}}: </span>
-										<span>{{quantity}} pcs @ ${{price}} = ${{price}}</span>
-									</div>
-								{{/each}}
-								<div style='margin-left: 16px; margin-top: 8px; font-weight: bold;'>
-									Item Total: {{quantity}} pcs - ${{price}}
+						{{#if sizes}}
+							{{#each sizes}}
+								<div style='margin-left: 16px; margin-top: 5px;'>
+									<span>Size {{size}}: </span>
+									<span>{{quantity}} pcs @ ${{price}} = ${{price}}</span>
 								</div>
-							{{/if}}
-						{{/if}}
-						
-						{{#if ../isRetail}}
+							{{/each}}
+							<div style='margin-left: 16px; margin-top: 8px; font-weight: bold;'>
+								Item Total: {{quantity}} pcs - ${{price}}
+							</div>
+						{{else}}
 							<div style='margin-left: 16px; margin-top: 5px;'>
 								<span>Size: <strong>{{selectedSize}}</strong></span>
 								<span style='margin-left: 10px;'>Quantity: <strong>{{quantity}}</strong></span>
@@ -97,10 +94,10 @@
 								<div style='margin-left: 16px; margin-top: 8px; padding: 8px; background: #f0f0f0; border-radius: 4px;'>
 									<div style='font-weight: bold; color: #e56be8;'>Custom Measurements:</div>
 									<div style='margin-top: 4px; font-size: 12px;'>
-										Bust: {{customMeasurement.bust}}cm | 
-										Waist: {{customMeasurement.waist}}cm | 
+										Bust: {{customMeasurement.bust}}cm |
+										Waist: {{customMeasurement.waist}}cm |
 										Hips: {{customMeasurement.hips}}cm<br>
-										Shoulder: {{customMeasurement.shoulder}}cm | 
+										Shoulder: {{customMeasurement.shoulder}}cm |
 										Shoulder to Knee: {{customMeasurement.shoulderToKnee}}cm
 									</div>
 								</div>
@@ -125,6 +122,11 @@
 					{{shippingAddress.country}}</p>
 			</div>
 
+			{{#if designUrl}}
+			<div class='order-info'>
+				<p><strong>Your design:</strong> <a href="{{designUrl}}">{{designUrl}}</a></p>
+			</div>
+			{{/if}}
 
 			<p>Thank you for choosing Drippy!</p>
 			<p>The Drippy Team</p>

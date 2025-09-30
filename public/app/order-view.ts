@@ -9,6 +9,7 @@ import '../elements/logo-button.js'
 import '../elements/person-button.js'
 import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
+import {href} from '../routes.js'
 import {appStyles} from '../styles/app-styles.js'
 import './app-buttons.js'
 import './buy-button.js'
@@ -112,6 +113,8 @@ export class OrderView extends Element {
 			}
 		}
 
+		const designUrl = href()
+
 		const orderData: OrderData = {
 			// Customer information
 			email: store.order.email || '',
@@ -132,6 +135,10 @@ export class OrderView extends Element {
 
 			// Shipping information
 			shippingAddress,
+
+			designUrl,
+
+			spaceDescription: store.selectedSpace?.description,
 		}
 
 		return orderData
