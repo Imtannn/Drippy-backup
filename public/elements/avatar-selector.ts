@@ -6,7 +6,6 @@ import {spaces} from '../consts/spaces.js'
 import {templates} from '../consts/templates.js'
 import type {TemplateCategory} from '../types/template.js'
 import type {Block} from '../types/block.js'
-// import type {Fabric} from '../types/fabric.js'
 
 const block3DLanding = {
 	male: [
@@ -208,7 +207,6 @@ export class AvatarSelector extends Element {
 			const shirtBlock = genderBlocks.find(block => block.templateCategory === 'Shirt' && block.category === 'Bodice')
 			const pantsBlock = genderBlocks.find(block => block.templateCategory === 'Pants' && block.category === 'Pants')
 
-			// Set templates first (giống blocks-selection logic) - dùng templateId từ blocks
 			const templateData: Array<any> = []
 			if (sleevesBlock || topBlock) {
 				// Find template by templateId from block
@@ -325,48 +323,26 @@ export class AvatarSelector extends Element {
 			const collection = gender === 'male' ? 'eliseF' : 'moidien'
 			const availableFabrics = fabrics[collection] || []
 
-			// Apply fabric cho tất cả blocks
 			const allBlocks = store.selectedBlocks
 
 			for (const [templateCategory, blocksMap] of allBlocks) {
-				// Lấy selectedTemplate để có category chính xác
 				const selectedTemplate = store.selectedTemplates.get(templateCategory)
-
-				// Áp dụng fabric cho tất cả block categories của template này (giống blockManager logic)
 				const actualBlockCategories = Array.from(blocksMap.keys())
-
-				// Kiểm tra xem template này đã có fabric chưa
 				const existingFabrics = store.selectedFabrics.get(templateCategory)
 
-				// Chỉ apply fabric cho blocks chưa có fabric
 				const blocksNeedingFabric = actualBlockCategories.filter(blockCategory => {
 					const hasFabric = (existingFabrics?.get(blockCategory)?.size ?? 0) > 0
 					return !hasFabric
 				})
 
-				// Debug: Log để hiểu tại sao không apply fabric
-				console.log('Debug applyFabricsToAllBlocks:', {
-					gender,
-					templateCategory,
-					selectedTemplate: selectedTemplate ? 'exists' : 'null',
-					actualBlockCategories,
-					blocksNeedingFabric,
-					existingFabrics: existingFabrics?.size ?? 0,
-					availableFabrics: availableFabrics.length,
-					selectedTemplatesKeys: Array.from(store.selectedTemplates.keys()),
-				})
-
 				if (selectedTemplate) {
 					const fabricData: Array<{fabric: any; blockCategory: any; templateCategory: any; assignedMesh?: string}> = []
-
-					// Apply main fabric từ materialId (giống blockManager logic)
 					if (selectedTemplate.materialId) {
 						const mainFabric = availableFabrics.find(
 							fabric => `${fabric.category} - ${fabric.materialName}` === selectedTemplate.materialId,
 						)
 
 						if (mainFabric) {
-							// Apply main fabric cho tất cả blocks cần fabric
 							for (const blockCategory of blocksNeedingFabric) {
 								fabricData.push({
 									fabric: mainFabric,
@@ -378,7 +354,6 @@ export class AvatarSelector extends Element {
 						}
 					}
 
-					// Apply extra materials (giống blockManager logic)
 					if (selectedTemplate.extraMaterials) {
 						for (const extraMaterial of selectedTemplate.extraMaterials) {
 							const extraFabric = availableFabrics.find(
@@ -386,7 +361,6 @@ export class AvatarSelector extends Element {
 							)
 
 							if (extraFabric) {
-								// Apply extra fabric cho tất cả blocks cần fabric
 								for (const blockCategory of blocksNeedingFabric) {
 									fabricData.push({
 										fabric: extraFabric,
@@ -399,7 +373,6 @@ export class AvatarSelector extends Element {
 						}
 					}
 
-					// Fallback: nếu không tìm thấy fabric theo materialId, dùng templateCategories
 					if (fabricData.length === 0) {
 						const suitableFabrics = availableFabrics.filter(fabric =>
 							fabric.templateCategories?.includes(selectedTemplate.category || templateCategory),
@@ -424,7 +397,6 @@ export class AvatarSelector extends Element {
 						store.setSelectedFabrics = fabricData
 					}
 				} else {
-					// Fallback: nếu không có selectedTemplate, apply fabric đầu tiên có sẵn
 					console.log('No selectedTemplate found, using fallback fabric')
 					if (blocksNeedingFabric.length > 0 && availableFabrics.length > 0) {
 						const fallbackFabric = availableFabrics[0]
