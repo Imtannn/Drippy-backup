@@ -28,7 +28,7 @@ class TextureManager {
 	private defaultConfig: TextureConfig = {
 		repeat: [60 / 9, 60 / 9],
 		coef: 1,
-		offset: [1, 1],
+		offset: [0, 0],
 		rotate: 0,
 	}
 

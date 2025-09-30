@@ -80,8 +80,8 @@ export class UploadView extends Element {
 	@signal selectedTemplates: Map<TemplateCategory, Template> = new Map()
 	@signal fabricScaleX = 2
 	@signal fabricScaleY = 2
-	@signal fabricOffsetX = 1
-	@signal fabricOffsetY = 1
+	@signal fabricOffsetX = 0
+	@signal fabricOffsetY = 0
 	@signal showConfigPanel = false
 	@signal isDragging = false
 	@signal panelX = -212
@@ -129,8 +129,8 @@ export class UploadView extends Element {
 		this.showConfigPanel = false
 		this.fabricScaleX = 9
 		this.fabricScaleY = 9
-		this.fabricOffsetX = 1
-		this.fabricOffsetY = 1
+		this.fabricOffsetX = 0
+		this.fabricOffsetY = 0
 		this.isDragging = false
 		this.panelX = -212
 		this.panelY = -371
@@ -1083,9 +1083,9 @@ export class UploadView extends Element {
 										<input
 											id="offset-x"
 											type="number"
-											min="-99"
-											max="99"
-											step="1"
+											min="0"
+											max="1"
+											step="0.0.1"
 											value=${() => this.fabricOffsetX}
 											oninput=${this.#handleOffsetXChange}
 										/>
@@ -1093,9 +1093,9 @@ export class UploadView extends Element {
 									<input
 										id="offset-x"
 										type="range"
-										min="-99"
-										max="99"
-										step="1"
+										min="0"
+										max="1"
+										step="0.01"
 										value=${() => this.fabricOffsetX}
 										oninput=${this.#handleOffsetXChange}
 									/>
@@ -1106,9 +1106,9 @@ export class UploadView extends Element {
 										<input
 											id="offset-y"
 											type="number"
-											min="-99"
-											max="99"
-											step="1"
+											min="0"
+											max="1"
+											step="0.01"
 											value=${() => this.fabricOffsetY}
 											oninput=${this.#handleOffsetYChange}
 										/>
@@ -1116,9 +1116,9 @@ export class UploadView extends Element {
 									<input
 										id="offset-y"
 										type="range"
-										min="-99"
-										max="99"
-										step="1"
+										min="0"
+										max="1"
+										step="0.01"
 										value=${() => this.fabricOffsetY}
 										oninput=${this.#handleOffsetYChange}
 									/>
