@@ -2,6 +2,7 @@ import {attribute, css, Element, element, html, signal} from 'lume'
 import {store} from '../app/store.js'
 import {avatars} from '../consts/avatars.js'
 import {fabrics} from '../consts/fabrics.js'
+import {spaces} from '../consts/spaces.js'
 import {templates} from '../consts/templates.js'
 import type {TemplateCategory} from '../types/template.js'
 import type {Block} from '../types/block.js'
@@ -10,42 +11,42 @@ import type {Block} from '../types/block.js'
 const block3DLanding = {
 	male: [
 		{
-			_id: '4',
+			_id: '1',
 			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_4_Sleeves/sleeves_1512.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.webp',
 			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_4_Sleeves/sleeves_1512.gltf',
-			blockName: 'sleeves 1512',
-			avatar: 'Male',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.gltf',
+			blockName: 'sleeves 1592',
+			avatar: 'Female',
 			category: 'Sleeves',
-			templateId: '3',
-			templateName: 'Item 4',
+			templateId: '1',
+			templateName: 'Item 6',
 			templateCategory: 'Top',
 		},
 		{
-			_id: '5',
+			_id: '2',
 			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_4_Bodice/bodice_1509.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.webp',
 			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_4_Bodice/bodice_1509.gltf',
-			blockName: 'bodice 1509',
-			avatar: 'Male',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.gltf',
+			blockName: 'bodice 1591',
+			avatar: 'Female',
 			category: 'Bodice',
-			templateId: '3',
-			templateName: 'Item 4',
+			templateId: '1',
+			templateName: 'Item 6',
 			templateCategory: 'Top',
 		},
 		{
-			_id: '14',
+			_id: '13',
 			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_7___Pants/pants%2Cskirt_1590.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_8___Pants/pants_1593.webp',
 			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_7___Pants/pants%2Cskirt_1590.gltf',
-			blockName: 'pants,skirt 1590',
-			avatar: 'Male',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_8___Pants/pants_1593.gltf',
+			blockName: 'pants 1593',
+			avatar: 'Female',
 			category: 'Pants',
-			templateId: '9',
-			templateName: 'Item 7',
+			templateId: '8',
+			templateName: 'Item 8',
 			templateCategory: 'Pants',
 		},
 	],
@@ -165,9 +166,28 @@ export class AvatarSelector extends Element {
 				store.setTempSelectedAvatar = maleAvatarValue
 				store.selectAvatar = maleAvatarValue
 
+				// Set default space for male avatar
+				this.setSpaceForGender('male')
+
 				// Set default blocks for male avatar
 				this.setBlocksForGender('male')
 			}
+		}
+	}
+
+	private setSpaceForGender(gender: 'male' | 'female') {
+		try {
+			// Find the first space for the specified gender
+			const spaceForGender = spaces.find(space => space.gender === gender)
+			if (spaceForGender) {
+				// Always set space when switching gender to ensure shoes are loaded
+				store.selectSpace = spaceForGender
+
+				// Hide background scene on landing page (but keep shoes from includedModelFiles)
+				store.setIsShowScene = false
+			}
+		} catch (error) {
+			// Error setting space
 		}
 	}
 
@@ -609,6 +629,9 @@ export class AvatarSelector extends Element {
 		if (avatarValue) {
 			store.setTempSelectedAvatar = avatarValue
 			store.selectAvatar = avatarValue
+
+			// Set default space for selected gender
+			this.setSpaceForGender(option.gender)
 
 			// Set default blocks cho gender được chọn
 			this.setBlocksForGender(option.gender)
