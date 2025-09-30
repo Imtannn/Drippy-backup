@@ -2330,6 +2330,7 @@ p {
 	}
 	.landing-page-desktop .hero-header {
 		min-height: 675px;
+		margin-bottom: 20px;
 	}
 	.landing-page-desktop .hero-header .bg-background {
 		background-position: 90% 50%;

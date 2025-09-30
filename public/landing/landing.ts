@@ -760,7 +760,7 @@ function waitForContentReady() {
 	// Wait for images + a minimum delay to ensure loading screen shows
 	Promise.all(imagePromises).then(() => {
 		// Ensure loading screen shows for at least 1.5 seconds
-		const minLoadingTime = 1500
+		const minLoadingTime = 3000
 		const startTime = Date.now()
 
 		const hideLoading = () => {

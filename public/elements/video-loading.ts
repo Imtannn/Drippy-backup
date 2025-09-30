@@ -130,6 +130,14 @@ export class VideoLoading extends Element {
 			}
 		}
 
+		/* Mobile scaling for screens ≤ 480px */
+		@media (max-width: 480px) {
+			.loading-video {
+				transform: translateZ(0) scale(2.5);
+				-webkit-transform: translateZ(0) scale(2.5);
+			}
+		}
+
 		/* Dark theme support */
 		[data-theme='dark'] .fallback-loader {
 			background: #010304;
