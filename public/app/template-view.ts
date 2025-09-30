@@ -27,7 +27,7 @@ import '../elements/preview-button.js'
 import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
-import {updateGarmentsInUrl, updateUrlWithParams} from '../routes.js'
+import {updateGarmentsInUrl, updateFabricsInUrl, updateUrlWithParams} from '../routes.js'
 import {formatNumber} from '../utils.js'
 import './app-buttons.js'
 import './avatar-selection.js'
@@ -117,6 +117,12 @@ export class TemplateView extends Element {
 		this.createEffect(() => {
 			const selectedTemplates = store.selectedTemplates
 			updateGarmentsInUrl(selectedTemplates)
+		})
+
+		// Update URL when fabrics change
+		this.createEffect(() => {
+			const selectedFabrics = store.selectedFabrics
+			updateFabricsInUrl(selectedFabrics)
 		})
 	}
 
