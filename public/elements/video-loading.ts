@@ -15,6 +15,12 @@ export class VideoLoading extends Element {
 		setTimeout(() => {
 			const video = this.shadowRoot?.querySelector('.loading-video') as HTMLVideoElement
 			if (video) {
+				// iPhone specific fixes
+				video.setAttribute('webkit-playsinline', 'true')
+				video.setAttribute('playsinline', 'true')
+				video.muted = true
+				video.defaultMuted = true
+
 				video.addEventListener('loadeddata', () => {
 					this.videoError = false
 				})
@@ -80,6 +86,14 @@ export class VideoLoading extends Element {
 			z-index: 10;
 			object-fit: cover;
 			object-position: center;
+			/* iPhone specific fixes */
+			-webkit-object-fit: cover;
+			-webkit-object-position: center;
+			/* Force hardware acceleration */
+			-webkit-transform: translateZ(0);
+			transform: translateZ(0);
+			/* Ensure video is visible */
+			background: transparent;
 		}
 
 		.fallback-loader {

@@ -297,13 +297,11 @@ const mainContent = html`
 								<custom-button variant="secondary" href="/">See it live</custom-button>
 								<custom-button variant="primary" href="https://calendly.com/rubydrippy3d/30min">Book a demo</custom-button>
 							</div>
-
-								<img class="cta__cone-image--2" src=${blingImage1} />
-
-								<img class="cta__cone-image--3" src=${blingImage2} />
-								<img class="cta__cone-image--4" src=${blingImage3} />
 						</section>
+						<img class="cta__cone-image--2" src=${blingImage1} />
 
+						<img class="cta__cone-image--3" src=${blingImage2} />
+						<img class="cta__cone-image--4" src=${blingImage3} />
 						<!-- Brands Section -->
 						<section class="section" id="brand">
 							<div class="section-header">

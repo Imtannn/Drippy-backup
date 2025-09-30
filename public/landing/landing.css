@@ -105,6 +105,8 @@ p {
 	align-self: stretch;
 	width: 100%;
 	box-sizing: border-box;
+	position: relative;
+	margin-bottom: 75px;
 }
 .landing-page-desktop .hero-header .bg-background {
 	background-image: url('../images/landing/bg-main.png');
@@ -1198,7 +1200,7 @@ p {
 	height: 100%;
 }
 
-.landing-page-desktop .hero-header .cta__cone-image--2 {
+.landing-page-desktop .cta__cone-image--2 {
 	width: 253px;
 	height: 243px;
 	top: 2%;
@@ -1209,7 +1211,7 @@ p {
 	display: block;
 }
 
-.landing-page-desktop .hero-header .cta__cone-image--3 {
+.landing-page-desktop .cta__cone-image--3 {
 	width: 177px;
 	height: 118px;
 	top: 12%;
@@ -1938,17 +1940,18 @@ p {
 
 	.landing-page-desktop .hero-header {
 		min-height: 950px;
+		margin-bottom: 0;
 	}
 	.landing-page-desktop .hero-header .hero__subtitle {
 		margin-bottom: 0;
 		text-align: center;
 	}
 
-	.landing-page-desktop .hero-header .cta__cone-image--2 {
+	.landing-page-desktop .cta__cone-image--2 {
 		width: 105px;
 		height: 81px;
 	}
-	.landing-page-desktop .hero-header .cta__cone-image--3 {
+	.landing-page-desktop .cta__cone-image--3 {
 		width: 101px;
 		height: 55px;
 	}
@@ -2226,13 +2229,13 @@ p {
 	.landing-page-desktop .footer__main {
 		gap: 50px;
 	}
-	.landing-page-desktop .hero-header .cta__cone-image--2 {
+	.landing-page-desktop .cta__cone-image--2 {
 		top: 1%;
 	}
-	.landing-page-desktop .hero-header .cta__cone-image--3 {
+	.landing-page-desktop .cta__cone-image--3 {
 		top: 11.5%;
 	}
-	.landing-page-desktop .hero-header .cta__cone-image--4 {
+	.landing-page-desktop .cta__cone-image--4 {
 		top: 25%;
 	}
 }
@@ -2261,13 +2264,13 @@ p {
 		max-width: 280px;
 		min-height: 510px;
 	}
-	.landing-page-desktop .hero-header .cta__cone-image--2 {
+	.landing-page-desktop .cta__cone-image--2 {
 		top: 1.5%;
 	}
-	.landing-page-desktop .hero-header .cta__cone-image--3 {
+	.landing-page-desktop .cta__cone-image--3 {
 		top: 10%;
 	}
-	.landing-page-desktop .hero-header .cta__cone-image--4 {
+	.landing-page-desktop .cta__cone-image--4 {
 		top: 32%;
 	}
 }
@@ -2323,7 +2326,7 @@ p {
 	}
 	.landing-page-desktop .hero-header .bg-background {
 		background-position: 90% 50%;
-		min-height: 500px;
+		min-height: 700px;
 		top: 1.5%;
 	}
 	/* Statistics responsive for mobile */
@@ -2558,13 +2561,13 @@ p {
 	.landing-page-desktop .feature__number {
 		top: 3px;
 	}
-	.landing-page-desktop .hero-header .cta__cone-image--2 {
+	.landing-page-desktop .cta__cone-image--2 {
 		top: 0.5%;
 	}
-	.landing-page-desktop .hero-header .cta__cone-image--3 {
+	.landing-page-desktop .cta__cone-image--3 {
 		top: 6%;
 	}
-	.landing-page-desktop .hero-header .cta__cone-image--4 {
+	.landing-page-desktop .cta__cone-image--4 {
 		top: 22%;
 	}
 }
