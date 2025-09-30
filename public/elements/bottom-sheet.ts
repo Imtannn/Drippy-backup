@@ -34,6 +34,15 @@ export class BottomSheet extends Element {
 	private sheetRef: HTMLElement | null = null
 	private isVisible = false
 
+	private updateBottomSheetHeightVar() {
+		if (!this.isDesktop && this.sheetHeight) {
+			document.documentElement.style.setProperty('--bottom-sheet-height', `${this.sheetHeight}px`)
+		} else {
+			// On desktop, remove the custom property to use the default fallback
+			document.documentElement.style.removeProperty('--bottom-sheet-height')
+		}
+	}
+
 	connectedCallback() {
 		super.connectedCallback()
 		this.checkDesktop()
@@ -86,6 +95,7 @@ export class BottomSheet extends Element {
 				this.isDesktop = false
 			}
 		}
+		this.updateBottomSheetHeightVar()
 	}
 
 	private handleResize = () => {
@@ -101,9 +111,11 @@ export class BottomSheet extends Element {
 				this.sheetHeight = snapFraction * viewportHeight
 			}
 			this.sheetRef!.style.height = `${this.sheetHeight}px`
+			this.updateBottomSheetHeightVar()
 		} else {
 			this.sheetRef!.style.height = '100vh'
 			this.sheetRef!.style.height = '100dvh'
+			this.updateBottomSheetHeightVar()
 		}
 	}
 
@@ -189,6 +201,9 @@ export class BottomSheet extends Element {
 
 		const constrainedHeight = Math.max(minHeight, Math.min(newHeight, maxHeight))
 		this.sheetRef.style.height = `${constrainedHeight}px`
+		// Update the CSS custom property during drag
+		this.sheetHeight = constrainedHeight
+		this.updateBottomSheetHeightVar()
 	}
 
 	private handleDragEnd = () => {
@@ -206,6 +221,7 @@ export class BottomSheet extends Element {
 		if (!this.isDesktop) {
 			this.sheetRef.style.height = `${this.sheetHeight}px`
 		}
+		this.updateBottomSheetHeightVar()
 	}
 
 	private addEventListeners() {

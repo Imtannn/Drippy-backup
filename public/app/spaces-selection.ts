@@ -25,6 +25,14 @@ export class SpacesSelection extends Element {
 
 		// Show all spaces regardless of gender
 		this.filterdSpace = spaces
+
+		// Close login dialog when user successfully logs in
+		this.createEffect(() => {
+			const user = currentUser()
+			if (user !== null && this.showLoginDialog) {
+				this.showLoginDialog = false
+			}
+		})
 	}
 
 	fadeOut(callback?: () => void) {

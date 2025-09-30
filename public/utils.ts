@@ -274,6 +274,24 @@ export function querySelectorDeep(root: Document | ShadowRoot, selector: string)
 	return null
 }
 
+/**
+ * Just like document.querySelectorAll(), but it will traverse into all known ShadowRoots.
+ *
+ * This does a shadow-including tree traversal and returns all matching elements.
+ */
+export function querySelectorAllDeep(root: Document | ShadowRoot, selector: string): Element[] {
+	const results: Element[] = []
+
+	for (const el of elementsDeep(root)) {
+		const nodeList = roots.get(el)?.querySelectorAll(selector)
+		if (nodeList) {
+			results.push(...Array.from(nodeList))
+		}
+	}
+
+	return results
+}
+
 /** Traverse element ancestors of an node. */
 export function* ancestorElements(el: Node): Generator<Element, void, void> {
 	let parent: Node | null = el.parentElement

@@ -63,7 +63,7 @@ export class AppButtonsLeft extends Element {
 		}
 
 		.bottom {
-			bottom: calc(100dvh * 0.41 + 10px);
+			bottom: calc(var(--bottom-sheet-height, 100dvh * 0.41) + 10px);
 		}
 
 		@media (min-width: 767px) {
@@ -125,7 +125,7 @@ export class AppButtonsRight extends Element {
 		}
 
 		.bottom {
-			bottom: calc(100dvh * 0.41 + 10px);
+			bottom: calc(var(--bottom-sheet-height, 100dvh * 0.41) + 10px);
 		}
 
 		@media (min-width: 767px) {
