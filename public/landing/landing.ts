@@ -134,7 +134,7 @@ const modelImage1 = new URL('../images/landing/model-1.png', import.meta.url).hr
 const stepImage1 = new URL('../images/landing/step-1.png', import.meta.url).href
 
 const cta__background = new URL('../images/landing/cta-background.png', import.meta.url).href
-const cta_model = new URL('../images/landing/cta-model.png', import.meta.url).href
+const cta_model = new URL('../images/landing/cta-model.JPEG', import.meta.url).href
 
 const instagramIcon = new URL('../images/landing/discord.png', import.meta.url).href
 const discordIcon = new URL('../images/landing/instagram.png', import.meta.url).href
@@ -415,6 +415,7 @@ const mainContent = html`
 										<p class="features__subtitle text-md-1">Let shoppers play, remix, and buy — all in one place.</p>
 									</div>
 									<div class="features__grid">
+										<img class="features__image mobile" src=${stepImage1} />
 										<div class="feature__wrapper">
 											<div class="feature__item">
 												<div class="feature__number-container">
@@ -478,7 +479,7 @@ const mainContent = html`
 									<custom-button variant="primary" href="https://calendly.com/rubydrippy3d/30min">Book a demo</custom-button>
 								</div>
 							</div>
-							<img class="features__image" src=${stepImage1} />
+							<img class="features__image desktop" src=${stepImage1} />
 						</section>
 
 						<!-- How it Works Section -->
@@ -664,7 +665,7 @@ const mainContent = html`
 								</div>
 								<div class="cta__text-section">
 									<div class="cta__title text-xl">Join the future.</div>
-									<p class="cta__description-text text-md">
+									<p class="cta__description-text text-md-1">
 										<span class="cta__description ">Turn your collections into </span>
 										<span class="cta__description--highlight">playable, immersive,<br> made-to-order</span>
 										<span class="cta__description"> experiences today. </span>
@@ -861,6 +862,11 @@ function initGenericCarousel(config: {
 
 	// Calculate offset for carousel positioning
 	const calculateOffset = (index: number) => {
+		// On mobile (< 480px), don't apply transform - items stay centered
+		if (window.innerWidth < 480) {
+			return 0
+		}
+
 		const containerWidth = container.offsetWidth
 		const itemWidth = config.itemWidth + 32 // item width + gap
 		const totalItems = items.length
@@ -875,6 +881,12 @@ function initGenericCarousel(config: {
 		if (!isCarouselActive()) return
 
 		const offset = calculateOffset(index)
+
+		// Debug logs for mobile
+		if (window.innerWidth < 480) {
+			console.log(`Mobile carousel update - Index: ${index}, Offset: ${offset}, Active: ${isActive}`)
+		}
+
 		track.style.transform = `translateX(${offset}px)`
 		items.forEach((item, i) => item.classList.toggle('active', i === index))
 	}
@@ -996,18 +1008,6 @@ function initGenericCarousel(config: {
 	window.addEventListener('resize', checkScreenSize, {passive: true})
 }
 
-// Initialize carousel for how it work section
-setTimeout(() => {
-	initGenericCarousel({
-		trackSelector: '.how-it-works__grid',
-		itemSelector: '.how-it-works__item',
-		containerSelector: '.how-it-works__content',
-		minWidth: 480,
-		maxWidth: 830,
-		itemWidth: 230,
-	})
-}, 150)
-
 // Handle <br> tags responsively (remove on mobile, restore on desktop)
 function handleResponsiveBreaks() {
 	const classes = ['.section-subtitle', '.highlight', '.cta__description--highlight']
@@ -1043,6 +1043,17 @@ function handleResponsiveBreaks() {
 
 setTimeout(handleResponsiveBreaks, 100)
 
+// Initialize carousel for how it work section
+setTimeout(() => {
+	initGenericCarousel({
+		trackSelector: '.how-it-works__grid',
+		itemSelector: '.how-it-works__item',
+		containerSelector: '.how-it-works__content',
+		minWidth: 0, // Allow mobile
+		maxWidth: 830,
+		itemWidth: 230,
+	})
+}, 150)
 // Initialize carousel for Platform section
 setTimeout(() => {
 	initGenericCarousel({

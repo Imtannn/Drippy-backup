@@ -524,6 +524,13 @@ p {
 	max-width: 50%;
 	min-height: 960px;
 }
+.landing-page-desktop .features__image.mobile {
+	display: none;
+}
+
+.landing-page-desktop .features__image.desktop {
+	display: block;
+}
 
 .landing-page-desktop .how-it-works__content {
 	width: 100%;
@@ -1021,8 +1028,8 @@ p {
 
 .landing-page-desktop .cta__background-image {
 	position: absolute;
-	min-width: 500px;
-	height: 790px;
+	min-width: 330px;
+	height: 740px;
 	bottom: -50%;
 	left: 50%;
 	transform: translate(-50%, 0);
@@ -2322,12 +2329,12 @@ p {
 		gap: 50px;
 	}
 	.landing-page-desktop .hero-header {
-		min-height: 750px;
+		min-height: 675px;
 	}
 	.landing-page-desktop .hero-header .bg-background {
 		background-position: 90% 50%;
-		min-height: 700px;
-		top: 1.5%;
+		min-height: 535px;
+		top: 23.5%;
 	}
 	/* Statistics responsive for mobile */
 	.landing-page-desktop .statistics__grid {
@@ -2364,9 +2371,9 @@ p {
 	/* How it works responsive for mobile - single column */
 	.landing-page-desktop .how-it-works__grid {
 		display: flex !important;
-		flex-direction: column !important;
 		gap: 20px !important;
 		align-items: center;
+		justify-content: center;
 	}
 
 	.landing-page-desktop .platform__content {
@@ -2442,8 +2449,16 @@ p {
 		gap: 50px;
 	}
 	.landing-page-desktop .features__image {
-		min-width: 350px;
+		min-width: 100%;
 		min-height: 100%;
+	}
+	.landing-page-desktop .features__image.mobile {
+		display: block;
+		margin-bottom: 25px;
+	}
+
+	.landing-page-desktop .features__image.desktop {
+		display: none;
 	}
 	.landing-page-desktop .section-drippy .feature__item {
 		align-items: center;
@@ -2485,7 +2500,6 @@ p {
 
 	.landing-page-desktop .how-it-works__grid {
 		align-items: center;
-		flex-direction: column;
 		gap: 50px;
 	}
 	.landing-page-desktop .how-it-works__grid .how-it-works__step {
@@ -2534,7 +2548,7 @@ p {
 		top: 9%;
 	}
 	.landing-page-desktop .cta__title {
-		height: 0;
+		height: 15px;
 	}
 
 	.landing-page-desktop .footer__container {
@@ -2562,13 +2576,13 @@ p {
 		top: 3px;
 	}
 	.landing-page-desktop .cta__cone-image--2 {
-		top: 0.5%;
+		top: 0.7%;
 	}
 	.landing-page-desktop .cta__cone-image--3 {
-		top: 6%;
+		top: 7%;
 	}
 	.landing-page-desktop .cta__cone-image--4 {
-		top: 22%;
+		top: 26%;
 	}
 }
 
@@ -2673,5 +2687,40 @@ p {
 	.showcase__model-center {
 		transform: translate3d(-50%, -40%, 0) !important;
 		-webkit-transform: translate3d(-50%, -40%, 0) !important;
+	}
+}
+
+/* Mobile carousel items - full width and centered on small screens */
+@media (max-width: 480px) {
+	.carousel-item {
+		width: calc(100vw - 40px) !important;
+		min-width: calc(100vw - 40px) !important;
+		max-width: calc(100vw - 40px) !important;
+	}
+
+	.how-it-works__item,
+	.platform__card,
+	.pricing__plans--item {
+		width: calc(100vw - 40px) !important;
+		min-width: calc(100vw - 40px) !important;
+		max-width: calc(100vw - 40px) !important;
+	}
+
+	/* Mobile carousel grid - center items without transform */
+	.carousel .how-it-works__grid,
+	.carousel .platform__grid,
+	.carousel .pricing__plans {
+		display: flex !important;
+		justify-content: center !important;
+		align-items: center !important;
+		gap: 20px !important;
+		transform: none !important;
+	}
+
+	/* Ensure only active item is visible on mobile */
+	.carousel .how-it-works__item:not(.active),
+	.carousel .platform__card:not(.active),
+	.carousel .pricing__plans--item:not(.active) {
+		display: none !important;
 	}
 }
