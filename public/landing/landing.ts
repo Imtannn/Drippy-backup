@@ -68,6 +68,7 @@ const materials = [
 ]
 // Show video loading initially
 function showVideoLoading() {
+	console.log('Showing video loading screen')
 	const videoLoadingElement = html`<video-loading></video-loading>`
 	document.body.appendChild(videoLoadingElement as any)
 	return videoLoadingElement
@@ -76,7 +77,10 @@ function showVideoLoading() {
 // Hide video loading when content is ready
 function hideVideoLoading(videoLoadingElement: any) {
 	if (videoLoadingElement && videoLoadingElement.parentNode) {
+		console.log('Hiding video loading screen')
 		videoLoadingElement.remove()
+	} else {
+		console.log('Video loading element not found or already removed')
 	}
 }
 const [isYearlyActive, setIsYearlyActive] = createSignal(true)
@@ -728,6 +732,13 @@ const mainContent = html`
 // Show video loading immediately when landing page starts loading
 const videoLoadingElement = showVideoLoading()
 
+// Fallback timeout to ensure loading screen is hidden after maximum 5 seconds
+const maxLoadingTime = 5000
+setTimeout(() => {
+	console.log('Fallback timeout: hiding video loading screen')
+	hideVideoLoading(videoLoadingElement)
+}, maxLoadingTime)
+
 // First, append the content to DOM so we can track image loading
 document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
@@ -746,13 +757,25 @@ function waitForContentReady() {
 		})
 	})
 
-	// Wait for images + a small delay for layout settling
+	// Wait for images + a minimum delay to ensure loading screen shows
 	Promise.all(imagePromises).then(() => {
-		// Use requestAnimationFrame to ensure DOM has updated
-		requestAnimationFrame(() => {
-			// Hide video loading when everything is ready
-			hideVideoLoading(videoLoadingElement)
-		})
+		// Ensure loading screen shows for at least 1.5 seconds
+		const minLoadingTime = 1500
+		const startTime = Date.now()
+
+		const hideLoading = () => {
+			const elapsed = Date.now() - startTime
+			const remainingTime = Math.max(0, minLoadingTime - elapsed)
+
+			setTimeout(() => {
+				// Use requestAnimationFrame to ensure DOM has updated
+				requestAnimationFrame(() => {
+					hideVideoLoading(videoLoadingElement)
+				})
+			}, remainingTime)
+		}
+
+		hideLoading()
 	})
 }
 
