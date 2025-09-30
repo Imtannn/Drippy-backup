@@ -4,7 +4,7 @@ import '../app/app-buttons.js'
 import '../app/drippy-scene.js'
 import '../app/item-card.js'
 import {store} from '../app/store.js'
-import {textureManager} from '../app/texture-manager.js'
+import {textureManager, DEFAULT_TEXTURE_CONFIG} from '../app/texture-manager.js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/bottom-sheet.js'
@@ -78,6 +78,17 @@ export class UploadView extends Element {
 	@signal selectedFabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>> = new Map()
 	@signal selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>> = new Map()
 	@signal selectedTemplates: Map<TemplateCategory, Template> = new Map()
+	@signal fabricScaleX = 2
+	@signal fabricScaleY = 2
+	@signal fabricOffsetX = DEFAULT_TEXTURE_CONFIG.offset[0]
+	@signal fabricOffsetY = DEFAULT_TEXTURE_CONFIG.offset[1]
+	@signal fabricCoef = DEFAULT_TEXTURE_CONFIG.coef
+	@signal fabricRotate = DEFAULT_TEXTURE_CONFIG.rotate
+	@signal showConfigPanel = false
+	@signal isDragging = false
+	@signal panelX = -212
+	@signal panelY = -371
+	@signal isMinimized = false
 
 	// DOM elements
 	private fileInput?: HTMLInputElement
@@ -117,6 +128,17 @@ export class UploadView extends Element {
 		this.selectedBlocks = new Map()
 		this.selectedTemplates = new Map()
 		this.uploadProgress = ''
+		this.showConfigPanel = false
+		this.fabricScaleX = 9
+		this.fabricScaleY = 9
+		this.fabricOffsetX = DEFAULT_TEXTURE_CONFIG.offset[0]
+		this.fabricOffsetY = DEFAULT_TEXTURE_CONFIG.offset[1]
+		this.fabricCoef = DEFAULT_TEXTURE_CONFIG.coef
+		this.fabricRotate = DEFAULT_TEXTURE_CONFIG.rotate
+		this.isDragging = false
+		this.panelX = -212
+		this.panelY = -371
+		this.isMinimized = false
 	}
 
 	#handleFileSelect = async (event: Event) => {
@@ -662,6 +684,12 @@ export class UploadView extends Element {
 			category: material.category as Fabric['category'],
 			templateCategories: material.templateCategories,
 			assignedMesh: THREE.PropertyBinding.sanitizeNodeName(material.assignedMesh || '').toLowerCase(),
+			scaleX: this.fabricScaleX,
+			scaleY: this.fabricScaleY,
+			offsetX: this.fabricOffsetX,
+			offsetY: this.fabricOffsetY,
+			coef: this.fabricCoef,
+			rotate: this.fabricRotate,
 		}))
 
 		console.log(`✅ All extra materials processed and added to materials list`)
@@ -804,10 +832,139 @@ export class UploadView extends Element {
 		console.log('🚀 Auto-selected uploaded template')
 	}
 
-	#onHomeButtonClick = () => {
-		const currentAvatar = store.selectedAvatar || 'moidien'
-		history.pushState(null, '', `/?avatar=${currentAvatar}`)
-		store.resetState()
+	#toggleConfigPanel = () => {
+		this.showConfigPanel = !this.showConfigPanel
+		// Reset panel position when opening
+		if (this.showConfigPanel) {
+			this.panelX = -212
+			this.panelY = -371
+		}
+	}
+
+	#minimizeConfigPanel = () => {
+		this.isMinimized = !this.isMinimized
+	}
+
+	#updateFabricProperties = () => {
+		// Update all converted fabrics with new values
+		this.convertedFabrics = this.convertedFabrics.map(fabric => ({
+			...fabric,
+			scaleX: this.fabricScaleX,
+			scaleY: this.fabricScaleY,
+			offsetX: this.fabricOffsetX,
+			offsetY: this.fabricOffsetY,
+			coef: this.fabricCoef,
+			rotate: this.fabricRotate,
+		}))
+
+		// Update selected fabrics as well
+		const updatedSelectedFabrics = new Map(this.selectedFabrics)
+		for (const [, blockMap] of updatedSelectedFabrics) {
+			for (const [, fabricMap] of blockMap) {
+				for (const [meshName, fabric] of fabricMap) {
+					fabricMap.set(meshName, {
+						...fabric,
+						scaleX: this.fabricScaleX,
+						scaleY: this.fabricScaleY,
+						offsetX: this.fabricOffsetX,
+						offsetY: this.fabricOffsetY,
+						coef: this.fabricCoef,
+						rotate: this.fabricRotate,
+					})
+				}
+			}
+		}
+		this.selectedFabrics = updatedSelectedFabrics
+
+		console.log('Updated fabric properties:', {
+			scaleX: this.fabricScaleX,
+			scaleY: this.fabricScaleY,
+			offsetX: this.fabricOffsetX,
+			offsetY: this.fabricOffsetY,
+			coef: this.fabricCoef,
+			rotate: this.fabricRotate,
+		})
+		console.log('Updated selected fabrics:', this.selectedFabrics)
+	}
+
+	#handleScaleXChange = (e: Event) => {
+		const value = parseFloat((e.target as HTMLInputElement).value)
+		this.fabricScaleX = isNaN(value) ? 1 : value
+		this.#updateFabricProperties()
+	}
+
+	#handleScaleYChange = (e: Event) => {
+		const value = parseFloat((e.target as HTMLInputElement).value)
+		this.fabricScaleY = isNaN(value) ? 1 : value
+		this.#updateFabricProperties()
+	}
+
+	#handleOffsetXChange = (e: Event) => {
+		const value = parseFloat((e.target as HTMLInputElement).value)
+		this.fabricOffsetX = isNaN(value) ? DEFAULT_TEXTURE_CONFIG.offset[0] : value
+		this.#updateFabricProperties()
+	}
+
+	#handleOffsetYChange = (e: Event) => {
+		const value = parseFloat((e.target as HTMLInputElement).value)
+		this.fabricOffsetY = isNaN(value) ? DEFAULT_TEXTURE_CONFIG.offset[1] : value
+		this.#updateFabricProperties()
+	}
+
+	#handleCoefChange = (e: Event) => {
+		const value = parseFloat((e.target as HTMLInputElement).value)
+		this.fabricCoef = isNaN(value) ? DEFAULT_TEXTURE_CONFIG.coef : value
+		this.#updateFabricProperties()
+	}
+
+	#handleRotateChange = (e: Event) => {
+		const value = parseFloat((e.target as HTMLInputElement).value)
+		this.fabricRotate = isNaN(value) ? DEFAULT_TEXTURE_CONFIG.rotate : value
+		this.#updateFabricProperties()
+	}
+
+	#resetFabricProperties = () => {
+		this.fabricScaleX = 9
+		this.fabricScaleY = 9
+		this.fabricOffsetX = DEFAULT_TEXTURE_CONFIG.offset[0]
+		this.fabricOffsetY = DEFAULT_TEXTURE_CONFIG.offset[1]
+		this.fabricCoef = DEFAULT_TEXTURE_CONFIG.coef
+		this.fabricRotate = DEFAULT_TEXTURE_CONFIG.rotate
+		this.#updateFabricProperties()
+	}
+
+	#handleDragStart = (e: MouseEvent | TouchEvent) => {
+		e.preventDefault()
+		this.isDragging = true
+
+		const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+		const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+
+		const startX = clientX - this.panelX
+		const startY = clientY - this.panelY
+
+		const handleDragMove = (moveEvent: MouseEvent | TouchEvent) => {
+			if (!this.isDragging) return
+
+			const moveClientX = 'touches' in moveEvent ? moveEvent.touches[0].clientX : moveEvent.clientX
+			const moveClientY = 'touches' in moveEvent ? moveEvent.touches[0].clientY : moveEvent.clientY
+
+			this.panelX = moveClientX - startX
+			this.panelY = moveClientY - startY
+		}
+
+		const handleDragEnd = () => {
+			this.isDragging = false
+			document.removeEventListener('mousemove', handleDragMove as EventListener)
+			document.removeEventListener('mouseup', handleDragEnd)
+			document.removeEventListener('touchmove', handleDragMove as EventListener)
+			document.removeEventListener('touchend', handleDragEnd)
+		}
+
+		document.addEventListener('mousemove', handleDragMove as EventListener)
+		document.addEventListener('mouseup', handleDragEnd)
+		document.addEventListener('touchmove', handleDragMove as EventListener)
+		document.addEventListener('touchend', handleDragEnd)
 	}
 
 	template = () => html`
@@ -855,15 +1012,26 @@ export class UploadView extends Element {
 
 		<app-buttons-left class="show-on-desktop">
 			<app-buttons-group>
-				<home-button onclick=${this.#onHomeButtonClick}></home-button>
 				<button class="upload-button" onclick=${this.#handleUploadClick} disabled=${() => this.isUploading}>
 					${() => (this.isUploading ? 'Uploading...' : '📁 Upload Template Folder')}
 				</button>
+				<show-when
+					condition=${() => this.convertedTemplate}
+					content=${() => html`
+						<button class="config-button left" onclick=${this.#toggleConfigPanel}>⚙️ Configure Fabric</button>
+					`}
+				></show-when>
 			</app-buttons-group>
 		</app-buttons-left>
 
 		<app-buttons-right class="show-on-mobile" layout="bottom">
 			<app-buttons-group>
+				<show-when
+					condition=${() => this.convertedTemplate}
+					content=${() => html`
+						<button class="config-button" onclick=${this.#toggleConfigPanel}>⚙️ Configure</button>
+					`}
+				></show-when>
 				<button class="upload-button" onclick=${this.#handleUploadClick} disabled=${() => this.isUploading}>
 					${() => (this.isUploading ? 'Uploading...' : '📁 Upload Template Folder')}
 				</button>
@@ -871,6 +1039,171 @@ export class UploadView extends Element {
 		</app-buttons-right>
 
 		${() => this.uploadProgress && html` <div class="upload-progress">${this.uploadProgress}</div> `}
+
+		<show-when
+			condition=${() => this.showConfigPanel && this.convertedTemplate}
+			content=${() => html`
+				<div class="config-panel" style=${() => `transform: translate(${this.panelX}px, ${this.panelY}px);`}>
+					<div class="config-panel-header" onmousedown=${this.#handleDragStart} ontouchstart=${this.#handleDragStart}>
+						<h3>Fabric Configuration</h3>
+						<div class="config-panel-header-right">
+							<button class="minimize-button" onclick=${this.#minimizeConfigPanel}>
+								${() => (this.isMinimized ? '📂' : '📁')}
+							</button>
+							<button class="close-button" onclick=${this.#toggleConfigPanel}>❌</button>
+						</div>
+					</div>
+					<show-when
+						condition=${() => !this.isMinimized}
+						content=${() => html`
+							<div class="config-panel-content">
+								<div class="config-row">
+									<div class="config-row-label">
+										<label for="scale-x">Scale X:</label>
+										<input
+											id="scale-x"
+											type="number"
+											min="-99"
+											max="99"
+											step="1"
+											value=${() => this.fabricScaleX}
+											oninput=${this.#handleScaleXChange}
+										/>
+									</div>
+									<input
+										id="scale-x"
+										type="range"
+										min="-99"
+										max="99"
+										step="1"
+										value=${() => this.fabricScaleX}
+										oninput=${this.#handleScaleXChange}
+									/>
+								</div>
+								<div class="config-row">
+									<div class="config-row-label">
+										<label for="scale-y">Scale Y:</label>
+										<input
+											id="scale-y"
+											type="number"
+											min="-99"
+											max="99"
+											step="1"
+											value=${() => this.fabricScaleY}
+											oninput=${this.#handleScaleYChange}
+										/>
+									</div>
+									<input
+										id="scale-y"
+										type="range"
+										min="-99"
+										max="99"
+										step="1"
+										value=${() => this.fabricScaleY}
+										oninput=${this.#handleScaleYChange}
+									/>
+								</div>
+								<div class="config-row">
+									<div class="config-row-label">
+										<label for="offset-x">Offset X:</label>
+										<input
+											id="offset-x"
+											type="number"
+											min="0"
+											max="1"
+											step="0.0.1"
+											value=${() => this.fabricOffsetX}
+											oninput=${this.#handleOffsetXChange}
+										/>
+									</div>
+									<input
+										id="offset-x"
+										type="range"
+										min="0"
+										max="1"
+										step="0.01"
+										value=${() => this.fabricOffsetX}
+										oninput=${this.#handleOffsetXChange}
+									/>
+								</div>
+								<div class="config-row">
+									<div class="config-row-label">
+										<label for="offset-y">Offset Y:</label>
+										<input
+											id="offset-y"
+											type="number"
+											min="0"
+											max="1"
+											step="0.01"
+											value=${() => this.fabricOffsetY}
+											oninput=${this.#handleOffsetYChange}
+										/>
+									</div>
+									<input
+										id="offset-y"
+										type="range"
+										min="0"
+										max="1"
+										step="0.01"
+										value=${() => this.fabricOffsetY}
+										oninput=${this.#handleOffsetYChange}
+									/>
+								</div>
+								<div class="config-row">
+									<div class="config-row-label">
+										<label for="coef">Coefficient:</label>
+										<input
+											id="coef"
+											type="number"
+											min="0.1"
+											max="1000"
+											step="0.1"
+											value=${() => this.fabricCoef}
+											oninput=${this.#handleCoefChange}
+										/>
+									</div>
+									<input
+										id="coef"
+										type="range"
+										min="0.1"
+										max="1000"
+										step="0.1"
+										value=${() => this.fabricCoef}
+										oninput=${this.#handleCoefChange}
+									/>
+								</div>
+								<div class="config-row">
+									<div class="config-row-label">
+										<label for="rotate">Rotation:</label>
+										<input
+											id="rotate"
+											type="number"
+											min="0"
+											max="6.28"
+											step="0.1"
+											value=${() => this.fabricRotate}
+											oninput=${this.#handleRotateChange}
+										/>
+									</div>
+									<input
+										id="rotate"
+										type="range"
+										min="0"
+										max="6.28"
+										step="0.1"
+										value=${() => this.fabricRotate}
+										oninput=${this.#handleRotateChange}
+									/>
+								</div>
+								<div class="config-actions">
+									<button class="reset-button" onclick=${this.#resetFabricProperties}>Reset to Default</button>
+								</div>
+							</div>
+						`}
+					></show-when>
+				</div>
+			`}
+		></show-when>
 
 		<bottom-sheet>
 			<show-when
@@ -950,6 +1283,45 @@ export class UploadView extends Element {
 			cursor: not-allowed;
 		}
 
+		.config-row-label {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			justify-content: space-between;
+			width: 100%;
+
+			input[type='number'] {
+				width: 50px;
+			}
+		}
+
+		.config-button {
+			background: #28a745;
+			color: white;
+			border: none;
+			border-radius: 8px;
+			padding: 12px 24px;
+			font-size: 14px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			min-width: 140px;
+			justify-content: center;
+		}
+
+		.config-button.left {
+			margin-left: 0;
+			margin-right: auto;
+		}
+
+		.config-button:hover {
+			background: #218838;
+			transform: translateY(-1px);
+		}
+
 		.upload-progress {
 			position: fixed;
 			bottom: 20px;
@@ -961,6 +1333,144 @@ export class UploadView extends Element {
 			font-weight: 500;
 			z-index: 1000;
 			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		}
+
+		.config-panel {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: white;
+			border-radius: 12px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+			z-index: 1001;
+			min-width: 400px;
+			max-width: 90vw;
+			transition: box-shadow 0.2s ease;
+		}
+
+		.config-panel:has(.config-panel-header:active) {
+			box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+		}
+
+		.config-panel-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px 24px 16px;
+			border-bottom: 1px solid #e9ecef;
+			cursor: move;
+			cursor: grab;
+			user-select: none;
+		}
+
+		.config-panel-header:active {
+			cursor: grabbing;
+		}
+
+		.config-panel-header h3 {
+			margin: 0;
+			color: #343a40;
+			font-size: 18px;
+			font-weight: 600;
+		}
+
+		.config-panel-header-right {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.minimize-button {
+			background: none;
+			border: none;
+			font-size: 18px;
+			color: #6c757d;
+			cursor: pointer;
+		}
+
+		.minimize-button:hover {
+			background: #f8f9fa;
+			color: #495057;
+		}
+
+		.close-button {
+			background: none;
+			border: none;
+			font-size: 18px;
+			color: #6c757d;
+			cursor: pointer;
+			padding: 4px;
+			border-radius: 4px;
+			transition: all 0.2s ease;
+			z-index: 1;
+			position: relative;
+		}
+
+		.close-button:hover {
+			background: #f8f9fa;
+			color: #495057;
+		}
+
+		.config-panel-content {
+			padding: 24px;
+		}
+
+		.config-row {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+
+		.config-row:last-child {
+			margin-bottom: 0;
+		}
+
+		.config-row label {
+			font-weight: 500;
+			color: #495057;
+			font-size: 14px;
+		}
+
+		.config-row input {
+			width: 100%;
+			padding: 8px 0px;
+			border: 1px solid #ced4da;
+			border-radius: 6px;
+			font-size: 14px;
+			text-align: right;
+		}
+
+		.config-row input:focus {
+			outline: none;
+			border-color: #007bff;
+			box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+		}
+
+		.config-actions {
+			margin-top: 24px;
+			padding-top: 20px;
+			border-top: 1px solid #e9ecef;
+		}
+
+		.reset-button {
+			width: 100%;
+			background: #6c757d;
+			color: white;
+			border: none;
+			border-radius: 6px;
+			padding: 10px 16px;
+			font-size: 14px;
+			font-weight: 500;
+			cursor: pointer;
+			transition: all 0.2s ease;
+		}
+
+		.reset-button:hover {
+			background: #5a6268;
 		}
 
 		.tabs-container {
@@ -1150,6 +1660,32 @@ export class UploadView extends Element {
 			.items-grid {
 				grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
 				gap: 12px;
+			}
+
+			.config-panel {
+				min-width: unset;
+				width: 90vw;
+				max-width: 400px;
+			}
+
+			.config-panel-header {
+				padding: 16px 20px 12px;
+			}
+
+			.config-panel-content {
+				padding: 20px;
+			}
+
+			.config-row {
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 8px;
+				margin-bottom: 16px;
+			}
+
+			.config-row input {
+				width: 100%;
+				text-align: left;
 			}
 		}
 	`

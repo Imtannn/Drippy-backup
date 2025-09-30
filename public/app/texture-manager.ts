@@ -8,6 +8,13 @@ export interface TextureConfig {
 	rotate: number
 }
 
+export const DEFAULT_TEXTURE_CONFIG: TextureConfig = {
+	repeat: [60 / 9, 60 / 9],
+	coef: 1000,
+	offset: [0, 0],
+	rotate: 0,
+}
+
 export interface TextureSet {
 	baseColor?: THREE.Texture
 	normal?: THREE.Texture
@@ -25,12 +32,7 @@ export interface CachedTexture {
 class TextureManager {
 	private textureCache = new Map<string, CachedTexture>()
 	private loadingPromises = new Map<string, Promise<CachedTexture | null>>()
-	private defaultConfig: TextureConfig = {
-		repeat: [60 / 9, 60 / 9],
-		coef: 1,
-		offset: [1, 1],
-		rotate: 0,
-	}
+	private defaultConfig: TextureConfig = DEFAULT_TEXTURE_CONFIG
 
 	/**
 	 * Create a base THREE.js texture from URL without any scaling applied
@@ -74,7 +76,7 @@ class TextureManager {
 
 					resolve({
 						texture,
-						originalRepeat: [60 / 3, 60 / 3], // Store default repeat
+						originalRepeat: this.defaultConfig.repeat,
 						aspectRatio,
 					})
 				} catch (error) {
@@ -96,11 +98,11 @@ class TextureManager {
 	/**
 	 * Get base texture with caching (no config-specific scaling)
 	 */
-	private async getBaseTexture(url: string): Promise<CachedTexture | null> {
+	private async getBaseTexture(url: string, config: TextureConfig): Promise<CachedTexture | null> {
 		if (!url) return null
 
 		// Use URL only as cache key
-		const cacheKey = url
+		const cacheKey = `${url}-${config.coef}-${config.offset[0]}-${config.offset[1]}-${config.rotate}-${config.repeat[0]}-${config.repeat[1]}`
 
 		// Return cached texture if available
 		if (this.textureCache.has(cacheKey)) {
@@ -169,7 +171,7 @@ class TextureManager {
 	 * Get texture with specific configuration applied
 	 */
 	async getTexture(url: string, config: TextureConfig): Promise<THREE.Texture | null> {
-		const cachedTexture = await this.getBaseTexture(url)
+		const cachedTexture = await this.getBaseTexture(url, config)
 		if (!cachedTexture) return null
 
 		return this.configureTexture(cachedTexture, config)
@@ -181,11 +183,11 @@ class TextureManager {
 	async preloadFabricBaseTextures(fabric: Fabric): Promise<(CachedTexture | null)[]> {
 		// Just load base textures into cache, no configuration needed
 		return await Promise.all([
-			this.getBaseTexture(fabric.baseColor || ''),
-			this.getBaseTexture(fabric.normal || ''),
-			this.getBaseTexture(fabric.displacement || ''),
-			this.getBaseTexture(fabric.roughness || ''),
-			this.getBaseTexture(fabric.alpha || ''),
+			this.getBaseTexture(fabric.baseColor || '', this.defaultConfig),
+			this.getBaseTexture(fabric.normal || '', this.defaultConfig),
+			this.getBaseTexture(fabric.displacement || '', this.defaultConfig),
+			this.getBaseTexture(fabric.roughness || '', this.defaultConfig),
+			this.getBaseTexture(fabric.alpha || '', this.defaultConfig),
 		])
 	}
 
@@ -193,7 +195,25 @@ class TextureManager {
 	 * Preload fabric textures using default configuration
 	 */
 	async preloadFabricTextures(fabric: Fabric): Promise<TextureSet> {
-		const config = this.defaultConfig
+		const config = {...this.defaultConfig}
+		if (fabric.scaleX) {
+			config.repeat[0] = 60 / fabric.scaleX
+		}
+		if (fabric.scaleY) {
+			config.repeat[1] = 60 / fabric.scaleY
+		}
+		if (fabric.offsetX) {
+			config.offset[0] = fabric.offsetX
+		}
+		if (fabric.offsetY) {
+			config.offset[1] = fabric.offsetY
+		}
+		if (fabric.coef) {
+			config.coef = fabric.coef
+		}
+		if (fabric.rotate) {
+			config.rotate = fabric.rotate
+		}
 
 		const [baseColor, normal, displacement, roughness, alpha] = await Promise.all([
 			this.getTexture(fabric.baseColor || '', config),
@@ -216,10 +236,26 @@ class TextureManager {
 	 * Load fabric textures with UV-aware configuration
 	 */
 	async loadFabricTexturesWithUV(fabric: Fabric, uvArray: number[]): Promise<TextureSet> {
-		const coef = this.calculateCoef(uvArray)
+		const defaultCoef = this.calculateCoef(uvArray)
 		const config: TextureConfig = {
 			...this.defaultConfig,
-			coef,
+			coef: fabric.coef || defaultCoef,
+		}
+
+		if (fabric.scaleX) {
+			config.repeat[0] = 60 / fabric.scaleX
+		}
+		if (fabric.scaleY) {
+			config.repeat[1] = 60 / fabric.scaleY
+		}
+		if (fabric.offsetX) {
+			config.offset[0] = fabric.offsetX
+		}
+		if (fabric.offsetY) {
+			config.offset[1] = fabric.offsetY
+		}
+		if (fabric.rotate) {
+			config.rotate = fabric.rotate
 		}
 
 		const [baseColor, normal, displacement, roughness, alpha] = await Promise.all([
