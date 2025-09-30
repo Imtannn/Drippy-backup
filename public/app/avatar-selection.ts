@@ -58,6 +58,11 @@ export class AvatarSelection extends Element {
 		const searchParams = new URLSearchParams(window.location.search)
 		searchParams.set('avatar', value)
 		updateUrlWithParams(searchParams)
+
+		// Force the setter to trigger even if the value is the same
+		if (store.selectedAvatar === value) {
+			store.selectedAvatar = null
+		}
 		store.selectAvatar = value
 	}
 
@@ -92,8 +97,12 @@ export class AvatarSelection extends Element {
 							items=${() => avatars.filter(avatar => avatar.gender === 'female')}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
-									class=${() => ((this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value ? 'item-preview' : '')}
-									item-active=${() => (this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value}
+									class=${() =>
+										(this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value
+											? 'item-preview'
+											: ''}
+									item-active=${() =>
+										(this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value}
 									item-src=${avatar.thumbnail}
 									item-alt=${avatar.value}
 									item-value=${avatar.value}
@@ -114,8 +123,12 @@ export class AvatarSelection extends Element {
 							items=${() => avatars.filter(avatar => avatar.gender === 'male')}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
-									class=${() => ((this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value ? 'item-preview' : '')}
-									item-active=${() => (this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value}
+									class=${() =>
+										(this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value
+											? 'item-preview'
+											: ''}
+									item-active=${() =>
+										(this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value}
 									item-src=${avatar.thumbnail}
 									item-alt=${avatar.value}
 									item-value=${avatar.value}

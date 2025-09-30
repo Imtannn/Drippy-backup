@@ -2,6 +2,8 @@ import {Meteor} from 'meteor/meteor'
 import {createSignal} from 'solid-js'
 import {Session} from 'meteor/session'
 import {effect} from './meteor-signals.js'
+import type {BlockCategory} from './types/block.js'
+import type {Fabric} from './types/fabric.js'
 import type {Template, TemplateCategory} from './types/template.js'
 
 // We'll keep the title up to date once we add routing. For now it is constant.
@@ -86,6 +88,33 @@ export const updateGarmentsInUrl = (garments: Map<TemplateCategory, Template>) =
 		currentUrl.searchParams.set('garments', garmentIds.join(','))
 	} else {
 		currentUrl.searchParams.delete('garments')
+	}
+
+	// Update URL without triggering page reload
+	history.replaceState({}, '', currentUrl.toString())
+}
+
+export const updateFabricsInUrl = (fabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>) => {
+	const currentUrl = new URL(location.href)
+
+	if (fabrics.size > 0) {
+		const fabricEntries: string[] = []
+
+		for (const [templateCategory, blockMap] of fabrics.entries()) {
+			for (const [blockCategory, pieceMap] of blockMap.entries()) {
+				for (const [piece, fabric] of pieceMap.entries()) {
+					fabricEntries.push(`${templateCategory}-${blockCategory}-${piece}:${fabric._id}`)
+				}
+			}
+		}
+
+		if (fabricEntries.length > 0) {
+			currentUrl.searchParams.set('fabrics', fabricEntries.join(','))
+		} else {
+			currentUrl.searchParams.delete('fabrics')
+		}
+	} else {
+		currentUrl.searchParams.delete('fabrics')
 	}
 
 	// Update URL without triggering page reload

@@ -696,6 +696,11 @@ export class DrippyScene extends Element {
 			min-height: 100vh;
 			touch-action: none;
 			position: relative;
+			/* iOS specific fixes */
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+			-webkit-transform: translateZ(0);
+			transform: translateZ(0);
 		}
 
 		#lume-scene-container {
@@ -703,28 +708,44 @@ export class DrippyScene extends Element {
 			height: 100%;
 			min-height: 100vh;
 			transition: transform var(--transitionFast);
+			-webkit-transition: transform var(--transitionFast);
+			/* iOS specific fixes */
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+			-webkit-transform: translateZ(0);
+			transform: translateZ(0);
 		}
 
 		:host-context(.showcase__model-center) lume-scene {
 			transform: unset !important;
+			-webkit-transform: unset !important;
 			transition: unset !important;
+			-webkit-transition: unset !important;
 		}
 
 		lume-scene {
 			transform: var(--scene-transform);
+			-webkit-transform: var(--scene-transform);
 			transition: transform var(--transitionFast);
+			-webkit-transition: transform var(--transitionFast);
+			/* iOS specific fixes */
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
 		}
 
 		@media (max-width: 767px) {
 			:host-context(.showcase__model-center) #lume-scene-container {
 				transform: unset !important;
+				-webkit-transform: unset !important;
 			}
 			#lume-scene-container {
 				transform: var(--scene-desktop-transform);
+				-webkit-transform: var(--scene-desktop-transform);
 			}
 
 			lume-scene {
 				transform: translateX(0);
+				-webkit-transform: translateX(0);
 			}
 		}
 	`

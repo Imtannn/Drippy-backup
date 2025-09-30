@@ -1,7 +1,7 @@
 import {html} from 'lume'
+import {createSignal} from 'solid-js'
 import '../elements/avatar-selector.js'
 import '../elements/custom-button.js'
-import {createSignal, createEffect} from 'solid-js'
 import '../routes.js' // track page visits
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
@@ -13,113 +13,59 @@ import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import type {BlockCategory} from '../types/block.js'
 
-// Materials data
-const materials = {
-	male: [
-		{
-			id: '6',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_RENDER.webp',
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_NORMAL.jpg',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_BASE.jpg',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_DISPLACE.jpg',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_ROUGH.jpg',
-			alpha: '',
-			materialName: 'Navy',
-			category: 'Polyester',
-			templateCategories: ['Top', 'Pants'],
-		},
-		{
-			id: '7',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/_COTTON_-_LAVENDER_BLUE_-_RENDER.webp',
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON_-_LAVENDER_BLUE_-_NORMAL.jpg',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON_-_LAVENDER_BLUE_-_BASE.jpg',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON__-_LAVENDER_BLUE_-_DISPLACE.jpg',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE/COTTON_-_LAVENDER_BLUE_-_ROUGH.jpg',
-			alpha: '',
-			materialName: 'Lavender Blue',
-			category: 'Cotton',
-			templateCategories: ['Top'],
-		},
-		{
-			id: '9',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_RENDER.webp',
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_NORMAL.jpg',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_BASE.jpg',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_DISPLACE.jpg',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_ROUGH.jpg',
-			alpha: '',
-			materialName: 'Tanktop',
-			category: 'Striped',
-			templateCategories: ['Top'],
-		},
-	],
-	female: [
-		{
-			id: '5',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_RENDER.png',
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_12/SEERSUCKER_FABRIC_-_BLACK_-_ROUGH.jpg',
-			alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/SEERSUCKER+FABRIC+-+OPACITY.jpg',
-			materialName: 'Black',
-			category: 'Seersucker Fabric',
-			templateCategories: ['Shirt'],
-		},
-		{
-			id: '6',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_RENDER.png',
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Material_11/COTTON_-_WHITE_-_ROUGH.jpg',
-			materialName: 'White',
-			category: 'Cotton',
-			templateCategories: ['Shirt'],
-		},
-		{
-			id: '7',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_RENDER.png',
-			normal:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_NORMAL.jpg',
-			baseColor:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_BASE.jpg',
-			displacement:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_DISPLACE.jpg',
-			roughness:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/Shirt/Materials_8/CRINKLE_FABRIC_-_NAVY_-_ROUGH.jpg',
-			materialName: 'Navy',
-			category: 'Crinkle Fabric',
-			templateCategories: ['Shirt'],
-		},
-	],
-}
+const materials = [
+	{
+		id: '6',
+		thumb:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_RENDER.webp',
+		normal:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_NORMAL.jpg',
+		baseColor:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_BASE.jpg',
+		displacement:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_DISPLACE.jpg',
+		roughness:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_ROUGH.jpg',
+		alpha: '',
+		materialName: 'Navy',
+		category: 'Polyester',
+		templateCategories: ['Top'],
+	},
+	{
+		id: '9',
+		thumb:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_RENDER.webp',
+		normal:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_NORMAL.jpg',
+		baseColor:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_BASE.jpg',
+		displacement:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_DISPLACE.jpg',
+		roughness:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_ROUGH.jpg',
+		alpha: '',
+		materialName: 'Tanktop',
+		category: 'Striped',
+		templateCategories: ['Top'],
+	},
+	{
+		id: '8',
+		thumb:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_RENDER.webp',
+		normal:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_NORMAL.jpg',
+		baseColor:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_BASE.jpg',
+		displacement:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_DISPLACE.jpg',
+		roughness:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_ROUGH.jpg',
+		alpha: '',
+		materialName: 'Orange',
+		category: 'Cotton',
+		templateCategories: ['Top'],
+	},
+]
 // Show video loading initially
 function showVideoLoading() {
 	const videoLoadingElement = html`<video-loading></video-loading>`
@@ -135,19 +81,16 @@ function hideVideoLoading(videoLoadingElement: any) {
 }
 const [isYearlyActive, setIsYearlyActive] = createSignal(true)
 
-// Tạo signal để track current materials
-const [currentMaterials, setCurrentMaterials] = createSignal(materials.male as any)
+const currentMaterials = materials
 
-// Effect để update materials khi avatar thay đổi
-createEffect(() => {
-	const currentAvatar = store.selectedAvatar || store.tempSelectedAvatar
-	const isMale = currentAvatar === 'luka' || !currentAvatar
-	setCurrentMaterials((isMale ? materials.male : materials.female) as any)
-})
+function handleMaterialClick(material: (typeof materials)[0]) {
+	const fabricData: {
+		fabric: Fabric
+		blockCategory: BlockCategory
+		templateCategory: TemplateCategory
+		assignedMesh: string
+	}[] = []
 
-// Handle material click to set selectedFabrics
-function handleMaterialClick(material: (typeof materials.male)[0] | (typeof materials.female)[0]) {
-	const fabricData = []
 	// Convert material to Fabric format
 	const fabric: Fabric = {
 		_id: material.id,
@@ -162,12 +105,14 @@ function handleMaterialClick(material: (typeof materials.male)[0] | (typeof mate
 		templateCategories: material.templateCategories,
 	}
 
-	// Set fabric for Shirt template and Bodice block category
+	// Set fabric for Top template and Bodice block category
 	fabricData.push({
 		fabric: fabric,
 		blockCategory: 'Bodice' as BlockCategory,
-		templateCategory: 'Shirt' as TemplateCategory,
+		templateCategory: 'Top' as TemplateCategory,
+		assignedMesh: '42-44-31-23-6-9-41-27', // Use the same mesh key as existing fabric
 	})
+
 	if (fabricData.length > 0) {
 		store.setSelectedFabrics = fabricData
 	}
@@ -397,18 +342,17 @@ const mainContent = html`
 									<div class="showcase__item">
 										<div class="showcase__background">
 											<div class="showcase__controls">
-												${() =>
-													currentMaterials().map(
-														(material: any) => html`
-															<div
-																class="showcase__avatar-option"
-																data-material-id=${material.id}
-																onclick=${() => handleMaterialClick(material)}
-															>
-																<img src=${material.thumb} alt=${material.materialName} />
-															</div>
-														`,
-													)}
+												${currentMaterials.map(
+													(material: any) => html`
+														<div
+															class="showcase__avatar-option"
+															data-material-id=${material.id}
+															onclick=${() => handleMaterialClick(material)}
+														>
+															<img src=${material.thumb} alt=${material.materialName} />
+														</div>
+													`,
+												)}
 											</div>
 
 											<avatar-selector target-model=".showcase__avatar-model" class="showcase__selector"></avatar-selector>
@@ -701,14 +645,6 @@ const mainContent = html`
 												</p>
 												<p class="pricing__plan-price--pro">
 													<span class="pricing__plan-feature list-type text-md">Analytics dashboard<br /></span>
-												</p>
-												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature--highlight text-md">Add-on: <br /></span>
-												</p>
-												<p class="pricing__plan-price--pro">
-													<span class="pricing__plan-feature text-md">Includes</span>
-													<span class="pricing__plan-feature--highlight text-md"> 1 growth pack/year </span>
-													<span class="pricing__plan-feature text-md"> (24 garments = €840 value).</span>
 												</p>
 											</div>
 										</div>
