@@ -400,7 +400,6 @@ export class DrippyScene extends Element {
 			}
 
 			onCleanup(() => {
-				console.log('onCleanup')
 				shouldCancel = true
 				// Cleanup: Remove all tracked material loading symbols
 				for (const loadingId of materialLoadingSymbols) {
