@@ -29,12 +29,12 @@ export class BuyButton extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			gap: 5px;
+			gap: var(--uiGapSmall);
 			padding: 8.5px 20.5px;
-			border-radius: 100px;
-			color: #ffffff;
-			background-color: #121316;
-			box-shadow: 0px 1px 2px 0px #ffffff40 inset;
+			border-radius: var(--borderRadiusPill);
+			color: var(--uiColorPrimaryWhite);
+			background-color: var(--uiColorPrimaryBlack);
+			box-shadow: 0px 1px 2px 0px var(--uiColorWhiteShadow) inset;
 			cursor: pointer;
 			border: none;
 			outline: none;
