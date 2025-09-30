@@ -286,7 +286,8 @@ export class LoginUI extends LumeElement {
 			display: block;
 
 			#login-email-label,
-			#login-password-label {
+			#login-password-label,
+			#forgot-password-email-label {
 				display: none;
 			}
 
@@ -352,7 +353,7 @@ export class LoginUI extends LumeElement {
 				input[type='password'] {
 					width: 100%;
 					height: var(--uiSpacingXl);
-					padding: var(--uiGapSmall);
+					padding: var(--uiGapLarge);
 					border-radius: var(--borderRadiusXxl);
 					font-size: var(--fontSizeTextSm);
 					margin-bottom: var(--uiGap);
@@ -363,10 +364,10 @@ export class LoginUI extends LumeElement {
 
 					&:focus {
 						outline: none;
-						border: var(--borderWidth) solid transparent;
+						border: var(--borderWidth) solid transparent !important;
 						background:
 							linear-gradient(white, white) padding-box,
-							linear-gradient(45deg, #e56be8, #495cff) border-box;
+							linear-gradient(45deg, #e56be8, #495cff) border-box !important;
 					}
 
 					&::placeholder {
