@@ -26,13 +26,13 @@ export class VideoLoading extends Element {
 					this.videoError = false
 				})
 
-				video.addEventListener('error', e => {
+				video.addEventListener('error', () => {
 					this.videoError = true
 				})
 
 				video.addEventListener('canplay', () => {
 					if (video.paused) {
-						video.play().catch(e => {
+						video.play().catch(() => {
 							this.videoError = true
 						})
 					}
