@@ -344,10 +344,8 @@ export class DrippyScene extends Element {
 		})
 
 		// Re-apply materials whenever the selected fabrics change or models mount
-		this.createEffect(async () => {
+		this.createEffect(() => {
 			const selectedFabrics = this.selectedFabrics
-			// Add a delay of 100ms to ensure the lume-gltf-model are in the DOM
-			await new Promise(resolve => setTimeout(resolve, 100))
 
 			// Cause reactive re-run when the number of blocks changes
 			if (this.renderBlocks.length === 0) {
