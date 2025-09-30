@@ -36,6 +36,8 @@ export type Fabric = {
 	scaleY?: number
 	offsetX?: number
 	offsetY?: number
+	coef?: number
+	rotate?: number
 
 	materialName: string
 	category?: FabricCategory
