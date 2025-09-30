@@ -117,4 +117,8 @@ export type OrderData = {
 		postalCode?: string
 		phone: string
 	}
+
+	designUrl?: string
+
+	spaceDescription?: string
 }
