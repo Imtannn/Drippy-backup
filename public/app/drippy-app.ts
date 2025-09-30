@@ -1,4 +1,5 @@
 import {css, Element, element, html, signal} from 'lume'
+import {fabrics} from '../consts/fabrics.js'
 import {spaces} from '../consts/spaces.js'
 import {templates} from '../consts/templates.js'
 import '../elements/logic/show-when.js'
@@ -6,8 +7,13 @@ import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
 import '../routes.js' // track page visits
+import type {Block, BlockCategory} from '../types/block.js'
+import type {Fabric} from '../types/fabric.js'
+import type {Template, TemplateCategory} from '../types/template.js'
+import type {Space} from '../types/types.js'
 import './app-guard.js'
 import './avatar-selection.js'
+import {blockManager} from './block-manager.js'
 import './blocks-selection.js'
 import './custom-measurement.js'
 import './drippy-scene.js'
@@ -20,11 +26,6 @@ import './spaces-selection.js'
 import {store} from './store.js'
 import './success-view.js'
 import './template-view.js'
-import {blockManager} from './block-manager.js'
-import type {Template, TemplateCategory} from '../types/template.js'
-import type {Block, BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
-import type {Space} from '../types/types.js'
 
 @element
 export class DrippyApp extends Element {
@@ -70,37 +71,8 @@ export class DrippyApp extends Element {
 					}
 				}
 
-				// Load garments from URL parameters if present
-				const garmentsParam = searchParams.get('garments')
-				if (garmentsParam && store.selectedSpace && store.selectedTemplates.size === 0) {
-					const garmentIds = garmentsParam.split(',')
-					const spaceTemplates = templates[store.selectedSpace.collection]
-
-					if (spaceTemplates) {
-						const templates = new Map<TemplateCategory, Template>()
-						const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-						const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
-
-						// Find and select each garment by ID
-						for (const garmentId of garmentIds) {
-							const template = spaceTemplates.find(t => t._id === garmentId.trim())
-							if (template) {
-								templates.set(template.category, template)
-								const templateBlockData = blockManager.convertTemplateToBlockData(template, space!)
-								const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
-									templateBlockData,
-									space!,
-								)
-								newBlocks.set(template.category, newBlocksMap)
-								newFabrics.set(template.category, newFabricsMap)
-							}
-						}
-
-						store.selectedFabrics = newFabrics
-						store.selectedBlocks = newBlocks
-						store.selectedTemplates = templates
-					}
-				}
+				// Load garments and fabrics from URL parameters if present
+				this.#loadFromUrlParameters(searchParams, space!)
 
 				if (store.isPreview || isPreview === 'true') {
 					store.navigateTo = 'preview'
@@ -129,6 +101,58 @@ export class DrippyApp extends Element {
 				this.showLoadingCover = false
 			}
 		})
+	}
+
+	/**
+	 * Load garments and fabrics from URL parameters
+	 * @param searchParams - URL search parameters
+	 * @param space - Selected space
+	 */
+	#loadFromUrlParameters(searchParams: URLSearchParams, space: Space) {
+		const garmentsParam = searchParams.get('garments')
+		const fabricsParam = searchParams.get('fabrics')
+
+		if ((garmentsParam || fabricsParam) && store.selectedSpace && store.selectedTemplates.size === 0) {
+			const spaceTemplates = templates[store.selectedSpace.collection]
+			const spaceFabrics = fabrics[store.selectedSpace.collection]
+
+			if (spaceTemplates) {
+				const templates = new Map<TemplateCategory, Template>()
+				const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+				const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+
+				const fabricOverrides =
+					fabricsParam && spaceFabrics
+						? blockManager.buildFabricOverridesFromUrl(fabricsParam, spaceFabrics)
+						: new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+
+				// Load garments if present
+				if (garmentsParam) {
+					const garmentIds = garmentsParam.split(',')
+					for (const garmentId of garmentIds) {
+						const template = spaceTemplates.find(t => t._id === garmentId.trim())
+						if (template) {
+							templates.set(template.category, template)
+							const templateBlockData = blockManager.convertTemplateToBlockData(template, space)
+
+							const templateFabricOverrides = fabricOverrides.get(template.category)
+
+							const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
+								templateBlockData,
+								space,
+								templateFabricOverrides,
+							)
+							newBlocks.set(template.category, newBlocksMap)
+							newFabrics.set(template.category, newFabricsMap)
+						}
+					}
+				}
+
+				store.selectedFabrics = newFabrics
+				store.selectedBlocks = newBlocks
+				store.selectedTemplates = templates
+			}
+		}
 	}
 
 	template = () => html`
