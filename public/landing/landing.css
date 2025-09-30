@@ -2177,7 +2177,7 @@ p {
 		display: none !important;
 	}
 	.landing-page-desktop .hero-header {
-		padding: 100px 20px 0px;
+		padding: 110px 20px 0px;
 		min-height: 825px;
 	}
 	.landing-page-desktop .hero-header .bg-background {
@@ -2576,13 +2576,13 @@ p {
 		top: 3px;
 	}
 	.landing-page-desktop .cta__cone-image--2 {
-		top: 0.7%;
+		top: 0.6%;
 	}
 	.landing-page-desktop .cta__cone-image--3 {
 		top: 7%;
 	}
 	.landing-page-desktop .cta__cone-image--4 {
-		top: 26%;
+		top: 25.7%;
 	}
 }
 
