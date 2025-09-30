@@ -9,7 +9,7 @@ import {
 } from '@lume/element'
 import {onCleanup} from 'solid-js'
 import html from 'solid-js/html'
-import {hasDescendant, querySelectorDeep} from '../utils.js'
+import {hasDescendant, querySelectorAllDeep, querySelectorDeep} from '../utils.js'
 import './blaze-component.js'
 
 // Props that the Blaze loginButtons template accepts.
@@ -56,14 +56,24 @@ export class LoginUI extends LumeElement {
 		// Set placeholders for email and password inputs
 		const setPlaceholders = () => {
 			const emailInput = querySelectorDeep(document, 'input[type="email"]') as HTMLInputElement | null
-			const passwordInput = querySelectorDeep(document, 'input[type="password"]') as HTMLInputElement | null
+			const passwordInputs = querySelectorAllDeep(document, 'input[type="password"]') as HTMLInputElement[]
 
 			if (emailInput && !emailInput.placeholder) {
 				emailInput.placeholder = 'Email'
 			}
-			if (passwordInput && !passwordInput.placeholder) {
-				passwordInput.placeholder = 'Password'
-			}
+
+			passwordInputs.forEach(passwordInput => {
+				if (!passwordInput.placeholder) {
+					// Set different placeholders based on the input's purpose
+					if (passwordInput.id.includes('old') || passwordInput.autocomplete === 'current-password') {
+						passwordInput.placeholder = 'Current Password'
+					} else if (passwordInput.autocomplete === 'new-password') {
+						passwordInput.placeholder = 'New Password'
+					} else {
+						passwordInput.placeholder = 'Password'
+					}
+				}
+			})
 		}
 
 		// Set placeholders after Blaze renders the inputs
@@ -286,7 +296,9 @@ export class LoginUI extends LumeElement {
 			display: block;
 
 			#login-email-label,
-			#login-password-label {
+			#login-password-label,
+			#forgot-password-email-label,
+			#login-old-password-label {
 				display: none;
 			}
 
@@ -352,7 +364,7 @@ export class LoginUI extends LumeElement {
 				input[type='password'] {
 					width: 100%;
 					height: var(--uiSpacingXl);
-					padding: var(--uiGapSmall);
+					padding: var(--uiGapLarge);
 					border-radius: var(--borderRadiusXxl);
 					font-size: var(--fontSizeTextSm);
 					margin-bottom: var(--uiGap);
@@ -363,10 +375,10 @@ export class LoginUI extends LumeElement {
 
 					&:focus {
 						outline: none;
-						border: var(--borderWidth) solid transparent;
+						border: var(--borderWidth) solid transparent !important;
 						background:
 							linear-gradient(white, white) padding-box,
-							linear-gradient(45deg, #e56be8, #495cff) border-box;
+							linear-gradient(45deg, #e56be8, #495cff) border-box !important;
 					}
 
 					&::placeholder {

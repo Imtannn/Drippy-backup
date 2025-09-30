@@ -2,50 +2,50 @@ import {attribute, css, Element, element, html, signal} from 'lume'
 import {store} from '../app/store.js'
 import {avatars} from '../consts/avatars.js'
 import {fabrics} from '../consts/fabrics.js'
+import {spaces} from '../consts/spaces.js'
 import {templates} from '../consts/templates.js'
 import type {TemplateCategory} from '../types/template.js'
 import type {Block} from '../types/block.js'
-// import type {Fabric} from '../types/fabric.js'
 
 const block3DLanding = {
 	male: [
 		{
-			_id: '4',
+			_id: '1',
 			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_4_Sleeves/sleeves_1512.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.webp',
 			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_4_Sleeves/sleeves_1512.gltf',
-			blockName: 'sleeves 1512',
-			avatar: 'Male',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.gltf',
+			blockName: 'sleeves 1592',
+			avatar: 'Female',
 			category: 'Sleeves',
-			templateId: '3',
-			templateName: 'Item 4',
+			templateId: '1',
+			templateName: 'Item 6',
 			templateCategory: 'Top',
 		},
 		{
-			_id: '5',
+			_id: '2',
 			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_4_Bodice/bodice_1509.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.webp',
 			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_4_Bodice/bodice_1509.gltf',
-			blockName: 'bodice 1509',
-			avatar: 'Male',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.gltf',
+			blockName: 'bodice 1591',
+			avatar: 'Female',
 			category: 'Bodice',
-			templateId: '3',
-			templateName: 'Item 4',
+			templateId: '1',
+			templateName: 'Item 6',
 			templateCategory: 'Top',
 		},
 		{
-			_id: '14',
+			_id: '13',
 			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_7___Pants/pants%2Cskirt_1590.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_8___Pants/pants_1593.webp',
 			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_7___Pants/pants%2Cskirt_1590.gltf',
-			blockName: 'pants,skirt 1590',
-			avatar: 'Male',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_8___Pants/pants_1593.gltf',
+			blockName: 'pants 1593',
+			avatar: 'Female',
 			category: 'Pants',
-			templateId: '9',
-			templateName: 'Item 7',
+			templateId: '8',
+			templateName: 'Item 8',
 			templateCategory: 'Pants',
 		},
 	],
@@ -165,9 +165,28 @@ export class AvatarSelector extends Element {
 				store.setTempSelectedAvatar = maleAvatarValue
 				store.selectAvatar = maleAvatarValue
 
+				// Set default space for male avatar
+				this.setSpaceForGender('male')
+
 				// Set default blocks for male avatar
 				this.setBlocksForGender('male')
 			}
+		}
+	}
+
+	private setSpaceForGender(gender: 'male' | 'female') {
+		try {
+			// Find the first space for the specified gender
+			const spaceForGender = spaces.find(space => space.gender === gender)
+			if (spaceForGender) {
+				// Always set space when switching gender to ensure shoes are loaded
+				store.selectSpace = spaceForGender
+
+				// Hide background scene on landing page (but keep shoes from includedModelFiles)
+				store.setIsShowScene = false
+			}
+		} catch (error) {
+			// Error setting space
 		}
 	}
 
@@ -188,7 +207,6 @@ export class AvatarSelector extends Element {
 			const shirtBlock = genderBlocks.find(block => block.templateCategory === 'Shirt' && block.category === 'Bodice')
 			const pantsBlock = genderBlocks.find(block => block.templateCategory === 'Pants' && block.category === 'Pants')
 
-			// Set templates first (giống blocks-selection logic) - dùng templateId từ blocks
 			const templateData: Array<any> = []
 			if (sleevesBlock || topBlock) {
 				// Find template by templateId from block
@@ -305,47 +323,26 @@ export class AvatarSelector extends Element {
 			const collection = gender === 'male' ? 'eliseF' : 'moidien'
 			const availableFabrics = fabrics[collection] || []
 
-			// Apply fabric cho tất cả blocks
 			const allBlocks = store.selectedBlocks
 
 			for (const [templateCategory, blocksMap] of allBlocks) {
-				// Lấy selectedTemplate để có category chính xác
 				const selectedTemplate = store.selectedTemplates.get(templateCategory)
-
-				// Áp dụng fabric cho tất cả block categories của template này (giống blockManager logic)
 				const actualBlockCategories = Array.from(blocksMap.keys())
-
-				// Kiểm tra xem template này đã có fabric chưa
 				const existingFabrics = store.selectedFabrics.get(templateCategory)
 
-				// Chỉ apply fabric cho blocks chưa có fabric
 				const blocksNeedingFabric = actualBlockCategories.filter(blockCategory => {
 					const hasFabric = (existingFabrics?.get(blockCategory)?.size ?? 0) > 0
 					return !hasFabric
 				})
 
-				// Debug: Log để hiểu tại sao sleeves được apply
-				if (blocksNeedingFabric.includes('Sleeves')) {
-					console.log('Sleeves cần fabric:', {
-						gender,
-						templateCategory,
-						actualBlockCategories,
-						blocksNeedingFabric,
-						existingFabrics: existingFabrics?.get('Sleeves')?.size ?? 0,
-					})
-				}
-
-				if (blocksNeedingFabric.length > 0 && selectedTemplate) {
+				if (selectedTemplate) {
 					const fabricData: Array<{fabric: any; blockCategory: any; templateCategory: any; assignedMesh?: string}> = []
-
-					// Apply main fabric từ materialId (giống blockManager logic)
 					if (selectedTemplate.materialId) {
 						const mainFabric = availableFabrics.find(
 							fabric => `${fabric.category} - ${fabric.materialName}` === selectedTemplate.materialId,
 						)
 
 						if (mainFabric) {
-							// Apply main fabric cho tất cả blocks cần fabric
 							for (const blockCategory of blocksNeedingFabric) {
 								fabricData.push({
 									fabric: mainFabric,
@@ -357,7 +354,6 @@ export class AvatarSelector extends Element {
 						}
 					}
 
-					// Apply extra materials (giống blockManager logic)
 					if (selectedTemplate.extraMaterials) {
 						for (const extraMaterial of selectedTemplate.extraMaterials) {
 							const extraFabric = availableFabrics.find(
@@ -365,7 +361,6 @@ export class AvatarSelector extends Element {
 							)
 
 							if (extraFabric) {
-								// Apply extra fabric cho tất cả blocks cần fabric
 								for (const blockCategory of blocksNeedingFabric) {
 									fabricData.push({
 										fabric: extraFabric,
@@ -378,7 +373,6 @@ export class AvatarSelector extends Element {
 						}
 					}
 
-					// Fallback: nếu không tìm thấy fabric theo materialId, dùng templateCategories
 					if (fabricData.length === 0) {
 						const suitableFabrics = availableFabrics.filter(fabric =>
 							fabric.templateCategories?.includes(selectedTemplate.category || templateCategory),
@@ -401,6 +395,21 @@ export class AvatarSelector extends Element {
 					// Set fabrics
 					if (fabricData.length > 0) {
 						store.setSelectedFabrics = fabricData
+					}
+				} else {
+					console.log('No selectedTemplate found, using fallback fabric')
+					if (blocksNeedingFabric.length > 0 && availableFabrics.length > 0) {
+						const fallbackFabric = availableFabrics[0]
+						const fabricData = blocksNeedingFabric.map(blockCategory => ({
+							fabric: fallbackFabric,
+							blockCategory: blockCategory,
+							templateCategory: templateCategory,
+							assignedMesh: 'default',
+						}))
+
+						if (fabricData.length > 0) {
+							store.setSelectedFabrics = fabricData
+						}
 					}
 				}
 			}
@@ -593,6 +602,9 @@ export class AvatarSelector extends Element {
 			store.setTempSelectedAvatar = avatarValue
 			store.selectAvatar = avatarValue
 
+			// Set default space for selected gender
+			this.setSpaceForGender(option.gender)
+
 			// Set default blocks cho gender được chọn
 			this.setBlocksForGender(option.gender)
 		}
@@ -679,6 +691,7 @@ export class AvatarSelector extends Element {
 			transition: all 0.3s ease;
 			z-index: 2;
 			min-width: 120px;
+			display: none;
 		}
 
 		:host(:hover) {

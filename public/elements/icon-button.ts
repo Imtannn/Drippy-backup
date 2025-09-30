@@ -43,6 +43,12 @@ export class IconButton extends Element {
 			opacity: 0.5;
 			cursor: not-allowed;
 		}
+
+		.icon-button-icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 	`
 }
 

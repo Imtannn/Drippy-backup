@@ -169,6 +169,7 @@ export const EmailTemplates = {
 				}
 			}>
 			totalAmount: string
+			designUrl?: string
 			isCustomSize?: boolean
 			customMeasurement?: {
 				bust: number
@@ -187,6 +188,7 @@ export const EmailTemplates = {
 			}
 		},
 		orderType: 'wholesale' | 'retail' = 'wholesale',
+		spaceDescription?: string,
 	): Promise<void> {
 		const options: HandlebarsTemplateOptions = {
 			to: userEmail,
@@ -199,6 +201,7 @@ export const EmailTemplates = {
 				orderType,
 				isWholesale: orderType === 'wholesale',
 				isRetail: orderType === 'retail',
+				brandName: spaceDescription || 'MoiDien',
 				...orderDetails,
 			},
 		}
@@ -232,6 +235,7 @@ export const EmailTemplates = {
 				}
 			}>
 			totalAmount: string
+			designUrl?: string
 			isCustomSize?: boolean
 			customMeasurement?: {
 				bust: number
@@ -250,6 +254,7 @@ export const EmailTemplates = {
 			}
 		},
 		orderType: 'wholesale' | 'retail' = 'wholesale',
+		spaceDescription?: string,
 	): Promise<void> {
 		const options: HandlebarsTemplateOptions = {
 			to: ADMIN_EMAIL,
@@ -262,6 +267,7 @@ export const EmailTemplates = {
 				orderType,
 				isWholesale: orderType === 'wholesale',
 				isRetail: orderType === 'retail',
+				brandName: spaceDescription || 'MoiDien',
 				...orderDetails,
 			},
 		}

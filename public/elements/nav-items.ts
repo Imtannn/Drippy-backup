@@ -57,6 +57,17 @@ export class NavItems extends Element {
 				</div>
 				<span class="nav-label">Pose</span>
 			</button>
+
+			<button
+				class="nav-item"
+				classList=${{active: () => this.activeTab === 'pose'}}
+				onclick=${() => this.#onTabClick('help')}
+			>
+				<div class="nav-icon">
+					<img src=${() => (this.activeTab === 'help' ? '/images/help.svg' : '/images/help-inactive.svg')} alt="Help" />
+				</div>
+				<span class="nav-label">Help</span>
+			</button>
 		</div>
 	`
 

@@ -27,7 +27,7 @@ import '../elements/preview-button.js'
 import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
-import {updateGarmentsInUrl, updateUrlWithParams} from '../routes.js'
+import {updateGarmentsInUrl, updateFabricsInUrl, updateUrlWithParams} from '../routes.js'
 import {formatNumber} from '../utils.js'
 import './app-buttons.js'
 import './avatar-selection.js'
@@ -48,7 +48,6 @@ export class TemplateView extends Element {
 	@signal showLoginDialog = false
 	@signal showAvatarSelection = false
 	@signal showPoseSelection = false
-	@signal pendingActiveTemplateIds: Partial<Record<TemplateCategory, string | null>> = {}
 	@signal showRemixOverlay = false
 	@signal showTemplateOverlay: Template | null = null
 
@@ -119,6 +118,12 @@ export class TemplateView extends Element {
 			const selectedTemplates = store.selectedTemplates
 			updateGarmentsInUrl(selectedTemplates)
 		})
+
+		// Update URL when fabrics change
+		this.createEffect(() => {
+			const selectedFabrics = store.selectedFabrics
+			updateFabricsInUrl(selectedFabrics)
+		})
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -155,8 +160,6 @@ export class TemplateView extends Element {
 			}
 		}
 
-		this.#setPendingActiveTemplateAndClear(template.category, template._id, interchangeableCategories)
-
 		newTemplates.set(template.category, template)
 		const templateBlockData = blockManager.convertTemplateToBlockData(template, store.selectedSpace!)
 		const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
@@ -166,29 +169,6 @@ export class TemplateView extends Element {
 		newBlocks.set(template.category, newBlocksMap)
 		newFabrics.set(template.category, newFabricsMap)
 
-		// let loadingId: symbol | null = null
-
-		// // Collect all fabrics to preload (main + extras)
-		// const fabricsToPreload = [...newFabricsMap.values()].flatMap(fabric => [...fabric.values()])
-		// const blocksToPreload = templateBlockData.blocks
-
-		// if (fabricsToPreload.length > 0) {
-		// 	loadingId = Symbol(`fabric-${template._id || 'extra'}`)
-		// 	store.addLoadingMaterial(loadingId)
-		// 	try {
-		// 		// Preload all fabric textures and template blocks separately
-		// 		await Promise.all([
-		// 			Promise.all(fabricsToPreload.map(fabric => textureManager.preloadFabricBaseTextures(fabric))),
-		// 			Promise.all(blocksToPreload.map(block => blockManager.preloadTemplateBlocks(block))),
-		// 		])
-		// 	} catch (error) {
-		// 		console.warn('Failed to preload fabric textures:', error)
-		// 	} finally {
-		// 		if (loadingId) {
-		// 			store.removeLoadingMaterial(loadingId)
-		// 		}
-		// 	}
-		// }
 		store.selectedFabrics = newFabrics
 		store.selectedBlocks = newBlocks
 		store.selectedTemplates = newTemplates
@@ -202,34 +182,9 @@ export class TemplateView extends Element {
 		if (available) {
 			this.#handleTemplateOverlayRemix(template.category)
 		}
-
-		this.#clearPendingActiveTemplateAndClear(template.category, interchangeableCategories)
-	}
-
-	#setPendingActiveTemplateAndClear = (
-		category: TemplateCategory,
-		templateId: string | null,
-		interchangeableCategories: TemplateCategory[],
-	) => {
-		this.pendingActiveTemplateIds = {
-			...this.pendingActiveTemplateIds,
-			[category]: templateId,
-			...Object.fromEntries(interchangeableCategories.map(category => [category, null])),
-		}
-	}
-
-	#clearPendingActiveTemplateAndClear = (category: TemplateCategory, interchangeableCategories: TemplateCategory[]) => {
-		const ids = Object.entries(this.pendingActiveTemplateIds).filter(
-			([id, _]) => !interchangeableCategories.includes(id as TemplateCategory) || id !== category,
-		)
-		this.pendingActiveTemplateIds = Object.fromEntries(ids)
 	}
 
 	#isTemplateActive = (template: Template) => {
-		const pendingId = this.pendingActiveTemplateIds[template.category]
-		if (pendingId !== undefined) {
-			return pendingId === template._id
-		}
 		return store.selectedTemplates.get(template.category)?._id === template._id
 	}
 

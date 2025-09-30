@@ -37,7 +37,7 @@ export class DialogElement extends Element {
 			max-width: 400px;
 			height: auto;
 			min-height: 0;
-			max-height: 40vh;
+			max-height: max(40vh, 400px);
 			overflow-x: hidden;
 			overflow-y: auto;
 			box-sizing: border-box;

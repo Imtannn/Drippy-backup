@@ -15,23 +15,31 @@ export class VideoLoading extends Element {
 		setTimeout(() => {
 			const video = this.shadowRoot?.querySelector('.loading-video') as HTMLVideoElement
 			if (video) {
+				// iPhone specific fixes
+				video.setAttribute('webkit-playsinline', 'true')
+				video.setAttribute('playsinline', 'true')
+				video.muted = true
+				video.defaultMuted = true
+				video.preload = 'auto'
+
 				video.addEventListener('loadeddata', () => {
 					this.videoError = false
 				})
 
-				video.addEventListener('error', e => {
-					console.error('[video-loading] Video error:', e, video.error)
+				video.addEventListener('error', () => {
 					this.videoError = true
 				})
 
 				video.addEventListener('canplay', () => {
 					if (video.paused) {
-						video.play().catch(e => {
-							console.warn('[video-loading] Video autoplay failed:', e)
+						video.play().catch(() => {
 							this.videoError = true
 						})
 					}
 				})
+
+				// Force load the video
+				video.load()
 			}
 		}, 0)
 	}
@@ -78,8 +86,16 @@ export class VideoLoading extends Element {
 			top: 0;
 			left: 0;
 			z-index: 10;
-			object-fit: cover;
+			object-fit: contain;
 			object-position: center;
+			/* iPhone specific fixes */
+			-webkit-object-fit: contain;
+			-webkit-object-position: center;
+			/* Force hardware acceleration */
+			-webkit-transform: translateZ(0);
+			transform: translateZ(0);
+			/* Ensure video is visible */
+			background: transparent;
 		}
 
 		.fallback-loader {

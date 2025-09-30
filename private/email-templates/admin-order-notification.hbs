@@ -58,7 +58,8 @@
 		</div>
 
 		<div class='content'>
-			<p>We have a {{#if isRetail}}retail{{/if}}{{#if isWholesale}}wholesale{{/if}} order from {{userEmail}}</p>
+			<p>We have a new order from {{userEmail}}</p>
+			<p>{{brandName}} will contact the customer soon for more details of this order.</p>
 
 			<div class='order-info'>
 				<h3>📦 Order Details</h3>
@@ -121,6 +122,11 @@
 					{{shippingAddress.country}}</p>
 			</div>
 
+			{{#if designUrl}}
+			<div class='order-info'>
+				<p><strong>Your design:</strong> <a href="{{designUrl}}">{{designUrl}}</a></p>
+			</div>
+			{{/if}}
 
 			<p>Please process this order promptly.</p>
 			<p>Admin Notification System</p>
