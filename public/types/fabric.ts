@@ -32,6 +32,10 @@ export type Fabric = {
 	roughness?: string
 	alpha?: string
 	assignedMesh?: string
+	scaleX?: number
+	scaleY?: number
+	offsetX?: number
+	offsetY?: number
 
 	materialName: string
 	category?: FabricCategory
