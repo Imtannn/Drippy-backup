@@ -324,18 +324,19 @@ export class AvatarSelector extends Element {
 					return !hasFabric
 				})
 
-				// Debug: Log để hiểu tại sao sleeves được apply
-				if (blocksNeedingFabric.includes('Sleeves')) {
-					console.log('Sleeves cần fabric:', {
-						gender,
-						templateCategory,
-						actualBlockCategories,
-						blocksNeedingFabric,
-						existingFabrics: existingFabrics?.get('Sleeves')?.size ?? 0,
-					})
-				}
+				// Debug: Log để hiểu tại sao không apply fabric
+				console.log('Debug applyFabricsToAllBlocks:', {
+					gender,
+					templateCategory,
+					selectedTemplate: selectedTemplate ? 'exists' : 'null',
+					actualBlockCategories,
+					blocksNeedingFabric,
+					existingFabrics: existingFabrics?.size ?? 0,
+					availableFabrics: availableFabrics.length,
+					selectedTemplatesKeys: Array.from(store.selectedTemplates.keys()),
+				})
 
-				if (blocksNeedingFabric.length > 0 && selectedTemplate) {
+				if (selectedTemplate) {
 					const fabricData: Array<{fabric: any; blockCategory: any; templateCategory: any; assignedMesh?: string}> = []
 
 					// Apply main fabric từ materialId (giống blockManager logic)
@@ -401,6 +402,22 @@ export class AvatarSelector extends Element {
 					// Set fabrics
 					if (fabricData.length > 0) {
 						store.setSelectedFabrics = fabricData
+					}
+				} else {
+					// Fallback: nếu không có selectedTemplate, apply fabric đầu tiên có sẵn
+					console.log('No selectedTemplate found, using fallback fabric')
+					if (blocksNeedingFabric.length > 0 && availableFabrics.length > 0) {
+						const fallbackFabric = availableFabrics[0]
+						const fabricData = blocksNeedingFabric.map(blockCategory => ({
+							fabric: fallbackFabric,
+							blockCategory: blockCategory,
+							templateCategory: templateCategory,
+							assignedMesh: 'default',
+						}))
+
+						if (fabricData.length > 0) {
+							store.setSelectedFabrics = fabricData
+						}
 					}
 				}
 			}
@@ -679,6 +696,7 @@ export class AvatarSelector extends Element {
 			transition: all 0.3s ease;
 			z-index: 2;
 			min-width: 120px;
+			display: none;
 		}
 
 		:host(:hover) {
