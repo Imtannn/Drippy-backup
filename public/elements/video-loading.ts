@@ -39,6 +39,7 @@ export class VideoLoading extends Element {
 				// iPhone specific fixes
 				video.setAttribute('webkit-playsinline', 'true')
 				video.setAttribute('playsinline', 'true')
+				video.setAttribute('x-webkit-airplay', 'allow')
 				video.muted = true
 				video.defaultMuted = true
 				video.preload = 'auto'
@@ -50,25 +51,55 @@ export class VideoLoading extends Element {
 
 				video.addEventListener('loadeddata', () => {
 					this.videoError = false
+					// Force play after data is loaded
+					video.play().catch(() => {
+						this.videoError = true
+					})
 				})
 
 				video.addEventListener('canplay', () => {
 					this.videoReady = true
-					if (video.paused) {
-						video.play().catch(() => {
-							this.videoError = true
-						})
-					}
+					// Force play when video can play
+					video.play().catch(() => {
+						this.videoError = true
+					})
+				})
+
+				video.addEventListener('canplaythrough', () => {
+					this.videoReady = true
+					// Force play when video can play through
+					video.play().catch(() => {
+						this.videoError = true
+					})
 				})
 
 				video.addEventListener('playing', () => {
 					this.videoReady = true
 				})
 
-				video.addEventListener('error', () => {
+				video.addEventListener('error', e => {
+					console.error('Video error:', e)
 					this.videoError = true
 					this.videoReady = false
 				})
+
+				// Add user interaction fallback for iOS
+				const tryPlay = () => {
+					if (video.paused) {
+						video.play().catch(error => {
+							console.log('Play failed, waiting for user interaction:', error)
+						})
+					}
+				}
+
+				// Try to play immediately
+				setTimeout(tryPlay, 100)
+				setTimeout(tryPlay, 500)
+				setTimeout(tryPlay, 1000)
+
+				// Add click listener to play video on user interaction
+				document.addEventListener('touchstart', tryPlay, {once: true})
+				document.addEventListener('click', tryPlay, {once: true})
 
 				// Force load the video
 				video.load()
@@ -132,6 +163,14 @@ export class VideoLoading extends Element {
 			background: #fff;
 			-webkit-transform: translateZ(0);
 			transform: translateZ(0);
+			/* iOS specific fixes */
+			-webkit-playsinline: true;
+			playsinline: true;
+			/* Force hardware acceleration */
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+			/* Ensure video is not paused by iOS */
+			pointer-events: none;
 		}
 
 		.loading-text {
