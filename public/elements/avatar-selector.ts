@@ -132,9 +132,12 @@ export class AvatarSelector extends Element {
 
 		setTimeout(() => {
 			this.createDropdownManually()
+			// Always set default male avatar when component loads
+			this.setDefaultMaleAvatar()
 			this.syncWithStore()
 		}, 100)
 
+		// Sync with store when avatar changes
 		this.createEffect(() => {
 			if (store.selectedAvatar) this.syncWithStore()
 		})
@@ -858,9 +861,6 @@ export class AvatarSelector extends Element {
 				// Update checkmarks in dropdown
 				this.updateCheckmarks()
 			}
-		} else {
-			// Nếu không có avatar nào được chọn, set default male
-			this.setDefaultMaleAvatar()
 		}
 	}
 
