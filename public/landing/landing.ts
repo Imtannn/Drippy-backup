@@ -68,6 +68,7 @@ const materials = [
 ]
 // Show video loading initially
 function showVideoLoading() {
+	console.log('Showing video loading screen')
 	const videoLoadingElement = html`<video-loading></video-loading>`
 	document.body.appendChild(videoLoadingElement as any)
 	return videoLoadingElement
@@ -76,7 +77,10 @@ function showVideoLoading() {
 // Hide video loading when content is ready
 function hideVideoLoading(videoLoadingElement: any) {
 	if (videoLoadingElement && videoLoadingElement.parentNode) {
+		console.log('Hiding video loading screen')
 		videoLoadingElement.remove()
+	} else {
+		console.log('Video loading element not found or already removed')
 	}
 }
 const [isYearlyActive, setIsYearlyActive] = createSignal(true)
@@ -134,7 +138,7 @@ const modelImage1 = new URL('../images/landing/model-1.png', import.meta.url).hr
 const stepImage1 = new URL('../images/landing/step-1.png', import.meta.url).href
 
 const cta__background = new URL('../images/landing/cta-background.png', import.meta.url).href
-const cta_model = new URL('../images/landing/cta-model.png', import.meta.url).href
+const cta_model = new URL('../images/landing/cta-model.JPEG', import.meta.url).href
 
 const instagramIcon = new URL('../images/landing/discord.png', import.meta.url).href
 const discordIcon = new URL('../images/landing/instagram.png', import.meta.url).href
@@ -415,6 +419,7 @@ const mainContent = html`
 										<p class="features__subtitle text-md-1">Let shoppers play, remix, and buy — all in one place.</p>
 									</div>
 									<div class="features__grid">
+										<img class="features__image mobile" src=${stepImage1} />
 										<div class="feature__wrapper">
 											<div class="feature__item">
 												<div class="feature__number-container">
@@ -478,7 +483,7 @@ const mainContent = html`
 									<custom-button variant="primary" href="https://calendly.com/rubydrippy3d/30min">Book a demo</custom-button>
 								</div>
 							</div>
-							<img class="features__image" src=${stepImage1} />
+							<img class="features__image desktop" src=${stepImage1} />
 						</section>
 
 						<!-- How it Works Section -->
@@ -664,7 +669,7 @@ const mainContent = html`
 								</div>
 								<div class="cta__text-section">
 									<div class="cta__title text-xl">Join the future.</div>
-									<p class="cta__description-text text-md">
+									<p class="cta__description-text text-md-1">
 										<span class="cta__description ">Turn your collections into </span>
 										<span class="cta__description--highlight">playable, immersive,<br> made-to-order</span>
 										<span class="cta__description"> experiences today. </span>
@@ -727,6 +732,13 @@ const mainContent = html`
 // Show video loading immediately when landing page starts loading
 const videoLoadingElement = showVideoLoading()
 
+// Fallback timeout to ensure loading screen is hidden after maximum 5 seconds
+const maxLoadingTime = 5000
+setTimeout(() => {
+	console.log('Fallback timeout: hiding video loading screen')
+	hideVideoLoading(videoLoadingElement)
+}, maxLoadingTime)
+
 // First, append the content to DOM so we can track image loading
 document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
@@ -745,13 +757,24 @@ function waitForContentReady() {
 		})
 	})
 
-	// Wait for images + a small delay for layout settling
+	// Wait for images + a minimum delay to ensure loading screen shows
 	Promise.all(imagePromises).then(() => {
-		// Use requestAnimationFrame to ensure DOM has updated
-		requestAnimationFrame(() => {
-			// Hide video loading when everything is ready
-			hideVideoLoading(videoLoadingElement)
-		})
+		const minLoadingTime = 3000
+		const startTime = Date.now()
+
+		const hideLoading = () => {
+			const elapsed = Date.now() - startTime
+			const remainingTime = Math.max(0, minLoadingTime - elapsed)
+
+			setTimeout(() => {
+				// Use requestAnimationFrame to ensure DOM has updated
+				requestAnimationFrame(() => {
+					hideVideoLoading(videoLoadingElement)
+				})
+			}, remainingTime)
+		}
+
+		hideLoading()
 	})
 }
 
@@ -854,6 +877,8 @@ function initGenericCarousel(config: {
 	let isActive = false
 	let eventListeners: Array<{element: HTMLElement | Window; event: string; handler: Function}> = []
 	let resizeTimeout: ReturnType<typeof setTimeout>
+	let progressContainer: HTMLElement | null = null
+	let progressDots: HTMLElement[] = []
 
 	// Helper function to check if carousel should be active
 	const isCarouselActive = () =>
@@ -861,6 +886,11 @@ function initGenericCarousel(config: {
 
 	// Calculate offset for carousel positioning
 	const calculateOffset = (index: number) => {
+		// On mobile (< 480px), don't apply transform - items stay centered
+		if (window.innerWidth < 480) {
+			return 0
+		}
+
 		const containerWidth = container.offsetWidth
 		const itemWidth = config.itemWidth + 32 // item width + gap
 		const totalItems = items.length
@@ -870,13 +900,66 @@ function initGenericCarousel(config: {
 		return -(index * itemWidth) + (containerWidth - itemWidth) / 2 // Middle items: center
 	}
 
+	// Create progress indicator for mobile
+	const createProgressIndicator = () => {
+		if (window.innerWidth >= 480) return
+
+		// Remove existing progress indicator
+		if (progressContainer) {
+			progressContainer.remove()
+		}
+
+		// Only show progress if there are multiple items
+		if (items.length <= 1) return
+
+		progressContainer = document.createElement('div')
+		progressContainer.className = 'carousel-progress'
+
+		progressDots = []
+		for (let i = 0; i < items.length; i++) {
+			const dot = document.createElement('div')
+			dot.className = 'carousel-progress-dot'
+			if (i === activeIndex) dot.classList.add('active')
+
+			// Add click handler to jump to specific item
+			dot.addEventListener('click', () => {
+				activeIndex = i
+				updateCarousel()
+			})
+
+			progressContainer.appendChild(dot)
+			progressDots.push(dot)
+		}
+
+		// Insert progress indicator after the container
+		container.parentNode?.insertBefore(progressContainer, container.nextSibling)
+	}
+
+	// Update progress indicator
+	const updateProgressIndicator = (index = activeIndex) => {
+		if (!progressDots.length || window.innerWidth >= 480) return
+
+		progressDots.forEach((dot, i) => {
+			dot.classList.toggle('active', i === index)
+		})
+	}
+
 	// Update carousel position and active states
 	const updateCarousel = (index = activeIndex) => {
 		if (!isCarouselActive()) return
 
 		const offset = calculateOffset(index)
+
+		// Debug logs for mobile
+		if (window.innerWidth < 480) {
+			console.log(`Mobile carousel update - Index: ${index}, Offset: ${offset}, Active: ${isActive}`)
+		}
+
 		track.style.transform = `translateX(${offset}px)`
 		items.forEach((item, i) => item.classList.toggle('active', i === index))
+
+		// Update progress indicator for mobile
+		updateProgressIndicator(index)
 	}
 
 	// Reset carousel to default state
@@ -887,6 +970,12 @@ function initGenericCarousel(config: {
 		} else {
 			track.style.transform = 'translateX(0)'
 			items.forEach(item => item.classList.remove('active'))
+			// Remove progress indicator when carousel is inactive
+			if (progressContainer) {
+				progressContainer.remove()
+				progressContainer = null
+				progressDots = []
+			}
 		}
 	}
 
@@ -961,6 +1050,8 @@ function initGenericCarousel(config: {
 			addEventListeners()
 			activeIndex = 0
 			updateCarousel()
+			// Create progress indicator for mobile
+			createProgressIndicator()
 		} else {
 			removeEventListeners()
 			resetCarousel()
@@ -975,7 +1066,12 @@ function initGenericCarousel(config: {
 			const currentWidth = window.innerWidth
 			isActive = currentWidth >= config.minWidth && currentWidth <= config.maxWidth
 
-			if (wasActive !== isActive) toggleCarousel(isActive)
+			if (wasActive !== isActive) {
+				toggleCarousel(isActive)
+			} else if (isActive && currentWidth < 480) {
+				// Update progress indicator when resizing on mobile
+				createProgressIndicator()
+			}
 		}, 100)
 	}
 
@@ -990,23 +1086,17 @@ function initGenericCarousel(config: {
 		removeEventListeners()
 		track.style.transform = 'translateX(0)'
 		items.forEach(item => item.classList.remove('active'))
+		// Remove progress indicator
+		if (progressContainer) {
+			progressContainer.remove()
+			progressContainer = null
+			progressDots = []
+		}
 		isActive = false
 	}
 
 	window.addEventListener('resize', checkScreenSize, {passive: true})
 }
-
-// Initialize carousel for how it work section
-setTimeout(() => {
-	initGenericCarousel({
-		trackSelector: '.how-it-works__grid',
-		itemSelector: '.how-it-works__item',
-		containerSelector: '.how-it-works__content',
-		minWidth: 480,
-		maxWidth: 830,
-		itemWidth: 230,
-	})
-}, 150)
 
 // Handle <br> tags responsively (remove on mobile, restore on desktop)
 function handleResponsiveBreaks() {
@@ -1043,6 +1133,17 @@ function handleResponsiveBreaks() {
 
 setTimeout(handleResponsiveBreaks, 100)
 
+// Initialize carousel for how it work section
+setTimeout(() => {
+	initGenericCarousel({
+		trackSelector: '.how-it-works__grid',
+		itemSelector: '.how-it-works__item',
+		containerSelector: '.how-it-works__content',
+		minWidth: 0, // Allow mobile
+		maxWidth: 830,
+		itemWidth: 230,
+	})
+}, 150)
 // Initialize carousel for Platform section
 setTimeout(() => {
 	initGenericCarousel({
