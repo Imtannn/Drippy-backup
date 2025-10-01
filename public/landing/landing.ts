@@ -759,7 +759,6 @@ function waitForContentReady() {
 
 	// Wait for images + a minimum delay to ensure loading screen shows
 	Promise.all(imagePromises).then(() => {
-		// Ensure loading screen shows for at least 1.5 seconds
 		const minLoadingTime = 3000
 		const startTime = Date.now()
 
@@ -878,6 +877,8 @@ function initGenericCarousel(config: {
 	let isActive = false
 	let eventListeners: Array<{element: HTMLElement | Window; event: string; handler: Function}> = []
 	let resizeTimeout: ReturnType<typeof setTimeout>
+	let progressContainer: HTMLElement | null = null
+	let progressDots: HTMLElement[] = []
 
 	// Helper function to check if carousel should be active
 	const isCarouselActive = () =>
@@ -899,6 +900,50 @@ function initGenericCarousel(config: {
 		return -(index * itemWidth) + (containerWidth - itemWidth) / 2 // Middle items: center
 	}
 
+	// Create progress indicator for mobile
+	const createProgressIndicator = () => {
+		if (window.innerWidth >= 480) return
+
+		// Remove existing progress indicator
+		if (progressContainer) {
+			progressContainer.remove()
+		}
+
+		// Only show progress if there are multiple items
+		if (items.length <= 1) return
+
+		progressContainer = document.createElement('div')
+		progressContainer.className = 'carousel-progress'
+
+		progressDots = []
+		for (let i = 0; i < items.length; i++) {
+			const dot = document.createElement('div')
+			dot.className = 'carousel-progress-dot'
+			if (i === activeIndex) dot.classList.add('active')
+
+			// Add click handler to jump to specific item
+			dot.addEventListener('click', () => {
+				activeIndex = i
+				updateCarousel()
+			})
+
+			progressContainer.appendChild(dot)
+			progressDots.push(dot)
+		}
+
+		// Insert progress indicator after the container
+		container.parentNode?.insertBefore(progressContainer, container.nextSibling)
+	}
+
+	// Update progress indicator
+	const updateProgressIndicator = (index = activeIndex) => {
+		if (!progressDots.length || window.innerWidth >= 480) return
+
+		progressDots.forEach((dot, i) => {
+			dot.classList.toggle('active', i === index)
+		})
+	}
+
 	// Update carousel position and active states
 	const updateCarousel = (index = activeIndex) => {
 		if (!isCarouselActive()) return
@@ -912,6 +957,9 @@ function initGenericCarousel(config: {
 
 		track.style.transform = `translateX(${offset}px)`
 		items.forEach((item, i) => item.classList.toggle('active', i === index))
+
+		// Update progress indicator for mobile
+		updateProgressIndicator(index)
 	}
 
 	// Reset carousel to default state
@@ -922,6 +970,12 @@ function initGenericCarousel(config: {
 		} else {
 			track.style.transform = 'translateX(0)'
 			items.forEach(item => item.classList.remove('active'))
+			// Remove progress indicator when carousel is inactive
+			if (progressContainer) {
+				progressContainer.remove()
+				progressContainer = null
+				progressDots = []
+			}
 		}
 	}
 
@@ -996,6 +1050,8 @@ function initGenericCarousel(config: {
 			addEventListeners()
 			activeIndex = 0
 			updateCarousel()
+			// Create progress indicator for mobile
+			createProgressIndicator()
 		} else {
 			removeEventListeners()
 			resetCarousel()
@@ -1010,7 +1066,12 @@ function initGenericCarousel(config: {
 			const currentWidth = window.innerWidth
 			isActive = currentWidth >= config.minWidth && currentWidth <= config.maxWidth
 
-			if (wasActive !== isActive) toggleCarousel(isActive)
+			if (wasActive !== isActive) {
+				toggleCarousel(isActive)
+			} else if (isActive && currentWidth < 480) {
+				// Update progress indicator when resizing on mobile
+				createProgressIndicator()
+			}
 		}, 100)
 	}
 
@@ -1025,6 +1086,12 @@ function initGenericCarousel(config: {
 		removeEventListeners()
 		track.style.transform = 'translateX(0)'
 		items.forEach(item => item.classList.remove('active'))
+		// Remove progress indicator
+		if (progressContainer) {
+			progressContainer.remove()
+			progressContainer = null
+			progressDots = []
+		}
 		isActive = false
 	}
 
