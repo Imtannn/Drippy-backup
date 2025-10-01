@@ -178,4 +178,22 @@ export const spaces: Space[] = [
 		collection: 'emwear',
 		isWholesale: false,
 	},
+	{
+		name: 'Fige dans le temps',
+		slug: 'fige-dans-le-temps',
+		description: 'Atelier Gourney',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/atelier-gourney/scene-thumbnail.webp',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/atelier-gourney/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/atelier-gourney/extras/shoes.glb',
+		],
+		gender: 'female',
+		garmentsCount: blocks.atelierGourney?.length ?? 0,
+		collection: 'atelierGourney',
+		isWholesale: false,
+	},
 ]

@@ -5,14 +5,14 @@ const animationTestAvatar = new URL('../models/FV2_Yunaa-01.glb', import.meta.ur
 export const avatars: Avatar[] = [
 	{
 		thumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/moidien/thumbnail.webp',
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/yuna/thumbnail.webp',
 
 		// Temporary replacement for testing animation.
 		// src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/moidien/model.glb',
 		src: animationTestAvatar,
 
 		gender: 'female',
-		value: 'moidien',
+		value: 'yuna',
 		default: true,
 	},
 	{
@@ -38,30 +38,37 @@ export const avatars: Avatar[] = [
 	},
 	{
 		thumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/v2/thumbnail.webp',
-		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/v2/model.glb',
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/tahy/thumbnail.webp',
+		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/tahy/model.glb',
 		gender: 'female',
-		value: 'v2',
+		value: 'tahy',
 	},
 	{
 		thumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/v4/thumbnail.webp',
-		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/v4/model.glb',
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/ruby/thumbnail.webp',
+		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/ruby/model.glb',
 		gender: 'female',
-		value: 'v4',
+		value: 'ruby',
 	},
 	{
 		thumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/v3/thumbnail.webp',
-		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/v3/model.glb',
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/heidi/thumbnail.webp',
+		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/heidi/model.glb',
 		gender: 'female',
-		value: 'v3',
+		value: 'heidi',
 	},
 	{
 		thumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/with-underwear/thumbnail.webp',
-		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/with-underwear/model.glb',
-		value: 'with-underwear',
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/bella/thumbnail.webp',
+		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/bella/model.glb',
+		gender: 'female',
+		value: 'bella',
+	},
+	{
+		thumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/anh/thumbnail.webp',
+		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/anh/model.glb',
+		value: 'anh',
 		gender: 'male',
 	},
 	{
