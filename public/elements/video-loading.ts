@@ -7,6 +7,7 @@ export class VideoLoading extends Element {
 	static elementName = 'video-loading'
 
 	@signal private videoError = false
+	@signal private videoReady = false
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -51,16 +52,22 @@ export class VideoLoading extends Element {
 					this.videoError = false
 				})
 
-				video.addEventListener('error', () => {
-					this.videoError = true
-				})
-
 				video.addEventListener('canplay', () => {
+					this.videoReady = true
 					if (video.paused) {
 						video.play().catch(() => {
 							this.videoError = true
 						})
 					}
+				})
+
+				video.addEventListener('playing', () => {
+					this.videoReady = true
+				})
+
+				video.addEventListener('error', () => {
+					this.videoError = true
+					this.videoReady = false
 				})
 
 				// Force load the video
@@ -79,6 +86,9 @@ export class VideoLoading extends Element {
 
 	template = () => html`
 		<div class="video-loading">
+			<h1 class="loading-text text-xl" style=${() => (this.videoReady ? 'display: block' : 'display: none')}>
+				Preparing your space....
+			</h1>
 			<video class="loading-video" autoplay muted loop playsinline>
 				<source src=${loadingVideoUrl} type="video/mp4" />
 			</video>
@@ -110,15 +120,31 @@ export class VideoLoading extends Element {
 			height: 100%;
 			background: #fff;
 		}
+		.text-xl {
+			font-size: var(--fontSizeTextXl);
+		}
 
 		.loading-video {
-			width: 100%;
-			height: 100%;
+			width: 80%;
+			height: 80%;
 			object-fit: contain;
 			object-position: center;
 			background: #fff;
 			-webkit-transform: translateZ(0);
 			transform: translateZ(0);
+		}
+
+		.loading-text {
+			position: absolute;
+			top: 5%;
+			left: 50%;
+			transform: translateX(-50%);
+			font-size: 24px;
+			font-weight: 600;
+			color: #333;
+			z-index: 20;
+			text-align: center;
+			white-space: nowrap;
 		}
 
 		.fallback-loader {
@@ -148,6 +174,24 @@ export class VideoLoading extends Element {
 			}
 			100% {
 				transform: rotate(360deg);
+			}
+		}
+
+		/* Mobile responsive text */
+		@media (max-width: 768px) {
+			.loading-text {
+				top: 12%;
+				padding: 0 20px;
+			}
+		}
+
+		@media (max-width: 480px) {
+			.text-xl {
+				font-size: var(--fontSizeTextXlMobile);
+			}
+			.loading-text {
+				top: 12%;
+				padding: 0 15px;
 			}
 		}
 	`
