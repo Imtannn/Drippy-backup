@@ -1,10 +1,10 @@
-import {css, Element, element, html, signal} from 'lume'
+import {batch, css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/avatar-dropdown.js'
 import '../elements/placeholder-image.js'
-import {updateUrlWithParams} from '../routes.js'
+import {pushState, searchParams} from '../routes.js'
 import type {Space} from '../types/types.js'
 import {currentUser, store} from './store.js'
 
@@ -43,21 +43,23 @@ export class SpacesSelection extends Element {
 	}
 
 	#onSceneSelected = (space: Space) => {
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('scene', space.slug)
+		searchParams().set('scene', space.slug)
 
 		// Check if we need to switch avatars based on gender
-		const currentAvatarGender = avatars.find(avatar => avatar.value === store.selectedAvatar)?.gender
+		const currentAvatarGender = avatars.find(avatar => avatar.name === store.selectedAvatar)?.gender
 		if (currentAvatarGender !== space.gender && store.selectedAvatar) {
 			// Find the default avatar for the space's gender
 			const defaultAvatar = avatars.find(avatar => avatar.gender === space.gender && avatar.default)
 			if (defaultAvatar) {
-				store.selectAvatar = defaultAvatar.value
-				searchParams.set('avatar', defaultAvatar.value)
+				store.selectedAvatar = defaultAvatar.name
+				searchParams().set('avatar', defaultAvatar.name)
 			}
 		}
-		updateUrlWithParams(searchParams)
-		store.selectSpace = space
+
+		batch(() => {
+			pushState()
+			store.selectSpace = space
+		})
 	}
 
 	#onSignInClick = () => {
@@ -66,7 +68,7 @@ export class SpacesSelection extends Element {
 
 	#onAvatarClick = (e: Event) => {
 		e.preventDefault()
-		store.navigateTo = 'avatar'
+		store.view = 'avatar'
 	}
 
 	template = () => html`
@@ -317,9 +319,7 @@ export class SpacesSelection extends Element {
 		.description {
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightNormal);
-			color: Eerie black;
 			line-height: var(--lineHeightLoose);
-			max-width: var(--appWidth);
 			margin: 0 auto;
 
 			:host-context([data-theme='dark']) & {
@@ -482,12 +482,7 @@ export class SpacesSelection extends Element {
 				gap: 0.5rem;
 			}
 
-			.main-title {
-				// font-size: 2rem;
-			}
-
 			.description {
-				// font-size: 1rem;
 				padding: 0 1rem;
 			}
 

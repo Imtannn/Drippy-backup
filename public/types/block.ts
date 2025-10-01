@@ -8,6 +8,7 @@ export type BlockCategory =
 	| 'Accessory'
 	| 'Skirt'
 	| 'Coat'
+
 export type TemplateCategory = 'Jacket' | 'Shirt' | 'Pants' | 'Accessories' | 'Dress' | 'Skirt' | 'Top' | string // For custom categories
 
 export type BlockAvatar = 'Male' | 'Female'

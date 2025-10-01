@@ -1,4 +1,4 @@
-import {css, Element, element, html, type ElementAttributes} from 'lume'
+import {batch, css, Element, element, html, type ElementAttributes} from 'lume'
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
 import '../elements/cube-button.js'
@@ -8,7 +8,7 @@ import '../elements/person-button.js'
 
 import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
-import {updateUrlWithParams} from '../routes.js'
+import {pushState, searchParams} from '../routes.js'
 import './app-buttons.js'
 import './buy-button.js'
 import './share-button.js'
@@ -21,11 +21,12 @@ export class OutfitPreview extends Element {
 	static readonly elementName = 'outfit-preview'
 
 	#onBackButtonClick = () => {
-		store.setIsPreview = false
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.delete('isPreview')
-		updateUrlWithParams(searchParams)
-		store.navigateTo = 'template'
+		batch(() => {
+			store.isPreview = false
+			searchParams().delete('isPreview')
+			pushState()
+			store.view = 'template'
+		})
 	}
 
 	#onHomeButtonClick = () => {
@@ -35,7 +36,7 @@ export class OutfitPreview extends Element {
 	}
 
 	#onBuyItClick = () => {
-		store.navigateTo = 'order-items'
+		store.view = 'order-items'
 	}
 
 	shareIcon = () => html`
