@@ -32,6 +32,7 @@ import {
 	hasAncestorWithName,
 	meshesInTree,
 	onModelLoad,
+	querySelectorAllSignal,
 	setEnvMapOnModelLoad,
 	setMaterialsVisibleOnModelLoad,
 } from '../utils.js'
@@ -154,6 +155,8 @@ export class DrippyScene extends Element {
 		} finally {
 			store.removeLoadingMaterial(loadingId)
 		}
+
+		onCleanup(() => store.removeLoadingMaterial(loadingId))
 	}
 
 	// Reset materials to default state (no textures)
@@ -174,292 +177,208 @@ export class DrippyScene extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
-			if (store.view === 'preview') {
-				this.style.setProperty('--scene-transform', 'translateX(0)')
-			} else {
-				if (
-					store.view === 'order' ||
-					store.view === 'order-items' ||
-					store.view === 'order-size' ||
-					store.view === 'custom-measurement' ||
-					store.view === 'success' ||
-					store.view === 'share'
-				) {
-					this.style.setProperty('--scene-transform', 'translateX(-10rem)')
+			const {avatarModel, backgroundModel} = this
+			if (!avatarModel || !backgroundModel) return
+
+			const models = querySelectorAllSignal(avatarModel, 'lume-gltf-model[data-cloth]') as Accessor<
+				NodeListOf<GltfModel>
+			>
+
+			createEffect(() => {
+				if (store.view === 'preview') {
+					this.style.setProperty('--scene-transform', 'translateX(0)')
+					this.style.setProperty('--scene-desktop-transform', 'translateY(0)')
 				} else {
-					this.style.setProperty('--scene-transform', 'translateX(10rem)')
+					this.style.setProperty('--scene-desktop-transform', 'translateY(-100px)')
+
+					if (
+						store.view === 'order' ||
+						store.view === 'order-items' ||
+						store.view === 'order-size' ||
+						store.view === 'custom-measurement' ||
+						store.view === 'success' ||
+						store.view === 'share'
+					) {
+						this.style.setProperty('--scene-transform', 'translateX(-10rem)')
+					} else {
+						this.style.setProperty('--scene-transform', 'translateX(10rem)')
+					}
 				}
-			}
-		})
+			})
 
-		this.createEffect(() => {
-			if (store.view === 'preview') {
-				this.style.setProperty('--scene-desktop-transform', 'translateY(0)')
-			} else {
-				this.style.setProperty('--scene-desktop-transform', 'translateY(-100px)')
-			}
-		})
-
-		this.createEffect(() => {
-			if (this.selectedSpace) {
+			createEffect(() => {
+				if (!this.selectedSpace) return
 				const space = spaces.find(space => space.slug === this.selectedSpace?.slug)
-				if (space) {
-					this.sceneUrl = space.scene
-				}
-			}
-		})
+				if (space) this.sceneUrl = space.scene
+			})
 
-		this.createEffect(() => {
 			const mutations = createMutationsSignal(document.documentElement, {
 				attributes: true,
 				attributeFilter: ['data-theme'],
 			})
 
-			this.createEffect(() => {
+			createEffect(() => {
 				mutations()
 				this.isDark = document.documentElement.dataset.theme === 'dark'
 			})
-		})
 
-		const avatarId = Symbol('avatar')
+			// Track selected avatar loading state
+			const avatarId = Symbol('avatar')
+			store.trackModelLoading(avatarId, avatarModel)
 
-		// FIXME The following two effects are almost identical, running some of
-		// the same code twice.
+			// Track background scene loading state
+			const sceneId = Symbol('scene')
+			store.trackModelLoading(sceneId, backgroundModel)
 
-		// Track selected avatar loading state
-		this.createEffect(() => {
-			if (!store.isShowAvatar || this.selectedAvatar) return
-			if (store.tempSelectedAvatar) {
-				const avatar = this.avatarModel
-				if (!avatar) return
+			// Track block loading state
+			createEffect(() => {
+				for (const [index, el] of models().entries()) {
+					// Use element ID + index for more stable identification
+					const elementId = el.getAttribute('id') || `unknown-${index}`
+					const blockId = Symbol(`block-${elementId}-${index}`)
+					const modelLoaded = onModelLoad(el)
 
-				const avatarLoaded = onModelLoad(avatar)
+					createEffect(() => {
+						if (!modelLoaded()) store.addLoadingBlock(blockId)
+						onCleanup(() => store.removeLoadingBlock(blockId))
+					})
+				}
+			})
 
-				createEffect(() => {
-					if (!avatarLoaded()) {
-						store.addLoadingBlock(avatarId)
-						store.addIsDrippySceneLoading(avatarId)
+			// This will cache render blocks by ID. This is a quick fix to make the
+			// <For> re-use the same objects to avoid reloading GLTF models.
+			const renderBlockCache = new Map<string, RenderBlock>()
 
-						return
-					}
-
-					store.removeLoadingBlock(avatarId)
-					store.removeIsDrippySceneLoading(avatarId)
-				})
+			function getRenderBlock(id: string, block: Block, templateCategory: TemplateCategory) {
+				let renderBlock = renderBlockCache.get(id)
+				if (!renderBlock) renderBlockCache.set(id, (renderBlock = {block, templateCategory, id}))
+				return renderBlock
 			}
-		})
-
-		const sceneId = Symbol('scene')
-
-		// Track background scene loading state
-		this.createEffect(() => {
-			if (!this.selectedSpace || !this.selectedSpace?.scene || !store.isShowScene) return
-
-			const scene = this.backgroundModel
-			if (!scene) return
-
-			const backgroundLoaded = onModelLoad(scene)
 
 			createEffect(() => {
-				if (!backgroundLoaded()) {
-					store.addLoadingBlock(sceneId)
-					store.addIsDrippySceneLoading(sceneId)
+				const blocks = Array.from(this.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
+				this.renderBlocks = blocks.flatMap(block => {
+					if (block.category === 'Sleeves') {
+						const id = `${this.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
+						let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
-					return
-				}
+						const idMirror = `${id}-mirror`
+						let renderBlockMirror = getRenderBlock(idMirror, block, block.templateCategory)
 
-				store.removeLoadingBlock(sceneId)
-				store.removeIsDrippySceneLoading(sceneId)
-			})
-		})
-
-		// Track block loading state
-		this.createEffect(() => {
-			const totalBlockCount = this.renderBlocks.length
-
-			if (totalBlockCount === 0) {
-				store.removeLoadingBlock(avatarId) // why remove avatarId when no blocks?
-				return
-			}
-
-			const models = Array.from(this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? []) as GltfModel[]
-
-			// Track block loading symbols for cleanup
-			const blockLoadingSymbols = new Set<symbol>()
-
-			for (const [index, el] of models.entries()) {
-				// Use element ID + index for more stable identification
-				const elementId = el.getAttribute('id') || `unknown-${index}`
-				const blockId = Symbol(`block-${elementId}-${index}`)
-				blockLoadingSymbols.add(blockId)
-
-				const modelLoaded = onModelLoad(el)
-
-				createEffect(() => {
-					if (!modelLoaded()) {
-						store.addLoadingBlock(blockId)
-						return
+						return [renderBlock, renderBlockMirror]
 					}
 
-					store.removeLoadingBlock(blockId)
-				})
-			}
-
-			// Cleanup: Remove all tracked loading symbols when effect re-runs or component unmounts
-			onCleanup(() => {
-				for (const blockId of blockLoadingSymbols) {
-					store.removeLoadingBlock(blockId)
-				}
-			})
-		})
-
-		// This will cache render blocks by ID. This is a quick fix to make the
-		// <For> re-use the same objects to avoid reloading GLTF models.
-		const renderBlockCache = new Map<string, RenderBlock>()
-
-		function getRenderBlock(id: string, block: Block, templateCategory: TemplateCategory) {
-			let renderBlock = renderBlockCache.get(id)
-			if (!renderBlock) renderBlockCache.set(id, (renderBlock = {block, templateCategory, id}))
-			return renderBlock
-		}
-
-		this.createEffect(() => {
-			const blocks = Array.from(this.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
-			this.renderBlocks = blocks.flatMap(block => {
-				if (block.category === 'Sleeves') {
 					const id = `${this.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
 					let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
-					const idMirror = `${id}-mirror`
-					let renderBlockMirror = getRenderBlock(idMirror, block, block.templateCategory)
-
-					return [renderBlock, renderBlockMirror]
-				}
-
-				const id = `${this.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
-				let renderBlock = getRenderBlock(id, block, block.templateCategory)
-
-				return renderBlock
-			})
-		})
-
-		// Re-apply materials whenever the selected fabrics change or models mount
-		this.createEffect(() => {
-			const selectedFabrics = this.selectedFabrics
-
-			// Cause reactive re-run when the number of blocks changes
-			if (this.renderBlocks.length === 0) {
-				// nothing to bind
-				return
-			}
-
-			let shouldCancel = false
-			const isCanceled = () => shouldCancel
-
-			const models: GltfModel[] = Array.from(
-				this.shadowRoot?.querySelectorAll('lume-gltf-model[data-cloth]') ?? [],
-			) as GltfModel[]
-
-			// Track material loading symbols for cleanup
-			const materialLoadingSymbols = new Set<symbol>()
-
-			// Process each model using its data-blockid to find the correct fabric
-			for (const el of models) {
-				const blockId = el.getAttribute('id')
-				if (!blockId) continue
-
-				// Parse blockId to extract template category, block category, and block ID
-				// Format: "TemplateCategory-BlockCategory-BlockId" or "TemplateCategory-BlockCategory-BlockId-mirror"
-				const isMirror = blockId.endsWith('-mirror')
-				const baseBlockId = isMirror ? blockId.slice(0, -7) : blockId // Remove "-mirror" if present
-				const parts = baseBlockId.split('-')
-
-				if (parts.length < 3) continue
-
-				const templateCategory = parts[1] as TemplateCategory
-				const blockCategory = parts[2] as BlockCategory
-
-				// Find the fabrics for this block
-				const templateFabrics = selectedFabrics.get(templateCategory)
-				const fabrics = templateFabrics?.get(blockCategory) || new Map<string, Fabric>()
-				const loadingId = Symbol(`material-${blockId}`)
-				materialLoadingSymbols.add(loadingId)
-
-				const modelLoaded = onModelLoad(el)
-
-				createEffect(() => {
-					if (!modelLoaded()) return
-
-					if (fabrics.size > 0) {
-						this.#applyFabrics(el, fabrics, isCanceled, loadingId)
-					} else {
-						// Reset to default material if no fabric selected for this block category
-						this.#resetMaterialsToDefault(el)
-					}
+					return renderBlock
 				})
-			}
-
-			onCleanup(() => {
-				shouldCancel = true
-				// Cleanup: Remove all tracked material loading symbols
-				for (const loadingId of materialLoadingSymbols) {
-					store.removeLoadingMaterial(loadingId)
-				}
 			})
-		})
 
-		// Play animation when blocks are added, pause animation when no blocks.
-		this.createEffect(() => {
-			// When rigging the garments to the skeleton, the model needs to be stationary,
-			// ideally in T-pose. We need to wait for all the blocks to be fully loaded before
-			// rigging.
+			// Re-apply materials whenever the selected fabrics change or models mount
+			createEffect(() => {
+				const selectedFabrics = this.selectedFabrics
 
-			if (store.loadingBlocks.size > 0) {
-				this.animsStopped = true
-			} else {
-				// Wait 1 more frame just for good measure. The rigging should happen as soon as
-				// the bocks are loaded, so this makes sure that the animations start on the next
-				// frame, when the rigging is finished.
-				if (this.animsEnabled) {
-					requestAnimationFrame(() => {
-						this.animsStopped = false
+				// Cause reactive re-run when the number of blocks changes
+				if (this.renderBlocks.length === 0) {
+					// nothing to bind
+					return
+				}
+
+				let shouldCancel = false
+				const isCanceled = () => shouldCancel
+
+				// Process each model using its data-blockid to find the correct fabric
+				for (const el of models()) {
+					const blockId = el.getAttribute('id')
+					if (!blockId) continue
+
+					// Parse blockId to extract template category, block category, and block ID
+					// Format: "TemplateCategory-BlockCategory-BlockId" or "TemplateCategory-BlockCategory-BlockId-mirror"
+					const isMirror = blockId.endsWith('-mirror')
+					const baseBlockId = isMirror ? blockId.slice(0, -7) : blockId // Remove "-mirror" if present
+					const parts = baseBlockId.split('-')
+
+					if (parts.length < 3) continue
+
+					const templateCategory = parts[1] as TemplateCategory
+					const blockCategory = parts[2] as BlockCategory
+
+					// Find the fabrics for this block
+					const templateFabrics = selectedFabrics.get(templateCategory)
+					const fabrics = templateFabrics?.get(blockCategory) || new Map<string, Fabric>()
+					const loadingId = Symbol(`material-${blockId}`)
+
+					const modelLoaded = onModelLoad(el)
+
+					createEffect(() => {
+						if (!modelLoaded()) return
+
+						if (fabrics.size > 0) {
+							this.#applyFabrics(el, fabrics, isCanceled, loadingId)
+						} else {
+							// Reset to default material if no fabric selected for this block category
+							this.#resetMaterialsToDefault(el)
+						}
+
+						onCleanup(() => this.#resetMaterialsToDefault(el))
 					})
 				}
-			}
-		})
 
-		this.createEffect(() => {
-			if (store.selectedAnimation === 'none') {
-				this.animsEnabled = false
-				this.animsStopped = true
+				onCleanup(() => (shouldCancel = true))
+			})
 
-				this.animName = null
-				this.animSrc = null
-			} else if (store.selectedAnimation === 'walk') {
-				this.animsEnabled = true
+			// Play animation when blocks are added, pause animation when no blocks.
+			createEffect(() => {
+				// When rigging the garments to the skeleton, the model needs to be stationary,
+				// ideally in T-pose. We need to wait for all the blocks to be fully loaded before
+				// rigging.
 
-				this.animName = 'FV2_Walking in place.mtn'
-				this.animSrc = '../models/Yuna-walkinplace.glb'
-			} else if (store.selectedAnimation === 'dance') {
-				this.animsEnabled = true
+				if (store.loadingBlocks.size > 0) {
+					this.animsStopped = true
+				} else {
+					// Wait 1 more frame just for good measure. The rigging should happen as soon as
+					// the bocks are loaded, so this makes sure that the animations start on the next
+					// frame, when the rigging is finished.
+					if (this.animsEnabled) {
+						requestAnimationFrame(() => {
+							this.animsStopped = false
+						})
+					}
+				}
+			})
 
-				this.animName = 'FV2_Dancing_01.mtn'
-				this.animSrc = '../models/Yuna-dancing01.glb'
-			}
-		})
+			createEffect(() => {
+				if (store.selectedAnimation === 'none') {
+					this.animsEnabled = false
+					this.animsStopped = true
 
-		this.createEffect(() => {
-			if (!this.lumeScene) return
-			this.lumeScene.glRenderer!.toneMapping = THREE.ACESFilmicToneMapping
-		})
+					this.animName = null
+					this.animSrc = null
+				} else if (store.selectedAnimation === 'walk') {
+					this.animsEnabled = true
 
-		this.createEffect(() => {
-			if (this.selectedSpace?.scene && this.backgroundModel) {
-				enableFrontsideOnModelLoad(this.backgroundModel)
-				enableShadowOnModelLoad(this.backgroundModel)
-				setEnvMapOnModelLoad(this.backgroundModel, env)
-				setMaterialsVisibleOnModelLoad(this.backgroundModel, () => store.isShowScene)
-			}
+					this.animName = 'FV2_Walking in place.mtn'
+					this.animSrc = '../models/Yuna-walkinplace.glb'
+				} else if (store.selectedAnimation === 'dance') {
+					this.animsEnabled = true
+
+					this.animName = 'FV2_Dancing_01.mtn'
+					this.animSrc = '../models/Yuna-dancing01.glb'
+				}
+			})
+
+			createEffect(() => {
+				if (!this.lumeScene) return
+				this.lumeScene.glRenderer!.toneMapping = THREE.ACESFilmicToneMapping
+			})
+
+			createEffect(() => {
+				enableFrontsideOnModelLoad(backgroundModel)
+				enableShadowOnModelLoad(backgroundModel)
+				setEnvMapOnModelLoad(backgroundModel, env)
+				setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
+			})
 		})
 	}
 
@@ -618,13 +537,7 @@ export class DrippyScene extends Element {
 						<lume-gltf-model
 							id="avatar"
 							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
-							src=${() => {
-								const avatarValue =
-									store.view === 'avatar'
-										? store.tempSelectedAvatar || this.selectedAvatar
-										: (this.selectedAvatar ?? store.tempSelectedAvatar)
-								return avatars.find(avatar => avatar.value === avatarValue)?.src
-							}}
+							src=${() => avatars.find(avatar => avatar.name === this.selectedAvatar)?.src ?? ''}
 							scale="1 1 1"
 							data-avatar
 						>
@@ -689,9 +602,8 @@ export class DrippyScene extends Element {
 			--scene-transform: translateX(0);
 			--scene-desktop-transform: translateY(-100px);
 			background: var(--appBackground);
-			width: var(--appWidth);
-			height: var(--appHeight);
-			min-height: 100vh;
+			width: 600px;
+			height: 400px;
 			touch-action: none;
 			position: relative;
 			/* iOS specific fixes */
@@ -704,7 +616,6 @@ export class DrippyScene extends Element {
 		#lume-scene-container {
 			width: 100%;
 			height: 100%;
-			min-height: 100vh;
 			transition: transform var(--transitionFast);
 			-webkit-transition: transform var(--transitionFast);
 			/* iOS specific fixes */

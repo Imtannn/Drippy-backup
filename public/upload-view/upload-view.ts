@@ -988,7 +988,7 @@ export class UploadView extends Element {
 					<for-each
 						items=${() => avatars}
 						content=${() => (avatar: (typeof avatars)[number]) => html`
-							<option value=${avatar.value}>${avatar.value}</option>
+							<option value=${avatar.name}>${avatar.name}</option>
 						`}
 					></for-each>
 				</select>
@@ -1245,8 +1245,8 @@ export class UploadView extends Element {
 		}
 
 		:host {
-			width: var(--appWidth);
-			height: var(--appHeight);
+			width: 100%;
+			height: 100%;
 		}
 
 		drippy-scene {

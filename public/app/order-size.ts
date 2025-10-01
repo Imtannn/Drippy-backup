@@ -17,7 +17,7 @@ export class OrderSize extends Element {
 	static elementName = 'order-size'
 
 	#onBackButtonClick = () => {
-		store.navigateTo = 'order-items'
+		store.view = 'order-items'
 	}
 
 	#onHomeButtonClick = () => {
@@ -27,7 +27,7 @@ export class OrderSize extends Element {
 	}
 
 	#onNextClick = () => {
-		store.navigateTo = 'order'
+		store.view = 'order'
 	}
 
 	#onShareClick = () => {
@@ -38,20 +38,20 @@ export class OrderSize extends Element {
 	}
 
 	#onBuyItClick = () => {
-		store.navigateTo = 'order'
+		store.view = 'order'
 	}
 
 	#onSizeButtonClick = (size: string, category?: TemplateCategory) => {
 		if (size === 'Custom') {
 			if (store.selectedSpace?.isWholesale) {
 				// Wholesale: use existing global custom measurement
-				store.navigateTo = 'custom-measurement'
+				store.view = 'custom-measurement'
 			} else {
 				// Retail: set current category and navigate to custom measurement
 				if (category) {
 					store.currentCustomMeasurementCategory = category
 				}
-				store.navigateTo = 'custom-measurement'
+				store.view = 'custom-measurement'
 			}
 		} else {
 			if (store.selectedSpace?.isWholesale) {

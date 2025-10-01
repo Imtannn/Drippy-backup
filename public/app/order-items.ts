@@ -51,7 +51,7 @@ export class OrderItems extends Element {
 	}
 
 	#onBackButtonClick = () => {
-		store.navigateTo = 'preview'
+		store.view = 'preview'
 	}
 
 	#onHomeButtonClick = () => {
@@ -61,7 +61,7 @@ export class OrderItems extends Element {
 	}
 
 	#onNextClick = () => {
-		store.navigateTo = 'order-size'
+		store.view = 'order-size'
 	}
 
 	#onItemToggle = (category: TemplateCategory) => {
@@ -75,7 +75,7 @@ export class OrderItems extends Element {
 	}
 
 	#onBuyItClick = () => {
-		store.navigateTo = 'preview'
+		store.view = 'preview'
 	}
 
 	template = () => html`

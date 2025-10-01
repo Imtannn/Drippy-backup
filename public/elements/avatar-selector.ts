@@ -136,10 +136,7 @@ export class AvatarSelector extends Element {
 		}, 100)
 
 		this.createEffect(() => {
-			const currentAvatar = store.selectedAvatar || store.tempSelectedAvatar
-			if (currentAvatar) {
-				this.syncWithStore()
-			}
+			if (store.selectedAvatar) this.syncWithStore()
 		})
 	}
 
@@ -150,27 +147,24 @@ export class AvatarSelector extends Element {
 		let avatar
 
 		if (gender === 'male') {
-			avatar = avatars.find(avatar => avatar.gender === gender && avatar.value === 'luka')
+			avatar = avatars.find(avatar => avatar.gender === gender && avatar.name === 'luka')
 		} else {
-			avatar = avatars.find(avatar => avatar.gender === gender && avatar.value === 'moidien')
+			avatar = avatars.find(avatar => avatar.gender === gender && avatar.name === 'moidien')
 		}
 
-		return avatar ? avatar.value : null
+		return avatar ? avatar.name : null
 	}
 
 	private setDefaultMaleAvatar() {
-		if (!store.selectedAvatar && !store.tempSelectedAvatar) {
-			const maleAvatarValue = this.findAvatarByGender('male')
-			if (maleAvatarValue) {
-				store.setTempSelectedAvatar = maleAvatarValue
-				store.selectAvatar = maleAvatarValue
+		const maleAvatarValue = this.findAvatarByGender('male')
+		if (maleAvatarValue) {
+			store.selectedAvatar = maleAvatarValue
 
-				// Set default space for male avatar
-				this.setSpaceForGender('male')
+			// Set default space for male avatar
+			this.setSpaceForGender('male')
 
-				// Set default blocks for male avatar
-				this.setBlocksForGender('male')
-			}
+			// Set default blocks for male avatar
+			this.setBlocksForGender('male')
 		}
 	}
 
@@ -266,7 +260,7 @@ export class AvatarSelector extends Element {
 			}
 
 			if (blockData.length > 0) {
-				store.setSelectedBlocks = blockData
+				store.setSelectedBlocks(blockData)
 				// Apply màu cho tất cả blocks sau khi set
 				this.applyFabricsToAllBlocks(gender)
 			}
@@ -414,7 +408,7 @@ export class AvatarSelector extends Element {
 				}
 			}
 		} catch (error) {
-			// Error applying fabrics
+			console.error('Error applying fabrics:', error instanceof Error ? error.message : error)
 		}
 	}
 
@@ -599,8 +593,7 @@ export class AvatarSelector extends Element {
 		const avatarValue = this.findAvatarByGender(option.gender)
 
 		if (avatarValue) {
-			store.setTempSelectedAvatar = avatarValue
-			store.selectAvatar = avatarValue
+			store.selectedAvatar = avatarValue
 
 			// Set default space for selected gender
 			this.setSpaceForGender(option.gender)
@@ -855,18 +848,15 @@ export class AvatarSelector extends Element {
 	 * Sync với store hiện tại - set avatar selector theo avatar đã chọn trong store
 	 */
 	public syncWithStore() {
-		const currentAvatar = store.selectedAvatar || store.tempSelectedAvatar
+		const currentAvatar = store.selectedAvatar
+		const avatar = avatars.find(avatar => avatar.name === currentAvatar)
 
-		if (currentAvatar) {
-			const avatar = avatars.find(avatar => avatar.value === currentAvatar)
-
-			if (avatar) {
-				const option = this.options.find(opt => opt.gender === avatar.gender)
-				if (option) {
-					this.selectedOption = option
-					// Update checkmarks in dropdown
-					this.updateCheckmarks()
-				}
+		if (avatar) {
+			const option = this.options.find(opt => opt.gender === avatar.gender)
+			if (option) {
+				this.selectedOption = option
+				// Update checkmarks in dropdown
+				this.updateCheckmarks()
 			}
 		} else {
 			// Nếu không có avatar nào được chọn, set default male

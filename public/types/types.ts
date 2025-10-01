@@ -16,8 +16,10 @@ export type Gender = 'male' | 'female'
 export type Avatar = {
 	thumbnail: string
 	src: string
-	value: string
+	/** A unique name such as "cool-avatar". Serves as the ID of the avatar. */
+	name: string
 	gender: Gender
+	/** When true, the avatar is the default avatar. Only *one* avatar should have this set to true. */
 	default?: boolean
 }
 

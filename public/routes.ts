@@ -14,9 +14,9 @@ export const appTitle = () => _appTitle()
 // Track the url of the current page on route change. This is used to track
 // visits to the page.
 
-const [_url, setUrl] = createSignal(new URL(location.href))
+const [url, setUrl] = createSignal(new URL(location.href))
 
-export const url = () => _url()
+export {url}
 export const pathname = () => url().pathname
 export const searchParams = () => url().searchParams
 export const host = () => url().host
@@ -32,25 +32,25 @@ export const password = () => url().password
 
 export const hrefMinusOrigin = () => url().href.replace(url().origin, '')
 
-// Utility function to update URL with search params while ensuring clean root path
-export const updateUrlWithParams = (searchParams: URLSearchParams) => {
-	window.history.replaceState({}, '', `?${searchParams.toString()}`)
-}
+export const replaceState = () => window.history.replaceState({}, '', href())
+export const pushState = () => window.history.pushState({}, '', href())
 
 window.addEventListener('popstate', () => setUrl(new URL(location.href)))
 
-const pushState = history.pushState
-history.pushState = History.prototype.pushState = function (...args) {
-	const ret = pushState.apply(this, args)
-	setUrl(new URL(location.href))
-	return ret
-}
+{
+	const pushState = history.pushState
+	history.pushState = History.prototype.pushState = function (...args) {
+		const ret = pushState.apply(this, args)
+		setUrl(new URL(location.href))
+		return ret
+	}
 
-const replaceState = history.replaceState
-history.replaceState = History.prototype.replaceState = function (...args) {
-	const ret = replaceState.apply(this, args)
-	setUrl(new URL(location.href))
-	return ret
+	const replaceState = history.replaceState
+	history.replaceState = History.prototype.replaceState = function (...args) {
+		const ret = replaceState.apply(this, args)
+		setUrl(new URL(location.href))
+		return ret
+	}
 }
 
 // Track which routes the user has already visited in local storage, that way we

@@ -152,10 +152,10 @@ export class RemixOverlay extends Element {
 	#onBlockSelect = (block: Block) => {
 		if (!this.selectedTemplateCategory) return
 
-		store.setSelectedBlocks = {
+		store.setSelectedBlocks({
 			block,
 			templateCategory: this.selectedTemplateCategory,
-		}
+		})
 	}
 
 	#getIsBlockActive = (block: Block) => {

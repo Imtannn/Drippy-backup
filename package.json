@@ -6,6 +6,7 @@
 	"scripts": {
 		"start": "npm run dev",
 		"build": "npm run _link && tsc",
+		"build:watch": "npm run _link && tsc --watch",
 		"build:clean": "npm run clean && npm run build",
 		"dev": "npm run build:clean && concurrently --kill-others --prefix-colors=auto --names=typescript,meteor 'tsc --watch' 'npm run _meteor'",
 		"_link": "symlink-dir imports public/imports",
