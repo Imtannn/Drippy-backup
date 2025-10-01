@@ -67,6 +67,10 @@ const BRAND_CONFIGS = [
 		brand: 'atelierGourney',
 		rootFolderId: '17aBfgFcD7Liq9fB_KC57rl5S2w-O4LYf',
 	},
+	{
+		brand: 'imzad',
+		rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
+	},
 	// {
 	// 	brand: 'baroudeuses',
 	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
