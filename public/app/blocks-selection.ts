@@ -1,7 +1,7 @@
-import {css, element, Element, html, signal, untrack, type ElementAttributes} from 'lume'
+import {batch, css, element, Element, html, signal, untrack, type ElementAttributes} from 'lume'
 import {blocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
-import {updateUrlWithParams} from '../routes.js'
+import {pushState, searchParams} from '../routes.js'
 
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
@@ -206,7 +206,7 @@ export class BlocksSelection extends Element {
 	}
 
 	#onBackButtonClick = () => {
-		store.navigateTo = 'template'
+		store.view = 'template'
 	}
 
 	#onHomeButtonClick = () => {
@@ -216,10 +216,11 @@ export class BlocksSelection extends Element {
 	}
 
 	#onPreviewButtonClick = () => {
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('isPreview', 'true')
-		store.setIsPreview = true
-		updateUrlWithParams(searchParams)
+		batch(() => {
+			searchParams().set('isPreview', 'true')
+			pushState()
+			store.isPreview = true
+		})
 	}
 
 	template = () => html`
@@ -363,10 +364,10 @@ export class BlocksSelection extends Element {
 																					item-value=${() => block}
 																					oncardselected=${(e: CustomEvent) => {
 																						if (!this.selectedTemplateCategory) return
-																						store.setSelectedBlocks = {
+																						store.setSelectedBlocks({
 																							block: e.detail.itemValue,
 																							templateCategory: this.selectedTemplateCategory,
-																						}
+																						})
 																					}}
 																				></item-card>
 																			`}

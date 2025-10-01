@@ -19,7 +19,7 @@ export class AvatarDropdown extends Element {
 		this.createEffect(() => {
 			const selectedAvatar = store.selectedAvatar
 			if (selectedAvatar) {
-				const avatar = avatars.find(a => a.value === selectedAvatar)
+				const avatar = avatars.find(a => a.name === selectedAvatar)
 				this.currentAvatarThumbnail = avatar?.thumbnail || ''
 			}
 		})

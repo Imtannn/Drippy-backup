@@ -78,11 +78,7 @@ export class PoseSelection extends Element {
 				<tabs-content selected-value="Poses">
 					<div class="items-grid">
 						<for-each
-							items=${() =>
-								store.selectedAvatar === 'moidien' &&
-								(store.tempSelectedAvatar === 'moidien' || !store.tempSelectedAvatar)
-									? poses.poses
-									: []}
+							items=${() => (store.selectedAvatar === 'moidien' ? poses.poses : [])}
 							content=${() => (pose: (typeof poses.poses)[number]) => html`
 								<item-card
 									class=${() => (store.selectedAnimation === pose.value ? 'item-preview' : '')}

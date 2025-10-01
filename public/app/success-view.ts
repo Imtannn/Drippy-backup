@@ -10,11 +10,11 @@ export class SuccessView extends Element {
 		const url = new URL(window.location.href)
 		window.history.replaceState({}, '', url.pathname)
 		store.resetState()
-		store.navigateTo = 'avatar'
+		store.view = 'avatar'
 	}
 
 	#onBackButtonClick = () => {
-		store.navigateTo = 'order-items'
+		store.view = 'order-items'
 	}
 
 	#onHomeButtonClick = () => {

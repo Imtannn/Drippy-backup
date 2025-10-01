@@ -8,6 +8,7 @@
 		"sourceMap": true,
 		"target": "ES2023",
 		"module": "ES2022",
+		"erasableSyntaxOnly": true,
 		"moduleResolution": "Node",
 		"lib": ["DOM", "DOM.Iterable", "ES2023"],
 		"verbatimModuleSyntax": true,
