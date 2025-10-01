@@ -138,7 +138,7 @@ const modelImage1 = new URL('../images/landing/model-1.png', import.meta.url).hr
 const stepImage1 = new URL('../images/landing/step-1.png', import.meta.url).href
 
 const cta__background = new URL('../images/landing/cta-background.png', import.meta.url).href
-const cta_model = new URL('../images/landing/cta-model.JPEG', import.meta.url).href
+const cta_model = new URL('../images/landing/cta-model.png', import.meta.url).href
 
 const instagramIcon = new URL('../images/landing/discord.png', import.meta.url).href
 const discordIcon = new URL('../images/landing/instagram.png', import.meta.url).href

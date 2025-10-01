@@ -1,6 +1,6 @@
 import {css, Element, element, html, signal} from 'lume'
 
-const loadingVideoUrl = new URL('../videos/landing.mp4', import.meta.url).href
+const loadingVideoUrl = new URL('../videos/loading.mp4', import.meta.url).href
 
 @element
 export class VideoLoading extends Element {
@@ -11,9 +11,29 @@ export class VideoLoading extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
+		// Prevent body scroll when video is showing
+		document.body.style.overflow = 'hidden'
+		document.documentElement.style.overflow = 'hidden'
+
+		// Force white background on host element
+		this.style.backgroundColor = '#fff'
+		this.style.background = '#fff'
+
 		// Set up video event listeners after template is rendered
 		setTimeout(() => {
 			const video = this.shadowRoot?.querySelector('.loading-video') as HTMLVideoElement
+			const videoContainer = this.shadowRoot?.querySelector('.video-loading') as HTMLElement
+			const fallbackLoader = this.shadowRoot?.querySelector('.fallback-loader') as HTMLElement
+
+			// Force white background on all elements
+			if (videoContainer) {
+				videoContainer.style.backgroundColor = '#fff'
+				videoContainer.style.background = '#fff'
+			}
+			if (fallbackLoader) {
+				fallbackLoader.style.backgroundColor = '#fff'
+				fallbackLoader.style.background = '#fff'
+			}
 			if (video) {
 				// iPhone specific fixes
 				video.setAttribute('webkit-playsinline', 'true')
@@ -21,6 +41,11 @@ export class VideoLoading extends Element {
 				video.muted = true
 				video.defaultMuted = true
 				video.preload = 'auto'
+				video.style.backgroundColor = '#fff'
+				// Prevent scaling
+				video.style.transform = 'translateZ(0) scale(1)'
+				video.style.maxWidth = '100vw'
+				video.style.maxHeight = '100vh'
 
 				video.addEventListener('loadeddata', () => {
 					this.videoError = false
@@ -44,6 +69,14 @@ export class VideoLoading extends Element {
 		}, 0)
 	}
 
+	disconnectedCallback() {
+		super.disconnectedCallback()
+
+		// Restore body scroll when component is removed
+		document.body.style.overflow = ''
+		document.documentElement.style.overflow = ''
+	}
+
 	template = () => html`
 		<div class="video-loading">
 			<video class="loading-video" autoplay muted loop playsinline>
@@ -58,7 +91,6 @@ export class VideoLoading extends Element {
 
 	css = css/*css*/ `
 		:host {
-			/* Full page loading */
 			display: block;
 			width: 100vw;
 			height: 100vh;
@@ -66,7 +98,8 @@ export class VideoLoading extends Element {
 			top: 0;
 			left: 0;
 			z-index: 9999;
-			pointer-events: auto;
+			background: #fff;
+			overflow: hidden;
 		}
 
 		.video-loading {
@@ -75,27 +108,17 @@ export class VideoLoading extends Element {
 			justify-content: center;
 			width: 100%;
 			height: 100%;
-			position: relative;
-			background: #010304;
+			background: #fff;
 		}
 
 		.loading-video {
-			width: 100vw;
-			height: 100vh;
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: 10;
+			width: 100%;
+			height: 100%;
 			object-fit: contain;
 			object-position: center;
-			/* iPhone specific fixes */
-			-webkit-object-fit: contain;
-			-webkit-object-position: center;
-			/* Force hardware acceleration */
+			background: #fff;
 			-webkit-transform: translateZ(0);
 			transform: translateZ(0);
-			/* Ensure video is visible */
-			background: transparent;
 		}
 
 		.fallback-loader {
@@ -107,8 +130,7 @@ export class VideoLoading extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background: #010304;
-			z-index: 5;
+			background: #fff;
 		}
 
 		.spinner {
@@ -116,7 +138,6 @@ export class VideoLoading extends Element {
 			height: 80px;
 			border: 6px solid rgba(76, 169, 195, 0.2);
 			border-top: 6px solid rgba(76, 169, 195, 1);
-			background: rgba(76, 169, 195, 0.1);
 			border-radius: 50%;
 			animation: spin 1s linear infinite;
 		}
@@ -128,24 +149,6 @@ export class VideoLoading extends Element {
 			100% {
 				transform: rotate(360deg);
 			}
-		}
-
-		/* Mobile scaling for screens ≤ 480px */
-		@media (max-width: 480px) {
-			.loading-video {
-				transform: translateZ(0) scale(2.5);
-				-webkit-transform: translateZ(0) scale(2.5);
-			}
-		}
-
-		/* Dark theme support */
-		[data-theme='dark'] .fallback-loader {
-			background: #010304;
-		}
-
-		[data-theme='dark'] .spinner {
-			border-color: rgba(76, 169, 195, 0.3);
-			border-top-color: rgba(76, 169, 195, 1);
 		}
 	`
 }
