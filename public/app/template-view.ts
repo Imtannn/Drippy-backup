@@ -163,15 +163,17 @@ export class TemplateView extends Element {
 		newBlocks.set(template.category, newBlocksMap)
 		newFabrics.set(template.category, newFabricsMap)
 
-		store.selectedFabrics = newFabrics
+		batch(() => {
+			store.selectedFabrics = newFabrics
 
-		// @ts-expect-error FIXME we should avoid having different ways of
-		// setting the same thing (see store.setSelectedBlocks, and
-		// loadFromUrlParameters in drippy-app.ts).  This will get more
-		// difficult to manage and error prone/buggy.
-		store.__selectedBlocks = newBlocks
+			// @ts-expect-error FIXME we should avoid having different ways of
+			// setting the same thing (see store.setSelectedBlocks, and
+			// loadFromUrlParameters in drippy-app.ts).  This will get more
+			// difficult to manage and error prone/buggy.
+			store.__selectedBlocks = newBlocks
 
-		store.selectedTemplates = newTemplates
+			store.selectedTemplates = newTemplates
+		})
 
 		// Check if remix is available for this template
 		const {available} = blockManager.isRemixAvailableForTemplate(template.category, {
