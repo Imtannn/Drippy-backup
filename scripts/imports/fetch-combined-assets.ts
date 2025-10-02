@@ -75,6 +75,18 @@ const BRAND_CONFIGS = [
 		brand: 'oneThousandPoets',
 		rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
 	},
+	{
+		brand: 'zove',
+		rootFolderId: '1XlxaOIFxxh-8xCmmM6XrDOW6iqq7xNhw',
+	},
+	{
+		brand: 'jaSengBu',
+		rootFolderId: '1BO4szN8246Y0V-AhL9zDyXzJ6rZLL7U8',
+	},
+	{
+		brand: 'mssPark',
+		rootFolderId: '1uUtAmMj_4gV1P3xuJKWGPbATJcv63GcJ',
+	},
 	// {
 	// 	brand: 'baroudeuses',
 	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
