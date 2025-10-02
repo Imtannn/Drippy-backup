@@ -52,18 +52,8 @@ export class AvatarSelection extends Element {
 			<bottom-sheet-header>
 				<div class="tabs-container">
 					<tabs-list>
-						<tabs-trigger
-							selected-value="female"
-							is-disabled=${() =>
-								this.contentOnly && store.selectedSpace?.gender && store.selectedSpace.gender !== 'female'}
-							>Female</tabs-trigger
-						>
-						<tabs-trigger
-							selected-value="male"
-							is-disabled=${() =>
-								this.contentOnly && store.selectedSpace?.gender && store.selectedSpace.gender !== 'male'}
-							>Male</tabs-trigger
-						>
+						<tabs-trigger selected-value="female">Female</tabs-trigger>
+						<tabs-trigger selected-value="male">Male</tabs-trigger>
 					</tabs-list>
 				</div>
 			</bottom-sheet-header>
