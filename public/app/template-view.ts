@@ -9,6 +9,7 @@ import {currentUser, store} from './store.js'
 
 import '../elements/animation-select.js'
 import '../elements/avatar-dropdown.js'
+import '../elements/avatar-swap-bottom-sheet.js'
 import '../elements/back-button.js'
 import '../elements/bottom-navigation.js'
 import '../elements/bottom-sheet.js'
@@ -29,6 +30,7 @@ import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import {updateGarmentsInUrl, updateFabricsInUrl, searchParams, pushState} from '../routes.js'
 import {formatNumber} from '../utils.js'
+import {avatars} from '../consts/avatars.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './item-card.js'
@@ -50,6 +52,8 @@ export class TemplateView extends Element {
 	@signal showPoseSelection = false
 	@signal showRemixOverlay = false
 	@signal showTemplateOverlay: Template | null = null
+	@signal showAvatarSwapSheet = false
+	@signal avatarSwapTemplate: Template | null = null
 
 	private isOpeningOverlay = false
 
@@ -135,6 +139,139 @@ export class TemplateView extends Element {
 			return
 		}
 
+		// Check if template requires different gender avatar
+		const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
+		const currentGender = currentAvatar?.gender
+		const templateGender = template.avatar
+
+		if (currentGender && templateGender && currentGender !== templateGender) {
+			// Show avatar swap bottom sheet
+			batch(() => {
+				this.avatarSwapTemplate = template
+				this.showAvatarSwapSheet = true
+			})
+			return
+		}
+
+		// Proceed with template selection
+		this.#selectTemplate(template)
+	}
+
+	#isTemplateActive = (template: Template) => {
+		return store.selectedTemplates.get(template.category)?._id === template._id
+	}
+
+	#onPreviewButtonClick = () => {
+		batch(() => {
+			const user = currentUser()
+
+			if (user) {
+				searchParams().set('isPreview', 'true')
+				store.isPreview = true
+				this.showAvatarSelection = false
+				this.showPoseSelection = false
+				this.showRemixOverlay = false
+				this.showTemplateOverlay = null
+				pushState()
+			} else {
+				this.showLoginDialog = true
+			}
+		})
+	}
+
+	#onBackButtonClick = () => {
+		batch(() => {
+			// FIXME This logic is "go back to home" logic, however it is inaccessible
+			// here to any other code that may want to go back to home. We need
+			// to make code re-usable, and consistent, without repeating.
+
+			// Reset UI state
+			this.showAvatarSelection = false
+			this.showPoseSelection = false
+			this.showLoginDialog = false
+			this.showRemixOverlay = false
+			this.showTemplateOverlay = null
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
+
+			store.resetSelectedTemplates()
+			store.view = 'scene'
+		})
+	}
+
+	#onAvatarDropdownClick = () => {
+		batch(() => {
+			this.showAvatarSelection = !this.showAvatarSelection
+			this.showPoseSelection = false
+			this.showRemixOverlay = false
+			this.showTemplateOverlay = null
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
+		})
+	}
+
+	#onNavTabChange = (e: CustomEvent) => {
+		batch(() => {
+			const tab = e.detail.tab
+			if (tab === 'pose') {
+				this.showPoseSelection = true
+				this.showAvatarSelection = false
+			} else {
+				this.showPoseSelection = false
+				this.showAvatarSelection = false
+			}
+			this.showRemixOverlay = false
+			this.showTemplateOverlay = null
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
+		})
+	}
+
+	#closeRemixOverlay = () => {
+		batch(() => {
+			this.showRemixOverlay = false
+			store.setRemixOverlayTemplateCategory = null
+		})
+	}
+
+	#onTemplateOverlayClose = () => {
+		batch(() => {
+			this.showTemplateOverlay = null
+			this.isOpeningOverlay = false
+		})
+	}
+
+	#handleTemplateOverlayRemix = (templateCategory: TemplateCategory) => {
+		batch(() => {
+			this.showTemplateOverlay = null
+			this.isOpeningOverlay = false
+			store.setRemixOverlayTemplateCategory = templateCategory
+			this.showRemixOverlay = true
+		})
+	}
+
+	#onTemplateOverlayRemix = (e: CustomEvent) => {
+		const templateCategory = e.detail.templateCategory
+		this.#handleTemplateOverlayRemix(templateCategory)
+	}
+
+	#onAvatarSwapped = () => {
+		// Close the avatar swap sheet
+		batch(() => {
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
+			this.showAvatarSelection = true
+		})
+	}
+
+	#onAvatarSwapCancel = () => {
+		batch(() => {
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
+		})
+	}
+
+	#selectTemplate = (template: Template) => {
 		const newTemplates = new Map<TemplateCategory, Template>(store.selectedTemplates)
 		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(store.selectedBlocks)
 		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(store.selectedFabrics)
@@ -184,98 +321,6 @@ export class TemplateView extends Element {
 		if (available) {
 			this.#handleTemplateOverlayRemix(template.category)
 		}
-	}
-
-	#isTemplateActive = (template: Template) => {
-		return store.selectedTemplates.get(template.category)?._id === template._id
-	}
-
-	#onPreviewButtonClick = () => {
-		batch(() => {
-			const user = currentUser()
-
-			if (user) {
-				searchParams().set('isPreview', 'true')
-				store.isPreview = true
-				this.showAvatarSelection = false
-				this.showPoseSelection = false
-				this.showRemixOverlay = false
-				this.showTemplateOverlay = null
-				pushState()
-			} else {
-				this.showLoginDialog = true
-			}
-		})
-	}
-
-	#onBackButtonClick = () => {
-		batch(() => {
-			// FIXME This logic is "go back to home" logic, however it is inaccessible
-			// here to any other code that may want to go back to home. We need
-			// to make code re-usable, and consistent, without repeating.
-
-			// Reset UI state
-			this.showAvatarSelection = false
-			this.showPoseSelection = false
-			this.showLoginDialog = false
-			this.showRemixOverlay = false
-			this.showTemplateOverlay = null
-
-			store.resetSelectedTemplates()
-			store.view = 'scene'
-		})
-	}
-
-	#onAvatarDropdownClick = () => {
-		batch(() => {
-			this.showAvatarSelection = !this.showAvatarSelection
-			this.showPoseSelection = false
-			this.showRemixOverlay = false
-			this.showTemplateOverlay = null
-		})
-	}
-
-	#onNavTabChange = (e: CustomEvent) => {
-		batch(() => {
-			const tab = e.detail.tab
-			if (tab === 'pose') {
-				this.showPoseSelection = true
-				this.showAvatarSelection = false
-			} else {
-				this.showPoseSelection = false
-				this.showAvatarSelection = false
-			}
-			this.showRemixOverlay = false
-			this.showTemplateOverlay = null
-		})
-	}
-
-	#closeRemixOverlay = () => {
-		batch(() => {
-			this.showRemixOverlay = false
-			store.setRemixOverlayTemplateCategory = null
-		})
-	}
-
-	#onTemplateOverlayClose = () => {
-		batch(() => {
-			this.showTemplateOverlay = null
-			this.isOpeningOverlay = false
-		})
-	}
-
-	#handleTemplateOverlayRemix = (templateCategory: TemplateCategory) => {
-		batch(() => {
-			this.showTemplateOverlay = null
-			this.isOpeningOverlay = false
-			store.setRemixOverlayTemplateCategory = templateCategory
-			this.showRemixOverlay = true
-		})
-	}
-
-	#onTemplateOverlayRemix = (e: CustomEvent) => {
-		const templateCategory = e.detail.templateCategory
-		this.#handleTemplateOverlayRemix(templateCategory)
 	}
 
 	#onDocumentClick = (e: Event) => {
@@ -455,6 +500,13 @@ export class TemplateView extends Element {
 				}
 			</style>
 		</dialog-element>
+
+		<avatar-swap-bottom-sheet
+			open=${() => this.showAvatarSwapSheet}
+			selected-template=${() => this.avatarSwapTemplate}
+			onavatar-swapped=${this.#onAvatarSwapped}
+			onclose=${this.#onAvatarSwapCancel}
+		></avatar-swap-bottom-sheet>
 	`
 
 	css = css/*css*/ `
