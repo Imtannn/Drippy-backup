@@ -44,7 +44,7 @@ export class VideoLoading extends Element {
 				video.preload = 'auto'
 				video.style.backgroundColor = '#000'
 				// Prevent scaling
-				video.style.transform = 'translateZ(0) scale(1.5)'
+				video.style.transform = 'translateZ(0) scale(1)'
 				video.style.maxWidth = '100vw'
 				video.style.maxHeight = '100vh'
 
@@ -154,8 +154,8 @@ export class VideoLoading extends Element {
 			object-fit: contain;
 			object-position: center;
 			background: #000;
-			-webkit-transform: translateZ(0) scale(0.5);
-			transform: translateZ(0) scale(0.5);
+			-webkit-transform: translateZ(0) scale(1);
+			transform: translateZ(0) scale(1);
 			/* iOS specific fixes */
 			-webkit-playsinline: true;
 			playsinline: true;
