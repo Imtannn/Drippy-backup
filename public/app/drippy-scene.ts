@@ -226,9 +226,12 @@ export class DrippyScene extends Element {
 			const avatarId = Symbol('avatar')
 			store.trackModelLoading(avatarId, avatarModel)
 
-			// Track background scene loading state
+			// Track background scene loading state (only if a scene is given)
 			const sceneId = Symbol('scene')
-			store.trackModelLoading(sceneId, backgroundModel)
+			createEffect(() => {
+				if (!backgroundModel.src) return
+				store.trackModelLoading(sceneId, backgroundModel)
+			})
 
 			// Track block loading state
 			createEffect(() => {
@@ -579,7 +582,7 @@ export class DrippyScene extends Element {
 						<lume-gltf-model
 							ref=${(el: GltfModel) => (this.backgroundModel = el)}
 							id="scene"
-							src=${() => this.selectedSpace?.scene ?? ''}
+							src=${() => (console.log('selected background', this.selectedSpace?.scene), this.selectedSpace?.scene ?? '')}
 						></lume-gltf-model>
 
 						<${Index} each=${() => this.selectedSpace?.includedModelFiles}>

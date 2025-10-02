@@ -24,9 +24,10 @@ export class ShareView extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		const currentAvatar = store.selectedAvatar || 'moidien'
+		// const currentAvatar = store.selectedAvatar || 'moidien'
 		batch(() => {
-			history.pushState(null, '', `/?avatar=${currentAvatar}`)
+			// history.pushState(null, '', `/?avatar=${currentAvatar}`)
+			store.view = 'scene'
 			store.resetState()
 		})
 	}

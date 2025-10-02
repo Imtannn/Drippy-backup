@@ -6,11 +6,6 @@ import '../app/drippy-app.js'
 
 type HomePageAttributes = keyof {} // no attributes yet
 
-const hasParams = window.location.search
-if (!hasParams) {
-	history.pushState(null, '', '?avatar=moidien')
-}
-
 @element
 export class HomePage extends Element {
 	static readonly elementName = 'home-page'
