@@ -745,7 +745,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 		const textureUrls: {[key: string]: string} = {}
 		let thumbUrl = ''
 
-		// Parse material name and texture settings from folder name: "${materialCategory} - ${materialName} (scaleX, scaleY, offsetX, offsetY, rotate, coef)"
+		// Parse material name and texture settings from folder name: "${materialCategory} - ${materialName} <scaleX, scaleY, offsetX, offsetY, rotate, coef>"
 		let materialCategory: string
 		let materialName: string
 		let textureSettings: {
@@ -758,7 +758,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 		} | null = null
 
 		// Check for texture settings pattern at the end
-		const textureSettingsMatch = materialFolder.name.match(/\(([^)]+)\)\s*$/)
+		const textureSettingsMatch = materialFolder.name.match(/<([^>]+)>\s*$/)
 		let nameWithoutSettings = materialFolder.name
 
 		if (textureSettingsMatch) {
@@ -775,7 +775,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 					coef: settingsValues[5],
 				}
 				// Remove texture settings from name for parsing
-				nameWithoutSettings = materialFolder.name.replace(/\s*\([^)]+\)\s*$/, '')
+				nameWithoutSettings = materialFolder.name.replace(/\s*<[^>]+>\s*$/, '')
 				console.log(`    🎛️ Found texture settings: ${JSON.stringify(textureSettings)}`)
 			} else {
 				console.warn(`    ⚠️ Invalid texture settings format: ${settingsStr}. Expected 6 numeric values.`)
@@ -888,8 +888,8 @@ async function scanCategoryMaterials(categoryMaterialsFolder: TODO, categoryName
 
 	for (const materialRef of materialReferenceFolders) {
 		// Parse and normalize the material folder name to match root materials format
-		// Remove texture settings if present: "Category - Name (settings)" -> "Category - Name"
-		const nameWithoutSettings = materialRef.name.replace(/\s*\([^)]+\)\s*$/, '')
+		// Remove texture settings if present: "Category - Name <settings>" -> "Category - Name"
+		const nameWithoutSettings = materialRef.name.replace(/\s*<[^>]+>\s*$/, '')
 		const folderNameParts = nameWithoutSettings.split('-')
 		if (folderNameParts.length < 2) {
 			console.warn(
@@ -916,8 +916,8 @@ async function scanCategoryMaterials(categoryMaterialsFolder: TODO, categoryName
 async function getTemplateMaterialReference(materialFolder: TODO): Promise<string | null> {
 	// Template material folders are just reference folders (empty)
 	// The folder name is the material key: "${materialCategory} - ${materialName}"
-	// Remove texture settings if present: "Category - Name (settings)" -> "Category - Name"
-	const nameWithoutSettings = materialFolder.name.replace(/\s*\([^)]+\)\s*$/, '')
+	// Remove texture settings if present: "Category - Name <settings>" -> "Category - Name"
+	const nameWithoutSettings = materialFolder.name.replace(/\s*<[^>]+>\s*$/, '')
 	const folderNameParts = nameWithoutSettings.split('-')
 	if (folderNameParts.length < 2) {
 		console.warn(
@@ -961,8 +961,8 @@ async function processExtraMaterialsFolder(extraMaterialsFolder: TODO): Promise<
 		console.log(`      📎 Found material reference: ${materialReferenceFolder.name}`)
 
 		// Parse and normalize the material folder name to match root materials format
-		// Remove texture settings if present: "Category - Name (settings)" -> "Category - Name"
-		const nameWithoutSettings = materialReferenceFolder.name.replace(/\s*\([^)]+\)\s*$/, '')
+		// Remove texture settings if present: "Category - Name <settings>" -> "Category - Name"
+		const nameWithoutSettings = materialReferenceFolder.name.replace(/\s*<[^>]+>\s*$/, '')
 		const folderNameParts = nameWithoutSettings.split('-')
 		if (folderNameParts.length < 2) {
 			console.warn(
