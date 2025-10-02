@@ -41,8 +41,7 @@ export class AvatarSelection extends Element {
 	}
 
 	#onSaveClick = () => {
-		if (!store.selectedAvatar) return
-		store.view = 'template'
+		store.view = 'scene'
 	}
 
 	#renderAvatarContent = () => html`

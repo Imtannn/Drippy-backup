@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor'
-import {createEffect, createMemo, onCleanup, untrack} from 'solid-js'
+import {batch, createEffect, createMemo, createSignal, onCleanup, untrack} from 'solid-js'
 import {createMutable} from 'solid-js/store'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -11,6 +11,7 @@ import {type GltfModel} from 'lume'
 import {avatars} from '../consts/avatars.js'
 import {Visits, type Visit} from '../imports/collections/Visits.js'
 import {pushState, searchParams, url} from '../routes.js'
+import {spaces} from '../consts/spaces.js'
 
 export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
 export const username = () => currentUser()?.username ?? ''
@@ -29,6 +30,10 @@ export const visits = toSolidSignal(() => {
 	else return [] as readonly Visit[]
 })
 export const usersCount = toSolidSignal(() => Counts.get('users'))
+
+const spaceFromParam = createMemo<Space | null>(() => {
+	return spaces.find(space => space.slug === searchParams().get('scene')) ?? null
+})
 
 class Store {
 	// convenience properties for signals
@@ -63,7 +68,7 @@ class Store {
 
 	/** Selected avatar defaults to the one in the URL. */
 	selectedAvatar = searchParams().get('avatar') ?? avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
-	selectedSpace = searchParams().get('scene') as Space | null
+	selectedSpace = spaceFromParam()
 	isPreview = searchParams().get('isPreview') === 'true'
 	// TODO initialize other props from URL params as well
 
@@ -407,94 +412,100 @@ class Store {
 		this.selectedOrderItems = newSelectedItems
 	}
 
+	// FIXME this is almost duplicate of resetState. Don't duplicate code!
 	resetSelectedTemplates() {
-		this.selectedTemplates = new Map<TemplateCategory, Template>()
-		this.__selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
-		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
-		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
-		this.retailItemQuantities = new Map<TemplateCategory, number>()
-		this.retailItemSizes = new Map<TemplateCategory, string>()
-		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
-		this.isPreview = false
-		this.customMeasurement = null as CustomMeasurement | null
+		batch(() => {
+			this.selectedTemplates = new Map<TemplateCategory, Template>()
+			this.__selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+			this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+			this.selectedOrderItems = new Map<TemplateCategory, boolean>()
+			this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
+			this.retailItemQuantities = new Map<TemplateCategory, number>()
+			this.retailItemSizes = new Map<TemplateCategory, string>()
+			this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
+			this.isPreview = false
+			this.customMeasurement = null as CustomMeasurement | null
 
-		// Clear all loading states to prevent orphaned symbols
-		// FIXME clearing loading states should not be necessary. If so, it
-		// means there's a leak. Instead, don't clear loading states, all async
-		// processes must always clean up after themselves, and this will
-		// automatically keep loading states cleared.
-		this.clearAllLoadingStates()
+			// Clear all loading states to prevent orphaned symbols
+			// FIXME clearing loading states should not be necessary. If so, it
+			// means there's a leak. Instead, don't clear loading states, all async
+			// processes must always clean up after themselves, and this will
+			// automatically keep loading states cleared.
+			this.clearAllLoadingStates()
 
-		this.order = {
-			status: 'idle' as OrderStatus,
-			error: null as string | null,
-			productName: 'Custom 3D Drippy Design',
-			selectedSize: '34 (XS)',
-			quantity: 1,
-			email: '',
-			customerEmail: '',
-			customerFirstName: '',
-			customerLastName: '',
-			shippingAddress: {
-				firstName: '',
-				lastName: '',
-				address: '',
-				apartment: '',
-				city: '',
-				postalCode: '',
-				phone: '',
-			},
-		} as OrderState
+			this.order = {
+				status: 'idle' as OrderStatus,
+				error: null as string | null,
+				productName: 'Custom 3D Drippy Design',
+				selectedSize: '34 (XS)',
+				quantity: 1,
+				email: '',
+				customerEmail: '',
+				customerFirstName: '',
+				customerLastName: '',
+				shippingAddress: {
+					firstName: '',
+					lastName: '',
+					address: '',
+					apartment: '',
+					city: '',
+					postalCode: '',
+					phone: '',
+				},
+			} as OrderState
+		})
 	}
 
-	resetState() {
-		this.view = 'scene'
-		this.selectedAvatar = avatars[0].name
-		this.selectedSpace = null as Space | null
-		this.selectedTemplates = new Map<TemplateCategory, Template>()
-		this.__selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
-		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
-		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
-		this.retailItemQuantities = new Map<TemplateCategory, number>()
-		this.retailItemSizes = new Map<TemplateCategory, string>()
-		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
-		this.screenshotCache = new Map<TemplateCategory, string>()
-		// TODO only use unique symbols for loading states, and make sure async
-		// processes always clean up!
-		this.loadingScreenshots = new Set<TemplateCategory>()
-		this.remixOverlayTemplateCategory = null
+	// FIXME this is almost duplicate of resetSelectedTemplates. Don't duplicate code!
+	resetState(view?: AppRoute) {
+		batch(() => {
+			if (view) this.view = view
+			this.selectedAvatar = avatars[0].name
+			this.selectedSpace = null as Space | null
+			this.selectedTemplates = new Map<TemplateCategory, Template>()
+			this.__selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+			this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+			this.selectedOrderItems = new Map<TemplateCategory, boolean>()
+			this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
+			this.retailItemQuantities = new Map<TemplateCategory, number>()
+			this.retailItemSizes = new Map<TemplateCategory, string>()
+			this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
+			this.screenshotCache = new Map<TemplateCategory, string>()
+			// TODO only use unique symbols for loading states, and make sure async
+			// processes always clean up!
+			this.loadingScreenshots = new Set<TemplateCategory>()
+			this.remixOverlayTemplateCategory = null
 
-		// Clear all loading states to prevent orphaned symbols
-		// FIXME clearing loading states should not be necessary. If so, it
-		// means there's a leak. Instead, don't clear loading states, all async
-		// processes must always clean up after themselves, and this will
-		// automatically keep loading states cleared.
-		this.clearAllLoadingStates()
+			// Clear all loading states to prevent orphaned symbols
+			// FIXME clearing loading states should not be necessary. If so, it
+			// means there's a leak. Instead, don't clear loading states, all async
+			// processes must always clean up after themselves, and this will
+			// automatically keep loading states cleared.
+			this.clearAllLoadingStates()
 
-		this.isPreview = false
-		this.customMeasurement = null as CustomMeasurement | null
-		this.order = {
-			status: 'idle' as OrderStatus,
-			error: null as string | null,
-			productName: 'Custom 3D Drippy Design',
-			selectedSize: '34 (XS)',
-			quantity: 1,
-			email: '',
-			customerEmail: '',
-			customerFirstName: '',
-			customerLastName: '',
-			shippingAddress: {
-				firstName: '',
-				lastName: '',
-				address: '',
-				apartment: '',
-				city: '',
-				postalCode: '',
-				phone: '',
-			},
-		} as OrderState
+			this.isPreview = false
+			this.customMeasurement = null as CustomMeasurement | null
+			this.order = {
+				status: 'idle' as OrderStatus,
+				error: null as string | null,
+				productName: 'Custom 3D Drippy Design',
+				selectedSize: '34 (XS)',
+				quantity: 1,
+				email: '',
+				customerEmail: '',
+				customerFirstName: '',
+				customerLastName: '',
+				shippingAddress: {
+					firstName: '',
+					lastName: '',
+					address: '',
+					apartment: '',
+					city: '',
+					postalCode: '',
+					phone: '',
+				},
+			} as OrderState
+		})
 	}
 
 	addIsDrippySceneLoading(key: symbol) {
@@ -614,13 +625,13 @@ createEffect(() => {
 	if (!store.selectedAvatar) throw new Error('Never set the selected avatar to empty!')
 })
 
-const scene = createMemo(() => searchParams().get('scene'))
+const sceneParam = createMemo(() => searchParams().get('scene'))
 
 // If no scene is selected, default to scene selection view (home), otherwise
 // go to template view
 createEffect(() => {
-	if (scene()) store.view = 'template'
-	else store.view = 'scene'
+	if (!sceneParam()) store.view = 'scene'
+	// else store.view = 'template'
 })
 
 createEffect(() => {
@@ -636,8 +647,10 @@ createEffect(() => {
 
 	// Anywhere but on the scene view, initialize the avatar URL param from selectedAvatar
 	untrack(() => {
-		searchParams().set('avatar', store.selectedAvatar)
-		pushState()
+		if (!searchParams().get('avatar')) {
+			searchParams().set('avatar', store.selectedAvatar)
+			pushState()
+		}
 	})
 
 	console.log('sync selectedAvatar with URL param')
@@ -652,4 +665,26 @@ createEffect(() => {
 			pushState()
 		},
 	)
+
+	const [skipFirstRun, setSkipFirstRun] = createSignal(true)
+
+	// Also ensure that if we're on a male space we switch to a male avatar, and
+	// vice versa
+	createEffect(() => {
+		if (skipFirstRun()) return // ensure syncSignals ran first
+
+		const space = spaceFromParam()
+		if (!space) return
+
+		const currentAvatarGender = avatars.find(avatar => avatar.name === store.selectedAvatar)?.gender
+		if (currentAvatarGender === space.gender) return
+
+		// Find the default avatar for the space's gender
+		const defaultAvatar = avatars.find(avatar => avatar.gender === space.gender && avatar.default)
+		if (!defaultAvatar) throw new Error(`No default avatar found`)
+
+		store.selectedAvatar = defaultAvatar.name
+	})
+
+	queueMicrotask(() => setSkipFirstRun(false))
 })

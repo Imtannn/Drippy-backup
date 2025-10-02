@@ -114,16 +114,10 @@ export class TemplateView extends Element {
 		})
 
 		// Update URL when garments change
-		this.createEffect(() => {
-			const selectedTemplates = store.selectedTemplates
-			updateGarmentsInUrl(selectedTemplates)
-		})
+		this.createEffect(() => updateGarmentsInUrl(store.selectedTemplates))
 
 		// Update URL when fabrics change
-		this.createEffect(() => {
-			const selectedFabrics = store.selectedFabrics
-			updateFabricsInUrl(selectedFabrics)
-		})
+		this.createEffect(() => updateFabricsInUrl(store.selectedFabrics))
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -214,6 +208,10 @@ export class TemplateView extends Element {
 
 	#onBackButtonClick = () => {
 		batch(() => {
+			// FIXME This logic is "go back to home" logic, however it is inaccessible
+			// here to any other code that may want to go back to home. We need
+			// to make code re-usable, and consistent, without repeating.
+
 			// Reset UI state
 			this.showAvatarSelection = false
 			this.showPoseSelection = false
