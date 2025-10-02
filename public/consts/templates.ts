@@ -192,7 +192,21 @@ export const templates: Record<string, Template[]> = {
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Skirt',
-		materialId: 'Silk - Crepe'
+		materialId: 'Silk - Crepe',
+		extraMaterials: [
+			{
+				mesh: 'pattern_609085-pattern_609088-pattern_609091',
+				materialId: 'Silk - Crepe (096372)',
+			},
+			{
+				mesh: 'pattern_609086-pattern_609089-pattern_609092',
+				materialId: 'Silk - Chiffon (2ab4c8)',
+			},
+			{
+				mesh: 'pattern_609084-pattern_609087-pattern_609090',
+				materialId: 'Silk - Crepe (D6e2ea)',
+			}
+		]
 	},
 	{
 		_id: '13',
@@ -201,7 +215,21 @@ export const templates: Record<string, Template[]> = {
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Skirt',
-		materialId: 'Silk - Crepe'
+		materialId: 'Silk - Crepe',
+		extraMaterials: [
+			{
+				mesh: 'pattern_609100-pattern_609090-pattern_609093-pattern_609095',
+				materialId: 'Silk - Crepe (096372)',
+			},
+			{
+				mesh: 'pattern_609101-pattern_609097-pattern_609091-pattern_609096',
+				materialId: 'Silk - Chiffon (2ab4c8)',
+			},
+			{
+				mesh: 'pattern_609086-pattern_609088-pattern_609092-pattern_609094',
+				materialId: 'Silk - Crepe (D6e2ea)',
+			}
+		]
 	}
 	],
 	lostCause: [
@@ -308,7 +336,7 @@ export const templates: Record<string, Template[]> = {
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Skirt',
-		materialId: 'Silk - Charcoal Gary',
+		materialId: 'Silk - Charcoal Gray',
 		extraMaterials: [
 			{
 				mesh: 'pattern_2271989',
@@ -359,24 +387,60 @@ export const templates: Record<string, Template[]> = {
 	shri: [
 	{
 		_id: '1',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_4.webp',
-		name: 'Item 4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Skirt/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Quilting - Golden'
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_8.webp',
+		name: 'Item 8',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Shirt',
+		materialId: 'Cotton - White'
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_6.webp',
+		name: 'Item 6',
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Shirt',
 		materialId: ''
 	},
 	{
-		_id: '2',
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_5.webp',
+		name: 'Item 5',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Shirt',
+		materialId: 'Silk - Black'
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_4.webp',
+		name: 'Item 4',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Shirt',
+		materialId: 'Lace - Tulle'
+	},
+	{
+		_id: '6',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_3.webp',
 		name: 'Item 3',
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Shirt',
-		materialId: 'Scuba - 287'
+		materialId: 'Cotton - White'
 	},
 	{
-		_id: '3',
+		_id: '7',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_2.webp',
 		name: 'Item 2',
 		price: 'N/A',
@@ -385,7 +449,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Fabric - Golden'
 	},
 	{
-		_id: '4',
+		_id: '8',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_1.webp',
 		name: 'Item 1',
 		price: 'N/A',
@@ -394,7 +458,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Velvet - Black'
 	},
 	{
-		_id: '5',
+		_id: '9',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Pants/Item_1.webp',
 		name: 'Item 1',
 		price: 'N/A',
@@ -406,9 +470,28 @@ export const templates: Record<string, Template[]> = {
 	eliseF: [
 	{
 		_id: '1',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Item_6.webp',
-		name: 'Item 6',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Reversible_Jacket_-_180.webp',
+		name: 'Reversible Jacket',
+		price: '180',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Striped - Canvas',
+		extraMaterials: [
+			{
+				mesh: '53-49-51-50-48-42-47-pattern_8255504-pattern_8255505-25-31-44',
+				materialId: 'Polyester - Navy',
+			},
+			{
+				mesh: 'buttonhead',
+				materialId: 'Cotton - Orange',
+			}
+		]
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Oversized_Bomber_-_230.webp',
+		name: 'Oversized Bomber',
+		price: '230',
 		avatar: 'Female',
 		category: 'Top',
 		materialId: 'Polyester - Navy',
@@ -420,78 +503,40 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '2',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Item_5.webp',
-		name: 'Item 5',
-		price: 'N/A',
-		avatar: 'Female',
-		category: 'Top',
-		materialId: 'Striped - Tanktop',
-		extraMaterials: [
-			{
-				mesh: 'front_11-front_8-front_12-front_7-front_10-front_5',
-				materialId: 'Poly - Twill',
-			}
-		]
-	},
-	{
 		_id: '3',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Item_4.webp',
-		name: 'Item 4',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Mesh_shirt_LS_-_140.webp',
+		name: 'Mesh shirt LS',
+		price: '140',
 		avatar: 'Female',
 		category: 'Top',
 		materialId: 'Cotton - White',
 		extraMaterials: [
 			{
-				mesh: 'piece15-tie_8-piece14-piece11-piece10-pattern2d_81354-pattern_11338149-pattern_11338146-body_front_11-pattern_11338143-buttonhead-pattern_11338137-body_front_placket_12-pattern_11338140-body_front_9-body_front_placket_13-body_back_yoke_15',
+				mesh: 'piece15-tie_8-piece14-piece11-piece10-pattern2d_81354-pattern_11338152-pattern_11338149-pattern_11338146-pattern_11338140-pattern_11338143-pattern_11338137-pattern_7374393-body_front_placket_13-body_back_yoke_30-body_front_11-body_back_yoke_29-body_front_placket_12-buttonhead-body_back_yoke_23-body_back_yoke_24-body_front_9-body_back_yoke_27',
 				materialId: 'Cotton - Orange',
 			}
 		]
 	},
 	{
 		_id: '4',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Item_3.webp',
-		name: 'Item 3',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Hoodie_-_90.webp',
+		name: 'Hoodie',
+		price: '90',
 		avatar: 'Female',
 		category: 'Top',
-		materialId: 'Cotton - White',
+		materialId: 'Knit - Fleece',
 		extraMaterials: [
 			{
-				mesh: 'body_back_yoke_15-body_front_placket_12-body_front_placket_13-body_front_9-body_front_11-buttonhead-pattern_11338149-pattern_11338146-pattern_11338143-pattern_11338140-pattern_11338137-tie_8-pattern2d_81354-piece10-piece14-piece11-piece15',
+				mesh: 'pattern_35-pattern_36',
 				materialId: 'Cotton - Orange',
 			}
 		]
 	},
 	{
 		_id: '5',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Item_2.webp',
-		name: 'Item 2',
-		price: 'N/A',
-		avatar: 'Female',
-		category: 'Top',
-		materialId: 'Striped - Canvas',
-		extraMaterials: [
-			{
-				mesh: '47-25-31-44',
-				materialId: 'Polyester - Navy',
-			},
-			{
-				mesh: 'buttonhead',
-				materialId: 'Cotton - Orange',
-			},
-			{
-				mesh: '4-2-1',
-				materialId: 'Cotton - White',
-			}
-		]
-	},
-	{
-		_id: '6',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Item_1.webp',
-		name: 'Item 1',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Pleats_shirt_-_130.webp',
+		name: 'Pleats shirt',
+		price: '130',
 		avatar: 'Female',
 		category: 'Top',
 		materialId: 'Cotton - Lavender Blue',
@@ -503,10 +548,49 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Mesh_shirt_SS_-_130.webp',
+		name: 'Mesh shirt SS',
+		price: '130',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Cotton - White',
+		extraMaterials: [
+			{
+				mesh: 'pattern_11338152-pattern_7374393-body_back_yoke_23-body_back_yoke_29-body_back_yoke_30-body_back_yoke_24-body_back_yoke_27-body_front_placket_12-body_front_placket_13-body_front_9-body_front_11-buttonhead-pattern_11338149-pattern_11338146-pattern_11338143-pattern_11338140-pattern_11338137-tie_8-pattern2d_81354-piece10-piece14-piece11-piece15',
+				materialId: 'Cotton - Orange',
+			}
+		]
+	},
+	{
 		_id: '7',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_9.webp',
-		name: 'Item 9',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Tanktop_-_45.webp',
+		name: 'Tanktop',
+		price: '45',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Striped - Tanktop',
+		extraMaterials: [
+			{
+				mesh: 'topstitch-front_13-front_11-front_8-front_12-front_7-front_5',
+				materialId: 'Poly - Twill',
+			}
+		]
+	},
+	{
+		_id: '8',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Oversized_Denim_Pants_-_180.webp',
+		name: 'Oversized Denim Pants',
+		price: '180',
+		avatar: 'Female',
+		category: 'Pants',
+		materialId: 'Denim - 276'
+	},
+	{
+		_id: '9',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Denim_Pockets_Pants_%2B_Bermuda_Short_-_300.webp',
+		name: 'Denim Pockets Pants + Bermuda Short',
+		price: '300',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Polyester - Navy',
@@ -526,10 +610,10 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '8',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_8.webp',
-		name: 'Item 8',
-		price: 'N/A',
+		_id: '10',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Bermuda_Short_-_100.webp',
+		name: 'Bermuda Short',
+		price: '100',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Polyester - Navy',
@@ -541,10 +625,10 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '9',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_7.webp',
-		name: 'Item 7',
-		price: 'N/A',
+		_id: '11',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Denim_Pocket_Pants_%2B_Pleats_Skirt_-_285.webp',
+		name: 'Denim Pocket Pants + Pleats Skirt',
+		price: '285',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Denim - 276',
@@ -560,19 +644,19 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '10',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_6.webp',
-		name: 'Item 6',
-		price: 'N/A',
+		_id: '12',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Pleats_Skirt_-_85.webp',
+		name: 'Pleats Skirt',
+		price: '85',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Polyester - Navy'
 	},
 	{
-		_id: '11',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_5.webp',
-		name: 'Item 5',
-		price: 'N/A',
+		_id: '13',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Track_Short_-_90.webp',
+		name: 'Track Short',
+		price: '90',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Poly - Twill',
@@ -588,10 +672,10 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '12',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_4.webp',
-		name: 'Item 4',
-		price: 'N/A',
+		_id: '14',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Track_Pants_-_110.webp',
+		name: 'Track Pants',
+		price: '110',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Poly - Twill',
@@ -607,29 +691,10 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '13',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_3.webp',
-		name: 'Item 3',
-		price: 'N/A',
-		avatar: 'Female',
-		category: 'Pants',
-		materialId: 'Denim - 276',
-		extraMaterials: [
-			{
-				mesh: '42-39-37-40',
-				materialId: 'Denim - Back',
-			},
-			{
-				mesh: '9-4-28-29-11-24-15-16-13-12-8-14-3',
-				materialId: 'Polyester - Navy',
-			}
-		]
-	},
-	{
-		_id: '14',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_2.webp',
-		name: 'Item 2',
-		price: 'N/A',
+		_id: '15',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Denim_Pockets_Pants_-_200.webp',
+		name: 'Denim Pockets Pants',
+		price: '200',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Denim - 276',
@@ -639,15 +704,6 @@ export const templates: Record<string, Template[]> = {
 				materialId: 'Denim - Back',
 			}
 		]
-	},
-	{
-		_id: '15',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_1.webp',
-		name: 'Item 1',
-		price: 'N/A',
-		avatar: 'Female',
-		category: 'Pants',
-		materialId: 'Polyester - Navy'
 	}
 	],
 	oofya: [
@@ -1004,7 +1060,7 @@ export const templates: Record<string, Template[]> = {
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Shirt',
-		materialId: 'Seersucker Fabric - Black'
+		materialId: 'Seersucker - Seethrough'
 	},
 	{
 		_id: '17',
@@ -1193,6 +1249,713 @@ export const templates: Record<string, Template[]> = {
 				materialId: 'Lace - Light Cream',
 			}
 		]
+	}
+	],
+	atelierGourney: [
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Jumpsuit/Item_5.webp',
+		name: 'Item 5',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Jumpsuit',
+		materialId: ''
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Jumpsuit/Item_4.webp',
+		name: 'Item 4',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Jumpsuit',
+		materialId: ''
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Jumpsuit/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Jumpsuit',
+		materialId: ''
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Jumpsuit/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Jumpsuit',
+		materialId: ''
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Jumpsuit/AETERNA_-_2500.webp',
+		name: 'AETERNA',
+		price: '2500',
+		avatar: 'Female',
+		category: 'Jumpsuit',
+		materialId: 'Black - 360'
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Dress/AETERNA_-_3500.webp',
+		name: 'AETERNA',
+		price: '3500',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Metallic - Fringe'
+	},
+	{
+		_id: '7',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Dress/INVOLVITE_-_3500.webp',
+		name: 'INVOLVITE',
+		price: '3500',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Wool - Sequin'
+	},
+	{
+		_id: '8',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Dress/CHRYSTALICE_-_3000.webp',
+		name: 'CHRYSTALICE',
+		price: '3000',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Wool - 361'
+	},
+	{
+		_id: '9',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Dress/HYMNUSE_-_4500.webp',
+		name: 'HYMNUSE',
+		price: '4500',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Wool - 361'
+	},
+	{
+		_id: '10',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Dress/NOSTORIA_-_2500.webp',
+		name: 'NOSTORIA',
+		price: '2500',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Wool - 361',
+		extraMaterials: [
+			{
+				mesh: 'pattern_402784-pattern_402783-pattern_354312-pattern_402780-pattern_402781-pattern_354317-pattern_354314-pattern_354315-pattern_354316-pattern_245407',
+				materialId: 'Embroidered - Horsehair',
+			}
+		]
+	}
+	],
+	imzad: [
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Pants/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Pants',
+		materialId: 'Denim - Shimmery',
+		extraMaterials: [
+			{
+				mesh: '29-37-18-32-43-25-23-26-16-22-17-13',
+				materialId: 'Back Denim - Shimmery',
+			},
+			{
+				mesh: 'buttonhead',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Skirt/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Silk - Beige'
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Skirt/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Leather - Dark Indigo',
+		extraMaterials: [
+			{
+				mesh: 'trim-buttonhead',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Top/Item_4.webp',
+		name: 'Item 4',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Charcoal - Blue Velvet',
+		extraMaterials: [
+			{
+				mesh: 'blobk_drippy_tight_ralan_45-buttonhead',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Top/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Sequin - White'
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Top/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Twill - Beige'
+	},
+	{
+		_id: '7',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Top/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Organza - Dark Indigo',
+		extraMaterials: [
+			{
+				mesh: 'trim',
+				materialId: 'Trim - Texture',
+			}
+		]
+	}
+	],
+	oneThousandPoets: [
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Pants/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Pants',
+		materialId: 'Cotton - White',
+		extraMaterials: [
+			{
+				mesh: 'trim',
+				materialId: 'Polyester - Navy',
+			}
+		]
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Accessories/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Accessories',
+		materialId: 'Black - Velvet'
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Skirt/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Leather - Black'
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Shirt/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Shirt',
+		materialId: 'Cotton - White',
+		extraMaterials: [
+			{
+				mesh: 'trim',
+				materialId: 'Polyester - Navy',
+			}
+		]
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Shirt/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Shirt',
+		materialId: 'Denim - Black'
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Shirt/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Shirt',
+		materialId: 'Denim - Black'
+	},
+	{
+		_id: '7',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/Item_11.webp',
+		name: 'Item 11',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Silk - Beige'
+	},
+	{
+		_id: '8',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/Item_10.webp',
+		name: 'Item 10',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Velvet - Black',
+		extraMaterials: [
+			{
+				mesh: 'handform001',
+				materialId: 'Golden - 349',
+			}
+		]
+	},
+	{
+		_id: '9',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/Item_9.webp',
+		name: 'Item 9',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: '',
+		extraMaterials: [
+			{
+				mesh: 'pattern_19771853',
+				materialId: 'Velvet - Black',
+			}
+		]
+	},
+	{
+		_id: '10',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/Item_8.webp',
+		name: 'Item 8',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Denim - Black'
+	},
+	{
+		_id: '11',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/Item_7.webp',
+		name: 'Item 7',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Veil - Beige'
+	},
+	{
+		_id: '12',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/Item_6.webp',
+		name: 'Item 6',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Lace - Beige'
+	},
+	{
+		_id: '13',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/Item_5.webp',
+		name: 'Item 5',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Suede - Black',
+		extraMaterials: [
+			{
+				mesh: 'pattern_9095729-base_drippy_tight_regular_shoulder_4-topstitch',
+				materialId: 'Lace - Beige',
+			}
+		]
+	},
+	{
+		_id: '14',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/Item_4.webp',
+		name: 'Item 4',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Wool - Black Suiting',
+		extraMaterials: [
+			{
+				mesh: 'pattern_9095729-pattern_7916207-pattern_7916208-pattern_7916209-pattern_7916206-pattern_275982-pattern_275980',
+				materialId: 'Lace - Beige',
+			}
+		]
+	},
+	{
+		_id: '15',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Lace - Beige'
+	},
+	{
+		_id: '16',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Suede - Black',
+		extraMaterials: [
+			{
+				mesh: 'topstitch',
+				materialId: 'Lace - Beige',
+			}
+		]
+	},
+	{
+		_id: '17',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Wool - Black Suiting'
+	}
+	],
+	zove: [
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Dress/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: ''
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Top/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Leather - Black',
+		extraMaterials: [
+			{
+				mesh: 'trim',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Top/Item_4.webp',
+		name: 'Item 4',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Denim - Light',
+		extraMaterials: [
+			{
+				mesh: 'pattern_16422735-pattern_16386325-pattern_16386328-pattern_16386326-pattern_16386327-pattern_16386329-pattern_16422734',
+				materialId: 'Leather - Black',
+			}
+		]
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Top/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Cotton - Twill',
+		extraMaterials: [
+			{
+				mesh: 'trim',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Top/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Twill - 235',
+		extraMaterials: [
+			{
+				mesh: 'buttonhead',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Skirt/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Twill - 235'
+	}
+	],
+	jaSengBu: [
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/jaSengBu/templates/Skirt/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Dark Green - 348',
+		extraMaterials: [
+			{
+				mesh: '_7-_8',
+				materialId: 'Golden - 349',
+			}
+		]
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/jaSengBu/templates/Skirt/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Taffeta - Red Print',
+		extraMaterials: [
+			{
+				mesh: 'pattern_402805-pattern_402808-pattern_402807-pattern_402803-pattern_402799-pattern_402802-pattern_402801-pattern_402791-pattern_354310-pattern_354321-pattern_354312-pattern_354333-pattern_354343-pattern_354347-pattern_354331-pattern_354339-pattern_354330-pattern_354327-pattern_354342-pattern_354341-pattern_354336',
+				materialId: 'Taffeta - White Print',
+			}
+		]
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/jaSengBu/templates/Skirt/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Jersey - Black',
+		extraMaterials: [
+			{
+				mesh: 'pattern_8215297-pattern_7672782',
+				materialId: 'Organza - Black',
+			}
+		]
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/jaSengBu/templates/Top/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Cotton - Charcoal Teal'
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/jaSengBu/templates/Top/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Organza - Black',
+		extraMaterials: [
+			{
+				mesh: 'pattern_354296-pattern_354299-pattern_402778-pattern_402776',
+				materialId: 'Jersey - Black',
+			}
+		]
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/jaSengBu/templates/Top/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Jersey - Black'
+	},
+	{
+		_id: '7',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/jaSengBu/templates/Dress/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Tweed Modern - 359'
+	},
+	{
+		_id: '8',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/jaSengBu/templates/Dress/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Jacquard - Red'
+	},
+	{
+		_id: '9',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/jaSengBu/templates/Dress/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Muslin - 343'
+	}
+	],
+	mssPark: [
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Skirt/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Poly - Camo'
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Skirt/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Jersey - Stretch'
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Skirt/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Jersey - Black'
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Pants/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Pants',
+		materialId: 'Fur - 373'
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Pants/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Pants',
+		materialId: 'Leather - Cracked',
+		extraMaterials: [
+			{
+				mesh: 'trim',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Item_4.webp',
+		name: 'Item 4',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Leather - Cracked'
+	},
+	{
+		_id: '7',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Cotton - Twill'
+	},
+	{
+		_id: '8',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Jersey - Stretch',
+		extraMaterials: [
+			{
+				mesh: 'graphic_1789490-zipperpattern_1789291-graphic_1789479-zipperpattern_1789278-slider_1',
+				materialId: 'Trim - Texture',
+			},
+			{
+				mesh: 'pattern_1545473-pattern_1545475-pattern_1545477',
+				materialId: 'Poly - Camo',
+			}
+		]
+	},
+	{
+		_id: '9',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Jersey - Black',
+		extraMaterials: [
+			{
+				mesh: 'trim',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '10',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Dress/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Jersey - Stretch'
+	},
+	{
+		_id: '11',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Dress/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Lace - White'
+	},
+	{
+		_id: '12',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Dress/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: 'Cotton - Black Seethrough'
 	}
 	]
 }

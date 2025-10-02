@@ -94,6 +94,19 @@ export class CustomButton extends Element {
 			overflow: hidden;
 		}
 
+		/* Typography classes */
+		.text-xs {
+			font-size: var(--fontSizeTextMd);
+		}
+
+		.text-md-1 {
+			font-size: var(--fontSizeTextMdDesktop);
+		}
+
+		.text-md {
+			font-size: var(--fontSizeTextMd);
+		}
+
 		.custom-button--disabled {
 			opacity: 0.6;
 			cursor: not-allowed;
@@ -200,6 +213,22 @@ export class CustomButton extends Element {
 		@media (max-width: 768px) {
 			.custom-button--large {
 				padding: 12px 24px;
+			}
+			.text-md-1 {
+				font-size: var(--fontSizeTextMd);
+			}
+		}
+		@media (max-width: 768px) {
+			.text-md {
+				font-size: var(--fontSizeTextSm);
+				line-height: var(--lineHeightNormal);
+			}
+			.text-md-1 {
+				font-size: var(--fontSizeTextSmTablet);
+				line-height: var(--lineHeightNormal);
+			}
+			.text-xs {
+				font-size: var(--fontSizeTextMd);
 			}
 		}
 	`

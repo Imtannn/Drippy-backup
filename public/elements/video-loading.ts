@@ -11,37 +11,104 @@ export class VideoLoading extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
+		// Prevent body scroll when video is showing
+		document.body.style.overflow = 'hidden'
+		document.documentElement.style.overflow = 'hidden'
+
+		// Force black background on host element
+		this.style.backgroundColor = '#000'
+		this.style.background = '#000'
+
 		// Set up video event listeners after template is rendered
 		setTimeout(() => {
 			const video = this.shadowRoot?.querySelector('.loading-video') as HTMLVideoElement
+			const videoContainer = this.shadowRoot?.querySelector('.video-loading') as HTMLElement
+			const fallbackLoader = this.shadowRoot?.querySelector('.fallback-loader') as HTMLElement
+
+			// Force black background on all elements
+			if (videoContainer) {
+				videoContainer.style.backgroundColor = '#000'
+				videoContainer.style.background = '#000'
+			}
+			if (fallbackLoader) {
+				fallbackLoader.style.backgroundColor = '#000'
+				fallbackLoader.style.background = '#000'
+			}
 			if (video) {
 				// iPhone specific fixes
 				video.setAttribute('webkit-playsinline', 'true')
 				video.setAttribute('playsinline', 'true')
+				video.setAttribute('x-webkit-airplay', 'allow')
 				video.muted = true
 				video.defaultMuted = true
 				video.preload = 'auto'
+				video.style.backgroundColor = '#000'
+				// Prevent scaling
+				video.style.transform = 'translateZ(0) scale(1)'
+				video.style.maxWidth = '100vw'
+				video.style.maxHeight = '100vh'
 
 				video.addEventListener('loadeddata', () => {
 					this.videoError = false
-				})
-
-				video.addEventListener('error', () => {
-					this.videoError = true
+					// Force play after data is loaded
+					video.play().catch(() => {
+						this.videoError = true
+					})
 				})
 
 				video.addEventListener('canplay', () => {
+					// Force play when video can play
+					video.play().catch(() => {
+						this.videoError = true
+					})
+				})
+
+				video.addEventListener('canplaythrough', () => {
+					// Force play when video can play through
+					video.play().catch(() => {
+						this.videoError = true
+					})
+				})
+
+				video.addEventListener('playing', () => {
+					// Video is now playing
+				})
+
+				video.addEventListener('error', e => {
+					console.error('Video error:', e)
+					this.videoError = true
+				})
+
+				// Add user interaction fallback for iOS
+				const tryPlay = () => {
 					if (video.paused) {
-						video.play().catch(() => {
-							this.videoError = true
+						video.play().catch(error => {
+							console.log('Play failed, waiting for user interaction:', error)
 						})
 					}
-				})
+				}
+
+				// Try to play immediately
+				setTimeout(tryPlay, 100)
+				setTimeout(tryPlay, 500)
+				setTimeout(tryPlay, 1000)
+
+				// Add click listener to play video on user interaction
+				document.addEventListener('touchstart', tryPlay, {once: true})
+				document.addEventListener('click', tryPlay, {once: true})
 
 				// Force load the video
 				video.load()
 			}
 		}, 0)
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback()
+
+		// Restore body scroll when component is removed
+		document.body.style.overflow = ''
+		document.documentElement.style.overflow = ''
 	}
 
 	template = () => html`
@@ -58,7 +125,6 @@ export class VideoLoading extends Element {
 
 	css = css/*css*/ `
 		:host {
-			/* Full page loading */
 			display: block;
 			width: 100vw;
 			height: 100vh;
@@ -66,7 +132,8 @@ export class VideoLoading extends Element {
 			top: 0;
 			left: 0;
 			z-index: 9999;
-			pointer-events: auto;
+			background: #000;
+			overflow: hidden;
 		}
 
 		.video-loading {
@@ -75,27 +142,41 @@ export class VideoLoading extends Element {
 			justify-content: center;
 			width: 100%;
 			height: 100%;
-			position: relative;
-			background: #010304;
+			background: #000;
+		}
+		.text-xl {
+			font-size: var(--fontSizeTextXl);
 		}
 
 		.loading-video {
-			width: 100vw;
-			height: 100vh;
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: 10;
+			width: 100%;
+			height: 100%;
 			object-fit: contain;
 			object-position: center;
-			/* iPhone specific fixes */
-			-webkit-object-fit: contain;
-			-webkit-object-position: center;
+			background: #000;
+			-webkit-transform: translateZ(0) scale(1);
+			transform: translateZ(0) scale(1);
+			/* iOS specific fixes */
+			-webkit-playsinline: true;
+			playsinline: true;
 			/* Force hardware acceleration */
-			-webkit-transform: translateZ(0);
-			transform: translateZ(0);
-			/* Ensure video is visible */
-			background: transparent;
+			-webkit-backface-visibility: hidden;
+			backface-visibility: hidden;
+			/* Ensure video is not paused by iOS */
+			pointer-events: none;
+		}
+
+		.loading-text {
+			position: absolute;
+			top: 5%;
+			left: 50%;
+			transform: translateX(-50%);
+			font-size: 24px;
+			font-weight: 600;
+			color: #333;
+			z-index: 20;
+			text-align: center;
+			white-space: nowrap;
 		}
 
 		.fallback-loader {
@@ -107,8 +188,7 @@ export class VideoLoading extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background: #010304;
-			z-index: 5;
+			background: #000;
 		}
 
 		.spinner {
@@ -116,7 +196,6 @@ export class VideoLoading extends Element {
 			height: 80px;
 			border: 6px solid rgba(76, 169, 195, 0.2);
 			border-top: 6px solid rgba(76, 169, 195, 1);
-			background: rgba(76, 169, 195, 0.1);
 			border-radius: 50%;
 			animation: spin 1s linear infinite;
 		}
@@ -130,14 +209,22 @@ export class VideoLoading extends Element {
 			}
 		}
 
-		/* Dark theme support */
-		[data-theme='dark'] .fallback-loader {
-			background: #010304;
+		/* Mobile responsive text */
+		@media (max-width: 768px) {
+			.loading-text {
+				top: 12%;
+				padding: 0 20px;
+			}
 		}
 
-		[data-theme='dark'] .spinner {
-			border-color: rgba(76, 169, 195, 0.3);
-			border-top-color: rgba(76, 169, 195, 1);
+		@media (max-width: 480px) {
+			.text-xl {
+				font-size: var(--fontSizeTextXlMobile);
+			}
+			.loading-text {
+				top: 12%;
+				padding: 0 15px;
+			}
 		}
 	`
 }

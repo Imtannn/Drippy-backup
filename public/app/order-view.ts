@@ -25,13 +25,11 @@ export class OrderView extends Element {
 	@eventAttribute onclick = null
 
 	#onBackButtonClick = () => {
-		store.navigateTo = 'order-size'
+		store.view = 'order-size'
 	}
 
 	#onHomeButtonClick = () => {
-		const currentAvatar = store.selectedAvatar || 'moidien'
-		history.pushState(null, '', `/?avatar=${currentAvatar}`)
-		store.resetState()
+		store.resetState('scene')
 	}
 
 	// Helper function to collect all order data
@@ -191,7 +189,7 @@ export class OrderView extends Element {
 			if (result.success) {
 				console.log('Order submitted successfully:', result.orderId)
 				store.setOrderStatus = 'success'
-				store.navigateTo = 'success'
+				store.view = 'success'
 			} else {
 				console.error('Server returned error:', result)
 				throw new Error(result.error || 'Failed to submit order')

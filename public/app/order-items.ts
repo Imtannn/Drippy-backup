@@ -51,17 +51,15 @@ export class OrderItems extends Element {
 	}
 
 	#onBackButtonClick = () => {
-		store.navigateTo = 'preview'
+		store.view = 'preview'
 	}
 
 	#onHomeButtonClick = () => {
-		const currentAvatar = store.selectedAvatar || 'moidien'
-		history.pushState(null, '', `/?avatar=${currentAvatar}`)
-		store.resetState()
+		store.resetState('scene')
 	}
 
 	#onNextClick = () => {
-		store.navigateTo = 'order-size'
+		store.view = 'order-size'
 	}
 
 	#onItemToggle = (category: TemplateCategory) => {
@@ -75,7 +73,7 @@ export class OrderItems extends Element {
 	}
 
 	#onBuyItClick = () => {
-		store.navigateTo = 'preview'
+		store.view = 'preview'
 	}
 
 	template = () => html`

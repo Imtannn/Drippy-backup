@@ -1,7 +1,7 @@
-import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {batch, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import '../elements/back-button.js'
 import '../elements/home-button.js'
-import {updateUrlWithParams} from '../routes.js'
+import {pushState, searchParams} from '../routes.js'
 import './app-buttons.js'
 import {store} from './store.js'
 
@@ -15,17 +15,16 @@ export class ShareView extends Element {
 	@signal isCopied = false
 
 	#onBackButtonClick = () => {
-		store.setIsPreview = false
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.delete('isPreview')
-		updateUrlWithParams(searchParams)
-		store.navigateTo = 'preview'
+		batch(() => {
+			store.isPreview = false
+			searchParams().delete('isPreview')
+			pushState()
+			store.view = 'preview'
+		})
 	}
 
 	#onHomeButtonClick = () => {
-		const currentAvatar = store.selectedAvatar || 'moidien'
-		history.pushState(null, '', `/?avatar=${currentAvatar}`)
-		store.resetState()
+		store.resetState('scene')
 	}
 
 	#onCopyLink = async () => {

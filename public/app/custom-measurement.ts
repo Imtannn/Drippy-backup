@@ -46,13 +46,11 @@ export class CustomMeasurement extends Element {
 	}
 
 	#onBackButtonClick = () => {
-		store.navigateTo = 'order-size'
+		store.view = 'order-size'
 	}
 
 	#onHomeButtonClick = () => {
-		const currentAvatar = store.selectedAvatar || 'moidien'
-		history.pushState(null, '', `/?avatar=${currentAvatar}`)
-		store.resetState()
+		store.resetState('scene')
 	}
 
 	#onSaveClick = () => {
@@ -77,7 +75,7 @@ export class CustomMeasurement extends Element {
 			store.setSelectedSize = 'Custom'
 		}
 
-		store.navigateTo = 'order-size'
+		store.view = 'order-size'
 	}
 
 	#valueWithoutCm = (value: string) => {
@@ -117,7 +115,7 @@ export class CustomMeasurement extends Element {
 	}
 
 	#onBuyItClick = () => {
-		store.navigateTo = 'preview'
+		store.view = 'preview'
 	}
 
 	template = () => html`

@@ -77,6 +77,26 @@ interface AnimateValueOptions {
 }
 
 /**
+ * Keep two signals in sync with each other.
+ * @param a - First signal value
+ * @param setA - Setter for the first signal
+ * @param b - Second signal value
+ * @param setB - Setter for the second signal
+ */
+export function syncSignals(a: any, setA: (val: any) => void, b: any, setB: (val: any) => void) {
+	createEffect(() => {
+		// Any time a changes, update b
+		a()
+		untrack(() => a() !== b() && setB(a()))
+	})
+	createEffect(() => {
+		// Any time b changes, update a
+		b()
+		untrack(() => a() !== b() && setA(b()))
+	})
+}
+
+/**
  * Animates a signal from its current value to a target value.
  *
  * @param signal - The signal to animate.
@@ -332,7 +352,7 @@ export async function preloadImage(image: string) {
  * options, returns a signal that contains the latest set of MutationRecords,
  * initially empty.
  */
-export function createMutationsSignal(target: Element, options: MutationObserverInit) {
+export function createMutationsSignal(target: Document | ShadowRoot | Element, options: MutationObserverInit) {
 	const [signal, setSignal] = createSignal<MutationRecord[]>([])
 
 	const mo = new MutationObserver(records => setSignal(records))
@@ -340,6 +360,30 @@ export function createMutationsSignal(target: Element, options: MutationObserver
 	onCleanup(() => mo.disconnect())
 
 	return signal
+}
+
+/**
+ * Signal version of querySelectorAll. Given a root element and selector,
+ * returns a signal that contains the latest NodeList of matching elements.  The
+ * NodeList is updated whenever mutations in the root subtree occur that may
+ * affect the matching set.
+ *
+ * @param root The root element to query within.
+ * @param selector The CSS selector to match elements.
+ * @returns A signal containing the NodeList of matching elements.
+ */
+export function querySelectorAllSignal(
+	root: Document | ShadowRoot | Element,
+	selector: string,
+): Accessor<NodeListOf<Element>> {
+	const mutations = createMutationsSignal(root, {childList: true, subtree: true})
+
+	const nodeList = createMemo(() => {
+		mutations()
+		return root.querySelectorAll(selector)
+	})
+
+	return nodeList
 }
 
 export function isMesh(obj: THREE.Object3D): obj is THREE.Mesh {
@@ -813,7 +857,7 @@ export function hasAncestorWithName(object: THREE.Object3D, targetName: string):
 	return false
 }
 
-// Format price without currency symbol
+/** Format price without currency symbol */
 export function formatNumber(amount: number, countryCode: string = 'eu') {
 	const formatter = new Intl.NumberFormat(countryCode, {
 		minimumFractionDigits: 2,
@@ -823,4 +867,17 @@ export function formatNumber(amount: number, countryCode: string = 'eu') {
 	})
 
 	return formatter.format(amount)
+}
+
+/**
+ * Check if two arrays are equal in terms of length and elements.
+ * @param a - First array to compare.
+ * @param b - Second array to compare.
+ * @returns True if arrays are equal, false otherwise.
+ */
+export function arrayEquals<T>(a: T[], b: T[]) {
+	if (!Array.isArray(a) || !Array.isArray(b)) return false
+	if (a.length !== b.length) return false
+	for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false
+	return true
 }

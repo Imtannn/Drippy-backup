@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor'
-import {createSignal} from 'solid-js'
+import {createEffect, createMemo, createSignal, untrack} from 'solid-js'
 import {Session} from 'meteor/session'
 import {effect} from './meteor-signals.js'
 import type {BlockCategory} from './types/block.js'
@@ -14,43 +14,47 @@ export const appTitle = () => _appTitle()
 // Track the url of the current page on route change. This is used to track
 // visits to the page.
 
-const [_url, setUrl] = createSignal(new URL(location.href))
+const [url, setUrl] = createSignal(new URL(location.href))
 
-export const url = () => _url()
-export const pathname = () => url().pathname
+export {url}
+export const pathname = createMemo(() => url().pathname)
 export const searchParams = () => url().searchParams
-export const host = () => url().host
-export const origin = () => url().origin
-export const protocol = () => url().protocol
-export const href = () => url().href
-export const search = () => url().search
-export const hash = () => url().hash
-export const port = () => url().port
-export const hostname = () => url().hostname
-export const username = () => url().username
-export const password = () => url().password
+export const host = createMemo(() => url().host)
+export const origin = createMemo(() => url().origin)
+export const protocol = createMemo(() => url().protocol)
+export const href = createMemo(() => url().href)
+export const search = createMemo(() => url().search)
+export const hash = createMemo(() => url().hash)
+export const port = createMemo(() => url().port)
+export const hostname = createMemo(() => url().hostname)
+export const username = createMemo(() => url().username)
+export const password = createMemo(() => url().password)
 
 export const hrefMinusOrigin = () => url().href.replace(url().origin, '')
 
-// Utility function to update URL with search params while ensuring clean root path
-export const updateUrlWithParams = (searchParams: URLSearchParams) => {
-	window.history.replaceState({}, '', `?${searchParams.toString()}`)
-}
+createEffect(() => console.log('Current route:', hrefMinusOrigin()))
+
+export const replaceState = () => window.history.replaceState({}, '', untrack(url).href)
+export const pushState = () => window.history.pushState({}, '', untrack(url).href)
 
 window.addEventListener('popstate', () => setUrl(new URL(location.href)))
 
-const pushState = history.pushState
-history.pushState = History.prototype.pushState = function (...args) {
-	const ret = pushState.apply(this, args)
-	setUrl(new URL(location.href))
-	return ret
-}
+{
+	const pushState = history.pushState
+	history.pushState = History.prototype.pushState = function (...args) {
+		const ret = pushState.apply(this, args)
+		setUrl(new URL(location.href))
+		console.trace('PUSHSTATE', args, location.href)
+		return ret
+	}
 
-const replaceState = history.replaceState
-history.replaceState = History.prototype.replaceState = function (...args) {
-	const ret = replaceState.apply(this, args)
-	setUrl(new URL(location.href))
-	return ret
+	const replaceState = history.replaceState
+	history.replaceState = History.prototype.replaceState = function (...args) {
+		const ret = replaceState.apply(this, args)
+		setUrl(new URL(location.href))
+		console.trace('REPLACESTATE', args, location.href)
+		return ret
+	}
 }
 
 // Track which routes the user has already visited in local storage, that way we
@@ -81,42 +85,33 @@ effect(() => {
 })
 
 export const updateGarmentsInUrl = (garments: Map<TemplateCategory, Template>) => {
-	const currentUrl = new URL(location.href)
-
 	if (garments.size > 0) {
 		const garmentIds = Array.from(garments.values()).map(garment => garment._id)
-		currentUrl.searchParams.set('garments', garmentIds.join(','))
-	} else {
-		currentUrl.searchParams.delete('garments')
-	}
+		untrack(searchParams).set('garments', garmentIds.join(','))
+	} else untrack(searchParams).delete('garments')
 
-	// Update URL without triggering page reload
-	history.replaceState({}, '', currentUrl.toString())
+	pushState()
 }
 
 export const updateFabricsInUrl = (fabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>) => {
-	const currentUrl = new URL(location.href)
-
 	if (fabrics.size > 0) {
 		const fabricEntries: string[] = []
 
-		for (const [templateCategory, blockMap] of fabrics.entries()) {
-			for (const [blockCategory, pieceMap] of blockMap.entries()) {
-				for (const [piece, fabric] of pieceMap.entries()) {
+		for (const [templateCategory, blockMap] of fabrics.entries())
+			for (const [blockCategory, pieceMap] of blockMap.entries())
+				for (const [piece, fabric] of pieceMap.entries())
 					fabricEntries.push(`${templateCategory}-${blockCategory}-${piece}:${fabric._id}`)
-				}
-			}
-		}
 
-		if (fabricEntries.length > 0) {
-			currentUrl.searchParams.set('fabrics', fabricEntries.join(','))
-		} else {
-			currentUrl.searchParams.delete('fabrics')
-		}
+		if (fabricEntries.length > 0) untrack(searchParams).set('fabrics', fabricEntries.join(','))
+		else untrack(searchParams).delete('fabrics')
 	} else {
-		currentUrl.searchParams.delete('fabrics')
+		untrack(searchParams).delete('fabrics')
 	}
 
 	// Update URL without triggering page reload
-	history.replaceState({}, '', currentUrl.toString())
+	pushState()
 }
+
+// debugging
+const win = window as any
+win.routes = {url, replaceState, pushState}

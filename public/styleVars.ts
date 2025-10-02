@@ -44,10 +44,6 @@ const styleVars = {
 	borderRadiusCircular: '50%',
 	borderRadiusPill: 100,
 
-	// App Dimensions
-	appWidth: 600,
-	appHeight: 400,
-
 	fontFamily: 'Poppins, Helvetica, sans-serif',
 
 	// Font Sizes

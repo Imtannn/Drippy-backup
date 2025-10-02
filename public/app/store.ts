@@ -1,13 +1,17 @@
 import {Meteor} from 'meteor/meteor'
-import {untrack} from 'solid-js'
+import {batch, createEffect, createMemo, createSignal, onCleanup, untrack} from 'solid-js'
 import {createMutable} from 'solid-js/store'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
-import {toSolidSignal} from '../utils.js'
+import {onModelLoad, syncSignals, toSolidSignal} from '../utils.js'
 
+import {type GltfModel} from 'lume'
+import {avatars} from '../consts/avatars.js'
 import {Visits, type Visit} from '../imports/collections/Visits.js'
+import {pushState, searchParams, url} from '../routes.js'
+import {spaces} from '../consts/spaces.js'
 
 export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
 export const username = () => currentUser()?.username ?? ''
@@ -27,70 +31,77 @@ export const visits = toSolidSignal(() => {
 })
 export const usersCount = toSolidSignal(() => Counts.get('users'))
 
-export const store = createMutable({
+const spaceFromParam = createMemo<Space | null>(() => {
+	return spaces.find(space => space.slug === searchParams().get('scene')) ?? null
+})
+
+class Store {
 	// convenience properties for signals
 	get user() {
 		return currentUser()
-	},
+	}
 	get username() {
 		return username()
-	},
+	}
 	get dateOfBirth() {
 		return dateOfBirth()
-	},
+	}
 	get isAdmin() {
 		return isAdmin()
-	},
+	}
 	get hideAnimationSelection() {
 		return hideAnimationSelection()
-	},
+	}
 	get visits() {
 		return visits()
-	},
+	}
 	get usersCount() {
 		return usersCount()
-	},
+	}
 
 	get turnOffSettingsInSpace() {
 		return turnOffSettingsInSpace()
-	},
+	}
 
-	// key is the block category, value is the block
-	view: 'avatar' as AppRoute,
-	tempSelectedAvatar: null as string | null,
-	selectedAvatar: null as string | null,
-	selectedPose: null as string | null,
-	selectedSpace: null as Space | null,
-	selectedAnimation: 'none' as 'none' | 'walk' | 'dance',
-	isPreview: false,
-	selectedTemplates: new Map<TemplateCategory, Template>(),
-	selectedBlocks: new Map<TemplateCategory, Map<BlockCategory, Block>>(),
-	selectedFabrics: new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(),
-	customMeasurement: null as CustomMeasurement | null,
-	isShowAvatar: true,
-	isShowScene: true,
-	isDrippySceneLoading: new Set<symbol>(),
-	loadingBlocks: new Set<symbol>(),
-	loadingMaterials: new Set<symbol>(),
+	// TODO this is not in sync with the address bar back/forward buttons
+	view = 'scene' as AppRoute
+
+	/** Selected avatar defaults to the one in the URL. */
+	selectedAvatar = searchParams().get('avatar') ?? avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
+	selectedSpace = spaceFromParam()
+	isPreview = searchParams().get('isPreview') === 'true'
+	// TODO initialize other props from URL params as well
+
+	selectedAnimation = 'none' as 'none' | 'walk' | 'dance'
+	selectedTemplates = new Map<TemplateCategory, Template>()
+	private __selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+	selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+	customMeasurement = null as CustomMeasurement | null
+	isShowAvatar = true
+	isShowScene = true
+
+	// Loading states tracked by unique symbols
+	drippySceneLoads = new Set<symbol>()
+	loadingBlocks = new Set<symbol>()
+	loadingMaterials = new Set<symbol>()
+	loadingScreenshots = new Set<TemplateCategory>()
 
 	// Order-related state
-	selectedOrderItems: new Map<TemplateCategory, boolean>(),
+	selectedOrderItems = new Map<TemplateCategory, boolean>()
 	// Size-specific quantities: Map<TemplateCategory, Map<Size, quantity>>
-	orderSizeQuantities: new Map<TemplateCategory, Map<string, number>>(),
+	orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 	// For retail mode: overall item quantities (not per size)
-	retailItemQuantities: new Map<TemplateCategory, number>(),
+	retailItemQuantities = new Map<TemplateCategory, number>()
 	// For retail mode: selected size per category
-	retailItemSizes: new Map<TemplateCategory, string>(),
+	retailItemSizes = new Map<TemplateCategory, string>()
 	// For retail mode: custom measurements per category
-	retailItemCustomMeasurements: new Map<TemplateCategory, CustomMeasurement>(),
+	retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 	// Track which category is currently being customized
-	currentCustomMeasurementCategory: null as TemplateCategory | null,
+	currentCustomMeasurementCategory = null as TemplateCategory | null
 	// Screenshot cache for garment images
-	screenshotCache: new Map<TemplateCategory, string>(),
-	// Track which screenshots are currently being generated
-	loadingScreenshots: new Set<TemplateCategory>(),
-	remixOverlayTemplateCategory: null as TemplateCategory | null,
-	order: {
+	screenshotCache = new Map<TemplateCategory, string>()
+	remixOverlayTemplateCategory = null as TemplateCategory | null
+	order = {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
 		productName: 'Custom 3D Drippy Design',
@@ -108,8 +119,17 @@ export const store = createMutable({
 			postalCode: '',
 			phone: '',
 		},
-	} as OrderState,
-	set setSelectedBlocks(
+	} as OrderState
+
+	get selectedBlocks() {
+		return this.__selectedBlocks
+	}
+
+	// FIXME we should avoid having different ways of setting the same thing
+	// (onItemClick in template-view.ts and loadFromUrlParameters in
+	// drippy-app.ts).  This will get more difficult to manage and error
+	// prone/buggy.
+	setSelectedBlocks(
 		blockData:
 			| {block: Block; templateCategory: TemplateCategory}
 			| {block: Block; templateCategory: TemplateCategory}[],
@@ -117,7 +137,7 @@ export const store = createMutable({
 		if (!Array.isArray(blockData)) {
 			blockData = [blockData]
 		}
-		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(this.selectedBlocks)
+		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(this.__selectedBlocks)
 
 		for (const {block, templateCategory} of blockData) {
 			// Get or create the template's block map
@@ -178,8 +198,8 @@ export const store = createMutable({
 				this.selectedFabrics.delete(templateCategory)
 			}
 		}
-		this.selectedBlocks = newBlocks
-	},
+		this.__selectedBlocks = newBlocks
+	}
 	set setSelectedFabrics(
 		fabricData:
 			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}
@@ -223,74 +243,59 @@ export const store = createMutable({
 			}
 		}
 		this.selectedFabrics = newFabrics
-	},
+	}
 	set unselectTemplate(template: Template) {
 		const newTemplates = new Map<TemplateCategory, Template>(this.selectedTemplates)
 		newTemplates.delete(template.category)
-		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(this.selectedBlocks)
+		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(this.__selectedBlocks)
 		newBlocks.delete(template.category)
 		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(this.selectedFabrics)
 		newFabrics.delete(template.category)
 
-		this.selectedBlocks = newBlocks
+		this.__selectedBlocks = newBlocks
 		this.selectedTemplates = newTemplates
 		this.selectedFabrics = newFabrics
-	},
-	set navigateTo(route: AppRoute) {
-		this.view = route
-	},
+	}
 	set setRemixOverlayTemplateCategory(category: TemplateCategory | null) {
 		this.remixOverlayTemplateCategory = category
-	},
-	set setTempSelectedAvatar(avatar: string) {
-		this.tempSelectedAvatar = avatar
-	},
-	set selectAvatar(avatar: string) {
-		this.selectedAvatar = avatar
-	},
-	set selectPose(pose: string) {
-		this.selectedPose = pose
-	},
+	}
 	set selectSpace(space: Space | null) {
 		this.selectedSpace = space
-	},
-	set setIsPreview(isPreview: boolean) {
-		this.isPreview = isPreview
-	},
+	}
 	set setCustomMeasurement(measurement: CustomMeasurement) {
 		this.customMeasurement = measurement
-	},
+	}
 	set setIsShowAvatar(isShowAvatar: boolean) {
 		this.isShowAvatar = isShowAvatar
-	},
+	}
 	set setIsShowScene(isShowScene: boolean) {
 		this.isShowScene = isShowScene
-	},
+	}
 	// Order-related setters
 	set setOrderStatus(status: OrderStatus) {
 		this.order.status = status
-	},
+	}
 	set setOrderError(error: string | null) {
 		this.order.error = error
-	},
+	}
 	set setSelectedSize(size: string) {
 		this.order.selectedSize = size
-	},
+	}
 	set setQuantity(quantity: number) {
 		this.order.quantity = quantity
-	},
+	}
 	set setCustomerInfo(info: {email?: string; firstName?: string; lastName?: string}) {
 		if (info.email !== undefined) this.order.customerEmail = info.email
 		if (info.firstName !== undefined) this.order.customerFirstName = info.firstName
 		if (info.lastName !== undefined) this.order.customerLastName = info.lastName
-	},
+	}
 	set setShippingAddress(address: Partial<ShippingAddress>) {
 		this.order.shippingAddress = {...this.order.shippingAddress, ...address}
-	},
+	}
 
 	set setSelectedOrderItems(items: Map<TemplateCategory, boolean>) {
 		this.selectedOrderItems = items
-	},
+	}
 
 	setSizeQuantity(category: TemplateCategory, size: string, quantity: number) {
 		// Create a new Map to trigger reactivity
@@ -306,17 +311,17 @@ export const store = createMutable({
 		newQuantities.set(category, categoryMap)
 
 		this.orderSizeQuantities = newQuantities
-	},
+	}
 
 	getSizeQuantity(category: TemplateCategory, size: string): number {
 		return this.orderSizeQuantities.get(category)?.get(size) || 0
-	},
+	}
 
 	getItemTotalQuantity(category: TemplateCategory): number {
 		const sizeMap = this.orderSizeQuantities.get(category)
 		if (!sizeMap) return 0
 		return Array.from(sizeMap.values()).reduce((sum, qty) => sum + qty, 0)
-	},
+	}
 
 	getOrderTotalQuantity(): number {
 		let total = 0
@@ -326,52 +331,52 @@ export const store = createMutable({
 			}
 		}
 		return total
-	},
+	}
 
 	getOrderTotalCost(): number {
 		// For now, using $125 per item as shown in UI
 		// TODO: Use actual pricing from templates/store
 		return this.getOrderTotalQuantity() * 125
-	},
+	}
 
 	// Retail mode methods (for non-wholesale)
 	setOrderSelectedSize(size: string) {
 		this.order.selectedSize = size
-	},
+	}
 
 	setRetailItemQuantity(category: TemplateCategory, quantity: number) {
 		const newQuantities = new Map(this.retailItemQuantities)
 		newQuantities.set(category, quantity)
 		this.retailItemQuantities = newQuantities
-	},
+	}
 
 	getRetailItemQuantity(category: TemplateCategory): number {
 		return this.retailItemQuantities.get(category) || 1 // Default to 1 for retail
-	},
+	}
 
 	setRetailItemSize(category: TemplateCategory, size: string) {
 		const newSizes = new Map(this.retailItemSizes)
 		newSizes.set(category, size)
 		this.retailItemSizes = newSizes
-	},
+	}
 
 	getRetailItemSize(category: TemplateCategory): string {
 		return this.retailItemSizes.get(category) || '34 (XS)' // Default size for retail
-	},
+	}
 
 	setRetailItemCustomMeasurement(category: TemplateCategory, measurement: CustomMeasurement) {
 		const newMeasurements = new Map(this.retailItemCustomMeasurements)
 		newMeasurements.set(category, measurement)
 		this.retailItemCustomMeasurements = newMeasurements
-	},
+	}
 
 	getRetailItemCustomMeasurement(category: TemplateCategory): CustomMeasurement | null {
 		return this.retailItemCustomMeasurements.get(category) || null
-	},
+	}
 
 	hasRetailItemCustomMeasurement(category: TemplateCategory): boolean {
 		return this.retailItemCustomMeasurements.has(category)
-	},
+	}
 
 	getRetailOrderTotalCost(): number {
 		let total = 0
@@ -381,7 +386,7 @@ export const store = createMutable({
 			}
 		}
 		return total
-	},
+	}
 
 	toggleOrderItem(category: TemplateCategory) {
 		const newSelectedItems = new Map(this.selectedOrderItems)
@@ -396,7 +401,7 @@ export const store = createMutable({
 
 		newSelectedItems.set(category, !currentlySelected)
 		this.selectedOrderItems = newSelectedItems
-	},
+	}
 
 	initializeOrderItems() {
 		// Initialize all selected templates as checked
@@ -405,138 +410,281 @@ export const store = createMutable({
 			newSelectedItems.set(category, true)
 		}
 		this.selectedOrderItems = newSelectedItems
-	},
+	}
 
+	// FIXME this is almost duplicate of resetState. Don't duplicate code!
 	resetSelectedTemplates() {
-		this.selectedTemplates = new Map<TemplateCategory, Template>()
-		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
-		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
-		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
-		this.retailItemQuantities = new Map<TemplateCategory, number>()
-		this.retailItemSizes = new Map<TemplateCategory, string>()
-		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
-		this.isPreview = false
-		this.customMeasurement = null as CustomMeasurement | null
-		// Clear all loading states to prevent orphaned symbols
-		this.loadingBlocks.clear()
-		this.loadingMaterials.clear()
-		this.isDrippySceneLoading.clear()
-		this.loadingScreenshots.clear()
-		this.order = {
-			status: 'idle' as OrderStatus,
-			error: null as string | null,
-			productName: 'Custom 3D Drippy Design',
-			selectedSize: '34 (XS)',
-			quantity: 1,
-			email: '',
-			customerEmail: '',
-			customerFirstName: '',
-			customerLastName: '',
-			shippingAddress: {
-				firstName: '',
-				lastName: '',
-				address: '',
-				apartment: '',
-				city: '',
-				postalCode: '',
-				phone: '',
-			},
-		} as OrderState
-	},
+		batch(() => {
+			this.selectedTemplates = new Map<TemplateCategory, Template>()
+			this.__selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+			this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+			this.selectedOrderItems = new Map<TemplateCategory, boolean>()
+			this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
+			this.retailItemQuantities = new Map<TemplateCategory, number>()
+			this.retailItemSizes = new Map<TemplateCategory, string>()
+			this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
+			this.isPreview = false
+			this.customMeasurement = null as CustomMeasurement | null
 
-	resetState() {
-		this.view = 'avatar' as AppRoute
-		this.selectedAvatar = null as string | null
-		this.selectedSpace = null as Space | null
-		this.selectedTemplates = new Map<TemplateCategory, Template>()
-		this.selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
-		this.selectedOrderItems = new Map<TemplateCategory, boolean>()
-		this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
-		this.retailItemQuantities = new Map<TemplateCategory, number>()
-		this.retailItemSizes = new Map<TemplateCategory, string>()
-		this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
-		this.screenshotCache = new Map<TemplateCategory, string>()
-		this.loadingScreenshots = new Set<TemplateCategory>()
-		this.remixOverlayTemplateCategory = null
-		// Clear all loading states to prevent orphaned symbols
-		this.loadingBlocks.clear()
-		this.loadingMaterials.clear()
-		this.isDrippySceneLoading.clear()
-		this.isPreview = false
-		this.customMeasurement = null as CustomMeasurement | null
-		this.order = {
-			status: 'idle' as OrderStatus,
-			error: null as string | null,
-			productName: 'Custom 3D Drippy Design',
-			selectedSize: '34 (XS)',
-			quantity: 1,
-			email: '',
-			customerEmail: '',
-			customerFirstName: '',
-			customerLastName: '',
-			shippingAddress: {
-				firstName: '',
-				lastName: '',
-				address: '',
-				apartment: '',
-				city: '',
-				postalCode: '',
-				phone: '',
-			},
-		} as OrderState
-	},
+			// Clear all loading states to prevent orphaned symbols
+			// FIXME clearing loading states should not be necessary. If so, it
+			// means there's a leak. Instead, don't clear loading states, all async
+			// processes must always clean up after themselves, and this will
+			// automatically keep loading states cleared.
+			this.clearAllLoadingStates()
+
+			this.order = {
+				status: 'idle' as OrderStatus,
+				error: null as string | null,
+				productName: 'Custom 3D Drippy Design',
+				selectedSize: '34 (XS)',
+				quantity: 1,
+				email: '',
+				customerEmail: '',
+				customerFirstName: '',
+				customerLastName: '',
+				shippingAddress: {
+					firstName: '',
+					lastName: '',
+					address: '',
+					apartment: '',
+					city: '',
+					postalCode: '',
+					phone: '',
+				},
+			} as OrderState
+		})
+	}
+
+	// FIXME this is almost duplicate of resetSelectedTemplates. Don't duplicate code!
+	resetState(view?: AppRoute) {
+		batch(() => {
+			if (view) this.view = view
+			this.selectedAvatar = avatars[0].name
+			this.selectedSpace = null as Space | null
+			this.selectedTemplates = new Map<TemplateCategory, Template>()
+			this.__selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+			this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+			this.selectedOrderItems = new Map<TemplateCategory, boolean>()
+			this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
+			this.retailItemQuantities = new Map<TemplateCategory, number>()
+			this.retailItemSizes = new Map<TemplateCategory, string>()
+			this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
+			this.screenshotCache = new Map<TemplateCategory, string>()
+			// TODO only use unique symbols for loading states, and make sure async
+			// processes always clean up!
+			this.loadingScreenshots = new Set<TemplateCategory>()
+			this.remixOverlayTemplateCategory = null
+
+			// Clear all loading states to prevent orphaned symbols
+			// FIXME clearing loading states should not be necessary. If so, it
+			// means there's a leak. Instead, don't clear loading states, all async
+			// processes must always clean up after themselves, and this will
+			// automatically keep loading states cleared.
+			this.clearAllLoadingStates()
+
+			this.isPreview = false
+			this.customMeasurement = null as CustomMeasurement | null
+			this.order = {
+				status: 'idle' as OrderStatus,
+				error: null as string | null,
+				productName: 'Custom 3D Drippy Design',
+				selectedSize: '34 (XS)',
+				quantity: 1,
+				email: '',
+				customerEmail: '',
+				customerFirstName: '',
+				customerLastName: '',
+				shippingAddress: {
+					firstName: '',
+					lastName: '',
+					address: '',
+					apartment: '',
+					city: '',
+					postalCode: '',
+					phone: '',
+				},
+			} as OrderState
+		})
+	}
 
 	addIsDrippySceneLoading(key: symbol) {
 		untrack(() => {
-			this.isDrippySceneLoading.add(key)
-			this.isDrippySceneLoading = new Set(this.isDrippySceneLoading) // trigger reactivity
+			this.drippySceneLoads.add(key)
+			this.drippySceneLoads = new Set(this.drippySceneLoads) // trigger reactivity
 		})
-	},
+	}
 	removeIsDrippySceneLoading(key: symbol) {
 		untrack(() => {
-			this.isDrippySceneLoading.delete(key)
-			this.isDrippySceneLoading = new Set(this.isDrippySceneLoading) // trigger reactivity
+			this.drippySceneLoads.delete(key)
+			this.drippySceneLoads = new Set(this.drippySceneLoads) // trigger reactivity
 		})
-	},
+	}
+	clearIsDrippySceneLoading() {
+		untrack(() => {
+			this.drippySceneLoads.clear()
+			this.drippySceneLoads = new Set(this.drippySceneLoads) // trigger reactivity
+		})
+	}
 
 	addLoadingBlock(key: symbol) {
 		untrack(() => {
 			this.loadingBlocks.add(key)
 			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
 		})
-	},
+	}
 	removeLoadingBlock(key: symbol) {
 		untrack(() => {
 			this.loadingBlocks.delete(key)
 			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
 		})
-	},
+	}
+	clearLoadingBlocks() {
+		untrack(() => {
+			this.loadingBlocks.clear()
+			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+		})
+	}
 
 	addLoadingMaterial(key: symbol) {
 		untrack(() => {
 			this.loadingMaterials.add(key)
 			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
 		})
-	},
+	}
 	removeLoadingMaterial(key: symbol) {
 		untrack(() => {
 			this.loadingMaterials.delete(key)
 			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
 		})
-	},
+	}
+	clearLoadingMaterials() {
+		untrack(() => {
+			this.loadingMaterials.clear()
+			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+		})
+	}
 
 	addLoadingScreenshot(category: TemplateCategory) {
 		untrack(() => {
+			// FIXME only use unique symbols for loading states, and make sure
+			// async processes always clean up!
 			this.loadingScreenshots.add(category)
 			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
 		})
-	},
+	}
 	removeLoadingScreenshot(category: TemplateCategory) {
 		untrack(() => {
+			// FIXME only use unique symbols for loading states, and make sure
+			// async processes always clean up!
 			this.loadingScreenshots.delete(category)
 			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
 		})
-	},
+	}
+	clearLoadingScreenshots() {
+		untrack(() => {
+			this.loadingScreenshots.clear()
+			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
+		})
+	}
+
+	clearAllLoadingStates() {
+		this.clearLoadingBlocks()
+		this.clearLoadingMaterials()
+		this.clearLoadingScreenshots()
+		this.clearIsDrippySceneLoading()
+	}
+
+	trackModelLoading(id: symbol, model: GltfModel) {
+		const modelLoaded = onModelLoad(model)
+
+		createEffect(() => {
+			if (!modelLoaded()) {
+				this.addLoadingBlock(id)
+				this.addIsDrippySceneLoading(id)
+			}
+
+			onCleanup(() => {
+				this.removeLoadingBlock(id)
+				this.removeIsDrippySceneLoading(id)
+			})
+		})
+	}
+
+	constructor() {
+		return createMutable(this)
+	}
+}
+
+export const store = new Store()
+
+// For debuggering
+;(window as any).drippyStore = store
+
+createEffect(() => {
+	if (!store.selectedAvatar) throw new Error('Never set the selected avatar to empty!')
+})
+
+const sceneParam = createMemo(() => searchParams().get('scene'))
+
+// If no scene is selected, default to scene selection view (home), otherwise
+// go to template view
+createEffect(() => {
+	if (!sceneParam()) store.view = 'scene'
+	// else store.view = 'template'
+})
+
+createEffect(() => {
+	// If we're in scene selection view, remove all params, and don't sync
+	// selectedAvatar with URL param
+	if (store.view === 'scene') {
+		untrack(() => {
+			url().search = ''
+			pushState()
+		})
+		return
+	}
+
+	// Anywhere but on the scene view, initialize the avatar URL param from selectedAvatar
+	untrack(() => {
+		if (!searchParams().get('avatar')) {
+			searchParams().set('avatar', store.selectedAvatar)
+			pushState()
+		}
+	})
+
+	console.log('sync selectedAvatar with URL param')
+
+	// And keep both selectedAvatar and avatar URL parameter in sync
+	syncSignals(
+		() => store.selectedAvatar,
+		(value: string) => (store.selectedAvatar = value),
+		() => searchParams().get('avatar') ?? avatars[0].name,
+		(value: string) => {
+			searchParams().set('avatar', value)
+			pushState()
+		},
+	)
+
+	const [skipFirstRun, setSkipFirstRun] = createSignal(true)
+
+	// Also ensure that if we're on a male space we switch to a male avatar, and
+	// vice versa
+	createEffect(() => {
+		if (skipFirstRun()) return // ensure syncSignals ran first
+
+		const space = spaceFromParam()
+		if (!space) return
+
+		const currentAvatarGender = avatars.find(avatar => avatar.name === store.selectedAvatar)?.gender
+		if (currentAvatarGender === space.gender) return
+
+		// Find the default avatar for the space's gender
+		const defaultAvatar = avatars.find(avatar => avatar.gender === space.gender && avatar.default)
+		if (!defaultAvatar) throw new Error(`No default avatar found`)
+
+		store.selectedAvatar = defaultAvatar.name
+	})
+
+	queueMicrotask(() => setSkipFirstRun(false))
 })

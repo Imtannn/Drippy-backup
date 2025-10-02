@@ -1,9 +1,9 @@
-import * as fs from 'fs'
-import * as path from 'path'
-import * as https from 'https'
 import * as AWS from 'aws-sdk'
-import * as THREE from 'three'
+import * as fs from 'fs'
+import * as https from 'https'
+import * as path from 'path'
 import sharp from 'sharp'
+import * as THREE from 'three'
 
 type TODO = any
 
@@ -62,6 +62,30 @@ const BRAND_CONFIGS = [
 	{
 		brand: 'emwear',
 		rootFolderId: '15zHjnYVfII_Z2cr17_6Vp7kscWm9UIAU',
+	},
+	{
+		brand: 'atelierGourney',
+		rootFolderId: '17aBfgFcD7Liq9fB_KC57rl5S2w-O4LYf',
+	},
+	{
+		brand: 'imzad',
+		rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
+	},
+	{
+		brand: 'oneThousandPoets',
+		rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
+	},
+	{
+		brand: 'zove',
+		rootFolderId: '1XlxaOIFxxh-8xCmmM6XrDOW6iqq7xNhw',
+	},
+	{
+		brand: 'jaSengBu',
+		rootFolderId: '1BO4szN8246Y0V-AhL9zDyXzJ6rZLL7U8',
+	},
+	{
+		brand: 'mssPark',
+		rootFolderId: '1uUtAmMj_4gV1P3xuJKWGPbATJcv63GcJ',
 	},
 	// {
 	// 	brand: 'baroudeuses',

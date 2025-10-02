@@ -2177,7 +2177,7 @@ p {
 		display: none !important;
 	}
 	.landing-page-desktop .hero-header {
-		padding: 100px 20px 0px;
+		padding: 110px 20px 0px;
 		min-height: 825px;
 	}
 	.landing-page-desktop .hero-header .bg-background {
@@ -2330,6 +2330,7 @@ p {
 	}
 	.landing-page-desktop .hero-header {
 		min-height: 675px;
+		margin-bottom: 20px;
 	}
 	.landing-page-desktop .hero-header .bg-background {
 		background-position: 90% 50%;
@@ -2576,13 +2577,13 @@ p {
 		top: 3px;
 	}
 	.landing-page-desktop .cta__cone-image--2 {
-		top: 0.7%;
+		top: 0.6%;
 	}
 	.landing-page-desktop .cta__cone-image--3 {
 		top: 7%;
 	}
 	.landing-page-desktop .cta__cone-image--4 {
-		top: 26%;
+		top: 25.7%;
 	}
 }
 
@@ -2722,5 +2723,42 @@ p {
 	.carousel .platform__card:not(.active),
 	.carousel .pricing__plans--item:not(.active) {
 		display: none !important;
+	}
+
+	/* Progress indicator for mobile carousel */
+	.carousel-progress {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 8px;
+		margin: 20px 0;
+		padding: 0 20px;
+	}
+
+	.carousel-progress-dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background-color: rgba(0, 0, 0, 0.2);
+		transition:
+			background-color 0.3s ease,
+			transform 0.3s ease;
+		cursor: pointer;
+	}
+
+	.carousel-progress-dot.active {
+		background-color: #6366f1;
+		transform: scale(1.2);
+	}
+
+	.carousel-progress-dot:hover {
+		background-color: rgba(99, 102, 241, 0.6);
+	}
+
+	/* Hide progress indicator on larger screens */
+	@media (min-width: 481px) {
+		.carousel-progress {
+			display: none !important;
+		}
 	}
 }

@@ -1,6 +1,5 @@
-import {css, Element, element, html, signal} from 'lume'
+import {createMemo, css, Element, element, html, signal} from 'lume'
 import {fabrics} from '../consts/fabrics.js'
-import {spaces} from '../consts/spaces.js'
 import {templates} from '../consts/templates.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
@@ -26,6 +25,11 @@ import './spaces-selection.js'
 import {store} from './store.js'
 import './success-view.js'
 import './template-view.js'
+import {searchParams} from '../routes.js'
+
+// const avatar = createMemo(() => searchParams().get('avatar'))
+const scene = createMemo(() => searchParams().get('scene') as Space | null)
+const isPreview = createMemo(() => searchParams().get('isPreview'))
 
 @element
 export class DrippyApp extends Element {
@@ -37,50 +41,17 @@ export class DrippyApp extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
+		// FIXME this needs re-work, currently can cause an infinite loop (the
+		// console.logs in loadFromUrlParameters will log repeatedly)
 		this.createEffect(() => {
 			try {
-				const searchParams = new URLSearchParams(window.location.search)
-				const avatar = searchParams.get('avatar')
-				const scene = searchParams.get('scene')
-				const isPreview = searchParams.get('isPreview')
-
-				// If no avatar is selected and no avatar is provided in search params, navigate to avatar selection. Else, use the provided avatar.
-				if (!store.selectedAvatar) {
-					if (avatar) {
-						store.selectAvatar = avatar
-					} else {
-						store.navigateTo = 'avatar'
-						return
-					}
-				}
-
-				// If no scene is selected and no scene is provided in search params, navigate to scene selection. Else, use the provided scene.
-				let space: Space | undefined
-				if (!store.selectedSpace) {
-					if (scene) {
-						space = spaces.find(space => space.slug === scene)
-						if (space) {
-							store.selectSpace = space
-						} else {
-							store.navigateTo = 'scene'
-							return
-						}
-					} else {
-						store.navigateTo = 'scene'
-						return
-					}
-				}
-
 				// Load garments and fabrics from URL parameters if present
-				this.#loadFromUrlParameters(searchParams, space!)
+				this.#loadFromUrlParameters(scene()!)
 
-				if (store.isPreview || isPreview === 'true') {
-					store.navigateTo = 'preview'
+				if (store.isPreview || isPreview() === 'true') {
+					store.view = 'preview'
 					return
 				}
-
-				// If both avatar and scene are selected, navigate to blocks.
-				store.navigateTo = 'template'
 			} catch (error) {
 				console.error('Error loading app', error)
 			} finally {
@@ -94,7 +65,7 @@ export class DrippyApp extends Element {
 				store.view !== 'scene' &&
 				store.selectedAvatar &&
 				store.selectedSpace &&
-				store.isDrippySceneLoading.size > 0
+				store.drippySceneLoads.size > 0
 			) {
 				this.showLoadingCover = true
 			} else {
@@ -105,12 +76,11 @@ export class DrippyApp extends Element {
 
 	/**
 	 * Load garments and fabrics from URL parameters
-	 * @param searchParams - URL search parameters
 	 * @param space - Selected space
 	 */
-	#loadFromUrlParameters(searchParams: URLSearchParams, space: Space) {
-		const garmentsParam = searchParams.get('garments')
-		const fabricsParam = searchParams.get('fabrics')
+	#loadFromUrlParameters(space: Space) {
+		const garmentsParam = searchParams().get('garments')
+		const fabricsParam = searchParams().get('fabrics')
 
 		if ((garmentsParam || fabricsParam) && store.selectedSpace && store.selectedTemplates.size === 0) {
 			const spaceTemplates = templates[store.selectedSpace.collection]
@@ -149,7 +119,14 @@ export class DrippyApp extends Element {
 				}
 
 				store.selectedFabrics = newFabrics
-				store.selectedBlocks = newBlocks
+				console.log('selected fabrics from url', newFabrics)
+
+				// @ts-expect-error FIXME we should avoid having two different
+				// ways of setting the same thing (see store.setSelectedBlocks
+				// and onItemClick in template-view.ts). This will get more
+				// difficult to manage and error prone/buggy.
+				store.__selectedBlocks = newBlocks
+
 				store.selectedTemplates = templates
 			}
 		}
@@ -168,7 +145,7 @@ export class DrippyApp extends Element {
 				<div id="app-container">
 					<drippy-scene
 						id="drippy-scene"
-						selected-space=${() => store.selectedSpace}
+						selected-space=${() => (console.log('selected space', store.selectedSpace), store.selectedSpace)}
 						selected-avatar=${() => store.selectedAvatar}
 						selected-fabrics=${() => store.selectedFabrics}
 						selected-blocks=${() => store.selectedBlocks}
@@ -239,9 +216,10 @@ export class DrippyApp extends Element {
 			user-select: none;
 		}
 
-		:host {
-			width: var(--appWidth);
-			height: var(--appHeight);
+		:host,
+		#app-container {
+			width: 100%;
+			height: 100%;
 		}
 
 		.loading-cover {

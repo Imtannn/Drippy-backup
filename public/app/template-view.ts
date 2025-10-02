@@ -1,4 +1,4 @@
-import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {batch, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import {templates} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Block, BlockCategory} from '../types/block.js'
@@ -27,7 +27,7 @@ import '../elements/preview-button.js'
 import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
-import {updateGarmentsInUrl, updateFabricsInUrl, updateUrlWithParams} from '../routes.js'
+import {updateGarmentsInUrl, updateFabricsInUrl, searchParams, pushState} from '../routes.js'
 import {formatNumber} from '../utils.js'
 import './app-buttons.js'
 import './avatar-selection.js'
@@ -69,7 +69,7 @@ export class TemplateView extends Element {
 		this.createEffect(() => {
 			if (!this.spaceCollection) return
 
-			const defaultCategories: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants']
+			const defaultCategories: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants', 'Jumpsuit']
 			const collectionTemplates = templates[this.spaceCollection] ?? []
 			const orderedTemplates: Template[] = []
 			const categories = new Map<TemplateCategory, Template[]>()
@@ -114,16 +114,10 @@ export class TemplateView extends Element {
 		})
 
 		// Update URL when garments change
-		this.createEffect(() => {
-			const selectedTemplates = store.selectedTemplates
-			updateGarmentsInUrl(selectedTemplates)
-		})
+		this.createEffect(() => updateGarmentsInUrl(store.selectedTemplates))
 
 		// Update URL when fabrics change
-		this.createEffect(() => {
-			const selectedFabrics = store.selectedFabrics
-			updateFabricsInUrl(selectedFabrics)
-		})
+		this.createEffect(() => updateFabricsInUrl(store.selectedFabrics))
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -170,7 +164,13 @@ export class TemplateView extends Element {
 		newFabrics.set(template.category, newFabricsMap)
 
 		store.selectedFabrics = newFabrics
-		store.selectedBlocks = newBlocks
+
+		// @ts-expect-error FIXME we should avoid having different ways of
+		// setting the same thing (see store.setSelectedBlocks, and
+		// loadFromUrlParameters in drippy-app.ts).  This will get more
+		// difficult to manage and error prone/buggy.
+		store.__selectedBlocks = newBlocks
+
 		store.selectedTemplates = newTemplates
 
 		// Check if remix is available for this template
@@ -189,73 +189,86 @@ export class TemplateView extends Element {
 	}
 
 	#onPreviewButtonClick = () => {
-		const user = currentUser()
+		batch(() => {
+			const user = currentUser()
 
-		if (user) {
-			const searchParams = new URLSearchParams(window.location.search)
-			searchParams.set('isPreview', 'true')
-			store.setIsPreview = true
-			this.showAvatarSelection = false
-			this.showPoseSelection = false
-			this.showRemixOverlay = false
-			this.showTemplateOverlay = null
-			updateUrlWithParams(searchParams)
-		} else {
-			this.showLoginDialog = true
-		}
+			if (user) {
+				searchParams().set('isPreview', 'true')
+				store.isPreview = true
+				this.showAvatarSelection = false
+				this.showPoseSelection = false
+				this.showRemixOverlay = false
+				this.showTemplateOverlay = null
+				pushState()
+			} else {
+				this.showLoginDialog = true
+			}
+		})
 	}
 
 	#onBackButtonClick = () => {
-		// Reset UI state
-		this.showAvatarSelection = false
-		this.showPoseSelection = false
-		this.showLoginDialog = false
-		this.showRemixOverlay = false
-		this.showTemplateOverlay = null
+		batch(() => {
+			// FIXME This logic is "go back to home" logic, however it is inaccessible
+			// here to any other code that may want to go back to home. We need
+			// to make code re-usable, and consistent, without repeating.
 
-		store.resetSelectedTemplates()
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.delete('scene')
-		updateUrlWithParams(searchParams)
-		store.selectSpace = null
-		store.navigateTo = 'scene'
+			// Reset UI state
+			this.showAvatarSelection = false
+			this.showPoseSelection = false
+			this.showLoginDialog = false
+			this.showRemixOverlay = false
+			this.showTemplateOverlay = null
+
+			store.resetSelectedTemplates()
+			store.view = 'scene'
+		})
 	}
 
 	#onAvatarDropdownClick = () => {
-		this.showAvatarSelection = !this.showAvatarSelection
-		this.showPoseSelection = false
-		this.showRemixOverlay = false
-		this.showTemplateOverlay = null
+		batch(() => {
+			this.showAvatarSelection = !this.showAvatarSelection
+			this.showPoseSelection = false
+			this.showRemixOverlay = false
+			this.showTemplateOverlay = null
+		})
 	}
 
 	#onNavTabChange = (e: CustomEvent) => {
-		const tab = e.detail.tab
-		if (tab === 'pose') {
-			this.showPoseSelection = true
-			this.showAvatarSelection = false
-		} else {
-			this.showPoseSelection = false
-			this.showAvatarSelection = false
-		}
-		this.showRemixOverlay = false
-		this.showTemplateOverlay = null
+		batch(() => {
+			const tab = e.detail.tab
+			if (tab === 'pose') {
+				this.showPoseSelection = true
+				this.showAvatarSelection = false
+			} else {
+				this.showPoseSelection = false
+				this.showAvatarSelection = false
+			}
+			this.showRemixOverlay = false
+			this.showTemplateOverlay = null
+		})
 	}
 
 	#closeRemixOverlay = () => {
-		this.showRemixOverlay = false
-		store.setRemixOverlayTemplateCategory = null
+		batch(() => {
+			this.showRemixOverlay = false
+			store.setRemixOverlayTemplateCategory = null
+		})
 	}
 
 	#onTemplateOverlayClose = () => {
-		this.showTemplateOverlay = null
-		this.isOpeningOverlay = false
+		batch(() => {
+			this.showTemplateOverlay = null
+			this.isOpeningOverlay = false
+		})
 	}
 
 	#handleTemplateOverlayRemix = (templateCategory: TemplateCategory) => {
-		this.showTemplateOverlay = null
-		this.isOpeningOverlay = false
-		store.setRemixOverlayTemplateCategory = templateCategory
-		this.showRemixOverlay = true
+		batch(() => {
+			this.showTemplateOverlay = null
+			this.isOpeningOverlay = false
+			store.setRemixOverlayTemplateCategory = templateCategory
+			this.showRemixOverlay = true
+		})
 	}
 
 	#onTemplateOverlayRemix = (e: CustomEvent) => {
@@ -418,6 +431,7 @@ export class TemplateView extends Element {
 			>
 				<avatar-dropdown
 					open=${() => this.showAvatarSelection}
+					show-popup
 					onavatar-dropdown-click=${this.#onAvatarDropdownClick}
 				></avatar-dropdown>
 				<nav-items ontab-change=${this.#onNavTabChange}></nav-items>

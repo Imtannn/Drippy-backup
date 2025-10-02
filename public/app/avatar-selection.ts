@@ -1,6 +1,5 @@
 import {booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import {avatars} from '../consts/avatars.js'
-import {updateUrlWithParams} from '../routes.js'
 import {store} from './store.js'
 
 import '../elements/bottom-sheet.js'
@@ -24,18 +23,8 @@ export class AvatarSelection extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
-			if (!store.tempSelectedAvatar) {
-				if (store.selectedAvatar) {
-					store.setTempSelectedAvatar = store.selectedAvatar
-				} else {
-					store.setTempSelectedAvatar = avatars[0].value
-				}
-			}
-		})
-
-		this.createEffect(() => {
 			if (this.contentOnly && store.selectedAvatar) {
-				const avatar = avatars.find(a => a.value === store.selectedAvatar)
+				const avatar = avatars.find(a => a.name === store.selectedAvatar)
 				if (avatar) {
 					this.selectedTab = avatar.gender
 				}
@@ -43,8 +32,8 @@ export class AvatarSelection extends Element {
 		})
 	}
 
-	#onItemClick = (e: CustomEvent) => {
-		store.setTempSelectedAvatar = e.detail.itemValue
+	#onAvatarThumbClick = (e: CustomEvent) => {
+		store.selectedAvatar = e.detail.itemValue
 
 		if (this.contentOnly) {
 			this.#onSaveClick()
@@ -52,18 +41,7 @@ export class AvatarSelection extends Element {
 	}
 
 	#onSaveClick = () => {
-		// TODO: set the selected avatar. This is a temporary solution.
-		const value = store.tempSelectedAvatar
-		if (!value) return
-		const searchParams = new URLSearchParams(window.location.search)
-		searchParams.set('avatar', value)
-		updateUrlWithParams(searchParams)
-
-		// Force the setter to trigger even if the value is the same
-		if (store.selectedAvatar === value) {
-			store.selectedAvatar = null
-		}
-		store.selectAvatar = value
+		store.view = 'scene'
 	}
 
 	#renderAvatarContent = () => html`
@@ -97,16 +75,12 @@ export class AvatarSelection extends Element {
 							items=${() => avatars.filter(avatar => avatar.gender === 'female')}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
-									class=${() =>
-										(this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value
-											? 'item-preview'
-											: ''}
-									item-active=${() =>
-										(this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value}
+									class=${() => (store.selectedAvatar === avatar.name ? 'item-preview' : '')}
+									item-active=${() => store.selectedAvatar === avatar.name}
 									item-src=${avatar.thumbnail}
-									item-alt=${avatar.value}
-									item-value=${avatar.value}
-									oncardselected=${this.#onItemClick}
+									item-alt=${avatar.name}
+									item-value=${avatar.name}
+									oncardselected=${this.#onAvatarThumbClick}
 									object-fit="cover"
 									object-position="top"
 									aspect-ratio="0.79"
@@ -123,16 +97,12 @@ export class AvatarSelection extends Element {
 							items=${() => avatars.filter(avatar => avatar.gender === 'male')}
 							content=${() => (avatar: (typeof avatars)[number]) => html`
 								<item-card
-									class=${() =>
-										(this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value
-											? 'item-preview'
-											: ''}
-									item-active=${() =>
-										(this.contentOnly ? store.selectedAvatar : store.tempSelectedAvatar) === avatar.value}
+									class=${() => (store.selectedAvatar === avatar.name ? 'item-preview' : '')}
+									item-active=${() => store.selectedAvatar === avatar.name}
 									item-src=${avatar.thumbnail}
-									item-alt=${avatar.value}
-									item-value=${avatar.value}
-									oncardselected=${this.#onItemClick}
+									item-alt=${avatar.name}
+									item-value=${avatar.name}
+									oncardselected=${this.#onAvatarThumbClick}
 									object-fit="cover"
 									object-position="top"
 									aspect-ratio="0.79"
@@ -147,18 +117,21 @@ export class AvatarSelection extends Element {
 	`
 
 	template = () => {
-		if (this.contentOnly) {
-			return this.#renderAvatarContent()
-		}
-
 		return html`
-			<app-buttons-right layout="bottom">
-				<app-buttons-group>
-					<save-button onclick=${this.#onSaveClick}></save-button>
-				</app-buttons-group>
-			</app-buttons-right>
+			<show-when condition=${() => this.contentOnly} content=${this.#renderAvatarContent}></show-when>
 
-			<bottom-sheet> ${this.#renderAvatarContent()} </bottom-sheet>
+			<show-when
+				condition=${() => !this.contentOnly}
+				content=${() => html`
+					<app-buttons-right layout="bottom">
+						<app-buttons-group>
+							<save-button onclick=${this.#onSaveClick}></save-button>
+						</app-buttons-group>
+					</app-buttons-right>
+
+					<bottom-sheet> ${this.#renderAvatarContent} </bottom-sheet>
+				`}
+			></show-when>
 		`
 	}
 

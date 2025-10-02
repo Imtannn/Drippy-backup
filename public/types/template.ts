@@ -1,6 +1,5 @@
 export type TemplateCategory =
 	| 'All'
-	| 'Dress'
 	| 'Skirt'
 	| 'Jacket'
 	| 'Shirt'
@@ -8,6 +7,7 @@ export type TemplateCategory =
 	| 'Accessories'
 	| 'Dress'
 	| 'Top'
+	| 'Jumpsuit'
 	| string // For custom categories
 
 export type ExtraMaterial = {
