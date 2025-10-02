@@ -192,7 +192,21 @@ export const templates: Record<string, Template[]> = {
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Skirt',
-		materialId: 'Silk - Crepe'
+		materialId: 'Silk - Crepe',
+		extraMaterials: [
+			{
+				mesh: 'pattern_609085-pattern_609088-pattern_609091',
+				materialId: 'Silk - Crepe (096372)',
+			},
+			{
+				mesh: 'pattern_609086-pattern_609089-pattern_609092',
+				materialId: 'Silk - Chiffon (2ab4c8)',
+			},
+			{
+				mesh: 'pattern_609084-pattern_609087-pattern_609090',
+				materialId: 'Silk - Crepe (D6e2ea)',
+			}
+		]
 	},
 	{
 		_id: '13',
@@ -201,7 +215,21 @@ export const templates: Record<string, Template[]> = {
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Skirt',
-		materialId: 'Silk - Crepe'
+		materialId: 'Silk - Crepe',
+		extraMaterials: [
+			{
+				mesh: 'pattern_609100-pattern_609090-pattern_609093-pattern_609095',
+				materialId: 'Silk - Crepe (096372)',
+			},
+			{
+				mesh: 'pattern_609101-pattern_609097-pattern_609091-pattern_609096',
+				materialId: 'Silk - Chiffon (2ab4c8)',
+			},
+			{
+				mesh: 'pattern_609086-pattern_609088-pattern_609092-pattern_609094',
+				materialId: 'Silk - Crepe (D6e2ea)',
+			}
+		]
 	}
 	],
 	lostCause: [
@@ -308,7 +336,7 @@ export const templates: Record<string, Template[]> = {
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Skirt',
-		materialId: 'Silk - Charcoal Gary',
+		materialId: 'Silk - Charcoal Gray',
 		extraMaterials: [
 			{
 				mesh: 'pattern_2271989',
@@ -1032,7 +1060,7 @@ export const templates: Record<string, Template[]> = {
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Shirt',
-		materialId: 'Seersucker Fabric - Black'
+		materialId: 'Seersucker - Seethrough'
 	},
 	{
 		_id: '17',
@@ -1190,7 +1218,7 @@ export const templates: Record<string, Template[]> = {
 		price: '65',
 		avatar: 'Female',
 		category: 'Dress',
-		materialId: '',
+		materialId: 'Silk - Lavender Blush',
 		extraMaterials: [
 			{
 				mesh: 'pattern_402777-pattern_402779-pattern_354297',
@@ -1226,6 +1254,24 @@ export const templates: Record<string, Template[]> = {
 	atelierGourney: [
 	{
 		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Jumpsuit/Item_5.webp',
+		name: 'Item 5',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Jumpsuit',
+		materialId: ''
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Jumpsuit/Item_4.webp',
+		name: 'Item 4',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Jumpsuit',
+		materialId: ''
+	},
+	{
+		_id: '3',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Jumpsuit/Item_3.webp',
 		name: 'Item 3',
 		price: 'N/A',
@@ -1234,7 +1280,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: ''
 	},
 	{
-		_id: '2',
+		_id: '4',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Jumpsuit/Item_2.webp',
 		name: 'Item 2',
 		price: 'N/A',
@@ -1243,7 +1289,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: ''
 	},
 	{
-		_id: '3',
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Jumpsuit/AETERNA_-_2500.webp',
 		name: 'AETERNA',
 		price: '2500',
@@ -1252,7 +1298,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Black - 360'
 	},
 	{
-		_id: '4',
+		_id: '6',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Dress/AETERNA_-_3500.webp',
 		name: 'AETERNA',
 		price: '3500',
@@ -1261,7 +1307,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Metallic - Fringe'
 	},
 	{
-		_id: '5',
+		_id: '7',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Dress/INVOLVITE_-_3500.webp',
 		name: 'INVOLVITE',
 		price: '3500',
@@ -1270,7 +1316,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Wool - Sequin'
 	},
 	{
-		_id: '6',
+		_id: '8',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Dress/CHRYSTALICE_-_3000.webp',
 		name: 'CHRYSTALICE',
 		price: '3000',
@@ -1279,7 +1325,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Wool - 361'
 	},
 	{
-		_id: '7',
+		_id: '9',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Dress/HYMNUSE_-_4500.webp',
 		name: 'HYMNUSE',
 		price: '4500',
@@ -1288,7 +1334,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Wool - 361'
 	},
 	{
-		_id: '8',
+		_id: '10',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/atelierGourney/templates/Dress/NOSTORIA_-_2500.webp',
 		name: 'NOSTORIA',
 		price: '2500',
@@ -1539,7 +1585,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Suede - Black',
 		extraMaterials: [
 			{
-				mesh: 'pattern_11672968-topstitch',
+				mesh: 'pattern_9095729-base_drippy_tight_regular_shoulder_4-topstitch',
 				materialId: 'Lace - Beige',
 			}
 		]
@@ -1554,7 +1600,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Wool - Black Suiting',
 		extraMaterials: [
 			{
-				mesh: 'pattern_9095729-pattern_7916207-pattern_7916208-pattern_7916209-pattern_275982-pattern_275980',
+				mesh: 'pattern_9095729-pattern_7916207-pattern_7916208-pattern_7916209-pattern_7916206-pattern_275982-pattern_275980',
 				materialId: 'Lace - Beige',
 			}
 		]
@@ -1783,8 +1829,8 @@ export const templates: Record<string, Template[]> = {
 	mssPark: [
 	{
 		_id: '1',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Skirt/Item_4_.webp',
-		name: 'Item 4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Skirt/Item_2.webp',
+		name: 'Item 2',
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Skirt',
@@ -1857,14 +1903,14 @@ export const templates: Record<string, Template[]> = {
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Top',
-		materialId: 'Jersey - Strecth',
+		materialId: 'Jersey - Stretch',
 		extraMaterials: [
 			{
-				mesh: 'slider_1-matshape_1886592_node-zipperpattern_1789291_node-matshape_1886584_node-zipperpattern_1789278_node',
+				mesh: 'graphic_1789490-zipperpattern_1789291-graphic_1789479-zipperpattern_1789278-slider_1',
 				materialId: 'Trim - Texture',
 			},
 			{
-				mesh: 'pattern_1545473_node-pattern_1545475_node-pattern_1545477_node',
+				mesh: 'pattern_1545473-pattern_1545475-pattern_1545477',
 				materialId: 'Poly - Camo',
 			}
 		]
