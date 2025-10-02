@@ -11,7 +11,7 @@ export type BlockCategory =
 
 export type TemplateCategory = 'Jacket' | 'Shirt' | 'Pants' | 'Accessories' | 'Dress' | 'Skirt' | 'Top' | string // For custom categories
 
-export type BlockAvatar = 'Male' | 'Female'
+export type BlockAvatar = 'male' | 'female'
 
 export type Block = {
 	_id: string
