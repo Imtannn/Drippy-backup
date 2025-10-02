@@ -702,7 +702,7 @@ export class UploadView extends Element {
 			thumb: block.thumbUrl,
 			modelFile: block.modelUrl,
 			blockName: block.blockName,
-			avatar: 'Female' as const,
+			avatar: 'female' as const,
 			category: block.category as BlockCategory,
 			templateId: templateId, // Will be set properly
 			templateName: uploadedTemplate.templateName,
@@ -714,7 +714,7 @@ export class UploadView extends Element {
 			_id: templateId,
 			thumb: uploadedTemplate.templateThumbnail || '',
 			name: uploadedTemplate.templateName,
-			avatar: 'Female' as const,
+			avatar: 'female' as const,
 			category: 'Dress' as TemplateCategory, // Default category for uploaded templates
 			materialId:
 				convertedFabrics.length > 0 ? `${convertedFabrics[0].category} - ${convertedFabrics[0].materialName}` : '',
