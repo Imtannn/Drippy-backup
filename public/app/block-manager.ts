@@ -248,7 +248,14 @@ class BlockManager {
 
 		if (templateCategory === 'Shirt') {
 			const selectedBlock = options.selectedBlocks?.get(templateCategory)?.get('Bodice')
-			if (selectedBlock?.templateId !== '13' && options.selectedSpace?.collection === 'moidien') {
+			if (
+				(selectedBlock?.templateId !== '13' && options.selectedSpace?.collection === 'moidien') ||
+				options.sourceCollection === 'moidien'
+			) {
+				return []
+			}
+
+			if (options?.selectedSpace?.collection === 'oofya' || options?.sourceCollection === 'oofya') {
 				return []
 			}
 		}
