@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor'
-import {createEffect, onCleanup, untrack} from 'solid-js'
+import {createEffect, createMemo, onCleanup, untrack} from 'solid-js'
 import {createMutable} from 'solid-js/store'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -7,10 +7,10 @@ import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {onModelLoad, syncSignals, toSolidSignal} from '../utils.js'
 
-import {Visits, type Visit} from '../imports/collections/Visits.js'
+import {type GltfModel} from 'lume'
 import {avatars} from '../consts/avatars.js'
-import type {GltfModel} from 'lume'
-import {pushState, searchParams} from '../routes.js'
+import {Visits, type Visit} from '../imports/collections/Visits.js'
+import {pushState, searchParams, url} from '../routes.js'
 
 export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
 export const username = () => currentUser()?.username ?? ''
@@ -58,16 +58,16 @@ class Store {
 		return turnOffSettingsInSpace()
 	}
 
-	// key is the block category, value is the block
-	view = 'avatar' as AppRoute
+	// TODO this is not in sync with the address bar back/forward buttons
+	view = 'scene' as AppRoute
+
 	/** Selected avatar defaults to the one in the URL. */
 	selectedAvatar = searchParams().get('avatar') ?? avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
 	selectedSpace = searchParams().get('scene') as Space | null
-
+	isPreview = searchParams().get('isPreview') === 'true'
 	// TODO initialize other props from URL params as well
 
 	selectedAnimation = 'none' as 'none' | 'walk' | 'dance'
-	isPreview = false
 	selectedTemplates = new Map<TemplateCategory, Template>()
 	private __selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
 	selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
@@ -449,7 +449,7 @@ class Store {
 	}
 
 	resetState() {
-		this.view = 'avatar' as AppRoute
+		this.view = 'scene'
 		this.selectedAvatar = avatars[0].name
 		this.selectedSpace = null as Space | null
 		this.selectedTemplates = new Map<TemplateCategory, Template>()
@@ -614,29 +614,38 @@ createEffect(() => {
 	if (!store.selectedAvatar) throw new Error('Never set the selected avatar to empty!')
 })
 
+const scene = createMemo(() => searchParams().get('scene'))
+
+// If no scene is selected, default to scene selection view (home), otherwise
+// go to template view
 createEffect(() => {
-	if (!searchParams().get('scene')) store.view = 'scene'
+	if (scene()) store.view = 'template'
+	else store.view = 'scene'
 })
 
 createEffect(() => {
-	// If we're not in avatar view, remove avatar param from URL, and don't sync
+	// If we're in scene selection view, remove all params, and don't sync
 	// selectedAvatar with URL param
 	if (store.view === 'scene') {
 		untrack(() => {
-			// searchParams().delete('avatar')
-			searchParams().forEach((_, key) => searchParams().delete(key))
+			url().search = ''
 			pushState()
 		})
 		return
 	}
 
-	// Otherwise keep selectedAvatar and URL parameter in sync
-	console.log(' BEGIN sync of selectedAvatar with URL param ')
+	// Anywhere but on the scene view, initialize the avatar URL param from selectedAvatar
+	untrack(() => {
+		searchParams().set('avatar', store.selectedAvatar)
+		pushState()
+	})
+
+	console.log('sync selectedAvatar with URL param')
+
+	// And keep both selectedAvatar and avatar URL parameter in sync
 	syncSignals(
 		() => store.selectedAvatar,
-		(value: string) => {
-			store.selectedAvatar = value
-		},
+		(value: string) => (store.selectedAvatar = value),
 		() => searchParams().get('avatar') ?? avatars[0].name,
 		(value: string) => {
 			searchParams().set('avatar', value)

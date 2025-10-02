@@ -213,4 +213,57 @@ export const spaces: Space[] = [
 		collection: 'imzad',
 		isWholesale: false,
 	},
+	{
+		name: 'One Thousand Poets',
+		slug: 'one-thousand-poets',
+		description: 'One Thousand Poets',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/one-thousand-poets/scene-thumbnail.webp',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/one-thousand-poets/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/one-thousand-poets/extras/shoes.glb',
+		],
+		gender: 'female',
+		garmentsCount: blocks.oneThousandPoets?.length ?? 0,
+		collection: 'oneThousandPoets',
+		isWholesale: false,
+	},
+	// {
+	// 	name: 'Zove',
+	// 	slug: 'zove',
+	// 	description: 'Zove',
+	// 	logo: '',
+	// 	env: '/images/envs/brown_photostudio_02.jpg',
+	// 	sceneThumbnail:
+	// 		'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/zove/scene-thumbnail.webp',
+	// 	scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/zove/scene-model.glb',
+	// 	includedModelFiles: [
+	// 		'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/zove/extras/shoes.glb',
+	// 	],
+	// 	gender: 'female',
+	// 	garmentsCount: blocks.zove?.length ?? 0,
+	// 	collection: 'zove',
+	// 	isWholesale: false,
+	// },
+	// {
+	// 	name: 'Ja Seng Bu',
+	// 	slug: 'ja-seng-bu',
+	// 	description: 'Ja Seng Bu',
+	// 	logo: '',
+	// 	env: '/images/envs/brown_photostudio_02.jpg',
+	// 	sceneThumbnail:
+	// 		'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/jaSengBu/scene-thumbnail.webp',
+	// 	scene:
+	// 		'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/jaSengBu/scene-model.glb',
+	// 	includedModelFiles: [
+	// 		'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/jaSengBu/extras/shoes.glb',
+	// 	],
+	// 	gender: 'female',
+	// 	garmentsCount: blocks.jaSengBu?.length ?? 0,
+	// 	collection: 'jaSengBu',
+	// 	isWholesale: false,
+	// },
 ]
