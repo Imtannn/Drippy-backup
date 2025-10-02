@@ -63,14 +63,14 @@ class Store {
 		return turnOffSettingsInSpace()
 	}
 
-	// TODO this is not in sync with the address bar back/forward buttons
-	view = 'scene' as AppRoute
+	// FIXME this is not in sync with the address bar back/forward buttons
+	view = searchParams().get('scene') && searchParams().get('avatar') ? ('template' as AppRoute) : ('scene' as AppRoute)
 
 	/** Selected avatar defaults to the one in the URL. */
 	selectedAvatar = searchParams().get('avatar') ?? avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
 	selectedSpace = spaceFromParam()
 	isPreview = searchParams().get('isPreview') === 'true'
-	// TODO initialize other props from URL params as well
+	// FIXME initialize other props from URL params as well
 
 	selectedAnimation = 'none' as 'none' | 'walk' | 'dance'
 	selectedTemplates = new Map<TemplateCategory, Template>()
@@ -630,7 +630,10 @@ const sceneParam = createMemo(() => searchParams().get('scene'))
 // If no scene is selected, default to scene selection view (home), otherwise
 // go to template view
 createEffect(() => {
-	if (!sceneParam()) store.view = 'scene'
+	if (!sceneParam()) {
+		console.log('No scene param, going to scene selection view')
+		store.view = 'scene'
+	}
 	// else store.view = 'template'
 })
 

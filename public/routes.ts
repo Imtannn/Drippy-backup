@@ -32,7 +32,7 @@ export const password = createMemo(() => url().password)
 
 export const hrefMinusOrigin = () => url().href.replace(url().origin, '')
 
-createEffect(() => console.log('Current route:', hrefMinusOrigin()))
+createEffect(() => console.trace('Current route:', hrefMinusOrigin()))
 
 export const replaceState = () => window.history.replaceState({}, '', untrack(url).href)
 export const pushState = () => window.history.pushState({}, '', untrack(url).href)
