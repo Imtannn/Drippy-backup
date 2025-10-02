@@ -77,6 +77,26 @@ interface AnimateValueOptions {
 }
 
 /**
+ * Keep two signals in sync with each other.
+ * @param a - First signal value
+ * @param setA - Setter for the first signal
+ * @param b - Second signal value
+ * @param setB - Setter for the second signal
+ */
+export function syncSignals(a: any, setA: (val: any) => void, b: any, setB: (val: any) => void) {
+	createEffect(() => {
+		// Any time a changes, update b
+		a()
+		untrack(() => a() !== b() && setB(a()))
+	})
+	createEffect(() => {
+		// Any time b changes, update a
+		b()
+		untrack(() => a() !== b() && setA(b()))
+	})
+}
+
+/**
  * Animates a signal from its current value to a target value.
  *
  * @param signal - The signal to animate.

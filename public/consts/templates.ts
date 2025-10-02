@@ -406,9 +406,28 @@ export const templates: Record<string, Template[]> = {
 	eliseF: [
 	{
 		_id: '1',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Reversible_jacket_-_180.webp',
-		name: 'Reversible jacket',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Reversible_Jacket_-_180.webp',
+		name: 'Reversible Jacket',
 		price: '180',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Striped - Canvas',
+		extraMaterials: [
+			{
+				mesh: '49-51-50-48-42-pattern_8255504-pattern_8255505-25-31-44',
+				materialId: 'Polyester - Navy',
+			},
+			{
+				mesh: 'buttonhead',
+				materialId: 'Cotton - Orange',
+			}
+		]
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Oversized_Bomber_-_230.webp',
+		name: 'Oversized Bomber',
+		price: '230',
 		avatar: 'Female',
 		category: 'Top',
 		materialId: 'Polyester - Navy',
@@ -420,16 +439,37 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '2',
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Mesh_shirt_LS_-_140.webp',
+		name: 'Mesh shirt LS',
+		price: '140',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Cotton - White',
+		extraMaterials: [
+			{
+				mesh: 'piece15-tie_8-piece14-piece11-piece10-pattern2d_81354-pattern_11338152-pattern_11338149-pattern_11338146-pattern_11338140-pattern_11338143-pattern_11338137-pattern_7374393-body_front_placket_13-body_back_yoke_30-body_front_11-body_back_yoke_29-body_front_placket_12-buttonhead-body_back_yoke_23-body_back_yoke_24-body_front_9-body_back_yoke_27',
+				materialId: 'Cotton - Orange',
+			}
+		]
+	},
+	{
+		_id: '4',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Hoodie_-_90.webp',
 		name: 'Hoodie',
 		price: '90',
 		avatar: 'Female',
 		category: 'Top',
-		materialId: ''
+		materialId: 'Knit - Fleece',
+		extraMaterials: [
+			{
+				mesh: 'pattern_35-pattern_36',
+				materialId: 'Cotton - Orange',
+			}
+		]
 	},
 	{
-		_id: '3',
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Pleats_shirt_-_130.webp',
 		name: 'Pleats shirt',
 		price: '130',
@@ -444,7 +484,7 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '4',
+		_id: '6',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Mesh_shirt_SS_-_130.webp',
 		name: 'Mesh shirt SS',
 		price: '130',
@@ -453,13 +493,13 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Cotton - White',
 		extraMaterials: [
 			{
-				mesh: 'body_back_yoke_15-body_front_placket_12-body_front_placket_13-body_front_9-body_front_11-buttonhead-pattern_11338149-pattern_11338146-pattern_11338143-pattern_11338140-pattern_11338137-tie_8-pattern2d_81354-piece10-piece14-piece11-piece15',
+				mesh: 'pattern_11338152-pattern_7374393-body_back_yoke_23-body_back_yoke_29-body_back_yoke_30-body_back_yoke_24-body_back_yoke_27-body_front_placket_12-body_front_placket_13-body_front_9-body_front_11-buttonhead-pattern_11338149-pattern_11338146-pattern_11338143-pattern_11338140-pattern_11338137-tie_8-pattern2d_81354-piece10-piece14-piece11-piece15',
 				materialId: 'Cotton - Orange',
 			}
 		]
 	},
 	{
-		_id: '5',
+		_id: '7',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Tanktop_-_45.webp',
 		name: 'Tanktop',
 		price: '45',
@@ -468,59 +508,25 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Striped - Tanktop',
 		extraMaterials: [
 			{
-				mesh: 'front_11-front_8-front_12-front_7-front_10-front_5',
+				mesh: 'topstitch-front_13-front_11-front_8-front_12-front_7-front_5',
 				materialId: 'Poly - Twill',
 			}
 		]
 	},
 	{
-		_id: '6',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Item_4.webp',
-		name: 'Item 4',
-		price: 'N/A',
-		avatar: 'Female',
-		category: 'Top',
-		materialId: 'Cotton - White',
-		extraMaterials: [
-			{
-				mesh: 'piece15-tie_8-piece14-piece11-piece10-pattern2d_81354-pattern_11338149-pattern_11338146-body_front_11-pattern_11338143-buttonhead-pattern_11338137-body_front_placket_12-pattern_11338140-body_front_9-body_front_placket_13-body_back_yoke_15',
-				materialId: 'Cotton - Orange',
-			}
-		]
-	},
-	{
-		_id: '7',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Top/Item_2.webp',
-		name: 'Item 2',
-		price: 'N/A',
-		avatar: 'Female',
-		category: 'Top',
-		materialId: 'Striped - Canvas',
-		extraMaterials: [
-			{
-				mesh: '47-25-31-44',
-				materialId: 'Polyester - Navy',
-			},
-			{
-				mesh: 'buttonhead',
-				materialId: 'Cotton - Orange',
-			}
-		]
-	},
-	{
 		_id: '8',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_10.webp',
-		name: 'Item 10',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Oversized_Denim_Pants_-_180.webp',
+		name: 'Oversized Denim Pants',
+		price: '180',
 		avatar: 'Female',
 		category: 'Pants',
-		materialId: ''
+		materialId: 'Denim - 276'
 	},
 	{
 		_id: '9',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_9.webp',
-		name: 'Item 9',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Denim_Pockets_Pants_%2B_Bermuda_Short_-_300.webp',
+		name: 'Denim Pockets Pants + Bermuda Short',
+		price: '300',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Polyester - Navy',
@@ -541,9 +547,9 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '10',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_8.webp',
-		name: 'Item 8',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Bermuda_Short_-_100.webp',
+		name: 'Bermuda Short',
+		price: '100',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Polyester - Navy',
@@ -556,9 +562,9 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '11',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_7.webp',
-		name: 'Item 7',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Denim_Pocket_Pants_%2B_Pleats_Skirt_-_285.webp',
+		name: 'Denim Pocket Pants + Pleats Skirt',
+		price: '285',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Denim - 276',
@@ -575,18 +581,18 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '12',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_6.webp',
-		name: 'Item 6',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Pleats_Skirt_-_85.webp',
+		name: 'Pleats Skirt',
+		price: '85',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Polyester - Navy'
 	},
 	{
 		_id: '13',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_5.webp',
-		name: 'Item 5',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Track_Short_-_90.webp',
+		name: 'Track Short',
+		price: '90',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Poly - Twill',
@@ -603,9 +609,9 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '14',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_4.webp',
-		name: 'Item 4',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Track_Pants_-_110.webp',
+		name: 'Track Pants',
+		price: '110',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Poly - Twill',
@@ -622,28 +628,9 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '15',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_3.webp',
-		name: 'Item 3',
-		price: 'N/A',
-		avatar: 'Female',
-		category: 'Pants',
-		materialId: 'Denim - 276',
-		extraMaterials: [
-			{
-				mesh: '42-39-37-40',
-				materialId: 'Denim - Back',
-			},
-			{
-				mesh: '9-4-28-29-11-24-15-16-13-12-8-14-3',
-				materialId: 'Polyester - Navy',
-			}
-		]
-	},
-	{
-		_id: '16',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_2.webp',
-		name: 'Item 2',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Denim_Pockets_Pants_-_200.webp',
+		name: 'Denim Pockets Pants',
+		price: '200',
 		avatar: 'Female',
 		category: 'Pants',
 		materialId: 'Denim - 276',
@@ -653,15 +640,6 @@ export const templates: Record<string, Template[]> = {
 				materialId: 'Denim - Back',
 			}
 		]
-	},
-	{
-		_id: '17',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/templates/Pants/Item_1.webp',
-		name: 'Item 1',
-		price: 'N/A',
-		avatar: 'Female',
-		category: 'Pants',
-		materialId: 'Polyester - Navy'
 	}
 	],
 	oofya: [
@@ -1060,7 +1038,7 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '2',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Top/Silk_Bloom_Top_-_45.webp',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Top/Silk_Bloom_Top_-_45.png',
 		name: 'Silk Bloom Top',
 		price: '45',
 		avatar: 'Female',
@@ -1267,6 +1245,99 @@ export const templates: Record<string, Template[]> = {
 			{
 				mesh: 'pattern_402784-pattern_402783-pattern_354312-pattern_402780-pattern_402781-pattern_354317-pattern_354314-pattern_354315-pattern_354316-pattern_245407',
 				materialId: 'Embroidered - Horsehair',
+			}
+		]
+	}
+	],
+	imzad: [
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Pants/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Pants',
+		materialId: 'Denim - Shimmery',
+		extraMaterials: [
+			{
+				mesh: '29-37-18-32-43-25-23-26-16-22-17-13',
+				materialId: 'Back Denim - Shimmery',
+			},
+			{
+				mesh: 'buttonhead',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Skirt/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Silk - Beige'
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Skirt/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Leather - Dark Indigo',
+		extraMaterials: [
+			{
+				mesh: 'trim-buttonhead',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Top/Item_4.webp',
+		name: 'Item 4',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Charcoal - Blue Velvet',
+		extraMaterials: [
+			{
+				mesh: 'blobk_drippy_tight_ralan_45-buttonhead',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Top/Item_3.webp',
+		name: 'Item 3',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Sequin - White'
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Top/Item_2.webp',
+		name: 'Item 2',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Twill - Beige'
+	},
+	{
+		_id: '7',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzad/templates/Top/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Top',
+		materialId: 'Organza - Dark Indigo',
+		extraMaterials: [
+			{
+				mesh: 'trim',
+				materialId: 'Trim - Texture',
 			}
 		]
 	}

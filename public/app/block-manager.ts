@@ -18,6 +18,7 @@ class BlockManager {
 		Skirt: [],
 		Top: [],
 		Coat: ['Sleeves'],
+		Jumpsuit: ['Sleeves'],
 	}
 
 	preloadTemplateBlocks(template: Block): Promise<GLTF> {
@@ -33,13 +34,14 @@ class BlockManager {
 	 */
 	checkInterchangeableCategories(category: TemplateCategory, selectedTemplates: Map<TemplateCategory, Template>) {
 		const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
-			Dress: ['Shirt', 'Top', 'Pants', 'Skirt'],
-			Top: ['Dress'],
-			Shirt: ['Dress'],
+			Dress: ['Shirt', 'Top', 'Pants', 'Skirt', 'Jumpsuit'],
+			Top: ['Dress', 'Jumpsuit'],
+			Shirt: ['Dress', 'Jumpsuit'],
 			Jacket: ['Coat'],
-			Skirt: ['Pants', 'Dress'],
-			Pants: ['Skirt', 'Dress'],
+			Skirt: ['Pants', 'Dress', 'Jumpsuit'],
+			Pants: ['Skirt', 'Dress', 'Jumpsuit'],
 			Coat: ['Jacket'],
+			Jumpsuit: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt'],
 		}
 
 		const interchangeableCategories = interchangeableCategoriesMapping[category]

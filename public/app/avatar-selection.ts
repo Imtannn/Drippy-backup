@@ -1,6 +1,5 @@
 import {booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import {avatars} from '../consts/avatars.js'
-import {pushState, searchParams} from '../routes.js'
 import {store} from './store.js'
 
 import '../elements/bottom-sheet.js'
@@ -30,11 +29,6 @@ export class AvatarSelection extends Element {
 					this.selectedTab = avatar.gender
 				}
 			}
-		})
-
-		this.createEffect(() => {
-			searchParams().set('avatar', store.selectedAvatar)
-			pushState()
 		})
 	}
 

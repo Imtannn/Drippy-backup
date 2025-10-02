@@ -69,7 +69,7 @@ export class TemplateView extends Element {
 		this.createEffect(() => {
 			if (!this.spaceCollection) return
 
-			const defaultCategories: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants']
+			const defaultCategories: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants', 'Jumpsuit']
 			const collectionTemplates = templates[this.spaceCollection] ?? []
 			const orderedTemplates: Template[] = []
 			const categories = new Map<TemplateCategory, Template[]>()
@@ -222,9 +222,6 @@ export class TemplateView extends Element {
 			this.showTemplateOverlay = null
 
 			store.resetSelectedTemplates()
-			searchParams().delete('scene')
-			pushState()
-			store.selectSpace = null
 			store.view = 'scene'
 		})
 	}

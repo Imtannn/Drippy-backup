@@ -196,4 +196,21 @@ export const spaces: Space[] = [
 		collection: 'atelierGourney',
 		isWholesale: false,
 	},
+	{
+		name: 'Imzad',
+		slug: 'imzad',
+		description: 'Imzad',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad/scene-thumbnail.webp',
+		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad/scene-model.glb',
+		includedModelFiles: [
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad/extras/shoes.glb',
+		],
+		gender: 'female',
+		garmentsCount: blocks.imzad?.length ?? 0,
+		collection: 'imzad',
+		isWholesale: false,
+	},
 ]

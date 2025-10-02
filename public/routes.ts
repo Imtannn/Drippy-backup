@@ -32,6 +32,8 @@ export const password = () => url().password
 
 export const hrefMinusOrigin = () => url().href.replace(url().origin, '')
 
+console.log('Current route:', hrefMinusOrigin())
+
 export const replaceState = () => window.history.replaceState({}, '', href())
 export const pushState = () => window.history.pushState({}, '', href())
 
