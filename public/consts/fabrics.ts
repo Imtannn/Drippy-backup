@@ -640,7 +640,7 @@ export const fabrics: Record<string, Fabric[]> = {
 	},
 	{
 		_id: '2',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_-_RENDER.png',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_-_BASE.jpg',
 		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_-_DISPLACE.jpg',

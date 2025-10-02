@@ -1906,11 +1906,11 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Jersey - Stretch',
 		extraMaterials: [
 			{
-				mesh: 'slider_1-matshape_1886592_node-zipperpattern_1789291_node-matshape_1886584_node-zipperpattern_1789278_node',
+				mesh: 'graphic_1789490-zipperpattern_1789291-graphic_1789479-zipperpattern_1789278-slider_1',
 				materialId: 'Trim - Texture',
 			},
 			{
-				mesh: 'pattern_1545473_node-pattern_1545475_node-pattern_1545477_node',
+				mesh: 'pattern_1545473-pattern_1545475-pattern_1545477',
 				materialId: 'Poly - Camo',
 			}
 		]
