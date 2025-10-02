@@ -359,6 +359,33 @@ export const templates: Record<string, Template[]> = {
 	shri: [
 	{
 		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Skirt/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Skirt',
+		materialId: 'Quilting - Golden'
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_8.webp',
+		name: 'Item 8',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Shirt',
+		materialId: 'Cotton - White'
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_6.webp',
+		name: 'Item 6',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Shirt',
+		materialId: ''
+	},
+	{
+		_id: '4',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_5.webp',
 		name: 'Item 5',
 		price: 'N/A',
@@ -367,7 +394,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Silk - Black'
 	},
 	{
-		_id: '2',
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_4.webp',
 		name: 'Item 4',
 		price: 'N/A',
@@ -376,16 +403,16 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Lace - Tulle'
 	},
 	{
-		_id: '3',
+		_id: '6',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_3.webp',
 		name: 'Item 3',
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Shirt',
-		materialId: 'Scuba - 287'
+		materialId: 'Cotton - White'
 	},
 	{
-		_id: '4',
+		_id: '7',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_2.webp',
 		name: 'Item 2',
 		price: 'N/A',
@@ -394,7 +421,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Fabric - Golden'
 	},
 	{
-		_id: '5',
+		_id: '8',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Shirt/Item_1.webp',
 		name: 'Item 1',
 		price: 'N/A',
@@ -403,7 +430,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Velvet - Black'
 	},
 	{
-		_id: '6',
+		_id: '9',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Pants/Item_1.webp',
 		name: 'Item 1',
 		price: 'N/A',
@@ -1163,7 +1190,7 @@ export const templates: Record<string, Template[]> = {
 		price: '65',
 		avatar: 'Female',
 		category: 'Dress',
-		materialId: 'Silk - Lavender Blush',
+		materialId: '',
 		extraMaterials: [
 			{
 				mesh: 'pattern_402777-pattern_402779-pattern_354297',
@@ -1527,7 +1554,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Wool - Black Suiting',
 		extraMaterials: [
 			{
-				mesh: 'pattern_9095729-pattern_7916207-pattern_7916208-pattern_7916209-pattern_7916206-pattern_275982-pattern_275980',
+				mesh: 'pattern_9095729-pattern_7916207-pattern_7916208-pattern_7916209-pattern_275982-pattern_275980',
 				materialId: 'Lace - Beige',
 			}
 		]
@@ -1569,6 +1596,15 @@ export const templates: Record<string, Template[]> = {
 	zove: [
 	{
 		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Dress/Item_1.webp',
+		name: 'Item 1',
+		price: 'N/A',
+		avatar: 'Female',
+		category: 'Dress',
+		materialId: ''
+	},
+	{
+		_id: '2',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Top/Item_1.webp',
 		name: 'Item 1',
 		price: 'N/A',
@@ -1583,7 +1619,7 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '2',
+		_id: '3',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Top/Item_4.webp',
 		name: 'Item 4',
 		price: 'N/A',
@@ -1598,7 +1634,7 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '3',
+		_id: '4',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Top/Item_3.webp',
 		name: 'Item 3',
 		price: 'N/A',
@@ -1613,7 +1649,7 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '4',
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Top/Item_2.webp',
 		name: 'Item 2',
 		price: 'N/A',
@@ -1628,7 +1664,7 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '5',
+		_id: '6',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/zove/templates/Skirt/Item_1.webp',
 		name: 'Item 1',
 		price: 'N/A',
@@ -1821,7 +1857,17 @@ export const templates: Record<string, Template[]> = {
 		price: 'N/A',
 		avatar: 'Female',
 		category: 'Top',
-		materialId: 'Jersey - Strecth'
+		materialId: 'Jersey - Strecth',
+		extraMaterials: [
+			{
+				mesh: 'slider_1-matshape_1886592_node-zipperpattern_1789291_node-matshape_1886584_node-zipperpattern_1789278_node',
+				materialId: 'Trim - Texture',
+			},
+			{
+				mesh: 'pattern_1545473_node-pattern_1545475_node-pattern_1545477_node',
+				materialId: 'Poly - Camo',
+			}
+		]
 	},
 	{
 		_id: '9',
