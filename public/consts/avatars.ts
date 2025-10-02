@@ -5,6 +5,14 @@ const animationTestAvatar = new URL('../models/FV2_Yunaa-01.glb', import.meta.ur
 export const avatars: Avatar[] = [
 	{
 		thumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/em/thumbnail.webp',
+		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/em/model.glb',
+		gender: 'female',
+		name: 'em',
+		default: true,
+	},
+	{
+		thumbnail:
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/yuna/thumbnail.webp',
 
 		// Temporary replacement for testing animation.
@@ -13,7 +21,6 @@ export const avatars: Avatar[] = [
 
 		gender: 'female',
 		name: 'yuna',
-		default: true,
 	},
 	{
 		thumbnail:
@@ -28,13 +35,6 @@ export const avatars: Avatar[] = [
 		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/naomi/model.glb',
 		gender: 'female',
 		name: 'naomi',
-	},
-	{
-		thumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/em/thumbnail.webp',
-		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/em/model.glb',
-		gender: 'female',
-		name: 'em',
 	},
 	{
 		thumbnail:
@@ -70,6 +70,7 @@ export const avatars: Avatar[] = [
 		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/anh/model.glb',
 		name: 'anh',
 		gender: 'male',
+		default: true,
 	},
 	{
 		thumbnail:
@@ -77,7 +78,6 @@ export const avatars: Avatar[] = [
 		src: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/luka/model.glb',
 		name: 'luka',
 		gender: 'male',
-		default: true,
 	},
 	{
 		thumbnail:
