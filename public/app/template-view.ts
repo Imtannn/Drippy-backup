@@ -433,6 +433,7 @@ export class TemplateView extends Element {
 			>
 				<avatar-dropdown
 					open=${() => this.showAvatarSelection}
+					show-popup
 					onavatar-dropdown-click=${this.#onAvatarDropdownClick}
 				></avatar-dropdown>
 				<nav-items ontab-change=${this.#onNavTabChange}></nav-items>

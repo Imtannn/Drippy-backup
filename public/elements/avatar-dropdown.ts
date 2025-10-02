@@ -2,7 +2,7 @@ import {booleanAttribute, css, Element, element, html, signal, type ElementAttri
 import {store} from '../app/store.js'
 import {avatars} from '../consts/avatars.js'
 
-type AvatarDropdownAttributes = 'open' | 'hideChevron'
+type AvatarDropdownAttributes = 'open' | 'hideChevron' | 'showPopup'
 
 @element
 export class AvatarDropdown extends Element {
@@ -10,19 +10,19 @@ export class AvatarDropdown extends Element {
 
 	@booleanAttribute open = false
 	@booleanAttribute hideChevron = false
+	@booleanAttribute showPopup = false
 	@signal currentAvatarThumbnail = ''
-	@signal private showPopup = true
+	@signal private shouldShowPopup = false
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		// Check if space exists in store to show popup
-		this.showPopup = !!store.selectedSpace
-
-		if (this.showPopup) {
+		if (this.showPopup && !!store.selectedSpace) {
 			setTimeout(() => {
-				this.showPopup = false
-			}, 20000)
+				this.shouldShowPopup = true
+				setTimeout(() => {
+					this.shouldShowPopup = false
+				}, 50000)
+			}, 1000)
 		}
 
 		this.createEffect(() => {
@@ -35,6 +35,7 @@ export class AvatarDropdown extends Element {
 	}
 
 	#onAvatarDropdownClick = () => {
+		this.shouldShowPopup = false
 		this.dispatchEvent(
 			new CustomEvent('avatar-dropdown-click', {
 				bubbles: true,
@@ -49,13 +50,13 @@ export class AvatarDropdown extends Element {
 	template = () => html`
 		<div class="avatar-container" onclick=${() => (!this.hideChevron ? this.#onAvatarDropdownClick() : null)}>
 			<!-- Popup notification -->
-			<div class="popup-notification" style=${() => (this.showPopup ? 'display: flex' : 'display: none')}>
+			<div class="popup-notification" style=${() => (this.shouldShowPopup ? 'display: flex' : 'display: none')}>
 				<span class="popup-text">swap avatar here</span>
 				<button
 					class="popup-close"
 					onclick=${(e: MouseEvent) => {
 						e.stopPropagation()
-						this.showPopup = false
+						this.shouldShowPopup = false
 					}}
 				>
 					×
@@ -131,20 +132,20 @@ export class AvatarDropdown extends Element {
 
 		.popup-notification {
 			position: absolute;
-			top: -60px;
+			top: -53px;
 			left: 100%;
 			transform: translateX(-35%);
 			background: #8b5cf6;
 			color: white;
-			padding: 12px 16px;
-			border-radius: 12px;
+			padding: 10px 12px;
+			border-radius: 10px;
 			font-size: 14px;
 			font-weight: 500;
 			z-index: 1000;
 			align-items: center;
 			gap: 8px;
 			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-			animation: slideInDown 0.3s ease-out;
+			animation: slideInDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 		}
 
 		.popup-notification::after {
@@ -186,13 +187,17 @@ export class AvatarDropdown extends Element {
 		}
 
 		@keyframes slideInDown {
-			from {
+			0% {
 				opacity: 0;
-				transform: translateX(-50%) translateY(-10px);
+				transform: translateX(-35%) translateY(-20px) scale(0.8);
 			}
-			to {
+			50% {
+				opacity: 0.8;
+				transform: translateX(-35%) translateY(-5px) scale(1.05);
+			}
+			100% {
 				opacity: 1;
-				transform: translateX(-50%) translateY(0);
+				transform: translateX(-35%) translateY(0) scale(1);
 			}
 		}
 	`
