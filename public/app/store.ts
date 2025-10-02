@@ -7,9 +7,9 @@ import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {onModelLoad, syncSignals, toSolidSignal} from '../utils.js'
 
-import {Visits, type Visit} from '../imports/collections/Visits.js'
-import {avatars} from '../consts/avatars.js'
 import type {GltfModel} from 'lume'
+import {avatars} from '../consts/avatars.js'
+import {Visits, type Visit} from '../imports/collections/Visits.js'
 import {pushState, searchParams} from '../routes.js'
 
 export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
@@ -59,7 +59,7 @@ class Store {
 	}
 
 	// key is the block category, value is the block
-	view = 'avatar' as AppRoute
+	view = 'scene' as AppRoute
 	/** Selected avatar defaults to the one in the URL. */
 	selectedAvatar = searchParams().get('avatar') ?? avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
 	selectedSpace = searchParams().get('scene') as Space | null
@@ -614,9 +614,10 @@ createEffect(() => {
 	if (!store.selectedAvatar) throw new Error('Never set the selected avatar to empty!')
 })
 
-createEffect(() => {
-	if (!searchParams().get('scene')) store.view = 'scene'
-})
+// commented out because we don't want to redirect to scene view in avatar view
+// createEffect(() => {
+// 	if (!searchParams().get('scene')) store.view = 'scene'
+// })
 
 createEffect(() => {
 	// If we're not in avatar view, remove avatar param from URL, and don't sync
