@@ -379,12 +379,29 @@ async function processTemplateFolder(
 		}
 	}
 
-	// Parse template name and price from folder name
+	// Parse template name, price, and avatar gender from folder name
 	const folderNameParts = templateFolder.name.split('-')
 	let templateName = normalizeName(templateFolder.name)
 	let templatePrice = 'N/A'
+	let avatarGender = 'female' // Default gender
 
-	if (folderNameParts.length >= 2) {
+	// Check for gender prefix in folder name
+	const genderMatch = templateFolder.name.match(/^\[(Male|Female)\]/i)
+	if (genderMatch) {
+		avatarGender = genderMatch[1].toLowerCase()
+		// Remove gender prefix from template name processing
+		const nameWithoutGender = templateFolder.name.replace(/^\[(Male|Female)\]\s*/i, '')
+		const namePartsWithoutGender = nameWithoutGender.split('-')
+
+		if (namePartsWithoutGender.length >= 2) {
+			templateName = normalizeName(namePartsWithoutGender[0].trim())
+			// Extract only numeric part from price (including decimals)
+			const priceMatch = namePartsWithoutGender[1].trim().match(/\d+(\.\d+)?/)
+			templatePrice = priceMatch ? priceMatch[0] : 'N/A'
+		} else {
+			templateName = normalizeName(nameWithoutGender)
+		}
+	} else if (folderNameParts.length >= 2) {
 		templateName = normalizeName(folderNameParts[0].trim())
 		// Extract only numeric part from price (including decimals)
 		const priceMatch = folderNameParts[1].trim().match(/\d+(\.\d+)?/)
@@ -397,6 +414,7 @@ async function processTemplateFolder(
 		category,
 		thumbUrl: templateS3Url,
 		materialId,
+		avatar: avatarGender,
 		folderId: templateFolder.id, // Add unique Google Drive folder ID
 		...(extraMaterials.length > 0 && {extraMaterials}),
 	}
@@ -498,7 +516,7 @@ function generateTemplateData(
 			thumb: template.thumbUrl,
 			name: template.name,
 			price: template.price,
-			avatar: 'Female',
+			avatar: template.avatar,
 			category: template.category,
 			materialId: template.materialId,
 			...(template.extraMaterials && {extraMaterials: template.extraMaterials}),
@@ -526,7 +544,7 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 				thumb: block.thumbUrl,
 				modelFile: block.modelUrl,
 				blockName: block.blockName,
-				avatar: 'Female',
+				avatar: 'female',
 				category: block.category,
 				templateId: templateId, // Now using actual template _id with guaranteed unique identification
 				templateName: block.templateName,
@@ -564,6 +582,7 @@ function generateFabricData(brand: string): TODO {
 			materialName: material.materialName,
 			category: material.category,
 			templateCategories: material.templateCategories.size > 0 ? Array.from(material.templateCategories) : [], // Convert Set to Array
+			...(material.textureSettings && {textureSettings: material.textureSettings}),
 		})
 		idCounter++
 	})
@@ -654,8 +673,12 @@ function generateFabricsFileContent(fabrics: TODO): string {
 	for (const collectionName in fabrics) {
 		const fabricsArray = fabrics[collectionName]
 		finalFabricsContent[collectionName] = fabricsArray
-			.map(
-				(fabric: TODO) => `	{
+			.map((fabric: TODO) => {
+				const textureSettingsString = fabric.textureSettings
+					? `,\n\t\ttextureSettings: {\n\t\t\tscaleX: ${fabric.textureSettings.scaleX},\n\t\t\tscaleY: ${fabric.textureSettings.scaleY},\n\t\t\toffsetX: ${fabric.textureSettings.offsetX},\n\t\t\toffsetY: ${fabric.textureSettings.offsetY},\n\t\t\trotate: ${fabric.textureSettings.rotate},\n\t\t\tcoef: ${fabric.textureSettings.coef}\n\t\t}`
+					: ''
+
+				return `	{
 		_id: '${fabric._id}',
 		thumb: '${fabric.thumb || ''}',
 		normal: '${fabric.normal || ''}',
@@ -665,9 +688,9 @@ function generateFabricsFileContent(fabrics: TODO): string {
 		alpha: '${fabric.alpha || ''}',
 		materialName: '${fabric.materialName}',
 		category: '${fabric.category || ''}',
-		templateCategories: [${fabric.templateCategories.map((cat: string) => `'${cat}'`).join(', ')}],
-	}`,
-			)
+		templateCategories: [${fabric.templateCategories.map((cat: string) => `'${cat}'`).join(', ')}]${textureSettingsString}
+	}`
+			})
 			.join(',\n')
 	}
 
@@ -722,15 +745,51 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 		const textureUrls: {[key: string]: string} = {}
 		let thumbUrl = ''
 
-		// Parse material name from folder name: "${materialCategory} - ${materialName}"
-		const folderNameParts = materialFolder.name.split('-')
+		// Parse material name and texture settings from folder name: "${materialCategory} - ${materialName} (scaleX, scaleY, offsetX, offsetY, rotate, coef)"
+		let materialCategory: string
+		let materialName: string
+		let textureSettings: {
+			scaleX: number
+			scaleY: number
+			offsetX: number
+			offsetY: number
+			rotate: number
+			coef: number
+		} | null = null
+
+		// Check for texture settings pattern at the end
+		const textureSettingsMatch = materialFolder.name.match(/\(([^)]+)\)\s*$/)
+		let nameWithoutSettings = materialFolder.name
+
+		if (textureSettingsMatch) {
+			const settingsStr = textureSettingsMatch[1]
+			const settingsValues = settingsStr.split(',').map((s: string) => parseFloat(s.trim()))
+
+			if (settingsValues.length === 6 && settingsValues.every((v: number) => !isNaN(v))) {
+				textureSettings = {
+					scaleX: settingsValues[0],
+					scaleY: settingsValues[1],
+					offsetX: settingsValues[2],
+					offsetY: settingsValues[3],
+					rotate: settingsValues[4],
+					coef: settingsValues[5],
+				}
+				// Remove texture settings from name for parsing
+				nameWithoutSettings = materialFolder.name.replace(/\s*\([^)]+\)\s*$/, '')
+				console.log(`    🎛️ Found texture settings: ${JSON.stringify(textureSettings)}`)
+			} else {
+				console.warn(`    ⚠️ Invalid texture settings format: ${settingsStr}. Expected 6 numeric values.`)
+			}
+		}
+
+		const folderNameParts = nameWithoutSettings.split('-')
 		if (folderNameParts.length < 2) {
 			console.warn(`    ⚠️ Invalid material folder name format: ${materialFolder.name}. Expected: "Category - Name"`)
 			continue
 		}
 
-		const materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
-		const materialName = capitalize(normalizeName(folderNameParts[1].trim()))
+		materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
+		materialName = capitalize(normalizeName(folderNameParts[1].trim()))
 		const materialKey = `${materialCategory} - ${materialName}`
 
 		// Check if already processed
@@ -808,6 +867,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 			thumbUrl,
 			...textureUrls,
 			templateCategories: new Set<string>(), // Will be populated later
+			...(textureSettings && {textureSettings}),
 		}
 
 		rootMaterials.set(materialKey, materialData)
@@ -828,7 +888,9 @@ async function scanCategoryMaterials(categoryMaterialsFolder: TODO, categoryName
 
 	for (const materialRef of materialReferenceFolders) {
 		// Parse and normalize the material folder name to match root materials format
-		const folderNameParts = materialRef.name.split('-')
+		// Remove texture settings if present: "Category - Name (settings)" -> "Category - Name"
+		const nameWithoutSettings = materialRef.name.replace(/\s*\([^)]+\)\s*$/, '')
+		const folderNameParts = nameWithoutSettings.split('-')
 		if (folderNameParts.length < 2) {
 			console.warn(
 				`    ⚠️ Invalid category material reference format: ${materialRef.name}. Expected: "Category - Name"`,
@@ -854,7 +916,9 @@ async function scanCategoryMaterials(categoryMaterialsFolder: TODO, categoryName
 async function getTemplateMaterialReference(materialFolder: TODO): Promise<string | null> {
 	// Template material folders are just reference folders (empty)
 	// The folder name is the material key: "${materialCategory} - ${materialName}"
-	const folderNameParts = materialFolder.name.split('-')
+	// Remove texture settings if present: "Category - Name (settings)" -> "Category - Name"
+	const nameWithoutSettings = materialFolder.name.replace(/\s*\([^)]+\)\s*$/, '')
+	const folderNameParts = nameWithoutSettings.split('-')
 	if (folderNameParts.length < 2) {
 		console.warn(
 			`    ⚠️ Invalid template material reference format: ${materialFolder.name}. Expected: "Category - Name"`,
@@ -897,7 +961,9 @@ async function processExtraMaterialsFolder(extraMaterialsFolder: TODO): Promise<
 		console.log(`      📎 Found material reference: ${materialReferenceFolder.name}`)
 
 		// Parse and normalize the material folder name to match root materials format
-		const folderNameParts = materialReferenceFolder.name.split('-')
+		// Remove texture settings if present: "Category - Name (settings)" -> "Category - Name"
+		const nameWithoutSettings = materialReferenceFolder.name.replace(/\s*\([^)]+\)\s*$/, '')
+		const folderNameParts = nameWithoutSettings.split('-')
 		if (folderNameParts.length < 2) {
 			console.warn(
 				`      ⚠️ Invalid material reference format: ${materialReferenceFolder.name}. Expected: "Category - Name"`,
