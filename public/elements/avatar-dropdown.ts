@@ -16,9 +16,8 @@ export class AvatarDropdown extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
-		const urlParams = new URLSearchParams(window.location.search)
-		const hasSceneParam = urlParams.has('scene')
-		this.showPopup = hasSceneParam
+		// Check if space exists in store to show popup
+		this.showPopup = !!store.selectedSpace
 
 		if (this.showPopup) {
 			setTimeout(() => {
