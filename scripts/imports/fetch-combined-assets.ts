@@ -71,6 +71,10 @@ const BRAND_CONFIGS = [
 		brand: 'imzad',
 		rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
 	},
+	{
+		brand: 'oneThousandPoets',
+		rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
+	},
 	// {
 	// 	brand: 'baroudeuses',
 	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
