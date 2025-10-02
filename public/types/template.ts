@@ -1,6 +1,5 @@
 export type TemplateCategory =
 	| 'All'
-	| 'Dress'
 	| 'Skirt'
 	| 'Jacket'
 	| 'Shirt'
