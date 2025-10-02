@@ -1,6 +1,5 @@
 import {createMemo, css, Element, element, html, signal} from 'lume'
 import {fabrics} from '../consts/fabrics.js'
-import {spaces} from '../consts/spaces.js'
 import {templates} from '../consts/templates.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
@@ -28,6 +27,10 @@ import './success-view.js'
 import './template-view.js'
 import {searchParams} from '../routes.js'
 
+// const avatar = createMemo(() => searchParams().get('avatar'))
+const scene = createMemo(() => searchParams().get('scene') as Space | null)
+const isPreview = createMemo(() => searchParams().get('isPreview'))
+
 @element
 export class DrippyApp extends Element {
 	static elementName = 'drippy-app'
@@ -38,51 +41,17 @@ export class DrippyApp extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 
-		const avatar = createMemo(() => searchParams().get('avatar'))
-		const scene = createMemo(() => searchParams().get('scene'))
-		const isPreview = createMemo(() => searchParams().get('isPreview'))
-
 		// FIXME this needs re-work, currently can cause an infinite loop (the
 		// console.logs in loadFromUrlParameters will log repeatedly)
 		this.createEffect(() => {
 			try {
-				// If no avatar is selected and no avatar is provided in search params, navigate to avatar selection. Else, use the provided avatar.
-				if (!store.selectedAvatar) {
-					if (avatar()) {
-						store.selectedAvatar = avatar() ?? ''
-					} else {
-						store.view = 'avatar'
-						return
-					}
-				}
-
-				// If no scene is selected and no scene is provided in search params, navigate to scene selection. Else, use the provided scene.
-				let space: Space | undefined
-				if (!store.selectedSpace) {
-					if (scene) {
-						space = spaces.find(space => space.slug === scene())
-						if (space) {
-							store.selectSpace = space
-						} else {
-							store.view = 'scene'
-							return
-						}
-					} else {
-						store.view = 'scene'
-						return
-					}
-				}
-
 				// Load garments and fabrics from URL parameters if present
-				this.#loadFromUrlParameters(searchParams(), space!)
+				this.#loadFromUrlParameters(scene()!)
 
 				if (store.isPreview || isPreview() === 'true') {
 					store.view = 'preview'
 					return
 				}
-
-				// If both avatar and scene are selected, navigate to blocks.
-				store.view = 'template'
 			} catch (error) {
 				console.error('Error loading app', error)
 			} finally {
@@ -107,13 +76,11 @@ export class DrippyApp extends Element {
 
 	/**
 	 * Load garments and fabrics from URL parameters
-	 * @param searchParams - URL search parameters
 	 * @param space - Selected space
 	 */
-	#loadFromUrlParameters(searchParams: URLSearchParams, space: Space) {
-		const garmentsParam = searchParams.get('garments')
-		const fabricsParam = searchParams.get('fabrics')
-		console.log(fabricsParam)
+	#loadFromUrlParameters(space: Space) {
+		const garmentsParam = searchParams().get('garments')
+		const fabricsParam = searchParams().get('fabrics')
 
 		if ((garmentsParam || fabricsParam) && store.selectedSpace && store.selectedTemplates.size === 0) {
 			const spaceTemplates = templates[store.selectedSpace.collection]

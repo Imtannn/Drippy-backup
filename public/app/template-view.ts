@@ -222,9 +222,6 @@ export class TemplateView extends Element {
 			this.showTemplateOverlay = null
 
 			store.resetSelectedTemplates()
-			searchParams().delete('scene')
-			pushState()
-			store.selectSpace = null
 			store.view = 'scene'
 		})
 	}

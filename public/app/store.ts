@@ -5,11 +5,12 @@ import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
-import {onModelLoad, toSolidSignal} from '../utils.js'
+import {onModelLoad, syncSignals, toSolidSignal} from '../utils.js'
 
 import {Visits, type Visit} from '../imports/collections/Visits.js'
 import {avatars} from '../consts/avatars.js'
 import type {GltfModel} from 'lume'
+import {pushState, searchParams} from '../routes.js'
 
 export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
 export const username = () => currentUser()?.username ?? ''
@@ -59,8 +60,12 @@ class Store {
 
 	// key is the block category, value is the block
 	view = 'avatar' as AppRoute
-	selectedAvatar = avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
-	selectedSpace = null as Space | null
+	/** Selected avatar defaults to the one in the URL. */
+	selectedAvatar = searchParams().get('avatar') ?? avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
+	selectedSpace = searchParams().get('scene') as Space | null
+
+	// TODO initialize other props from URL params as well
+
 	selectedAnimation = 'none' as 'none' | 'walk' | 'dance'
 	isPreview = false
 	selectedTemplates = new Map<TemplateCategory, Template>()
@@ -607,4 +612,35 @@ export const store = new Store()
 
 createEffect(() => {
 	if (!store.selectedAvatar) throw new Error('Never set the selected avatar to empty!')
+})
+
+createEffect(() => {
+	if (!searchParams().get('scene')) store.view = 'scene'
+})
+
+createEffect(() => {
+	// If we're not in avatar view, remove avatar param from URL, and don't sync
+	// selectedAvatar with URL param
+	if (store.view === 'scene') {
+		untrack(() => {
+			// searchParams().delete('avatar')
+			searchParams().forEach((_, key) => searchParams().delete(key))
+			pushState()
+		})
+		return
+	}
+
+	// Otherwise keep selectedAvatar and URL parameter in sync
+	console.log(' BEGIN sync of selectedAvatar with URL param ')
+	syncSignals(
+		() => store.selectedAvatar,
+		(value: string) => {
+			store.selectedAvatar = value
+		},
+		() => searchParams().get('avatar') ?? avatars[0].name,
+		(value: string) => {
+			searchParams().set('avatar', value)
+			pushState()
+		},
+	)
 })

@@ -59,6 +59,7 @@ export class SpacesSelection extends Element {
 		batch(() => {
 			pushState()
 			store.selectSpace = space
+			store.view = 'template'
 		})
 	}
 
