@@ -1,13 +1,12 @@
 import {css, Element, element, html, signal} from 'lume'
 
-const loadingVideoUrl = new URL('../videos/loading.mp4', import.meta.url).href
+const loadingVideoUrl = new URL('../videos/landing.mp4', import.meta.url).href
 
 @element
 export class VideoLoading extends Element {
 	static elementName = 'video-loading'
 
 	@signal private videoError = false
-	@signal private videoReady = false
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -16,9 +15,9 @@ export class VideoLoading extends Element {
 		document.body.style.overflow = 'hidden'
 		document.documentElement.style.overflow = 'hidden'
 
-		// Force white background on host element
-		this.style.backgroundColor = '#fff'
-		this.style.background = '#fff'
+		// Force black background on host element
+		this.style.backgroundColor = '#000'
+		this.style.background = '#000'
 
 		// Set up video event listeners after template is rendered
 		setTimeout(() => {
@@ -26,14 +25,14 @@ export class VideoLoading extends Element {
 			const videoContainer = this.shadowRoot?.querySelector('.video-loading') as HTMLElement
 			const fallbackLoader = this.shadowRoot?.querySelector('.fallback-loader') as HTMLElement
 
-			// Force white background on all elements
+			// Force black background on all elements
 			if (videoContainer) {
-				videoContainer.style.backgroundColor = '#fff'
-				videoContainer.style.background = '#fff'
+				videoContainer.style.backgroundColor = '#000'
+				videoContainer.style.background = '#000'
 			}
 			if (fallbackLoader) {
-				fallbackLoader.style.backgroundColor = '#fff'
-				fallbackLoader.style.background = '#fff'
+				fallbackLoader.style.backgroundColor = '#000'
+				fallbackLoader.style.background = '#000'
 			}
 			if (video) {
 				// iPhone specific fixes
@@ -43,7 +42,7 @@ export class VideoLoading extends Element {
 				video.muted = true
 				video.defaultMuted = true
 				video.preload = 'auto'
-				video.style.backgroundColor = '#fff'
+				video.style.backgroundColor = '#000'
 				// Prevent scaling
 				video.style.transform = 'translateZ(0) scale(1)'
 				video.style.maxWidth = '100vw'
@@ -58,7 +57,6 @@ export class VideoLoading extends Element {
 				})
 
 				video.addEventListener('canplay', () => {
-					this.videoReady = true
 					// Force play when video can play
 					video.play().catch(() => {
 						this.videoError = true
@@ -66,7 +64,6 @@ export class VideoLoading extends Element {
 				})
 
 				video.addEventListener('canplaythrough', () => {
-					this.videoReady = true
 					// Force play when video can play through
 					video.play().catch(() => {
 						this.videoError = true
@@ -74,13 +71,12 @@ export class VideoLoading extends Element {
 				})
 
 				video.addEventListener('playing', () => {
-					this.videoReady = true
+					// Video is now playing
 				})
 
 				video.addEventListener('error', e => {
 					console.error('Video error:', e)
 					this.videoError = true
-					this.videoReady = false
 				})
 
 				// Add user interaction fallback for iOS
@@ -117,9 +113,6 @@ export class VideoLoading extends Element {
 
 	template = () => html`
 		<div class="video-loading">
-			<h1 class="loading-text text-xl" style=${() => (this.videoReady ? 'display: block' : 'display: none')}>
-				Preparing your space....
-			</h1>
 			<video class="loading-video" autoplay muted loop playsinline>
 				<source src=${loadingVideoUrl} type="video/mp4" />
 			</video>
@@ -139,7 +132,7 @@ export class VideoLoading extends Element {
 			top: 0;
 			left: 0;
 			z-index: 9999;
-			background: #fff;
+			background: #000;
 			overflow: hidden;
 		}
 
@@ -149,20 +142,20 @@ export class VideoLoading extends Element {
 			justify-content: center;
 			width: 100%;
 			height: 100%;
-			background: #fff;
+			background: #000;
 		}
 		.text-xl {
 			font-size: var(--fontSizeTextXl);
 		}
 
 		.loading-video {
-			width: 80%;
-			height: 80%;
+			width: 100%;
+			height: 100%;
 			object-fit: contain;
 			object-position: center;
-			background: #fff;
-			-webkit-transform: translateZ(0);
-			transform: translateZ(0);
+			background: #000;
+			-webkit-transform: translateZ(0) scale(1);
+			transform: translateZ(0) scale(1);
 			/* iOS specific fixes */
 			-webkit-playsinline: true;
 			playsinline: true;
@@ -195,7 +188,7 @@ export class VideoLoading extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			background: #fff;
+			background: #000;
 		}
 
 		.spinner {

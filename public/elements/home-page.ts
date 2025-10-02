@@ -1,8 +1,8 @@
 import type {ElementAttributes} from '@lume/element'
 import {css, Element, element, html, numberAttribute} from 'lume'
+import '../app/drippy-app.js'
 import '../imports/collections/Users.js'
 import './login-ui.js'
-import '../app/drippy-app.js'
 
 type HomePageAttributes = keyof {} // no attributes yet
 

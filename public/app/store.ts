@@ -7,10 +7,17 @@ import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {onModelLoad, syncSignals, toSolidSignal} from '../utils.js'
 
+<<<<<<< HEAD
 import {Visits, type Visit} from '../imports/collections/Visits.js'
 import {avatars} from '../consts/avatars.js'
 import {type GltfModel} from 'lume'
 import {pushState, searchParams, url} from '../routes.js'
+=======
+import type {GltfModel} from 'lume'
+import {avatars} from '../consts/avatars.js'
+import {Visits, type Visit} from '../imports/collections/Visits.js'
+import {pushState, searchParams} from '../routes.js'
+>>>>>>> c154c30035d275fb334318457c3b2ee46cd799af
 
 export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
 export const username = () => currentUser()?.username ?? ''
@@ -58,9 +65,14 @@ class Store {
 		return turnOffSettingsInSpace()
 	}
 
+<<<<<<< HEAD
 	// TODO this is not in sync with the address bar back/forward buttons
 	view = 'scene' as AppRoute
 
+=======
+	// key is the block category, value is the block
+	view = 'scene' as AppRoute
+>>>>>>> c154c30035d275fb334318457c3b2ee46cd799af
 	/** Selected avatar defaults to the one in the URL. */
 	selectedAvatar = searchParams().get('avatar') ?? avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
 	selectedSpace = searchParams().get('scene') as Space | null
