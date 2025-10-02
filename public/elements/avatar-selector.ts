@@ -18,7 +18,7 @@ const block3DLanding = {
 			blockName: 'sleeves 1592',
 			avatar: 'Male',
 			category: 'Sleeves',
-			templateId: 1,
+			templateId: 2,
 			templateName: 'Item 6',
 			templateCategory: 'Top',
 		},
