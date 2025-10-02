@@ -16,9 +16,9 @@ const block3DLanding = {
 			modelFile:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.gltf',
 			blockName: 'sleeves 1592',
-			avatar: 'Female',
+			avatar: 'Male',
 			category: 'Sleeves',
-			templateId: '1',
+			templateId: 1,
 			templateName: 'Item 6',
 			templateCategory: 'Top',
 		},
@@ -29,9 +29,9 @@ const block3DLanding = {
 			modelFile:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.gltf',
 			blockName: 'bodice 1591',
-			avatar: 'Female',
+			avatar: 'Male',
 			category: 'Bodice',
-			templateId: '1',
+			templateId: 1,
 			templateName: 'Item 6',
 			templateCategory: 'Top',
 		},
@@ -42,9 +42,9 @@ const block3DLanding = {
 			modelFile:
 				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_8___Pants/pants_1593.gltf',
 			blockName: 'pants 1593',
-			avatar: 'Female',
+			avatar: 'Male',
 			category: 'Pants',
-			templateId: '8',
+			templateId: 10,
 			templateName: 'Item 8',
 			templateCategory: 'Pants',
 		},
@@ -59,7 +59,7 @@ const block3DLanding = {
 			blockName: 'bodice 1455',
 			avatar: 'Female',
 			category: 'Bodice',
-			templateId: 'Item 8',
+			templateId: 8,
 			templateName: 'Item 8',
 			templateCategory: 'Shirt',
 		},
@@ -72,8 +72,8 @@ const block3DLanding = {
 			blockName: 'pants 130',
 			avatar: 'Female',
 			category: 'Pants',
-			templateId: 'Item 7',
-			templateName: 'Item 7',
+			templateId: 17,
+			templateName: 'Lazy pants',
 			templateCategory: 'Pants',
 		},
 	],
@@ -208,7 +208,7 @@ export class AvatarSelector extends Element {
 			if (sleevesBlock || topBlock) {
 				// Find template by templateId from block
 				const templateId = sleevesBlock?.templateId || topBlock?.templateId
-				const topTemplate = templates[collection]?.find(t => t._id === templateId)
+				const topTemplate = templates[collection]?.find(t => t._id === String(templateId))
 				if (topTemplate) {
 					templateData.push(topTemplate)
 				}
@@ -216,7 +216,7 @@ export class AvatarSelector extends Element {
 			if (shirtBlock) {
 				// Find template by templateId from block
 				const templateId = shirtBlock.templateId
-				const shirtTemplate = templates[collection]?.find(t => t._id === templateId)
+				const shirtTemplate = templates[collection]?.find(t => t._id === String(templateId))
 				if (shirtTemplate) {
 					templateData.push(shirtTemplate)
 				}
@@ -224,7 +224,7 @@ export class AvatarSelector extends Element {
 			if (pantsBlock) {
 				// Find template by templateId from block
 				const templateId = pantsBlock.templateId
-				const pantsTemplate = templates[collection]?.find(t => t._id === templateId)
+				const pantsTemplate = templates[collection]?.find(t => t._id === String(templateId))
 				if (pantsTemplate) {
 					templateData.push(pantsTemplate)
 				}
@@ -239,25 +239,25 @@ export class AvatarSelector extends Element {
 			const blockData: Array<{block: Block; templateCategory: TemplateCategory}> = []
 			if (sleevesBlock) {
 				blockData.push({
-					block: sleevesBlock as Block,
+					block: {...sleevesBlock, templateId: String(sleevesBlock.templateId)} as Block,
 					templateCategory: sleevesBlock.templateCategory as TemplateCategory,
 				})
 			}
 			if (topBlock) {
 				blockData.push({
-					block: topBlock as Block,
+					block: {...topBlock, templateId: String(topBlock.templateId)} as Block,
 					templateCategory: topBlock.templateCategory as TemplateCategory,
 				})
 			}
 			if (shirtBlock) {
 				blockData.push({
-					block: shirtBlock as Block,
+					block: {...shirtBlock, templateId: String(shirtBlock.templateId)} as Block,
 					templateCategory: shirtBlock.templateCategory as TemplateCategory,
 				})
 			}
 			if (pantsBlock) {
 				blockData.push({
-					block: pantsBlock as Block,
+					block: {...pantsBlock, templateId: String(pantsBlock.templateId)} as Block,
 					templateCategory: 'Pants' as TemplateCategory,
 				})
 			}
