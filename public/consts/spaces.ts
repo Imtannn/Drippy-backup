@@ -114,25 +114,6 @@ export const spaces: Space[] = [
 		isWorkInProgress: false,
 	},
 	{
-		name: 'YALLAH',
-		slug: 'YALLAH',
-		description: 'Baroudeuses',
-		logo: '',
-		env: '/images/envs/brown_photostudio_02.jpg',
-		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/baroudeuses/scene-thumbnail.png',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/baroudeuses/scene-model.glb',
-		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/baroudeuses/extras/shoes.glb',
-		],
-		gender: 'female',
-		garmentsCount: blocks.baroudeuses?.length ?? 0,
-		collection: 'baroudeuses',
-		isWholesale: false,
-		isWorkInProgress: true,
-	},
-	{
 		name: 'Movement',
 		slug: 'movement',
 		description: 'Haruki',
