@@ -1,6 +1,5 @@
 export type TemplateCategory =
 	| 'All'
-	| 'Dress'
 	| 'Skirt'
 	| 'Jacket'
 	| 'Shirt'
@@ -21,7 +20,7 @@ export type Template = {
 	thumb: string
 	modelFile?: string // Optional since we're getting from blocks now
 	name: string
-	avatar: 'Male' | 'Female'
+	avatar: 'male' | 'female'
 	price?: string
 	category: TemplateCategory
 	materialId?: string // References fabric by "${materialName} ${category}" format

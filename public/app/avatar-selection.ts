@@ -21,28 +21,14 @@ export class AvatarSelection extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		this.createEffect(() => {
-			if (this.contentOnly && store.selectedAvatar) {
-				const avatar = avatars.find(a => a.name === store.selectedAvatar)
-				if (avatar) {
-					this.selectedTab = avatar.gender
-				}
-			}
-		})
 	}
 
 	#onAvatarThumbClick = (e: CustomEvent) => {
 		store.selectedAvatar = e.detail.itemValue
-
-		if (this.contentOnly) {
-			this.#onSaveClick()
-		}
 	}
 
 	#onSaveClick = () => {
-		if (!store.selectedAvatar) return
-		store.view = 'template'
+		store.view = 'scene'
 	}
 
 	#renderAvatarContent = () => html`
@@ -53,18 +39,8 @@ export class AvatarSelection extends Element {
 			<bottom-sheet-header>
 				<div class="tabs-container">
 					<tabs-list>
-						<tabs-trigger
-							selected-value="female"
-							is-disabled=${() =>
-								this.contentOnly && store.selectedSpace?.gender && store.selectedSpace.gender !== 'female'}
-							>Female</tabs-trigger
-						>
-						<tabs-trigger
-							selected-value="male"
-							is-disabled=${() =>
-								this.contentOnly && store.selectedSpace?.gender && store.selectedSpace.gender !== 'male'}
-							>Male</tabs-trigger
-						>
+						<tabs-trigger selected-value="female">Female</tabs-trigger>
+						<tabs-trigger selected-value="male">Male</tabs-trigger>
 					</tabs-list>
 				</div>
 			</bottom-sheet-header>

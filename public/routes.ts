@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor'
-import {createEffect, createMemo, createSignal} from 'solid-js'
+import {createEffect, createMemo, createSignal, untrack} from 'solid-js'
 import {Session} from 'meteor/session'
 import {effect} from './meteor-signals.js'
 import type {BlockCategory} from './types/block.js'
@@ -32,10 +32,10 @@ export const password = createMemo(() => url().password)
 
 export const hrefMinusOrigin = () => url().href.replace(url().origin, '')
 
-createEffect(() => console.log('Current route:', hrefMinusOrigin()))
+createEffect(() => console.trace('Current route:', hrefMinusOrigin()))
 
-export const replaceState = () => window.history.replaceState({}, '', href())
-export const pushState = () => window.history.pushState({}, '', href())
+export const replaceState = () => window.history.replaceState({}, '', untrack(url).href)
+export const pushState = () => window.history.pushState({}, '', untrack(url).href)
 
 window.addEventListener('popstate', () => setUrl(new URL(location.href)))
 
@@ -44,7 +44,7 @@ window.addEventListener('popstate', () => setUrl(new URL(location.href)))
 	history.pushState = History.prototype.pushState = function (...args) {
 		const ret = pushState.apply(this, args)
 		setUrl(new URL(location.href))
-		console.log('PUSHSTATE', args, location.href)
+		console.trace('PUSHSTATE', args, location.href)
 		return ret
 	}
 
@@ -52,7 +52,7 @@ window.addEventListener('popstate', () => setUrl(new URL(location.href)))
 	history.replaceState = History.prototype.replaceState = function (...args) {
 		const ret = replaceState.apply(this, args)
 		setUrl(new URL(location.href))
-		console.log('REPLACESTATE', args, location.href)
+		console.trace('REPLACESTATE', args, location.href)
 		return ret
 	}
 }
@@ -85,44 +85,31 @@ effect(() => {
 })
 
 export const updateGarmentsInUrl = (garments: Map<TemplateCategory, Template>) => {
-	const currentUrl = new URL(location.href)
-
 	if (garments.size > 0) {
 		const garmentIds = Array.from(garments.values()).map(garment => garment._id)
-		currentUrl.searchParams.set('garments', garmentIds.join(','))
-	} else {
-		currentUrl.searchParams.delete('garments')
-	}
+		untrack(searchParams).set('garments', garmentIds.join(','))
+	} else untrack(searchParams).delete('garments')
 
-	// Update URL without triggering page reload
-	history.replaceState({}, '', currentUrl.toString())
+	pushState()
 }
 
 export const updateFabricsInUrl = (fabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>) => {
-	const currentUrl = new URL(location.href)
-
 	if (fabrics.size > 0) {
 		const fabricEntries: string[] = []
 
-		for (const [templateCategory, blockMap] of fabrics.entries()) {
-			for (const [blockCategory, pieceMap] of blockMap.entries()) {
-				for (const [piece, fabric] of pieceMap.entries()) {
+		for (const [templateCategory, blockMap] of fabrics.entries())
+			for (const [blockCategory, pieceMap] of blockMap.entries())
+				for (const [piece, fabric] of pieceMap.entries())
 					fabricEntries.push(`${templateCategory}-${blockCategory}-${piece}:${fabric._id}`)
-				}
-			}
-		}
 
-		if (fabricEntries.length > 0) {
-			currentUrl.searchParams.set('fabrics', fabricEntries.join(','))
-		} else {
-			currentUrl.searchParams.delete('fabrics')
-		}
+		if (fabricEntries.length > 0) untrack(searchParams).set('fabrics', fabricEntries.join(','))
+		else untrack(searchParams).delete('fabrics')
 	} else {
-		currentUrl.searchParams.delete('fabrics')
+		untrack(searchParams).delete('fabrics')
 	}
 
 	// Update URL without triggering page reload
-	history.replaceState({}, '', currentUrl.toString())
+	pushState()
 }
 
 // debugging

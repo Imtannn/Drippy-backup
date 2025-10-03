@@ -7,10 +7,7 @@ export class SuccessView extends Element {
 	static elementName = 'success-view'
 
 	#onDripAnotherDesignClick = () => {
-		const url = new URL(window.location.href)
-		window.history.pushState({}, '', url.pathname)
-		store.resetState()
-		store.view = 'avatar'
+		store.goBackHomeAndResetState()
 	}
 
 	#onBackButtonClick = () => {
@@ -19,10 +16,7 @@ export class SuccessView extends Element {
 
 	// FIXME we need to stop repeating code so many times!!!
 	#onHomeButtonClick = () => {
-		// const currentAvatar = store.selectedAvatar || 'moidien'
-		// history.pushState(null, '', `/?avatar=${currentAvatar}`)
-		store.view = 'scene'
-		store.resetState()
+		store.goBackHomeAndResetState()
 	}
 
 	template = () => html`

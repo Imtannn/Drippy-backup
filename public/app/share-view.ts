@@ -24,12 +24,7 @@ export class ShareView extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		// const currentAvatar = store.selectedAvatar || 'moidien'
-		batch(() => {
-			// history.pushState(null, '', `/?avatar=${currentAvatar}`)
-			store.view = 'scene'
-			store.resetState()
-		})
+		store.goBackHomeAndResetState()
 	}
 
 	#onCopyLink = async () => {

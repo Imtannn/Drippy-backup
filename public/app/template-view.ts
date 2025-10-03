@@ -9,6 +9,7 @@ import {currentUser, store} from './store.js'
 
 import '../elements/animation-select.js'
 import '../elements/avatar-dropdown.js'
+import '../elements/avatar-swap-bottom-sheet.js'
 import '../elements/back-button.js'
 import '../elements/bottom-navigation.js'
 import '../elements/bottom-sheet.js'
@@ -29,6 +30,7 @@ import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import {updateGarmentsInUrl, updateFabricsInUrl, searchParams, pushState} from '../routes.js'
 import {formatNumber} from '../utils.js'
+import {avatars} from '../consts/avatars.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './item-card.js'
@@ -50,6 +52,8 @@ export class TemplateView extends Element {
 	@signal showPoseSelection = false
 	@signal showRemixOverlay = false
 	@signal showTemplateOverlay: Template | null = null
+	@signal showAvatarSwapSheet = false
+	@signal avatarSwapTemplate: Template | null = null
 
 	private isOpeningOverlay = false
 
@@ -114,16 +118,10 @@ export class TemplateView extends Element {
 		})
 
 		// Update URL when garments change
-		this.createEffect(() => {
-			const selectedTemplates = store.selectedTemplates
-			updateGarmentsInUrl(selectedTemplates)
-		})
+		this.createEffect(() => updateGarmentsInUrl(store.selectedTemplates))
 
 		// Update URL when fabrics change
-		this.createEffect(() => {
-			const selectedFabrics = store.selectedFabrics
-			updateFabricsInUrl(selectedFabrics)
-		})
+		this.createEffect(() => updateFabricsInUrl(store.selectedFabrics))
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -141,53 +139,22 @@ export class TemplateView extends Element {
 			return
 		}
 
-		const newTemplates = new Map<TemplateCategory, Template>(store.selectedTemplates)
-		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(store.selectedBlocks)
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(store.selectedFabrics)
+		// Check if template requires different gender avatar
+		const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
+		const currentGender = currentAvatar?.gender
+		const templateGender = template.avatar
 
-		// check if the template with same category already exists
-		const interchangeableCategories = blockManager.checkInterchangeableCategories(
-			template.category,
-			store.selectedTemplates,
-		)
-		if (interchangeableCategories.length > 0) {
-			for (const category of interchangeableCategories) {
-				if (store.selectedTemplates.has(category as TemplateCategory)) {
-					newTemplates.delete(category as TemplateCategory)
-					newBlocks.delete(category as TemplateCategory)
-					newFabrics.delete(category as TemplateCategory)
-				}
-			}
+		if (currentGender && templateGender && currentGender !== templateGender) {
+			// Show avatar swap bottom sheet
+			batch(() => {
+				this.avatarSwapTemplate = template
+				this.showAvatarSwapSheet = true
+			})
+			return
 		}
 
-		newTemplates.set(template.category, template)
-		const templateBlockData = blockManager.convertTemplateToBlockData(template, store.selectedSpace!)
-		const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
-			templateBlockData,
-			store.selectedSpace!,
-		)
-		newBlocks.set(template.category, newBlocksMap)
-		newFabrics.set(template.category, newFabricsMap)
-
-		store.selectedFabrics = newFabrics
-
-		// @ts-expect-error FIXME we should avoid having different ways of
-		// setting the same thing (see store.setSelectedBlocks, and
-		// loadFromUrlParameters in drippy-app.ts).  This will get more
-		// difficult to manage and error prone/buggy.
-		store.__selectedBlocks = newBlocks
-
-		store.selectedTemplates = newTemplates
-
-		// Check if remix is available for this template
-		const {available} = blockManager.isRemixAvailableForTemplate(template.category, {
-			selectedBlocks: newBlocks,
-			selectedSpace: store.selectedSpace,
-		})
-
-		if (available) {
-			this.#handleTemplateOverlayRemix(template.category)
-		}
+		// Proceed with template selection
+		this.#selectTemplate(template)
 	}
 
 	#isTemplateActive = (template: Template) => {
@@ -214,15 +181,20 @@ export class TemplateView extends Element {
 
 	#onBackButtonClick = () => {
 		batch(() => {
+			// FIXME This logic is "go back to home" logic, however it is inaccessible
+			// here to any other code that may want to go back to home. We need
+			// to make code re-usable, and consistent, without repeating.
+
 			// Reset UI state
 			this.showAvatarSelection = false
 			this.showPoseSelection = false
 			this.showLoginDialog = false
 			this.showRemixOverlay = false
 			this.showTemplateOverlay = null
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
 
-			store.resetSelectedTemplates()
-			store.view = 'scene'
+			store.goBackHomeAndResetState()
 		})
 	}
 
@@ -232,6 +204,8 @@ export class TemplateView extends Element {
 			this.showPoseSelection = false
 			this.showRemixOverlay = false
 			this.showTemplateOverlay = null
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
 		})
 	}
 
@@ -247,6 +221,8 @@ export class TemplateView extends Element {
 			}
 			this.showRemixOverlay = false
 			this.showTemplateOverlay = null
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
 		})
 	}
 
@@ -276,6 +252,74 @@ export class TemplateView extends Element {
 	#onTemplateOverlayRemix = (e: CustomEvent) => {
 		const templateCategory = e.detail.templateCategory
 		this.#handleTemplateOverlayRemix(templateCategory)
+	}
+
+	#onAvatarSwapped = () => {
+		// Close the avatar swap sheet
+		batch(() => {
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
+			this.showAvatarSelection = true
+		})
+	}
+
+	#onAvatarSwapCancel = () => {
+		batch(() => {
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
+		})
+	}
+
+	#selectTemplate = (template: Template) => {
+		const newTemplates = new Map<TemplateCategory, Template>(store.selectedTemplates)
+		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(store.selectedBlocks)
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(store.selectedFabrics)
+
+		// check if the template with same category already exists
+		const interchangeableCategories = blockManager.checkInterchangeableCategories(
+			template.category,
+			store.selectedTemplates,
+		)
+		if (interchangeableCategories.length > 0) {
+			for (const category of interchangeableCategories) {
+				if (store.selectedTemplates.has(category as TemplateCategory)) {
+					newTemplates.delete(category as TemplateCategory)
+					newBlocks.delete(category as TemplateCategory)
+					newFabrics.delete(category as TemplateCategory)
+				}
+			}
+		}
+
+		newTemplates.set(template.category, template)
+		const templateBlockData = blockManager.convertTemplateToBlockData(template, store.selectedSpace!)
+		const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
+			templateBlockData,
+			store.selectedSpace!,
+		)
+		newBlocks.set(template.category, newBlocksMap)
+		newFabrics.set(template.category, newFabricsMap)
+
+		batch(() => {
+			store.selectedFabrics = newFabrics
+
+			// @ts-expect-error FIXME we should avoid having different ways of
+			// setting the same thing (see store.setSelectedBlocks, and
+			// loadFromUrlParameters in drippy-app.ts).  This will get more
+			// difficult to manage and error prone/buggy.
+			store.__selectedBlocks = newBlocks
+
+			store.selectedTemplates = newTemplates
+		})
+
+		// Check if remix is available for this template
+		const {available} = blockManager.isRemixAvailableForTemplate(template.category, {
+			selectedBlocks: newBlocks,
+			selectedSpace: store.selectedSpace,
+		})
+
+		if (available) {
+			this.#handleTemplateOverlayRemix(template.category)
+		}
 	}
 
 	#onDocumentClick = (e: Event) => {
@@ -455,6 +499,13 @@ export class TemplateView extends Element {
 				}
 			</style>
 		</dialog-element>
+
+		<avatar-swap-bottom-sheet
+			open=${() => this.showAvatarSwapSheet}
+			selected-template=${() => this.avatarSwapTemplate}
+			onavatar-swapped=${this.#onAvatarSwapped}
+			onclose=${this.#onAvatarSwapCancel}
+		></avatar-swap-bottom-sheet>
 	`
 
 	css = css/*css*/ `

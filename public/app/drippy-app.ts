@@ -1,4 +1,4 @@
-import {createMemo, css, Element, element, html, signal} from 'lume'
+import {batch, createMemo, css, Element, element, html, signal} from 'lume'
 import {fabrics} from '../consts/fabrics.js'
 import {templates} from '../consts/templates.js'
 import '../elements/logic/show-when.js'
@@ -118,16 +118,18 @@ export class DrippyApp extends Element {
 					}
 				}
 
-				store.selectedFabrics = newFabrics
-				console.log('selected fabrics from url', newFabrics)
+				batch(() => {
+					store.selectedFabrics = newFabrics
+					console.log('selected fabrics from url', newFabrics)
 
-				// @ts-expect-error FIXME we should avoid having two different
-				// ways of setting the same thing (see store.setSelectedBlocks
-				// and onItemClick in template-view.ts). This will get more
-				// difficult to manage and error prone/buggy.
-				store.__selectedBlocks = newBlocks
+					// @ts-expect-error FIXME we should avoid having two different
+					// ways of setting the same thing (see store.setSelectedBlocks
+					// and onItemClick in template-view.ts). This will get more
+					// difficult to manage and error prone/buggy.
+					store.__selectedBlocks = newBlocks
 
-				store.selectedTemplates = templates
+					store.selectedTemplates = templates
+				})
 			}
 		}
 	}

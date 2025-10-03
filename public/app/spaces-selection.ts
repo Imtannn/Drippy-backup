@@ -1,6 +1,5 @@
 import {batch, css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
-import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/avatar-dropdown.js'
 import '../elements/placeholder-image.js'
@@ -44,17 +43,6 @@ export class SpacesSelection extends Element {
 
 	#onSceneSelected = (space: Space) => {
 		searchParams().set('scene', space.slug)
-
-		// Check if we need to switch avatars based on gender
-		const currentAvatarGender = avatars.find(avatar => avatar.name === store.selectedAvatar)?.gender
-		if (currentAvatarGender !== space.gender && store.selectedAvatar) {
-			// Find the default avatar for the space's gender
-			const defaultAvatar = avatars.find(avatar => avatar.gender === space.gender && avatar.default)
-			if (defaultAvatar) {
-				store.selectedAvatar = defaultAvatar.name
-				searchParams().set('avatar', defaultAvatar.name)
-			}
-		}
 
 		batch(() => {
 			pushState()

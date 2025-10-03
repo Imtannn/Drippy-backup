@@ -55,10 +55,7 @@ export class OrderItems extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		// const currentAvatar = store.selectedAvatar || 'moidien'
-		// history.pushState(null, '', `/?avatar=${currentAvatar}`)
-		store.view = 'scene'
-		store.resetState()
+		store.goBackHomeAndResetState()
 	}
 
 	#onNextClick = () => {
