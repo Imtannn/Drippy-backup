@@ -602,12 +602,11 @@ createEffect(() => {
 })
 
 createEffect(() => {
-	// If we're in scene selection view, remove all params but keep the selected avatar if there is one
+	// If we're in scene selection view, remove all params, and don't sync
+	// selectedAvatar with URL param
 	if (store.view === 'scene') {
 		untrack(() => {
-			const params = new URLSearchParams(url().search)
-			const avatar = params.get('avatar')
-			url().search = avatar ? `avatar=${avatar}` : ''
+			url().search = ''
 			pushState()
 		})
 		return
