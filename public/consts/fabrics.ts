@@ -872,7 +872,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'White',
 		category: 'Pleated',
-		templateCategories: ['Shirt']
+		templateCategories: ['Shirt', 'Dress', 'Pants']
 	},
 	{
 		_id: '7',
@@ -884,7 +884,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '235',
 		category: 'Twill',
-		templateCategories: ['Pants']
+		templateCategories: ['Pants', 'Dress']
 	},
 	{
 		_id: '8',
@@ -896,7 +896,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Random',
 		category: 'Pleated',
-		templateCategories: ['Bag', 'Hat']
+		templateCategories: ['Bag', 'Hat', 'Dress']
 	},
 	{
 		_id: '9',
@@ -908,7 +908,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Brown',
 		category: 'Cotton',
-		templateCategories: []
+		templateCategories: ['Dress', 'Pants']
 	},
 	{
 		_id: '10',
@@ -932,7 +932,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Navy',
 		category: 'Crinkle Fabric',
-		templateCategories: ['Shirt']
+		templateCategories: ['Shirt', 'Dress', 'Pants']
 	},
 	{
 		_id: '12',
@@ -962,6 +962,30 @@ export const fabrics: Record<string, Fabric[]> = {
 	emwear: [
 	{
 		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_FFFAED/SILK_-_SEETHROUGH_FFFAED_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_FFFAED/SILK_-_SEETHROUGH_FFFAED_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_FFFAED/SILK_-_SEETHROUGH_FFFAED_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_FFFAED/SILK_-_SEETHROUGH_FFFAED_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_FFFAED/SILK_-_SEETHROUGH_FFFAED_%28ROUGH%29.jpg',
+		alpha: '',
+		materialName: 'Seethrough Fffaed',
+		category: 'Silk',
+		templateCategories: ['Dress']
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_CCE9FF/SILK_-_SEETHROUGH_CCE9FF_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_CCE9FF/SILK_-_SEETHROUGH_CCE9FF_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_CCE9FF/SILK_-_SEETHROUGH_CCE9FF_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_CCE9FF/SILK_-_SEETHROUGH_CCE9FF_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_CCE9FF/SILK_-_SEETHROUGH_CCE9FF_%28ROUGH%29.jpg',
+		alpha: '',
+		materialName: 'Seethrough Cce9ff',
+		category: 'Silk',
+		templateCategories: ['Coat', 'Dress']
+	},
+	{
+		_id: '3',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%3C25%2C_35%2C_0%2C_0%2C_1000%2C_0%3E/MESH_-_FLOWER_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%3C25%2C_35%2C_0%2C_0%2C_1000%2C_0%3E/MESH_-_FLOWER_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%3C25%2C_35%2C_0%2C_0%2C_1000%2C_0%3E/MESH_-_FLOWER_-_BASE.jpg',
@@ -979,7 +1003,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		coef: 0
 	},
 	{
-		_id: '2',
+		_id: '4',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%3C5%2C_9%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_WHITE_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%3C5%2C_9%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_WHITE_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%3C5%2C_9%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_WHITE_-_BASE.jpg',
@@ -997,7 +1021,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		coef: 0
 	},
 	{
-		_id: '3',
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%3C13%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_FFE6F2_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%3C13%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_FFE6F2_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%3C13%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_FFE6F2_-_BASE.jpg',
@@ -1015,19 +1039,19 @@ export const fabrics: Record<string, Fabric[]> = {
 		coef: 0
 	},
 	{
-		_id: '4',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_MUSTARD_YELLOW_GREEN/SILK_-_MUSTARD_YELLOW_GREEN_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_MUSTARD_YELLOW_GREEN/SILK_-_MUSTARD_YELLOW_GREEN_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_MUSTARD_YELLOW_GREEN/SILK_-_MUSTARD_YELLOW_GREEN_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_MUSTARD_YELLOW_GREEN/SILK_-_MUSTARD_YELLOW_GREEN_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_MUSTARD_YELLOW_GREEN/SILK_-_MUSTARD_YELLOW_GREEN_-_ROUGH.jpg',
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_MUSTARD_YELLOW_GREEN/SILK_-_MUSTARD_YELLOW_GREEN_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_MUSTARD_YELLOW_GREEN/SILK_-_MUSTARD_YELLOW_GREEN_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_MUSTARD_YELLOW_GREEN/SILK_-_MUSTARD_YELLOW_GREEN_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_MUSTARD_YELLOW_GREEN/SILK_-_MUSTARD_YELLOW_GREEN_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_MUSTARD_YELLOW_GREEN/SILK_-_MUSTARD_YELLOW_GREEN_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'Mustard Yellow Green',
 		category: 'Silk',
 		templateCategories: ['Top']
 	},
 	{
-		_id: '5',
+		_id: '7',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_DEEP_RASBERRY/SILK_-_DEEP_RASBERRY_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_DEEP_RASBERRY/SILK_-_DEEP_RASBERRY_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_DEEP_RASBERRY/SILK_-_DEEP_RASBERRY_-_BASE.jpg',
@@ -1039,52 +1063,28 @@ export const fabrics: Record<string, Fabric[]> = {
 		templateCategories: ['Top']
 	},
 	{
-		_id: '6',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_WHITE/SILK_-_WHITE_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_WHITE/SILK_-_WHITE_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_WHITE/SILK_-_WHITE_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_WHITE/SILK_-_WHITE_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_WHITE/SILK_-_WHITE_-_ROUGH.jpg',
+		_id: '8',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_WHITE/SILK_-_WHITE_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_WHITE/SILK_-_WHITE_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_WHITE/SILK_-_WHITE_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_WHITE/SILK_-_WHITE_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_WHITE/SILK_-_WHITE_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'White',
 		category: 'Silk',
 		templateCategories: ['Top']
 	},
 	{
-		_id: '7',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_-_FFFAED/SILK_-_SEETHROUGH_FFFAED_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_-_FFFAED/SILK_-_SEETHROUGH_FFFAED_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_-_FFFAED/SILK_-_SEETHROUGH_FFFAED_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_-_FFFAED/SILK_-_SEETHROUGH_FFFAED_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_-_FFFAED/SILK_-_SEETHROUGH_FFFAED_-_ALPHA.jpg',
-		alpha: '',
-		materialName: 'Seethrough',
-		category: 'Silk',
-		templateCategories: ['Skirt']
-	},
-	{
-		_id: '8',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFFAED/SILK_-_FFFAED_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFFAED/SILK_-_FFFAED_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFFAED/SILK_-_FFFAED_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFFAED/SILK_-_FFFAED_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFFAED/SILK_-_FFFAED_-_ROUGH.jpg',
+		_id: '9',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFFAED/SILK_-_FFFAED_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFFAED/SILK_-_FFFAED_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFFAED/SILK_-_FFFAED_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFFAED/SILK_-_FFFAED_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFFAED/SILK_-_FFFAED_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'Fffaed',
 		category: 'Silk',
 		templateCategories: ['Dress', 'Coat']
-	},
-	{
-		_id: '9',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_CCE9FF/SILK_-_SEETHROUGH_CCE9FF_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_CCE9FF/SILK_-_SEETHROUGH_CCE9FF_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_CCE9FF/SILK_-_SEETHROUGH_CCE9FF_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_CCE9FF/SILK_-_SEETHROUGH_CCE9FF_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_SEETHROUGH_CCE9FF/SILK_-_SEETHROUGH_CCE9FF_-_ROUGH.jpg',
-		alpha: '',
-		materialName: 'Seethrough Cce9ff',
-		category: 'Silk',
-		templateCategories: ['Coat', 'Dress']
 	},
 	{
 		_id: '10',
@@ -1112,15 +1112,15 @@ export const fabrics: Record<string, Fabric[]> = {
 	},
 	{
 		_id: '12',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'Off White',
 		category: 'Silk',
-		templateCategories: ['Dress']
+		templateCategories: ['Dress', 'Skirt']
 	},
 	{
 		_id: '13',
@@ -1136,11 +1136,11 @@ export const fabrics: Record<string, Fabric[]> = {
 	},
 	{
 		_id: '14',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFEBB7/SILK_-_FFEBB7_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFEBB7/SILK_-_FFEBB7_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFEBB7/SILK_-_FFEBB7_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFEBB7/SILK_-_FFEBB7_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFEBB7/SILK_-_FFEBB7_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFEBB7/SILK_-_FFEBB7_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFEBB7/SILK_-_FFEBB7_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFEBB7/SILK_-_FFEBB7_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFEBB7/SILK_-_FFEBB7_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_FFEBB7/SILK_-_FFEBB7_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'Ffebb7',
 		category: 'Silk',
@@ -1172,11 +1172,11 @@ export const fabrics: Record<string, Fabric[]> = {
 	},
 	{
 		_id: '17',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LAVENDER_BLUSH/SILK_-_LAVENDER_BLUSH_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LAVENDER_BLUSH/SILK_-_LAVENDER_BLUSH_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LAVENDER_BLUSH/SILK_-_LAVENDER_BLUSH_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LAVENDER_BLUSH/SILK_-_LAVENDER_BLUSH_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LAVENDER_BLUSH/SILK_-_LAVENDER_BLUSH_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LAVENDER_BLUSH/SILK_-_LAVENDER_BLUSH_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LAVENDER_BLUSH/SILK_-_LAVENDER_BLUSH_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LAVENDER_BLUSH/SILK_-_LAVENDER_BLUSH_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LAVENDER_BLUSH/SILK_-_LAVENDER_BLUSH_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LAVENDER_BLUSH/SILK_-_LAVENDER_BLUSH_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'Lavender Blush',
 		category: 'Silk',
@@ -1196,11 +1196,11 @@ export const fabrics: Record<string, Fabric[]> = {
 	},
 	{
 		_id: '19',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LIGHT_CREAM/SILK_-_LIGHT_CREAM_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LIGHT_CREAM/SILK_-_LIGHT_CREAM_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LIGHT_CREAM/SILK_-_LIGHT_CREAM_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LIGHT_CREAM/SILK_-_LIGHT_CREAM_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LIGHT_CREAM/SILK_-_LIGHT_CREAM_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LIGHT_CREAM/SILK_-_LIGHT_CREAM_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LIGHT_CREAM/SILK_-_LIGHT_CREAM_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LIGHT_CREAM/SILK_-_LIGHT_CREAM_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LIGHT_CREAM/SILK_-_LIGHT_CREAM_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/SILK_-_LIGHT_CREAM/SILK_-_LIGHT_CREAM_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'Light Cream',
 		category: 'Silk',

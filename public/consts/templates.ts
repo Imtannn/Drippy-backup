@@ -1196,72 +1196,9 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '4',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Drape_Elegance_Dress_-_67.webp',
-		name: 'Drape Elegance Dress',
-		price: '67',
-		avatar: 'female',
-		category: 'Dress',
-		materialId: 'Silk - Ffebb7'
-	},
-	{
-		_id: '5',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Pure_Grace_Dress_-_60.webp',
-		name: 'Pure Grace Dress',
-		price: '60',
-		avatar: 'female',
-		category: 'Dress',
-		materialId: 'Silk - Off White',
-		extraMaterials: [
-			{
-				mesh: 'pattern_402783-pattern_402782-pattern_402780-pattern_402776-pattern_354302-pattern_354305-pattern_354304-pattern_354303-pattern_354295',
-				materialId: 'Lace - Light Cream',
-			}
-		]
-	},
-	{
-		_id: '6',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Swayrose_Dress_-_67.webp',
-		name: 'Swayrose Dress',
-		price: '67',
-		avatar: 'female',
-		category: 'Dress',
-		materialId: 'Silk - Ffc85a'
-	},
-	{
-		_id: '7',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Luxe_Reverie_Dress_-_55.webp',
-		name: 'Luxe Reverie Dress',
-		price: '55',
-		avatar: 'female',
-		category: 'Dress',
-		materialId: 'Silk - Ffe6f2',
-		extraMaterials: [
-			{
-				mesh: 'pattern_354307-pattern_354313-pattern_354306-pattern_354310',
-				materialId: 'Lace - Ffe6f2',
-			}
-		]
-	},
-	{
-		_id: '8',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Holi_Sunset_Dress_-_90.webp',
-		name: 'Holi Sunset Dress',
-		price: '90',
-		avatar: 'female',
-		category: 'Dress',
-		materialId: 'Silk - Fffaed',
-		extraMaterials: [
-			{
-				mesh: 'pattern_402772-pattern_402773-pattern_354294',
-				materialId: 'Silk - Seethrough Fffaed',
-			}
-		]
-	},
-	{
-		_id: '9',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Ocean_Wave_Slip_Dress_-_65.webp',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Ocean_Wave_Slip_Dress_-_120.webp',
 		name: 'Ocean Wave Slip Dress',
-		price: '65',
+		price: '120',
 		avatar: 'female',
 		category: 'Dress',
 		materialId: 'Silk - Lavender Blush',
@@ -1277,10 +1214,10 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '10',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Rosette_Dress_-_55.webp',
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Rosette_Dress_-_100.webp',
 		name: 'Rosette Dress',
-		price: '55',
+		price: '100',
 		avatar: 'female',
 		category: 'Dress',
 		materialId: 'Silk - Cce9ff',
@@ -1288,6 +1225,69 @@ export const templates: Record<string, Template[]> = {
 			{
 				mesh: '33-65-64-pattern_76019845-pattern_76183233-pattern_76019844-63-62-21',
 				materialId: 'Silk - Seethrough Cce9ff',
+			}
+		]
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Drape_Elegance_Dress_-_67.webp',
+		name: 'Drape Elegance Dress',
+		price: '67',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Silk - Ffebb7'
+	},
+	{
+		_id: '7',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Pure_Grace_Dress_-_60.webp',
+		name: 'Pure Grace Dress',
+		price: '60',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Silk - Off White',
+		extraMaterials: [
+			{
+				mesh: 'pattern_402783-pattern_402782-pattern_402780-pattern_402776-pattern_354302-pattern_354305-pattern_354304-pattern_354303-pattern_354295',
+				materialId: 'Lace - Light Cream',
+			}
+		]
+	},
+	{
+		_id: '8',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Swayrose_Dress_-_67.webp',
+		name: 'Swayrose Dress',
+		price: '67',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Silk - Ffc85a'
+	},
+	{
+		_id: '9',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Luxe_Reverie_Dress_-_55.webp',
+		name: 'Luxe Reverie Dress',
+		price: '55',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Silk - Ffe6f2',
+		extraMaterials: [
+			{
+				mesh: 'pattern_354307-pattern_354313-pattern_354306-pattern_354310',
+				materialId: 'Lace - Ffe6f2',
+			}
+		]
+	},
+	{
+		_id: '10',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Holi_Sunset_Dress_-_90.webp',
+		name: 'Holi Sunset Dress',
+		price: '90',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Silk - Fffaed',
+		extraMaterials: [
+			{
+				mesh: 'pattern_402772-pattern_402773-pattern_354294',
+				materialId: 'Silk - Seethrough Fffaed',
 			}
 		]
 	},
