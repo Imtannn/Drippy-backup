@@ -218,7 +218,7 @@ export class CustomButton extends Element {
 				font-size: var(--fontSizeTextMd);
 			}
 		}
-		@media (max-width: 768px) {
+		@media (max-width: 480px) {
 			.text-md {
 				font-size: var(--fontSizeTextSm);
 				line-height: var(--lineHeightNormal);
@@ -228,7 +228,7 @@ export class CustomButton extends Element {
 				line-height: var(--lineHeightNormal);
 			}
 			.text-xs {
-				font-size: var(--fontSizeTextMd);
+				font-size: var(--fontSizeTextSmTablet);
 			}
 		}
 	`
