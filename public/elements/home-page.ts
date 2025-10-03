@@ -17,27 +17,6 @@ export class HomePage extends Element {
 	}
 
 	template = () => html`
-		<style>
-			/* Hide the #root we're not using from the imported HTML. */
-			#root:first-of-type {
-				display: none;
-			}
-
-			body {
-				overflow: auto;
-				pointer-events: auto;
-			}
-
-			login-ui {
-				pointer-events: auto;
-				display: block;
-				position: absolute;
-				top: 10px;
-				right: 10px;
-				z-index: 2;
-			}
-		</style>
-
 		<drippy-app></drippy-app>
 		<style>
 			drippy-app {
@@ -56,14 +35,6 @@ export class HomePage extends Element {
 
 		* {
 			pointer-events: auto;
-		}
-
-		login-ui {
-			display: block;
-			position: absolute;
-			top: 10px;
-			right: 10px;
-			z-index: 2;
 		}
 	`
 }
