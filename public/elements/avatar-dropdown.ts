@@ -106,7 +106,7 @@ export class AvatarDropdown extends Element {
 		}
 
 		.avatar-container:has(.popup-notification[style*='display: flex']) .avatar-image-wrapper {
-			border-color: #8b5cf6;
+			border-color: #b897fd;
 		}
 
 		.avatar-image {
@@ -135,7 +135,7 @@ export class AvatarDropdown extends Element {
 			top: -53px;
 			left: 100%;
 			transform: translateX(-35%);
-			background: #8b5cf6;
+			background: #b897fd;
 			color: white;
 			padding: 10px 12px;
 			border-radius: 10px;
@@ -158,7 +158,7 @@ export class AvatarDropdown extends Element {
 			height: 0;
 			border-left: 8px solid transparent;
 			border-right: 8px solid transparent;
-			border-top: 8px solid #8b5cf6;
+			border-top: 8px solid #b897fd;
 		}
 
 		.popup-text {
