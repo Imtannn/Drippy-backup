@@ -75,7 +75,7 @@ class Store {
 	selectedAnimation = 'none' as 'none' | 'walk' | 'dance'
 	selectedTemplates = new Map<TemplateCategory, Template>()
 	private __selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-	selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+	selectedFabrics = new Map() as SelectedFabrics
 	customMeasurement = null as CustomMeasurement | null
 	isShowAvatar = true
 	isShowScene = true
@@ -201,6 +201,7 @@ class Store {
 		this.__selectedBlocks = newBlocks
 	}
 	set setSelectedFabrics(
+		// FIXME don't repeat complex type definitions all over the place
 		fabricData:
 			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}
 			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}[],
@@ -208,7 +209,7 @@ class Store {
 		if (!Array.isArray(fabricData)) {
 			fabricData = [fabricData]
 		}
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(this.selectedFabrics)
+		const newFabrics = new Map(this.selectedFabrics) as SelectedFabrics
 
 		for (let {fabric, blockCategory, templateCategory, assignedMesh} of fabricData) {
 			if (!assignedMesh) {
@@ -623,26 +624,6 @@ createEffect(() => {
 			pushState()
 		},
 	)
-
-	// const [skipFirstRun, setSkipFirstRun] = createSignal(true)
-
-	// Also ensure that if we're on a male space we switch to a male avatar, and
-	// vice versa
-	// 	createEffect(() => {
-	// 		if (skipFirstRun()) return // ensure syncSignals ran first
-
-	// 		const space = spaceFromParam()
-	// 		if (!space) return
-
-	// 		const currentAvatarGender = avatars.find(avatar => avatar.name === store.selectedAvatar)?.gender
-	// 		if (currentAvatarGender === space.gender) return
-
-	// 		// Find the default avatar for the space's gender
-	// 		const defaultAvatar = avatars.find(avatar => avatar.gender === space.gender && avatar.default)
-	// 		if (!defaultAvatar) throw new Error(`No default avatar found`)
-
-	// 		store.selectedAvatar = defaultAvatar.name
-	// 	})
-
-	// 	queueMicrotask(() => setSkipFirstRun(false))
 })
+
+export type SelectedFabrics = Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>

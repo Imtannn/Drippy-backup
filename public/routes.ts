@@ -2,7 +2,7 @@ import {Meteor} from 'meteor/meteor'
 import {createEffect, createMemo, createSignal, untrack} from 'solid-js'
 import {Session} from 'meteor/session'
 import {effect} from './meteor-signals.js'
-import type {BlockCategory} from './types/block.js'
+import type {Block, BlockCategory} from './types/block.js'
 import type {Fabric} from './types/fabric.js'
 import type {Template, TemplateCategory} from './types/template.js'
 
@@ -84,7 +84,7 @@ effect(() => {
 	Meteor.call('visits.increment', href())
 })
 
-export const updateGarmentsInUrl = (garments: Map<TemplateCategory, Template>) => {
+export function updateGarmentsInUrl(garments: Map<TemplateCategory, Template>) {
 	if (garments.size > 0) {
 		const garmentIds = Array.from(garments.values()).map(garment => garment._id)
 		untrack(searchParams).set('garments', garmentIds.join(','))
@@ -93,7 +93,8 @@ export const updateGarmentsInUrl = (garments: Map<TemplateCategory, Template>) =
 	pushState()
 }
 
-export const updateFabricsInUrl = (fabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>) => {
+// FIXME please don't duplicate complex type definitions all over the place.
+export function updateFabricsInUrl(fabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>) {
 	if (fabrics.size > 0) {
 		const fabricEntries: string[] = []
 
