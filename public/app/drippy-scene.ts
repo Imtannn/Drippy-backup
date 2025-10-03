@@ -530,7 +530,7 @@ export class DrippyScene extends Element {
 						<lume-camera-rig
 							min-distance="1"
 							max-distance="3"
-							distance="2"
+							distance="2.5"
 							min-vertical-angle="-17"
 							max-vertical-angle="45"
 							dolly-speed="0.01"
