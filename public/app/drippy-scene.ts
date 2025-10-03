@@ -443,7 +443,7 @@ export class DrippyScene extends Element {
 					ref=${(el: Scene) => ((this.lumeScene = el), el && (el.three.environmentIntensity = 0.3))}
 					id="drippy-scene"
 					webgl
-					perspective="1000"
+					perspective="800"
 					physically-correct-lights
 					shadow-mode="vsm"
 					environment="/images/envs/brown_photostudio_02.jpg"
@@ -530,14 +530,16 @@ export class DrippyScene extends Element {
 						</lume-spot-light>
 
 						<lume-camera-rig
-							min-distance="1.5"
-							max-distance="8"
-							distance="4"
-							min-vertical-angle="-30"
+							min-distance="1"
+							max-distance="3"
+							distance="2"
+							min-vertical-angle="-17"
 							max-vertical-angle="45"
 							dolly-speed="0.01"
 							position="0 -1 0"
-						></lume-camera-rig>
+						>
+							<lume-perspective-camera active slot="camera-child" near="0.05" far="60" fov="50"></lume-perspective-camera>
+						</lume-camera-rig>
 
 						<lume-gltf-model
 							id="avatar"
