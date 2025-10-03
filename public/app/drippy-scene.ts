@@ -186,10 +186,10 @@ export class DrippyScene extends Element {
 
 			createEffect(() => {
 				if (store.view === 'preview') {
-					this.style.setProperty('--scene-transform', 'translateX(0)')
-					this.style.setProperty('--scene-desktop-transform', 'translateY(0)')
+					this.style.setProperty('--sceneTranslateX', 'translateX(0)')
+					this.style.setProperty('--sceneTranslateY', 'translateY(0)')
 				} else {
-					this.style.setProperty('--scene-desktop-transform', 'translateY(-100px)')
+					this.style.setProperty('--sceneTranslateY', 'translateY(-100px)')
 
 					if (
 						store.view === 'order' ||
@@ -199,9 +199,9 @@ export class DrippyScene extends Element {
 						store.view === 'success' ||
 						store.view === 'share'
 					) {
-						this.style.setProperty('--scene-transform', 'translateX(-10rem)')
+						this.style.setProperty('--sceneTranslateX', 'translateX(calc(-1 * var(--sceneDesktopOffset)))')
 					} else {
-						this.style.setProperty('--scene-transform', 'translateX(10rem)')
+						this.style.setProperty('--sceneTranslateX', 'translateX(var(--sceneDesktopOffset))')
 					}
 				}
 			})
@@ -602,8 +602,9 @@ export class DrippyScene extends Element {
 
 	css = css/*css*/ `
 		:host {
-			--scene-transform: translateX(0);
-			--scene-desktop-transform: translateY(-100px);
+			--sceneDesktopOffset: 10rem;
+			--sceneTranslateX: translateX(0);
+			--sceneTranslateY: translateY(-100px);
 			background: var(--appBackground);
 			width: 600px;
 			height: 400px;
@@ -617,8 +618,9 @@ export class DrippyScene extends Element {
 		}
 
 		#lume-scene-container {
-			width: 100%;
+			width: calc(100% + 2 * var(--sceneDesktopOffset));
 			height: 100%;
+			translate: calc(-1 * var(--sceneDesktopOffset));
 			transition: transform var(--transitionFast);
 			-webkit-transition: transform var(--transitionFast);
 			/* iOS specific fixes */
@@ -636,8 +638,8 @@ export class DrippyScene extends Element {
 		}
 
 		lume-scene {
-			transform: var(--scene-transform);
-			-webkit-transform: var(--scene-transform);
+			transform: var(--sceneTranslateX);
+			-webkit-transform: var(--sceneTranslateX);
 			transition: transform var(--transitionFast);
 			-webkit-transition: transform var(--transitionFast);
 			/* iOS specific fixes */
@@ -651,8 +653,8 @@ export class DrippyScene extends Element {
 				-webkit-transform: unset !important;
 			}
 			#lume-scene-container {
-				transform: var(--scene-desktop-transform);
-				-webkit-transform: var(--scene-desktop-transform);
+				transform: var(--sceneTranslateY);
+				-webkit-transform: var(--sceneTranslateY);
 			}
 
 			lume-scene {
