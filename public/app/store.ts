@@ -419,7 +419,7 @@ class Store {
 	goBackHomeAndResetState() {
 		batch(() => {
 			this.view = 'scene'
-			this.selectedAvatar = avatars[0].name
+			// this.selectedAvatar = avatars[0].name // don't reset the selected avatar
 			this.selectedSpace = null as Space | null
 			this.selectedTemplates = new Map<TemplateCategory, Template>()
 			this.__selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
@@ -602,11 +602,12 @@ createEffect(() => {
 })
 
 createEffect(() => {
-	// If we're in scene selection view, remove all params, and don't sync
-	// selectedAvatar with URL param
+	// If we're in scene selection view, remove all params but keep the selected avatar if there is one
 	if (store.view === 'scene') {
 		untrack(() => {
-			url().search = ''
+			const params = new URLSearchParams(url().search)
+			const avatar = params.get('avatar')
+			url().search = avatar ? `avatar=${avatar}` : ''
 			pushState()
 		})
 		return
