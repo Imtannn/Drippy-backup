@@ -34,10 +34,6 @@ export class AvatarSelection extends Element {
 
 	#onAvatarThumbClick = (e: CustomEvent) => {
 		store.selectedAvatar = e.detail.itemValue
-
-		if (this.contentOnly) {
-			this.#onSaveClick()
-		}
 	}
 
 	#onSaveClick = () => {
