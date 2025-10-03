@@ -669,25 +669,25 @@ createEffect(() => {
 		},
 	)
 
-	const [skipFirstRun, setSkipFirstRun] = createSignal(true)
+	// const [skipFirstRun, setSkipFirstRun] = createSignal(true)
 
 	// Also ensure that if we're on a male space we switch to a male avatar, and
 	// vice versa
-	createEffect(() => {
-		if (skipFirstRun()) return // ensure syncSignals ran first
+	// 	createEffect(() => {
+	// 		if (skipFirstRun()) return // ensure syncSignals ran first
 
-		const space = spaceFromParam()
-		if (!space) return
+	// 		const space = spaceFromParam()
+	// 		if (!space) return
 
-		const currentAvatarGender = avatars.find(avatar => avatar.name === store.selectedAvatar)?.gender
-		if (currentAvatarGender === space.gender) return
+	// 		const currentAvatarGender = avatars.find(avatar => avatar.name === store.selectedAvatar)?.gender
+	// 		if (currentAvatarGender === space.gender) return
 
-		// Find the default avatar for the space's gender
-		const defaultAvatar = avatars.find(avatar => avatar.gender === space.gender && avatar.default)
-		if (!defaultAvatar) throw new Error(`No default avatar found`)
+	// 		// Find the default avatar for the space's gender
+	// 		const defaultAvatar = avatars.find(avatar => avatar.gender === space.gender && avatar.default)
+	// 		if (!defaultAvatar) throw new Error(`No default avatar found`)
 
-		store.selectedAvatar = defaultAvatar.name
-	})
+	// 		store.selectedAvatar = defaultAvatar.name
+	// 	})
 
-	queueMicrotask(() => setSkipFirstRun(false))
+	// 	queueMicrotask(() => setSkipFirstRun(false))
 })
