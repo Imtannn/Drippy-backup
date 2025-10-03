@@ -21,23 +21,10 @@ export class AvatarSelection extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		this.createEffect(() => {
-			if (this.contentOnly && store.selectedAvatar) {
-				const avatar = avatars.find(a => a.name === store.selectedAvatar)
-				if (avatar) {
-					this.selectedTab = avatar.gender
-				}
-			}
-		})
 	}
 
 	#onAvatarThumbClick = (e: CustomEvent) => {
 		store.selectedAvatar = e.detail.itemValue
-
-		if (this.contentOnly) {
-			this.#onSaveClick()
-		}
 	}
 
 	#onSaveClick = () => {
