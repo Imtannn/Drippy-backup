@@ -529,7 +529,7 @@ export class DrippyScene extends Element {
 						</lume-spot-light>
 
 						<lume-camera-rig
-							min-distance="1"
+							min-distance="0.5"
 							max-distance="${() => (isDesktop() ? 3 : 5)}"
 							distance="${() => (isDesktop() ? 2.5 : 4)}"
 							min-vertical-angle="-17"
