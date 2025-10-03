@@ -6,6 +6,7 @@ import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
 import '../routes.js' // track page visits
+import {searchParams} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
@@ -25,10 +26,9 @@ import './spaces-selection.js'
 import {store} from './store.js'
 import './success-view.js'
 import './template-view.js'
-import {searchParams} from '../routes.js'
 
 // const avatar = createMemo(() => searchParams().get('avatar'))
-const scene = createMemo(() => searchParams().get('scene') as Space | null)
+// const scene = createMemo(() => searchParams().get('scene') as Space | null)
 const isPreview = createMemo(() => searchParams().get('isPreview'))
 
 @element
@@ -46,7 +46,9 @@ export class DrippyApp extends Element {
 		this.createEffect(() => {
 			try {
 				// Load garments and fabrics from URL parameters if present
-				this.#loadFromUrlParameters(scene()!)
+				if (store.selectedSpace) {
+					this.#loadFromUrlParameters(store.selectedSpace)
+				}
 
 				if (store.isPreview || isPreview() === 'true') {
 					store.view = 'preview'
