@@ -16,14 +16,16 @@ import '../elements/login-ui.js'
 export class SpacesSelection extends Element {
 	static elementName = 'spaces-selection'
 
-	@signal filterdSpace: Space[] = []
+	@signal filteredSpace: Space[] = []
 	@signal showLoginDialog = false
 
 	connectedCallback() {
 		super.connectedCallback()
 
 		// Show all spaces regardless of gender
-		this.filterdSpace = spaces
+		this.createEffect(() => {
+			this.filteredSpace = store.isAdmin ? spaces : spaces.filter(space => !space.isWorkInProgress)
+		})
 
 		// Close login dialog when user successfully logs in
 		this.createEffect(() => {
@@ -88,7 +90,7 @@ export class SpacesSelection extends Element {
 			<!-- Space Cards -->
 			<div class="cards-container">
 				<index-each
-					items=${() => this.filterdSpace}
+					items=${() => this.filteredSpace}
 					content=${() => (space: Accessor<Space>) => html`
 						<!-- Bloom Realm Card -->
 						<div class="space-card">
@@ -110,7 +112,7 @@ export class SpacesSelection extends Element {
 				></index-each>
 
 				<show-when
-					condition=${() => this.filterdSpace.length === 0}
+					condition=${() => this.filteredSpace.length === 0}
 					content=${() => html`
 						<div class="no-spaces-container">
 							<p class="no-spaces-text">Spaces for this avatar are coming soon!</p>

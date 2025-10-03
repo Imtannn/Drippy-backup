@@ -755,7 +755,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 		const textureUrls: {[key: string]: string} = {}
 		let thumbUrl = ''
 
-		// Parse material name and texture settings from folder name: "${materialCategory} - ${materialName} <scaleX, scaleY, offsetX, offsetY, rotate, coef>"
+		// Parse material name and texture settings from folder name: "${materialCategory} - ${materialName} <scaleX, scaleY, offsetX, offsetY, coef, rotate>"
 		let materialCategory: string
 		let materialName: string
 		let textureSettings: {
@@ -781,8 +781,8 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 					scaleY: settingsValues[1],
 					offsetX: settingsValues[2],
 					offsetY: settingsValues[3],
-					rotate: settingsValues[4],
-					coef: settingsValues[5],
+					coef: settingsValues[4],
+					rotate: settingsValues[5],
 				}
 				// Remove texture settings from name for parsing
 				nameWithoutSettings = materialFolder.name.replace(/\s*<[^>]+>\s*$/, '')

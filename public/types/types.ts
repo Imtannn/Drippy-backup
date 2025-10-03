@@ -37,6 +37,7 @@ export type Space = {
 	gender: 'male' | 'female'
 	garmentsCount: number
 	isWholesale: boolean
+	isWorkInProgress?: boolean
 }
 
 export type CustomMeasurement = {
