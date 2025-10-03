@@ -387,6 +387,48 @@ export const templates: Record<string, Template[]> = {
 	shri: [
 	{
 		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Black_Crop_Jacket_With_Balloon_Sleeves_-_220.webp',
+		name: 'Black Crop Jacket With Balloon Sleeves',
+		price: '220',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Silk - Black',
+		extraMaterials: [
+			{
+				mesh: 'pattern_3187427_node-vtt_25_node-vtt_29_node',
+				materialId: 'Lace - Golden',
+			}
+		]
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Hand_Woven_Bobbin_Lace_Bib_-_200.webp',
+		name: 'Hand Woven Bobbin Lace Bib',
+		price: '200',
+		avatar: 'female',
+		category: 'Top',
+		materialId: ''
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/White_Shirt_with_Balloon_Sleeves_-_100.webp',
+		name: 'White Shirt with Balloon Sleeves',
+		price: '100',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Cotton - White'
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Gold_Crop_Jacket_with_Flower_Brooch_-_100.webp',
+		name: 'Gold Crop Jacket with Flower Brooch',
+		price: '100',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Fabric - Golden'
+	},
+	{
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_9.webp',
 		name: 'Item 9',
 		price: 'N/A',
@@ -401,16 +443,7 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '2',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_8.webp',
-		name: 'Item 8',
-		price: 'N/A',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Cotton - White'
-	},
-	{
-		_id: '3',
+		_id: '6',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_7.webp',
 		name: 'Item 7',
 		price: 'N/A',
@@ -419,31 +452,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Quilting - Golden'
 	},
 	{
-		_id: '4',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_6.webp',
-		name: 'Item 6',
-		price: 'N/A',
-		avatar: 'female',
-		category: 'Top',
-		materialId: ''
-	},
-	{
-		_id: '5',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_5.webp',
-		name: 'Item 5',
-		price: 'N/A',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Silk - Black',
-		extraMaterials: [
-			{
-				mesh: 'pattern_3187427_node-vtt_25_node-vtt_29_node',
-				materialId: 'Lace - Golden',
-			}
-		]
-	},
-	{
-		_id: '6',
+		_id: '7',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_4.webp',
 		name: 'Item 4',
 		price: 'N/A',
@@ -462,22 +471,13 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '7',
+		_id: '8',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_3.webp',
 		name: 'Item 3',
 		price: 'N/A',
 		avatar: 'female',
 		category: 'Top',
 		materialId: 'Cotton - White'
-	},
-	{
-		_id: '8',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_2.webp',
-		name: 'Item 2',
-		price: 'N/A',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Fabric - Golden'
 	},
 	{
 		_id: '9',
@@ -529,8 +529,8 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '13',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Pants/Item_1.webp',
-		name: 'Item 1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Pants/%22Drama_Queen%22_Quilted_Wide-leg_Pant_-_300.webp',
+		name: '"Drama Queen" Quilted Wide',
 		price: 'N/A',
 		avatar: 'female',
 		category: 'Pants',
@@ -1196,15 +1196,6 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '4',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Coat/New_Luna_Robe_-_45.webp',
-		name: 'New Luna Robe',
-		price: '45',
-		avatar: 'female',
-		category: 'Coat',
-		materialId: 'Silk - Seethrough Cce9ff'
-	},
-	{
-		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Drape_Elegance_Dress_-_67.webp',
 		name: 'Drape Elegance Dress',
 		price: '67',
@@ -1213,7 +1204,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Silk - Ffebb7'
 	},
 	{
-		_id: '6',
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Pure_Grace_Dress_-_60.webp',
 		name: 'Pure Grace Dress',
 		price: '60',
@@ -1228,7 +1219,7 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '7',
+		_id: '6',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Swayrose_Dress_-_67.webp',
 		name: 'Swayrose Dress',
 		price: '67',
@@ -1237,7 +1228,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Silk - Ffc85a'
 	},
 	{
-		_id: '8',
+		_id: '7',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Luxe_Reverie_Dress_-_55.webp',
 		name: 'Luxe Reverie Dress',
 		price: '55',
@@ -1252,7 +1243,7 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '9',
+		_id: '8',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Holi_Sunset_Dress_-_90.webp',
 		name: 'Holi Sunset Dress',
 		price: '90',
@@ -1267,14 +1258,18 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '10',
+		_id: '9',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Ocean_Wave_Slip_Dress_-_65.webp',
 		name: 'Ocean Wave Slip Dress',
 		price: '65',
 		avatar: 'female',
 		category: 'Dress',
-		materialId: 'Mesh - Lavender Blush',
+		materialId: 'Silk - Lavender Blush',
 		extraMaterials: [
+			{
+				mesh: '76-64-68-23',
+				materialId: 'Mesh - Lavender Blush',
+			},
 			{
 				mesh: 'pattern_402777-pattern_402779-pattern_354297',
 				materialId: 'Lace - Lavender Blush',
@@ -1282,16 +1277,22 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
-		_id: '11',
+		_id: '10',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Rosette_Dress_-_55.webp',
 		name: 'Rosette Dress',
 		price: '55',
 		avatar: 'female',
 		category: 'Dress',
-		materialId: 'Silk - Cce9ff'
+		materialId: 'Silk - Cce9ff',
+		extraMaterials: [
+			{
+				mesh: '33-65-64-pattern_76019845-pattern_76183233-pattern_76019844-63-62-21',
+				materialId: 'Silk - Seethrough Cce9ff',
+			}
+		]
 	},
 	{
-		_id: '12',
+		_id: '11',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/emwear/templates/Dress/Lush_Dream_Dress_-_55.webp',
 		name: 'Lush Dream Dress',
 		price: '55',
