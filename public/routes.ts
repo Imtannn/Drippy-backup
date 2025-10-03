@@ -2,9 +2,6 @@ import {Meteor} from 'meteor/meteor'
 import {createEffect, createMemo, createSignal, untrack} from 'solid-js'
 import {Session} from 'meteor/session'
 import {effect} from './meteor-signals.js'
-import type {Block, BlockCategory} from './types/block.js'
-import type {Fabric} from './types/fabric.js'
-import type {Template, TemplateCategory} from './types/template.js'
 
 // We'll keep the title up to date once we add routing. For now it is constant.
 let appName = 'Drippy'
@@ -83,35 +80,6 @@ effect(() => {
 
 	Meteor.call('visits.increment', href())
 })
-
-export function updateGarmentsInUrl(garments: Map<TemplateCategory, Template>) {
-	if (garments.size > 0) {
-		const garmentIds = Array.from(garments.values()).map(garment => garment._id)
-		untrack(searchParams).set('garments', garmentIds.join(','))
-	} else untrack(searchParams).delete('garments')
-
-	pushState()
-}
-
-// FIXME please don't duplicate complex type definitions all over the place.
-export function updateFabricsInUrl(fabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>) {
-	if (fabrics.size > 0) {
-		const fabricEntries: string[] = []
-
-		for (const [templateCategory, blockMap] of fabrics.entries())
-			for (const [blockCategory, pieceMap] of blockMap.entries())
-				for (const [piece, fabric] of pieceMap.entries())
-					fabricEntries.push(`${templateCategory}-${blockCategory}-${piece}:${fabric._id}`)
-
-		if (fabricEntries.length > 0) untrack(searchParams).set('fabrics', fabricEntries.join(','))
-		else untrack(searchParams).delete('fabrics')
-	} else {
-		untrack(searchParams).delete('fabrics')
-	}
-
-	// Update URL without triggering page reload
-	pushState()
-}
 
 // debugging
 const win = window as any

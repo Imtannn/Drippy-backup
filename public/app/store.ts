@@ -6,7 +6,8 @@ import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {onModelLoad, syncSignals, toSolidSignal} from '../utils.js'
-
+import {blocks} from '../consts/blocks.js'
+import {fabrics} from '../consts/fabrics.js'
 import {type GltfModel} from 'lume'
 import {avatars} from '../consts/avatars.js'
 import {Visits, type Visit} from '../imports/collections/Visits.js'
@@ -198,8 +199,10 @@ class Store {
 				this.selectedFabrics.delete(templateCategory)
 			}
 		}
+
 		this.__selectedBlocks = newBlocks
 	}
+
 	set setSelectedFabrics(
 		// FIXME don't repeat complex type definitions all over the place
 		fabricData:
@@ -577,6 +580,11 @@ export const store = new Store()
 // For debuggering
 ;(window as any).drippyStore = store
 
+// Pre-populate selected blocks from URL on app initialization
+selectedBlocksFromUrl()
+selectedFabricsFromUrl()
+console.log('Initialized selected blocks and fabrics from URL parameters', store.selectedBlocks, store.selectedFabrics)
+
 createEffect(() => {
 	if (!store.selectedAvatar) throw new Error('Never set the selected avatar to empty!')
 })
@@ -627,3 +635,141 @@ createEffect(() => {
 })
 
 export type SelectedFabrics = Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>
+
+export function updateGarmentsInUrl(garments: Map<TemplateCategory, Template>) {
+	if (garments.size > 0) {
+		const garmentIds = Array.from(garments.values()).map(garment => garment._id)
+		untrack(searchParams).set('garments', garmentIds.join(','))
+	} else untrack(searchParams).delete('garments')
+
+	pushState()
+}
+
+export function updateBlocksInUrl(selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>>) {
+	if (selectedBlocks.size > 0) {
+		const blockIds: string[] = []
+		for (const [, blockMap] of selectedBlocks) {
+			for (const [, block] of blockMap) {
+				blockIds.push(block._id)
+			}
+		}
+		untrack(searchParams).set('garments', blockIds.join(','))
+	} else {
+		untrack(searchParams).delete('garments')
+	}
+
+	pushState()
+}
+
+// FIXME please don't duplicate complex type definitions all over the place.
+export function updateFabricsInUrl(fabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>) {
+	if (fabrics.size > 0) {
+		const fabricEntries: string[] = []
+
+		for (const [templateCategory, blockMap] of fabrics.entries())
+			for (const [blockCategory, pieceMap] of blockMap.entries())
+				for (const [piece, fabric] of pieceMap.entries())
+					fabricEntries.push(`${templateCategory}-${blockCategory}-${piece}:${fabric._id}`)
+
+		if (fabricEntries.length > 0) untrack(searchParams).set('fabrics', fabricEntries.join(','))
+		else {
+			untrack(searchParams).delete('fabrics')
+			debugger
+		}
+	} else {
+		untrack(searchParams).delete('fabrics')
+		debugger
+	}
+
+	// Update URL without triggering page reload
+	pushState()
+}
+
+export function selectedBlocksFromUrl() {
+	const blockData: {block: Block; templateCategory: TemplateCategory}[] = []
+
+	// Get the brand/collection from the scene URL parameter
+	const sceneParam = untrack(searchParams).get('scene')
+	const space = spaces.find(space => space.slug === sceneParam)
+	const collection = space?.collection
+
+	// Parse garments parameter (comma-separated block IDs)
+	const garmentsParam = untrack(searchParams).get('garments')
+	if (garmentsParam && collection) {
+		const blockIds = garmentsParam.split(',').filter(id => id.trim())
+
+		// Find blocks by ID within the specific brand collection
+		for (const blockId of blockIds) {
+			const block = findBlockById(blockId, collection)
+			if (block) {
+				blockData.push({
+					block,
+					templateCategory: block.templateCategory,
+				})
+			}
+		}
+	}
+
+	store.setSelectedBlocks(blockData)
+}
+
+// Helper function to find a block by ID within a specific brand collection
+function findBlockById(blockId: string, collection: string): Block | null {
+	// Search within the specific brand collection
+	const brandBlocks = blocks[collection]
+	if (brandBlocks) {
+		return brandBlocks.find(b => b._id === blockId) || null
+	}
+
+	return null
+}
+
+function selectedFabricsFromUrl() {
+	// Get the brand/collection from the scene URL parameter
+	const sceneParam = untrack(searchParams).get('scene')
+	const space = spaces.find(space => space.slug === sceneParam)
+	const collection = space?.collection
+
+	// Parse fabrics parameter (comma-separated entries in format: templateCategory-blockCategory-piece:fabricId)
+	const fabricsParam = untrack(searchParams).get('fabrics')
+	if (!fabricsParam || !collection) return
+
+	const fabricEntries = fabricsParam.split(',').filter(entry => entry.trim())
+	const fabricData: {
+		fabric: Fabric
+		blockCategory: BlockCategory
+		templateCategory: TemplateCategory
+		assignedMesh?: string
+	}[] = []
+
+	for (const entry of fabricEntries) {
+		const [keyPart, fabricId] = entry.split(':')
+		if (!keyPart || !fabricId) continue
+
+		const [templateCategory, blockCategory, piece] = keyPart.split('-')
+		if (!templateCategory || !blockCategory || !piece) continue
+
+		const fabric = findFabricById(fabricId, collection)
+		if (fabric) {
+			fabricData.push({
+				fabric,
+				blockCategory: blockCategory as BlockCategory,
+				templateCategory: templateCategory as TemplateCategory,
+				assignedMesh: piece === 'default' ? undefined : piece,
+			})
+		}
+	}
+
+	store.setSelectedFabrics = fabricData
+}
+
+// Helper function to find a fabric by ID within a specific brand collection
+function findFabricById(fabricId: string, collection: string): Fabric | null {
+	// Search within the specific brand collection
+	const brandFabrics = fabrics[collection]
+	if (brandFabrics) {
+		return brandFabrics.find(f => f._id === fabricId) || null
+	}
+
+	return null
+}
