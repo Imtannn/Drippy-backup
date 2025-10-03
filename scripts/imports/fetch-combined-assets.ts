@@ -582,7 +582,12 @@ function generateFabricData(brand: string): TODO {
 			materialName: material.materialName,
 			category: material.category,
 			templateCategories: material.templateCategories.size > 0 ? Array.from(material.templateCategories) : [], // Convert Set to Array
-			...(material.textureSettings && {textureSettings: material.textureSettings}),
+			...(material.scaleX !== undefined && {scaleX: material.scaleX}),
+			...(material.scaleY !== undefined && {scaleY: material.scaleY}),
+			...(material.offsetX !== undefined && {offsetX: material.offsetX}),
+			...(material.offsetY !== undefined && {offsetY: material.offsetY}),
+			...(material.rotate !== undefined && {rotate: material.rotate}),
+			...(material.coef !== undefined && {coef: material.coef}),
 		})
 		idCounter++
 	})
@@ -674,9 +679,14 @@ function generateFabricsFileContent(fabrics: TODO): string {
 		const fabricsArray = fabrics[collectionName]
 		finalFabricsContent[collectionName] = fabricsArray
 			.map((fabric: TODO) => {
-				const textureSettingsString = fabric.textureSettings
-					? `,\n\t\ttextureSettings: {\n\t\t\tscaleX: ${fabric.textureSettings.scaleX},\n\t\t\tscaleY: ${fabric.textureSettings.scaleY},\n\t\t\toffsetX: ${fabric.textureSettings.offsetX},\n\t\t\toffsetY: ${fabric.textureSettings.offsetY},\n\t\t\trotate: ${fabric.textureSettings.rotate},\n\t\t\tcoef: ${fabric.textureSettings.coef}\n\t\t}`
-					: ''
+				const texturePropsString = [
+					fabric.scaleX !== undefined ? `,\n\t\tscaleX: ${fabric.scaleX}` : '',
+					fabric.scaleY !== undefined ? `,\n\t\tscaleY: ${fabric.scaleY}` : '',
+					fabric.offsetX !== undefined ? `,\n\t\toffsetX: ${fabric.offsetX}` : '',
+					fabric.offsetY !== undefined ? `,\n\t\toffsetY: ${fabric.offsetY}` : '',
+					fabric.rotate !== undefined ? `,\n\t\trotate: ${fabric.rotate}` : '',
+					fabric.coef !== undefined ? `,\n\t\tcoef: ${fabric.coef}` : '',
+				].join('')
 
 				return `	{
 		_id: '${fabric._id}',
@@ -688,7 +698,7 @@ function generateFabricsFileContent(fabrics: TODO): string {
 		alpha: '${fabric.alpha || ''}',
 		materialName: '${fabric.materialName}',
 		category: '${fabric.category || ''}',
-		templateCategories: [${fabric.templateCategories.map((cat: string) => `'${cat}'`).join(', ')}]${textureSettingsString}
+		templateCategories: [${fabric.templateCategories.map((cat: string) => `'${cat}'`).join(', ')}]${texturePropsString}
 	}`
 			})
 			.join(',\n')
@@ -867,7 +877,14 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 			thumbUrl,
 			...textureUrls,
 			templateCategories: new Set<string>(), // Will be populated later
-			...(textureSettings && {textureSettings}),
+			...(textureSettings && {
+				scaleX: textureSettings.scaleX,
+				scaleY: textureSettings.scaleY,
+				offsetX: textureSettings.offsetX,
+				offsetY: textureSettings.offsetY,
+				rotate: textureSettings.rotate,
+				coef: textureSettings.coef,
+			}),
 		}
 
 		rootMaterials.set(materialKey, materialData)
