@@ -12,7 +12,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Dusty Mocha',
 		category: 'Silk',
-		templateCategories: ['Shirt', 'Skirt'],
+		templateCategories: ['Shirt', 'Skirt']
 	},
 	{
 		_id: '2',
@@ -24,7 +24,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Blood Red',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '3',
@@ -36,7 +36,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Coconut Milk',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '4',
@@ -48,7 +48,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '281',
 		category: 'Sequin',
-		templateCategories: ['Shirt', 'Skirt'],
+		templateCategories: ['Shirt', 'Skirt']
 	},
 	{
 		_id: '5',
@@ -60,7 +60,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Beige',
 		category: 'Silk',
-		templateCategories: ['Shirt', 'Skirt'],
+		templateCategories: ['Shirt', 'Skirt']
 	}
 	],
 	haruki: [
@@ -74,7 +74,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Red',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '2',
@@ -86,7 +86,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Chiffon (2ab4c8)',
 		category: 'Silk',
-		templateCategories: ['Dress', 'Skirt'],
+		templateCategories: ['Dress', 'Skirt']
 	},
 	{
 		_id: '3',
@@ -98,7 +98,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Crepe (E8bbca)',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '4',
@@ -110,7 +110,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Crepe (096372)',
 		category: 'Silk',
-		templateCategories: ['Dress', 'Skirt'],
+		templateCategories: ['Dress', 'Skirt']
 	},
 	{
 		_id: '5',
@@ -122,7 +122,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Crepe (D6e2ea)',
 		category: 'Silk',
-		templateCategories: ['Dress', 'Skirt'],
+		templateCategories: ['Dress', 'Skirt']
 	},
 	{
 		_id: '6',
@@ -134,7 +134,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Crepe',
 		category: 'Silk',
-		templateCategories: ['Shirt', 'Dress', 'Skirt'],
+		templateCategories: ['Shirt', 'Dress', 'Skirt']
 	}
 	],
 	lostCause: [
@@ -148,7 +148,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Charcoal Gray',
 		category: 'Silk',
-		templateCategories: ['Skirt'],
+		templateCategories: ['Skirt']
 	},
 	{
 		_id: '2',
@@ -160,7 +160,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Silk',
-		templateCategories: ['Top', 'Skirt'],
+		templateCategories: ['Top', 'Skirt']
 	},
 	{
 		_id: '3',
@@ -172,7 +172,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black Twisted',
 		category: 'Wool',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '4',
@@ -184,7 +184,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/lostCause/root/SILK_-_ORGANZA_PRINT/SILK_-_ORGANZA_PRINT_-_ALPHA.jpg',
 		materialName: 'Organza Print',
 		category: 'Silk',
-		templateCategories: [],
+		templateCategories: []
 	},
 	{
 		_id: '5',
@@ -196,7 +196,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Twisted',
 		category: 'Wool',
-		templateCategories: ['Top', 'Accessories'],
+		templateCategories: ['Top', 'Accessories']
 	},
 	{
 		_id: '6',
@@ -208,7 +208,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Fake',
 		category: 'Fur',
-		templateCategories: [],
+		templateCategories: []
 	},
 	{
 		_id: '7',
@@ -220,7 +220,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Print',
 		category: 'Leather',
-		templateCategories: ['Top', 'Pants'],
+		templateCategories: ['Top', 'Pants']
 	},
 	{
 		_id: '8',
@@ -232,7 +232,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/lostCause/root/ABTRACT_-_BLACK_FACE/ABSTRACT_-_BLACK_FACE_-_ALPHA.jpg',
 		materialName: 'Black Face',
 		category: 'Abtract',
-		templateCategories: ['Pants'],
+		templateCategories: ['Pants']
 	},
 	{
 		_id: '9',
@@ -244,7 +244,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/lostCause/root/ABTRACT_-_NAVY_FACE/ABSTRACT_-_FACE_-_ALPHA.jpg',
 		materialName: 'Navy Face',
 		category: 'Abtract',
-		templateCategories: ['Skirt'],
+		templateCategories: ['Skirt']
 	},
 	{
 		_id: '10',
@@ -256,7 +256,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Yarn',
 		category: 'Twisted',
-		templateCategories: ['Skirt'],
+		templateCategories: ['Skirt']
 	},
 	{
 		_id: '11',
@@ -268,7 +268,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/lostCause/root/SILK_-_BLACK_ORGANZA/SILK_-_BLACK_ORGANZA_-_ALPHA.jpg',
 		materialName: 'Black Organza',
 		category: 'Silk',
-		templateCategories: ['Accessories'],
+		templateCategories: ['Accessories']
 	},
 	{
 		_id: '12',
@@ -280,12 +280,60 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/lostCause/root/WOOL_-_YARN/WOOL_-_YARN_-_ALPHA.jpg',
 		materialName: 'Yarn',
 		category: 'Wool',
-		templateCategories: ['Top', 'Dress', 'Skirt', 'Pants'],
+		templateCategories: ['Top', 'Dress', 'Skirt', 'Pants']
 	}
 	],
 	shri: [
 	{
 		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_WHITE/QUILTING_-_WHITE_-_RENDER.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_WHITE/QUILTING_-_WHITE_-_NORMAL.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_WHITE/QUILTING_-_WHITE_-_BASE.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_WHITE/QUILTING_-_WHITE_-_DISPLACE.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_WHITE/QUILTING_-_WHITE_-_ROUGH.jpg',
+		alpha: '',
+		materialName: 'White',
+		category: 'Quilting',
+		templateCategories: ['Accesorries', 'Top']
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/TAPE_-_GOLD/TAPE_-_GOLD_-_RENDER.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/TAPE_-_GOLD/TAPE_-_GOLD_-_NORMAL.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/TAPE_-_GOLD/TAPE_-_GOLD_-_BASE.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/TAPE_-_GOLD/TAPE_-_GOLD_-_DISPLACE.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/TAPE_-_GOLD/TAPE_-_GOLD_-_ROUGH.jpg',
+		alpha: '',
+		materialName: 'Gold',
+		category: 'Tape',
+		templateCategories: ['Skirt']
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/MESH_-_METALLIC/MESH_-_METALLIC_-_RENDER.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/MESH_-_METALLIC/MESH_-_METALLIC_-_NORMAL.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/MESH_-_METALLIC/MESH_-_METALLIC_-_BASE.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/MESH_-_METALLIC/MESH_-_METALLIC_-_DISPLACE.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/MESH_-_METALLIC/MESH_-_METALLIC_-_ROUGH.jpg',
+		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/MESH_-_METALLIC/MESH_-_METALLIC_-_ALPHA.jpg',
+		materialName: 'Metallic',
+		category: 'Mesh',
+		templateCategories: ['Skirt', 'Top']
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_BLACK/QUILTING_-_BLACK_-_RENDER.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_BLACK/QUILTING_-_BLACK_-_NORMAL.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_BLACK/QUILTING_-_BLACK_-_BASE.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_BLACK/QUILTING_-_BLACK_-_DISPLACE.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_BLACK/QUILTING_-_BLACK_-_ROUGH.jpg',
+		alpha: '',
+		materialName: 'Black',
+		category: 'Quilting',
+		templateCategories: ['Top', 'Accesorries']
+	},
+	{
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_GOLDEN/QUILTING_-_GOLDEN_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_GOLDEN/QUILTING_-_GOLDEN_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/QUILTING_-_GOLDEN/QUILTING_-_GOLDEN_-_BASE.jpg',
@@ -294,22 +342,22 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Golden',
 		category: 'Quilting',
-		templateCategories: ['Skirt', 'Shirt'],
+		templateCategories: ['Top', 'Skirt', 'Accesorries']
 	},
 	{
-		_id: '2',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/COTTON_-_WHITE/SCUBA_-_287_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/COTTON_-_WHITE/SCUBA_-_287_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/COTTON_-_WHITE/SCUBA_-_287_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/COTTON_-_WHITE/SCUBA_-_287_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/COTTON_-_WHITE/SCUBA_-_287_-_ROUGH.jpg',
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/COTTON_-_WHITE/COTTON_-_WHITE_-_DISPLACE.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
 		alpha: '',
 		materialName: 'White',
 		category: 'Cotton',
-		templateCategories: ['Shirt'],
+		templateCategories: ['Top', 'Pants']
 	},
 	{
-		_id: '3',
+		_id: '7',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/ORGANZA_-_BLACK/ORGANZA_-_BLACK_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/ORGANZA_-_BLACK/ORGANZA_-_BLACK_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/ORGANZA_-_BLACK/ORGANZA_-_BLACK_-_BASE.jpg',
@@ -318,10 +366,10 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/ORGANZA_-_BLACK/ORGANZA_-_BLACK_-_ALPHA.jpg',
 		materialName: 'Black',
 		category: 'Organza',
-		templateCategories: ['Shirt'],
+		templateCategories: ['Top']
 	},
 	{
-		_id: '4',
+		_id: '8',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_TULLE/LACE_-_TULLE_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_TULLE/LACE_-_TULLE_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_TULLE/LACE_-_TULLE_-_BASE.jpg',
@@ -330,10 +378,10 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_TULLE/LACE_-_TULLE_-_ALPHA.jpg',
 		materialName: 'Tulle',
 		category: 'Lace',
-		templateCategories: ['Shirt'],
+		templateCategories: ['Top']
 	},
 	{
-		_id: '5',
+		_id: '9',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_GOLDEN/LACE_-_GOLDEN_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_GOLDEN/LACE_-_GOLDEN_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_GOLDEN/LACE_-_GOLDEN_-_BASE.jpg',
@@ -342,10 +390,10 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Golden',
 		category: 'Lace',
-		templateCategories: ['Shirt'],
+		templateCategories: ['Top']
 	},
 	{
-		_id: '6',
+		_id: '10',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/SILK_-_BLACK/SILK_-_BLACK_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/SILK_-_BLACK/SILK_-_BLACK_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/SILK_-_BLACK/SILK_-_BLACK_-_BASE.jpg',
@@ -354,10 +402,10 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Silk',
-		templateCategories: ['Shirt'],
+		templateCategories: ['Top']
 	},
 	{
-		_id: '7',
+		_id: '11',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/FABRIC_-_GOLDEN/FABRIC_-_GOLDEN_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/FABRIC_-_GOLDEN/FABRIC_-_GOLDEN_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/FABRIC_-_GOLDEN/FABRIC_-_GOLDEN_-_BASE.jpg',
@@ -366,10 +414,10 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Golden',
 		category: 'Fabric',
-		templateCategories: ['Shirt', 'Skirt'],
+		templateCategories: ['Top', 'Skirt']
 	},
 	{
-		_id: '8',
+		_id: '12',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/SILK_-_BRONZE/SILK_-_BRONZE_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/SILK_-_BRONZE/SILK_-_BRONZE_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/SILK_-_BRONZE/SILK_-_BRONZE_-_BASE.jpg',
@@ -378,10 +426,10 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Bronze',
 		category: 'Silk',
-		templateCategories: ['Pants'],
+		templateCategories: ['Pants']
 	},
 	{
-		_id: '9',
+		_id: '13',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/VELVET_-_BLACK/VELVET_-_BLACK_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/VELVET_-_BLACK/VELVET_-_BLACK_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/VELVET_-_BLACK/VELVET_-_BLACK_-_BASE.jpg',
@@ -390,7 +438,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Velvet',
-		templateCategories: ['Shirt'],
+		templateCategories: ['Top']
 	}
 	],
 	eliseF: [
@@ -404,7 +452,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Fleece',
 		category: 'Knit',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '2',
@@ -416,7 +464,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Dusty Blue',
 		category: 'Poly',
-		templateCategories: ['Pants'],
+		templateCategories: ['Pants']
 	},
 	{
 		_id: '3',
@@ -428,7 +476,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Back',
 		category: 'Denim',
-		templateCategories: ['Pants'],
+		templateCategories: ['Pants']
 	},
 	{
 		_id: '4',
@@ -440,7 +488,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Canvas',
 		category: 'Striped',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '5',
@@ -452,7 +500,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '276',
 		category: 'Denim',
-		templateCategories: ['Pants'],
+		templateCategories: ['Pants']
 	},
 	{
 		_id: '6',
@@ -464,7 +512,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Navy',
 		category: 'Polyester',
-		templateCategories: ['Top', 'Pants'],
+		templateCategories: ['Top', 'Pants']
 	},
 	{
 		_id: '7',
@@ -476,7 +524,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Lavender Blue',
 		category: 'Cotton',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '8',
@@ -488,7 +536,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Orange',
 		category: 'Cotton',
-		templateCategories: ['Top', 'Pants'],
+		templateCategories: ['Top', 'Pants']
 	},
 	{
 		_id: '9',
@@ -500,7 +548,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Tanktop',
 		category: 'Striped',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '10',
@@ -512,7 +560,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'White',
 		category: 'Cotton',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '11',
@@ -524,21 +572,27 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Twill',
 		category: 'Poly',
-		templateCategories: ['Pants', 'Top'],
+		templateCategories: ['Pants', 'Top']
 	}
 	],
 	oofya: [
 	{
 		_id: '1',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oofya/root/3D_-_SQUARE_%2811%2C_10%2C_0%2C_0%2C_1000%2C_0%29/3D_-_SQUARE_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oofya/root/3D_-_SQUARE_%2811%2C_10%2C_0%2C_0%2C_1000%2C_0%29/3D_-_SQUARE_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oofya/root/3D_-_SQUARE_%2811%2C_10%2C_0%2C_0%2C_1000%2C_0%29/3D_-_SQUARE_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oofya/root/3D_-_SQUARE_%2811%2C_10%2C_0%2C_0%2C_1000%2C_0%29/3D_-_SQUARE_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oofya/root/3D_-_SQUARE_%2811%2C_10%2C_0%2C_0%2C_1000%2C_0%29/3D_-_SQUARE_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oofya/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_RENDER.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oofya/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_NORMAL.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oofya/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_BASE.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oofya/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_DISPLACE.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oofya/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_ROUGH.jpg',
 		alpha: '',
-		materialName: 'Square (11, 10, 0, 0, 1000, 0)',
+		materialName: 'Square',
 		category: '3d',
-		templateCategories: [],
+		templateCategories: ['Accessory'],
+		scaleX: 11,
+		scaleY: 10,
+		offsetX: 0,
+		offsetY: 0,
+		rotate: 1000,
+		coef: 0
 	},
 	{
 		_id: '2',
@@ -550,7 +604,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Gray',
 		category: 'Cotton',
-		templateCategories: ['Dress', 'Shirt'],
+		templateCategories: ['Dress', 'Shirt']
 	},
 	{
 		_id: '3',
@@ -562,7 +616,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Grid',
 		category: 'Corduroy',
-		templateCategories: ['Skirt'],
+		templateCategories: ['Skirt']
 	},
 	{
 		_id: '4',
@@ -574,7 +628,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Taffeta',
-		templateCategories: ['Accessory', 'Shirt'],
+		templateCategories: ['Accessory', 'Shirt']
 	},
 	{
 		_id: '5',
@@ -586,7 +640,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Golden Brown Grid',
 		category: 'Corduroy',
-		templateCategories: ['Accessory'],
+		templateCategories: ['Accessory']
 	},
 	{
 		_id: '6',
@@ -598,7 +652,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black Seethrough',
 		category: 'Cotton',
-		templateCategories: [],
+		templateCategories: []
 	},
 	{
 		_id: '7',
@@ -610,7 +664,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'White',
 		category: 'Cotton',
-		templateCategories: ['Shirt'],
+		templateCategories: ['Shirt']
 	},
 	{
 		_id: '8',
@@ -622,134 +676,146 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Cotton',
-		templateCategories: ['Dress', 'Pants', 'Shirt'],
+		templateCategories: ['Dress', 'Pants', 'Shirt']
 	}
 	],
 	theSoul: [
 	{
 		_id: '1',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/COTTON_-_WHITE/COTTON_-_WHITE_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/COTTON_-_WHITE/COTTON_-_WHITE_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/COTTON_-_WHITE/COTTON_-_WHITE_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/COTTON_-_WHITE/COTTON_-_WHITE_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/COTTON_-_WHITE/COTTON_-_WHITE_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/COTTON_-_WHITE/COTTON_-_WHITE_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'White',
 		category: 'Cotton',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '2',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TWEED_-_331/TWEED_-_331_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: '331',
 		category: 'Tweed',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '3',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/WOOL_-_OLIVE_GRAY/WOOL_-_OLIVE_GRAY_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/WOOL_-_OLIVE_GRAY/WOOL_-_OLIVE_GRAY_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/WOOL_-_OLIVE_GRAY/WOOL_-_OLIVE_GRAY_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/WOOL_-_OLIVE_GRAY/WOOL_-_OLIVE_GRAY_-_DISPLACE.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/WOOL_-_OLIVE_GRAY/WOOL_-_OLIVE_GRAY_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/WOOL_-_OLIVE_GRAY/WOOL_-_OLIVE_GRAY_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/WOOL_-_OLIVE_GRAY/WOOL_-_OLIVE_GRAY_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/WOOL_-_OLIVE_GRAY/WOOL_-_OLIVE_GRAY_%28DISPLACE%29.jpg',
 		roughness: '',
 		alpha: '',
 		materialName: 'Olive Gray',
 		category: 'Wool',
-		templateCategories: ['Pants', 'Top'],
+		templateCategories: ['Pants', 'Top']
 	},
 	{
 		_id: '4',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SUITING_-_HONEY_MUSTARD/SUITING_-_HONEY_MUSTARD_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SUITING_-_HONEY_MUSTARD/SUITING_-_HONEY_MUSTARD_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SUITING_-_HONEY_MUSTARD/SUITING_-_HONEY_MUSTARD_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SUITING_-_HONEY_MUSTARD/SUITING_-_HONEY_MUSTARD_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SUITING_-_HONEY_MUSTARD/SUITING_-_HONEY_MUSTARD_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SUITING_-_HONEY_MUSTARD/SUITING_-_HONEY_MUSTARD_%28RENDER%29.webp',
+		normal: '',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SUITING_-_HONEY_MUSTARD/SUITING_-_HONEY_MUSTARD_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SUITING_-_HONEY_MUSTARD/SUITING_-_HONEY_MUSTARD_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SUITING_-_HONEY_MUSTARD/SUITING_-_HONEY_MUSTARD_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'Honey Mustard',
 		category: 'Suiting',
-		templateCategories: ['Pants', 'Top'],
+		templateCategories: ['Pants', 'Top']
 	},
 	{
 		_id: '5',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/PRINT_CHIFFON_-_FLORAL/PRINT_CHIFFON_-_FLORAL_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/PRINT_CHIFFON_-_FLORAL/PRINT_CHIFFON_-_FLORAL_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/PRINT_CHIFFON_-_FLORAL/PRINT_CHIFFON_-_FLORAL_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/PRINT_CHIFFON_-_FLORAL/PRINT_CHIFFON_-_FLORAL_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/PRINT_CHIFFON_-_FLORAL/PRINT_CHIFFON_-_FLORAL_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/PRINT_CHIFFON_-_FLORAL/PRINT_CHIFFON_-_FLORAL_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/PRINT_CHIFFON_-_FLORAL/PRINT_CHIFFON_-_FLORAL_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/PRINT_CHIFFON_-_FLORAL/PRINT_CHIFFON_-_FLORAL_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/PRINT_CHIFFON_-_FLORAL/PRINT_CHIFFON_-_FLORAL_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/PRINT_CHIFFON_-_FLORAL/PRINT_CHIFFON_-_FLORAL_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'Floral',
 		category: 'Print Chiffon',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '6',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SATEEN_-_BLACK/SATEEN_-_BLACK_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SATEEN_-_BLACK/SATEEN_-_BLACK_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SATEEN_-_BLACK/SATEEN_-_BLACK_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SATEEN_-_BLACK/SATEEN_-_BLACK_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SATEEN_-_BLACK/SATEEN_-_BLACK_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'Black',
 		category: 'Sateen',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '7',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'Black',
 		category: 'Taffeta',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '8',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/LACE_-_WHITE_FLOWER_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/LACE_-_WHITE_FLOWER_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/LACE_-_WHITE_FLOWER_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/LACE_-_WHITE_FLOWER_-_DISPLACE.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/LACE_-_WHITE_FLOWER_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/LACE_-_WHITE_FLOWER_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/LACE_-_WHITE_FLOWER_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/LACE_-_WHITE_FLOWER_%28DISPLACE%29.jpg',
 		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/WHITE_LACE_FLOWER_-_ROUGH.jpg',
-		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/LACE_-_WHITE_FLOWER_-_ALPHA.jpg',
+		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/LACE_-_WHITE_FLOWER_%28ALPHA%29.jpg',
 		materialName: 'White Flower',
 		category: 'Lace',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '9',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_-_ROUGH.jpg',
-		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_-_ALPHA.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_%28ROUGH%29.jpg',
+		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_%28ALPHA%29.jpg',
 		materialName: 'Flower',
 		category: 'Lace',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '10',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SILK_-_TAN/SILK_-_TAN_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SILK_-_TAN/SILK_-_TAN_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SILK_-_TAN/SILK_-_TAN_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SILK_-_TAN/SILK_-_TAN_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SILK_-_TAN/SILK_-_TAN_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SILK_-_TAN/SILK_-_TAN_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SILK_-_TAN/SILK_-_TAN_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SILK_-_TAN/SILK_-_TAN_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SILK_-_TAN/SILK_-_TAN_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/theSoul/root/SILK_-_TAN/SILK_-_TAN_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'Tan',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	}
 	],
 	moidien: [
 	{
 		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_-_SEETHROUGH/SEERSUCKER_-_SEETHROUGH_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_-_SEETHROUGH/SEERSUCKER_-_SEETHROUGH_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_-_SEETHROUGH/SEERSUCKER_-_SEETHROUGH_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_-_SEETHROUGH/SEERSUCKER_-_SEETHROUGH_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_-_SEETHROUGH/SEERSUCKER_-_SEETHROUGH_%28ALPHA%29.jpg',
+		alpha: '',
+		materialName: 'Seethrough',
+		category: 'Seersucker',
+		templateCategories: ['Shirt']
+	},
+	{
+		_id: '2',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_-_BLACK/SEERSUCKER_FABRIC_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_-_BLACK/SEERSUCKER_FABRIC_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_-_BLACK/SEERSUCKER_FABRIC-_BASE.jpg',
@@ -758,34 +824,34 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Seersucker',
-		templateCategories: [],
-	},
-	{
-		_id: '2',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/POLY_-_JACQUARD_%288%2C_10%2C_0%2C_0%2C_1000%2C_0%29/POLY_-_JACQUARD_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/POLY_-_JACQUARD_%288%2C_10%2C_0%2C_0%2C_1000%2C_0%29/POLY_-_JACQUARD_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/POLY_-_JACQUARD_%288%2C_10%2C_0%2C_0%2C_1000%2C_0%29/POLY_-_JACQUARD_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/POLY_-_JACQUARD_%288%2C_10%2C_0%2C_0%2C_1000%2C_0%29/POLY_-_JACQUARD_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/POLY_-_JACQUARD_%288%2C_10%2C_0%2C_0%2C_1000%2C_0%29/POLY_-_JACQUARD_-_ROUGH.jpg',
-		alpha: '',
-		materialName: 'Jacquard (8, 10, 0, 0, 1000, 0)',
-		category: 'Poly',
-		templateCategories: [],
+		templateCategories: []
 	},
 	{
 		_id: '3',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/WASHED_-_T-SHIRT_%28-7%2C_54%2C_0%2C_0.07%2C_1000%2C_0%29/WASHED_-_T-SHIRT_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/WASHED_-_T-SHIRT_%28-7%2C_54%2C_0%2C_0.07%2C_1000%2C_0%29/WASHED_-_T-SHIRT_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/WASHED_-_T-SHIRT_%28-7%2C_54%2C_0%2C_0.07%2C_1000%2C_0%29/WASHED_-_T-SHIRT_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/WASHED_-_T-SHIRT_%28-7%2C_54%2C_0%2C_0.07%2C_1000%2C_0%29/WASHED_-_T-SHIRT_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/WASHED_-_T-SHIRT_%28-7%2C_54%2C_0%2C_0.07%2C_1000%2C_0%29/WASHED_-_T-SHIRT_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/POLY_-_JACQUARD_%288%2C_10%2C_0%2C_0%2C_1000%2C_0%29/POLY_-_JACQUARD_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/POLY_-_JACQUARD_%288%2C_10%2C_0%2C_0%2C_1000%2C_0%29/POLY_-_JACQUARD_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/POLY_-_JACQUARD_%288%2C_10%2C_0%2C_0%2C_1000%2C_0%29/POLY_-_JACQUARD_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/POLY_-_JACQUARD_%288%2C_10%2C_0%2C_0%2C_1000%2C_0%29/POLY_-_JACQUARD_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/POLY_-_JACQUARD_%288%2C_10%2C_0%2C_0%2C_1000%2C_0%29/POLY_-_JACQUARD_%28ROUGH%29.jpg',
 		alpha: '',
-		materialName: 'T',
-		category: 'Washed',
-		templateCategories: ['Shirt'],
+		materialName: 'Jacquard (8, 10, 0, 0, 1000, 0)',
+		category: 'Poly',
+		templateCategories: []
 	},
 	{
 		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/WASHED_-_T-SHIRT_%28-7%2C_54%2C_0%2C_0.07%2C_1000%2C_0%29/WASHED_-_T-SHIRT_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/WASHED_-_T-SHIRT_%28-7%2C_54%2C_0%2C_0.07%2C_1000%2C_0%29/WASHED_-_T-SHIRT_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/WASHED_-_T-SHIRT_%28-7%2C_54%2C_0%2C_0.07%2C_1000%2C_0%29/WASHED_-_T-SHIRT_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/WASHED_-_T-SHIRT_%28-7%2C_54%2C_0%2C_0.07%2C_1000%2C_0%29/WASHED_-_T-SHIRT_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/WASHED_-_T-SHIRT_%28-7%2C_54%2C_0%2C_0.07%2C_1000%2C_0%29/WASHED_-_T-SHIRT_%28ROUGH%29.jpg',
+		alpha: '',
+		materialName: 'T',
+		category: 'Washed',
+		templateCategories: ['Shirt']
+	},
+	{
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_BROWN/PLEATED_-_BROWN_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_BROWN/PLEATED_-_BROWN_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_BROWN/PLEATED_-_BROWN_-_BASE.jpg',
@@ -794,70 +860,70 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Brown',
 		category: 'Pleated',
-		templateCategories: ['Shirt'],
-	},
-	{
-		_id: '5',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_WHITE/PLEATED_FABRIC_-_WHITE_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_WHITE/PLEATED_FABRIC_-_WHITE_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_WHITE/PLEATED_FABRIC_-_WHITE_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_WHITE/PLEATED_FABRIC_-_WHITE_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_WHITE/PLEATED_FABRIC_-_WHITE_-_ROUGH.jpg',
-		alpha: '',
-		materialName: 'White',
-		category: 'Pleated',
-		templateCategories: ['Shirt'],
+		templateCategories: ['Shirt']
 	},
 	{
 		_id: '6',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/TWILL_-_235/COTTON_-_TWILL_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/TWILL_-_235/COTTON_-_TWILL_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/TWILL_-_235/COTTON_-_TWILL_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/TWILL_-_235/COTTON_-_TWILL_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/TWILL_-_235/COTTON_-_TWILL_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_WHITE/PLEATED_FABRIC_-_WHITE_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_WHITE/PLEATED_FABRIC_-_WHITE_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_WHITE/PLEATED_FABRIC_-_WHITE_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_WHITE/PLEATED_FABRIC_-_WHITE_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_WHITE/PLEATED_FABRIC_-_WHITE_%28ROUGH%29.jpg',
 		alpha: '',
-		materialName: '235',
-		category: 'Twill',
-		templateCategories: ['Pants'],
+		materialName: 'White',
+		category: 'Pleated',
+		templateCategories: ['Shirt']
 	},
 	{
 		_id: '7',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_RANDOM/PLEATED_-_RANDOM_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_RANDOM/PLEATED_-_RANDOM_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_RANDOM/PLEATED_-_RANDOM_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_RANDOM/PLEATED_-_RANDOM_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_RANDOM/PLEATED_-_RANDOM_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/TWILL_-_235/COTTON_-_TWILL_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/TWILL_-_235/COTTON_-_TWILL_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/TWILL_-_235/COTTON_-_TWILL_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/TWILL_-_235/COTTON_-_TWILL_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/TWILL_-_235/COTTON_-_TWILL_%28ROUGH%29.jpg',
 		alpha: '',
-		materialName: 'Random',
-		category: 'Pleated',
-		templateCategories: ['Bag'],
+		materialName: '235',
+		category: 'Twill',
+		templateCategories: ['Pants']
 	},
 	{
 		_id: '8',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BROWN/COTTON_-_BROWN_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BROWN/COTTON_-_BROWN_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BROWN/COTTON_-_BROWN_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BROWN/COTTON_-_BROWN_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BROWN/COTTON_-_BROWN_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_RANDOM/PLEATED_-_RANDOM_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_RANDOM/PLEATED_-_RANDOM_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_RANDOM/PLEATED_-_RANDOM_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_RANDOM/PLEATED_-_RANDOM_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/PLEATED_-_RANDOM/PLEATED_-_RANDOM_%28ROUGH%29.jpg',
 		alpha: '',
-		materialName: 'Brown',
-		category: 'Cotton',
-		templateCategories: [],
+		materialName: 'Random',
+		category: 'Pleated',
+		templateCategories: ['Bag', 'Hat']
 	},
 	{
 		_id: '9',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BLACK/COTTON_-_BLACK_%28RENDER%29.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BLACK/COTTON_-_BLACK_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BLACK/COTTON_-_BLACK_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BLACK/COTTON_-_BLACK_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BLACK/COTTON_-_BLACK_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BROWN/COTTON_-_BROWN_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BROWN/COTTON_-_BROWN_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BROWN/COTTON_-_BROWN_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BROWN/COTTON_-_BROWN_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BROWN/COTTON_-_BROWN_%28ROUGH%29.jpg',
 		alpha: '',
-		materialName: 'Black',
+		materialName: 'Brown',
 		category: 'Cotton',
-		templateCategories: [],
+		templateCategories: []
 	},
 	{
 		_id: '10',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BLACK/COTTON_-_BLACK_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BLACK/COTTON_-_BLACK_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BLACK/COTTON_-_BLACK_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BLACK/COTTON_-_BLACK_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_BLACK/COTTON_-_BLACK_%28ROUGH%29.jpg',
+		alpha: '',
+		materialName: 'Black',
+		category: 'Cotton',
+		templateCategories: []
+	},
+	{
+		_id: '11',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/CRINKLE_FABRIC_-_NAVY/CRINKLE_FABRIC_-_NAVY_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/CRINKLE_FABRIC_-_NAVY/CRINKLE_FABRIC_-_NAVY_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/CRINKLE_FABRIC_-_NAVY/CRINKLE_FABRIC_-_NAVY_-_BASE.jpg',
@@ -866,81 +932,87 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Navy',
 		category: 'Crinkle Fabric',
-		templateCategories: ['Jacket'],
-	},
-	{
-		_id: '11',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_TAUPE/COTTON_-_TAUPE_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_TAUPE/COTTON_-_TAUPE_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_TAUPE/COTTON_-_TAUPE_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_TAUPE/COTTON_-_TAUPE_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_TAUPE/COTTON_-_TAUPE_-_ROUGH.jpg',
-		alpha: '',
-		materialName: 'Taupe',
-		category: 'Cotton',
-		templateCategories: ['Dress'],
+		templateCategories: ['Shirt']
 	},
 	{
 		_id: '12',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_FABRIC_-_BLACK/SEERSUCKER_FABRIC_-_BLACK_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_FABRIC_-_BLACK/SEERSUCKER_FABRIC_-_BLACK_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_FABRIC_-_BLACK/SEERSUCKER_FABRIC_-_BLACK_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_FABRIC_-_BLACK/SEERSUCKER_FABRIC_-_BLACK_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_FABRIC_-_BLACK/SEERSUCKER_FABRIC_-_BLACK_-_ROUGH.jpg',
-		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/SEERSUCKER_FABRIC_-_BLACK/SEERSUCKER_FABRIC_-_ALPHA.jpg',
-		materialName: 'Black',
-		category: 'Seersucker Fabric',
-		templateCategories: ['Pants'],
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_TAUPE/COTTON_-_TAUPE_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_TAUPE/COTTON_-_TAUPE_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_TAUPE/COTTON_-_TAUPE_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_TAUPE/COTTON_-_TAUPE_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_TAUPE/COTTON_-_TAUPE_%28ROUGH%29.jpg',
+		alpha: '',
+		materialName: 'Taupe',
+		category: 'Cotton',
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '13',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_WHITE/COTTON_-_WHITE_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_WHITE/COTTON_-_WHITE_%28RENDER%29.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_WHITE/COTTON_-_WHITE_%28NORMAL%29.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_WHITE/COTTON_-_WHITE_%28BASE%29.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_WHITE/COTTON_-_WHITE_%28DISPLACE%29.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/moidien/root/COTTON_-_WHITE/COTTON_-_WHITE_%28ROUGH%29.jpg',
 		alpha: '',
 		materialName: 'White',
 		category: 'Cotton',
-		templateCategories: ['Shirt'],
+		templateCategories: ['Shirt']
 	}
 	],
 	emwear: [
 	{
 		_id: '1',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%285%2C_9%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_WHITE_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%285%2C_9%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_WHITE_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%285%2C_9%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_WHITE_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%285%2C_9%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_WHITE_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%285%2C_9%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_WHITE_-_ROUGH.jpg',
-		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%285%2C_9%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_WHITE_-_ALPHA.jpg',
-		materialName: 'White (5, 9, 0, 0, 1000, 0)',
-		category: 'Lace',
-		templateCategories: [],
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%3C25%2C_35%2C_0%2C_0%2C_1000%2C_0%3E/MESH_-_FLOWER_-_RENDER.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%3C25%2C_35%2C_0%2C_0%2C_1000%2C_0%3E/MESH_-_FLOWER_-_NORMAL.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%3C25%2C_35%2C_0%2C_0%2C_1000%2C_0%3E/MESH_-_FLOWER_-_BASE.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%3C25%2C_35%2C_0%2C_0%2C_1000%2C_0%3E/MESH_-_FLOWER_-_DISPLACE.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%3C25%2C_35%2C_0%2C_0%2C_1000%2C_0%3E/MESH_-_FLOWER_-_ROUGH.jpg',
+		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%3C25%2C_35%2C_0%2C_0%2C_1000%2C_0%3E/MESH_-_FLOWER_-_ALPHA.jpg',
+		materialName: 'Flower',
+		category: 'Mesh',
+		templateCategories: ['Coat'],
+		scaleX: 25,
+		scaleY: 35,
+		offsetX: 0,
+		offsetY: 0,
+		rotate: 1000,
+		coef: 0
 	},
 	{
 		_id: '2',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%2813%2C_7%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_FFE6F2_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%2813%2C_7%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_FFE6F2_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%2813%2C_7%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_FFE6F2_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%2813%2C_7%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_FFE6F2_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%2813%2C_7%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_FFE6F2_-_ROUGH.jpg',
-		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%2813%2C_7%2C_0%2C_0%2C_1000%2C_0%29/LACE_-_FFE6F2_-_ALPHA.jpg',
-		materialName: 'Ffe6f2 (13, 7, 0, 0, 1000, 0)',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%3C5%2C_9%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_WHITE_-_RENDER.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%3C5%2C_9%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_WHITE_-_NORMAL.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%3C5%2C_9%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_WHITE_-_BASE.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%3C5%2C_9%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_WHITE_-_DISPLACE.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%3C5%2C_9%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_WHITE_-_ROUGH.jpg',
+		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_WHITE_%3C5%2C_9%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_WHITE_-_ALPHA.jpg',
+		materialName: 'White',
 		category: 'Lace',
-		templateCategories: [],
+		templateCategories: ['Skirt'],
+		scaleX: 5,
+		scaleY: 9,
+		offsetX: 0,
+		offsetY: 0,
+		rotate: 1000,
+		coef: 0
 	},
 	{
 		_id: '3',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%2825%2C_35%2C_0%2C_0%2C_1000%2C_0%29/MESH_-_FLOWER_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%2825%2C_35%2C_0%2C_0%2C_1000%2C_0%29/MESH_-_FLOWER_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%2825%2C_35%2C_0%2C_0%2C_1000%2C_0%29/MESH_-_FLOWER_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%2825%2C_35%2C_0%2C_0%2C_1000%2C_0%29/MESH_-_FLOWER_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%2825%2C_35%2C_0%2C_0%2C_1000%2C_0%29/MESH_-_FLOWER_-_ROUGH.jpg',
-		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_FLOWER_%2825%2C_35%2C_0%2C_0%2C_1000%2C_0%29/MESH_-_FLOWER_-_ALPHA.jpg',
-		materialName: 'Flower (25, 35, 0, 0, 1000, 0)',
-		category: 'Mesh',
-		templateCategories: [],
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%3C13%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_FFE6F2_-_RENDER.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%3C13%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_FFE6F2_-_NORMAL.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%3C13%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_FFE6F2_-_BASE.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%3C13%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_FFE6F2_-_DISPLACE.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%3C13%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_FFE6F2_-_ROUGH.jpg',
+		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_FFE6F2_%3C13%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/LACE_-_FFE6F2_-_ALPHA.jpg',
+		materialName: 'Ffe6f2',
+		category: 'Lace',
+		templateCategories: ['Dress'],
+		scaleX: 13,
+		scaleY: 7,
+		offsetX: 0,
+		offsetY: 0,
+		rotate: 1000,
+		coef: 0
 	},
 	{
 		_id: '4',
@@ -952,7 +1024,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Mustard Yellow Green',
 		category: 'Silk',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '5',
@@ -964,7 +1036,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Deep Rasberry',
 		category: 'Silk',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '6',
@@ -976,7 +1048,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'White',
 		category: 'Silk',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '7',
@@ -988,7 +1060,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Seethrough',
 		category: 'Silk',
-		templateCategories: [],
+		templateCategories: []
 	},
 	{
 		_id: '8',
@@ -1000,7 +1072,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Fffaed',
 		category: 'Silk',
-		templateCategories: ['Dress', 'Coat'],
+		templateCategories: ['Dress', 'Coat']
 	},
 	{
 		_id: '9',
@@ -1012,7 +1084,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Seethrough Cce9ff',
 		category: 'Silk',
-		templateCategories: ['Coat', 'Dress'],
+		templateCategories: ['Coat', 'Dress']
 	},
 	{
 		_id: '10',
@@ -1024,7 +1096,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Cce9ff',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '11',
@@ -1036,7 +1108,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Ffe6f2',
 		category: 'Silk',
-		templateCategories: ['Dress', 'Coat'],
+		templateCategories: ['Dress', 'Coat']
 	},
 	{
 		_id: '12',
@@ -1048,7 +1120,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Off White',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '13',
@@ -1060,7 +1132,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Ffc85a',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '14',
@@ -1072,7 +1144,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Ffebb7',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '15',
@@ -1084,7 +1156,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/MESH_-_LAVENDER_BLUSH/MESH_-_LAVENDER_BLUSH_-_ALPHA.jpg',
 		materialName: 'Lavender Blush',
 		category: 'Mesh',
-		templateCategories: ['Coat'],
+		templateCategories: ['Dress', 'Coat']
 	},
 	{
 		_id: '16',
@@ -1096,7 +1168,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_LAVENDER_BLUSH/LACE_-_LAVENDER_BLUSH_-_ALPHA.jpg',
 		materialName: 'Lavender Blush',
 		category: 'Lace',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '17',
@@ -1108,7 +1180,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Lavender Blush',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '18',
@@ -1120,7 +1192,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/emwear/root/LACE_-_LIGHT_CREAM/LACE_-_LIGHT_CREAM_-_ALPHA.jpg',
 		materialName: 'Light Cream',
 		category: 'Lace',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '19',
@@ -1132,7 +1204,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Light Cream',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	}
 	],
 	atelierGourney: [
@@ -1146,19 +1218,19 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Fringe',
 		category: 'Metallic',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '2',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/atelierGourney/root/WOOL_-_SEQUIN/WOOL_-_SEQUIN_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/atelierGourney/root/WOOL_-_SEQUIN/WOOL_-_SEQUIN_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/atelierGourney/root/WOOL_-_SEQUIN/WOOL_-_SEQUIN_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/atelierGourney/root/WOOL_-_SEQUIN/WOO_L-__SEQUIN_-_DISPLACE.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/atelierGourney/root/WOOL_-_SEQUIN/WOOL-__SEQUIN_-_DISPLACE.jpg',
 		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/atelierGourney/root/WOOL_-_SEQUIN/WOOL_-_SEQUIN_-_ROUGH.jpg',
-		alpha: '',
+		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/atelierGourney/root/WOOL_-_SEQUIN/WOOL-__SEQUIN_-_ALPHA.jpg',
 		materialName: 'Sequin',
 		category: 'Wool',
-		templateCategories: ['Dress', 'Accessories'],
+		templateCategories: ['Dress', 'Accessories']
 	},
 	{
 		_id: '3',
@@ -1170,7 +1242,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/atelierGourney/root/YARN_LACE_-_RED/YARN_LACE_-_RED_-_ALPHA.jpg',
 		materialName: 'Red',
 		category: 'Yarn Lace',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '4',
@@ -1182,7 +1254,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '360',
 		category: 'Black',
-		templateCategories: ['Jumpsuit'],
+		templateCategories: ['Jumpsuit']
 	},
 	{
 		_id: '5',
@@ -1194,7 +1266,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/atelierGourney/root/EMBROIDERED_-_HORSEHAIR/EMBROIDERED_-_HORSEHAIR_-_ALPHA.jpg',
 		materialName: 'Horsehair',
 		category: 'Embroidered',
-		templateCategories: ['Accessories', 'Dress'],
+		templateCategories: ['Accessories', 'Dress']
 	},
 	{
 		_id: '6',
@@ -1206,7 +1278,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '361',
 		category: 'Wool',
-		templateCategories: ['Dress', 'Accessories'],
+		templateCategories: ['Dress', 'Accessories']
 	},
 	{
 		_id: '7',
@@ -1218,7 +1290,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/atelierGourney/root/YARN_LACE_-_WHITE/YARN_LACE_-_WHITE_-_ALPHA.jpg',
 		materialName: 'White',
 		category: 'Yarn Lace',
-		templateCategories: ['Accessories'],
+		templateCategories: ['Accessories']
 	}
 	],
 	imzad: [
@@ -1232,7 +1304,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzad/root/SEQUIN_-_WHITE_%2815%2C_5%2C_0%2C_0%2C_1000%2C_0%29/SEQUIN_-_WHITE_-_ALPHA.jpg',
 		materialName: 'White (15, 5, 0, 0, 1000, 0)',
 		category: 'Sequin',
-		templateCategories: [],
+		templateCategories: []
 	},
 	{
 		_id: '2',
@@ -1244,7 +1316,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Beige',
 		category: 'Silk',
-		templateCategories: ['Skirt'],
+		templateCategories: ['Skirt']
 	},
 	{
 		_id: '3',
@@ -1256,7 +1328,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Beige',
 		category: 'Twill',
-		templateCategories: ['Top', 'Skirt'],
+		templateCategories: ['Top', 'Skirt']
 	},
 	{
 		_id: '4',
@@ -1268,7 +1340,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Texture',
 		category: 'Trim',
-		templateCategories: ['Accessories', 'Top'],
+		templateCategories: ['Accessories', 'Top']
 	},
 	{
 		_id: '5',
@@ -1280,7 +1352,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Shimmery',
 		category: 'Denim',
-		templateCategories: ['Pants'],
+		templateCategories: ['Pants']
 	},
 	{
 		_id: '6',
@@ -1292,7 +1364,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzad/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_-_ALPHA.jpg',
 		materialName: 'Dark Indigo',
 		category: 'Organza',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '7',
@@ -1304,7 +1376,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Shimmery',
 		category: 'Back Denim',
-		templateCategories: ['Pants'],
+		templateCategories: ['Pants']
 	},
 	{
 		_id: '8',
@@ -1316,7 +1388,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Dark Indigo',
 		category: 'Leather',
-		templateCategories: ['Skirt', 'Accessories'],
+		templateCategories: ['Skirt', 'Accessories']
 	},
 	{
 		_id: '9',
@@ -1328,7 +1400,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Blue Velvet',
 		category: 'Charcoal',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	}
 	],
 	oneThousandPoets: [
@@ -1342,7 +1414,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Velvet',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '2',
@@ -1354,7 +1426,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oneThousandPoets/root/LACE_-_FLOWER/LACE_-_FLOWER_-_ALPHA.jpg',
 		materialName: 'Flower',
 		category: 'Lace',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '3',
@@ -1366,7 +1438,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Suede',
-		templateCategories: ['Dress', 'Shirt'],
+		templateCategories: ['Dress', 'Shirt']
 	},
 	{
 		_id: '4',
@@ -1378,7 +1450,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Navy',
 		category: 'Polyester',
-		templateCategories: ['Pants', 'Shirt'],
+		templateCategories: ['Pants', 'Shirt']
 	},
 	{
 		_id: '5',
@@ -1390,7 +1462,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '349',
 		category: 'Golden',
-		templateCategories: ['Accessories', 'Dress'],
+		templateCategories: ['Accessories', 'Dress']
 	},
 	{
 		_id: '6',
@@ -1402,7 +1474,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Leather',
-		templateCategories: ['Skirt', 'Shirt', 'Dress'],
+		templateCategories: ['Skirt', 'Shirt', 'Dress']
 	},
 	{
 		_id: '7',
@@ -1414,7 +1486,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oneThousandPoets/root/VEIL_-_BEIGE/VEIL_-_BEIGE_-_ALPHA.jpg',
 		materialName: 'Beige',
 		category: 'Veil',
-		templateCategories: ['Dress', 'Accessories'],
+		templateCategories: ['Dress', 'Accessories']
 	},
 	{
 		_id: '8',
@@ -1426,7 +1498,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Beige',
 		category: 'Silk',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '9',
@@ -1438,7 +1510,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'White',
 		category: 'Cotton',
-		templateCategories: ['Pants', 'Shirt'],
+		templateCategories: ['Pants', 'Shirt']
 	},
 	{
 		_id: '10',
@@ -1450,7 +1522,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Denim',
-		templateCategories: ['Shirt', 'Dress', 'Skirt'],
+		templateCategories: ['Shirt', 'Dress', 'Skirt']
 	},
 	{
 		_id: '11',
@@ -1462,7 +1534,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'White',
 		category: 'Suede',
-		templateCategories: ['Accessories', 'Skirt', 'Shirt', 'Dress'],
+		templateCategories: ['Accessories', 'Skirt', 'Shirt', 'Dress']
 	},
 	{
 		_id: '12',
@@ -1474,7 +1546,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/oneThousandPoets/root/LACE_-_BEIGE/LACE_-_BEIGE_-_ALPHA.jpg',
 		materialName: 'Beige',
 		category: 'Lace',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '13',
@@ -1486,7 +1558,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black Suiting',
 		category: 'Wool',
-		templateCategories: ['Dress', 'Accessories', 'Skirt'],
+		templateCategories: ['Dress', 'Accessories', 'Skirt']
 	}
 	],
 	zove: [
@@ -1500,7 +1572,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Texture',
 		category: 'Trim',
-		templateCategories: [],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '2',
@@ -1512,7 +1584,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Light',
 		category: 'Denim',
-		templateCategories: ['Top'],
+		templateCategories: ['Top', 'Dress', 'Skirt']
 	},
 	{
 		_id: '3',
@@ -1524,7 +1596,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Twill',
 		category: 'Cotton',
-		templateCategories: ['Top'],
+		templateCategories: ['Top', 'Dress', 'Skirt']
 	},
 	{
 		_id: '4',
@@ -1536,7 +1608,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '235',
 		category: 'Twill',
-		templateCategories: ['Top', 'Skirt'],
+		templateCategories: ['Dress', 'Top', 'Skirt']
 	},
 	{
 		_id: '5',
@@ -1548,7 +1620,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Leather',
-		templateCategories: ['Top'],
+		templateCategories: ['Top', 'Skirt']
 	}
 	],
 	jaSengBu: [
@@ -1562,7 +1634,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '349',
 		category: 'Golden',
-		templateCategories: ['Skirt'],
+		templateCategories: ['Skirt']
 	},
 	{
 		_id: '2',
@@ -1574,7 +1646,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '359',
 		category: 'Tweed Modern',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '3',
@@ -1586,7 +1658,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '344',
 		category: 'Smocking',
-		templateCategories: [],
+		templateCategories: []
 	},
 	{
 		_id: '4',
@@ -1598,7 +1670,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Red',
 		category: 'Jacquard',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '5',
@@ -1610,7 +1682,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Charcoal Teal',
 		category: 'Cotton',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '6',
@@ -1622,7 +1694,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'White Print',
 		category: 'Taffeta',
-		templateCategories: ['Skirt'],
+		templateCategories: ['Skirt']
 	},
 	{
 		_id: '7',
@@ -1634,7 +1706,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '348',
 		category: 'Dark Green',
-		templateCategories: ['Skirt'],
+		templateCategories: ['Skirt']
 	},
 	{
 		_id: '8',
@@ -1646,7 +1718,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Red Print',
 		category: 'Taffeta',
-		templateCategories: ['Skirt'],
+		templateCategories: ['Skirt']
 	},
 	{
 		_id: '9',
@@ -1658,7 +1730,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '343',
 		category: 'Muslin',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '10',
@@ -1670,7 +1742,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Jersey',
-		templateCategories: ['Skirt', 'Top'],
+		templateCategories: ['Skirt', 'Top']
 	},
 	{
 		_id: '11',
@@ -1682,7 +1754,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/ORGANZA_-_BLACK/ORGANZA_-_BLACK_-_ALPHA.jpg',
 		materialName: 'Black',
 		category: 'Organza',
-		templateCategories: ['Top', 'Skirt'],
+		templateCategories: ['Top', 'Skirt']
 	}
 	],
 	mssPark: [
@@ -1696,7 +1768,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Stretch',
 		category: 'Jersey',
-		templateCategories: ['Skirt', 'Top', 'Dress'],
+		templateCategories: ['Skirt', 'Top', 'Dress']
 	},
 	{
 		_id: '2',
@@ -1708,7 +1780,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/mssPark/root/LACE_-_WHITE/WHITE_-_LACE_-_ALPHA.jpg',
 		materialName: 'White',
 		category: 'Lace',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '3',
@@ -1720,7 +1792,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Texture',
 		category: 'Trim',
-		templateCategories: ['Bag'],
+		templateCategories: ['Bag']
 	},
 	{
 		_id: '4',
@@ -1732,7 +1804,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '373',
 		category: 'Fur',
-		templateCategories: ['Pants'],
+		templateCategories: ['Pants']
 	},
 	{
 		_id: '5',
@@ -1744,7 +1816,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Leather',
-		templateCategories: ['Bag'],
+		templateCategories: ['Bag']
 	},
 	{
 		_id: '6',
@@ -1756,7 +1828,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: '357',
 		category: 'Basketball',
-		templateCategories: ['Bag'],
+		templateCategories: ['Bag']
 	},
 	{
 		_id: '7',
@@ -1768,7 +1840,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Camo',
 		category: 'Poly',
-		templateCategories: ['Skirt'],
+		templateCategories: ['Skirt', 'Top']
 	},
 	{
 		_id: '8',
@@ -1780,7 +1852,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Twill',
 		category: 'Cotton',
-		templateCategories: ['Top'],
+		templateCategories: ['Top']
 	},
 	{
 		_id: '9',
@@ -1792,7 +1864,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black Seethrough',
 		category: 'Cotton',
-		templateCategories: ['Dress'],
+		templateCategories: ['Dress']
 	},
 	{
 		_id: '10',
@@ -1804,7 +1876,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Cracked',
 		category: 'Leather',
-		templateCategories: ['Pants', 'Top'],
+		templateCategories: ['Pants', 'Top']
 	},
 	{
 		_id: '11',
@@ -1816,7 +1888,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		alpha: '',
 		materialName: 'Black',
 		category: 'Jersey',
-		templateCategories: ['Skirt', 'Top'],
+		templateCategories: ['Skirt', 'Top']
 	}
 	]
 }
