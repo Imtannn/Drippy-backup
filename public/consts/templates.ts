@@ -468,7 +468,13 @@ export const templates: Record<string, Template[]> = {
 		price: '200',
 		avatar: 'female',
 		category: 'Top',
-		materialId: 'Seersucker - Seethrough'
+		materialId: 'Seersucker - Seethrough',
+		extraMaterials: [
+			{
+				mesh: 'pattern_3461812-pattern_3461811',
+				materialId: 'Lace - Golden',
+			}
+		]
 	},
 	{
 		_id: '8',
@@ -538,6 +544,21 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '14',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Pants/Quilted_Black_Culotte_-_200.webp',
+		name: 'Quilted Black Culotte',
+		price: '200',
+		avatar: 'female',
+		category: 'Pants',
+		materialId: 'Quilting - Black (',
+		extraMaterials: [
+			{
+				mesh: 'topstitch-pattern_118853',
+				materialId: 'Fabric - Golden',
+			}
+		]
+	},
+	{
+		_id: '15',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Pants/%22Drama_Queen%22_Quilted_Wide-leg_Pant_-_300.webp',
 		name: '"Drama Queen" Quilted Wide',
 		price: 'N/A',
@@ -878,6 +899,122 @@ export const templates: Record<string, Template[]> = {
 		avatar: 'female',
 		category: 'Shirt',
 		materialId: 'Cotton - Black'
+	}
+	],
+	theSoul: [
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Pants/SUNVEIL_TAILORED_TROUSERS_-_0.webp',
+		name: 'SUNVEIL TAILORED TROUSERS',
+		price: '0',
+		avatar: 'female',
+		category: 'Pants',
+		materialId: 'Suiting - Honey Mustard'
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Pants/SERENE_WIDE-LEG_TAILORED_TROUSERS_-_0.webp',
+		name: 'SERENE WIDE',
+		price: 'N/A',
+		avatar: 'female',
+		category: 'Pants',
+		materialId: 'Wool - Olive Gray'
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Top/SUNVEIL_V-NECK_BLAZER_-_0.webp',
+		name: 'SUNVEIL V',
+		price: 'N/A',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Suiting - Honey Mustard'
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Top/SERENE_HIGH_NECK_DRAPED_BLOUSE_-_0.webp',
+		name: 'SERENE HIGH NECK DRAPED BLOUSE',
+		price: '0',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Wool - Olive Gray'
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Top/CLOUD_BALLOON-DRAPED_-_305.webp',
+		name: 'CLOUD BALLOON',
+		price: 'N/A',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Cotton - White'
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Top/OLIVIA_TWEED_JACKET_-_515.webp',
+		name: 'OLIVIA TWEED JACKET',
+		price: '515',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Tweed - 331'
+	},
+	{
+		_id: '7',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Dress/LILY_IVORY_HIGH_NECK_LACE_DRESS_-_450.webp',
+		name: 'LILY IVORY HIGH NECK LACE DRESS',
+		price: '450',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Lace - Flower',
+		extraMaterials: [
+			{
+				mesh: 'pattern_4844284-pattern_4872557-pattern_4872556-pattern_4856659-pattern_4856658',
+				materialId: 'Taffeta - Black',
+			}
+		]
+	},
+	{
+		_id: '8',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Dress/PETAL_VEIL_GOWN_-_570.webp',
+		name: 'PETAL VEIL GOWN',
+		price: '570',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Taffeta - Black'
+	},
+	{
+		_id: '9',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Dress/GOLDEN_BLOOM-DRAPED_GOWN_-_300.webp',
+		name: 'GOLDEN BLOOM',
+		price: 'N/A',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Silk - Tan'
+	},
+	{
+		_id: '10',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Dress/CASCADE_FLORAL_BUSTIER_MAXI_DRESS_-_465.webp',
+		name: 'CASCADE FLORAL BUSTIER MAXI DRESS',
+		price: '465',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Print Chiffon - Floral'
+	},
+	{
+		_id: '11',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Dress/STARLIGHT_DRESS_-_410.webp',
+		name: 'STARLIGHT DRESS',
+		price: '410',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Sateen - Black'
+	},
+	{
+		_id: '12',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Dress/ROSA_LACE_DRESS_-_465.webp',
+		name: 'ROSA LACE DRESS',
+		price: '465',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Lace - White Flower'
 	}
 	],
 	moidien: [

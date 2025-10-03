@@ -1,10 +1,12 @@
-import {css, Element, element, html} from 'lume'
+import {css, Element, element, html, signal} from 'lume'
 
 const loadingVideoUrl = new URL('../videos/landing.mp4', import.meta.url).href
 
 @element
 export class VideoLoading extends Element {
 	static elementName = 'video-loading'
+
+	@signal private videoError = false
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -21,11 +23,16 @@ export class VideoLoading extends Element {
 		setTimeout(() => {
 			const video = this.shadowRoot?.querySelector('.loading-video') as HTMLVideoElement
 			const videoContainer = this.shadowRoot?.querySelector('.video-loading') as HTMLElement
+			const fallbackLoader = this.shadowRoot?.querySelector('.fallback-loader') as HTMLElement
 
 			// Force black background on all elements
 			if (videoContainer) {
 				videoContainer.style.backgroundColor = '#000'
 				videoContainer.style.background = '#000'
+			}
+			if (fallbackLoader) {
+				fallbackLoader.style.backgroundColor = '#000'
+				fallbackLoader.style.background = '#000'
 			}
 			if (video) {
 				// iPhone specific fixes
@@ -36,30 +43,30 @@ export class VideoLoading extends Element {
 				video.defaultMuted = true
 				video.preload = 'auto'
 				video.style.backgroundColor = '#000'
-				// Scale only on mobile screens <480px
-				const isMobile = window.innerWidth < 480
-				video.style.transform = isMobile ? 'translateZ(0) scale(1.3)' : 'translateZ(0) scale(1)'
+				// Prevent scaling
+				video.style.transform = 'translateZ(0) scale(1.3)'
 				video.style.maxWidth = '100vw'
 				video.style.maxHeight = '100vh'
 
 				video.addEventListener('loadeddata', () => {
+					this.videoError = false
 					// Force play after data is loaded
 					video.play().catch(() => {
-						console.log('Video play failed on loadeddata')
+						this.videoError = true
 					})
 				})
 
 				video.addEventListener('canplay', () => {
 					// Force play when video can play
 					video.play().catch(() => {
-						console.log('Video play failed on canplay')
+						this.videoError = true
 					})
 				})
 
 				video.addEventListener('canplaythrough', () => {
 					// Force play when video can play through
 					video.play().catch(() => {
-						console.log('Video play failed on canplaythrough')
+						this.videoError = true
 					})
 				})
 
@@ -69,6 +76,7 @@ export class VideoLoading extends Element {
 
 				video.addEventListener('error', e => {
 					console.error('Video error:', e)
+					this.videoError = true
 				})
 
 				// Add user interaction fallback for iOS
@@ -108,6 +116,10 @@ export class VideoLoading extends Element {
 			<video class="loading-video" autoplay muted loop playsinline>
 				<source src=${loadingVideoUrl} type="video/mp4" />
 			</video>
+			<!-- Fallback spinner shown when video fails to load -->
+			<div class="fallback-loader" style=${() => (this.videoError ? 'display: flex' : 'display: none')}>
+				<div class="spinner"></div>
+			</div>
 		</div>
 	`
 
@@ -142,6 +154,8 @@ export class VideoLoading extends Element {
 			object-fit: contain;
 			object-position: center;
 			background: #000;
+			-webkit-transform: translateZ(0) scale(1.3);
+			transform: translateZ(0) scale(1.3);
 			/* iOS specific fixes */
 			-webkit-playsinline: true;
 			playsinline: true;
@@ -165,6 +179,36 @@ export class VideoLoading extends Element {
 			white-space: nowrap;
 		}
 
+		.fallback-loader {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #000;
+		}
+
+		.spinner {
+			width: 80px;
+			height: 80px;
+			border: 6px solid rgba(76, 169, 195, 0.2);
+			border-top: 6px solid rgba(76, 169, 195, 1);
+			border-radius: 50%;
+			animation: spin 1s linear infinite;
+		}
+
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+
 		/* Mobile responsive text */
 		@media (max-width: 768px) {
 			.loading-text {
@@ -180,10 +224,6 @@ export class VideoLoading extends Element {
 			.loading-text {
 				top: 12%;
 				padding: 0 15px;
-			}
-			.loading-video {
-				-webkit-transform: translateZ(0) scale(1.3);
-				transform: translateZ(0) scale(1.3);
 			}
 		}
 	`
