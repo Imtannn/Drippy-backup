@@ -21,7 +21,7 @@ export class OrderSize extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		store.resetState('scene')
+		store.goBackHomeAndResetState()
 	}
 
 	#onNextClick = () => {

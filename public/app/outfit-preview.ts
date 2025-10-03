@@ -30,7 +30,7 @@ export class OutfitPreview extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		store.resetState('scene')
+		store.goBackHomeAndResetState()
 	}
 
 	#onBuyItClick = () => {

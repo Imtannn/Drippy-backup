@@ -29,7 +29,7 @@ export class OrderView extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		store.resetState('scene')
+		store.goBackHomeAndResetState()
 	}
 
 	// Helper function to collect all order data

@@ -194,8 +194,7 @@ export class TemplateView extends Element {
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
 
-			store.resetSelectedTemplates()
-			store.view = 'scene'
+			store.goBackHomeAndResetState()
 		})
 	}
 

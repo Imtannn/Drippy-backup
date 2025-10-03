@@ -210,7 +210,7 @@ export class BlocksSelection extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		store.resetState('scene')
+		store.goBackHomeAndResetState()
 	}
 
 	#onPreviewButtonClick = () => {

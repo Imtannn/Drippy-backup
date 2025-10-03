@@ -7,7 +7,7 @@ export class SuccessView extends Element {
 	static elementName = 'success-view'
 
 	#onDripAnotherDesignClick = () => {
-		store.resetState('scene')
+		store.goBackHomeAndResetState()
 	}
 
 	#onBackButtonClick = () => {
@@ -16,7 +16,7 @@ export class SuccessView extends Element {
 
 	// FIXME we need to stop repeating code so many times!!!
 	#onHomeButtonClick = () => {
-		store.resetState('scene')
+		store.goBackHomeAndResetState()
 	}
 
 	template = () => html`

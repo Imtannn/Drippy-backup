@@ -55,7 +55,7 @@ export class OrderItems extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		store.resetState('scene')
+		store.goBackHomeAndResetState()
 	}
 
 	#onNextClick = () => {

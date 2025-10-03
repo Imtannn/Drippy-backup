@@ -50,7 +50,7 @@ export class CustomMeasurement extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		store.resetState('scene')
+		store.goBackHomeAndResetState()
 	}
 
 	#onSaveClick = () => {

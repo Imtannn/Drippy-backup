@@ -412,54 +412,9 @@ class Store {
 		this.selectedOrderItems = newSelectedItems
 	}
 
-	// FIXME this is almost duplicate of resetState. Don't duplicate code!
-	resetSelectedTemplates() {
+	goBackHomeAndResetState() {
 		batch(() => {
-			this.selectedTemplates = new Map<TemplateCategory, Template>()
-			this.__selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-			this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
-			this.selectedOrderItems = new Map<TemplateCategory, boolean>()
-			this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
-			this.retailItemQuantities = new Map<TemplateCategory, number>()
-			this.retailItemSizes = new Map<TemplateCategory, string>()
-			this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
-			this.isPreview = false
-			this.customMeasurement = null as CustomMeasurement | null
-
-			// Clear all loading states to prevent orphaned symbols
-			// FIXME clearing loading states should not be necessary. If so, it
-			// means there's a leak. Instead, don't clear loading states, all async
-			// processes must always clean up after themselves, and this will
-			// automatically keep loading states cleared.
-			this.clearAllLoadingStates()
-
-			this.order = {
-				status: 'idle' as OrderStatus,
-				error: null as string | null,
-				productName: 'Custom 3D Drippy Design',
-				selectedSize: '34 (XS)',
-				quantity: 1,
-				email: '',
-				customerEmail: '',
-				customerFirstName: '',
-				customerLastName: '',
-				shippingAddress: {
-					firstName: '',
-					lastName: '',
-					address: '',
-					apartment: '',
-					city: '',
-					postalCode: '',
-					phone: '',
-				},
-			} as OrderState
-		})
-	}
-
-	// FIXME this is almost duplicate of resetSelectedTemplates. Don't duplicate code!
-	resetState(view?: AppRoute) {
-		batch(() => {
-			if (view) this.view = view
+			this.view = 'scene'
 			this.selectedAvatar = avatars[0].name
 			this.selectedSpace = null as Space | null
 			this.selectedTemplates = new Map<TemplateCategory, Template>()

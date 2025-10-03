@@ -24,7 +24,7 @@ export class ShareView extends Element {
 	}
 
 	#onHomeButtonClick = () => {
-		store.resetState('scene')
+		store.goBackHomeAndResetState()
 	}
 
 	#onCopyLink = async () => {
