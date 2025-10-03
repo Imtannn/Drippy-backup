@@ -1,18 +1,18 @@
+import {type GltfModel} from 'lume'
 import {Meteor} from 'meteor/meteor'
 import {batch, createEffect, createMemo, onCleanup, untrack} from 'solid-js'
 import {createMutable} from 'solid-js/store'
+import {avatars} from '../consts/avatars.js'
+import {blocks} from '../consts/blocks.js'
+import {fabrics} from '../consts/fabrics.js'
+import {spaces} from '../consts/spaces.js'
+import {Visits, type Visit} from '../imports/collections/Visits.js'
+import {pushState, searchParams, url} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {onModelLoad, syncSignals, toSolidSignal} from '../utils.js'
-import {blocks} from '../consts/blocks.js'
-import {fabrics} from '../consts/fabrics.js'
-import {type GltfModel} from 'lume'
-import {avatars} from '../consts/avatars.js'
-import {Visits, type Visit} from '../imports/collections/Visits.js'
-import {pushState, searchParams, url} from '../routes.js'
-import {spaces} from '../consts/spaces.js'
 
 export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
 export const username = () => currentUser()?.username ?? ''
@@ -732,9 +732,13 @@ function selectedFabricsFromUrl() {
 
 	// Parse fabrics parameter (comma-separated entries in format: templateCategory-blockCategory-piece:fabricId)
 	const fabricsParam = untrack(searchParams).get('fabrics')
-	if (!fabricsParam || !collection) return
+
+	if (!fabricsParam || !collection) {
+		return
+	}
 
 	const fabricEntries = fabricsParam.split(',').filter(entry => entry.trim())
+
 	const fabricData: {
 		fabric: Fabric
 		blockCategory: BlockCategory
@@ -744,10 +748,28 @@ function selectedFabricsFromUrl() {
 
 	for (const entry of fabricEntries) {
 		const [keyPart, fabricId] = entry.split(':')
-		if (!keyPart || !fabricId) continue
 
-		const [templateCategory, blockCategory, piece] = keyPart.split('-')
-		if (!templateCategory || !blockCategory || !piece) continue
+		if (!keyPart || !fabricId) {
+			continue
+		}
+
+		// Split only on first 2 dashes to handle concatenated mesh names
+		// Format: templateCategory-blockCategory-piece (where piece may contain dashes)
+		const dashIndex1 = keyPart.indexOf('-')
+		if (dashIndex1 === -1) continue
+
+		const templateCategory = keyPart.substring(0, dashIndex1)
+		const remaining = keyPart.substring(dashIndex1 + 1)
+
+		const dashIndex2 = remaining.indexOf('-')
+		if (dashIndex2 === -1) continue
+
+		const blockCategory = remaining.substring(0, dashIndex2)
+		const piece = remaining.substring(dashIndex2 + 1)
+
+		if (!templateCategory || !blockCategory || !piece) {
+			continue
+		}
 
 		const fabric = findFabricById(fabricId, collection)
 		if (fabric) {
