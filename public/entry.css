@@ -24,6 +24,9 @@ body,
 	pointer-events: none;
 	box-sizing: border-box;
 	overscroll-behavior: none;
+	touch-action: none;
+	user-select: none;
+	-webkit-user-select: none;
 
 	color: black;
 	background: var(--appBackground);

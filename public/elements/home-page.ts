@@ -12,12 +12,14 @@ export class HomePage extends Element {
 
 	@numberAttribute count = 0
 
-	connectedCallback() {
-		super.connectedCallback()
+	onPointerCancel = (event: PointerEvent) => {
+		// Prevent drippy-app pointercancel from being interrupted by parent.
+		event.preventDefault()
+		event.stopPropagation()
 	}
 
 	template = () => html`
-		<drippy-app></drippy-app>
+		<drippy-app on:pointercancel=${this.onPointerCancel}></drippy-app>
 		<style>
 			drippy-app {
 				width: 100%;
