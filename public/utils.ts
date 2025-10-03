@@ -386,6 +386,19 @@ export function querySelectorAllSignal(
 	return nodeList
 }
 
+export function createMediaSignal(query: string): Accessor<boolean> {
+	const mm = window.matchMedia(query)
+	const [matches, setMatches] = createSignal(mm.matches)
+
+	const listener = (event: MediaQueryListEvent) => setMatches(event.matches)
+	mm.addEventListener('change', listener)
+	onCleanup(() => mm.removeEventListener('change', listener))
+
+	return matches
+}
+
+export const isDesktop = createMediaSignal('(min-width: 768px)')
+
 export function isMesh(obj: THREE.Object3D): obj is THREE.Mesh {
 	return obj instanceof THREE.Mesh
 }
