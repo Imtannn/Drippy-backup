@@ -387,75 +387,9 @@ export const templates: Record<string, Template[]> = {
 	shri: [
 	{
 		_id: '1',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Black_Crop_Jacket_With_Balloon_Sleeves_-_220.webp',
-		name: 'Black Crop Jacket With Balloon Sleeves',
-		price: '220',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Silk - Black',
-		extraMaterials: [
-			{
-				mesh: 'pattern_3187427_node-vtt_25_node-vtt_29_node',
-				materialId: 'Lace - Golden',
-			}
-		]
-	},
-	{
-		_id: '2',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Hand_Woven_Bobbin_Lace_Bib_-_200.webp',
-		name: 'Hand Woven Bobbin Lace Bib',
-		price: '200',
-		avatar: 'female',
-		category: 'Top',
-		materialId: ''
-	},
-	{
-		_id: '3',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/White_Shirt_with_Balloon_Sleeves_-_100.webp',
-		name: 'White Shirt with Balloon Sleeves',
-		price: '100',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Cotton - White'
-	},
-	{
-		_id: '4',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Gold_Crop_Jacket_with_Flower_Brooch_-_100.webp',
-		name: 'Gold Crop Jacket with Flower Brooch',
-		price: '100',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Fabric - Golden'
-	},
-	{
-		_id: '5',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_9.webp',
-		name: 'Item 9',
-		price: 'N/A',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Quilting - Golden',
-		extraMaterials: [
-			{
-				mesh: 'pattern_1248603-pattern_1251950-pattern_1248600-pattern_1248599',
-				materialId: 'Mesh - Metallic',
-			}
-		]
-	},
-	{
-		_id: '6',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_7.webp',
-		name: 'Item 7',
-		price: 'N/A',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Quilting - Golden'
-	},
-	{
-		_id: '7',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_4.webp',
-		name: 'Item 4',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Bobbin_Lace_Crop_Top_-_150.webp',
+		name: 'Bobbin Lace Crop Top',
+		price: '150',
 		avatar: 'female',
 		category: 'Top',
 		materialId: 'Organza - Black',
@@ -471,43 +405,94 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/White_Crop_Shirt_with_Pockets_-_100.webp',
+		name: 'White Crop Shirt with Pockets',
+		price: '100',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Cotton - White'
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Corset_-_150.webp',
+		name: 'Corset',
+		price: '150',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Velvet - Black'
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Gold_Quilted_Top_with_Flower_-_200.webp',
+		name: 'Gold Quilted Top with Flower',
+		price: '200',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Quilting - Golden'
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Gold_Quilted_Top_-_100.webp',
+		name: 'Gold Quilted Top',
+		price: '100',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Quilting - Golden',
+		extraMaterials: [
+			{
+				mesh: 'pattern_1248603-pattern_1251950-pattern_1248600-pattern_1248599',
+				materialId: 'Mesh - Metallic',
+			}
+		]
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Black_Crop_Jacket_With_Balloon_Sleeves_-_220.webp',
+		name: 'Black Crop Jacket With Balloon Sleeves',
+		price: '220',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Silk - Black',
+		extraMaterials: [
+			{
+				mesh: 'pattern_3187427_node-vtt_25_node-vtt_29_node',
+				materialId: 'Lace - Golden',
+			}
+		]
+	},
+	{
+		_id: '7',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Hand_Woven_Bobbin_Lace_Bib_-_200.webp',
+		name: 'Hand Woven Bobbin Lace Bib',
+		price: '200',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Seersucker - Seethrough'
+	},
+	{
 		_id: '8',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_3.webp',
-		name: 'Item 3',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/White_Shirt_with_Balloon_Sleeves_-_100.webp',
+		name: 'White Shirt with Balloon Sleeves',
+		price: '100',
 		avatar: 'female',
 		category: 'Top',
 		materialId: 'Cotton - White'
 	},
 	{
 		_id: '9',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Item_1.webp',
-		name: 'Item 1',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Top/Gold_Crop_Jacket_with_Flower_Brooch_-_100.webp',
+		name: 'Gold Crop Jacket with Flower Brooch',
+		price: '100',
 		avatar: 'female',
 		category: 'Top',
-		materialId: 'Velvet - Black'
+		materialId: 'Fabric - Golden'
 	},
 	{
 		_id: '10',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Skirt/Item_2.webp',
-		name: 'Item 2',
-		price: 'N/A',
-		avatar: 'female',
-		category: 'Skirt',
-		materialId: 'Mesh - Metallic',
-		extraMaterials: [
-			{
-				mesh: 'pattern_148545-pattern_148552-pattern_148554-pattern_148548-pattern_148544-pattern_148546',
-				materialId: 'Tape - Gold',
-			}
-		]
-	},
-	{
-		_id: '11',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Skirt/Item_1.webp',
-		name: 'Item 1',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Skirt/Gold_Quilted_Skirt_-_250.webp',
+		name: 'Gold Quilted Skirt',
+		price: '250',
 		avatar: 'female',
 		category: 'Skirt',
 		materialId: 'Fabric - Golden',
@@ -519,16 +504,40 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
+		_id: '11',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Skirt/Gold_Mini_Skirt_-_100.webp',
+		name: 'Gold Mini Skirt',
+		price: '100',
+		avatar: 'female',
+		category: 'Skirt',
+		materialId: 'Fabric - Golden'
+	},
+	{
 		_id: '12',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Accesorries/Item_1.webp',
-		name: 'Item 1',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Skirt/Layered_Long_Skirt_-_100.webp',
+		name: 'Layered Long Skirt',
+		price: '100',
+		avatar: 'female',
+		category: 'Skirt',
+		materialId: 'Mesh - Metallic',
+		extraMaterials: [
+			{
+				mesh: 'pattern_148545-pattern_148552-pattern_148554-pattern_148548-pattern_148544-pattern_148546',
+				materialId: 'Tape - Gold',
+			}
+		]
+	},
+	{
+		_id: '13',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Accesorries/White_Berret_Hat_-_60.webp',
+		name: 'White Berret Hat',
+		price: '60',
 		avatar: 'female',
 		category: 'Accesorries',
 		materialId: 'Quilting - White'
 	},
 	{
-		_id: '13',
+		_id: '14',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Pants/%22Drama_Queen%22_Quilted_Wide-leg_Pant_-_300.webp',
 		name: '"Drama Queen" Quilted Wide',
 		price: 'N/A',

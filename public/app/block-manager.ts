@@ -191,7 +191,18 @@ class BlockManager {
 			const [pathPart, fabricId] = fabricEntry.split(':')
 			if (!pathPart || !fabricId) continue
 
-			const [templateCategory, blockCategory, piece] = pathPart.split('-')
+			const dashIndex1 = pathPart.indexOf('-')
+			if (dashIndex1 === -1) continue
+
+			const templateCategory = pathPart.substring(0, dashIndex1)
+			const remaining = pathPart.substring(dashIndex1 + 1)
+
+			const dashIndex2 = remaining.indexOf('-')
+			if (dashIndex2 === -1) continue
+
+			const blockCategory = remaining.substring(0, dashIndex2)
+			const piece = remaining.substring(dashIndex2 + 1)
+
 			if (!templateCategory || !blockCategory || !piece) continue
 
 			const fabric = spaceFabrics.find(f => f._id === fabricId.trim())
