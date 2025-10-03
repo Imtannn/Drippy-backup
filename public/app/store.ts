@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor'
-import {batch, createEffect, createMemo, createSignal, onCleanup, untrack} from 'solid-js'
+import {batch, createEffect, createMemo, onCleanup, untrack} from 'solid-js'
 import {createMutable} from 'solid-js/store'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
