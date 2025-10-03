@@ -673,12 +673,14 @@ export function updateFabricsInUrl(fabrics: Map<TemplateCategory, Map<BlockCateg
 
 		if (fabricEntries.length > 0) untrack(searchParams).set('fabrics', fabricEntries.join(','))
 		else {
+			// FIXME? is this still deleting the param from URL?
 			untrack(searchParams).delete('fabrics')
-			debugger
+			// debugger
 		}
 	} else {
+		// FIXME? is this still deleting the param from URL?
 		untrack(searchParams).delete('fabrics')
-		debugger
+		// debugger
 	}
 
 	// Update URL without triggering page reload
