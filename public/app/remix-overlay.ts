@@ -7,31 +7,31 @@ import {
 	html,
 	onCleanup,
 	signal,
-	type ElementAttributes,
 	untrack,
+	type ElementAttributes,
 } from 'lume'
 
 import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/tabs.js'
-import './fabric-selection.js'
-import './item-card.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
-import type {TemplateCategory} from '../types/template.js'
+import type {Template} from '../types/template.js'
 import {blockManager} from './block-manager.js'
+import './fabric-selection.js'
+import './item-card.js'
 import {store} from './store.js'
 
 const STYLE_TAB = 'style'
 const FABRICS_TAB = 'fabrics'
 
-type RemixOverlayAttributes = 'selectedTemplateCategory' | 'onclose'
+type RemixOverlayAttributes = 'selectedTemplate' | 'onclose'
 
 @element
 export class RemixOverlay extends Element {
 	static readonly elementName = 'remix-overlay'
 
-	@attribute selectedTemplateCategory: TemplateCategory | null = null
+	@attribute selectedTemplate: Template | null = null
 
 	@signal activeTab: typeof STYLE_TAB | typeof FABRICS_TAB | null = null
 	@signal spaceCollection: string | null = null
@@ -56,18 +56,15 @@ export class RemixOverlay extends Element {
 
 		// Update blocks for the selected template category
 		this.createEffect(() => {
-			if (!this.selectedTemplateCategory || !this.spaceCollection) {
+			if (!this.selectedTemplate || !this.spaceCollection) {
 				this.availableBlocks = []
 				return
 			}
 
-			const selectedTemplate = store.selectedTemplates.get(this.selectedTemplateCategory)
-			if (!selectedTemplate) {
-				this.availableBlocks = []
-				return
-			}
-
-			this.availableBlocks = blockManager.getBlocksForTemplateCategory(selectedTemplate.category, this.spaceCollection)
+			this.availableBlocks = blockManager.getBlocksForTemplateCategory(
+				this.selectedTemplate.category,
+				this.spaceCollection,
+			)
 
 			onCleanup(() => {
 				this.availableBlocks = []
@@ -76,12 +73,12 @@ export class RemixOverlay extends Element {
 
 		// Update block categories when template category changes (following blocks-selection logic)
 		this.createEffect(() => {
-			if (!this.selectedTemplateCategory) {
+			if (!this.selectedTemplate) {
 				this.blocksCategories = []
 				return
 			}
 
-			const {blocksCategories} = blockManager.isRemixAvailableForTemplate(this.selectedTemplateCategory, {
+			const {blocksCategories} = blockManager.isRemixAvailableForTemplate(this.selectedTemplate.category, {
 				selectedBlocks: untrack(() => store.selectedBlocks),
 				selectedSpace: untrack(() => store.selectedSpace),
 				sourceCollection: this.spaceCollection,
@@ -102,15 +99,12 @@ export class RemixOverlay extends Element {
 
 		// Update fabrics for the template category
 		this.createEffect(() => {
-			if (!this.selectedTemplateCategory || !this.spaceCollection) {
+			if (!this.selectedTemplate || !this.spaceCollection) {
 				this.availableFabrics = []
 				return
 			}
 
-			this.availableFabrics = blockManager.getAvailableFabricsForTemplateCategory(
-				this.spaceCollection,
-				this.selectedTemplateCategory,
-			)
+			this.availableFabrics = blockManager.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate)
 
 			// Make sure the overlay is scrolled to the top on opening
 			this.shadowRoot?.querySelector('.scroll-content')?.scrollIntoView({behavior: 'instant', block: 'end'})
@@ -122,7 +116,7 @@ export class RemixOverlay extends Element {
 
 		// Update piece selections when selected fabrics change (following blocks-selection logic)
 		this.createEffect(() => {
-			const selectedFabrics = store.selectedFabrics.get(this.selectedTemplateCategory!)
+			const selectedFabrics = store.selectedFabrics.get(this.selectedTemplate!.category)
 			if (!selectedFabrics) {
 				this.pieceSelections = []
 				return
@@ -150,17 +144,17 @@ export class RemixOverlay extends Element {
 	}
 
 	#onBlockSelect = (block: Block) => {
-		if (!this.selectedTemplateCategory) return
+		if (!this.selectedTemplate) return
 
 		store.setSelectedBlocks({
 			block,
-			templateCategory: this.selectedTemplateCategory,
+			templateCategory: this.selectedTemplate.category,
 		})
 	}
 
 	#getIsBlockActive = (block: Block) => {
-		if (!this.selectedTemplateCategory) return false
-		const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory)
+		if (!this.selectedTemplate) return false
+		const templateBlocks = store.selectedBlocks.get(this.selectedTemplate.category)
 		return templateBlocks?.get(block.category)?._id === block._id
 	}
 
@@ -219,7 +213,7 @@ export class RemixOverlay extends Element {
 							<fabric-selection
 								piece-selections=${() => this.pieceSelections}
 								available-fabrics=${() => this.availableFabrics}
-								selected-template-category=${() => this.selectedTemplateCategory}
+								selected-template-category=${() => this.selectedTemplate!.category}
 							></fabric-selection>
 						</tabs-content>
 
@@ -353,6 +347,8 @@ export class RemixOverlay extends Element {
 			border-radius: var(--borderRadiusCircular);
 			border: none;
 			cursor: pointer;
+			margin: 0px 20px;
+			transform: translateX(20px);
 		}
 
 		tabs-content {

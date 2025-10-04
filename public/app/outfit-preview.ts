@@ -78,7 +78,10 @@ export class OutfitPreview extends Element {
 		<show-on-device device="desktop">
 			<app-buttons-right layout="bottom">
 				<app-buttons-group custom-style="gap: 34px;" group-direction="row">
-					<buy-button onclick=${this.#onBuyItClick}></buy-button>
+					<buy-button
+						classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}
+						onclick=${this.#onBuyItClick}
+					></buy-button>
 				</app-buttons-group>
 			</app-buttons-right>
 		</show-on-device>
@@ -96,7 +99,7 @@ export class OutfitPreview extends Element {
 		</app-buttons-right>
 
 		<show-on-device device="mobile">
-			<div class="bottom-buttons">
+			<div class="bottom-buttons" classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}>
 				<button class="buy-button" onclick=${this.#onBuyItClick}>${this.buyIcon()} Buy it!</button>
 			</div>
 		</show-on-device>
@@ -142,6 +145,10 @@ export class OutfitPreview extends Element {
 			background: #12131680;
 			color: var(--uiColorPrimaryWhite);
 			backdrop-filter: blur(50px);
+		}
+
+		.viewOnly {
+			display: none;
 		}
 	`
 }

@@ -53,7 +53,7 @@ export class TemplateItemOverlay extends Element {
 		// Open remix overlay
 		this.dispatchEvent(
 			new CustomEvent('remix', {
-				detail: {templateCategory: this.selectedTemplate.category},
+				detail: {template: this.selectedTemplate},
 				bubbles: true,
 			}),
 		)
