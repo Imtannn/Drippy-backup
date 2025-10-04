@@ -10,7 +10,7 @@ export class FabricSelection extends Element {
 	static readonly elementName = 'fabric-selection'
 
 	@attribute pieceSelections: string[] = []
-	@attribute availableFabrics: Fabric[] = []
+	@attribute availableFabrics: Record<string, Fabric[]> = {}
 	@attribute selectedTemplateCategory: TemplateCategory | null = null
 
 	@signal _selectingPiece: string | undefined = undefined
@@ -118,7 +118,7 @@ export class FabricSelection extends Element {
 				content=${() => html`
 					<div class="items-grid">
 						<for-each
-							items=${() => this.availableFabrics}
+							items=${() => this.availableFabrics[this._selectingPiece || 'default']}
 							content=${() => (fabric: Fabric) => html`
 								<item-card
 									item-active=${() => this.#isFabricActive(fabric, piece)}

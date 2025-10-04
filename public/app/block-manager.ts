@@ -285,18 +285,34 @@ class BlockManager {
 		return (fabrics[collection] ?? []).filter(fabric => fabric.templateCategories?.includes(templateCategory))
 	}
 
-	getAvailableFabricsForTemplate(sourceCollection: string | null | undefined, template: Template): Fabric[] {
+	getAvailableFabricsForTemplate(
+		sourceCollection: string | null | undefined,
+		template: Template,
+	): Record<string, Fabric[]> {
 		// use template.materialId to get the fabric
 		// only filter fabrics that both include template.category and fabric.category
 		const collection = sourceCollection ?? 'moidien'
+		const availableFabrics: Record<string, Fabric[]> = {}
 
 		const templateFabric = getFabricForTemplate(template, collection)
 
-		if (!templateFabric) return []
-
-		const availableFabrics = (fabrics[collection] ?? []).filter(
-			fabric => fabric.templateCategories?.includes(template.category) && fabric.category === templateFabric.category,
+		availableFabrics['default'] = (fabrics[collection] ?? []).filter(
+			fabric => fabric.templateCategories?.includes(template.category) && fabric.category === templateFabric?.category,
 		)
+
+		if (template.extraMaterials && template.extraMaterials.length > 0) {
+			for (const extraMaterial of template.extraMaterials) {
+				const extraFabric = fabrics[collection]?.find(
+					fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
+				)
+				console.log('extraFabric', extraFabric)
+				availableFabrics[extraMaterial.mesh] = (fabrics[collection] ?? []).filter(
+					fabric => fabric.templateCategories?.includes(template.category) && fabric.category === extraFabric?.category,
+				)
+			}
+		}
+
+		console.log('availableFabrics', availableFabrics, template)
 
 		return availableFabrics
 	}
