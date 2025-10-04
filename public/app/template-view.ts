@@ -28,15 +28,14 @@ import '../elements/preview-button.js'
 import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
-import {searchParams, pushState} from '../routes.js'
-import {updateGarmentsInUrl, updateFabricsInUrl} from './store.js'
+import {pushState, searchParams} from '../routes.js'
 import {formatNumber} from '../utils.js'
-import {avatars} from '../consts/avatars.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './item-card.js'
 import './pose-selection.js'
 import './remix-overlay.js'
+import {updateFabricsInUrl, updateGarmentsInUrl} from './store.js'
 import './template-item-overlay.js'
 
 type TemplateViewAttributes = keyof {}
@@ -144,18 +143,18 @@ export class TemplateView extends Element {
 		}
 
 		// Check if template requires different gender avatar
-		const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
-		const currentGender = currentAvatar?.gender
-		const templateGender = template.avatar
+		// const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
+		// const currentGender = currentAvatar?.gender
+		// const templateGender = template.avatar
 
-		if (currentGender && templateGender && currentGender !== templateGender) {
-			// Show avatar swap bottom sheet
-			batch(() => {
-				this.avatarSwapTemplate = template
-				this.showAvatarSwapSheet = true
-			})
-			return
-		}
+		// if (currentGender && templateGender && currentGender !== templateGender) {
+		// 	// Show avatar swap bottom sheet
+		// 	batch(() => {
+		// 		this.avatarSwapTemplate = template
+		// 		this.showAvatarSwapSheet = true
+		// 	})
+		// 	return
+		// }
 
 		// Proceed with template selection
 		this.#selectTemplate(template)
