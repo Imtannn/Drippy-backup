@@ -1,12 +1,13 @@
-import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {css, Element, element, html, signal, booleanAttribute, type ElementAttributes} from 'lume'
 
-type DialogElementAttributes = 'open'
+type DialogElementAttributes = 'open' | 'closeable'
 
 @element
 export class DialogElement extends Element {
 	static readonly elementName = 'dialog-element'
 
 	@signal open = false
+	@booleanAttribute closeable = true
 
 	#dialogRef: HTMLDialogElement | null = null
 	#styleRef: HTMLStyleElement | null = null
@@ -61,9 +62,9 @@ export class DialogElement extends Element {
 			dialog.appendChild(this.firstChild)
 		}
 
-		// Close dialog when clicking backdrop
+		// Close dialog when clicking backdrop (only if closeable)
 		dialog.addEventListener('click', e => {
-			if (e.target === dialog) {
+			if (e.target === dialog && this.closeable) {
 				this.close()
 			}
 		})

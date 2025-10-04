@@ -55,9 +55,7 @@ export class PreviewButton extends Element {
 		</svg>`
 
 	template = () => html`
-		<button class="preview-button" onclick=${this.#onClick} disabled=${() => this.buttonDisabled}>
-			${this.previewIcon()} Preview
-		</button>
+		<button class="preview-button" onclick=${this.#onClick} disabled=${() => this.buttonDisabled}>Preview & buy</button>
 	`
 
 	css = css/*css*/ `

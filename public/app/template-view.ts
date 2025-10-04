@@ -57,6 +57,7 @@ export class TemplateView extends Element {
 	@signal avatarSwapTemplate: Template | null = null
 
 	private isOpeningOverlay = false
+	private previewAutoTriggerTimer: number | null = null
 
 	private defaultCollection = 'moidien'
 
@@ -125,6 +126,26 @@ export class TemplateView extends Element {
 		this.createEffect(() => {
 			console.log('Fabrics to update URL:', store.selectedFabrics)
 			updateFabricsInUrl(store.selectedFabrics)
+		})
+
+		// Auto-trigger preview button after 15s if conditions are met
+		this.createEffect(() => {
+			const user = currentUser()
+			const canShowPreview = !this.showAvatarSelection && !this.showPoseSelection
+			const hasSelectedTemplates = store.selectedTemplates.size > 0
+
+			// Clear existing timer
+			if (this.previewAutoTriggerTimer) {
+				clearTimeout(this.previewAutoTriggerTimer)
+				this.previewAutoTriggerTimer = null
+			}
+
+			// Start timer if: button is visible, user not logged in, and has selected templates
+			if (canShowPreview && !user && hasSelectedTemplates) {
+				this.previewAutoTriggerTimer = window.setTimeout(() => {
+					this.#onPreviewButtonClick()
+				}, 10000) // 15 seconds
+			}
 		})
 	}
 
@@ -342,6 +363,12 @@ export class TemplateView extends Element {
 	disconnectedCallback() {
 		super.disconnectedCallback()
 		document.removeEventListener('click', this.#onDocumentClick)
+
+		// Clear auto-trigger timer
+		if (this.previewAutoTriggerTimer) {
+			clearTimeout(this.previewAutoTriggerTimer)
+			this.previewAutoTriggerTimer = null
+		}
 	}
 
 	template = () => html`
@@ -490,6 +517,7 @@ export class TemplateView extends Element {
 
 		<dialog-element
 			open=${() => this.showLoginDialog}
+			closeable="false"
 			onclose=${() => {
 				this.showLoginDialog = false
 			}}
