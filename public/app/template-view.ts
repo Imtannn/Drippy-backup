@@ -1,4 +1,4 @@
-import {batch, css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {batch, css, Element, element, html, onCleanup, signal, type ElementAttributes} from 'lume'
 import {templates} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Block, BlockCategory} from '../types/block.js'
@@ -56,8 +56,6 @@ export class TemplateView extends Element {
 	@signal avatarSwapTemplate: Template | null = null
 
 	private isOpeningOverlay = false
-	private previewAutoTriggerTimer: number | null = null
-
 	private defaultCollection = 'moidien'
 
 	connectedCallback() {
@@ -130,20 +128,21 @@ export class TemplateView extends Element {
 		// Auto-trigger preview button after 15s if conditions are met
 		this.createEffect(() => {
 			const user = currentUser()
+			// If user is not logged in or is getting user info from server, return
+			if (user !== null) return
+
 			const canShowPreview = !this.showAvatarSelection && !this.showPoseSelection
 			const hasSelectedTemplates = store.selectedTemplates.size > 0
 
-			// Clear existing timer
-			if (this.previewAutoTriggerTimer) {
-				clearTimeout(this.previewAutoTriggerTimer)
-				this.previewAutoTriggerTimer = null
-			}
-
-			// Start timer if: button is visible, user not logged in, and has selected templates
-			if (canShowPreview && !user && hasSelectedTemplates) {
-				this.previewAutoTriggerTimer = window.setTimeout(() => {
+			// Start timer if: button is visible, and has selected templates
+			if (canShowPreview && hasSelectedTemplates) {
+				const timer = window.setTimeout(() => {
 					this.#onPreviewButtonClick()
 				}, 10000) // 15 seconds
+
+				onCleanup(() => {
+					clearTimeout(timer)
+				})
 			}
 		})
 	}
@@ -362,12 +361,6 @@ export class TemplateView extends Element {
 	disconnectedCallback() {
 		super.disconnectedCallback()
 		document.removeEventListener('click', this.#onDocumentClick)
-
-		// Clear auto-trigger timer
-		if (this.previewAutoTriggerTimer) {
-			clearTimeout(this.previewAutoTriggerTimer)
-			this.previewAutoTriggerTimer = null
-		}
 	}
 
 	template = () => html`
