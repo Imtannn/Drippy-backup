@@ -28,15 +28,14 @@ import '../elements/preview-button.js'
 import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
-import {searchParams, pushState} from '../routes.js'
-import {updateGarmentsInUrl, updateFabricsInUrl} from './store.js'
+import {pushState, searchParams} from '../routes.js'
 import {formatNumber} from '../utils.js'
-import {avatars} from '../consts/avatars.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './item-card.js'
 import './pose-selection.js'
 import './remix-overlay.js'
+import {updateFabricsInUrl, updateGarmentsInUrl} from './store.js'
 import './template-item-overlay.js'
 
 type TemplateViewAttributes = keyof {}
@@ -165,18 +164,18 @@ export class TemplateView extends Element {
 		}
 
 		// Check if template requires different gender avatar
-		const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
-		const currentGender = currentAvatar?.gender
-		const templateGender = template.avatar
+		// const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
+		// const currentGender = currentAvatar?.gender
+		// const templateGender = template.avatar
 
-		if (currentGender && templateGender && currentGender !== templateGender) {
-			// Show avatar swap bottom sheet
-			batch(() => {
-				this.avatarSwapTemplate = template
-				this.showAvatarSwapSheet = true
-			})
-			return
-		}
+		// if (currentGender && templateGender && currentGender !== templateGender) {
+		// 	// Show avatar swap bottom sheet
+		// 	batch(() => {
+		// 		this.avatarSwapTemplate = template
+		// 		this.showAvatarSwapSheet = true
+		// 	})
+		// 	return
+		// }
 
 		// Proceed with template selection
 		this.#selectTemplate(template)
@@ -254,7 +253,7 @@ export class TemplateView extends Element {
 	#closeRemixOverlay = () => {
 		batch(() => {
 			this.showRemixOverlay = false
-			store.setRemixOverlayTemplateCategory = null
+			store.setRemixOverlayTemplate = null
 		})
 	}
 
@@ -265,18 +264,18 @@ export class TemplateView extends Element {
 		})
 	}
 
-	#handleTemplateOverlayRemix = (templateCategory: TemplateCategory) => {
+	#handleTemplateOverlayRemix = (template: Template) => {
 		batch(() => {
 			this.showTemplateOverlay = null
 			this.isOpeningOverlay = false
-			store.setRemixOverlayTemplateCategory = templateCategory
+			store.setRemixOverlayTemplate = template
 			this.showRemixOverlay = true
 		})
 	}
 
 	#onTemplateOverlayRemix = (e: CustomEvent) => {
-		const templateCategory = e.detail.templateCategory
-		this.#handleTemplateOverlayRemix(templateCategory)
+		const template = e.detail.template
+		this.#handleTemplateOverlayRemix(template)
 	}
 
 	#onAvatarSwapped = () => {
@@ -343,7 +342,7 @@ export class TemplateView extends Element {
 		})
 
 		if (available) {
-			this.#handleTemplateOverlayRemix(template.category)
+			this.#handleTemplateOverlayRemix(template)
 		}
 	}
 
@@ -395,7 +394,7 @@ export class TemplateView extends Element {
 		<app-buttons-right layout="bottom">
 			<app-buttons-group>
 				<show-when
-					condition=${() => !this.showAvatarSelection && !this.showPoseSelection}
+					condition=${() => !this.showAvatarSelection && !this.showPoseSelection && !this.showRemixOverlay}
 					content=${() => html`
 						<preview-button
 							button-disabled=${() => store.selectedTemplates.size === 0}
@@ -469,7 +468,10 @@ export class TemplateView extends Element {
 															></show-when>
 														</div>
 														<div class="template-product-name">${template.name}</div>
-														<div class="template-product-price-container">
+														<div
+															class="template-product-price-container"
+															classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}
+														>
 															<div
 																class="template-product-price"
 																classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
@@ -493,17 +495,17 @@ export class TemplateView extends Element {
 				`}
 			></show-when>
 			<show-when
-				condition=${() => this.showRemixOverlay && store.remixOverlayTemplateCategory !== null}
+				condition=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
 				content=${() => html`
 					<remix-overlay
-						selected-template-category=${() => store.remixOverlayTemplateCategory}
+						selected-template=${() => store.remixOverlayTemplate}
 						onclose=${this.#closeRemixOverlay}
 					></remix-overlay>
 				`}
 			></show-when>
 			<bottom-navigation
 				classList=${() => ({
-					hidden: this.showRemixOverlay && store.remixOverlayTemplateCategory !== null,
+					hidden: this.showRemixOverlay && store.remixOverlayTemplate !== null,
 				})}
 			>
 				<avatar-dropdown
@@ -620,6 +622,10 @@ export class TemplateView extends Element {
 			justify-content: space-between;
 			align-items: center;
 			flex-wrap: nowrap;
+		}
+
+		.template-product-price-container.viewOnly {
+			display: none;
 		}
 
 		.template-product-price {

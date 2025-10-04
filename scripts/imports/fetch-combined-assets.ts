@@ -27,75 +27,78 @@ const s3 = new AWS.S3()
 
 // Brand configurations with Google Drive folder IDs
 const BRAND_CONFIGS = [
-	{
-		brand: 'vaishnavi',
-		rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
-	},
-	{
-		brand: 'haruki',
-		rootFolderId: '1-_x-GVUxGBn4S1VDI6t3dFN990IG-VWu',
-	},
-	{
-		brand: 'lostCause',
-		rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
-	},
-	{
-		brand: 'shri',
-		rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
-	},
-	{
-		brand: 'eliseF',
-		rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
-	},
-	{
-		brand: 'oofya',
-		rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
-	},
-	{
-		brand: 'theSoul',
-		rootFolderId: '19Oq6abu1SnMTLSJHS0VY_GT1pAvpdU0T',
-	},
-	{
-		brand: 'moidien',
-		rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
-	},
-	{
-		brand: 'emwear',
-		rootFolderId: '15zHjnYVfII_Z2cr17_6Vp7kscWm9UIAU',
-	},
-	{
-		brand: 'atelierGourney',
-		rootFolderId: '17aBfgFcD7Liq9fB_KC57rl5S2w-O4LYf',
-	},
-	{
-		brand: 'imzad',
-		rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
-	},
-	{
-		brand: 'oneThousandPoets',
-		rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
-	},
-	{
-		brand: 'zove',
-		rootFolderId: '1XlxaOIFxxh-8xCmmM6XrDOW6iqq7xNhw',
-	},
-	{
-		brand: 'jaSengBu',
-		rootFolderId: '1BO4szN8246Y0V-AhL9zDyXzJ6rZLL7U8',
-	},
-	{
-		brand: 'mssPark',
-		rootFolderId: '1uUtAmMj_4gV1P3xuJKWGPbATJcv63GcJ',
-	},
+	// {
+	// 	brand: 'vaishnavi',
+	// 	rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
+	// },
+	// {
+	// 	brand: 'haruki',
+	// 	rootFolderId: '1-_x-GVUxGBn4S1VDI6t3dFN990IG-VWu',
+	// },
+	// {
+	// 	brand: 'lostCause',
+	// 	rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
+	// },
+	// {
+	// 	brand: 'shri',
+	// 	rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
+	// },
+	// {
+	// 	brand: 'eliseF',
+	// 	rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
+	// },
+	// {
+	// 	brand: 'oofya',
+	// 	rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
+	// },
+	// {
+	// 	brand: 'theSoul',
+	// 	rootFolderId: '19Oq6abu1SnMTLSJHS0VY_GT1pAvpdU0T',
+	// },
+	// {
+	// 	brand: 'moidien',
+	// 	rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
+	// },
+	// {
+	// 	brand: 'emwear',
+	// 	rootFolderId: '15zHjnYVfII_Z2cr17_6Vp7kscWm9UIAU',
+	// },
+	// {
+	// 	brand: 'atelierGourney',
+	// 	rootFolderId: '17aBfgFcD7Liq9fB_KC57rl5S2w-O4LYf',
+	// },
+	// {
+	// 	brand: 'imzad',
+	// 	rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
+	// },
+	// {
+	// 	brand: 'oneThousandPoets',
+	// 	rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
+	// },
+	// {
+	// 	brand: 'zove',
+	// 	rootFolderId: '1XlxaOIFxxh-8xCmmM6XrDOW6iqq7xNhw',
+	// },
+	// {
+	// 	brand: 'jaSengBu',
+	// 	rootFolderId: '1BO4szN8246Y0V-AhL9zDyXzJ6rZLL7U8',
+	// },
+	// {
+	// 	brand: 'mssPark',
+	// 	rootFolderId: '1uUtAmMj_4gV1P3xuJKWGPbATJcv63GcJ',
+	// },
 	// {
 	// 	brand: 'baroudeuses',
 	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
 	// },
-	// Add more brands here as needed
-	// {
-	//   brand: 'another-brand',
-	//   rootFolderId: 'another-folder-id',
-	// },
+	{
+		brand: 'imzadFemale',
+		rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
+	},
+	{
+		brand: 'imzadMale',
+		rootFolderId: '1fsA2JrL5ibuWrC_Fp_IDubvZuQj5bwpa',
+	},
 ]
 
 const allFabrics: TODO[] = []
@@ -380,17 +383,16 @@ async function processTemplateFolder(
 	}
 
 	// Parse template name, price, and avatar gender from folder name
-	const folderNameParts = templateFolder.name.split('-')
-	let templateName = normalizeName(templateFolder.name)
+	let templateName = ''
 	let templatePrice = 'N/A'
 	let avatarGender = 'female' // Default gender
 
-	// Check for gender prefix in folder name
-	const genderMatch = templateFolder.name.match(/^\[(Male|Female)\]/i)
+	// Check for gender prefix in folder name (handles [Male], _[Male]_, and space variations)
+	const genderMatch = templateFolder.name.match(/^[\s_]*\[(Male|Female)\][\s_]*/i)
 	if (genderMatch) {
 		avatarGender = genderMatch[1].toLowerCase()
 		// Remove gender prefix from template name processing
-		const nameWithoutGender = templateFolder.name.replace(/^\[(Male|Female)\]\s*/i, '')
+		const nameWithoutGender = templateFolder.name.replace(/^[\s_]*\[(Male|Female)\][\s_]*/i, '')
 		const namePartsWithoutGender = nameWithoutGender.split('-')
 
 		if (namePartsWithoutGender.length >= 2) {
@@ -401,11 +403,17 @@ async function processTemplateFolder(
 		} else {
 			templateName = normalizeName(nameWithoutGender)
 		}
-	} else if (folderNameParts.length >= 2) {
-		templateName = normalizeName(folderNameParts[0].trim())
-		// Extract only numeric part from price (including decimals)
-		const priceMatch = folderNameParts[1].trim().match(/\d+(\.\d+)?/)
-		templatePrice = priceMatch ? priceMatch[0] : 'N/A'
+	} else {
+		// No gender prefix, parse normally
+		const folderNameParts = templateFolder.name.split('-')
+		if (folderNameParts.length >= 2) {
+			templateName = normalizeName(folderNameParts[0].trim())
+			// Extract only numeric part from price (including decimals)
+			const priceMatch = folderNameParts[1].trim().match(/\d+(\.\d+)?/)
+			templatePrice = priceMatch ? priceMatch[0] : 'N/A'
+		} else {
+			templateName = normalizeName(templateFolder.name)
+		}
 	}
 
 	const template = {
@@ -482,6 +490,7 @@ async function processTemplateFolder(
 						templateFolderId: templateFolder.id, // Add unique template folder ID
 						thumbUrl: blockThumbS3Url,
 						modelUrl: blockModelS3Url,
+						avatar: avatarGender, // Include avatar gender from template
 					})
 
 					console.log(`      ✅ Uploaded block ${baseName}`)
@@ -544,7 +553,7 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 				thumb: block.thumbUrl,
 				modelFile: block.modelUrl,
 				blockName: block.blockName,
-				avatar: 'female',
+				avatar: block.avatar, // Use avatar gender from block (inherited from template)
 				category: block.category,
 				templateId: templateId, // Now using actual template _id with guaranteed unique identification
 				templateName: block.templateName,

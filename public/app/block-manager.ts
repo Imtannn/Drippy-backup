@@ -1,7 +1,7 @@
 import {GLTFLoader, type GLTF} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {blocks as collectionBlocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
-import {getBlocksForTemplate} from '../consts/relationships.js'
+import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
@@ -40,7 +40,7 @@ class BlockManager {
 			Jacket: ['Coat', 'Shirt', 'Top', 'Jumpsuit', 'Dress'],
 			Skirt: ['Pants', 'Dress', 'Jumpsuit'],
 			Pants: ['Skirt', 'Dress', 'Jumpsuit'],
-			Coat: ['Jacket'],
+			Coat: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt', 'Jacket'],
 			Jumpsuit: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt', 'Jacket'],
 		}
 
@@ -283,6 +283,38 @@ class BlockManager {
 	): Fabric[] {
 		const collection = sourceCollection ?? 'moidien'
 		return (fabrics[collection] ?? []).filter(fabric => fabric.templateCategories?.includes(templateCategory))
+	}
+
+	getAvailableFabricsForTemplate(
+		sourceCollection: string | null | undefined,
+		template: Template,
+	): Record<string, Fabric[]> {
+		// use template.materialId to get the fabric
+		// only filter fabrics that both include template.category and fabric.category
+		const collection = sourceCollection ?? 'moidien'
+		const availableFabrics: Record<string, Fabric[]> = {}
+
+		const templateFabric = getFabricForTemplate(template, collection)
+
+		availableFabrics['default'] = (fabrics[collection] ?? []).filter(
+			fabric => fabric.templateCategories?.includes(template.category) && fabric.category === templateFabric?.category,
+		)
+
+		if (template.extraMaterials && template.extraMaterials.length > 0) {
+			for (const extraMaterial of template.extraMaterials) {
+				const extraFabric = fabrics[collection]?.find(
+					fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
+				)
+				console.log('extraFabric', extraFabric)
+				availableFabrics[extraMaterial.mesh] = (fabrics[collection] ?? []).filter(
+					fabric => fabric.templateCategories?.includes(template.category) && fabric.category === extraFabric?.category,
+				)
+			}
+		}
+
+		console.log('availableFabrics', availableFabrics, template)
+
+		return availableFabrics
 	}
 
 	getBlocksForTemplateCategory(templateCategory: TemplateCategory, collection: string | null | undefined) {

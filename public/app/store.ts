@@ -67,7 +67,7 @@ class Store {
 	// FIXME this is not in sync with the address bar back/forward buttons
 	view = searchParams().get('scene') && searchParams().get('avatar') ? ('template' as AppRoute) : ('scene' as AppRoute)
 
-	/** Selected avatar defaults to the one in the URL. */
+	/** Selected avatar defaults based on space gender to the one in the URL. */
 	selectedAvatar = searchParams().get('avatar') ?? avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
 	selectedSpace = spaceFromParam()
 	isPreview = searchParams().get('isPreview') === 'true'
@@ -101,7 +101,7 @@ class Store {
 	currentCustomMeasurementCategory = null as TemplateCategory | null
 	// Screenshot cache for garment images
 	screenshotCache = new Map<TemplateCategory, string>()
-	remixOverlayTemplateCategory = null as TemplateCategory | null
+	remixOverlayTemplate = null as Template | null
 	order = {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -260,8 +260,8 @@ class Store {
 		this.selectedTemplates = newTemplates
 		this.selectedFabrics = newFabrics
 	}
-	set setRemixOverlayTemplateCategory(category: TemplateCategory | null) {
-		this.remixOverlayTemplateCategory = category
+	set setRemixOverlayTemplate(template: Template | null) {
+		this.remixOverlayTemplate = template
 	}
 	set selectSpace(space: Space | null) {
 		this.selectedSpace = space
@@ -433,7 +433,7 @@ class Store {
 			// TODO only use unique symbols for loading states, and make sure async
 			// processes always clean up!
 			this.loadingScreenshots = new Set<TemplateCategory>()
-			this.remixOverlayTemplateCategory = null
+			this.remixOverlayTemplate = null
 
 			// Clear all loading states to prevent orphaned symbols
 			// FIXME clearing loading states should not be necessary. If so, it
@@ -632,6 +632,22 @@ createEffect(() => {
 			pushState()
 		},
 	)
+})
+
+// Auto-correct avatar when navigating to a space with different gender
+createEffect(() => {
+	const space = store.selectSpace
+	if (!space) return
+
+	const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
+
+	// If space gender doesn't match avatar gender, switch to default avatar for that gender
+	if (space.gender && currentAvatar && space.gender !== currentAvatar.gender) {
+		const defaultAvatar = avatars.find(a => a.gender === space.gender && a.default)
+		if (defaultAvatar) {
+			store.selectedAvatar = defaultAvatar.name
+		}
+	}
 })
 
 export type SelectedFabrics = Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>

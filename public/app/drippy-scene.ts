@@ -30,6 +30,7 @@ import {
 	enableFrontsideOnModelLoad,
 	enableShadowOnModelLoad,
 	hasAncestorWithName,
+	isDesktop,
 	meshesInTree,
 	onModelLoad,
 	querySelectorAllSignal,
@@ -376,12 +377,10 @@ export class DrippyScene extends Element {
 				this.lumeScene.glRenderer!.toneMapping = THREE.ACESFilmicToneMapping
 			})
 
-			createEffect(() => {
-				enableFrontsideOnModelLoad(backgroundModel)
-				enableShadowOnModelLoad(backgroundModel)
-				setEnvMapOnModelLoad(backgroundModel, env)
-				setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
-			})
+			enableFrontsideOnModelLoad(backgroundModel)
+			enableShadowOnModelLoad(backgroundModel)
+			setEnvMapOnModelLoad(backgroundModel, env)
+			setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
 		})
 	}
 
@@ -530,9 +529,9 @@ export class DrippyScene extends Element {
 						</lume-spot-light>
 
 						<lume-camera-rig
-							min-distance="1"
-							max-distance="3"
-							distance="2"
+							min-distance="0.5"
+							max-distance="${() => (isDesktop() ? 3 : 5)}"
+							distance="${() => (isDesktop() ? 2.5 : 4)}"
 							min-vertical-angle="-17"
 							max-vertical-angle="45"
 							dolly-speed="0.01"
@@ -544,7 +543,7 @@ export class DrippyScene extends Element {
 						<lume-gltf-model
 							id="avatar"
 							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
-							src=${() => avatars.find(avatar => avatar.name === this.selectedAvatar)?.src ?? ''}
+							attr:src=${() => avatars.find(avatar => avatar.name === this.selectedAvatar)?.src ?? ''}
 							scale="1 1 1"
 							data-avatar
 						>
@@ -556,7 +555,7 @@ export class DrippyScene extends Element {
 											id=${item.id}
 											data-index=${index()}
 											data-cloth
-											src=${item.block.modelFile}
+											attr:src=${item.block.modelFile}
 											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
 										>
 											<!-- The lume-auto-rigger will rig the parent lume-gltf-model to the next nearest lume-gltf-model skeleton. -->
@@ -577,7 +576,7 @@ export class DrippyScene extends Element {
 							</lume-element3d>
 
 							<lume-animation
-								src=${() => this.animSrc}
+								attr:src=${() => this.animSrc}
 								clip-name=${() => this.animName}
 								stopped=${() => this.animsStopped || !this.animsEnabled}
 							></lume-animation>
@@ -586,7 +585,7 @@ export class DrippyScene extends Element {
 						<lume-gltf-model
 							ref=${(el: GltfModel) => (this.backgroundModel = el)}
 							id="scene"
-							src=${() => (console.log('selected background', this.selectedSpace?.scene), this.selectedSpace?.scene ?? '')}
+							attr:src=${() => (console.log('selected background', this.selectedSpace?.scene), this.selectedSpace?.scene ?? '')}
 						></lume-gltf-model>
 
 						<${Index} each=${() => this.selectedSpace?.includedModelFiles}>

@@ -114,25 +114,6 @@ export const spaces: Space[] = [
 		isWorkInProgress: false,
 	},
 	{
-		name: 'YALLAH',
-		slug: 'YALLAH',
-		description: 'Baroudeuses',
-		logo: '',
-		env: '/images/envs/brown_photostudio_02.jpg',
-		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/baroudeuses/scene-thumbnail.png',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/baroudeuses/scene-model.glb',
-		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/baroudeuses/extras/shoes.glb',
-		],
-		gender: 'female',
-		garmentsCount: blocks.baroudeuses?.length ?? 0,
-		collection: 'baroudeuses',
-		isWholesale: false,
-		isWorkInProgress: true,
-	},
-	{
 		name: 'Movement',
 		slug: 'movement',
 		description: 'Haruki',
@@ -149,7 +130,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.haruki?.length ?? 0,
 		collection: 'haruki',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: 'Essence of her',
@@ -168,7 +149,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.vaishnavi?.length ?? 0,
 		collection: 'vaishnavi',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: 'Shadow Grace',
@@ -187,7 +168,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.lostCause?.length ?? 0,
 		collection: 'lostCause',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: '9heure19heure',
@@ -205,7 +186,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.eliseF?.length ?? 0,
 		collection: 'eliseF',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: 'Fige dans le temps',
@@ -224,23 +205,43 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.atelierGourney?.length ?? 0,
 		collection: 'atelierGourney',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
-		name: 'Imzad',
-		slug: 'imzad',
+		name: 'Imzad-Man',
+		slug: 'imzad-man',
 		description: 'Imzad',
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad/scene-thumbnail.webp',
-		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad/scene-model.glb',
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-male/scene-thumbnail.webp',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-male/scene-model.glb',
 		includedModelFiles: [],
-		gender: 'female',
-		garmentsCount: blocks.imzad?.length ?? 0,
-		collection: 'imzad',
+		gender: 'male',
+		garmentsCount: blocks.imzadMale?.length ?? 0,
+		collection: 'imzadMale',
 		isWholesale: false,
 		isWorkInProgress: false,
+		viewOnly: true,
+	},
+	{
+		name: 'Imzad-Woman',
+		slug: 'imzad-woman',
+		description: 'Imzad',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-female/scene-thumbnail.webp',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-female/scene-model.glb',
+		includedModelFiles: [],
+		gender: 'female',
+		garmentsCount: blocks.imzadFemale?.length ?? 0,
+		collection: 'imzadFemale',
+		isWholesale: false,
+		isWorkInProgress: false,
+		viewOnly: true,
 	},
 	{
 		name: 'One Thousand Poets',
@@ -259,7 +260,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.oneThousandPoets?.length ?? 0,
 		collection: 'oneThousandPoets',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: 'Ja Seng Bu',
@@ -278,7 +279,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.jaSengBu?.length ?? 0,
 		collection: 'jaSengBu',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: 'Mss Park',
@@ -297,6 +298,6 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.mssPark?.length ?? 0,
 		collection: 'mssPark',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 ]
