@@ -260,9 +260,8 @@ class BlockManager {
 		if (templateCategory === 'Shirt') {
 			const selectedBlock = options.selectedBlocks?.get(templateCategory)?.get('Bodice')
 			if (
-				(selectedBlock?.templateName !== 'Pleated long sleeve shirt' &&
-					options.selectedSpace?.collection === 'moidien') ||
-				options.sourceCollection === 'moidien'
+				selectedBlock?.templateName !== 'Pleated long sleeve shirt' &&
+				(options.selectedSpace?.collection === 'moidien' || options.sourceCollection === 'moidien')
 			) {
 				return []
 			}
