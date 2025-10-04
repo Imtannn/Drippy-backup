@@ -14,9 +14,9 @@ class BlockManager {
 		Jacket: ['Sleeves'],
 		Pants: [],
 		Accessories: [],
-		Dress: [],
+		Dress: ['Sleeves', 'Skirt'],
 		Skirt: [],
-		Top: [],
+		Top: ['Sleeves'],
 		Coat: ['Sleeves'],
 		Jumpsuit: ['Sleeves'],
 	}
