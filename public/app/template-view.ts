@@ -368,7 +368,7 @@ export class TemplateView extends Element {
 		<app-buttons-right layout="bottom">
 			<app-buttons-group>
 				<show-when
-					condition=${() => !this.showAvatarSelection && !this.showPoseSelection}
+					condition=${() => !this.showAvatarSelection && !this.showPoseSelection && !this.showRemixOverlay}
 					content=${() => html`
 						<preview-button
 							button-disabled=${() => store.selectedTemplates.size === 0}
@@ -442,7 +442,10 @@ export class TemplateView extends Element {
 															></show-when>
 														</div>
 														<div class="template-product-name">${template.name}</div>
-														<div class="template-product-price-container">
+														<div
+															class="template-product-price-container"
+															classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}
+														>
 															<div
 																class="template-product-price"
 																classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
@@ -592,6 +595,10 @@ export class TemplateView extends Element {
 			justify-content: space-between;
 			align-items: center;
 			flex-wrap: nowrap;
+		}
+
+		.template-product-price-container.viewOnly {
+			display: none;
 		}
 
 		.template-product-price {

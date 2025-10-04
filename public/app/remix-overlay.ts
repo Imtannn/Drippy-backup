@@ -353,6 +353,8 @@ export class RemixOverlay extends Element {
 			border-radius: var(--borderRadiusCircular);
 			border: none;
 			cursor: pointer;
+			margin: 0px 20px;
+			transform: translateX(20px);
 		}
 
 		tabs-content {
