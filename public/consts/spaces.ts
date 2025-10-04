@@ -214,39 +214,6 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad/scene-thumbnail.webp',
-		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad/scene-model.glb',
-		includedModelFiles: [],
-		gender: 'female',
-		garmentsCount: blocks.imzadMan?.length ?? 0,
-		collection: 'imzad',
-		isWholesale: false,
-		isWorkInProgress: true,
-	},
-	{
-		name: 'Imzad Female',
-		slug: 'imzad-female',
-		description: 'Imzad Female',
-		logo: '',
-		env: '/images/envs/brown_photostudio_02.jpg',
-		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-female/scene-thumbnail.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-female/scene-model.glb',
-		includedModelFiles: [],
-		gender: 'female',
-		garmentsCount: blocks.imzadFemale?.length ?? 0,
-		collection: 'imzadFemale',
-		isWholesale: false,
-		isWorkInProgress: false,
-	},
-	{
-		name: 'Imzad Male',
-		slug: 'imzad-male',
-		description: 'Imzad Male',
-		logo: '',
-		env: '/images/envs/brown_photostudio_02.jpg',
-		sceneThumbnail:
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-male/scene-thumbnail.webp',
 		scene:
 			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-male/scene-model.glb',
@@ -265,12 +232,13 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad/scene-thumbnail.webp',
-		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad/scene-model.glb',
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-female/scene-thumbnail.webp',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-female/scene-model.glb',
 		includedModelFiles: [],
 		gender: 'female',
-		garmentsCount: blocks.imzadWoman?.length ?? 0,
-		collection: 'imzad',
+		garmentsCount: blocks.imzadFemale?.length ?? 0,
+		collection: 'imzadFemale',
 		isWholesale: false,
 		isWorkInProgress: false,
 		viewOnly: true,
