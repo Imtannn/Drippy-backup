@@ -101,7 +101,7 @@ class Store {
 	currentCustomMeasurementCategory = null as TemplateCategory | null
 	// Screenshot cache for garment images
 	screenshotCache = new Map<TemplateCategory, string>()
-	remixOverlayTemplateCategory = null as TemplateCategory | null
+	remixOverlayTemplate = null as Template | null
 	order = {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -260,8 +260,8 @@ class Store {
 		this.selectedTemplates = newTemplates
 		this.selectedFabrics = newFabrics
 	}
-	set setRemixOverlayTemplateCategory(category: TemplateCategory | null) {
-		this.remixOverlayTemplateCategory = category
+	set setRemixOverlayTemplate(template: Template | null) {
+		this.remixOverlayTemplate = template
 	}
 	set selectSpace(space: Space | null) {
 		this.selectedSpace = space
@@ -433,7 +433,7 @@ class Store {
 			// TODO only use unique symbols for loading states, and make sure async
 			// processes always clean up!
 			this.loadingScreenshots = new Set<TemplateCategory>()
-			this.remixOverlayTemplateCategory = null
+			this.remixOverlayTemplate = null
 
 			// Clear all loading states to prevent orphaned symbols
 			// FIXME clearing loading states should not be necessary. If so, it

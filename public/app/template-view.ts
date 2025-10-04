@@ -233,7 +233,7 @@ export class TemplateView extends Element {
 	#closeRemixOverlay = () => {
 		batch(() => {
 			this.showRemixOverlay = false
-			store.setRemixOverlayTemplateCategory = null
+			store.setRemixOverlayTemplate = null
 		})
 	}
 
@@ -244,18 +244,18 @@ export class TemplateView extends Element {
 		})
 	}
 
-	#handleTemplateOverlayRemix = (templateCategory: TemplateCategory) => {
+	#handleTemplateOverlayRemix = (template: Template) => {
 		batch(() => {
 			this.showTemplateOverlay = null
 			this.isOpeningOverlay = false
-			store.setRemixOverlayTemplateCategory = templateCategory
+			store.setRemixOverlayTemplate = template
 			this.showRemixOverlay = true
 		})
 	}
 
 	#onTemplateOverlayRemix = (e: CustomEvent) => {
-		const templateCategory = e.detail.templateCategory
-		this.#handleTemplateOverlayRemix(templateCategory)
+		const template = e.detail.template
+		this.#handleTemplateOverlayRemix(template)
 	}
 
 	#onAvatarSwapped = () => {
@@ -322,7 +322,7 @@ export class TemplateView extends Element {
 		})
 
 		if (available) {
-			this.#handleTemplateOverlayRemix(template.category)
+			this.#handleTemplateOverlayRemix(template)
 		}
 	}
 
@@ -469,17 +469,17 @@ export class TemplateView extends Element {
 				`}
 			></show-when>
 			<show-when
-				condition=${() => this.showRemixOverlay && store.remixOverlayTemplateCategory !== null}
+				condition=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
 				content=${() => html`
 					<remix-overlay
-						selected-template-category=${() => store.remixOverlayTemplateCategory}
+						selected-template=${() => store.remixOverlayTemplate}
 						onclose=${this.#closeRemixOverlay}
 					></remix-overlay>
 				`}
 			></show-when>
 			<bottom-navigation
 				classList=${() => ({
-					hidden: this.showRemixOverlay && store.remixOverlayTemplateCategory !== null,
+					hidden: this.showRemixOverlay && store.remixOverlayTemplate !== null,
 				})}
 			>
 				<avatar-dropdown

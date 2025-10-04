@@ -1810,7 +1810,7 @@ export const templates: Record<string, Template[]> = {
 			price: '40',
 			avatar: 'female',
 			category: 'Pants',
-			materialId: 'Seersucker Fabric - Black',
+			materialId: 'Seersucker - Black',
 		},
 		{
 			_id: '18',
