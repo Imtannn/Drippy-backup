@@ -2151,4 +2151,138 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 	],
+	imzadFemale: [
+		{
+			_id: '1',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadFemale/templates/Skirt/LA_JUPE_AEROX.webp',
+			name: 'LA JUPE AEROX',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Skirt',
+			materialId: 'Leather - Dark Indigo',
+			extraMaterials: [
+				{
+					mesh: 'trim-buttonhead',
+					materialId: 'Trim - Texture',
+				},
+			],
+		},
+		{
+			_id: '2',
+			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadFemale/templates/Top/Top.webp',
+			name: 'Top',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Top',
+			materialId: 'Organza - Dark Indigo',
+			extraMaterials: [
+				{
+					mesh: 'trim',
+					materialId: 'Trim - Texture',
+				},
+			],
+		},
+		{
+			_id: '3',
+			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadFemale/templates/Top/Coat.webp',
+			name: 'Coat',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Top',
+			materialId: 'Twill - Beige',
+			extraMaterials: [
+				{
+					mesh: 'buttonhead',
+					materialId: 'Trim - Texture',
+				},
+			],
+		},
+		{
+			_id: '4',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadFemale/templates/Top/LE_BOMBERS_STRYKER.webp',
+			name: 'LE BOMBERS STRYKER',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Top',
+			materialId: 'Charcoal - Blue Velvet',
+			extraMaterials: [
+				{
+					mesh: 'blobk_drippy_tight_ralan_45-buttonhead',
+					materialId: 'Trim - Texture',
+				},
+			],
+		},
+	],
+	imzadMale: [
+		{
+			_id: '1',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/templates/Skirt/NUANCIER_DE_LA_JUPE.webp',
+			name: 'NUANCIER DE LA JUPE',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Skirt',
+			materialId: 'Silk - Beige',
+		},
+		{
+			_id: '2',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/templates/Top/LE_HOODY-DRESS_VELORA.webp',
+			name: 'LE HOODY',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Top',
+			materialId: 'Sequin - White',
+		},
+		{
+			_id: '3',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/templates/Top/LE_DEBARDEUR_ARMOR.webp',
+			name: 'LE DEBARDEUR ARMOR',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Top',
+			materialId: 'Silver - 385',
+		},
+		{
+			_id: '4',
+			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/templates/Top/LE_PULL_RAW.webp',
+			name: 'LE PULL RAW',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Top',
+			materialId: 'Twill - Beige',
+		},
+		{
+			_id: '5',
+			thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/templates/Accessories/Item_2.webp',
+			name: 'Item 2',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Accessories',
+			materialId: 'Leather - Dark Indigo',
+		},
+		{
+			_id: '6',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/templates/Pants/LE_PANTALON_D-FURM.webp',
+			name: 'LE PANTALON D',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Pants',
+			materialId: 'Denim - Shimmery',
+			extraMaterials: [
+				{
+					mesh: 'buttonhead',
+					materialId: 'Trim - Texture',
+				},
+				{
+					mesh: '43-32-37-29-26-25-23-22-18-17-16-13',
+					materialId: 'Back Denim - Shimmery',
+				},
+			],
+		},
+	],
 }

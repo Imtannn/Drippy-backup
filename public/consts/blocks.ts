@@ -3393,4 +3393,191 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Pants',
 		},
 	],
+	imzadFemale: [
+		{
+			_id: '1',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadFemale/blocks/Skirt/Item_1___Skirt/skirt_1654.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadFemale/blocks/Skirt/Item_1___Skirt/skirt_1654.gltf',
+			blockName: 'skirt 1654',
+			avatar: 'female',
+			category: 'Skirt',
+			templateId: '1',
+			templateName: 'LA JUPE AEROX',
+			templateCategory: 'Skirt',
+		},
+		{
+			_id: '2',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadFemale/blocks/Top/Item_1___Sleeves/sleeve_1652.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadFemale/blocks/Top/Item_1___Sleeves/sleeve_1652.gltf',
+			blockName: 'sleeve 1652',
+			avatar: 'female',
+			category: 'Sleeves',
+			templateId: '2',
+			templateName: 'Top',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '3',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadFemale/blocks/Top/Item_1___Bodice/bodice_1651.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadFemale/blocks/Top/Item_1___Bodice/bodice_1651.gltf',
+			blockName: 'bodice 1651',
+			avatar: 'female',
+			category: 'Bodice',
+			templateId: '2',
+			templateName: 'Top',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '4',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadFemale/blocks/Top/Item_5___Sleeves/sleeve_1706.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadFemale/blocks/Top/Item_5___Sleeves/sleeve_1706.gltf',
+			blockName: 'sleeve 1706',
+			avatar: 'female',
+			category: 'Sleeves',
+			templateId: '3',
+			templateName: 'Coat',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '5',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadFemale/blocks/Top/Item_5___Fullbody/fullbody_1705.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadFemale/blocks/Top/Item_5___Fullbody/fullbody_1705.gltf',
+			blockName: 'fullbody 1705',
+			avatar: 'female',
+			category: 'Full Body',
+			templateId: '3',
+			templateName: 'Coat',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '6',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadFemale/blocks/Top/Item_1___Sleeves/sleeve_1642.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadFemale/blocks/Top/Item_1___Sleeves/sleeve_1642.gltf',
+			blockName: 'sleeve 1642',
+			avatar: 'female',
+			category: 'Sleeves',
+			templateId: '4',
+			templateName: 'LE BOMBERS STRYKER',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '7',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadFemale/blocks/Top/Item_1___Bodice/fullbody_1641.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadFemale/blocks/Top/Item_1___Bodice/fullbody_1641.gltf',
+			blockName: 'fullbody 1641',
+			avatar: 'female',
+			category: 'Bodice',
+			templateId: '4',
+			templateName: 'LE BOMBERS STRYKER',
+			templateCategory: 'Top',
+		},
+	],
+
+	imzadMale: [
+		{
+			_id: '1',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/blocks/Skirt/Item_2___Skirt/skirt_1661.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadMale/blocks/Skirt/Item_2___Skirt/skirt_1661.gltf',
+			blockName: 'skirt 1661',
+			avatar: 'female',
+			category: 'Skirt',
+			templateId: '1',
+			templateName: 'NUANCIER DE LA JUPE',
+			templateCategory: 'Skirt',
+		},
+		{
+			_id: '2',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/blocks/Top/Item_3___Sleeves/sleeve_1665.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadMale/blocks/Top/Item_3___Sleeves/sleeve_1665.gltf',
+			blockName: 'sleeve 1665',
+			avatar: 'female',
+			category: 'Sleeves',
+			templateId: '2',
+			templateName: 'LE HOODY',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '3',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/blocks/Top/Item_3___Bodice/bodice_1664.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadMale/blocks/Top/Item_3___Bodice/bodice_1664.gltf',
+			blockName: 'bodice 1664',
+			avatar: 'female',
+			category: 'Bodice',
+			templateId: '2',
+			templateName: 'LE HOODY',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '4',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/blocks/Top/Item_6___Bodice/top_1703.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadMale/blocks/Top/Item_6___Bodice/top_1703.gltf',
+			blockName: 'top 1703',
+			avatar: 'female',
+			category: 'Bodice',
+			templateId: '3',
+			templateName: 'LE DEBARDEUR ARMOR',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '5',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/blocks/Top/Item_2___Bodice/bodice_1662.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadMale/blocks/Top/Item_2___Bodice/bodice_1662.gltf',
+			blockName: 'bodice 1662',
+			avatar: 'female',
+			category: 'Bodice',
+			templateId: '4',
+			templateName: 'LE PULL RAW',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '6',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/blocks/Accessories/Item_2___Accessory/accessory_1719.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadMale/blocks/Accessories/Item_2___Accessory/accessory_1719.gltf',
+			blockName: 'accessory 1719',
+			avatar: 'female',
+			category: 'Accessory',
+			templateId: '5',
+			templateName: 'Item 2',
+			templateCategory: 'Accessories',
+		},
+		{
+			_id: '7',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/imzadMale/blocks/Pants/Item_1___Pants/pants_1663.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/imzadMale/blocks/Pants/Item_1___Pants/pants_1663.gltf',
+			blockName: 'pants 1663',
+			avatar: 'female',
+			category: 'Pants',
+			templateId: '6',
+			templateName: 'LE PANTALON D',
+			templateCategory: 'Pants',
+		},
+	],
 }

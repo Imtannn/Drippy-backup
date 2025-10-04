@@ -130,7 +130,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.haruki?.length ?? 0,
 		collection: 'haruki',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: 'Essence of her',
@@ -149,7 +149,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.vaishnavi?.length ?? 0,
 		collection: 'vaishnavi',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: 'Shadow Grace',
@@ -168,7 +168,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.lostCause?.length ?? 0,
 		collection: 'lostCause',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: '9heure19heure',
@@ -186,7 +186,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.eliseF?.length ?? 0,
 		collection: 'eliseF',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: 'Fige dans le temps',
@@ -205,7 +205,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.atelierGourney?.length ?? 0,
 		collection: 'atelierGourney',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: 'Imzad',
@@ -220,6 +220,40 @@ export const spaces: Space[] = [
 		gender: 'female',
 		garmentsCount: blocks.imzad?.length ?? 0,
 		collection: 'imzad',
+		isWholesale: false,
+		isWorkInProgress: true,
+	},
+	{
+		name: 'Imzad Female',
+		slug: 'imzad-female',
+		description: 'Imzad Female',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-female/scene-thumbnail.webp',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-female/scene-model.glb',
+		includedModelFiles: [],
+		gender: 'female',
+		garmentsCount: blocks.imzadFemale?.length ?? 0,
+		collection: 'imzadFemale',
+		isWholesale: false,
+		isWorkInProgress: false,
+	},
+	{
+		name: 'Imzad Male',
+		slug: 'imzad-male',
+		description: 'Imzad Male',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-male/scene-thumbnail.webp',
+		scene:
+			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-male/scene-model.glb',
+		includedModelFiles: [],
+		gender: 'male',
+		garmentsCount: blocks.imzadMale?.length ?? 0,
+		collection: 'imzadMale',
 		isWholesale: false,
 		isWorkInProgress: false,
 	},
@@ -240,7 +274,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.oneThousandPoets?.length ?? 0,
 		collection: 'oneThousandPoets',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: 'Ja Seng Bu',
@@ -259,7 +293,7 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.jaSengBu?.length ?? 0,
 		collection: 'jaSengBu',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 	{
 		name: 'Mss Park',
@@ -278,6 +312,6 @@ export const spaces: Space[] = [
 		garmentsCount: blocks.mssPark?.length ?? 0,
 		collection: 'mssPark',
 		isWholesale: false,
-		isWorkInProgress: true,
+		isWorkInProgress: false,
 	},
 ]

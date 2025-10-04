@@ -39,10 +39,10 @@ const BRAND_CONFIGS = [
 	// 	brand: 'lostCause',
 	// 	rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
 	// },
-	{
-		brand: 'shri',
-		rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
-	},
+	// {
+	// 	brand: 'shri',
+	// 	rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
+	// },
 	// {
 	// 	brand: 'eliseF',
 	// 	rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
@@ -67,10 +67,10 @@ const BRAND_CONFIGS = [
 	// 	brand: 'atelierGourney',
 	// 	rootFolderId: '17aBfgFcD7Liq9fB_KC57rl5S2w-O4LYf',
 	// },
-	{
-		brand: 'imzad',
-		rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
-	},
+	// {
+	// 	brand: 'imzad',
+	// 	rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
+	// },
 	// {
 	// 	brand: 'oneThousandPoets',
 	// 	rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
@@ -91,11 +91,14 @@ const BRAND_CONFIGS = [
 	// 	brand: 'baroudeuses',
 	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
 	// },
-	// Add more brands here as needed
-	// {
-	//   brand: 'another-brand',
-	//   rootFolderId: 'another-folder-id',
-	// },
+	{
+		brand: 'imzadFemale',
+		rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
+	},
+	{
+		brand: 'imzadMale',
+		rootFolderId: '1fsA2JrL5ibuWrC_Fp_IDubvZuQj5bwpa',
+	},
 ]
 
 const allFabrics: TODO[] = []

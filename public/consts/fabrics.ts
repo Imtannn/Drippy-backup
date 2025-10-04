@@ -2820,4 +2820,358 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Top'],
 		},
 	],
+	imzadFemale: [
+		{
+			_id: '1',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_%28RENDER%29.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_%28NORMAL%29.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_%28BASE%29.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_%28DISPLACE%29.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_%28ROUGH%29.jpg',
+			alpha:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_%28ALPHA%29.jpg',
+			materialName: 'White',
+			category: 'Sequin',
+			templateCategories: ['Top'],
+			scaleX: 15,
+			scaleY: 5,
+			offsetX: 0,
+			offsetY: 0,
+			rotate: 0,
+			coef: 1000,
+		},
+		{
+			_id: '2',
+			thumb: '',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SILVER_-_385/SILVER_-_385_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SILVER_-_385/SILVER_-_385_-_BASE.jpg',
+			displacement: '',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SILVER_-_385/SILVER_-_385_-_ROUGH.jpg',
+			alpha:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SILVER_-_385/SILVER_-_385_-_ALPHA.jpg',
+			materialName: '385',
+			category: 'Silver',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '3',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SILK_-_BEIGE/SILK_-_BEIGE_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SILK_-_BEIGE/SILK_-_BEIGE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SILK_-_BEIGE/SILK_-_BEIGE_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SILK_-_BEIGE/SILK_-_BEIGE_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/SILK_-_BEIGE/SILK_-_BEIGE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Beige',
+			category: 'Silk',
+			templateCategories: ['Skirt'],
+		},
+		{
+			_id: '4',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/TWILL_-_BEIGE/TWILL_-_BEIGE_%28RENDER%29.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/TWILL_-_BEIGE/TWILL_-_BEIGE_%28NORMAL%29.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/TWILL_-_BEIGE/TWILL_-_BEIGE_%28BASE%29.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/TWILL_-_BEIGE/TWILL_-_BEIGE_%28DISPLACE%29.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/TWILL_-_BEIGE/TWILL_-_BEIGE_%28ROUGH%29.jpg',
+			alpha: '',
+			materialName: 'Beige',
+			category: 'Twill',
+			templateCategories: ['Top', 'Skirt', 'Accessories'],
+		},
+		{
+			_id: '5',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/TRIM_-_TEXTURE/TRIM_-_TEXTURE_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/TRIM_-_TEXTURE/TRIM_-_TEXTURE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/TRIM_-_TEXTURE/TRIM_-_TEXTURE_-_BASE.jpg',
+			displacement: '',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/TRIM_-_TEXTURE/TRIM_-_TEXTURE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Texture',
+			category: 'Trim',
+			templateCategories: ['Accessories', 'Top'],
+		},
+		{
+			_id: '6',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/DENIM_-_SHIMMERY/DENIM_-_SHIMMERY_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/DENIM_-_SHIMMERY/DENIM_-_SHIMMERY_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/DENIM_-_SHIMMERY/DENIM_-_SHIMMERY_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/DENIM_-_SHIMMERY/DENIM_-_SHIMMERY_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/DENIM_-_SHIMMERY/DENIM_-_SHIMMERY_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Shimmery',
+			category: 'Denim',
+			templateCategories: [],
+		},
+		{
+			_id: '7',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_%28RENDER%29.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_%28NORMAL%29.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_%28BASE%29.jpg',
+			displacement: '',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_%28ROUGH%29.jpg',
+			alpha:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_%28ALPHA%29.jpg',
+			materialName: 'Dark Indigo',
+			category: 'Organza',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '8',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/BACK_DENIM_-_SHIMMERY/BACK_DENIM_-_SHIMMERY_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/BACK_DENIM_-_SHIMMERY/BACK_DENIM_-_SHIMMERY_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/BACK_DENIM_-_SHIMMERY/BACK_DENIM_-_SHIMMERY_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/BACK_DENIM_-_SHIMMERY/BACK_DENIM_-_SHIMMERY_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/BACK_DENIM_-_SHIMMERY/BACK_DENIM_-_SHIMMERY_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Shimmery',
+			category: 'Back Denim',
+			templateCategories: [],
+		},
+		{
+			_id: '9',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/LEATHER_-_DARK_INDIGO/LEATHER_-_DARK_INDIGO_%28RENDER%29.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/LEATHER_-_DARK_INDIGO/LEATHER_-_DARK_INDIGO_%28NORMAL%29.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/LEATHER_-_DARK_INDIGO/LEATHER_-_DARK_INDIGO_%28BASE%29.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/LEATHER_-_DARK_INDIGO/LEATHER_-_DARK_INDIGO_%28DISPLACE%29.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/LEATHER_-_DARK_INDIGO/LEATHER_-_DARK_INDIGO_%28ROUGH%29.jpg',
+			alpha: '',
+			materialName: 'Dark Indigo',
+			category: 'Leather',
+			templateCategories: ['Skirt', 'Accessories'],
+		},
+		{
+			_id: '10',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/CHARCOAL_-_BLUE_VELVET/CHARCOAL_-_BLUE_VELVET_%28RENDER%29.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/CHARCOAL_-_BLUE_VELVET/CHARCOAL_-_BLUE_VELVET_%28NORMAL%29.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/CHARCOAL_-_BLUE_VELVET/CHARCOAL_-_BLUE_VELVET_%28BASE%29.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/CHARCOAL_-_BLUE_VELVET/CHARCOAL_-_BLUE_VELVET_%28DISPLACE%29.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadFemale/root/CHARCOAL_-_BLUE_VELVET/CHARCOAL_-_BLUE_VELVET_%28ROUGH%29.jpg',
+			alpha: '',
+			materialName: 'Blue Velvet',
+			category: 'Charcoal',
+			templateCategories: ['Top'],
+		},
+	],
+	imzadMale: [
+		{
+			_id: '1',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_-_ROUGH.jpg',
+			alpha:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SEQUIN_-_WHITE_%3C15%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/SEQUIN_-_WHITE_-_ALPHA.jpg',
+			materialName: 'White',
+			category: 'Sequin',
+			templateCategories: ['Top'],
+			scaleX: 15,
+			scaleY: 5,
+			offsetX: 0,
+			offsetY: 0,
+			rotate: 0,
+			coef: 1000,
+		},
+		{
+			_id: '2',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Beige',
+			category: 'Twill',
+			templateCategories: ['Top', 'Skirt', 'Accessories'],
+		},
+		{
+			_id: '3',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/TRIM_-_TEXTURE/TRIM_-_TEXTURE_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/TRIM_-_TEXTURE/TRIM_-_TEXTURE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/TRIM_-_TEXTURE/TRIM_-_TEXTURE_-_BASE.jpg',
+			displacement: '',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/TRIM_-_TEXTURE/TRIM_-_TEXTURE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Texture',
+			category: 'Trim',
+			templateCategories: ['Top', 'Accessories'],
+		},
+		{
+			_id: '4',
+			thumb: '',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SILVER_-_385/SILVER_-_385_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SILVER_-_385/SILVER_-_385_-_BASE.jpg',
+			displacement: '',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SILVER_-_385/SILVER_-_385_-_ROUGH.jpg',
+			alpha:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SILVER_-_385/SILVER_-_385_-_ALPHA.jpg',
+			materialName: '385',
+			category: 'Silver',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '5',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SILK_-_BEIGE/SILK_-_BEIGE_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SILK_-_BEIGE/SILK_-_BEIGE_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SILK_-_BEIGE/SILK_-_BEIGE_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SILK_-_BEIGE/SILK_-_BEIGE_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/SILK_-_BEIGE/SILK_-_BEIGE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Beige',
+			category: 'Silk',
+			templateCategories: ['Skirt'],
+		},
+		{
+			_id: '6',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_-_BASE.jpg',
+			displacement: '',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_-_ROUGH.jpg',
+			alpha:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_-_ALPHA.jpg',
+			materialName: 'Dark Indigo',
+			category: 'Organza',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '7',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/LEATHER_-_DARK_INDIGO/LEATHER_-_DARK_INDIGO_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/LEATHER_-_DARK_INDIGO/LEATHER_-_DARK_INDIGO_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/LEATHER_-_DARK_INDIGO/LEATHER_-_DARK_INDIGO_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/LEATHER_-_DARK_INDIGO/LEATHER_-_DARK_INDIGO_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/LEATHER_-_DARK_INDIGO/LEATHER_-_DARK_INDIGO_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Dark Indigo',
+			category: 'Leather',
+			templateCategories: ['Accessories', 'Skirt'],
+		},
+		{
+			_id: '8',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/DENIM_-_SHIMMERY/DENIM_-_SHIMMERY_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/DENIM_-_SHIMMERY/DENIM_-_SHIMMERY_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/DENIM_-_SHIMMERY/DENIM_-_SHIMMERY_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/DENIM_-_SHIMMERY/DENIM_-_SHIMMERY_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/DENIM_-_SHIMMERY/DENIM_-_SHIMMERY_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Shimmery',
+			category: 'Denim',
+			templateCategories: ['Pants'],
+		},
+		{
+			_id: '9',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/BACK_DENIM_-_SHIMMERY/BACK_DENIM_-_SHIMMERY_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/BACK_DENIM_-_SHIMMERY/BACK_DENIM_-_SHIMMERY_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/BACK_DENIM_-_SHIMMERY/BACK_DENIM_-_SHIMMERY_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/BACK_DENIM_-_SHIMMERY/BACK_DENIM_-_SHIMMERY_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/BACK_DENIM_-_SHIMMERY/BACK_DENIM_-_SHIMMERY_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Shimmery',
+			category: 'Back Denim',
+			templateCategories: ['Pants'],
+		},
+		{
+			_id: '10',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/CHARCOAL_-_BLUE_VELVET/CHARCOAL_-_BLUE_VELVET_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/CHARCOAL_-_BLUE_VELVET/CHARCOAL_-_BLUE_VELVET_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/CHARCOAL_-_BLUE_VELVET/CHARCOAL_-_BLUE_VELVET_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/CHARCOAL_-_BLUE_VELVET/CHARCOAL_-_BLUE_VELVET_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/imzadMale/root/CHARCOAL_-_BLUE_VELVET/CHARCOAL_-_BLUE_VELVET_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Blue Velvet',
+			category: 'Charcoal',
+			templateCategories: ['Top'],
+		},
+	],
 }
