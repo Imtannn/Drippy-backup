@@ -40,7 +40,7 @@ class BlockManager {
 			Jacket: ['Coat', 'Shirt', 'Top', 'Jumpsuit', 'Dress'],
 			Skirt: ['Pants', 'Dress', 'Jumpsuit'],
 			Pants: ['Skirt', 'Dress', 'Jumpsuit'],
-			Coat: ['Jacket'],
+			Coat: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt', 'Jacket'],
 			Jumpsuit: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt', 'Jacket'],
 		}
 
