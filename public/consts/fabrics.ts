@@ -2732,7 +2732,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Texture',
 			category: 'Trim',
-			templateCategories: ['Accessories', 'Top'],
+			templateCategories: ['Accessories', 'Top', 'Pants'],
 		},
 		{
 			_id: '6',
@@ -3053,7 +3053,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Texture',
 			category: 'Trim',
-			templateCategories: ['Top', 'Accessories'],
+			templateCategories: ['Top', 'Accessories', 'Pants'],
 		},
 		{
 			_id: '4',

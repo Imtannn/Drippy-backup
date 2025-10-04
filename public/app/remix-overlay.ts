@@ -37,7 +37,7 @@ export class RemixOverlay extends Element {
 	@signal spaceCollection: string | null = null
 	@signal availableBlocks: Block[] = []
 	@signal blocksCategories: string[] = []
-	@signal availableFabrics: Fabric[] = []
+	@signal availableFabrics: Record<string, Fabric[]> = {}
 	@signal pieceSelections: string[] = []
 	@signal selectedSubTab: string | null = null
 
@@ -100,17 +100,18 @@ export class RemixOverlay extends Element {
 		// Update fabrics for the template category
 		this.createEffect(() => {
 			if (!this.selectedTemplate || !this.spaceCollection) {
-				this.availableFabrics = []
+				this.availableFabrics = {}
 				return
 			}
 
-			this.availableFabrics = blockManager.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate)
+			this.availableFabrics =
+				blockManager.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
 
 			// Make sure the overlay is scrolled to the top on opening
 			this.shadowRoot?.querySelector('.scroll-content')?.scrollIntoView({behavior: 'instant', block: 'end'})
 
 			onCleanup(() => {
-				this.availableFabrics = []
+				this.availableFabrics = {}
 			})
 		})
 
