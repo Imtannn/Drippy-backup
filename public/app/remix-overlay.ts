@@ -188,24 +188,26 @@ export class RemixOverlay extends Element {
 									content=${() => html`<tabs-trigger selected-value=${STYLE_TAB}>Style</tabs-trigger>`}
 								></show-when>
 							</tabs-list>
-							<button class="close-button" onclick=${this.#handleClose}>
-								<svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<path
-										d="M7.06934 1L0.930664 7.13867"
-										stroke="white"
-										stroke-width="1.2"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-									/>
-									<path
-										d="M0.930664 1L7.06934 7.13867"
-										stroke="white"
-										stroke-width="1.2"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-									/>
-								</svg>
-							</button>
+							<div class="close-button-container" onclick=${this.#handleClose}>
+								<button class="close-button">
+									<svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path
+											d="M7.06934 1L0.930664 7.13867"
+											stroke="white"
+											stroke-width="1.2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										/>
+										<path
+											d="M0.930664 1L7.06934 7.13867"
+											stroke="white"
+											stroke-width="1.2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										/>
+									</svg>
+								</button>
+							</div>
 						</div>
 
 						<tabs-content selected-value=${FABRICS_TAB}>
@@ -338,6 +340,13 @@ export class RemixOverlay extends Element {
 			padding-bottom: var(--uiSpacingSmall);
 		}
 
+		.close-button-container {
+			padding: 12px;
+			margin: -12px 8px;
+			transform: translateX(20px);
+			cursor: pointer;
+		}
+
 		.close-button {
 			display: flex;
 			align-items: center;
@@ -347,9 +356,7 @@ export class RemixOverlay extends Element {
 			height: 18px;
 			border-radius: var(--borderRadiusCircular);
 			border: none;
-			cursor: pointer;
-			margin: 0px 20px;
-			transform: translateX(20px);
+			pointer-events: none;
 		}
 
 		tabs-content {
