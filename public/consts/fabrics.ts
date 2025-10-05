@@ -514,7 +514,7 @@ export const fabrics: Record<string, Fabric[]> = {
 	},
 	{
 		_id: '15',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_TULLE/LACE_-_TULLE_-_RENDER.webp',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_TULLE/LACE_-_TULLE_-_RENDER.png',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_TULLE/LACE_-_TULLE_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_TULLE/LACE_-_TULLE_-_BASE.jpg',
 		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/shri/root/LACE_-_TULLE/LACE_-_TULLE_-_DISPLACE.jpg',
@@ -1968,6 +1968,24 @@ export const fabrics: Record<string, Fabric[]> = {
 	jaSengBu: [
 	{
 		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/JACQUARD_-_RED_%3C9%2C_12%2C_0%2C_0%2C_1000%2C_0%3E/JACQUARD_-_RED_-_RENDER.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/JACQUARD_-_RED_%3C9%2C_12%2C_0%2C_0%2C_1000%2C_0%3E/JACQUARD_-_RED_-_NORMAL.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/JACQUARD_-_RED_%3C9%2C_12%2C_0%2C_0%2C_1000%2C_0%3E/JACQUARD_-_RED_-_BASE.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/JACQUARD_-_RED_%3C9%2C_12%2C_0%2C_0%2C_1000%2C_0%3E/JACQUARD_-_RED_-_DISPLACE.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/JACQUARD_-_RED_%3C9%2C_12%2C_0%2C_0%2C_1000%2C_0%3E/JACQUARD_-_RED_-_ROUGH.jpg',
+		alpha: '',
+		materialName: 'Red',
+		category: 'Jacquard',
+		templateCategories: ['Dress'],
+		scaleX: 9,
+		scaleY: 12,
+		offsetX: 0,
+		offsetY: 0,
+		rotate: 0,
+		coef: 1000
+	},
+	{
+		_id: '2',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/TWEED_MODERN_-_359_%3C4%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/TWEED_MODERN_-_359_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/TWEED_MODERN_-_359_%3C4%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/TWEED_MODERN_-_359_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/TWEED_MODERN_-_359_%3C4%2C_7%2C_0%2C_0%2C_1000%2C_0%3E/TWEED_MODERN_-_359_-_BASE.jpg',
@@ -1985,7 +2003,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		coef: 1000
 	},
 	{
-		_id: '2',
+		_id: '3',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/GOLDEN_-_349_%3C9%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/GOLDEN_-_349_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/GOLDEN_-_349_%3C9%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/GOLDEN_-_349_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/GOLDEN_-_349_%3C9%2C_5%2C_0%2C_0%2C_1000%2C_0%3E/GOLDEN_-_349_-_BASE.jpg',
@@ -2003,7 +2021,7 @@ export const fabrics: Record<string, Fabric[]> = {
 		coef: 1000
 	},
 	{
-		_id: '3',
+		_id: '4',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/SMOCKING_-_344/SMOCKING_-_344_-_RENDER.webp',
 		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/SMOCKING_-_344/SMOCKING_-_344_-_NORMAL.jpg',
 		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/SMOCKING_-_344/SMOCKING_-_344_-_BASE.jpg',
@@ -2013,18 +2031,6 @@ export const fabrics: Record<string, Fabric[]> = {
 		materialName: '344',
 		category: 'Smocking',
 		templateCategories: []
-	},
-	{
-		_id: '4',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/JACQUARD_-_RED/JACQUARD_-_RED_-_RENDER.webp',
-		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/JACQUARD_-_RED/JACQUARD_-_RED_-_NORMAL.jpg',
-		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/JACQUARD_-_RED/JACQUARD_-_RED_-_BASE.jpg',
-		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/JACQUARD_-_RED/JACQUARD_-_RED_-_DISPLACE.jpg',
-		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/jaSengBu/root/JACQUARD_-_RED/JACQUARD_-_RED_-_ROUGH.jpg',
-		alpha: '',
-		materialName: 'Red',
-		category: 'Jacquard',
-		templateCategories: ['Dress']
 	},
 	{
 		_id: '5',
@@ -2255,6 +2261,44 @@ export const fabrics: Record<string, Fabric[]> = {
 		materialName: 'Black',
 		category: 'Jersey',
 		templateCategories: ['Skirt', 'Top']
+	}
+	],
+	baroudeuses: [
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Linen_-_38/Linen_-_38_-_Render.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Linen_-_38/Linen_-_38_-_Normal_Map.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Linen_-_38/Linen_-_38_-_Base_Color.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Linen_-_38/Linen_-_38_-_Displacement.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Linen_-_38/Linen_-_38_-_Roughness.jpg',
+		alpha: '',
+		materialName: '38',
+		category: 'Linen',
+		templateCategories: ['Pants', 'Shirt']
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Cotton_-_Taupe/Cotton_-_Taupe_-_Render.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Cotton_-_Taupe/Cotton_-_Taupe_-_Normal_Map.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Cotton_-_Taupe/Cotton_-_Taupe_-_Base_Color.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Cotton_-_Taupe/Cotton_-_Taupe_-_Displacement.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Cotton_-_Taupe/Cotton_-_Taupe_-_Roughness.jpg',
+		alpha: '',
+		materialName: 'Taupe',
+		category: 'Cotton',
+		templateCategories: ['Pants', 'Shirt']
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Silk_-_Herringbone/Silk_-_Herringbone_-_Render.webp',
+		normal: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Silk_-_Herringbone/Silk_-_Herringbone_-_Normal_Map.jpg',
+		baseColor: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Silk_-_Herringbone/Silk_-_Herringbone_-_Base_color.jpg',
+		displacement: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Silk_-_Herringbone/Silk_-_Herringbone_-_Displacement.jpg',
+		roughness: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/baroudeuses/root/Silk_-_Herringbone/Silk_-_Herringbone_-_Roughness.jpg',
+		alpha: '',
+		materialName: 'Herringbone',
+		category: 'Silk',
+		templateCategories: ['Pants', 'Shirt']
 	}
 	],
 	imzadFemale: [

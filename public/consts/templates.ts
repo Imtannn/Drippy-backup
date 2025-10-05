@@ -562,6 +562,21 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '16',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Pants/%22Drama_Queen%22_Quilted_Wide_leg_Pant_-_300.webp',
+		name: '"Drama Queen" Quilted Wide leg Pant',
+		price: '300',
+		avatar: 'female',
+		category: 'Pants',
+		materialId: 'Silk - Bronze',
+		extraMaterials: [
+			{
+				mesh: 'trim',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '17',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Pants/Quilted_Black_Culotte_-_200.webp',
 		name: 'Quilted Black Culotte',
 		price: '200',
@@ -572,21 +587,6 @@ export const templates: Record<string, Template[]> = {
 			{
 				mesh: 'topstitch-pattern_118853',
 				materialId: 'Fabric - Golden',
-			}
-		]
-	},
-	{
-		_id: '17',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/shri/templates/Pants/%22Drama_Queen%22_Quilted_Wide-leg_Pant_-_300.webp',
-		name: '"Drama Queen" Quilted Wide',
-		price: 'N/A',
-		avatar: 'female',
-		category: 'Pants',
-		materialId: 'Silk - Bronze',
-		extraMaterials: [
-			{
-				mesh: 'trim',
-				materialId: 'Trim - Texture',
 			}
 		]
 	}
@@ -928,6 +928,15 @@ export const templates: Record<string, Template[]> = {
 	theSoul: [
 	{
 		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Pants/SERENE_WIDE_LEG_TAILORED_TROUSERS_-_0.webp',
+		name: 'SERENE WIDE LEG TAILORED TROUSERS',
+		price: '0',
+		avatar: 'female',
+		category: 'Pants',
+		materialId: 'Wool - Olive Gray'
+	},
+	{
+		_id: '2',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Pants/SUNVEIL_TAILORED_TROUSERS_-_0.webp',
 		name: 'SUNVEIL TAILORED TROUSERS',
 		price: '0',
@@ -936,40 +945,31 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Suiting - Honey Mustard'
 	},
 	{
-		_id: '2',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Pants/SERENE_WIDE-LEG_TAILORED_TROUSERS_-_0.webp',
-		name: 'SERENE WIDE',
-		price: 'N/A',
-		avatar: 'female',
-		category: 'Pants',
-		materialId: 'Wool - Olive Gray'
-	},
-	{
 		_id: '3',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Top/SUNVEIL_V-NECK_BLAZER_-_0.webp',
-		name: 'SUNVEIL V',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Top/SUNVEIL_V_NECK_BLAZER_-_0.webp',
+		name: 'SUNVEIL V NECK BLAZER',
+		price: '0',
 		avatar: 'female',
 		category: 'Top',
 		materialId: 'Suiting - Honey Mustard'
 	},
 	{
 		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Top/CLOUD_BALLOON_DRAPED_-_305.webp',
+		name: 'CLOUD BALLOON DRAPED',
+		price: '305',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Cotton - White'
+	},
+	{
+		_id: '5',
 		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Top/SERENE_HIGH_NECK_DRAPED_BLOUSE_-_0.webp',
 		name: 'SERENE HIGH NECK DRAPED BLOUSE',
 		price: '0',
 		avatar: 'female',
 		category: 'Top',
 		materialId: 'Wool - Olive Gray'
-	},
-	{
-		_id: '5',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/theSoul/templates/Top/CLOUD_BALLOON-DRAPED_-_305.webp',
-		name: 'CLOUD BALLOON',
-		price: 'N/A',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Cotton - White'
 	},
 	{
 		_id: '6',
@@ -1483,7 +1483,7 @@ export const templates: Record<string, Template[]> = {
 		materialId: 'Wool - 361',
 		extraMaterials: [
 			{
-				mesh: 'pattern_402784-pattern_402783-pattern_354312-pattern_402780-pattern_402781-pattern_354317-pattern_354314-pattern_354315-pattern_354316-pattern_245407',
+				mesh: 'pattern_13045425-pattern_13045424-pattern_402784-pattern_402783-pattern_354312-pattern_402780-pattern_402781-pattern_354317-pattern_354314-pattern_354315-pattern_354316-pattern_245407',
 				materialId: 'Embroidered - Horsehair',
 			}
 		]
@@ -1620,18 +1620,9 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '7',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/LACE_DRESS_-_200.webp',
-		name: 'LACE DRESS',
-		price: '200',
-		avatar: 'female',
-		category: 'Dress',
-		materialId: 'Lace - Beige'
-	},
-	{
-		_id: '8',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/SHORT_A-LINE_DRESS_-_650.webp',
-		name: 'SHORT A',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/SHORT_A_LINE_DRESS_-_650.webp',
+		name: 'SHORT A LINE DRESS',
+		price: '650',
 		avatar: 'female',
 		category: 'Dress',
 		materialId: '',
@@ -1641,6 +1632,15 @@ export const templates: Record<string, Template[]> = {
 				materialId: 'Velvet - Black',
 			}
 		]
+	},
+	{
+		_id: '8',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/oneThousandPoets/templates/Dress/LACE_DRESS_-_200.webp',
+		name: 'LACE DRESS',
+		price: '200',
+		avatar: 'female',
+		category: 'Dress',
+		materialId: 'Lace - Beige'
 	},
 	{
 		_id: '9',
@@ -2032,42 +2032,9 @@ export const templates: Record<string, Template[]> = {
 	},
 	{
 		_id: '7',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Technical_Illustration_Hollow_Bodysuit_-_0.webp',
-		name: 'Technical Illustration Hollow Bodysuit',
-		price: '0',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Cotton - Twill'
-	},
-	{
-		_id: '8',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Asymmetric_Cut-out_Top_-_650.webp',
-		name: 'Asymmetric Cut',
-		price: 'N/A',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Jersey - Black',
-		extraMaterials: [
-			{
-				mesh: 'trim',
-				materialId: 'Trim - Texture',
-			}
-		]
-	},
-	{
-		_id: '9',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Modular_Leather_Flower_Top_-_645.webp',
-		name: 'Modular Leather Flower Top',
-		price: '645',
-		avatar: 'female',
-		category: 'Top',
-		materialId: 'Leather - Cracked'
-	},
-	{
-		_id: '10',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Asymmetric_Camo_Zip-Detail_Top_-_600.webp',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Asymmetric_Camo_Zip_-_600.webp',
 		name: 'Asymmetric Camo Zip',
-		price: 'N/A',
+		price: '600',
 		avatar: 'female',
 		category: 'Top',
 		materialId: 'Jersey - Stretch',
@@ -2083,10 +2050,43 @@ export const templates: Record<string, Template[]> = {
 		]
 	},
 	{
+		_id: '8',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Asymmetric_Cut_out_Top_-_650.webp',
+		name: 'Asymmetric Cut out Top',
+		price: '650',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Jersey - Black',
+		extraMaterials: [
+			{
+				mesh: 'trim',
+				materialId: 'Trim - Texture',
+			}
+		]
+	},
+	{
+		_id: '9',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Technical_Illustration_Hollow_Bodysuit_-_0.webp',
+		name: 'Technical Illustration Hollow Bodysuit',
+		price: '0',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Cotton - Twill'
+	},
+	{
+		_id: '10',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Top/Modular_Leather_Flower_Top_-_645.webp',
+		name: 'Modular Leather Flower Top',
+		price: '645',
+		avatar: 'female',
+		category: 'Top',
+		materialId: 'Leather - Cracked'
+	},
+	{
 		_id: '11',
-		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Dress/Side-Exposed_Boned_Skort_-_550.webp',
-		name: 'Side',
-		price: 'N/A',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/mssPark/templates/Dress/Side_Exposed_Boned_Skort_-_550.webp',
+		name: 'Side Exposed Boned Skort',
+		price: '550',
 		avatar: 'female',
 		category: 'Dress',
 		materialId: 'Jersey - Stretch'
@@ -2108,6 +2108,62 @@ export const templates: Record<string, Template[]> = {
 		avatar: 'female',
 		category: 'Dress',
 		materialId: 'Cotton - Black Seethrough'
+	}
+	],
+	baroudeuses: [
+	{
+		_id: '1',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Pants/Item_2_-_0.webp',
+		name: 'Item 2',
+		price: '0',
+		avatar: 'female',
+		category: 'Pants',
+		materialId: 'Silk - Herringbone'
+	},
+	{
+		_id: '2',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Pants/Item_1_-_0.webp',
+		name: 'Item 1',
+		price: '0',
+		avatar: 'female',
+		category: 'Pants',
+		materialId: 'Silk - Herringbone'
+	},
+	{
+		_id: '3',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Pants/KAWI_-_0.webp',
+		name: 'KAWI',
+		price: '0',
+		avatar: 'female',
+		category: 'Pants',
+		materialId: 'Silk - Herringbone'
+	},
+	{
+		_id: '4',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Shirt/Item_3_-_0.webp',
+		name: 'Item 3',
+		price: '0',
+		avatar: 'female',
+		category: 'Shirt',
+		materialId: 'Silk - Herringbone'
+	},
+	{
+		_id: '5',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Shirt/Item_2_-_0.webp',
+		name: 'Item 2',
+		price: '0',
+		avatar: 'female',
+		category: 'Shirt',
+		materialId: 'Silk - Herringbone'
+	},
+	{
+		_id: '6',
+		thumb: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/baroudeuses/templates/Shirt/MINIKOMO_-_0.webp',
+		name: 'MINIKOMO',
+		price: '0',
+		avatar: 'female',
+		category: 'Shirt',
+		materialId: 'Silk - Herringbone'
 	}
 	],
 	imzadFemale: [
