@@ -1,12 +1,11 @@
 import {GLTFLoader, type GLTF} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {blocks as collectionBlocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
-import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
+import {getBlocksForTemplate, getFabricsByFabricCategory} from '../consts/relationships.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {Space} from '../types/types.js'
-import {store} from './store.js'
 
 class BlockManager {
 	private readonly availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
@@ -294,25 +293,20 @@ class BlockManager {
 		const collection = sourceCollection ?? 'moidien'
 		const availableFabrics: Record<string, Fabric[]> = {}
 
-		const templateFabric = getFabricForTemplate(template, collection)
-
-		availableFabrics['default'] = (fabrics[collection] ?? []).filter(
-			fabric => fabric.templateCategories?.includes(template.category) && fabric.category === templateFabric?.category,
+		const defaultFabric = fabrics[collection]?.find(
+			fabric => `${fabric.category} - ${fabric.materialName}` === template.materialId,
 		)
+
+		availableFabrics['default'] = getFabricsByFabricCategory(defaultFabric?.category)
 
 		if (template.extraMaterials && template.extraMaterials.length > 0) {
 			for (const extraMaterial of template.extraMaterials) {
 				const extraFabric = fabrics[collection]?.find(
 					fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
 				)
-				console.log('extraFabric', extraFabric)
-				availableFabrics[extraMaterial.mesh] = (fabrics[collection] ?? []).filter(
-					fabric => fabric.templateCategories?.includes(template.category) && fabric.category === extraFabric?.category,
-				)
+				availableFabrics[extraMaterial.mesh] = getFabricsByFabricCategory(extraFabric?.category)
 			}
 		}
-
-		console.log('availableFabrics', availableFabrics, template)
 
 		return availableFabrics
 	}
