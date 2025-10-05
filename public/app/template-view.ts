@@ -335,7 +335,7 @@ export class TemplateView extends Element {
 		})
 
 		// Check if remix is available for this template
-		const {available} = blockManager.isRemixAvailableForTemplate(template.category, {
+		const {available} = blockManager.isRemixAvailableForTemplate(template, {
 			selectedBlocks: newBlocks,
 			selectedSpace: store.selectedSpace,
 		})

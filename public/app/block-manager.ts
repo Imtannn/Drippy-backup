@@ -1,7 +1,7 @@
 import {GLTFLoader, type GLTF} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {blocks as collectionBlocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
-import {getBlocksForTemplate, getFabricForTemplate} from '../consts/relationships.js'
+import {getBlocksForTemplate, getFabricsByFabricCategory} from '../consts/relationships.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
@@ -14,7 +14,7 @@ class BlockManager {
 		Jacket: ['Sleeves'],
 		Pants: [],
 		Accessories: [],
-		Dress: ['Sleeves', 'Skirt'],
+		Dress: [],
 		Skirt: [],
 		Top: ['Sleeves'],
 		Coat: ['Sleeves'],
@@ -35,13 +35,13 @@ class BlockManager {
 	checkInterchangeableCategories(category: TemplateCategory, selectedTemplates: Map<TemplateCategory, Template>) {
 		const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
 			Dress: ['Shirt', 'Top', 'Pants', 'Skirt', 'Jumpsuit', 'Jacket'],
-			Top: ['Dress', 'Jumpsuit', 'Jacket'],
+			Top: ['Dress', 'Jacket'],
 			Shirt: ['Dress', 'Jumpsuit', 'Jacket'],
 			Jacket: ['Coat', 'Shirt', 'Top', 'Jumpsuit', 'Dress'],
 			Skirt: ['Pants', 'Dress', 'Jumpsuit'],
-			Pants: ['Skirt', 'Dress', 'Jumpsuit'],
+			Pants: ['Skirt', 'Dress'],
 			Coat: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt', 'Jacket'],
-			Jumpsuit: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt', 'Jacket'],
+			Jumpsuit: ['Dress', 'Shirt', 'Skirt', 'Jacket'],
 		}
 
 		const interchangeableCategories = interchangeableCategoriesMapping[category]
@@ -293,25 +293,20 @@ class BlockManager {
 		const collection = sourceCollection ?? 'moidien'
 		const availableFabrics: Record<string, Fabric[]> = {}
 
-		const templateFabric = getFabricForTemplate(template, collection)
-
-		availableFabrics['default'] = (fabrics[collection] ?? []).filter(
-			fabric => fabric.templateCategories?.includes(template.category) && fabric.category === templateFabric?.category,
+		const defaultFabric = fabrics[collection]?.find(
+			fabric => `${fabric.category} - ${fabric.materialName}` === template.materialId,
 		)
+
+		availableFabrics['default'] = getFabricsByFabricCategory(defaultFabric?.category)
 
 		if (template.extraMaterials && template.extraMaterials.length > 0) {
 			for (const extraMaterial of template.extraMaterials) {
 				const extraFabric = fabrics[collection]?.find(
 					fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
 				)
-				console.log('extraFabric', extraFabric)
-				availableFabrics[extraMaterial.mesh] = (fabrics[collection] ?? []).filter(
-					fabric => fabric.templateCategories?.includes(template.category) && fabric.category === extraFabric?.category,
-				)
+				availableFabrics[extraMaterial.mesh] = getFabricsByFabricCategory(extraFabric?.category)
 			}
 		}
-
-		console.log('availableFabrics', availableFabrics, template)
 
 		return availableFabrics
 	}
@@ -322,22 +317,23 @@ class BlockManager {
 	}
 
 	isRemixAvailableForTemplate(
-		templateCategory: TemplateCategory,
+		template: Template,
 		options: {
 			selectedBlocks?: Map<TemplateCategory, Map<BlockCategory, Block>> | undefined
 			selectedSpace?: Space | null | undefined
 			sourceCollection?: string | null | undefined
 		},
 	) {
+		const templateCategory = template.category
 		if (!['Shirt', 'Jacket', 'Pants', 'Dress', 'Skirt', 'Top'].includes(templateCategory))
 			return {available: false, blocksCategories: [], fabrics: []}
 		const blocksCategories = this.getBlockCategoriesForTemplateCategory(templateCategory, options)
-		const fabrics = this.getAvailableFabricsForTemplateCategory(
+		const fabrics = this.getAvailableFabricsForTemplate(
 			options.sourceCollection ?? options.selectedSpace?.collection,
-			templateCategory,
+			template,
 		)
 		return {
-			available: blocksCategories.length > 0 || fabrics.length > 0,
+			available: blocksCategories.length > 0 || Object.values(fabrics).some(fabricArray => fabricArray.length > 1),
 			blocksCategories,
 			fabrics,
 		}
