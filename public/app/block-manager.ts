@@ -14,7 +14,7 @@ class BlockManager {
 		Jacket: ['Sleeves'],
 		Pants: [],
 		Accessories: [],
-		Dress: ['Sleeves', 'Skirt'],
+		Dress: [],
 		Skirt: [],
 		Top: ['Sleeves'],
 		Coat: ['Sleeves'],
@@ -35,13 +35,13 @@ class BlockManager {
 	checkInterchangeableCategories(category: TemplateCategory, selectedTemplates: Map<TemplateCategory, Template>) {
 		const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
 			Dress: ['Shirt', 'Top', 'Pants', 'Skirt', 'Jumpsuit', 'Jacket'],
-			Top: ['Dress', 'Jumpsuit', 'Jacket'],
+			Top: ['Dress', 'Jacket'],
 			Shirt: ['Dress', 'Jumpsuit', 'Jacket'],
 			Jacket: ['Coat', 'Shirt', 'Top', 'Jumpsuit', 'Dress'],
 			Skirt: ['Pants', 'Dress', 'Jumpsuit'],
-			Pants: ['Skirt', 'Dress', 'Jumpsuit'],
+			Pants: ['Skirt', 'Dress'],
 			Coat: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt', 'Jacket'],
-			Jumpsuit: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt', 'Jacket'],
+			Jumpsuit: ['Dress', 'Shirt', 'Skirt', 'Jacket'],
 		}
 
 		const interchangeableCategories = interchangeableCategoriesMapping[category]
