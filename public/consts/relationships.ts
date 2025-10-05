@@ -37,14 +37,12 @@ export function getFabricForTemplate(template: Template, brand: string = 'moidie
 /**
  * Find fabric that matches a template's materialId
  */
-export function getFabricsByFabricCategory(fabricCategory?: string): Fabric[] {
+export function getFabricsByFabricCategory(fabricCategory?: string, collection: string = 'moidien'): Fabric[] {
 	if (!fabricCategory) return []
 
-	return (
-		Object.values(fabrics)
-			.flat()
-			.filter(fabric => fabric.category === fabricCategory) || []
-	)
+	const fabricsInCategory = (fabrics[collection] ?? []).filter(fabric => fabric.category === fabricCategory)
+
+	return fabricsInCategory
 }
 
 /**

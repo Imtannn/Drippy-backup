@@ -297,14 +297,14 @@ class BlockManager {
 			fabric => `${fabric.category} - ${fabric.materialName}` === template.materialId,
 		)
 
-		availableFabrics['default'] = getFabricsByFabricCategory(defaultFabric?.category)
+		availableFabrics['default'] = getFabricsByFabricCategory(defaultFabric?.category, collection)
 
 		if (template.extraMaterials && template.extraMaterials.length > 0) {
 			for (const extraMaterial of template.extraMaterials) {
 				const extraFabric = fabrics[collection]?.find(
 					fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
 				)
-				availableFabrics[extraMaterial.mesh] = getFabricsByFabricCategory(extraFabric?.category)
+				availableFabrics[extraMaterial.mesh] = getFabricsByFabricCategory(extraFabric?.category, collection)
 			}
 		}
 
