@@ -6,6 +6,7 @@ import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {Space} from '../types/types.js'
+import {store} from './store.js'
 
 class BlockManager {
 	private readonly availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
@@ -322,22 +323,23 @@ class BlockManager {
 	}
 
 	isRemixAvailableForTemplate(
-		templateCategory: TemplateCategory,
+		template: Template,
 		options: {
 			selectedBlocks?: Map<TemplateCategory, Map<BlockCategory, Block>> | undefined
 			selectedSpace?: Space | null | undefined
 			sourceCollection?: string | null | undefined
 		},
 	) {
+		const templateCategory = template.category
 		if (!['Shirt', 'Jacket', 'Pants', 'Dress', 'Skirt', 'Top'].includes(templateCategory))
 			return {available: false, blocksCategories: [], fabrics: []}
 		const blocksCategories = this.getBlockCategoriesForTemplateCategory(templateCategory, options)
-		const fabrics = this.getAvailableFabricsForTemplateCategory(
+		const fabrics = this.getAvailableFabricsForTemplate(
 			options.sourceCollection ?? options.selectedSpace?.collection,
-			templateCategory,
+			template,
 		)
 		return {
-			available: blocksCategories.length > 0 || fabrics.length > 0,
+			available: blocksCategories.length > 0 || Object.values(fabrics).some(fabricArray => fabricArray.length > 1),
 			blocksCategories,
 			fabrics,
 		}
