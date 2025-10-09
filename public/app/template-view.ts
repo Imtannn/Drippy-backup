@@ -334,15 +334,16 @@ export class TemplateView extends Element {
 			store.selectedTemplates = newTemplates
 		})
 
-		// Check if remix is available for this template
-		const {available} = blockManager.isRemixAvailableForTemplate(template, {
-			selectedBlocks: newBlocks,
-			selectedSpace: store.selectedSpace,
-		})
+		// Don't auto-open remix overlay when selecting template
+		// User can manually click "Remix" button if needed
+		// const {available} = blockManager.isRemixAvailableForTemplate(template, {
+		// 	selectedBlocks: newBlocks,
+		// 	selectedSpace: store.selectedSpace,
+		// })
 
-		if (available) {
-			this.#handleTemplateOverlayRemix(template)
-		}
+		// if (available) {
+		// 	this.#handleTemplateOverlayRemix(template)
+		// }
 	}
 
 	#onDocumentClick = (e: Event) => {
