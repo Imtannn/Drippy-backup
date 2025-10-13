@@ -79,8 +79,14 @@ function hideVideoLoading(videoLoadingElement: any) {
 	if (videoLoadingElement && videoLoadingElement.parentNode) {
 		console.log('Hiding video loading screen')
 		videoLoadingElement.remove()
+		// Restore body scroll
+		document.body.style.overflow = ''
+		document.documentElement.style.overflow = ''
 	} else {
 		console.log('Video loading element not found or already removed')
+		// Restore scroll anyway just in case
+		document.body.style.overflow = ''
+		document.documentElement.style.overflow = ''
 	}
 }
 const [isYearlyActive, setIsYearlyActive] = createSignal(true)
@@ -780,6 +786,15 @@ function waitForContentReady() {
 
 // Start waiting for content to be ready
 waitForContentReady()
+
+// Force enable scroll after page load (iOS specific fix)
+setTimeout(() => {
+	document.body.style.overflow = ''
+	document.documentElement.style.overflow = ''
+	document.body.style.overflowY = 'auto'
+	document.documentElement.style.overflowY = 'auto'
+	console.log('Force enabled scroll for iOS')
+}, 3500)
 
 // Add smooth scroll behavior for header menu links
 function setupSmoothScroll() {
