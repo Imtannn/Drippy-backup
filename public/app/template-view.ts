@@ -150,17 +150,14 @@ export class TemplateView extends Element {
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
 
-		const isCurrentlySelected = this.#isTemplateActive(template)
-
 		// If clicking on already selected template, show overlay instead of toggling
-		if (isCurrentlySelected) {
-			this.isOpeningOverlay = true
-			this.showTemplateOverlay = template
-			setTimeout(() => {
-				this.isOpeningOverlay = false
-			}, 0)
-			return
-		}
+		this.isOpeningOverlay = true
+		this.showTemplateOverlay = template
+		this.#selectTemplate(template)
+		setTimeout(() => {
+			this.isOpeningOverlay = false
+		}, 0)
+		return
 
 		// Check if template requires different gender avatar
 		// const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
@@ -177,7 +174,6 @@ export class TemplateView extends Element {
 		// }
 
 		// Proceed with template selection
-		this.#selectTemplate(template)
 	}
 
 	#isTemplateActive = (template: Template) => {
@@ -333,16 +329,6 @@ export class TemplateView extends Element {
 
 			store.selectedTemplates = newTemplates
 		})
-
-		// Check if remix is available for this template
-		const {available} = blockManager.isRemixAvailableForTemplate(template, {
-			selectedBlocks: newBlocks,
-			selectedSpace: store.selectedSpace,
-		})
-
-		if (available) {
-			this.#handleTemplateOverlayRemix(template)
-		}
 	}
 
 	#onDocumentClick = (e: Event) => {
@@ -394,6 +380,10 @@ export class TemplateView extends Element {
 							onclick=${this.#onPreviewButtonClick}
 						></preview-button>
 					`}
+				></show-when>
+				<show-when
+					condition=${() => this.showRemixOverlay}
+					content=${() => html` <button class="done-button" onclick=${this.#closeRemixOverlay}>Done</button> `}
 				></show-when>
 			</app-buttons-group>
 		</app-buttons-right>
@@ -641,6 +631,23 @@ export class TemplateView extends Element {
 
 		.hidden {
 			display: none;
+		}
+
+		.done-button {
+			background: var(--uiColorPrimaryBlack);
+			color: var(--uiColorPrimaryWhite);
+			border: none;
+			border-radius: 16px;
+			padding: var(--uiSpacingSmall) var(--uiSpacingMedium);
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightSemiBold);
+			cursor: pointer;
+			transition: var(--transitionFast);
+		}
+
+		.done-button:hover {
+			background: var(--uiColorPrimaryBlack);
+			opacity: 0.8;
 		}
 	`
 }

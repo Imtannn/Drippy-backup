@@ -9,6 +9,9 @@ body {
 	-webkit-transform-style: flat;
 	background-color: var(--uiColorPrimaryWhite);
 	scroll-behavior: smooth;
+	/* iOS specific scroll fixes */
+	-webkit-overflow-scrolling: touch;
+	position: relative;
 }
 
 * {
@@ -79,7 +82,8 @@ p {
 	min-height: 100vh;
 	top: 80px;
 	left: 0;
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: visible;
 }
 
 .landing-page-desktop .frame {
