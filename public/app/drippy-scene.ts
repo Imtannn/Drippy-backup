@@ -239,59 +239,98 @@ export class DrippyScene extends Element {
 			})
 
 			let previousCount = -1
+			let loaderTimeout: number | undefined = undefined
+			let progressTimeouts: number[] = []
 
 			createEffect(() => {
 				const loadingCount = store.drippySceneLoads.size
 
 				if (loadingCount > 0) {
-					if (!this.isLoading) {
-						this.isLoading = true
-						this.loadingProgress = 10
+					// Delay showing loader for 500ms - skip for fast loads
+					if (!this.isLoading && loaderTimeout === undefined) {
+						loaderTimeout = window.setTimeout(() => {
+							if (store.drippySceneLoads.size > 0) {
+								this.isLoading = true
+								this.loadingProgress = 10
+							}
+							loaderTimeout = undefined
+						}, 500)
 					}
 
-					if (loadingCount === 2) {
-						this.loadingProgress = 10
-					} else if (loadingCount === 1) {
-						if (previousCount === 2 || previousCount === -1) {
-							// animate smoothly through multiple steps
-							const progressStages = [
-								{progress: 15, delay: 0},
-								{progress: 30, delay: 150},
-								{progress: 50, delay: 300},
-								{progress: 60, delay: 1000},
-								{progress: 65, delay: 3000},
-								{progress: 70, delay: 5000},
-								{progress: 75, delay: 7000},
-								{progress: 78, delay: 10000},
-								{progress: 80, delay: 14000},
-								{progress: 82, delay: 18000},
-								{progress: 84, delay: 23000},
-								{progress: 88, delay: 30000},
-								{progress: 92, delay: 40000},
-							]
+					if (this.isLoading) {
+						if (loadingCount === 2) {
+							this.loadingProgress = 10
+						} else if (loadingCount === 1) {
+							if (previousCount === 2 || previousCount === -1) {
+								// animate smoothly through multiple steps
+								const progressStages = [
+									{progress: 15, delay: 0},
+									{progress: 30, delay: 150},
+									{progress: 50, delay: 300},
+									{progress: 60, delay: 1000},
+									{progress: 65, delay: 3000},
+									{progress: 70, delay: 5000},
+									{progress: 75, delay: 7000},
+									{progress: 78, delay: 10000},
+									{progress: 80, delay: 14000},
+									{progress: 82, delay: 18000},
+									{progress: 84, delay: 23000},
+									{progress: 88, delay: 30000},
+									{progress: 92, delay: 40000},
+								]
 
-							progressStages.forEach(({progress, delay}) => {
-								setTimeout(() => {
-									if (store.drippySceneLoads.size === 1) {
-										this.loadingProgress = progress
-									}
-								}, delay)
-							})
+								progressStages.forEach(({progress, delay}) => {
+									const timeoutId = window.setTimeout(() => {
+										if (store.drippySceneLoads.size === 1) {
+											this.loadingProgress = progress
+										}
+									}, delay)
+									progressTimeouts.push(timeoutId)
+								})
+							}
 						}
+
+						previousCount = loadingCount
+					}
+				} else if (loadingCount === 0 && (previousCount > 0 || this.isLoading || loaderTimeout !== undefined)) {
+					// Clear pending loader timeout if loading finished fast
+					if (loaderTimeout !== undefined) {
+						clearTimeout(loaderTimeout)
+						loaderTimeout = undefined
 					}
 
-					previousCount = loadingCount
-				} else if (loadingCount === 0 && (previousCount > 0 || this.isLoading)) {
-					this.loadingProgress = 100
+					// Clear all progress stage timeouts
+					progressTimeouts.forEach(timeoutId => clearTimeout(timeoutId))
+					progressTimeouts = []
 
-					// Wait for browser to paint 100% before hiding (double RAF ensures paint completes)
-					requestAnimationFrame(() => {
+					if (this.isLoading) {
+						this.loadingProgress = 100
+
+						// Wait for browser to paint 100% before hiding
+						// Triple RAF + small delay ensures 100% is visible
 						requestAnimationFrame(() => {
-							this.isLoading = false
-							previousCount = -1
+							requestAnimationFrame(() => {
+								requestAnimationFrame(() => {
+									setTimeout(() => {
+										this.isLoading = false
+										previousCount = -1
+									}, 100)
+								})
+							})
 						})
-					})
+					} else {
+						// Reset state even if loader was never shown
+						previousCount = -1
+					}
 				}
+			})
+
+			// Cleanup timeouts on component unmount
+			onCleanup(() => {
+				if (loaderTimeout !== undefined) {
+					clearTimeout(loaderTimeout)
+				}
+				progressTimeouts.forEach(timeoutId => clearTimeout(timeoutId))
 			})
 
 			// Track block loading state
