@@ -23,7 +23,11 @@ export class ProgressLoader extends Element {
 				<img src="/images/D.webp" alt="Drippy Logo" class="loading-logo" />
 				<div class="progress-container">
 					<div class="progress-bar-bg"></div>
-					<div class="progress-bar-fill" style=${() => `width: ${this.progress}%`}></div>
+					<div
+						class="progress-bar-fill"
+						style=${() =>
+							`width: calc(${this.progress}% + 1px); transition: ${this.progress === 100 ? 'none' : 'width 0.3s ease-out'}`}
+					></div>
 				</div>
 			</div>
 		</div>
