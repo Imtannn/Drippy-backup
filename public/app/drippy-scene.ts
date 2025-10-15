@@ -77,6 +77,7 @@ export class DrippyScene extends Element {
 	@attribute selectedAvatar: string | null = null
 	@attribute selectedFabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>> = new Map()
 	@attribute selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>> = new Map()
+	@attribute landing: boolean = false
 
 	@signal isDark = false
 	@signal sceneUrl = ''
@@ -534,7 +535,7 @@ export class DrippyScene extends Element {
 							distance="${() => (isDesktop() ? 2.5 : 4)}"
 							min-vertical-angle="-17"
 							max-vertical-angle="45"
-							dolly-speed="0.01"
+							dolly-speed="${() => (this.landing ? 0 : 0.01)}"
 							position="0 -1 0"
 						>
 							<lume-perspective-camera active slot="camera-child" near="0.05" far="60" fov="50"></lume-perspective-camera>

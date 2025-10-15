@@ -93,7 +93,7 @@ export class ItemCard extends Element {
 			cursor: pointer;
 			border: 2px solid transparent; /* needed so the border-box layer shows */
 			position: relative;
-			left: -2px; /* needed because the border shifted the element to the right */
+			left: 0; /* needed because the border shifted the element to the right */
 			transition:
 				transform 0.2s ease,
 				background 0.2s ease;

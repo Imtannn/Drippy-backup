@@ -372,6 +372,7 @@ const mainContent = html`
 													selected-avatar=${() => store.selectedAvatar}
 													selected-fabrics=${() => store.selectedFabrics}
 													selected-blocks=${() => store.selectedBlocks}
+													landing=${true}
 												></drippy-scene>
 											</div>
 											<div class="showcase__label text-xs">Interactive 3D with avatars</div>
