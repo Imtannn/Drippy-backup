@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<title>Drippy Embed</title>
+
+		<base href="/embed/index.html" />
+
+		<script src="../write-html.js" href="/"></script>
+	</head>
+
+	<body>
+		<style>
+			/* Hide the #root we're not using from the imported HTML. */
+			#root:first-of-type {
+				display: none;
+			}
+
+			/* Make html, body, and drippy-scene fill 100% */
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+
+			body {
+				pointer-events: auto;
+			}
+
+			drippy-scene {
+				width: 100%;
+				height: 100%;
+				display: block;
+
+				/* Override sceneTranslateY to 0 for embed view */
+				--sceneTranslateY: translateY(0) !important;
+			}
+
+			/* Force override inline styles with higher specificity */
+			drippy-scene[style*='--sceneTranslateY'] {
+				--sceneTranslateY: translateY(0) !important;
+			}
+
+			/* Alternative: Target the scene container directly */
+			drippy-scene #lume-scene-container {
+				transform: translateY(0) !important;
+				-webkit-transform: translateY(0) !important;
+			}
+		</style>
+
+		<script type="module" src="./embed.js"></script>
+	</body>
+</html>
