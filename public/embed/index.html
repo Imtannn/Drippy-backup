@@ -32,6 +32,20 @@
 				width: 100%;
 				height: 100%;
 				display: block;
+
+				/* Override sceneTranslateY to 0 for embed view */
+				--sceneTranslateY: translateY(0) !important;
+			}
+
+			/* Force override inline styles with higher specificity */
+			drippy-scene[style*='--sceneTranslateY'] {
+				--sceneTranslateY: translateY(0) !important;
+			}
+
+			/* Alternative: Target the scene container directly */
+			drippy-scene #lume-scene-container {
+				transform: translateY(0) !important;
+				-webkit-transform: translateY(0) !important;
 			}
 		</style>
 

@@ -107,3 +107,19 @@ drippyScene.selectedBlocks = selectedBlocks
 
 // Append to body
 document.body.appendChild(drippyScene)
+
+// Force override sceneTranslateY after element is created
+// This ensures we override any inline styles set by drippy-scene
+setTimeout(() => {
+	const scene = document.querySelector('drippy-scene') as HTMLElement
+	if (scene) {
+		scene.style.setProperty('--sceneTranslateY', 'translateY(0)', 'important')
+
+		// Also directly target the scene container
+		const sceneContainer = scene.querySelector('#lume-scene-container') as HTMLElement
+		if (sceneContainer) {
+			sceneContainer.style.setProperty('transform', 'translateY(0)', 'important')
+			sceneContainer.style.setProperty('-webkit-transform', 'translateY(0)', 'important')
+		}
+	}
+}, 100)
