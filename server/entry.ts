@@ -96,10 +96,15 @@ WebApp.rawHandlers.use(
 
 			// TODO maybe we only need to set this for documents (not scripts,
 			// images, etc).
-			res.setHeader(
-				'Content-Security-Policy',
-				`frame-ancestors 'self' ${Meteor.isDevelopment ? localhostOrigins.join(' ') : remoteOrigins.join(' ')}`,
-			)
+			// Allow /embed to be embedded from any domain (for Shopify, etc.)
+			if (req.url?.startsWith('/embed')) {
+				res.setHeader('Content-Security-Policy', `frame-ancestors *`)
+			} else {
+				res.setHeader(
+					'Content-Security-Policy',
+					`frame-ancestors 'self' ${Meteor.isDevelopment ? localhostOrigins.join(' ') : remoteOrigins.join(' ')}`,
+				)
+			}
 		} else return getCoffee(res)
 
 		if (req.url !== req.originalUrl) {
