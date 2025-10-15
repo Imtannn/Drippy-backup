@@ -20,6 +20,7 @@ import {spaces} from '../consts/spaces.js'
 import '../elements/loading-indicator.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
+import '../elements/progress-loader.js'
 import '../elements/rig/lume-auto-rigger.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -93,6 +94,9 @@ export class DrippyScene extends Element {
 
 	@signal private animName: string | null = null
 	@signal private animSrc: string | null = null
+
+	@signal private loadingProgress = 0
+	@signal private isLoading = false
 
 	async #applyFabrics(el: Element3D, fabrics: Map<string, Fabric>, isCanceled: () => boolean, loadingId: symbol) {
 		const root = el.three
@@ -232,6 +236,62 @@ export class DrippyScene extends Element {
 			createEffect(() => {
 				if (!backgroundModel.src) return
 				store.trackModelLoading(sceneId, backgroundModel)
+			})
+
+			let previousCount = -1
+
+			createEffect(() => {
+				const loadingCount = store.drippySceneLoads.size
+
+				if (loadingCount > 0) {
+					if (!this.isLoading) {
+						this.isLoading = true
+						this.loadingProgress = 10
+					}
+
+					if (loadingCount === 2) {
+						this.loadingProgress = 10
+					} else if (loadingCount === 1) {
+						if (previousCount === 2 || previousCount === -1) {
+							// animate smoothly through multiple steps
+							const progressStages = [
+								{progress: 15, delay: 0},
+								{progress: 30, delay: 150},
+								{progress: 50, delay: 300},
+								{progress: 60, delay: 1000},
+								{progress: 65, delay: 3000},
+								{progress: 70, delay: 5000},
+								{progress: 75, delay: 7000},
+								{progress: 78, delay: 10000},
+								{progress: 80, delay: 14000},
+								{progress: 82, delay: 18000},
+								{progress: 84, delay: 23000},
+								{progress: 88, delay: 30000},
+								{progress: 92, delay: 40000},
+							]
+
+							progressStages.forEach(({progress, delay}) => {
+								setTimeout(() => {
+									if (store.drippySceneLoads.size === 1) {
+										this.loadingProgress = progress
+									}
+								}, delay)
+							})
+						}
+					}
+
+					previousCount = loadingCount
+				} else if (loadingCount === 0 && (previousCount > 0 || this.isLoading)) {
+					this.loadingProgress = 100
+
+					// Wait for browser to paint 100% before hiding (double RAF ensures paint completes)
+					requestAnimationFrame(() => {
+						requestAnimationFrame(() => {
+							this.isLoading = false
+							previousCount = -1
+						})
+					})
+				}
 			})
 
 			// Track block loading state
@@ -394,6 +454,8 @@ export class DrippyScene extends Element {
 		const shadowRadius = 4
 
 		return html`
+			<progress-loader is-visible=${() => this.isLoading} progress=${() => this.loadingProgress}></progress-loader>
+
 			<show-when
 				condition=${() => store.isAdmin && !store.turnOffSettingsInSpace}
 				content=${() => html`
