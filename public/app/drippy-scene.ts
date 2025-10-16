@@ -491,9 +491,10 @@ export class DrippyScene extends Element {
 		const penumbra = 0.25
 		const spotAngle = 30
 		const shadowRadius = 4
+		const isUploadView = location.pathname.includes('upload-view')
 
 		return html`
-			<progress-loader is-visible=${() => this.isLoading} progress=${() => this.loadingProgress}></progress-loader>
+			${!isUploadView && html`<progress-loader is-visible=${() => this.isLoading} progress=${() => this.loadingProgress}></progress-loader>`}
 
 			<show-when
 				condition=${() => store.isAdmin && !store.turnOffSettingsInSpace}
