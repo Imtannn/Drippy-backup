@@ -72,7 +72,6 @@ export class ProgressLoader extends Element {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			gap: 0.5rem;
 		}
 
 		.loading-logo {
@@ -84,7 +83,7 @@ export class ProgressLoader extends Element {
 		.progress-container {
 			position: relative;
 			width: 88px;
-			height: 5px;
+			height: 10px;
 		}
 
 		.progress-bar-bg {
@@ -98,7 +97,7 @@ export class ProgressLoader extends Element {
 			border-radius: var(--borderRadiusPill);
 			box-sizing: border-box;
 			box-shadow:
-				0px 5px 8px #c6c6c6,
+				0px 10px 5px #c6c6c6,
 				0 2px 4px var(--uiColorLightGrey);
 		}
 
