@@ -6,14 +6,13 @@ export const spaces: Space[] = [
 		name: 'GẤP',
 		slug: 'GAP',
 		description: 'MoiDien',
-		logo: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/moidien/logo_optimized.webp',
+		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/moidien/logo_optimized.webp',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/moidien/scene-thumbnail_optimized.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/moidien/scene-model.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/moidien/scene-thumbnail_optimized.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/moidien/scene-model.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/moidien/extras/shoes.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/moidien/extras/shoes.glb',
 		],
 		gender: 'female',
 		garmentsCount: blocks.moidien?.length ?? 0,
@@ -28,11 +27,10 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/the-soul/The+Soul+-+Scene.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/the-soul/The+Soul+-+Scene.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/the-soul/The+Soul+-+Scene.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/the-soul/The+Soul+-+Scene.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/the-soul/The+Soul+-+Shoes.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/the-soul/The+Soul+-+Shoes.glb',
 		],
 		gender: 'female',
 		garmentsCount: blocks.theSoul?.length ?? 0,
@@ -44,13 +42,12 @@ export const spaces: Space[] = [
 		name: 'Emwear',
 		slug: 'emwear',
 		description: 'Emwear',
-		logo: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/Logo-1/Emwear.png',
+		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Logo-1/Emwear.png',
 		env: '/images/envs/brown_photostudio_02.jpg',
-		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/emwear/scene-thumbnail.webp',
-		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/emwear/scene-model.glb',
+		sceneThumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/emwear/scene-thumbnail.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/emwear/scene-model.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/emwear/extras/shoes.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/emwear/extras/shoes.glb',
 		],
 		gender: 'female',
 		garmentsCount: blocks.emwear?.length ?? 0,
@@ -62,14 +59,11 @@ export const spaces: Space[] = [
 		name: 'Duality in Radiance',
 		slug: 'duality-in-radiance',
 		description: 'SHRI',
-		logo: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/Logo-1/Shri.png',
+		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Logo-1/Shri.png',
 		env: '/images/envs/brown_photostudio_02.jpg',
-		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/shri/SHRI+-+Scene.webp',
-		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/shri/SHRI+-+Scene.glb',
-		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/shri/SHRI+-+Shoes.glb',
-		],
+		sceneThumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/shri/SHRI+-+Scene.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/shri/SHRI+-+Scene.glb',
+		includedModelFiles: ['https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/shri/SHRI+-+Shoes.glb'],
 		gender: 'female',
 		garmentsCount: blocks.shri?.length ?? 0,
 		collection: 'shri',
@@ -80,14 +74,12 @@ export const spaces: Space[] = [
 		name: 'Metamorphosis',
 		slug: 'metamorphosis',
 		description: 'OOFYA',
-		logo: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/Logo-1/Oofya.png',
+		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Logo-1/Oofya.png',
 		env: '/images/envs/brown_photostudio_02.jpg',
-		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SCENE.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SCENE.glb',
+		sceneThumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SCENE.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SCENE.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SHOES.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SHOES.glb',
 		],
 		gender: 'female',
 		garmentsCount: blocks.oofya?.length ?? 0,
@@ -99,14 +91,11 @@ export const spaces: Space[] = [
 		name: 'Zove',
 		slug: 'zove',
 		description: 'Zove',
-		logo: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/Logo-1/Zove.png',
+		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Logo-1/Zove.png',
 		env: '/images/envs/brown_photostudio_02.jpg',
-		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/zove/ZOVE+-+SCENE.webp',
-		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/zove/ZOVE+-+SCENE.glb',
-		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/zove/extras/shoes.glb',
-		],
+		sceneThumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/zove/ZOVE+-+SCENE.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/zove/ZOVE+-+SCENE.glb',
+		includedModelFiles: ['https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/zove/extras/shoes.glb'],
 		gender: 'female',
 		garmentsCount: blocks.zove?.length ?? 0,
 		collection: 'zove',
@@ -120,11 +109,10 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/movement/scene-thumbnail.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/movement/scene-model.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/movement/scene-thumbnail.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/movement/scene-model.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/movement/extras/shoes.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/movement/extras/shoes.glb',
 		],
 		gender: 'female',
 		garmentsCount: blocks.haruki?.length ?? 0,
@@ -139,11 +127,10 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/naishnavi/scene-thumbnail_optimized.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/naishnavi/scene-model.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/naishnavi/scene-thumbnail_optimized.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/naishnavi/scene-model.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/naishnavi/extras/shoes.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/naishnavi/extras/shoes.glb',
 		],
 		gender: 'female',
 		garmentsCount: blocks.vaishnavi?.length ?? 0,
@@ -158,11 +145,10 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/lost-cause/scene-thumbnail_optimized.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/lost-cause/scene-model.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/lost-cause/scene-thumbnail_optimized.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/lost-cause/scene-model.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/lost-cause/extras/shoes.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/lost-cause/extras/shoes.glb',
 		],
 		gender: 'female',
 		garmentsCount: blocks.lostCause?.length ?? 0,
@@ -177,10 +163,10 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/eliseF/scene-thumbnail_optimized.webp',
-		scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/eliseF/scene-model.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/eliseF/scene-thumbnail_optimized.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/eliseF/scene-model.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/eliseF/extras/shoes.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/eliseF/extras/shoes.glb',
 		],
 		gender: 'male',
 		garmentsCount: blocks.eliseF?.length ?? 0,
@@ -195,11 +181,10 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/atelier-gourney/scene-thumbnail.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/atelier-gourney/scene-model.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/atelier-gourney/scene-thumbnail.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/atelier-gourney/scene-model.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/atelier-gourney/extras/shoes.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/atelier-gourney/extras/shoes.glb',
 		],
 		gender: 'female',
 		garmentsCount: blocks.atelierGourney?.length ?? 0,
@@ -214,9 +199,8 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-male/scene-thumbnail2.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-male/scene-model.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/imzad-male/scene-thumbnail2.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/imzad-male/scene-model.glb',
 		includedModelFiles: [],
 		gender: 'male',
 		garmentsCount: blocks.imzadMale?.length ?? 0,
@@ -232,9 +216,8 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-female/scene-thumbnail.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/imzad-female/scene-model.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/imzad-female/scene-thumbnail.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/imzad-female/scene-model.glb',
 		includedModelFiles: [],
 		gender: 'female',
 		garmentsCount: blocks.imzadFemale?.length ?? 0,
@@ -250,11 +233,10 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/one-thousand-poets/scene-thumbnail.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/one-thousand-poets/scene-model.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/one-thousand-poets/scene-thumbnail.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/one-thousand-poets/scene-model.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/one-thousand-poets/extras/shoes.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/one-thousand-poets/extras/shoes.glb',
 		],
 		gender: 'female',
 		garmentsCount: blocks.oneThousandPoets?.length ?? 0,
@@ -269,11 +251,10 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/ja-seng-bu/scene-thumbnail.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/ja-seng-bu/scene-model.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/ja-seng-bu/scene-thumbnail.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/ja-seng-bu/scene-model.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/ja-seng-bu/extras/shoes.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/ja-seng-bu/extras/shoes.glb',
 		],
 		gender: 'female',
 		garmentsCount: blocks.jaSengBu?.length ?? 0,
@@ -288,11 +269,10 @@ export const spaces: Space[] = [
 		logo: '',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/mss-park/scene-thumbnail.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/mss-park/scene-model.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/mss-park/scene-thumbnail.webp',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/mss-park/scene-model.glb',
 		includedModelFiles: [
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/mss-park/extras/shoes.glb',
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/mss-park/extras/shoes.glb',
 		],
 		gender: 'female',
 		garmentsCount: blocks.mssPark?.length ?? 0,
