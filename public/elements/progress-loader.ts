@@ -26,7 +26,7 @@ export class ProgressLoader extends Element {
 					<div
 						class="progress-bar-fill"
 						style=${() =>
-							`width: calc(${this.progress}% + 1px); transition: ${this.progress === 100 ? 'none' : 'width 0.3s ease-out'}`}
+							`width: ${this.progress}%; transition: ${this.progress === 100 ? 'none' : 'width 0.3s ease-out'}`}
 					></div>
 				</div>
 			</div>
@@ -72,19 +72,19 @@ export class ProgressLoader extends Element {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			gap: 2rem;
+			gap: 0.5rem;
 		}
 
 		.loading-logo {
-			width: 120px;
+			width: 108px;
 			height: auto;
 			object-fit: contain;
 		}
 
 		.progress-container {
 			position: relative;
-			width: 200px;
-			height: 8px;
+			width: 88px;
+			height: 5px;
 		}
 
 		.progress-bar-bg {
@@ -93,20 +93,23 @@ export class ProgressLoader extends Element {
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background: #e0e1e4;
-			border: 1px solid #000;
-			border-radius: 4px;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+			background: var(--uiColorLightGrey);
+			border: var(--borderWidth) solid var(--uiColorPrimaryBlack);
+			border-radius: var(--borderRadiusPill);
+			box-sizing: border-box;
+			box-shadow:
+				0px 5px 8px #c6c6c6,
+				0 2px 4px var(--uiColorLightGrey);
 		}
 
 		.progress-bar-fill {
 			position: absolute;
 			top: 0px;
-			bottom: 1px;
 			left: 0px;
-			height: calc(100% + 1px);
-			background: #2a2c31;
-			border-radius: 3px;
+			height: calc(100%);
+			background: var(--uiColorSecondaryDarkGrey);
+			border-radius: var(--borderRadiusPill);
+			box-sizing: border-box;
 			z-index: 1;
 			transition: width 0.3s ease-out;
 		}
