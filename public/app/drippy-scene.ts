@@ -17,6 +17,7 @@ import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
+import {url} from '../routes.js'
 import '../elements/loading-indicator.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
@@ -491,10 +492,14 @@ export class DrippyScene extends Element {
 		const penumbra = 0.25
 		const spotAngle = 30
 		const shadowRadius = 4
-		const isUploadView = location.pathname.includes('upload-view')
 
 		return html`
-			${!isUploadView && html`<progress-loader is-visible=${() => this.isLoading} progress=${() => this.loadingProgress}></progress-loader>`}
+			<show-when
+				condition=${() => !url().pathname.includes('upload-view')}
+				content=${() => html`
+					<progress-loader is-visible=${() => this.isLoading} progress=${() => this.loadingProgress}></progress-loader>
+				`}
+			></show-when>
 
 			<show-when
 				condition=${() => store.isAdmin && !store.turnOffSettingsInSpace}
