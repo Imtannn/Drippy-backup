@@ -297,15 +297,15 @@ export class TemplateView extends Element {
 		})
 	}
 
-	#onViewDetailsClick = () => {
-		batch(() => {
-			this.showDetailView = true
-			this.showAvatarSelection = false
-			this.showPoseSelection = false
-			this.showRemixOverlay = false
-			this.showTemplateOverlay = null
-		})
-	}
+	// #onViewDetailsClick = () => {
+	// 	batch(() => {
+	// 		this.showDetailView = true
+	// 		this.showAvatarSelection = false
+	// 		this.showPoseSelection = false
+	// 		this.showRemixOverlay = false
+	// 		this.showTemplateOverlay = null
+	// 	})
+	// }
 
 	#onDetailViewClose = () => {
 		this.showDetailView = false
@@ -557,7 +557,7 @@ export class TemplateView extends Element {
 						const templates = Array.from(store.selectedTemplates.values())
 						return {hidden: templates.length === 0}
 					}}
-					onclick=${this.#onViewDetailsClick}
+					disabled
 				>
 					View details
 				</button>
@@ -799,8 +799,13 @@ export class TemplateView extends Element {
 			transition: background 0.2s ease;
 		}
 
-		.view-details-btn:hover {
+		.view-details-btn:hover:not(:disabled) {
 			background: #eeeeee;
+		}
+
+		.view-details-btn:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
 		}
 
 		.default-nav {
