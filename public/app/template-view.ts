@@ -552,18 +552,20 @@ export class TemplateView extends Element {
 			padding-bottom: var(--uiSpacingXxl);
 			background: var(--uiColorPrimaryWhite);
 		}
+		.items-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: var(--uiGap);
+		}
 
 		/* Add bottom padding on desktop to prevent content hiding behind navigation */
 		@media (min-width: 768px) {
 			.tabs-content-container {
 				padding-bottom: 80px;
 			}
-		}
-
-		.items-grid {
-			display: grid;
-			grid-template-columns: repeat(4, 1fr);
-			gap: var(--uiGap);
+			.items-grid {
+				grid-template-columns: repeat(4, 1fr);
+			}
 		}
 
 		.templates-content-container {
