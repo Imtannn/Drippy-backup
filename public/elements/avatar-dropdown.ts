@@ -16,12 +16,17 @@ export class AvatarDropdown extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
-		if (this.showPopup && !!store.selectedSpace) {
+		// Check if user has previously dismissed the popup
+		const popupDismissed = localStorage.getItem('avatar-popup-dismissed')
+
+		if (this.showPopup && !!store.selectedSpace && !popupDismissed) {
 			setTimeout(() => {
 				this.shouldShowPopup = true
+				// Auto close after 20 seconds and save dismissed state
 				setTimeout(() => {
 					this.shouldShowPopup = false
-				}, 50000)
+					localStorage.setItem('avatar-popup-dismissed', 'true')
+				}, 20000)
 			}, 1000)
 		}
 
@@ -57,6 +62,7 @@ export class AvatarDropdown extends Element {
 					onclick=${(e: MouseEvent) => {
 						e.stopPropagation()
 						this.shouldShowPopup = false
+						localStorage.setItem('avatar-popup-dismissed', 'true')
 					}}
 				>
 					×
