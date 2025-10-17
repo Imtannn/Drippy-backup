@@ -78,6 +78,12 @@ export class BottomSheet extends Element {
 				this.style.setProperty('--bottom-sheet-max-height', 'calc(100vh - 3rem)')
 			}
 		})
+
+		// Watch for defaultSnap changes and recalculate height
+		this.createEffect(() => {
+			this.defaultSnap
+			this.handleResize()
+		})
 	}
 
 	disconnectedCallback() {

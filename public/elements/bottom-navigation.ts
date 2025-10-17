@@ -15,7 +15,6 @@ export class BottomNavigation extends Element {
 	css = css/*css*/ `
 		:host {
 			display: block;
-			padding: var(--uiSpacingSmall) var(--uiSpacing);
 		}
 
 		/* Mobile: Fixed position floating at bottom of screen */
@@ -27,6 +26,7 @@ export class BottomNavigation extends Element {
 				right: 0;
 				z-index: 100;
 				background: transparent;
+				padding: 2px;
 			}
 		}
 
@@ -37,6 +37,7 @@ export class BottomNavigation extends Element {
 				bottom: 0;
 				left: 0;
 				right: 0;
+				padding: 2px;
 			}
 		}
 
@@ -46,10 +47,11 @@ export class BottomNavigation extends Element {
 			justify-content: space-between;
 			background: rgba(255, 255, 255, 0.8);
 			backdrop-filter: blur(20px);
-			border-radius: 24px;
+			border-radius: var(--borderRadiusPill);
 			position: relative;
 			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 			border: 1px solid rgba(255, 255, 255, 0.2);
+			padding: 2px 4px;
 		}
 	`
 }

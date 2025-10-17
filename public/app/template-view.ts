@@ -37,6 +37,7 @@ import './loading-spinner-overlay.js'
 import './pose-selection.js'
 import './remix-overlay.js'
 import {updateFabricsInUrl, updateGarmentsInUrl} from './store.js'
+import './template-detail-view.js'
 import './template-item-overlay.js'
 
 type TemplateViewAttributes = keyof {}
@@ -55,6 +56,7 @@ export class TemplateView extends Element {
 	@signal showTemplateOverlay: Template | null = null
 	@signal showAvatarSwapSheet = false
 	@signal avatarSwapTemplate: Template | null = null
+	@signal showDetailView = false
 
 	private isOpeningOverlay = false
 	private defaultCollection = 'moidien'
@@ -212,6 +214,7 @@ export class TemplateView extends Element {
 			this.showPoseSelection = false
 			this.showLoginDialog = false
 			this.showRemixOverlay = false
+			this.showDetailView = false
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
@@ -290,6 +293,20 @@ export class TemplateView extends Element {
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
 		})
+	}
+
+	#onViewDetailsClick = () => {
+		batch(() => {
+			this.showDetailView = true
+			this.showAvatarSelection = false
+			this.showPoseSelection = false
+			this.showRemixOverlay = false
+			this.showTemplateOverlay = null
+		})
+	}
+
+	#onDetailViewClose = () => {
+		this.showDetailView = false
 	}
 
 	#selectTemplate = (template: Template) => {
@@ -376,7 +393,8 @@ export class TemplateView extends Element {
 		<app-buttons-right layout="bottom">
 			<app-buttons-group>
 				<show-when
-					condition=${() => !this.showAvatarSelection && !this.showPoseSelection && !this.showRemixOverlay}
+					condition=${() =>
+						!this.showAvatarSelection && !this.showPoseSelection && !this.showRemixOverlay && !this.showDetailView}
 					content=${() => html`
 						<preview-button
 							button-disabled=${() => store.selectedTemplates.size === 0}
@@ -391,7 +409,16 @@ export class TemplateView extends Element {
 			</app-buttons-group>
 		</app-buttons-right>
 
-		<bottom-sheet>
+		<bottom-sheet default-snap=${() => (this.showDetailView ? '0.88' : undefined)}>
+			<show-when
+				condition=${() => this.showDetailView}
+				content=${() => html`
+					<template-detail-view
+						selected-template=${() => Array.from(store.selectedTemplates.values())[0] || null}
+						onclose=${this.#onDetailViewClose}
+					></template-detail-view>
+				`}
+			></show-when>
 			<show-when
 				condition=${() => this.showAvatarSelection}
 				content=${() => html`<avatar-selection content-only></avatar-selection>`}
@@ -402,7 +429,11 @@ export class TemplateView extends Element {
 			></show-when>
 			<show-when
 				condition=${() =>
-					!this.showAvatarSelection && !this.showPoseSelection && this.selectedTab !== null && !this.showRemixOverlay}
+					!this.showAvatarSelection &&
+					!this.showPoseSelection &&
+					!this.showDetailView &&
+					this.selectedTab !== null &&
+					!this.showRemixOverlay}
 				content=${() => html`
 					<tabs-provider
 						default-value=${() => this.selectedTab}
@@ -497,15 +528,57 @@ export class TemplateView extends Element {
 			></show-when>
 			<bottom-navigation
 				classList=${() => ({
-					hidden: this.showRemixOverlay && store.remixOverlayTemplate !== null,
+					hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
 				})}
 			>
-				<avatar-dropdown
-					open=${() => this.showAvatarSelection}
-					show-popup
-					onavatar-dropdown-click=${this.#onAvatarDropdownClick}
-				></avatar-dropdown>
-				<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+				<div
+					class="template-info"
+					classList=${() => {
+						const templates = Array.from(store.selectedTemplates.values())
+						return {hidden: templates.length === 0}
+					}}
+				>
+					${() => {
+						const templates = Array.from(store.selectedTemplates.values())
+						if (templates.length > 0) {
+							const selectedTemplate = templates[0]
+							return html`
+								<div class="template-image-wrapper">
+									<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+								</div>
+								<div class="template-details">
+									<div class="template-name">${selectedTemplate.name}</div>
+									<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+								</div>
+							`
+						}
+						return ''
+					}}
+				</div>
+				<button
+					class="view-details-btn"
+					classList=${() => {
+						const templates = Array.from(store.selectedTemplates.values())
+						return {hidden: templates.length === 0}
+					}}
+					onclick=${this.#onViewDetailsClick}
+				>
+					View details
+				</button>
+				<div
+					class="default-nav"
+					classList=${() => {
+						const templates = Array.from(store.selectedTemplates.values())
+						return {hidden: templates.length > 0}
+					}}
+				>
+					<avatar-dropdown
+						open=${() => this.showAvatarSelection}
+						show-popup
+						onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+					></avatar-dropdown>
+					<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+				</div>
 			</bottom-navigation>
 		</bottom-sheet>
 
@@ -659,6 +732,74 @@ export class TemplateView extends Element {
 		.done-button:hover {
 			background: var(--uiColorPrimaryBlack);
 			opacity: 0.8;
+		}
+
+		.template-info {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.template-image-wrapper {
+			position: relative;
+			width: 40px;
+			height: 40px;
+			overflow: hidden;
+			border-radius: var(--borderRadiusCircular);
+			border: 1px solid var(--uiColorAccentViolet);
+			transition: border-color 0.3s ease;
+			background: var(--appBackground);
+		}
+
+		.template-image {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+			object-position: center;
+			margin-top: 0;
+		}
+
+		.template-details {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+		}
+
+		.template-name {
+			font-size: 10px;
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
+			margin: 0;
+		}
+
+		.template-price {
+			font-size: 12px;
+			color: #424347;
+			margin: 0;
+		}
+
+		.view-details-btn {
+			background: #f6f6f6;
+			border-radius: var(--borderRadiusPill);
+			border: var(--borderWidth) solid #8c8c8c;
+			padding: 8px 16px;
+			font-size: 10px;
+			font-weight: 500;
+			color: #8c8c8c;
+			cursor: pointer;
+			transition: background 0.2s ease;
+		}
+
+		.view-details-btn:hover {
+			background: #eeeeee;
+		}
+
+		.default-nav {
+			display: contents;
+		}
+
+		.hidden {
+			display: none !important;
 		}
 	`
 }
