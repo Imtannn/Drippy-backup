@@ -78,12 +78,15 @@ export class ProgressLoader extends Element {
 			width: 108px;
 			height: auto;
 			object-fit: contain;
+			margin: 0;
+			display: block;
 		}
 
 		.progress-container {
 			position: relative;
 			width: 88px;
-			height: 10px;
+			height: 7px;
+			margin-top: -8px;
 		}
 
 		.progress-bar-bg {
@@ -96,9 +99,6 @@ export class ProgressLoader extends Element {
 			border: var(--borderWidth) solid var(--uiColorPrimaryBlack);
 			border-radius: var(--borderRadiusPill);
 			box-sizing: border-box;
-			box-shadow:
-				0px 10px 5px #c6c6c6,
-				0 2px 4px var(--uiColorLightGrey);
 		}
 
 		.progress-bar-fill {
