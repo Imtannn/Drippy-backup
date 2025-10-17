@@ -37,6 +37,7 @@ import './loading-spinner-overlay.js'
 import './pose-selection.js'
 import './remix-overlay.js'
 import {updateFabricsInUrl, updateGarmentsInUrl} from './store.js'
+import './template-detail-view.js'
 import './template-item-overlay.js'
 
 type TemplateViewAttributes = keyof {}
@@ -55,6 +56,7 @@ export class TemplateView extends Element {
 	@signal showTemplateOverlay: Template | null = null
 	@signal showAvatarSwapSheet = false
 	@signal avatarSwapTemplate: Template | null = null
+	@signal showDetailView = false
 
 	private isOpeningOverlay = false
 	private defaultCollection = 'moidien'
@@ -212,6 +214,7 @@ export class TemplateView extends Element {
 			this.showPoseSelection = false
 			this.showLoginDialog = false
 			this.showRemixOverlay = false
+			this.showDetailView = false
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
@@ -290,6 +293,20 @@ export class TemplateView extends Element {
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
 		})
+	}
+
+	#onViewDetailsClick = () => {
+		batch(() => {
+			this.showDetailView = true
+			this.showAvatarSelection = false
+			this.showPoseSelection = false
+			this.showRemixOverlay = false
+			this.showTemplateOverlay = null
+		})
+	}
+
+	#onDetailViewClose = () => {
+		this.showDetailView = false
 	}
 
 	#selectTemplate = (template: Template) => {
@@ -376,7 +393,8 @@ export class TemplateView extends Element {
 		<app-buttons-right layout="bottom">
 			<app-buttons-group>
 				<show-when
-					condition=${() => !this.showAvatarSelection && !this.showPoseSelection && !this.showRemixOverlay}
+					condition=${() =>
+						!this.showAvatarSelection && !this.showPoseSelection && !this.showRemixOverlay && !this.showDetailView}
 					content=${() => html`
 						<preview-button
 							button-disabled=${() => store.selectedTemplates.size === 0}
@@ -391,7 +409,16 @@ export class TemplateView extends Element {
 			</app-buttons-group>
 		</app-buttons-right>
 
-		<bottom-sheet>
+		<bottom-sheet default-snap=${() => (this.showDetailView ? '0.88' : undefined)}>
+			<show-when
+				condition=${() => this.showDetailView}
+				content=${() => html`
+					<template-detail-view
+						selected-template=${() => Array.from(store.selectedTemplates.values())[0] || null}
+						onclose=${this.#onDetailViewClose}
+					></template-detail-view>
+				`}
+			></show-when>
 			<show-when
 				condition=${() => this.showAvatarSelection}
 				content=${() => html`<avatar-selection content-only></avatar-selection>`}
@@ -402,7 +429,11 @@ export class TemplateView extends Element {
 			></show-when>
 			<show-when
 				condition=${() =>
-					!this.showAvatarSelection && !this.showPoseSelection && this.selectedTab !== null && !this.showRemixOverlay}
+					!this.showAvatarSelection &&
+					!this.showPoseSelection &&
+					!this.showDetailView &&
+					this.selectedTab !== null &&
+					!this.showRemixOverlay}
 				content=${() => html`
 					<tabs-provider
 						default-value=${() => this.selectedTab}
@@ -497,15 +528,13 @@ export class TemplateView extends Element {
 			></show-when>
 			<bottom-navigation
 				classList=${() => ({
-					hidden: this.showRemixOverlay && store.remixOverlayTemplate !== null,
+					hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
 				})}
 			>
-				<!-- Template info - shown when template is selected -->
 				<div
 					class="template-info"
 					classList=${() => {
 						const templates = Array.from(store.selectedTemplates.values())
-						console.log('**templates', templates)
 						return {hidden: templates.length === 0}
 					}}
 				>
@@ -532,11 +561,10 @@ export class TemplateView extends Element {
 						const templates = Array.from(store.selectedTemplates.values())
 						return {hidden: templates.length === 0}
 					}}
+					onclick=${this.#onViewDetailsClick}
 				>
 					View details
 				</button>
-
-				<!-- Default navigation - shown when no template is selected -->
 				<div
 					class="default-nav"
 					classList=${() => {
@@ -718,7 +746,7 @@ export class TemplateView extends Element {
 			height: 40px;
 			overflow: hidden;
 			border-radius: var(--borderRadiusCircular);
-			border: 1px solid var(--uiColorBorderColor);
+			border: 1px solid var(--uiColorAccentViolet);
 			transition: border-color 0.3s ease;
 			background: var(--appBackground);
 		}
@@ -726,8 +754,9 @@ export class TemplateView extends Element {
 		.template-image {
 			width: 100%;
 			height: 100%;
-			object-fit: cover;
+			object-fit: contain;
 			object-position: center;
+			margin-top: 0;
 		}
 
 		.template-details {
@@ -737,26 +766,26 @@ export class TemplateView extends Element {
 		}
 
 		.template-name {
-			font-size: 14px;
-			font-weight: 500;
-			color: var(--uiColorText);
+			font-size: 10px;
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
 			margin: 0;
 		}
 
 		.template-price {
 			font-size: 12px;
-			color: var(--uiColorTextSecondary);
+			color: #424347;
 			margin: 0;
 		}
 
 		.view-details-btn {
 			background: #f6f6f6;
-			border: none;
-			border-radius: 16px;
+			border-radius: var(--borderRadiusPill);
+			border: var(--borderWidth) solid #8c8c8c;
 			padding: 8px 16px;
 			font-size: 10px;
 			font-weight: 500;
-			color: var(--uiColorText);
+			color: #8c8c8c;
 			cursor: pointer;
 			transition: background 0.2s ease;
 		}
