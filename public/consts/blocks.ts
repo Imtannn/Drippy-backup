@@ -5,9 +5,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '1',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_5_Skirt/skirt_1738.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_5_Skirt/skirt_1738.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_5_Skirt/skirt_1738.glb',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_5_Skirt/skirt_1738.glb',
 			blockName: 'skirt 1738',
 			avatar: 'female',
 			category: 'Skirt',
@@ -18,9 +18,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '2',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_5_Sleeves/sleeves_1737.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_5_Sleeves/sleeves_1737.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_5_Sleeves/sleeves_1737.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_5_Sleeves/sleeves_1737.gltf',
 			blockName: 'sleeves 1737',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -31,9 +31,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '3',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_5_Bodice/bodice_1736.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_5_Bodice/bodice_1736.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_5_Bodice/bodice_1736.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_5_Bodice/bodice_1736.gltf',
 			blockName: 'bodice 1736',
 			avatar: 'female',
 			category: 'Bodice',
@@ -43,9 +43,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '4',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.glb',
 			blockName: 'Item 5',
 			avatar: 'female',
 			category: 'Skirt',
@@ -55,9 +56,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '5',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.gltf',
 			blockName: 'Item 4',
 			avatar: 'female',
 			category: 'Skirt',
@@ -67,9 +69,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '6',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.glb',
 			blockName: 'Item 3',
 			avatar: 'female',
 			category: 'Skirt',
@@ -79,9 +82,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '7',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.gltf',
 			blockName: 'Item 2',
 			avatar: 'female',
 			category: 'Skirt',
@@ -91,8 +95,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '8',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.glb',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.glb',
 			blockName: 'Item 1',
 			avatar: 'female',
 			category: 'Skirt',
@@ -102,9 +108,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '9',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.glb',
 			blockName: 'Item 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -114,9 +121,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '10',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.gltf',
 			blockName: 'Item 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -126,9 +134,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '11',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.gltf',
 			blockName: 'Item 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -138,9 +147,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '12',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.gltf',
 			blockName: 'Item 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -150,9 +160,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '13',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.gltf',
 			blockName: 'Item 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -162,9 +173,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '14',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.gltf',
 			blockName: 'Item 5',
 			avatar: 'female',
 			category: 'Bodice',
@@ -174,9 +186,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '15',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.gltf',
 			blockName: 'Item 4',
 			avatar: 'female',
 			category: 'Bodice',
@@ -186,9 +199,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '16',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.gltf',
 			blockName: 'Item 3',
 			avatar: 'female',
 			category: 'Bodice',
@@ -198,9 +212,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '17',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.gltf',
 			blockName: 'Item 2',
 			avatar: 'female',
 			category: 'Bodice',
@@ -210,9 +225,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '18',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.gltf',
 			blockName: 'Item 1',
 			avatar: 'female',
 			category: 'Bodice',
@@ -223,9 +239,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '19',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_4_Skirt/skirt_1734.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_4_Skirt/skirt_1734.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_4_Skirt/skirt_1734.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_4_Skirt/skirt_1734.gltf',
 			blockName: 'skirt 1734',
 			avatar: 'female',
 			category: 'Skirt',
@@ -236,9 +252,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '20',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_4_Bodice/bodice_1733.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_4_Bodice/bodice_1733.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_4_Bodice/bodice_1733.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_4_Bodice/bodice_1733.gltf',
 			blockName: 'bodice 1733',
 			avatar: 'female',
 			category: 'Bodice',
@@ -248,9 +264,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '21',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.glb',
 			blockName: 'Item 5',
 			avatar: 'female',
 			category: 'Skirt',
@@ -260,9 +277,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '22',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.glb',
 			blockName: 'Item 4',
 			avatar: 'female',
 			category: 'Skirt',
@@ -272,9 +290,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '23',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.gltf',
 			blockName: 'Item 3',
 			avatar: 'female',
 			category: 'Skirt',
@@ -284,8 +303,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '24',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.glb',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.glb',
 			blockName: 'Item 2',
 			avatar: 'female',
 			category: 'Skirt',
@@ -295,9 +316,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '25',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.glb',
 			blockName: 'Item 1',
 			avatar: 'female',
 			category: 'Skirt',
@@ -307,9 +329,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '26',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.gltf',
 			blockName: 'Item 5',
 			avatar: 'female',
 			category: 'Bodice',
@@ -319,9 +342,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '27',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.gltf',
 			blockName: 'Item 4',
 			avatar: 'female',
 			category: 'Bodice',
@@ -331,9 +355,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '28',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.gltf',
 			blockName: 'Item 3',
 			avatar: 'female',
 			category: 'Bodice',
@@ -343,9 +368,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '29',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.gltf',
 			blockName: 'Item 2',
 			avatar: 'female',
 			category: 'Bodice',
@@ -355,9 +381,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '30',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.gltf',
 			blockName: 'Item 1',
 			avatar: 'female',
 			category: 'Bodice',
@@ -368,9 +395,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '31',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_3_Skirt/skirt_1741.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_3_Skirt/skirt_1741.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_3_Skirt/skirt_1741.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_3_Skirt/skirt_1741.gltf',
 			blockName: 'skirt 1741',
 			avatar: 'female',
 			category: 'Skirt',
@@ -381,9 +408,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '32',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_3_Sleeves/sleeves_1740.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_3_Sleeves/sleeves_1740.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_3_Sleeves/sleeves_1740.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_3_Sleeves/sleeves_1740.gltf',
 			blockName: 'sleeves 1740',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -394,9 +421,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '33',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_3_Bodice/bodice_1739.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_3_Bodice/bodice_1739.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_3_Bodice/bodice_1739.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_3_Bodice/bodice_1739.gltf',
 			blockName: 'bodice 1739',
 			avatar: 'female',
 			category: 'Bodice',
@@ -406,9 +433,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '34',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.glb',
 			blockName: 'Item 5',
 			avatar: 'female',
 			category: 'Skirt',
@@ -418,9 +446,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '35',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.gltf',
 			blockName: 'Item 4',
 			avatar: 'female',
 			category: 'Skirt',
@@ -430,9 +459,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '36',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.gltf',
 			blockName: 'Item 3',
 			avatar: 'female',
 			category: 'Skirt',
@@ -442,8 +472,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '37',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.glb',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.glb',
 			blockName: 'Item 2',
 			avatar: 'female',
 			category: 'Skirt',
@@ -453,9 +485,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '38',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.glb',
 			blockName: 'Item 1',
 			avatar: 'female',
 			category: 'Skirt',
@@ -465,9 +498,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '39',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.gltf',
 			blockName: 'Item 5',
 			avatar: 'female',
 			category: 'Bodice',
@@ -477,9 +511,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '40',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.gltf',
 			blockName: 'Item 4',
 			avatar: 'female',
 			category: 'Bodice',
@@ -489,9 +524,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '41',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.gltf',
 			blockName: 'Item 3',
 			avatar: 'female',
 			category: 'Bodice',
@@ -501,9 +537,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '42',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.gltf',
 			blockName: 'Item 2',
 			avatar: 'female',
 			category: 'Bodice',
@@ -513,9 +550,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '43',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.gltf',
 			blockName: 'Item 1',
 			avatar: 'female',
 			category: 'Bodice',
@@ -525,9 +563,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '44',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.glb',
 			blockName: 'Item 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -537,9 +576,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '45',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.gltf',
 			blockName: 'Item 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -549,9 +589,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '46',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.glb',
 			blockName: 'Item 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -561,9 +602,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '47',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.gltf',
 			blockName: 'Item 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -573,9 +615,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '48',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.glb',
 			blockName: 'Item 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -586,9 +629,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '49',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_2___Skirt/skirt_1744.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_2___Skirt/skirt_1744.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_2___Skirt/skirt_1744.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_2___Skirt/skirt_1744.gltf',
 			blockName: 'skirt 1744',
 			avatar: 'female',
 			category: 'Skirt',
@@ -599,9 +642,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '50',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_2___Sleeves/sleeves_1743.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_2___Sleeves/sleeves_1743.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_2___Sleeves/sleeves_1743.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_2___Sleeves/sleeves_1743.gltf',
 			blockName: 'sleeves 1743',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -612,9 +655,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '51',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_2___Bodice/bodice_1742.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_2___Bodice/bodice_1742.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_2___Bodice/bodice_1742.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_2___Bodice/bodice_1742.gltf',
 			blockName: 'bodice 1742',
 			avatar: 'female',
 			category: 'Bodice',
@@ -624,9 +667,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '52',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_5.gltf',
 			blockName: 'Item 5',
 			avatar: 'female',
 			category: 'Skirt',
@@ -636,9 +680,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '53',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_4.gltf',
 			blockName: 'Item 4',
 			avatar: 'female',
 			category: 'Skirt',
@@ -648,8 +693,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '54',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.glb',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.webp',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_3.glb',
 			blockName: 'Item 3',
 			avatar: 'female',
 			category: 'Skirt',
@@ -659,9 +706,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '55',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_2.gltf',
 			blockName: 'Item 2',
 			avatar: 'female',
 			category: 'Skirt',
@@ -671,9 +719,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '56',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Skirt/Item_1.gltf',
 			blockName: 'Item 1',
 			avatar: 'female',
 			category: 'Skirt',
@@ -683,9 +732,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '57',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_5.gltf',
 			blockName: 'Item 5',
 			avatar: 'female',
 			category: 'Bodice',
@@ -695,9 +745,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '58',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_4.gltf',
 			blockName: 'Item 4',
 			avatar: 'female',
 			category: 'Bodice',
@@ -707,9 +758,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '59',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_3.gltf',
 			blockName: 'Item 3',
 			avatar: 'female',
 			category: 'Bodice',
@@ -719,9 +771,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '60',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_2.gltf',
 			blockName: 'Item 2',
 			avatar: 'female',
 			category: 'Bodice',
@@ -731,9 +784,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '61',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Bodice/Item_1.gltf',
 			blockName: 'Item 1',
 			avatar: 'female',
 			category: 'Bodice',
@@ -743,9 +797,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '62',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_5.gltf',
 			blockName: 'Item 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -755,9 +810,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '63',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_4.gltf',
 			blockName: 'Item 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -767,9 +823,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '64',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_3.gltf',
 			blockName: 'Item 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -779,9 +836,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '65',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_2.gltf',
 			blockName: 'Item 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -791,9 +849,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '66',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.webp',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Item_1.gltf',
 			blockName: 'Item 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -804,9 +863,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '67',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_1_Sleeves/sleeves_1732.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_1_Sleeves/sleeves_1732.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_1_Sleeves/sleeves_1732.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_1_Sleeves/sleeves_1732.gltf',
 			blockName: 'sleeves 1732',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -817,9 +876,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '68',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/blocks/Dress/Item_1___Fullbody/fullbody_1730.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/blocks/Dress/Item_1___Fullbody/fullbody_1730.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/blocks/Dress/Item_1___Fullbody/fullbody_1730.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/blocks/Dress/Item_1___Fullbody/fullbody_1730.gltf',
 			blockName: 'fullbody 1730',
 			avatar: 'female',
 			category: 'Full Body',
@@ -830,9 +889,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '69',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_5.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_5.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_5.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_5.gltf',
 			blockName: 'Sleeves 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -843,9 +902,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '70',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_4.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_4.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_4.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_4.gltf',
 			blockName: 'Sleeves 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -856,9 +915,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '71',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_3.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_3.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_3.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_3.gltf',
 			blockName: 'Sleeves 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -869,9 +928,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '72',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_2.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_2.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_2.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_2.gltf',
 			blockName: 'Sleeves 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -882,9 +941,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '73',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_1.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_1.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_1.gltf',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/sapienzaUniversityOfRome/options/Dress/Sleeves/Sleeves_1.gltf',
 			blockName: 'Sleeves 1',
 			avatar: 'female',
 			category: 'Sleeves',
