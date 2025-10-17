@@ -33,6 +33,7 @@ import {formatNumber} from '../utils.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './item-card.js'
+import './loading-spinner-overlay.js'
 import './pose-selection.js'
 import './remix-overlay.js'
 import {updateFabricsInUrl, updateGarmentsInUrl} from './store.js'
@@ -149,6 +150,8 @@ export class TemplateView extends Element {
 
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
+
+		store.setLoadingTemplate(template._id)
 
 		// If clicking on already selected template, show overlay instead of toggling
 		this.isOpeningOverlay = true
@@ -440,7 +443,9 @@ export class TemplateView extends Element {
 																aspect-ratio="0.79"
 															></item-card>
 															<show-when
-																condition=${() => this.showTemplateOverlay?._id === template._id}
+																condition=${() =>
+																	this.showTemplateOverlay?._id === template._id &&
+																	!store.isTemplateLoading(template._id)}
 																content=${() => html`
 																	<template-item-overlay
 																		selected-template=${() => template}
@@ -448,6 +453,10 @@ export class TemplateView extends Element {
 																		onremix=${this.#onTemplateOverlayRemix}
 																	></template-item-overlay>
 																`}
+															></show-when>
+															<show-when
+																condition=${() => store.isTemplateLoading(template._id)}
+																content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
 															></show-when>
 														</div>
 														<div class="template-product-name">${template.name}</div>
