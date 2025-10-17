@@ -117,7 +117,14 @@ export class TemplateDetailView extends Element {
 				</tabs-provider>
 			</div>
 
-			<button class="done-button" onclick=${this.onclose}>Done</button>
+			<button
+				class="done-button"
+				onclick=${() => {
+					this.dispatchEvent(new CustomEvent('close', {bubbles: true}))
+				}}
+			>
+				Done
+			</button>
 		</div>
 	`
 

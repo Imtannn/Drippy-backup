@@ -67,6 +67,8 @@ export class TemplateView extends Element {
 		// Add click handler to close overlay when clicking outside
 		document.addEventListener('click', this.#onDocumentClick)
 
+		this.addEventListener('close', this.#onDetailViewClose)
+
 		this.createEffect(() => {
 			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
 		})
