@@ -1,4 +1,9 @@
 import {attribute, booleanAttribute, css, Element, element, type ElementAttributes, html, onCleanup} from 'lume'
+import {store} from '../app/store.js'
+
+import '../app/app-buttons.js'
+import './back-button.js'
+import '../elements/preview-button.js'
 
 // Define snap points in percentages of viewport height
 const SNAP_POINTS = [0.41, 0.6, 0.88]
@@ -297,8 +302,29 @@ export class BottomSheet extends Element {
 		this.handleDragStart(e as MouseEvent | TouchEvent)
 	}
 
+	#onBackButtonClick = () => {
+		console.log('Back button clicked')
+		// Emit event so parent component can handle the back action
+		// This allows each parent to implement their own back logic
+		this.dispatchEvent(new CustomEvent('back', {bubbles: true, composed: true}))
+	}
+
+	#onPreviewButtonClick = () => {
+		// Emit event so parent component can handle the preview action
+		this.dispatchEvent(new CustomEvent('preview', {bubbles: true, composed: true}))
+	}
+
 	template = () => {
 		return html`
+			<app-buttons-left>
+				<app-buttons-group group-direction="row" custom-class="button-group-spread">
+					<back-button onclick=${this.#onBackButtonClick}></back-button>
+					<preview-button
+						button-disabled=${() => store.selectedTemplates.size === 0}
+						onclick=${this.#onPreviewButtonClick}
+					></preview-button>
+				</app-buttons-group>
+			</app-buttons-left>
 			<div
 				class="bottom-sheet"
 				classList=${{
@@ -337,6 +363,13 @@ export class BottomSheet extends Element {
 			pointer-events: none;
 		}
 
+		/* Hide back button and preview button on mobile, show only on desktop */
+		app-buttons-left {
+			display: none;
+		}
+		app-buttons-right {
+			display: none;
+		}
 		body.is-dragging {
 			user-select: none;
 			cursor: ns-resize;
@@ -424,6 +457,32 @@ export class BottomSheet extends Element {
 				padding-right: 0;
 			}
 
+			/* Show back button on desktop */
+			app-buttons-left {
+				display: block;
+				pointer-events: auto;
+				z-index: 100;
+				--app-buttons-left-transform: translateX(0) !important;
+				--app-buttons-left-transform: translateY(-10px) !important;
+			}
+
+			/* Override transform to keep button visible */
+			app-buttons-left .app-buttons-left {
+				transform: translateX(0) !important;
+			}
+
+			app-buttons-right {
+				display: block;
+				pointer-events: auto;
+				z-index: 100;
+				--app-buttons-right-transform: translateX(0) !important;
+				--app-buttons-right-transform: translateY(-10px) !important;
+			}
+
+			app-buttons-right .app-buttons-right {
+				transform: translateX(0) !important;
+			}
+
 			.bottom-sheet {
 				position: relative;
 				top: auto;
@@ -432,8 +491,8 @@ export class BottomSheet extends Element {
 				right: auto;
 				border-radius: 1rem;
 				border: 1px solid #e5e7eb;
-				width: 24rem;
-				padding-top: var(--bottom-sheet-handle-height);
+				width: 32rem;
+				padding-top: 70px;
 				max-width: calc(100vw - 3rem);
 				height: 100vh;
 				max-height: var(--bottom-sheet-max-height);

@@ -393,23 +393,17 @@ export class TemplateView extends Element {
 		<app-buttons-right layout="bottom">
 			<app-buttons-group>
 				<show-when
-					condition=${() =>
-						!this.showAvatarSelection && !this.showPoseSelection && !this.showRemixOverlay && !this.showDetailView}
-					content=${() => html`
-						<preview-button
-							button-disabled=${() => store.selectedTemplates.size === 0}
-							onclick=${this.#onPreviewButtonClick}
-						></preview-button>
-					`}
-				></show-when>
-				<show-when
 					condition=${() => this.showRemixOverlay}
 					content=${() => html` <button class="done-button" onclick=${this.#closeRemixOverlay}>Done</button> `}
 				></show-when>
 			</app-buttons-group>
 		</app-buttons-right>
 
-		<bottom-sheet default-snap=${() => (this.showDetailView ? '0.88' : undefined)}>
+		<bottom-sheet
+			onback=${this.#onBackButtonClick}
+			onpreview=${this.#onPreviewButtonClick}
+			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
+		>
 			<show-when
 				condition=${() => this.showDetailView}
 				content=${() => html`
@@ -611,6 +605,19 @@ export class TemplateView extends Element {
 		${onboardingStyles}
 		:host {
 			display: contents;
+		}
+
+		/* Show back button on mobile only, hide on desktop (bottom-sheet handles desktop) */
+		app-buttons-left {
+			display: block;
+			pointer-events: auto;
+			z-index: 100;
+		}
+
+		@media (min-width: 768px) {
+			app-buttons-left {
+				display: none;
+			}
 		}
 
 		.tabs-container {

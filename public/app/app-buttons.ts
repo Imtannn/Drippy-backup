@@ -151,14 +151,17 @@ export class AppButtonsRight extends Element {
 // APP BUTTONS GROUP - Group of app buttons
 // ============================================================================
 
-type AppButtonsGroupAttributes = 'groupDirection' | 'customStyle'
+type AppButtonsGroupAttributes = 'groupDirection' | 'customStyle' | 'customClass'
 
 @element
 export class AppButtonsGroup extends Element {
 	static readonly elementName = 'app-buttons-group'
 
 	@attribute groupDirection: 'column' | 'row' = 'column'
+	@attribute customClass: string = ''
 	@attribute customStyle: string = ''
+	#divRef?: HTMLElement
+
 	connectedCallback() {
 		super.connectedCallback()
 		this.createEffect(() => {
@@ -168,10 +171,26 @@ export class AppButtonsGroup extends Element {
 				this.style.setProperty('--app-buttons-group-direction', 'column')
 			}
 		})
+
+		this.createEffect(() => {
+			if (this.#divRef) {
+				// Remove all previous custom classes
+				this.#divRef.className = 'app-buttons-group'
+				// Add custom class if provided
+				if (this.customClass) {
+					this.#divRef.classList.add(this.customClass)
+				}
+			}
+		})
 	}
 
 	template = () => html`
-		<div class="app-buttons-group" id="app-buttons-group" style=${() => this.customStyle}>
+		<div
+			class="app-buttons-group"
+			ref="${(el: HTMLElement) => (this.#divRef = el)}"
+			id="app-buttons-group"
+			style=${() => this.customStyle}
+		>
 			<slot></slot>
 		</div>
 	`
@@ -186,6 +205,14 @@ export class AppButtonsGroup extends Element {
 			align-items: flex-end;
 			flex-direction: var(--app-buttons-group-direction);
 			gap: 5px;
+		}
+
+		/* Custom class for spread layout */
+		.button-group-spread {
+			align-items: unset !important;
+			flex-direction: unset !important;
+			justify-content: space-between;
+			width: 30rem;
 		}
 	`
 }
