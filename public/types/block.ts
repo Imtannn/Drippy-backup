@@ -20,7 +20,7 @@ export type Block = {
 	blockName: string
 	avatar: BlockAvatar
 	category: BlockCategory
-	templateId: string
-	templateName: string
+	templateId?: string
+	templateName?: string
 	templateCategory: TemplateCategory
 }

@@ -16,16 +16,13 @@ import type {BlockCategory} from '../types/block.js'
 const materials = [
 	{
 		id: '6',
-		thumb:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_RENDER.webp',
-		normal:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_NORMAL.jpg',
-		baseColor:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_BASE.jpg',
+		thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_RENDER.webp',
+		normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_NORMAL.jpg',
+		baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_BASE.jpg',
 		displacement:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_DISPLACE.jpg',
+			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_DISPLACE.jpg',
 		roughness:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_ROUGH.jpg',
+			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_ROUGH.jpg',
 		alpha: '',
 		materialName: 'Navy',
 		category: 'Polyester',
@@ -34,15 +31,15 @@ const materials = [
 	{
 		id: '9',
 		thumb:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_RENDER.webp',
+			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_RENDER.webp',
 		normal:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_NORMAL.jpg',
+			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_NORMAL.jpg',
 		baseColor:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_BASE.jpg',
+			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_BASE.jpg',
 		displacement:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_DISPLACE.jpg',
+			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_DISPLACE.jpg',
 		roughness:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_ROUGH.jpg',
+			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_ROUGH.jpg',
 		alpha: '',
 		materialName: 'Tanktop',
 		category: 'Striped',
@@ -50,16 +47,12 @@ const materials = [
 	},
 	{
 		id: '8',
-		thumb:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_RENDER.webp',
-		normal:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_NORMAL.jpg',
-		baseColor:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_BASE.jpg',
+		thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_RENDER.webp',
+		normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_NORMAL.jpg',
+		baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_BASE.jpg',
 		displacement:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_DISPLACE.jpg',
-		roughness:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_ROUGH.jpg',
+			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_DISPLACE.jpg',
+		roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_ROUGH.jpg',
 		alpha: '',
 		materialName: 'Orange',
 		category: 'Cotton',

@@ -1,3 +1,5 @@
+import type {Block, BlockCategory} from './block'
+
 export type TemplateCategory =
 	| 'All'
 	| 'Skirt'
@@ -25,4 +27,6 @@ export type Template = {
 	category: TemplateCategory
 	materialId?: string // References fabric by "${materialName} ${category}" format
 	extraMaterials?: ExtraMaterial[]
+	fabricOptions?: string[] // Array of material IDs that reference fabrics
+	blockOptions?: {category: BlockCategory; blocks: Block[]}[]
 }

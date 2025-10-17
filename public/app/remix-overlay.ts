@@ -17,6 +17,7 @@ import '../elements/tabs.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template} from '../types/template.js'
+import {fabrics} from '../consts/fabrics.js'
 import {blockManager} from './block-manager.js'
 import './fabric-selection.js'
 import './item-card.js'
@@ -61,10 +62,16 @@ export class RemixOverlay extends Element {
 				return
 			}
 
-			this.availableBlocks = blockManager.getBlocksForTemplateCategory(
-				this.selectedTemplate.category,
-				this.spaceCollection,
-			)
+			// Use template blockOptions if available, otherwise fall back to blockManager
+			if (this.selectedTemplate.blockOptions && this.selectedTemplate.blockOptions.length > 0) {
+				// Flatten all blocks from blockOptions
+				this.availableBlocks = this.selectedTemplate.blockOptions.flatMap(option => option.blocks)
+			} else {
+				this.availableBlocks = blockManager.getBlocksForTemplateCategory(
+					this.selectedTemplate.category,
+					this.spaceCollection,
+				)
+			}
 
 			onCleanup(() => {
 				this.availableBlocks = []
@@ -78,16 +85,20 @@ export class RemixOverlay extends Element {
 				return
 			}
 
-			const {blocksCategories} = blockManager.isRemixAvailableForTemplate(this.selectedTemplate, {
-				selectedBlocks: untrack(() => store.selectedBlocks),
-				selectedSpace: untrack(() => store.selectedSpace),
-				sourceCollection: this.spaceCollection,
-			})
+			// Use template blockOptions if available, otherwise fall back to blockManager
+			if (this.selectedTemplate.blockOptions && this.selectedTemplate.blockOptions.length > 0) {
+				this.blocksCategories = this.selectedTemplate.blockOptions.map(option => option.category)
+			} else {
+				const {blocksCategories} = blockManager.isRemixAvailableForTemplate(this.selectedTemplate, {
+					selectedBlocks: untrack(() => store.selectedBlocks),
+					selectedSpace: untrack(() => store.selectedSpace),
+					sourceCollection: this.spaceCollection,
+				})
+				this.blocksCategories = blocksCategories
+			}
 
-			this.blocksCategories = blocksCategories
-
-			if (blocksCategories.length > 0) {
-				this.selectedSubTab = blocksCategories[0]
+			if (this.blocksCategories.length > 0) {
+				this.selectedSubTab = this.blocksCategories[0]
 			}
 
 			this.activeTab = FABRICS_TAB
@@ -104,8 +115,35 @@ export class RemixOverlay extends Element {
 				return
 			}
 
-			this.availableFabrics =
-				blockManager.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
+			// Use template fabricOptions if available, otherwise fall back to blockManager
+			if (this.selectedTemplate.fabricOptions && this.selectedTemplate.fabricOptions.length > 0) {
+				// Get fabrics from the collection that match the fabricOptions material IDs
+				const collection = this.spaceCollection
+				const availableFabrics: Record<string, Fabric[]> = {}
+
+				// Get fabrics that match the fabricOptions
+				const optionFabrics = this.selectedTemplate.fabricOptions
+					.map(materialId => {
+						return fabrics[collection]?.find(fabric => `${fabric.category} - ${fabric.materialName}` === materialId)
+					})
+					.filter(fabric => fabric !== undefined) as Fabric[]
+
+				if (optionFabrics.length > 0) {
+					availableFabrics['default'] = optionFabrics
+				}
+
+				// Handle extraMaterials if they exist - use optionFabrics directly
+				if (this.selectedTemplate.extraMaterials && this.selectedTemplate.extraMaterials.length > 0) {
+					for (const extraMaterial of this.selectedTemplate.extraMaterials) {
+						availableFabrics[extraMaterial.mesh] = optionFabrics
+					}
+				}
+
+				this.availableFabrics = availableFabrics
+			} else {
+				this.availableFabrics =
+					blockManager.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
+			}
 
 			// Make sure the overlay is scrolled to the top on opening
 			this.shadowRoot?.querySelector('.scroll-content')?.scrollIntoView({behavior: 'instant', block: 'end'})
@@ -160,6 +198,13 @@ export class RemixOverlay extends Element {
 	}
 
 	#filteredBlocksByCategory = (category: BlockCategory) => {
+		// If using template blockOptions, filter from the specific category's blocks
+		if (this.selectedTemplate?.blockOptions && this.selectedTemplate.blockOptions.length > 0) {
+			const categoryOption = this.selectedTemplate.blockOptions.find(option => option.category === category)
+			return categoryOption?.blocks || []
+		}
+
+		// Otherwise use the general available blocks
 		return this.availableBlocks.filter(block => block.category === category)
 	}
 
