@@ -3269,547 +3269,564 @@ export const fabrics: Record<string, Fabric[]> = {
 		{
 			_id: '1',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_12/VELVET_-_12_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_RED/VELVET_-_RED_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_12/VELVET_-_12_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_RED/VELVET_-_RED_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_12/VELVET_-_12_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_RED/VELVET_-_RED_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_12/VELVET_-_12_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_RED/VELVET_-_RED_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_12/VELVET_-_12_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_RED/VELVET_-_RED_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Red',
+			category: 'Velvet',
+			templateCategories: ['Dress'],
+		},
+		{
+			_id: '2',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_12/VELVET_-_12_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_12/VELVET_-_12_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_12/VELVET_-_12_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_12/VELVET_-_12_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_12/VELVET_-_12_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '12',
 			category: 'Velvet',
 			templateCategories: [],
 		},
 		{
-			_id: '2',
+			_id: '3',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_11/VELVET_-_11_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_11/VELVET_-_11_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_11/VELVET_-_11_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_11/VELVET_-_11_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_11/VELVET_-_11_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_11/VELVET_-_11_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_11/VELVET_-_11_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_11/VELVET_-_11_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_11/VELVET_-_11_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_11/VELVET_-_11_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '11',
 			category: 'Velvet',
 			templateCategories: [],
 		},
 		{
-			_id: '3',
+			_id: '4',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_10/VELVET_-_10_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_10/VELVET_-_10_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_10/VELVET_-_10_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_10/VELVET_-_10_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_10/VELVET_-_10_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_10/VELVET_-_10_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_10/VELVET_-_10_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_10/VELVET_-_10_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_10/VELVET_-_10_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_10/VELVET_-_10_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '10',
 			category: 'Velvet',
 			templateCategories: [],
 		},
 		{
-			_id: '4',
+			_id: '5',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_09/VELVET_-_09_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_09/VELVET_-_09_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_09/VELVET_-_09_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_09/VELVET_-_09_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_09/VELVET_-_09_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_09/VELVET_-_09_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_09/VELVET_-_09_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_09/VELVET_-_09_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_09/VELVET_-_09_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_09/VELVET_-_09_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '09',
 			category: 'Velvet',
 			templateCategories: [],
 		},
 		{
-			_id: '5',
+			_id: '6',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_1/TEXTURE_-_MICRO_1_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_1/TEXTURE_-_MICRO_1_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_1/TEXTURE_-_MICRO_1_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_1/TEXTURE_-_MICRO_1_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_1/TEXTURE_-_MICRO_1_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_1/TEXTURE_-_MICRO_1_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_1/TEXTURE_-_MICRO_1_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_1/TEXTURE_-_MICRO_1_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_1/TEXTURE_-_MICRO_1_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_1/TEXTURE_-_MICRO_1_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Micro 1',
 			category: 'Texture',
 			templateCategories: [],
 		},
 		{
-			_id: '6',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_ALPHA.jpg',
-			materialName: 'Flower 05',
-			category: 'Lace',
-			templateCategories: ['Dress'],
-		},
-		{
 			_id: '7',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_ROUGH.jpg',
 			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_ALPHA.jpg',
-			materialName: 'Flower 04',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_ALPHA.jpg',
+			materialName: 'Flower 05',
 			category: 'Lace',
 			templateCategories: ['Dress'],
 		},
 		{
 			_id: '8',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_ROUGH.jpg',
 			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_ALPHA.jpg',
-			materialName: 'Flower 03',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_ALPHA.jpg',
+			materialName: 'Flower 04',
 			category: 'Lace',
 			templateCategories: ['Dress'],
 		},
 		{
 			_id: '9',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_ROUGH.jpg',
 			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_ALPHA.jpg',
-			materialName: 'Flower 02',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_ALPHA.jpg',
+			materialName: 'Flower 03',
 			category: 'Lace',
 			templateCategories: ['Dress'],
 		},
 		{
 			_id: '10',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_ROUGH.jpg',
 			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_ALPHA.jpg',
-			materialName: 'Flower 01',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_ALPHA.jpg',
+			materialName: 'Flower 02',
 			category: 'Lace',
 			templateCategories: ['Dress'],
 		},
 		{
 			_id: '11',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_05/STRIPED_-_METALLIC_05_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_05/STRIPED_-_METALLIC_05_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_05/STRIPED_-_METALLIC_05_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_05/STRIPED_-_METALLIC_05_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_05/STRIPED_-_METALLIC_05_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_ROUGH.jpg',
+			alpha:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_ALPHA.jpg',
+			materialName: 'Flower 01',
+			category: 'Lace',
+			templateCategories: ['Dress'],
+		},
+		{
+			_id: '12',
+			thumb:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_05/STRIPED_-_METALLIC_05_-_RENDER.webp',
+			normal:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_05/STRIPED_-_METALLIC_05_-_NORMAL.jpg',
+			baseColor:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_05/STRIPED_-_METALLIC_05_-_BASE.jpg',
+			displacement:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_05/STRIPED_-_METALLIC_05_-_DISPLACE.jpg',
+			roughness:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_05/STRIPED_-_METALLIC_05_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Metallic 05',
 			category: 'Striped',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '12',
+			_id: '13',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_04/STRIPED_-_METALLIC_04_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_04/STRIPED_-_METALLIC_04_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_04/STRIPED_-_METALLIC_04_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_04/STRIPED_-_METALLIC_04_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_04/STRIPED_-_METALLIC_04_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_04/STRIPED_-_METALLIC_04_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_04/STRIPED_-_METALLIC_04_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_04/STRIPED_-_METALLIC_04_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_04/STRIPED_-_METALLIC_04_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_04/STRIPED_-_METALLIC_04_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Metallic 04',
 			category: 'Striped',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '13',
+			_id: '14',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_03/STRIPED_-_METALLIC_03_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_03/STRIPED_-_METALLIC_03_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_03/STRIPED_-_METALLIC_03_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_03/STRIPED_-_METALLIC_03_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_03/STRIPED_-_METALLIC_03_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_03/STRIPED_-_METALLIC_03_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_03/STRIPED_-_METALLIC_03_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_03/STRIPED_-_METALLIC_03_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_03/STRIPED_-_METALLIC_03_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_03/STRIPED_-_METALLIC_03_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Metallic 03',
 			category: 'Striped',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '14',
+			_id: '15',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_02/STRIPED_-_METALLIC_02_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_02/STRIPED_-_METALLIC_02_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_02/STRIPED_-_METALLIC_02_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_02/STRIPED_-_METALLIC_02_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_02/STRIPED_-_METALLIC_02_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_02/STRIPED_-_METALLIC_02_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_02/STRIPED_-_METALLIC_02_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_02/STRIPED_-_METALLIC_02_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_02/STRIPED_-_METALLIC_02_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_02/STRIPED_-_METALLIC_02_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Metallic 02',
 			category: 'Striped',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '15',
+			_id: '16',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_01/STRIPED_-_METALLIC_01_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_01/STRIPED_-_METALLIC_01_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_01/STRIPED_-_METALLIC_01_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_01/STRIPED_-_METALLIC_01_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_01/STRIPED_-_METALLIC_01_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_01/STRIPED_-_METALLIC_01_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_01/STRIPED_-_METALLIC_01_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_01/STRIPED_-_METALLIC_01_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_01/STRIPED_-_METALLIC_01_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/STRIPED_-_METALLIC_01/STRIPED_-_METALLIC_01_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Metallic 01',
 			category: 'Striped',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '16',
+			_id: '17',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_08/VELVET_-_08_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_08/VELVET_-_08_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_08/VELVET_-_08_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_08/VELVET_-_08_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_08/VELVET_-_08_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_08/VELVET_-_08_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_08/VELVET_-_08_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_08/VELVET_-_08_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_08/VELVET_-_08_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_08/VELVET_-_08_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '08',
 			category: 'Velvet',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '17',
+			_id: '18',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_07/VELVET_-_07_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_07/VELVET_-_07_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_07/VELVET_-_07_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_07/VELVET_-_07_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_07/VELVET_-_07_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_07/VELVET_-_07_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_07/VELVET_-_07_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_07/VELVET_-_07_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_07/VELVET_-_07_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_07/VELVET_-_07_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '07',
 			category: 'Velvet',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '18',
+			_id: '19',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_06/VELVET_-_06_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_06/VELVET_-_06_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_06/VELVET_-_06_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_06/VELVET_-_06_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_06/VELVET_-_06_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_06/VELVET_-_06_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_06/VELVET_-_06_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_06/VELVET_-_06_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_06/VELVET_-_06_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_06/VELVET_-_06_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '06',
 			category: 'Velvet',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '19',
+			_id: '20',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_05/VELVET_-_05_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_05/VELVET_-_05_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_05/VELVET_-_05_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_05/VELVET_-_05_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_05/VELVET_-_05_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_05/VELVET_-_05_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_05/VELVET_-_05_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_05/VELVET_-_05_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_05/VELVET_-_05_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_05/VELVET_-_05_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '05',
 			category: 'Velvet',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '20',
+			_id: '21',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_04/VELVET_-_04_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_04/VELVET_-_04_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_04/VELVET_-_04_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_04/VELVET_-_04_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_04/VELVET_-_04_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_04/VELVET_-_04_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_04/VELVET_-_04_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_04/VELVET_-_04_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_04/VELVET_-_04_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_04/VELVET_-_04_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '04',
 			category: 'Velvet',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '21',
+			_id: '22',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_03/VELVET_-_03_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_03/VELVET_-_03_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_03/VELVET_-_03_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_03/VELVET_-_03_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_03/VELVET_-_03_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_03/VELVET_-_03_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_03/VELVET_-_03_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_03/VELVET_-_03_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_03/VELVET_-_03_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_03/VELVET_-_03_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '03',
 			category: 'Velvet',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '22',
+			_id: '23',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_02/VELVET_-_02_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_02/VELVET_-_02_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_02/VELVET_-_02_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_02/VELVET_-_02_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_02/VELVET_-_02_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_02/VELVET_-_02_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_02/VELVET_-_02_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_02/VELVET_-_02_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_02/VELVET_-_02_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_02/VELVET_-_02_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '02',
 			category: 'Velvet',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '23',
+			_id: '24',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_01/VELVET_-_01_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_01/VELVET_-_01_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_01/VELVET_-_01_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_01/VELVET_-_01_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_01/VELVET_-_01_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_01/VELVET_-_01_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_01/VELVET_-_01_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_01/VELVET_-_01_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/VELVET_-_01/VELVET_-_01_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/VELVET_-_01/VELVET_-_01_-_ROUGH.jpg',
 			alpha: '',
 			materialName: '01',
 			category: 'Velvet',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '24',
+			_id: '25',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_GREEN/MUSLIN_-_GREEN_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_GREEN/MUSLIN_-_GREEN_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_GREEN/MUSLIN_-_GREEN_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_GREEN/MUSLIN_-_GREEN_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_GREEN/MUSLIN_-_GREEN_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_GREEN/MUSLIN_-_GREEN_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_GREEN/MUSLIN_-_GREEN_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_GREEN/MUSLIN_-_GREEN_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_GREEN/MUSLIN_-_GREEN_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_GREEN/MUSLIN_-_GREEN_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Green',
 			category: 'Muslin',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '25',
+			_id: '26',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BROWN/MUSLIN_-_BROWN_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BROWN/MUSLIN_-_BROWN_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BROWN/MUSLIN_-_BROWN_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BROWN/MUSLIN_-_BROWN_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BROWN/MUSLIN_-_BROWN_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BROWN/MUSLIN_-_BROWN_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BROWN/MUSLIN_-_BROWN_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BROWN/MUSLIN_-_BROWN_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BROWN/MUSLIN_-_BROWN_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BROWN/MUSLIN_-_BROWN_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Brown',
 			category: 'Muslin',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '26',
+			_id: '27',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BLUE/MUSLIN_-_BLUE_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BLUE/MUSLIN_-_BLUE_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BLUE/MUSLIN_-_BLUE_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BLUE/MUSLIN_-_BLUE_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BLUE/MUSLIN_-_BLUE_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BLUE/MUSLIN_-_BLUE_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BLUE/MUSLIN_-_BLUE_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BLUE/MUSLIN_-_BLUE_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BLUE/MUSLIN_-_BLUE_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_BLUE/MUSLIN_-_BLUE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Blue',
 			category: 'Muslin',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '27',
+			_id: '28',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_PINK/MUSLIN_-_PINK_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_PINK/MUSLIN_-_PINK_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_PINK/MUSLIN_-_PINK_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_PINK/MUSLIN_-_PINK_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_PINK/MUSLIN_-_PINK_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_PINK/MUSLIN_-_PINK_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_PINK/MUSLIN_-_PINK_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_PINK/MUSLIN_-_PINK_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_PINK/MUSLIN_-_PINK_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_PINK/MUSLIN_-_PINK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Pink',
 			category: 'Muslin',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '28',
+			_id: '29',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_WHITE/MUSLIN_-_WHITE_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_WHITE/MUSLIN_-_WHITE_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_WHITE/MUSLIN_-_WHITE_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_WHITE/MUSLIN_-_WHITE_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_WHITE/MUSLIN_-_WHITE_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_WHITE/MUSLIN_-_WHITE_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_WHITE/MUSLIN_-_WHITE_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_WHITE/MUSLIN_-_WHITE_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_WHITE/MUSLIN_-_WHITE_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/MUSLIN_-_WHITE/MUSLIN_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Muslin',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '29',
+			_id: '30',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/COTTON_-_SILK_WHITE/COTTON_-_SILK_WHITE_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/COTTON_-_SILK_WHITE/COTTON_-_SILK_WHITE_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/COTTON_-_SILK_WHITE/COTTON_-_SILK_WHITE_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/COTTON_-_SILK_WHITE/COTTON_-_SILK_WHITE_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/COTTON_-_SILK_WHITE/COTTON_-_SILK_WHITE_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/COTTON_-_SILK_WHITE/COTTON_-_SILK_WHITE_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/COTTON_-_SILK_WHITE/COTTON_-_SILK_WHITE_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/COTTON_-_SILK_WHITE/COTTON_-_SILK_WHITE_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/COTTON_-_SILK_WHITE/COTTON_-_SILK_WHITE_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/COTTON_-_SILK_WHITE/COTTON_-_SILK_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Silk White',
 			category: 'Cotton',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '30',
+			_id: '31',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_3/TEXTURE_-_MICRO_3_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_3/TEXTURE_-_MICRO_3_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_3/TEXTURE_-_MICRO_3_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_3/TEXTURE_-_MICRO_3_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_3/TEXTURE_-_MICRO_3_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_3/TEXTURE_-_MICRO_3_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_3/TEXTURE_-_MICRO_3_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_3/TEXTURE_-_MICRO_3_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_3/TEXTURE_-_MICRO_3_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_3/TEXTURE_-_MICRO_3_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Micro 3',
 			category: 'Texture',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '31',
+			_id: '32',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_2/TEXTURE_-_MICRO_2_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_2/TEXTURE_-_MICRO_2_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_2/TEXTURE_-_MICRO_2_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_2/TEXTURE_-_MICRO_2_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_2/TEXTURE_-_MICRO_2_-_BASE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_2/TEXTURE_-_MICRO_2_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_2/TEXTURE_-_MICRO_2_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_2/TEXTURE_-_MICRO_2_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_2/TEXTURE_-_MICRO_2_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_2/TEXTURE_-_MICRO_2_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Micro 2',
 			category: 'Texture',
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: '32',
+			_id: '33',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_VELVET/TEXTURE_-_MICRO_VELVET_-_RENDER.webp',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_VELVET/TEXTURE_-_MICRO_VELVET_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_VELVET/TEXTURE_-_MICRO_VELVET_-_NORMAL.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_VELVET/TEXTURE_-_MICRO_VELVET_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_VELVET/TEXTURE_-_MICRO_VELVET_-_BASE.png',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_VELVET/TEXTURE_-_MICRO_VELVET_-_BASE.png',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_VELVET/TEXTURE_-_MICRO_VELVET_-_DISPLACE.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_VELVET/TEXTURE_-_MICRO_VELVET_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_VELVET/TEXTURE_-_MICRO_VELVET_-_ROUGH.jpg',
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/fabrics/sapienzaUniversityOfRome/root/TEXTURE_-_MICRO_VELVET/TEXTURE_-_MICRO_VELVET_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Micro Velvet',
 			category: 'Texture',
