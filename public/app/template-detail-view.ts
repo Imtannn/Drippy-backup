@@ -242,7 +242,7 @@ export class TemplateDetailView extends Element {
 
 		.done-button {
 			width: calc(100% - var(--uiSpacing) * 2);
-			margin: var(--uiSpacing);
+			margin: var(--uiSpacingSmall) var(--uiSpacing);
 			padding: var(--uiSpacingSmall);
 			background: var(--uiColorPrimaryBlack);
 			color: var(--uiColorPrimaryWhite);
