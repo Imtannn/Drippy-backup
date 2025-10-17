@@ -500,12 +500,57 @@ export class TemplateView extends Element {
 					hidden: this.showRemixOverlay && store.remixOverlayTemplate !== null,
 				})}
 			>
-				<avatar-dropdown
-					open=${() => this.showAvatarSelection}
-					show-popup
-					onavatar-dropdown-click=${this.#onAvatarDropdownClick}
-				></avatar-dropdown>
-				<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+				<!-- Template info - shown when template is selected -->
+				<div
+					class="template-info"
+					classList=${() => {
+						const templates = Array.from(store.selectedTemplates.values())
+						console.log('**templates', templates)
+						return {hidden: templates.length === 0}
+					}}
+				>
+					${() => {
+						const templates = Array.from(store.selectedTemplates.values())
+						if (templates.length > 0) {
+							const selectedTemplate = templates[0]
+							return html`
+								<div class="template-image-wrapper">
+									<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+								</div>
+								<div class="template-details">
+									<div class="template-name">${selectedTemplate.name}</div>
+									<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+								</div>
+							`
+						}
+						return ''
+					}}
+				</div>
+				<button
+					class="view-details-btn"
+					classList=${() => {
+						const templates = Array.from(store.selectedTemplates.values())
+						return {hidden: templates.length === 0}
+					}}
+				>
+					View details
+				</button>
+
+				<!-- Default navigation - shown when no template is selected -->
+				<div
+					class="default-nav"
+					classList=${() => {
+						const templates = Array.from(store.selectedTemplates.values())
+						return {hidden: templates.length > 0}
+					}}
+				>
+					<avatar-dropdown
+						open=${() => this.showAvatarSelection}
+						show-popup
+						onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+					></avatar-dropdown>
+					<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+				</div>
 			</bottom-navigation>
 		</bottom-sheet>
 
@@ -659,6 +704,73 @@ export class TemplateView extends Element {
 		.done-button:hover {
 			background: var(--uiColorPrimaryBlack);
 			opacity: 0.8;
+		}
+
+		.template-info {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.template-image-wrapper {
+			position: relative;
+			width: 40px;
+			height: 40px;
+			overflow: hidden;
+			border-radius: var(--borderRadiusCircular);
+			border: 1px solid var(--uiColorBorderColor);
+			transition: border-color 0.3s ease;
+			background: var(--appBackground);
+		}
+
+		.template-image {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: center;
+		}
+
+		.template-details {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+		}
+
+		.template-name {
+			font-size: 14px;
+			font-weight: 500;
+			color: var(--uiColorText);
+			margin: 0;
+		}
+
+		.template-price {
+			font-size: 12px;
+			color: var(--uiColorTextSecondary);
+			margin: 0;
+		}
+
+		.view-details-btn {
+			background: #f6f6f6;
+			border: none;
+			border-radius: 16px;
+			padding: 8px 16px;
+			font-size: 10px;
+			font-weight: 500;
+			color: var(--uiColorText);
+			cursor: pointer;
+			transition: background 0.2s ease;
+		}
+
+		.view-details-btn:hover {
+			background: #eeeeee;
+		}
+
+		.default-nav {
+			display: contents;
+		}
+
+		.hidden {
+			display: none !important;
 		}
 	`
 }
