@@ -138,7 +138,7 @@ export class TemplateView extends Element {
 			if (canShowPreview && hasSelectedTemplates) {
 				const timer = window.setTimeout(() => {
 					this.#onPreviewButtonClick()
-				}, 10000) // 15 seconds
+				}, 65000) // 65 seconds
 
 				onCleanup(() => {
 					clearTimeout(timer)
@@ -562,7 +562,7 @@ export class TemplateView extends Element {
 
 		.items-grid {
 			display: grid;
-			grid-template-columns: repeat(3, 1fr);
+			grid-template-columns: repeat(4, 1fr);
 			gap: var(--uiGap);
 		}
 
