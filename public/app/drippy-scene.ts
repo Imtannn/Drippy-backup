@@ -17,12 +17,11 @@ import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
-import {url} from '../routes.js'
-import '../elements/loading-indicator.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
 import '../elements/progress-loader.js'
 import '../elements/rig/lume-auto-rigger.js'
+import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
@@ -100,7 +99,13 @@ export class DrippyScene extends Element {
 	@signal private loadingProgress = 0
 	@signal private isLoading = false
 
-	async #applyFabrics(el: Element3D, fabrics: Map<string, Fabric>, isCanceled: () => boolean, loadingId: symbol) {
+	async #applyFabrics(
+		el: Element3D,
+		fabrics: Map<string, Fabric>,
+		isCanceled: () => boolean,
+		loadingId: symbol,
+		templateId: string | undefined,
+	) {
 		const root = el.three
 		store.addLoadingMaterial(loadingId)
 
@@ -161,6 +166,9 @@ export class DrippyScene extends Element {
 			console.warn('Failed to apply fabrics to object:', error)
 		} finally {
 			store.removeLoadingMaterial(loadingId)
+			if (templateId) {
+				store.clearLoadingTemplate(templateId)
+			}
 		}
 
 		onCleanup(() => store.removeLoadingMaterial(loadingId))
@@ -420,10 +428,15 @@ export class DrippyScene extends Element {
 						if (!modelLoaded()) return
 
 						if (fabrics.size > 0) {
-							this.#applyFabrics(el, fabrics, isCanceled, loadingId)
+							const template = store.selectedTemplates.get(templateCategory)
+							this.#applyFabrics(el, fabrics, isCanceled, loadingId, template?._id)
 						} else {
 							// Reset to default material if no fabric selected for this block category
 							this.#resetMaterialsToDefault(el)
+							const template = store.selectedTemplates.get(templateCategory)
+							if (template) {
+								store.clearLoadingTemplate(template._id)
+							}
 						}
 
 						onCleanup(() => this.#resetMaterialsToDefault(el))
@@ -496,7 +509,7 @@ export class DrippyScene extends Element {
 
 		return html`
 			<show-when
-				condition=${() => !url().pathname.includes('upload-view')}
+				condition=${() => !pathname().includes('upload-view')}
 				content=${() => html`
 					<progress-loader is-visible=${() => this.isLoading} progress=${() => this.loadingProgress}></progress-loader>
 				`}
@@ -529,19 +542,6 @@ export class DrippyScene extends Element {
 							}}
 						/>
 					</div>
-				`}
-			></show-when>
-
-			<show-when
-				condition=${() => store.view === 'blocks' || store.view === 'avatar' || store.view === 'template'}
-				content=${() => html`
-					<app-buttons-left layout="bottom">
-						<app-buttons-group>
-							<loading-indicator
-								is-visible=${() => store.loadingBlocks.size > 0 || store.loadingMaterials.size > 0}
-							></loading-indicator>
-						</app-buttons-group>
-					</app-buttons-left>
 				`}
 			></show-when>
 

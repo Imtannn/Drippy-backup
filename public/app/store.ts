@@ -86,6 +86,8 @@ class Store {
 	loadingBlocks = new Set<symbol>()
 	loadingMaterials = new Set<symbol>()
 	loadingScreenshots = new Set<TemplateCategory>()
+	loadingTemplateId: string | null = null
+	currentAbortController: AbortController | null = null
 
 	// Order-related state
 	selectedOrderItems = new Map<TemplateCategory, boolean>()
@@ -547,11 +549,35 @@ class Store {
 		})
 	}
 
+	setLoadingTemplate(templateId: string) {
+		if (this.currentAbortController) {
+			this.currentAbortController.abort()
+		}
+		this.currentAbortController = new AbortController()
+		this.loadingTemplateId = templateId
+	}
+
+	clearLoadingTemplate(templateId: string) {
+		if (this.loadingTemplateId === templateId) {
+			this.loadingTemplateId = null
+			this.currentAbortController = null
+		}
+	}
+
+	isTemplateLoading(templateId: string): boolean {
+		return this.loadingTemplateId === templateId
+	}
+
 	clearAllLoadingStates() {
 		this.clearLoadingBlocks()
 		this.clearLoadingMaterials()
 		this.clearLoadingScreenshots()
 		this.clearIsDrippySceneLoading()
+		this.loadingTemplateId = null
+		if (this.currentAbortController) {
+			this.currentAbortController.abort()
+			this.currentAbortController = null
+		}
 	}
 
 	trackModelLoading(id: symbol, model: GltfModel) {
