@@ -11,10 +11,8 @@ const block3DLanding = {
 	male: [
 		{
 			_id: '1',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.webp',
-			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.gltf',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.gltf',
 			blockName: 'sleeves 1592',
 			avatar: 'Male',
 			category: 'Sleeves',
@@ -24,10 +22,8 @@ const block3DLanding = {
 		},
 		{
 			_id: '2',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.webp',
-			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.gltf',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.gltf',
 			blockName: 'bodice 1591',
 			avatar: 'Male',
 			category: 'Bodice',
@@ -37,10 +33,8 @@ const block3DLanding = {
 		},
 		{
 			_id: '13',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/eliseF/blocks/Pants/Item_8___Pants/pants_1593.webp',
-			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/eliseF/blocks/Pants/Item_8___Pants/pants_1593.gltf',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/blocks/Pants/Item_8___Pants/pants_1593.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/eliseF/blocks/Pants/Item_8___Pants/pants_1593.gltf',
 			blockName: 'pants 1593',
 			avatar: 'Male',
 			category: 'Pants',
@@ -52,10 +46,8 @@ const block3DLanding = {
 	female: [
 		{
 			_id: '14',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455.png',
-			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455..gltf',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455.png',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455..gltf',
 			blockName: 'bodice 1455',
 			avatar: 'Female',
 			category: 'Bodice',
@@ -65,10 +57,8 @@ const block3DLanding = {
 		},
 		{
 			_id: '15',
-			thumb:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/images/moidien/blocks/Pants/Item_7_Pants/pants_130.png',
-			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/models/moidien/blocks/Pants/Item_7_Pants/pants_130..gltf',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/moidien/blocks/Pants/Item_7_Pants/pants_130.png',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Pants/Item_7_Pants/pants_130..gltf',
 			blockName: 'pants 130',
 			avatar: 'Female',
 			category: 'Pants',
@@ -85,11 +75,11 @@ interface AvatarOption {
 	gender: 'male' | 'female'
 }
 const maleAvatar = new URL(
-	'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/male/luka/thumbnail.webp',
+	'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/male/luka/thumbnail.webp',
 	import.meta.url,
 ).href
 const femaleAvatar = new URL(
-	'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/moidien/thumbnail.webp',
+	'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/moidien/thumbnail.webp',
 	import.meta.url,
 ).href
 /**

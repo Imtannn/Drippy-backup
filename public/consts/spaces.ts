@@ -280,4 +280,23 @@ export const spaces: Space[] = [
 		isWholesale: false,
 		isWorkInProgress: false,
 	},
+	{
+		name: 'CHANGES',
+		slug: 'changes',
+		description: 'Sapienza University of Rome',
+		logo: '',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		sceneThumbnail:
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/sapienzaUniversityOfRome/CHANGES+-+3D+SCENE.webp',
+		scene:
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/sapienzaUniversityOfRome/CHANGES+-+3D+SCENE.glb',
+		includedModelFiles: [
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/sapienzaUniversityOfRome/CHANGES+-+3D+SHOES.glb',
+		],
+		gender: 'female',
+		garmentsCount: blocks.sapienzaUniversityOfRome?.length ?? 0,
+		collection: 'sapienzaUniversityOfRome',
+		isWholesale: false,
+		isWorkInProgress: false,
+	},
 ]

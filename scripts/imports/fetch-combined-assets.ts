@@ -91,13 +91,13 @@ const BRAND_CONFIGS = [
 	// 	brand: 'baroudeuses',
 	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
 	// },
+	// {
+	// 	brand: 'imzadFemale',
+	// 	rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
+	// },
 	{
-		brand: 'imzadFemale',
-		rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
-	},
-	{
-		brand: 'imzadMale',
-		rootFolderId: '1fsA2JrL5ibuWrC_Fp_IDubvZuQj5bwpa',
+		brand: 'sapienzaUniversityOfRome',
+		rootFolderId: '1yficP672jh2jmHwfmHqKN5f3ca1Hd5rm',
 	},
 ]
 
@@ -278,12 +278,145 @@ function normalizeBlockCategory(folderName: string): string {
 	return folderName // fallback to original name
 }
 
+// Process option materials folder and return material IDs
+async function processOptionMaterials(optionMaterialsFolder: TODO): Promise<string[]> {
+	console.log(`    📁 Processing option materials folder`)
+
+	const optionMaterialsContents = await fetchFolderContents(optionMaterialsFolder.id)
+	const materialReferenceFolders = optionMaterialsContents.filter(
+		item => item.mimeType === 'application/vnd.google-apps.folder',
+	)
+
+	console.log(`      Found ${materialReferenceFolders.length} material reference folders`)
+
+	const fabricOptions: string[] = []
+
+	for (const materialRef of materialReferenceFolders) {
+		// Parse and normalize the material folder name to match root materials format
+		const nameWithoutSettings = materialRef.name.replace(/\s*<[^>]+>\s*$/, '')
+		const folderNameParts = nameWithoutSettings.split('-')
+		if (folderNameParts.length < 2) {
+			console.warn(
+				`      ⚠️ Invalid option material reference format: ${materialRef.name}. Expected: "Category - Name"`,
+			)
+			continue
+		}
+
+		const materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
+		const materialName = capitalize(normalizeName(folderNameParts[1].trim()))
+		const materialKey = `${materialCategory} - ${materialName}`
+
+		console.log(`      🔧 Adding option material: "${materialRef.name}" -> "${materialKey}"`)
+		fabricOptions.push(materialKey)
+	}
+
+	return fabricOptions
+}
+
+// Process option block folders and return block options
+async function processOptionBlocks(
+	optionBlockFolders: TODO[],
+	templateCategory: string,
+	brand: string,
+	avatarGender: string,
+): Promise<{category: string; blocks: TODO[]}[]> {
+	let blockIdCounter = 1000000 // Start with high number to avoid conflicts with regular blocks
+	const blockOptions: {category: string; blocks: TODO[]}[] = []
+
+	for (const optionBlockFolder of optionBlockFolders) {
+		console.log(`      📁 Processing option block folder: ${optionBlockFolder.name}`)
+
+		// Extract category from folder name "Option Sleeves" -> "Sleeves"
+		const categoryMatch = optionBlockFolder.name.match(/^Option\s+(.+)$/i)
+		if (!categoryMatch) {
+			console.warn(`      ⚠️ Invalid option block folder name: ${optionBlockFolder.name}`)
+			continue
+		}
+
+		const blockCategory = normalizeBlockCategory(categoryMatch[1])
+		console.log(`      📂 Block category: ${blockCategory}`)
+
+		const optionBlockContents = await fetchFolderContents(optionBlockFolder.id)
+		const blockFolders = optionBlockContents.filter(item => item.mimeType === 'application/vnd.google-apps.folder')
+
+		console.log(`      Found ${blockFolders.length} block folders`)
+
+		const categoryBlocks: TODO[] = []
+
+		for (const blockFolder of blockFolders) {
+			console.log(`        📁 Processing block folder: ${blockFolder.name}`)
+
+			const blockContents = await fetchFolderContents(blockFolder.id)
+			const gltfFiles = blockContents.filter(
+				(f: TODO) => f.name.toLowerCase().endsWith('.gltf') || f.name.toLowerCase().endsWith('.glb'),
+			)
+			const pngFiles = blockContents.filter((f: TODO) => f.name.toLowerCase().endsWith('.png'))
+
+			if (gltfFiles.length === 0 || pngFiles.length === 0) {
+				console.warn(`        ⚠️ Missing files in block folder: ${blockFolder.name}`)
+				continue
+			}
+
+			const gltfFile = gltfFiles[0]
+			const pngFile = pngFiles[0]
+
+			try {
+				console.log(`        📥 Processing option block: ${blockFolder.name}`)
+
+				// Download block files
+				const [pngBuffer, gltfBuffer] = await Promise.all([
+					downloadToBuffer(getDriveDownloadUrl(pngFile.id)),
+					downloadToBuffer(getDriveDownloadUrl(gltfFile.id)),
+				])
+
+				// Upload to S3
+				const [blockThumbS3Url, blockModelS3Url] = await Promise.all([
+					uploadToS3(
+						pngBuffer,
+						`images/${brand}/options/${templateCategory}/${blockCategory}/${blockFolder.name}.png`,
+						'image/png',
+					),
+					uploadToS3(
+						gltfBuffer,
+						`models/${brand}/options/${templateCategory}/${blockCategory}/${blockFolder.name}${path.extname(gltfFile.name)}`,
+						'model/gltf+json',
+					),
+				])
+
+				categoryBlocks.push({
+					_id: blockIdCounter.toString(),
+					blockName: normalizeName(blockFolder.name),
+					category: blockCategory,
+					templateCategory: templateCategory,
+					thumbUrl: blockThumbS3Url,
+					modelUrl: blockModelS3Url,
+					avatar: avatarGender,
+				})
+				blockIdCounter++
+
+				console.log(`        ✅ Uploaded option block ${blockFolder.name}`)
+			} catch (error) {
+				console.error(`        ❌ Failed to process option block ${blockFolder.name}:`, error)
+			}
+		}
+
+		if (categoryBlocks.length > 0) {
+			blockOptions.push({
+				category: blockCategory,
+				blocks: categoryBlocks,
+			})
+		}
+	}
+
+	return blockOptions
+}
+
 // Process a template folder and extract template info and blocks
 async function processTemplateFolder(
 	templateFolder: TODO,
 	category: string,
 	brand: string,
-): Promise<{template: TODO; blocks: TODO[]; unsucceeded: TODO[]}> {
+): Promise<{template: TODO; blocks: TODO[]; optionBlocks: TODO[]; unsucceeded: TODO[]}> {
 	console.log(`  📂 Processing template: ${templateFolder.name}`)
 
 	const templateContents = await fetchFolderContents(templateFolder.id)
@@ -295,7 +428,7 @@ async function processTemplateFolder(
 
 	if (!templateThumbnail) {
 		console.warn(`  ⚠️  No template thumbnail found for ${templateFolder.name}`)
-		return {template: null, blocks: [], unsucceeded: []}
+		return {template: null, blocks: [], optionBlocks: [], unsucceeded: []}
 	}
 
 	// Find block type folders
@@ -328,6 +461,23 @@ async function processTemplateFolder(
 		extraMaterials = await processExtraMaterialsFolder(extraMaterialsFolders[0])
 	}
 
+	// Find Option folders for exclusive options
+	const optionMaterialsFolders = templateContents.filter(
+		item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) === 'Option Materials',
+	)
+
+	const optionBlockFolders = templateContents.filter(
+		item =>
+			item.mimeType === 'application/vnd.google-apps.folder' &&
+			item.name.toLowerCase().startsWith('option ') &&
+			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory', 'coat'].some(blockType =>
+				item.name.toLowerCase().includes(blockType.toLowerCase()),
+			),
+	)
+
+	console.log(`    Found ${optionMaterialsFolders.length} option materials folders`)
+	console.log(`    Found ${optionBlockFolders.length} option block folders`)
+
 	let materialContents: TODO[] = []
 	if (materialFolder) {
 		materialContents = await fetchFolderContents(materialFolder.id)
@@ -340,7 +490,7 @@ async function processTemplateFolder(
 
 	if (blockTypeFolders.length === 0) {
 		console.warn(`  ⚠️  No block type folders found for ${templateFolder.name}`)
-		return {template: null, blocks: [], unsucceeded: []}
+		return {template: null, blocks: [], optionBlocks: [], unsucceeded: []}
 	}
 
 	console.log(`    Found ${blockTypeFolders.length} block type folders`)
@@ -416,6 +566,20 @@ async function processTemplateFolder(
 		}
 	}
 
+	// Process option materials for fabricOptions
+	let fabricOptions: string[] = []
+	if (optionMaterialsFolders.length > 0) {
+		console.log(`    📁 Processing option materials`)
+		fabricOptions = await processOptionMaterials(optionMaterialsFolders[0])
+	}
+
+	// Process option blocks for blockOptions
+	let blockOptions: {category: string; blocks: TODO[]}[] = []
+	if (optionBlockFolders.length > 0) {
+		console.log(`    📁 Processing option blocks`)
+		blockOptions = await processOptionBlocks(optionBlockFolders, category, brand, avatarGender)
+	}
+
 	const template = {
 		name: templateName,
 		price: templatePrice,
@@ -425,10 +589,13 @@ async function processTemplateFolder(
 		avatar: avatarGender,
 		folderId: templateFolder.id, // Add unique Google Drive folder ID
 		...(extraMaterials.length > 0 && {extraMaterials}),
+		...(fabricOptions.length > 0 && {fabricOptions}),
+		...(blockOptions.length > 0 && {blockOptions}),
 	}
 
 	// Process blocks in each block type folder
 	const allBlocks: TODO[] = []
+	const allOptionBlocks: TODO[] = []
 	const unsucceeded: TODO[] = []
 
 	for (const blockTypeFolder of blockTypeFolders) {
@@ -504,7 +671,12 @@ async function processTemplateFolder(
 		}
 	}
 
-	return {template, blocks: allBlocks, unsucceeded: unsucceeded}
+	// Collect all option blocks from blockOptions
+	blockOptions.forEach(option => {
+		allOptionBlocks.push(...option.blocks)
+	})
+
+	return {template, blocks: allBlocks, optionBlocks: allOptionBlocks, unsucceeded: unsucceeded}
 }
 
 function generateTemplateData(
@@ -529,6 +701,8 @@ function generateTemplateData(
 			category: template.category,
 			materialId: template.materialId,
 			...(template.extraMaterials && {extraMaterials: template.extraMaterials}),
+			...(template.fabricOptions && {fabricOptions: template.fabricOptions}),
+			...(template.blockOptions && {blockOptions: template.blockOptions}),
 		})
 
 		// Store mapping using unique Google Drive folder ID - guaranteed to be unique
@@ -543,7 +717,8 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 	const blocks: TODO = {}
 	let idCounter = 1
 
-	processedData.forEach(({blocks: templateBlocks}) => {
+	processedData.forEach(({blocks: templateBlocks, optionBlocks}) => {
+		// Process regular template blocks
 		templateBlocks.forEach((block: TODO) => {
 			blocks[brand] = blocks[brand] || []
 			// Use unique Google Drive folder ID to find the correct template ID
@@ -558,6 +733,23 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 				templateId: templateId, // Now using actual template _id with guaranteed unique identification
 				templateName: block.templateName,
 				templateCategory: block.templateCategory,
+			})
+			idCounter++
+		})
+
+		// Process option blocks (without templateId and templateName)
+		optionBlocks.forEach((block: TODO) => {
+			blocks[brand] = blocks[brand] || []
+			blocks[brand].push({
+				_id: idCounter.toString(),
+				thumb: block.thumbUrl,
+				modelFile: block.modelUrl,
+				blockName: block.blockName,
+				avatar: block.avatar,
+				category: block.category,
+				templateCategory: block.templateCategory,
+				templateId: '', // Empty string instead of undefined
+				templateName: '', // Empty string instead of undefined
 			})
 			idCounter++
 		})
@@ -619,6 +811,24 @@ function generateTemplatesFileContent(templates: TODO): string {
 							.join(',\n')}\n\t\t]`
 					: ''
 
+				const fabricOptionsString = template.fabricOptions
+					? `,\n\t\tfabricOptions: [${template.fabricOptions.map((fabric: string) => `'${fabric}'`).join(', ')}]`
+					: ''
+
+				const blockOptionsString = template.blockOptions
+					? `,\n\t\tblockOptions: [\n${template.blockOptions
+							.map(
+								(option: {category: string; blocks: TODO[]}) =>
+									`\t\t\t{\n\t\t\t\tcategory: '${option.category}',\n\t\t\t\tblocks: [\n${option.blocks
+										.map(
+											(block: TODO) =>
+												`\t\t\t\t\t{\n\t\t\t\t\t\t_id: '${block._id}',\n\t\t\t\t\t\tthumb: '${block.thumbUrl}',\n\t\t\t\t\t\tmodelFile: '${block.modelUrl}',\n\t\t\t\t\t\tblockName: '${block.blockName}',\n\t\t\t\t\t\tavatar: '${block.avatar}',\n\t\t\t\t\t\tcategory: '${block.category}',\n\t\t\t\t\t\ttemplateCategory: '${block.templateCategory}'\n\t\t\t\t\t}`,
+										)
+										.join(',\n')}\n\t\t\t\t]\n\t\t\t}`,
+							)
+							.join(',\n')}\n\t\t]`
+					: ''
+
 				return `	{
 		_id: '${template._id}',
 		thumb: '${template.thumb}',
@@ -626,7 +836,7 @@ function generateTemplatesFileContent(templates: TODO): string {
 		price: '${template.price}',
 		avatar: '${template.avatar}',
 		category: '${template.category}',
-		materialId: '${template.materialId || ''}'${extraMaterialsString}
+		materialId: '${template.materialId || ''}'${extraMaterialsString}${fabricOptionsString}${blockOptionsString}
 	}`
 			})
 			.join(',\n')
@@ -728,19 +938,19 @@ ${fabricsArray}
 }
 
 async function updateTemplatesFile(content: string): Promise<void> {
-	const templatesPath = path.join(__dirname, '../../public/consts/templates.ts')
+	const templatesPath = path.join(__dirname, '../../public/consts/templates_copy.ts')
 	fs.writeFileSync(templatesPath, content, 'utf8')
 	console.log('✅ templates.ts updated successfully')
 }
 
 async function updateBlocksFile(content: string): Promise<void> {
-	const blocksPath = path.join(__dirname, '../../public/consts/blocks.ts')
+	const blocksPath = path.join(__dirname, '../../public/consts/blocks_copy.ts')
 	fs.writeFileSync(blocksPath, content, 'utf8')
 	console.log('✅ blocks.ts updated successfully')
 }
 
 async function updateFabricsFile(content: string): Promise<void> {
-	const fabricsPath = path.join(__dirname, '../../public/consts/fabrics.ts')
+	const fabricsPath = path.join(__dirname, '../../public/consts/fabrics_copy.ts')
 	fs.writeFileSync(fabricsPath, content, 'utf8')
 	console.log('✅ fabrics.ts updated successfully')
 }
@@ -1147,6 +1357,7 @@ async function main(): Promise<void> {
 						brandProcessedData.push(processedTemplate)
 					}
 					allUnsucceeded.push(...processedTemplate.unsucceeded)
+					// Option blocks will be handled separately in block generation
 				}
 			}
 
