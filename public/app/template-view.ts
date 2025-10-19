@@ -531,7 +531,7 @@ export class TemplateView extends Element {
 					class="template-info"
 					classList=${() => {
 						const templates = Array.from(store.selectedTemplates.values())
-						return {hidden: templates.length === 0}
+						return {hidden: templates.length === 0 || true}
 					}}
 				>
 					${() => {
@@ -555,7 +555,7 @@ export class TemplateView extends Element {
 					class="view-details-btn"
 					classList=${() => {
 						const templates = Array.from(store.selectedTemplates.values())
-						return {hidden: templates.length === 0}
+						return {hidden: templates.length === 0 || true}
 					}}
 					disabled
 				>
@@ -565,7 +565,7 @@ export class TemplateView extends Element {
 					class="default-nav"
 					classList=${() => {
 						const templates = Array.from(store.selectedTemplates.values())
-						return {hidden: templates.length > 0}
+						return {hidden: templates.length > 0 && false}
 					}}
 				>
 					<avatar-dropdown
