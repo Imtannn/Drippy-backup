@@ -18,7 +18,7 @@ export class LoadingSpinnerOverlay extends Element {
 			left: 0;
 			width: 100%;
 			height: 100%;
-			z-index: 10;
+			z-index: 5;
 			border-radius: 12px;
 			overflow: hidden;
 		}

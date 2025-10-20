@@ -4,6 +4,7 @@ import {store} from '../app/store.js'
 import '../app/app-buttons.js'
 import './back-button.js'
 import '../elements/preview-button.js'
+import './logic/show-when.js'
 
 // Define snap points in percentages of viewport height
 const SNAP_POINTS = [0.41, 0.6, 0.88]
@@ -319,10 +320,15 @@ export class BottomSheet extends Element {
 			<app-buttons-left>
 				<app-buttons-group group-direction="row" custom-class="button-group-spread">
 					<back-button onclick=${this.#onBackButtonClick}></back-button>
-					<preview-button
-						button-disabled=${() => store.selectedTemplates.size === 0}
-						onclick=${this.#onPreviewButtonClick}
-					></preview-button>
+					<show-when
+						condition=${() => this.floatDirection === 'left'}
+						content=${() => html`
+							<preview-button
+								button-disabled=${() => store.selectedTemplates.size === 0}
+								onclick=${this.#onPreviewButtonClick}
+							></preview-button>
+						`}
+					></show-when>
 				</app-buttons-group>
 			</app-buttons-left>
 			<div
