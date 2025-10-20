@@ -713,7 +713,7 @@ export class DrippyScene extends Element {
 
 	css = css/*css*/ `
 		:host {
-			--sceneDesktopOffset: 10rem;
+			--sceneDesktopOffset: 15rem;
 			--sceneTranslateX: translateX(0);
 			--sceneTranslateY: translateY(-100px);
 			background: var(--appBackground);
