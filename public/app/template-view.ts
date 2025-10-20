@@ -373,12 +373,6 @@ export class TemplateView extends Element {
 	}
 
 	template = () => html`
-		<app-buttons-left>
-			<app-buttons-group>
-				<back-button onclick=${this.#onBackButtonClick}></back-button>
-			</app-buttons-group>
-		</app-buttons-left>
-
 		<app-buttons-right>
 			<app-buttons-group>
 				<logo-button brand-name="MoiDien"></logo-button>
@@ -406,24 +400,39 @@ export class TemplateView extends Element {
 							></preview-button>
 						`}
 					></show-when>
+					<show-when
+						condition=${() => this.showRemixOverlay}
+						content=${() => html` <button class="done-button" onclick=${this.#closeRemixOverlay}>Done</button> `}
+					></show-when>
 				</app-buttons-group>
 			</app-buttons-right>
 		</show-on-device>
 
-		<app-buttons-right layout="bottom">
-			<app-buttons-group>
-				<show-when
-					condition=${() => this.showRemixOverlay}
-					content=${() => html` <button class="done-button" onclick=${this.#closeRemixOverlay}>Done</button> `}
-				></show-when>
-			</app-buttons-group>
-		</app-buttons-right>
-
 		<bottom-sheet
 			onback=${this.#onBackButtonClick}
 			onpreview=${this.#onPreviewButtonClick}
+			ondone=${this.#closeRemixOverlay}
+			show-remix-overlay=${() => this.showRemixOverlay}
 			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
 		>
+			<app-buttons-left>
+				<app-buttons-group group-direction="row" custom-class="button-group-spread">
+					<back-button onclick=${this.#onBackButtonClick}></back-button>
+					<show-when
+						condition=${() => !this.showRemixOverlay}
+						content=${() => html`
+							<preview-button
+								button-disabled=${() => store.selectedTemplates.size === 0}
+								onclick=${this.#onPreviewButtonClick}
+							></preview-button>
+						`}
+					></show-when>
+					<show-when
+						condition=${() => this.showRemixOverlay}
+						content=${() => html` <button class="done-button" onclick=${this.#closeRemixOverlay}>Done</button> `}
+					></show-when>
+				</app-buttons-group>
+			</app-buttons-left>
 			<show-when
 				condition=${() => this.showDetailView}
 				content=${() => html`
@@ -627,16 +636,16 @@ export class TemplateView extends Element {
 			display: contents;
 		}
 
-		/* Show back button on mobile only, hide on desktop (bottom-sheet handles desktop) */
 		app-buttons-left {
-			display: block;
+			display: none;
 			pointer-events: auto;
 			z-index: 100;
 		}
-
 		@media (min-width: 768px) {
 			app-buttons-left {
-				display: none;
+				display: block;
+				--app-buttons-left-transform: translateX(0) !important;
+				--app-buttons-left-transform: translateY(-10px) !important;
 			}
 		}
 
@@ -740,10 +749,7 @@ export class TemplateView extends Element {
 			text-wrap: wrap;
 		}
 
-		.hidden {
-			display: none;
-		}
-
+		/* Done button styles */
 		.done-button {
 			background: var(--uiColorPrimaryBlack);
 			color: var(--uiColorPrimaryWhite);
@@ -759,6 +765,10 @@ export class TemplateView extends Element {
 		.done-button:hover {
 			background: var(--uiColorPrimaryBlack);
 			opacity: 0.8;
+		}
+
+		.hidden {
+			display: none;
 		}
 
 		.template-info {

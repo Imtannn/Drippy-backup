@@ -213,6 +213,7 @@ export class AppButtonsGroup extends Element {
 			flex-direction: unset !important;
 			justify-content: space-between;
 			width: 30rem;
+			margin-top: 6px !important;
 		}
 	`
 }
