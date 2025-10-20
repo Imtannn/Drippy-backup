@@ -38,6 +38,7 @@ export class BottomNavigation extends Element {
 				left: 0;
 				right: 0;
 				padding: 2px;
+				padding-bottom: 14px;
 			}
 		}
 
