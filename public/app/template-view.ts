@@ -20,6 +20,7 @@ import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
+import '../elements/show-on-device.js'
 import '../elements/logo-button.js'
 import '../elements/nav-items.js'
 import '../elements/person-button.js'
@@ -391,6 +392,23 @@ export class TemplateView extends Element {
 				></show-when>
 			</app-buttons-group>
 		</app-buttons-right>
+
+		<show-on-device device="mobile">
+			<app-buttons-right layout="bottom">
+				<app-buttons-group>
+					<show-when
+						condition=${() =>
+							!this.showAvatarSelection && !this.showPoseSelection && !this.showRemixOverlay && !this.showDetailView}
+						content=${() => html`
+							<preview-button
+								button-disabled=${() => store.selectedTemplates.size === 0}
+								onclick=${this.#onPreviewButtonClick}
+							></preview-button>
+						`}
+					></show-when>
+				</app-buttons-group>
+			</app-buttons-right>
+		</show-on-device>
 
 		<app-buttons-right layout="bottom">
 			<app-buttons-group>
