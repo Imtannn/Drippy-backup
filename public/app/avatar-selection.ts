@@ -21,6 +21,11 @@ export class AvatarSelection extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
+
+		const currentAvatar = avatars.find(avatar => avatar.name === store.selectedAvatar)
+		if (currentAvatar?.gender) {
+			this.selectedTab = currentAvatar.gender
+		}
 	}
 
 	#onAvatarThumbClick = (e: CustomEvent) => {
@@ -39,8 +44,18 @@ export class AvatarSelection extends Element {
 			<bottom-sheet-header>
 				<div class="tabs-container">
 					<tabs-list>
-						<tabs-trigger selected-value="female">Female</tabs-trigger>
-						<tabs-trigger selected-value="male">Male</tabs-trigger>
+						<tabs-trigger
+							selected-value="female"
+							is-disabled=${() => avatars.find(avatar => avatar.name === store.selectedAvatar)?.gender === 'male'}
+						>
+							Female
+						</tabs-trigger>
+						<tabs-trigger
+							selected-value="male"
+							is-disabled=${() => avatars.find(avatar => avatar.name === store.selectedAvatar)?.gender === 'female'}
+						>
+							Male
+						</tabs-trigger>
 					</tabs-list>
 				</div>
 			</bottom-sheet-header>
