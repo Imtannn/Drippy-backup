@@ -377,7 +377,7 @@ export class BottomSheet extends Element {
 		.bottom-sheet {
 			position: fixed;
 			bottom: 0;
-			left: 0;
+			left: -2px;
 			right: 0;
 			z-index: 50;
 			background: var(--uiColorPrimaryWhite);

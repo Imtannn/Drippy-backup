@@ -12,6 +12,7 @@ import '../elements/avatar-dropdown.js'
 import '../elements/avatar-swap-bottom-sheet.js'
 import '../elements/back-button.js'
 import '../elements/bottom-navigation.js'
+import '../elements/top-navigation.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
 import '../elements/dialog-element.js'
@@ -433,6 +434,62 @@ export class TemplateView extends Element {
 					></show-when>
 				</app-buttons-group>
 			</app-buttons-left>
+			<show-on-device device="desktop">
+				<top-navigation
+					classList=${() => ({
+						hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
+					})}
+				>
+					<div
+						class="template-info"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length === 0 || true}
+						}}
+					>
+						${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							if (templates.length > 0) {
+								const selectedTemplate = templates[0]
+								return html`
+									<div class="template-image-wrapper">
+										<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+									</div>
+									<div class="template-details">
+										<div class="template-name">${selectedTemplate.name}</div>
+										<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+									</div>
+								`
+							}
+							return ''
+						}}
+					</div>
+					<button
+						class="view-details-btn"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length === 0 || true}
+						}}
+						disabled
+					>
+						View details
+					</button>
+					<div
+						class="default-nav"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length > 0 && false}
+						}}
+					>
+						<avatar-dropdown
+							open=${() => this.showAvatarSelection}
+							show-popup
+							onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+						></avatar-dropdown>
+						<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+					</div>
+				</top-navigation>
+			</show-on-device>
 			<show-when
 				condition=${() => this.showDetailView}
 				content=${() => html`
@@ -549,60 +606,62 @@ export class TemplateView extends Element {
 					></remix-overlay>
 				`}
 			></show-when>
-			<bottom-navigation
-				classList=${() => ({
-					hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
-				})}
-			>
-				<div
-					class="template-info"
-					classList=${() => {
-						const templates = Array.from(store.selectedTemplates.values())
-						return {hidden: templates.length === 0 || true}
-					}}
+			<show-on-device device="mobile">
+				<bottom-navigation
+					classList=${() => ({
+						hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
+					})}
 				>
-					${() => {
-						const templates = Array.from(store.selectedTemplates.values())
-						if (templates.length > 0) {
-							const selectedTemplate = templates[0]
-							return html`
-								<div class="template-image-wrapper">
-									<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
-								</div>
-								<div class="template-details">
-									<div class="template-name">${selectedTemplate.name}</div>
-									<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
-								</div>
-							`
-						}
-						return ''
-					}}
-				</div>
-				<button
-					class="view-details-btn"
-					classList=${() => {
-						const templates = Array.from(store.selectedTemplates.values())
-						return {hidden: templates.length === 0 || true}
-					}}
-					disabled
-				>
-					View details
-				</button>
-				<div
-					class="default-nav"
-					classList=${() => {
-						const templates = Array.from(store.selectedTemplates.values())
-						return {hidden: templates.length > 0 && false}
-					}}
-				>
-					<avatar-dropdown
-						open=${() => this.showAvatarSelection}
-						show-popup
-						onavatar-dropdown-click=${this.#onAvatarDropdownClick}
-					></avatar-dropdown>
-					<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
-				</div>
-			</bottom-navigation>
+					<div
+						class="template-info"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length === 0 || true}
+						}}
+					>
+						${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							if (templates.length > 0) {
+								const selectedTemplate = templates[0]
+								return html`
+									<div class="template-image-wrapper">
+										<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+									</div>
+									<div class="template-details">
+										<div class="template-name">${selectedTemplate.name}</div>
+										<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+									</div>
+								`
+							}
+							return ''
+						}}
+					</div>
+					<button
+						class="view-details-btn"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length === 0 || true}
+						}}
+						disabled
+					>
+						View details
+					</button>
+					<div
+						class="default-nav"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length > 0 && false}
+						}}
+					>
+						<avatar-dropdown
+							open=${() => this.showAvatarSelection}
+							show-popup
+							onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+						></avatar-dropdown>
+						<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+					</div>
+				</bottom-navigation>
+			</show-on-device>
 		</bottom-sheet>
 
 		<dialog-element
