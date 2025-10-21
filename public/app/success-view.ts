@@ -1,5 +1,6 @@
 import {css, Element, element, html} from 'lume'
 import {appStyles} from '../styles/app-styles.js'
+import './app-buttons-preset.js'
 import {store} from './store.js'
 
 @element
@@ -10,29 +11,8 @@ export class SuccessView extends Element {
 		store.goBackHomeAndResetState()
 	}
 
-	#onBackButtonClick = () => {
-		store.view = 'order-items'
-	}
-
-	// FIXME we need to stop repeating code so many times!!!
-	#onHomeButtonClick = () => {
-		store.goBackHomeAndResetState()
-	}
-
 	template = () => html`
-		<app-buttons-left>
-			<app-buttons-group group-direction="row">
-				<back-button onclick=${this.#onBackButtonClick}></back-button>
-				<home-button onclick=${this.#onHomeButtonClick}></home-button>
-			</app-buttons-group>
-		</app-buttons-left>
-
-		<app-buttons-right>
-			<app-buttons-group>
-				<!-- <theme-switch-button></theme-switch-button> -->
-				<logo-button brand-name="MoiDien"></logo-button>
-			</app-buttons-group>
-		</app-buttons-right>
+		<app-buttons-preset preset="simple-flow"></app-buttons-preset>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-sheet-height="270px">
 			<div class="success-container">

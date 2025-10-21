@@ -1,9 +1,5 @@
-import {batch, css, Element, element, html, signal, type ElementAttributes} from 'lume'
-import '../elements/back-button.js'
-import '../elements/home-button.js'
-import {pushState, searchParams} from '../routes.js'
-import './app-buttons.js'
-import {store} from './store.js'
+import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import './app-buttons-preset.js'
 
 type ShareViewAttributes = keyof {}
 
@@ -13,19 +9,6 @@ export class ShareView extends Element {
 
 	@signal shareUrl = window.location.href
 	@signal isCopied = false
-
-	#onBackButtonClick = () => {
-		batch(() => {
-			store.isPreview = false
-			searchParams().delete('isPreview')
-			pushState()
-			store.view = 'preview'
-		})
-	}
-
-	#onHomeButtonClick = () => {
-		store.goBackHomeAndResetState()
-	}
 
 	#onCopyLink = async () => {
 		try {
@@ -83,19 +66,7 @@ export class ShareView extends Element {
 	}
 
 	template = () => html`
-		<app-buttons-left>
-			<app-buttons-group group-direction="row">
-				<back-button onclick=${this.#onBackButtonClick}></back-button>
-				<home-button onclick=${this.#onHomeButtonClick}></home-button>
-			</app-buttons-group>
-		</app-buttons-left>
-
-		<app-buttons-right>
-			<app-buttons-group>
-				<!-- <theme-switch-button></theme-switch-button> -->
-				<logo-button brand-name="MoiDien"></logo-button>
-			</app-buttons-group>
-		</app-buttons-right>
+		<app-buttons-preset preset="simple-flow"></app-buttons-preset>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
 			<div class="share-container">

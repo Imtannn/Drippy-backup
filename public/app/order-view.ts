@@ -2,18 +2,11 @@ import {css, Element, element, eventAttribute, html, type ElementAttributes} fro
 import {Meteor} from 'meteor/meteor'
 import type {OrderData} from '../types/types.js'
 
-import '../elements/back-button.js'
-import '../elements/home-button.js'
 import '../elements/logic/show-when.js'
-import '../elements/logo-button.js'
-import '../elements/person-button.js'
-import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
 import {href} from '../routes.js'
 import {appStyles} from '../styles/app-styles.js'
-import './app-buttons.js'
-import './buy-button.js'
-import './share-button.js'
+import './app-buttons-preset.js'
 import {store} from './store.js'
 
 type OrderViewAttributes = 'onclick'
@@ -23,14 +16,6 @@ export class OrderView extends Element {
 	static readonly elementName = 'order-view'
 
 	@eventAttribute onclick = null
-
-	#onBackButtonClick = () => {
-		store.view = 'order-size'
-	}
-
-	#onHomeButtonClick = () => {
-		store.goBackHomeAndResetState()
-	}
 
 	// Helper function to collect all order data
 	#collectOrderData = (): OrderData => {
@@ -257,35 +242,8 @@ export class OrderView extends Element {
 		}
 	}
 
-	#onShareClick = () => {
-		// copy current url to clipboard
-		console.log('Share my drip clicked')
-		navigator.clipboard.writeText(window.location.href)
-		alert('Link copied to clipboard')
-	}
-
 	template = () => html`
-		<app-buttons-left>
-			<app-buttons-group group-direction="row">
-				<back-button onclick=${this.#onBackButtonClick}></back-button>
-				<home-button onclick=${this.#onHomeButtonClick}></home-button>
-			</app-buttons-group>
-		</app-buttons-left>
-
-		<show-on-device device="desktop">
-			<app-buttons-right layout="bottom">
-				<app-buttons-group custom-style="gap: 34px;" group-direction="row">
-					<share-button onclick=${this.#onShareClick}></share-button>
-					<buy-button onclick=${this.#onBackButtonClick}></buy-button>
-				</app-buttons-group>
-			</app-buttons-right>
-		</show-on-device>
-
-		<app-buttons-right>
-			<app-buttons-group>
-				<logo-button brand-name="MoiDien"></logo-button>
-			</app-buttons-group>
-		</app-buttons-right>
+		<app-buttons-preset preset="order-flow"></app-buttons-preset>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-snap="0.88">
 			<div class="order-container">
