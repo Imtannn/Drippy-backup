@@ -1,4 +1,4 @@
-import {html, css, element, Element, type ElementAttributes, attribute} from 'lume'
+import {attribute, css, element, Element, html, type ElementAttributes} from 'lume'
 
 type LogoButtonAttributes = 'brandName'
 
@@ -28,7 +28,9 @@ export class LogoButton extends Element {
 			class="logo-button"
 			style=${() =>
 				`background-image: url(${BRANDS.find(brand => brand.name === this.brandName)?.image}); background-size: cover; background-position: center;`}
-		></button>`
+		>
+			LOGO
+		</button>`
 
 	css = css/*css*/ `
 		.logo-button {
