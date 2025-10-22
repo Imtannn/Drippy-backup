@@ -10,7 +10,6 @@ import '../elements/logic/show-when.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
 import '../elements/preview-button.js'
-import '../elements/save-button.js'
 import '../elements/show-on-device.js'
 import './app-buttons.js'
 import './buy-button.js'
@@ -20,26 +19,44 @@ type LayoutPreset = 'order-flow' | 'template-flow' | 'preview-flow' | 'simple-fl
 
 type PresetConfig = {
 	left?: {
-		back?: boolean
-		home?: boolean
+		all?: {
+			back?: boolean
+			home?: boolean
+		}
+		desktop?: {
+			back?: boolean
+			home?: boolean
+		}
+		mobile?: {
+			back?: boolean
+			home?: boolean
+		}
 	}
 	right?: {
 		logo?: boolean
 		tools?: boolean
 		animation?: boolean
-		device?: 'mobile' | 'desktop'
-		share?: boolean
-		buy?: boolean
-		preview?: boolean
-		save?: boolean
+		all?: {
+			share?: boolean
+			buy?: boolean
+			preview?: boolean
+		}
+		desktop?: {
+			share?: boolean
+			buy?: boolean
+			preview?: boolean
+		}
+		mobile?: {
+			share?: boolean
+			buy?: boolean
+			preview?: boolean
+		}
 	}
 }
 
 type AppButtonsPresetAttributes =
 	| 'preset'
 	| 'brandName'
-	| 'hideLeft'
-	| 'hideRight'
 	| 'showTools'
 	| 'showAnimation'
 	| 'disablePersonButton'
@@ -52,8 +69,6 @@ export class AppButtonsPreset extends Element {
 	@attribute preset: LayoutPreset = 'custom'
 	@attribute brandName = 'MoiDien'
 
-	@booleanAttribute hideLeft = false
-	@booleanAttribute hideRight = false
 	@booleanAttribute showTools = true
 	@booleanAttribute showAnimation = false
 	@booleanAttribute disablePersonButton = true
@@ -125,19 +140,31 @@ export class AppButtonsPreset extends Element {
 	#presetConfig = (): PresetConfig => {
 		const presets: Record<LayoutPreset, PresetConfig> = {
 			'order-flow': {
-				left: {back: true, home: true},
-				right: {logo: true, device: 'desktop', share: true, buy: true},
+				left: {all: {back: true, home: true}},
+				right: {
+					logo: true,
+					desktop: {share: true, buy: true},
+				},
 			},
 			'template-flow': {
-				left: {},
-				right: {logo: true, tools: true, animation: this.showAnimation, device: 'mobile', preview: true},
+				left: {mobile: {back: true}},
+				right: {
+					logo: true,
+					tools: true,
+					animation: this.showAnimation,
+					mobile: {preview: true},
+				},
 			},
 			'preview-flow': {
-				left: {back: true, home: true},
-				right: {logo: true, tools: true, device: 'desktop', buy: true, share: true},
+				left: {all: {back: true, home: true}},
+				right: {
+					logo: true,
+					tools: true,
+					desktop: {buy: true, share: true},
+				},
 			},
 			'simple-flow': {
-				left: {back: true, home: true},
+				left: {all: {back: true, home: true}},
 				right: {logo: true},
 			},
 			custom: {},
@@ -145,14 +172,53 @@ export class AppButtonsPreset extends Element {
 		return presets[this.preset] || {}
 	}
 
-	#renderLeft = () => html`
-		<app-buttons-left>
-			<app-buttons-group group-direction="row">
-				${() => this.#presetConfig().left?.back && html`<back-button onclick=${this.#onBackClick}></back-button>`}
-				${() => this.#presetConfig().left?.home && html`<home-button onclick=${this.#onHomeClick}></home-button>`}
-			</app-buttons-group>
-		</app-buttons-left>
-	`
+	#renderLeft = () => {
+		const config = this.#presetConfig().left
+		if (!config) return ''
+
+		const renderButtons = (buttons: {back?: boolean; home?: boolean} | undefined) => {
+			if (!buttons) return ''
+			return html`
+				<app-buttons-left>
+					<app-buttons-group group-direction="row">
+						${() => buttons.back && html`<back-button onclick=${this.#onBackClick}></back-button>`}
+						${() => buttons.home && html`<home-button onclick=${this.#onHomeClick}></home-button>`}
+					</app-buttons-group>
+				</app-buttons-left>
+			`
+		}
+
+		return html`
+			${() => config.all && renderButtons(config.all)}
+			${() =>
+				config.desktop && html`<show-on-device device="desktop">${renderButtons(config.desktop)}</show-on-device>`}
+			${() => config.mobile && html`<show-on-device device="mobile">${renderButtons(config.mobile)}</show-on-device>`}
+		`
+	}
+
+	#renderActionButtons = (config: PresetConfig['right']) => {
+		if (!config) return ''
+
+		const renderButtons = (buttons: {share?: boolean; buy?: boolean; preview?: boolean} | undefined) => {
+			if (!buttons) return ''
+			return html`
+				<app-buttons-right layout="bottom" style="top: 20px;">
+					<app-buttons-group custom-style="gap: 34px; align-items: center;margin-top: -3px;" group-direction="row">
+						${() => buttons.share && html`<share-button onclick=${this.#onShareClick}></share-button>`}
+						${() => buttons.buy && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
+						${() => buttons.preview && html`<preview-button onclick=${this.#onPreviewClick}></preview-button>`}
+					</app-buttons-group>
+				</app-buttons-right>
+			`
+		}
+
+		return html`
+			${() => config.all && renderButtons(config.all)}
+			${() =>
+				config.desktop && html`<show-on-device device="desktop">${renderButtons(config.desktop)}</show-on-device>`}
+			${() => config.mobile && html`<show-on-device device="mobile">${renderButtons(config.mobile)}</show-on-device>`}
+		`
+	}
 
 	#renderRight = () => {
 		const config = this.#presetConfig().right
@@ -163,7 +229,7 @@ export class AppButtonsPreset extends Element {
 				${() =>
 					config.logo &&
 					html`
-						<app-buttons-group custom-style="margin-top: 3px;">
+						<app-buttons-group>
 							<logo-button brand-name=${() => this.brandName}></logo-button>
 						</app-buttons-group>
 					`}
@@ -181,27 +247,13 @@ export class AppButtonsPreset extends Element {
 					`}
 			</app-buttons-right>
 
-			${() => {
-				const content = html`
-					<app-buttons-right layout="bottom">
-						<app-buttons-group custom-style="gap: 34px;" group-direction="row">
-							${() => config.share && html`<share-button onclick=${this.#onShareClick}></share-button>`}
-							${() => config.buy && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
-							${() => config.preview && html`<preview-button onclick=${this.#onPreviewClick}></preview-button>`}
-						</app-buttons-group>
-					</app-buttons-right>
-				`
-
-				// If device is specified, wrap with show-on-device; otherwise show on all devices
-				if (!config.device) return content
-				return html`<show-on-device device=${config.device}>${content}</show-on-device>`
-			}}
+			${() => this.#renderActionButtons(config)}
 		`
 	}
 
 	template = () => html`
-		${() => !this.hideLeft && this.#presetConfig().left && this.#renderLeft()}
-		${() => !this.hideRight && this.#presetConfig().right && this.#renderRight()}
+		${() => this.#presetConfig().left && this.#renderLeft()}
+		${() => this.#presetConfig().right && this.#renderRight()}
 		<slot></slot>
 	`
 }
