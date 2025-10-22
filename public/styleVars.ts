@@ -95,6 +95,9 @@ const styleVars = {
 	cardHeightMobile: 220,
 	cardHeightDesktop: 280,
 	cardHeightLarge: 310,
+
+	// Button heights
+	buttonHeight: 38,
 }
 
 interface Window {

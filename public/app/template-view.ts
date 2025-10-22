@@ -20,17 +20,18 @@ import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
-import '../elements/show-on-device.js'
-import '../elements/logo-button.js'
 import '../elements/nav-items.js'
 import '../elements/person-button.js'
 import '../elements/placeholder-image.js'
 import '../elements/preview-button.js'
 import '../elements/save-button.js'
+import '../elements/show-on-device.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
+import '../elements/top-navigation.js'
 import {pushState, searchParams} from '../routes.js'
 import {formatNumber} from '../utils.js'
+import './app-buttons-preset.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './item-card.js'
@@ -373,57 +374,116 @@ export class TemplateView extends Element {
 	}
 
 	template = () => html`
-		<app-buttons-left>
-			<app-buttons-group>
-				<back-button onclick=${this.#onBackButtonClick}></back-button>
-			</app-buttons-group>
-		</app-buttons-left>
-
-		<app-buttons-right>
-			<app-buttons-group>
-				<logo-button brand-name="MoiDien"></logo-button>
-			</app-buttons-group>
-			<app-buttons-group>
-				<person-button></person-button>
-				<cube-button></cube-button>
+		<app-buttons-preset
+			preset="template-flow"
+			brand-name="MoiDien"
+			show-animation=${() => store.selectedSpace?.collection === 'moidien'}
+			disable-person-button=${false}
+			disable-cube-button=${false}
+			hide-preview-button=${() => this.showRemixOverlay}
+		>
+			<show-on-device device="mobile">
 				<show-when
-					condition=${() => store.selectedSpace?.collection === 'moidien'}
-					content=${() => html`<animation-select></animation-select>`}
+					condition=${() => this.showRemixOverlay}
+					content=${() => html`
+						<app-buttons-right layout="bottom">
+							<app-buttons-group>
+								<button class="done-button" onclick=${this.#closeRemixOverlay}>Done</button>
+							</app-buttons-group>
+						</app-buttons-right>
+					`}
 				></show-when>
-			</app-buttons-group>
-		</app-buttons-right>
+			</show-on-device>
+		</app-buttons-preset>
 
-		<show-on-device device="mobile">
-			<app-buttons-right layout="bottom">
-				<app-buttons-group>
+		<bottom-sheet
+			onback=${this.#onBackButtonClick}
+			onpreview=${this.#onPreviewButtonClick}
+			ondone=${this.#closeRemixOverlay}
+			show-remix-overlay=${() => this.showRemixOverlay}
+			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
+		>
+			<app-buttons-left>
+				<app-buttons-group group-direction="row" custom-class="button-group-spread">
 					<show-when
-						condition=${() =>
-							!this.showAvatarSelection && !this.showPoseSelection && !this.showRemixOverlay && !this.showDetailView}
+						condition=${() => !this.showRemixOverlay}
+						content=${() => html`<back-button onclick=${this.#onBackButtonClick}></back-button>`}
+					></show-when>
+
+					<show-when
+						condition=${() => !this.showRemixOverlay}
 						content=${() => html`
 							<preview-button
+								class="align-right"
 								button-disabled=${() => store.selectedTemplates.size === 0}
 								onclick=${this.#onPreviewButtonClick}
 							></preview-button>
 						`}
 					></show-when>
+					<show-when
+						condition=${() => this.showRemixOverlay}
+						content=${() => html`
+							<button class="done-button align-right" onclick=${this.#closeRemixOverlay}>Done</button>
+						`}
+					></show-when>
 				</app-buttons-group>
-			</app-buttons-right>
-		</show-on-device>
-
-		<app-buttons-right layout="bottom">
-			<app-buttons-group>
-				<show-when
-					condition=${() => this.showRemixOverlay}
-					content=${() => html` <button class="done-button" onclick=${this.#closeRemixOverlay}>Done</button> `}
-				></show-when>
-			</app-buttons-group>
-		</app-buttons-right>
-
-		<bottom-sheet
-			onback=${this.#onBackButtonClick}
-			onpreview=${this.#onPreviewButtonClick}
-			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
-		>
+			</app-buttons-left>
+			<show-on-device device="desktop">
+				<top-navigation
+					classList=${() => ({
+						hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
+					})}
+				>
+					<div
+						class="template-info"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length === 0 || true}
+						}}
+					>
+						${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							if (templates.length > 0) {
+								const selectedTemplate = templates[0]
+								return html`
+									<div class="template-image-wrapper">
+										<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+									</div>
+									<div class="template-details">
+										<div class="template-name">${selectedTemplate.name}</div>
+										<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+									</div>
+								`
+							}
+							return ''
+						}}
+					</div>
+					<button
+						class="view-details-btn"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length === 0 || true}
+						}}
+						disabled
+					>
+						View details
+					</button>
+					<div
+						class="default-nav"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length > 0 && false}
+						}}
+					>
+						<avatar-dropdown
+							open=${() => this.showAvatarSelection}
+							show-popup
+							onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+						></avatar-dropdown>
+						<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+					</div>
+				</top-navigation>
+			</show-on-device>
 			<show-when
 				condition=${() => this.showDetailView}
 				content=${() => html`
@@ -540,60 +600,62 @@ export class TemplateView extends Element {
 					></remix-overlay>
 				`}
 			></show-when>
-			<bottom-navigation
-				classList=${() => ({
-					hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
-				})}
-			>
-				<div
-					class="template-info"
-					classList=${() => {
-						const templates = Array.from(store.selectedTemplates.values())
-						return {hidden: templates.length === 0 || true}
-					}}
+			<show-on-device device="mobile">
+				<bottom-navigation
+					classList=${() => ({
+						hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
+					})}
 				>
-					${() => {
-						const templates = Array.from(store.selectedTemplates.values())
-						if (templates.length > 0) {
-							const selectedTemplate = templates[0]
-							return html`
-								<div class="template-image-wrapper">
-									<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
-								</div>
-								<div class="template-details">
-									<div class="template-name">${selectedTemplate.name}</div>
-									<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
-								</div>
-							`
-						}
-						return ''
-					}}
-				</div>
-				<button
-					class="view-details-btn"
-					classList=${() => {
-						const templates = Array.from(store.selectedTemplates.values())
-						return {hidden: templates.length === 0 || true}
-					}}
-					disabled
-				>
-					View details
-				</button>
-				<div
-					class="default-nav"
-					classList=${() => {
-						const templates = Array.from(store.selectedTemplates.values())
-						return {hidden: templates.length > 0 && false}
-					}}
-				>
-					<avatar-dropdown
-						open=${() => this.showAvatarSelection}
-						show-popup
-						onavatar-dropdown-click=${this.#onAvatarDropdownClick}
-					></avatar-dropdown>
-					<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
-				</div>
-			</bottom-navigation>
+					<div
+						class="template-info"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length === 0 || true}
+						}}
+					>
+						${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							if (templates.length > 0) {
+								const selectedTemplate = templates[0]
+								return html`
+									<div class="template-image-wrapper">
+										<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+									</div>
+									<div class="template-details">
+										<div class="template-name">${selectedTemplate.name}</div>
+										<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+									</div>
+								`
+							}
+							return ''
+						}}
+					</div>
+					<button
+						class="view-details-btn"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length === 0 || true}
+						}}
+						disabled
+					>
+						View details
+					</button>
+					<div
+						class="default-nav"
+						classList=${() => {
+							const templates = Array.from(store.selectedTemplates.values())
+							return {hidden: templates.length > 0 && false}
+						}}
+					>
+						<avatar-dropdown
+							open=${() => this.showAvatarSelection}
+							show-popup
+							onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+						></avatar-dropdown>
+						<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+					</div>
+				</bottom-navigation>
+			</show-on-device>
 		</bottom-sheet>
 
 		<dialog-element
@@ -627,17 +689,21 @@ export class TemplateView extends Element {
 			display: contents;
 		}
 
-		/* Show back button on mobile only, hide on desktop (bottom-sheet handles desktop) */
 		app-buttons-left {
-			display: block;
+			display: none;
 			pointer-events: auto;
 			z-index: 100;
 		}
-
 		@media (min-width: 768px) {
 			app-buttons-left {
-				display: none;
+				display: block;
+				--app-buttons-left-transform: translateX(0) !important;
+				--app-buttons-left-transform: translateY(-10px) !important;
 			}
+		}
+
+		.align-right {
+			margin-left: auto;
 		}
 
 		.tabs-container {
@@ -740,15 +806,13 @@ export class TemplateView extends Element {
 			text-wrap: wrap;
 		}
 
-		.hidden {
-			display: none;
-		}
-
+		/* Done button styles */
 		.done-button {
 			background: var(--uiColorPrimaryBlack);
 			color: var(--uiColorPrimaryWhite);
 			border: none;
-			border-radius: 16px;
+			border-radius: var(--borderRadiusPill);
+			height: var(--buttonHeight);
 			padding: var(--uiSpacingSmall) var(--uiSpacingMedium);
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightSemiBold);
@@ -759,6 +823,10 @@ export class TemplateView extends Element {
 		.done-button:hover {
 			background: var(--uiColorPrimaryBlack);
 			opacity: 0.8;
+		}
+
+		.hidden {
+			display: none;
 		}
 
 		.template-info {

@@ -1,6 +1,5 @@
 export type AppRoute =
 	| 'avatar'
-	| 'blocks'
 	| 'preview'
 	| 'custom-measurement'
 	| 'success'
