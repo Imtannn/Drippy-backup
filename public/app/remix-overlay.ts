@@ -348,7 +348,7 @@ export class RemixOverlay extends Element {
 
 		.tabs-list-container {
 			position: absolute;
-			top: 15px;
+
 			right: 0;
 			left: 0;
 			z-index: 100;
@@ -381,7 +381,7 @@ export class RemixOverlay extends Element {
 
 		@media (min-width: 769px) {
 			tabs-content {
-				padding-top: 25px;
+				padding-top: 15px;
 			}
 		}
 	`

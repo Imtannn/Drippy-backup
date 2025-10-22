@@ -143,6 +143,7 @@ export class FabricSelection extends Element {
 			display: flex;
 			flex-direction: column;
 			gap: var(--uiGap);
+			margin-top: 10px;
 		}
 
 		.fabric-selection {
@@ -182,6 +183,11 @@ export class FabricSelection extends Element {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
 			gap: var(--uiGap);
+		}
+		@media (min-width: 768px) {
+			.items-grid {
+				grid-template-columns: repeat(4, 1fr);
+			}
 		}
 	`
 }
