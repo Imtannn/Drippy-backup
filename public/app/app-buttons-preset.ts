@@ -129,7 +129,7 @@ export class AppButtonsPreset extends Element {
 				right: {logo: true, device: 'desktop', share: true, buy: true},
 			},
 			'template-flow': {
-				left: {back: true},
+				left: {},
 				right: {logo: true, tools: true, animation: this.showAnimation, device: 'mobile', preview: true},
 			},
 			'preview-flow': {
@@ -163,7 +163,7 @@ export class AppButtonsPreset extends Element {
 				${() =>
 					config.logo &&
 					html`
-						<app-buttons-group>
+						<app-buttons-group custom-style="margin-top: 3px;">
 							<logo-button brand-name=${() => this.brandName}></logo-button>
 						</app-buttons-group>
 					`}
