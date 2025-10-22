@@ -12,7 +12,6 @@ import '../elements/avatar-dropdown.js'
 import '../elements/avatar-swap-bottom-sheet.js'
 import '../elements/back-button.js'
 import '../elements/bottom-navigation.js'
-import '../elements/top-navigation.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
 import '../elements/dialog-element.js'
@@ -21,17 +20,18 @@ import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
-import '../elements/show-on-device.js'
-import '../elements/logo-button.js'
 import '../elements/nav-items.js'
 import '../elements/person-button.js'
 import '../elements/placeholder-image.js'
 import '../elements/preview-button.js'
 import '../elements/save-button.js'
+import '../elements/show-on-device.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
+import '../elements/top-navigation.js'
 import {pushState, searchParams} from '../routes.js'
 import {formatNumber} from '../utils.js'
+import './app-buttons-preset.js'
 import './app-buttons.js'
 import './avatar-selection.js'
 import './item-card.js'
@@ -374,40 +374,13 @@ export class TemplateView extends Element {
 	}
 
 	template = () => html`
-		<app-buttons-right>
-			<app-buttons-group>
-				<logo-button brand-name="MoiDien"></logo-button>
-			</app-buttons-group>
-			<app-buttons-group>
-				<person-button></person-button>
-				<cube-button></cube-button>
-				<show-when
-					condition=${() => store.selectedSpace?.collection === 'moidien'}
-					content=${() => html`<animation-select></animation-select>`}
-				></show-when>
-			</app-buttons-group>
-		</app-buttons-right>
-
-		<show-on-device device="mobile">
-			<app-buttons-right layout="bottom">
-				<app-buttons-group>
-					<show-when
-						condition=${() =>
-							!this.showAvatarSelection && !this.showPoseSelection && !this.showRemixOverlay && !this.showDetailView}
-						content=${() => html`
-							<preview-button
-								button-disabled=${() => store.selectedTemplates.size === 0}
-								onclick=${this.#onPreviewButtonClick}
-							></preview-button>
-						`}
-					></show-when>
-					<show-when
-						condition=${() => this.showRemixOverlay}
-						content=${() => html` <button class="done-button" onclick=${this.#closeRemixOverlay}>Done</button> `}
-					></show-when>
-				</app-buttons-group>
-			</app-buttons-right>
-		</show-on-device>
+		<app-buttons-preset
+			preset="template-flow"
+			brand-name="MoiDien"
+			show-animation=${() => store.selectedSpace?.collection === 'moidien'}
+			disable-person-button=${false}
+			disable-cube-button=${false}
+		></app-buttons-preset>
 
 		<bottom-sheet
 			onback=${this.#onBackButtonClick}
