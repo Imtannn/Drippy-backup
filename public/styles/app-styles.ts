@@ -128,6 +128,7 @@ export const appStyles = css`
 		padding: 15px 20px;
 		font-size: 14px;
 		font-weight: 600;
+		height: var(--buttonHeight);
 		cursor: pointer;
 		display: flex;
 		align-items: center;

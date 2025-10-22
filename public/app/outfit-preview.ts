@@ -78,6 +78,7 @@ export class OutfitPreview extends Element {
 			justify-content: center;
 			gap: 5px;
 			padding: 8.5px 20.5px;
+			height: var(--buttonHeight);
 			border-radius: 100px;
 			color: #ffffff;
 			background: var(--uiColorPrimaryBlack);
