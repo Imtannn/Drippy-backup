@@ -65,6 +65,7 @@ export class PreviewButton extends Element {
 			justify-content: center;
 			gap: var(--uiGapSmall);
 			padding: 8.5px 20.5px;
+			height: var(--buttonHeight);
 			border-radius: var(--borderRadiusPill);
 			color: var(--uiColorPrimaryWhite);
 			background-color: var(--uiColorPrimaryBlack);

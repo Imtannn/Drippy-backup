@@ -391,11 +391,16 @@ export class TemplateView extends Element {
 		>
 			<app-buttons-left>
 				<app-buttons-group group-direction="row" custom-class="button-group-spread">
-					<back-button onclick=${this.#onBackButtonClick}></back-button>
+					<show-when
+						condition=${() => !this.showRemixOverlay}
+						content=${() => html`<back-button onclick=${this.#onBackButtonClick}></back-button>`}
+					></show-when>
+
 					<show-when
 						condition=${() => !this.showRemixOverlay}
 						content=${() => html`
 							<preview-button
+								class="align-right"
 								button-disabled=${() => store.selectedTemplates.size === 0}
 								onclick=${this.#onPreviewButtonClick}
 							></preview-button>
@@ -403,7 +408,7 @@ export class TemplateView extends Element {
 					></show-when>
 					<show-when
 						condition=${() => this.showRemixOverlay}
-						content=${() => html` <button class="done-button" onclick=${this.#closeRemixOverlay}>Done</button> `}
+						content=${() => html` <button class="done-button align-right" onclick=${this.#closeRemixOverlay}>Done</button> `}
 					></show-when>
 				</app-buttons-group>
 			</app-buttons-left>
@@ -679,6 +684,10 @@ export class TemplateView extends Element {
 				--app-buttons-left-transform: translateX(0) !important;
 				--app-buttons-left-transform: translateY(-10px) !important;
 			}
+		}
+
+		.align-right {
+			margin-left: auto;
 		}
 
 		.tabs-container {
