@@ -786,7 +786,8 @@ export class TemplateView extends Element {
 			background: var(--uiColorPrimaryBlack);
 			color: var(--uiColorPrimaryWhite);
 			border: none;
-			border-radius: 16px;
+			border-radius: var(--borderRadiusPill);
+			height: var(--buttonHeight);
 			padding: var(--uiSpacingSmall) var(--uiSpacingMedium);
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightSemiBold);
