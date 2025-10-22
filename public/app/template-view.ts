@@ -380,7 +380,21 @@ export class TemplateView extends Element {
 			show-animation=${() => store.selectedSpace?.collection === 'moidien'}
 			disable-person-button=${false}
 			disable-cube-button=${false}
-		></app-buttons-preset>
+			hide-preview-button=${() => this.showRemixOverlay}
+		>
+			<show-on-device device="mobile">
+				<show-when
+					condition=${() => this.showRemixOverlay}
+					content=${() => html`
+						<app-buttons-right layout="bottom">
+							<app-buttons-group>
+								<button class="done-button" onclick=${this.#closeRemixOverlay}>Done</button>
+							</app-buttons-group>
+						</app-buttons-right>
+					`}
+				></show-when>
+			</show-on-device>
+		</app-buttons-preset>
 
 		<bottom-sheet
 			onback=${this.#onBackButtonClick}
@@ -408,7 +422,9 @@ export class TemplateView extends Element {
 					></show-when>
 					<show-when
 						condition=${() => this.showRemixOverlay}
-						content=${() => html` <button class="done-button align-right" onclick=${this.#closeRemixOverlay}>Done</button> `}
+						content=${() => html`
+							<button class="done-button align-right" onclick=${this.#closeRemixOverlay}>Done</button>
+						`}
 					></show-when>
 				</app-buttons-group>
 			</app-buttons-left>

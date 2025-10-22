@@ -61,6 +61,7 @@ type AppButtonsPresetAttributes =
 	| 'showAnimation'
 	| 'disablePersonButton'
 	| 'disableCubeButton'
+	| 'hidePreviewButton'
 
 @element
 export class AppButtonsPreset extends Element {
@@ -73,6 +74,7 @@ export class AppButtonsPreset extends Element {
 	@booleanAttribute showAnimation = false
 	@booleanAttribute disablePersonButton = true
 	@booleanAttribute disableCubeButton = true
+	@booleanAttribute hidePreviewButton = false
 
 	#onBackClick = () => {
 		switch (this.preset) {
@@ -206,7 +208,7 @@ export class AppButtonsPreset extends Element {
 					<app-buttons-group custom-style="gap: 34px; align-items: center;margin-top: -3px;" group-direction="row">
 						${() => buttons.share && html`<share-button onclick=${this.#onShareClick}></share-button>`}
 						${() => buttons.buy && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
-						${() => buttons.preview && html`<preview-button onclick=${this.#onPreviewClick}></preview-button>`}
+						${() => buttons.preview && !this.hidePreviewButton && html`<preview-button onclick=${this.#onPreviewClick}></preview-button>`}
 					</app-buttons-group>
 				</app-buttons-right>
 			`
