@@ -2431,8 +2431,8 @@ p {
 	}
 
 	.showcase .showcase__model {
-		transform: scale(0.9);
-		-webkit-transform: scale(0.9);
+		transform: scale(1.5);
+		-webkit-transform: scale(1.5);
 		-webkit-backface-visibility: hidden;
 		backface-visibility: hidden;
 	}
