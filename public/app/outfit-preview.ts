@@ -1,17 +1,6 @@
-import {batch, css, Element, element, html, type ElementAttributes} from 'lume'
-import '../elements/animation-select.js'
-import '../elements/back-button.js'
-import '../elements/cube-button.js'
-import '../elements/home-button.js'
-import '../elements/logo-button.js'
-import '../elements/person-button.js'
-
-import '../elements/show-on-device.js'
+import {css, Element, element, html, type ElementAttributes} from 'lume'
 import '../elements/theme-switch-button.js'
-import {pushState, searchParams} from '../routes.js'
-import './app-buttons.js'
-import './buy-button.js'
-import './share-button.js'
+import './app-buttons-preset.js'
 import {store} from './store.js'
 
 type OutfitPreviewAttributes = keyof {}
@@ -19,19 +8,6 @@ type OutfitPreviewAttributes = keyof {}
 @element
 export class OutfitPreview extends Element {
 	static readonly elementName = 'outfit-preview'
-
-	#onBackButtonClick = () => {
-		batch(() => {
-			store.isPreview = false
-			searchParams().delete('isPreview')
-			pushState()
-			store.view = 'template'
-		})
-	}
-
-	#onHomeButtonClick = () => {
-		store.goBackHomeAndResetState()
-	}
 
 	#onBuyItClick = () => {
 		store.view = 'order-items'
@@ -68,35 +44,7 @@ export class OutfitPreview extends Element {
 	`
 
 	template = () => html`
-		<app-buttons-left>
-			<app-buttons-group group-direction="row">
-				<back-button onclick=${this.#onBackButtonClick}></back-button>
-				<home-button onclick=${this.#onHomeButtonClick}></home-button>
-			</app-buttons-group>
-		</app-buttons-left>
-
-		<show-on-device device="desktop">
-			<app-buttons-right layout="bottom">
-				<app-buttons-group custom-style="gap: 34px;" group-direction="row">
-					<buy-button
-						classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}
-						onclick=${this.#onBuyItClick}
-					></buy-button>
-				</app-buttons-group>
-			</app-buttons-right>
-		</show-on-device>
-
-		<app-buttons-right>
-			<app-buttons-group>
-				<logo-button brand-name="MoiDien"></logo-button>
-			</app-buttons-group>
-
-			<app-buttons-group>
-				<person-button disabled></person-button>
-				<cube-button disabled></cube-button>
-				<animation-select disabled></animation-select>
-			</app-buttons-group>
-		</app-buttons-right>
+		<app-buttons-preset preset="preview-flow"></app-buttons-preset>
 
 		<show-on-device device="mobile">
 			<div class="bottom-buttons" classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}>
@@ -130,6 +78,7 @@ export class OutfitPreview extends Element {
 			justify-content: center;
 			gap: 5px;
 			padding: 8.5px 20.5px;
+			height: var(--buttonHeight);
 			border-radius: 100px;
 			color: #ffffff;
 			background: var(--uiColorPrimaryBlack);

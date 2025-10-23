@@ -166,11 +166,6 @@ export class DrippyApp extends Element {
 					></show-when>
 
 					<show-when
-						condition=${() => store.view === 'blocks'}
-						content=${() => html`<blocks-selection></blocks-selection>`}
-					></show-when>
-
-					<show-when
 						condition=${() => store.view === 'preview'}
 						content=${() => html`<outfit-preview></outfit-preview>`}
 					></show-when>

@@ -1,14 +1,8 @@
 import {css, Element, element, html, signal} from 'lume'
-import '../elements/back-button.js'
 import '../elements/bottom-sheet.js'
-import '../elements/home-button.js'
-import '../elements/logo-button.js'
-import '../elements/show-on-device.js'
 import '../elements/theme-switch-button.js'
 import {appStyles} from '../styles/app-styles.js'
-import './app-buttons.js'
-import './buy-button.js'
-import './share-button.js'
+import './app-buttons-preset.js'
 import {store} from './store.js'
 
 @element
@@ -43,14 +37,6 @@ export class CustomMeasurement extends Element {
 			this.shoulder = store.customMeasurement.shoulder
 			this.shoulderToKnee = store.customMeasurement.shoulderToKnee
 		}
-	}
-
-	#onBackButtonClick = () => {
-		store.view = 'order-size'
-	}
-
-	#onHomeButtonClick = () => {
-		store.goBackHomeAndResetState()
 	}
 
 	#onSaveClick = () => {
@@ -107,46 +93,18 @@ export class CustomMeasurement extends Element {
 		this.shoulderToKnee = Number(valueWithoutCm)
 	}
 
-	#onShareClick = () => {
-		// copy current url to clipboard
-		console.log('Share my drip clicked')
-		navigator.clipboard.writeText(window.location.href)
-		alert('Link copied to clipboard')
-	}
-
-	#onBuyItClick = () => {
-		store.view = 'preview'
+	#onBackClick = () => {
+		store.view = 'order-size'
 	}
 
 	template = () => html`
-		<app-buttons-left>
-			<app-buttons-group group-direction="row">
-				<back-button onclick=${this.#onBackButtonClick}></back-button>
-				<home-button onclick=${this.#onHomeButtonClick}></home-button>
-			</app-buttons-group>
-		</app-buttons-left>
-
-		<app-buttons-right>
-			<app-buttons-group>
-				<!-- <theme-switch-button></theme-switch-button> -->
-				<logo-button brand-name="MoiDien"></logo-button>
-			</app-buttons-group>
-		</app-buttons-right>
-
-		<show-on-device device="desktop">
-			<app-buttons-right layout="bottom">
-				<app-buttons-group custom-style="gap: 34px;" group-direction="row">
-					<share-button onclick=${this.#onShareClick}></share-button>
-					<buy-button onclick=${this.#onBuyItClick}></buy-button>
-				</app-buttons-group>
-			</app-buttons-right>
-		</show-on-device>
+		<app-buttons-preset preset="order-flow"></app-buttons-preset>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
 			<div class="measurement-container">
 				<!-- Header -->
 				<div class="measurement-header">
-					<div class="back-icon" onclick=${this.#onBackButtonClick}>
+					<div class="back-icon" onclick=${this.#onBackClick}>
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="12" viewBox="0 0 20 12" fill="none">
 							<path
 								d="M19 6.75C19.4142 6.75 19.75 6.41421 19.75 6C19.75 5.58579 19.4142 5.25 19 5.25V6.75ZM0.469536 5.46967C0.176643 5.76256 0.176643 6.23744 0.469536 6.53033L5.24251 11.3033C5.5354 11.5962 6.01027 11.5962 6.30317 11.3033C6.59606 11.0104 6.59606 10.5355 6.30317 10.2426L2.06053 6L6.30317 1.75736C6.59606 1.46447 6.59606 0.989593 6.30317 0.696699C6.01027 0.403806 5.5354 0.403806 5.24251 0.696699L0.469536 5.46967ZM19 6V5.25L0.999866 5.25V6V6.75L19 6.75V6Z"

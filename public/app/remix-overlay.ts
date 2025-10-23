@@ -11,13 +11,13 @@ import {
 	type ElementAttributes,
 } from 'lume'
 
+import {fabrics} from '../consts/fabrics.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/tabs.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template} from '../types/template.js'
-import {fabrics} from '../consts/fabrics.js'
 import {blockManager} from './block-manager.js'
 import './fabric-selection.js'
 import './item-card.js'
@@ -319,7 +319,7 @@ export class RemixOverlay extends Element {
 
 		.category-tab {
 			background: transparent;
-			padding: 0;
+			padding-top: var(--uiSpacingMedium);
 			border: none;
 			border-radius: var(--borderRadiusMedium);
 			font-size: var(--fontSizeTextXs);
