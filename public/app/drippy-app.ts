@@ -1,6 +1,7 @@
 import {batch, createMemo, css, Element, element, html, signal} from 'lume'
 import {fabrics} from '../consts/fabrics.js'
 import {templates} from '../consts/templates.js'
+import '../elements/connection-warning.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
@@ -141,6 +142,7 @@ export class DrippyApp extends Element {
 			condition=${() => this.appLoaded}
 			fallback=${() => html`<div class="loading">Loading...</div>`}
 			content=${() => html`
+				<connection-warning></connection-warning>
 				<div id="app-container">
 					<drippy-scene
 						id="drippy-scene"
