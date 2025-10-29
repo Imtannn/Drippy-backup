@@ -13,6 +13,8 @@ import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
 import {onModelLoad, syncSignals, toSolidSignal} from '../utils.js'
+import type {ConnectionStatus} from './network-monitor.js'
+import {createNetworkEffect} from './network-monitor.js'
 
 export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
 export const username = () => currentUser()?.username ?? ''
@@ -88,6 +90,9 @@ class Store {
 	loadingScreenshots = new Set<TemplateCategory>()
 	loadingTemplateId: string | null = null
 	currentAbortController: AbortController | null = null
+
+	connectionStatus: ConnectionStatus = 'online'
+	showConnectionWarning = false
 
 	// Order-related state
 	selectedOrderItems = new Map<TemplateCategory, boolean>()
@@ -297,6 +302,19 @@ class Store {
 	}
 	set setShippingAddress(address: Partial<ShippingAddress>) {
 		this.order.shippingAddress = {...this.order.shippingAddress, ...address}
+	}
+
+	set setConnectionStatus(status: ConnectionStatus) {
+		this.connectionStatus = status
+		if (status === 'slow' || status === 'offline') {
+			this.showConnectionWarning = true
+		} else if (status === 'online') {
+			this.showConnectionWarning = false
+		}
+	}
+
+	set setShowConnectionWarning(show: boolean) {
+		this.showConnectionWarning = show
 	}
 
 	set setSelectedOrderItems(items: Map<TemplateCategory, boolean>) {
@@ -605,6 +623,11 @@ export const store = new Store()
 
 // For debuggering
 ;(window as any).drippyStore = store
+
+createNetworkEffect((status: ConnectionStatus) => {
+	store.setConnectionStatus = status
+	console.log('Network status changed:', status)
+})
 
 // Pre-populate selected blocks from URL on app initialization
 selectedBlocksFromUrl()

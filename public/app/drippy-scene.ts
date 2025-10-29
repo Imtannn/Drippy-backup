@@ -195,9 +195,20 @@ export class DrippyScene extends Element {
 			const {avatarModel, backgroundModel} = this
 			if (!avatarModel || !backgroundModel) return
 
-			const models = querySelectorAllSignal(avatarModel, 'lume-gltf-model[data-cloth]') as Accessor<
+			disableFrustumCulledOnLoad(backgroundModel)
+			disableFrustumCulledOnLoad(avatarModel)
+
+			const garmentModels = querySelectorAllSignal(avatarModel, 'lume-gltf-model[data-cloth]') as Accessor<
 				NodeListOf<GltfModel>
 			>
+
+			const extraObjects = querySelectorAllSignal(avatarModel, 'lume-gltf-model.extraObjects') as Accessor<
+				NodeListOf<GltfModel>
+			>
+
+			createEffect(() => {
+				for (const el of extraObjects()) disableFrustumCulledOnLoad(el)
+			})
 
 			createEffect(() => {
 				if (store.view === 'preview') {
@@ -345,7 +356,7 @@ export class DrippyScene extends Element {
 
 			// Track block loading state
 			createEffect(() => {
-				for (const [index, el] of models().entries()) {
+				for (const [index, el] of garmentModels().entries()) {
 					// Use element ID + index for more stable identification
 					const elementId = el.getAttribute('id') || `unknown-${index}`
 					const blockId = Symbol(`block-${elementId}-${index}`)
@@ -355,6 +366,8 @@ export class DrippyScene extends Element {
 						if (!modelLoaded()) store.addLoadingBlock(blockId)
 						onCleanup(() => store.removeLoadingBlock(blockId))
 					})
+
+					disableFrustumCulledOnLoad(el)
 				}
 			})
 
@@ -402,7 +415,7 @@ export class DrippyScene extends Element {
 				const isCanceled = () => shouldCancel
 
 				// Process each model using its data-blockid to find the correct fabric
-				for (const el of models()) {
+				for (const el of garmentModels()) {
 					const blockId = el.getAttribute('id')
 					if (!blockId) continue
 
@@ -774,4 +787,12 @@ export class DrippyScene extends Element {
 			}
 		}
 	`
+}
+
+function disableFrustumCulledOnLoad(model: GltfModel) {
+	const modelLoaded = onModelLoad(model)
+
+	createEffect(() => {
+		if (modelLoaded()) model.three.traverse(child => (child.frustumCulled = false))
+	})
 }

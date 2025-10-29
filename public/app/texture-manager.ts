@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import type {Fabric} from '../types/fabric.js'
+import {reportImageLoadFailure, reportImageLoadSuccess} from './network-monitor.js'
 
 export interface TextureConfig {
 	repeat: [number, number]
@@ -56,6 +57,9 @@ class TextureManager {
 
 			img.onload = () => {
 				try {
+					// Report successful load to network monitor
+					reportImageLoadSuccess()
+
 					// Create texture from the loaded image
 					const texture = new THREE.Texture(img)
 
@@ -81,12 +85,14 @@ class TextureManager {
 					})
 				} catch (error) {
 					console.warn('Failed to create texture from image:', url, error)
+					reportImageLoadFailure(url, error)
 					resolve(null)
 				}
 			}
 
 			img.onerror = error => {
 				console.warn('Failed to load image:', url, error)
+				reportImageLoadFailure(url, error)
 				resolve(null) // Return null instead of rejecting to prevent Promise.all from failing
 			}
 
