@@ -10,11 +10,6 @@
 
 	<body>
 		<style>
-			/* Hide the #root we're not using from the imported HTML. */
-			#root:first-of-type {
-				display: none;
-			}
-
 			body {
 				overflow: auto;
 				pointer-events: auto;
@@ -23,6 +18,11 @@
 			#landingUI {
 				padding: 20px;
 				overflow-x: auto;
+			}
+
+			/* Show the #root for landing page content */
+			#root {
+				display: block !important;
 			}
 		</style>
 
