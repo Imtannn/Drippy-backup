@@ -63,7 +63,7 @@ export class BlocksSelection extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
-			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
+			this.spaceCollection = store.getEffectiveSpace()?.collection ?? this.defaultCollection
 		})
 
 		// Update available template categories from selectedTemplates
@@ -128,12 +128,12 @@ export class BlocksSelection extends Element {
 			const selectedBlock = untrack(() =>
 				store.selectedBlocks.get(this.selectedTemplateCategory!)?.get(this.selectedBlockCategory),
 			)
-			const selectedSpace = untrack(() => store.selectedSpace)
+			const effectiveSpace = untrack(() => store.getEffectiveSpace())
 
 			if (
 				this.selectedTemplateCategory === 'Shirt' &&
 				selectedBlock?.templateId !== 'Item 9' &&
-				selectedSpace?.collection === 'moidien'
+				effectiveSpace?.collection === 'moidien'
 			) {
 				this.blocksCategories = []
 				return
@@ -243,7 +243,7 @@ export class BlocksSelection extends Element {
 				<person-button></person-button>
 				<cube-button></cube-button>
 				<show-when
-					condition=${() => store.selectedSpace?.collection === 'moidien'}
+					condition=${() => store.getEffectiveSpace()?.collection === 'moidien'}
 					content=${() => html` <animation-select></animation-select> `}
 				></show-when>
 			</app-buttons-group>

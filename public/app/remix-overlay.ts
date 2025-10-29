@@ -48,7 +48,7 @@ export class RemixOverlay extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
-			this.spaceCollection = store.selectedSpace?.collection ?? 'moidien'
+			this.spaceCollection = store.getEffectiveSpace()?.collection ?? 'moidien'
 
 			onCleanup(() => {
 				this.spaceCollection = null

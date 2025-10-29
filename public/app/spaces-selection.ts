@@ -92,7 +92,6 @@ export class SpacesSelection extends Element {
 				<index-each
 					items=${() => this.filteredSpace}
 					content=${() => (space: Accessor<Space>) => html`
-						<!-- Bloom Realm Card -->
 						<div class="space-card">
 							<div class="scene-preview">
 								<div class="scene-placeholder" onclick=${() => this.#onSceneSelected(space())}>

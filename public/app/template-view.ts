@@ -1,9 +1,11 @@
 import {batch, css, Element, element, html, onCleanup, signal, type ElementAttributes} from 'lume'
 import {templates} from '../consts/templates.js'
+import {spaces} from '../consts/spaces.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
+import type {Space} from '../types/types.js'
 import {blockManager} from './block-manager.js'
 import {currentUser, store} from './store.js'
 
@@ -72,7 +74,12 @@ export class TemplateView extends Element {
 		this.addEventListener('close', this.#onDetailViewClose)
 
 		this.createEffect(() => {
-			this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
+			// If we're in 'drippy' mode (all spaces), use drippySelectedSpace, otherwise use store.selectedSpace
+			if (store.selectedSpace?.collection === 'drippy') {
+				this.spaceCollection = store.drippySelectedSpace?.collection ?? this.defaultCollection
+			} else {
+				this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
+			}
 		})
 
 		// Update template categories when templates change
@@ -313,7 +320,14 @@ export class TemplateView extends Element {
 		this.showDetailView = false
 	}
 
+	#onDrippySpaceSelect = (space: Space) => {
+		store.drippySelectedSpace = space
+	}
+
 	#selectTemplate = (template: Template) => {
+		const effectiveSpace = store.getEffectiveSpace()
+		if (!effectiveSpace) return
+
 		const newTemplates = new Map<TemplateCategory, Template>(store.selectedTemplates)
 		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(store.selectedBlocks)
 		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(store.selectedFabrics)
@@ -334,10 +348,10 @@ export class TemplateView extends Element {
 		}
 
 		newTemplates.set(template.category, template)
-		const templateBlockData = blockManager.convertTemplateToBlockData(template, store.selectedSpace!)
+		const templateBlockData = blockManager.convertTemplateToBlockData(template, effectiveSpace)
 		const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
 			templateBlockData,
-			store.selectedSpace!,
+			effectiveSpace,
 		)
 		newBlocks.set(template.category, newBlocksMap)
 		newFabrics.set(template.category, newFabricsMap)
@@ -377,7 +391,7 @@ export class TemplateView extends Element {
 		<app-buttons-preset
 			preset="template-flow"
 			brand-name="MoiDien"
-			show-animation=${() => store.selectedSpace?.collection === 'moidien'}
+			show-animation=${() => store.getEffectiveSpace()?.collection === 'moidien'}
 			disable-person-button=${false}
 			disable-cube-button=${false}
 			hide-preview-button=${() => this.showRemixOverlay}
@@ -483,6 +497,27 @@ export class TemplateView extends Element {
 						<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
 					</div>
 				</top-navigation>
+				<show-when
+					condition=${() => store.selectedSpace?.collection === 'drippy'}
+					content=${() => html`
+						<top-navigation>
+							<div class="spaces-scroll-container">
+								<for-each
+									items=${() => spaces}
+									content=${() => (space: Space) => html`
+										<button
+											class="space-logo-button"
+											classList=${() => ({active: store.drippySelectedSpace?.slug === space.slug})}
+											onclick=${() => this.#onDrippySpaceSelect(space)}
+										>
+											<img src=${space.logo || space.sceneThumbnail} alt=${space.name} />
+										</button>
+									`}
+								></for-each>
+							</div>
+						</top-navigation>
+					`}
+				></show-when>
 			</show-on-device>
 			<show-when
 				condition=${() => this.showDetailView}
@@ -900,6 +935,59 @@ export class TemplateView extends Element {
 
 		.hidden {
 			display: none !important;
+		}
+
+		/* Floating spaces selector */
+		.floating-spaces-selector {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.spaces-scroll-container {
+			display: flex;
+			gap: var(--uiSpacingSmall);
+			overflow-x: auto;
+			align-items: center;
+			scrollbar-width: none;
+		}
+
+		.spaces-scroll-container::-webkit-scrollbar {
+			display: none;
+		}
+
+		.space-logo-button {
+			width: 42px;
+			height: 42px;
+			min-width: 42px;
+			min-height: 42px;
+			border-radius: var(--borderRadiusCircular);
+			background: var(--uiColorPrimaryBlack);
+			cursor: pointer;
+			transition: all var(--transitionFast);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			overflow: hidden;
+			border: 2px solid transparent;
+			padding: 0;
+		}
+
+		.space-logo-button:hover {
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+		}
+
+		.space-logo-button.active {
+			border-color: var(--uiColorAccentViolet);
+			box-shadow: 0 2px 8px rgba(138, 43, 226, 0.3);
+		}
+
+		.space-logo-button img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: center;
+			margin-top: 0;
 		}
 	`
 }

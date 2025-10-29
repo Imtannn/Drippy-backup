@@ -72,6 +72,7 @@ class Store {
 	/** Selected avatar defaults based on space gender to the one in the URL. */
 	selectedAvatar = searchParams().get('avatar') ?? avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
 	selectedSpace = spaceFromParam()
+	drippySelectedSpace: Space | null = spaces[0] || null
 	isPreview = searchParams().get('isPreview') === 'true'
 	// FIXME initialize other props from URL params as well
 
@@ -272,6 +273,12 @@ class Store {
 	}
 	set selectSpace(space: Space | null) {
 		this.selectedSpace = space
+	}
+	getEffectiveSpace(): Space | null {
+		if (this.selectedSpace?.collection === 'drippy') {
+			return this.drippySelectedSpace
+		}
+		return this.selectedSpace
 	}
 	set setCustomMeasurement(measurement: CustomMeasurement) {
 		this.customMeasurement = measurement
