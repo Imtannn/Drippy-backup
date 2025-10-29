@@ -140,7 +140,7 @@ export class AvatarDropdown extends Element {
 			position: absolute;
 			top: -53px;
 			left: 100%;
-			transform: translateX(-35%);
+			transform: translateX(-37%);
 			background: #b897fd;
 			color: white;
 			padding: 10px 12px;
