@@ -303,6 +303,7 @@ export class RemixOverlay extends Element {
 	css = css/*css*/ `
 		:host {
 			display: block;
+			padding-top: 60px;
 		}
 
 		.overlay {

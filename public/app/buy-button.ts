@@ -39,7 +39,7 @@ export class BuyButton extends Element {
 			border: none;
 			outline: none;
 			font-weight: var(--fontWeightSemiBold);
-			font-size: var(--fontSizeTextSm);
+			font-size: var(--fontSizeTextXs);
 		}
 	`
 }
