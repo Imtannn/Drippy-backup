@@ -12,10 +12,17 @@ body {
 	/* iOS specific scroll fixes */
 	-webkit-overflow-scrolling: touch;
 	position: relative;
+	/* Enable pointer events for landing page */
+	pointer-events: auto !important;
+	touch-action: auto !important;
+	user-select: auto !important;
+	-webkit-user-select: auto !important;
 }
 
 * {
 	box-sizing: border-box;
+	/* Enable pointer events for all elements in landing page */
+	pointer-events: auto !important;
 }
 
 button:focus-visible {
