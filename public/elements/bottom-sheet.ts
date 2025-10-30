@@ -468,7 +468,7 @@ export class BottomSheet extends Element {
 				width: 32rem;
 				max-width: calc(100vw - 3rem);
 				height: 100vh;
-				max-height: 100vh;
+				max-height: var(--bottom-sheet-max-height);
 				opacity: 0;
 				transform: translateY(1.25rem);
 				transition:

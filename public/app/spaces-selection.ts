@@ -540,6 +540,7 @@ export class SpacesSelection extends Element {
 		}
 
 		/* Center tabs without modifying tabs component */
+
 		tabs-provider {
 			display: flex;
 			flex-direction: column;
@@ -552,6 +553,9 @@ export class SpacesSelection extends Element {
 			width: auto !important;
 			max-width: fit-content !important;
 			margin: 0 auto !important;
+		}
+		tabs-provider .tab {
+			padding: 10px 16px !important;
 		}
 
 		/* Ensure tabs-content containers are also centered */
@@ -572,22 +576,25 @@ export class SpacesSelection extends Element {
 
 		@media (min-width: 768px) {
 			.items-grid {
-				grid-template-columns: repeat(3, 1fr);
+				grid-template-columns: repeat(4, 1fr);
 				gap: var(--gridGapTablet);
 			}
 		}
 
 		@media (min-width: 1024px) {
 			.items-grid {
-				grid-template-columns: repeat(4, 1fr);
+				grid-template-columns: repeat(6, 1fr);
 				gap: var(--gridGapDesktop);
 			}
 		}
 
 		.template-item {
+			min-width: 0;
+			width: 100%;
 			display: flex;
 			flex-direction: column;
-			gap: 8px;
+			gap: var(--uiSpacingTiny);
+			position: relative;
 		}
 
 		.template-item-container {
@@ -602,7 +609,7 @@ export class SpacesSelection extends Element {
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightSemiBold);
 			color: var(--uiColorPrimaryBlack);
-			text-align: center;
+			text-align: start;
 			margin: 0;
 
 			:host-context([data-theme='dark']) & {
@@ -613,15 +620,17 @@ export class SpacesSelection extends Element {
 		.template-product-price-container {
 			display: flex;
 			flex-direction: column;
-			align-items: center;
+			align-items: start;
 			gap: 2px;
 		}
 
 		.template-product-price {
 			font-size: var(--fontSizeTextXxs);
 			font-weight: var(--fontWeightSemiBold);
-			color: #666;
-			text-align: center;
+			color: var(--uiColorPrimaryBlack);
+			display: flex;
+			justify-content: start;
+			align-items: center;
 
 			:host-context([data-theme='dark']) & {
 				color: #ccc;
@@ -639,6 +648,8 @@ export class SpacesSelection extends Element {
 
 		.template-product-price img {
 			margin-right: 6px;
+			width: 12px;
+			height: 9.5px;
 		}
 
 		.template-product-wholesale {
