@@ -500,7 +500,7 @@ export class TemplateView extends Element {
 				<show-when
 					condition=${() => store.selectedSpace?.collection === 'drippy'}
 					content=${() => html`
-						<top-navigation>
+						<top-navigation class="spaces-navigation">
 							<div class="spaces-scroll-container">
 								<for-each
 									items=${() => spaces.filter(space => !space.isHidden)}
@@ -548,24 +548,11 @@ export class TemplateView extends Element {
 						default-value=${() => this.selectedTab}
 						ontabchange=${(e: CustomEvent) => (this.selectedTab = e.detail.value)}
 					>
-						<bottom-sheet-header>
-							<div class="tabs-container">
-								<tabs-list>
-									<for-each
-										items=${() => Object.keys(this.templateCategories)}
-										content=${() => (category: TemplateCategory) => html`
-											<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
-										`}
-									></for-each>
-								</tabs-list>
-							</div>
-						</bottom-sheet-header>
-
-						<div class="tabs-content-container">
-							<show-on-device device="mobile">
-								<show-when
-									condition=${() => store.selectedSpace?.collection === 'drippy'}
-									content=${() => html`
+						<show-on-device device="mobile">
+							<show-when
+								condition=${() => store.selectedSpace?.collection === 'drippy'}
+								content=${() => html`
+									<div class="spaces-mobile-navigation">
 										<div class="spaces-scroll-container">
 											<for-each
 												items=${() => spaces.filter(space => !space.isHidden)}
@@ -580,9 +567,24 @@ export class TemplateView extends Element {
 												`}
 											></for-each>
 										</div>
-									`}
-								></show-when>
-							</show-on-device>
+									</div>
+								`}
+							></show-when>
+						</show-on-device>
+						<bottom-sheet-header>
+							<div class="tabs-container">
+								<tabs-list>
+									<for-each
+										items=${() => Object.keys(this.templateCategories)}
+										content=${() => (category: TemplateCategory) => html`
+											<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
+										`}
+									></for-each>
+								</tabs-list>
+							</div>
+						</bottom-sheet-header>
+
+						<div class="tabs-content-container">
 							<for-each
 								items=${() => Object.keys(this.templateCategories)}
 								content=${() => (category: TemplateCategory) => html`
@@ -998,12 +1000,10 @@ export class TemplateView extends Element {
 		}
 
 		.space-logo-button:hover {
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 		}
 
 		.space-logo-button.active {
 			border-color: var(--uiColorAccentViolet);
-			box-shadow: 0 2px 8px rgba(138, 43, 226, 0.3);
 		}
 
 		.space-logo-button img {
@@ -1012,6 +1012,14 @@ export class TemplateView extends Element {
 			object-fit: cover;
 			object-position: center;
 			margin-top: 0;
+		}
+
+		.spaces-navigation {
+			margin-top: 0;
+		}
+
+		.spaces-mobile-navigation {
+			padding: 0 20px 12px;
 		}
 	`
 }
