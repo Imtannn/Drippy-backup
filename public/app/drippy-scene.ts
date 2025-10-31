@@ -572,7 +572,7 @@ export class DrippyScene extends Element {
 						<lume-ambient-light visible="true" intensity="0.7" color="white"></lume-ambient-light>
 
 						<!-- a sphere to debug/visualize the env map -->
-						<!-- <lume-sphere visible="${() => store.isAdmin && !store.turnOffSettingsInSpace}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere> -->
+						<lume-sphere visible="${() => store.isAdmin && !store.turnOffSettingsInSpace && false}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
 
 						<lume-spot-light
 							visible="true"
