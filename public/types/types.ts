@@ -38,6 +38,7 @@ export type Space = {
 	isWholesale: boolean
 	isWorkInProgress?: boolean
 	viewOnly?: boolean
+	isHidden?: boolean
 }
 
 export type CustomMeasurement = {

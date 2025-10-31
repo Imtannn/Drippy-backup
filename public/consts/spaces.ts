@@ -313,5 +313,6 @@ export const spaces: Space[] = [
 		collection: 'drippy',
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 ]

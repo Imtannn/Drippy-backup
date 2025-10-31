@@ -503,7 +503,7 @@ export class TemplateView extends Element {
 						<top-navigation>
 							<div class="spaces-scroll-container">
 								<for-each
-									items=${() => spaces}
+									items=${() => spaces.filter(space => !space.isHidden)}
 									content=${() => (space: Space) => html`
 										<button
 											class="space-logo-button"
@@ -560,7 +560,29 @@ export class TemplateView extends Element {
 								</tabs-list>
 							</div>
 						</bottom-sheet-header>
+
 						<div class="tabs-content-container">
+							<show-on-device device="mobile">
+								<show-when
+									condition=${() => store.selectedSpace?.collection === 'drippy'}
+									content=${() => html`
+										<div class="spaces-scroll-container">
+											<for-each
+												items=${() => spaces.filter(space => !space.isHidden)}
+												content=${() => (space: Space) => html`
+													<button
+														class="space-logo-button"
+														classList=${() => ({active: store.drippySelectedSpace?.slug === space.slug})}
+														onclick=${() => this.#onDrippySpaceSelect(space)}
+													>
+														<img src=${space.logo || space.sceneThumbnail} alt=${space.name} />
+													</button>
+												`}
+											></for-each>
+										</div>
+									`}
+								></show-when>
+							</show-on-device>
 							<for-each
 								items=${() => Object.keys(this.templateCategories)}
 								content=${() => (category: TemplateCategory) => html`

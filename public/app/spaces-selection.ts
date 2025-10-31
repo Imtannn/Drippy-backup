@@ -24,7 +24,9 @@ export class SpacesSelection extends Element {
 
 		// Show all spaces regardless of gender
 		this.createEffect(() => {
-			this.filteredSpace = store.isAdmin ? spaces : spaces.filter(space => !space.isWorkInProgress)
+			this.filteredSpace = store.isAdmin
+				? spaces.filter(space => !space.isHidden)
+				: spaces.filter(space => !space.isWorkInProgress && !space.isHidden)
 		})
 
 		// Close login dialog when user successfully logs in
