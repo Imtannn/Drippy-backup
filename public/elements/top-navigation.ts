@@ -24,7 +24,7 @@ export class TopNavigation extends Element {
 				top: 0;
 				left: 0;
 				right: 0;
-				z-index: 100;
+				z-index: 1000;
 				background: transparent;
 			}
 		}
@@ -33,7 +33,7 @@ export class TopNavigation extends Element {
 		@media (min-width: 768px) {
 			:host {
 				width: 30rem;
-				margin: 8px auto 0 auto;
+				margin: 65px auto 0 auto;
 				padding-bottom: 14px;
 			}
 		}

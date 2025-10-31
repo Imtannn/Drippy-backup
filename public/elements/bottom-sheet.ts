@@ -466,7 +466,6 @@ export class BottomSheet extends Element {
 				border-bottom-right-radius: 1rem;
 				border: 1px solid #e5e7eb;
 				width: 32rem;
-				padding-top: 60px;
 				max-width: calc(100vw - 3rem);
 				height: 100vh;
 				max-height: var(--bottom-sheet-max-height);

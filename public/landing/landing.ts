@@ -1,17 +1,17 @@
 import {html} from 'lume'
 import {createSignal} from 'solid-js'
+import '../app/drippy-scene.js'
+import {store} from '../app/store.js'
 import '../elements/avatar-selector.js'
 import '../elements/custom-button.js'
-import '../routes.js' // track page visits
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
-import '../app/drippy-scene.js'
-import {store} from '../app/store.js'
+import '../routes.js' // track page visits
 
+import type {BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
-import type {BlockCategory} from '../types/block.js'
 
 const materials = [
 	{
@@ -297,7 +297,7 @@ const mainContent = html`
 							<div class="bg-background"></div>
 
 							<div class="hero__actions">
-								<custom-button variant="secondary" href="/">See it live</custom-button>
+								<custom-button variant="secondary" href="/?app">See it live</custom-button>
 								<custom-button variant="primary" href="https://calendly.com/rubydrippy3d/30min">Book a demo</custom-button>
 							</div>
 						</section>
@@ -479,7 +479,7 @@ const mainContent = html`
 									</div>
 								</div>
 								<div class="hero__actions">
-									<custom-button variant="secondary" href="/">See it live</custom-button>
+									<custom-button variant="secondary" href="/?app">See it live</custom-button>
 									<custom-button variant="primary" href="https://calendly.com/rubydrippy3d/30min">Book a demo</custom-button>
 								</div>
 							</div>
@@ -510,7 +510,7 @@ const mainContent = html`
 							</div>
 
 							<div class="hero__actions">
-								<custom-button variant="secondary" href="/">See it live</custom-button>
+								<custom-button variant="secondary" href="/?app">See it live</custom-button>
 								<custom-button variant="primary" href="https://calendly.com/rubydrippy3d/30min">Book a demo</custom-button>
 							</div>
 						</section>
@@ -740,8 +740,11 @@ setTimeout(() => {
 }, maxLoadingTime)
 
 // First, append the content to DOM so we can track image loading
-document.body.append(...(Array.isArray(navbar) ? navbar : [navbar]))
-document.body.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
+// Try to use #root if it exists, otherwise append to body
+const root = document.getElementById('root')
+const container = root || document.body
+container.append(...(Array.isArray(navbar) ? navbar : [navbar]))
+container.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
 
 // Wait for all images and content to be fully loaded
 function waitForContentReady() {

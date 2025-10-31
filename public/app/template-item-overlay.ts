@@ -123,7 +123,7 @@ export class TemplateItemOverlay extends Element {
 			padding: var(--uiSpacingSmall) var(--uiSpacingMedium);
 			border-radius: 999px;
 			border: none;
-			font-size: var(--fontSizeTextXxs);
+			font-size: var(--fontSizeTextXs);
 			cursor: pointer;
 			transition: var(--transitionFast);
 			min-width: 60px;
