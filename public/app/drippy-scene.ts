@@ -385,7 +385,7 @@ export class DrippyScene extends Element {
 				const blocks = Array.from(this.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
 				this.renderBlocks = blocks.flatMap(block => {
 					if (block.category === 'Sleeves') {
-						const id = `${this.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
+						const id = `${store.getEffectiveSpace()?.collection}-${block.templateCategory}-${block.category}-${block._id}`
 						let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
 						const idMirror = `${id}-mirror`
@@ -394,7 +394,7 @@ export class DrippyScene extends Element {
 						return [renderBlock, renderBlockMirror]
 					}
 
-					const id = `${this.selectedSpace?.collection}-${block.templateCategory}-${block.category}-${block._id}`
+					const id = `${store.getEffectiveSpace()?.collection}-${block.templateCategory}-${block.category}-${block._id}`
 					let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
 					return renderBlock

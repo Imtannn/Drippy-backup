@@ -1,4 +1,5 @@
 import * as AWS from 'aws-sdk'
+import {randomUUID as uuidv4} from 'crypto'
 import * as fs from 'fs'
 import * as https from 'https'
 import * as path from 'path'
@@ -15,6 +16,7 @@ const S3_BUCKET = process.env.S3_BUCKET || 'your-bucket-name'
 const S3_REGION = process.env.S3_REGION || 'us-east-1'
 const S3_ACCESS_KEY = process.env.AWS_ACCESS_KEY_ID
 const S3_SECRET_KEY = process.env.AWS_SECRET_ACCESS_KEY
+const CLOUDFRONT_URL = 'https://d1e6s1h8cqcr26.cloudfront.net'
 
 // Configure AWS
 AWS.config.update({
@@ -27,74 +29,70 @@ const s3 = new AWS.S3()
 
 // Brand configurations with Google Drive folder IDs
 const BRAND_CONFIGS = [
-	// {
-	// 	brand: 'vaishnavi',
-	// 	rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
-	// },
-	// {
-	// 	brand: 'haruki',
-	// 	rootFolderId: '1-_x-GVUxGBn4S1VDI6t3dFN990IG-VWu',
-	// },
-	// {
-	// 	brand: 'lostCause',
-	// 	rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
-	// },
-	// {
-	// 	brand: 'shri',
-	// 	rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
-	// },
-	// {
-	// 	brand: 'eliseF',
-	// 	rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
-	// },
-	// {
-	// 	brand: 'oofya',
-	// 	rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
-	// },
-	// {
-	// 	brand: 'theSoul',
-	// 	rootFolderId: '19Oq6abu1SnMTLSJHS0VY_GT1pAvpdU0T',
-	// },
-	// {
-	// 	brand: 'moidien',
-	// 	rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
-	// },
-	// {
-	// 	brand: 'emwear',
-	// 	rootFolderId: '15zHjnYVfII_Z2cr17_6Vp7kscWm9UIAU',
-	// },
-	// {
-	// 	brand: 'atelierGourney',
-	// 	rootFolderId: '17aBfgFcD7Liq9fB_KC57rl5S2w-O4LYf',
-	// },
-	// {
-	// 	brand: 'imzad',
-	// 	rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
-	// },
-	// {
-	// 	brand: 'oneThousandPoets',
-	// 	rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
-	// },
-	// {
-	// 	brand: 'zove',
-	// 	rootFolderId: '1XlxaOIFxxh-8xCmmM6XrDOW6iqq7xNhw',
-	// },
-	// {
-	// 	brand: 'jaSengBu',
-	// 	rootFolderId: '1BO4szN8246Y0V-AhL9zDyXzJ6rZLL7U8',
-	// },
-	// {
-	// 	brand: 'mssPark',
-	// 	rootFolderId: '1uUtAmMj_4gV1P3xuJKWGPbATJcv63GcJ',
-	// },
-	// {
-	// 	brand: 'baroudeuses',
-	// 	rootFolderId: '1Eu5LyK8R-DGEkCys50KJ-7EatssA3X2w',
-	// },
-	// {
-	// 	brand: 'imzadFemale',
-	// 	rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
-	// },
+	{
+		brand: 'vaishnavi',
+		rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
+	},
+	{
+		brand: 'haruki',
+		rootFolderId: '1-_x-GVUxGBn4S1VDI6t3dFN990IG-VWu',
+	},
+	{
+		brand: 'lostCause',
+		rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
+	},
+	{
+		brand: 'shri',
+		rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
+	},
+	{
+		brand: 'eliseF',
+		rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
+	},
+	{
+		brand: 'oofya',
+		rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
+	},
+	{
+		brand: 'theSoul',
+		rootFolderId: '19Oq6abu1SnMTLSJHS0VY_GT1pAvpdU0T',
+	},
+	{
+		brand: 'moidien',
+		rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
+	},
+	{
+		brand: 'emwear',
+		rootFolderId: '15zHjnYVfII_Z2cr17_6Vp7kscWm9UIAU',
+	},
+	{
+		brand: 'atelierGourney',
+		rootFolderId: '17aBfgFcD7Liq9fB_KC57rl5S2w-O4LYf',
+	},
+	{
+		brand: 'oneThousandPoets',
+		rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
+	},
+	{
+		brand: 'zove',
+		rootFolderId: '1XlxaOIFxxh-8xCmmM6XrDOW6iqq7xNhw',
+	},
+	{
+		brand: 'jaSengBu',
+		rootFolderId: '1BO4szN8246Y0V-AhL9zDyXzJ6rZLL7U8',
+	},
+	{
+		brand: 'mssPark',
+		rootFolderId: '1uUtAmMj_4gV1P3xuJKWGPbATJcv63GcJ',
+	},
+	{
+		brand: 'imzadMale',
+		rootFolderId: '1fsA2JrL5ibuWrC_Fp_IDubvZuQj5bwpa',
+	},
+	{
+		brand: 'imzadFemale',
+		rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
+	},
 	{
 		brand: 'sapienzaUniversityOfRome',
 		rootFolderId: '1yficP672jh2jmHwfmHqKN5f3ca1Hd5rm',
@@ -196,8 +194,9 @@ async function uploadToS3(
 	}
 
 	try {
-		const result = await s3.upload(params).promise()
-		return result.Location
+		await s3.upload(params).promise()
+		// Return CloudFront URL instead of S3 URL
+		return `${CLOUDFRONT_URL}/${uploadKey.replace(/ /g, '_')}`
 	} catch (error) {
 		console.error('Error uploading to S3:', error)
 		throw error
@@ -320,7 +319,6 @@ async function processOptionBlocks(
 	brand: string,
 	avatarGender: string,
 ): Promise<{category: string; blocks: TODO[]}[]> {
-	let blockIdCounter = 1000000 // Start with high number to avoid conflicts with regular blocks
 	const blockOptions: {category: string; blocks: TODO[]}[] = []
 
 	for (const optionBlockFolder of optionBlockFolders) {
@@ -384,7 +382,7 @@ async function processOptionBlocks(
 				])
 
 				categoryBlocks.push({
-					_id: blockIdCounter.toString(),
+					_id: uuidv4(),
 					blockName: normalizeName(blockFolder.name),
 					category: blockCategory,
 					templateCategory: templateCategory,
@@ -392,7 +390,6 @@ async function processOptionBlocks(
 					modelUrl: blockModelS3Url,
 					avatar: avatarGender,
 				})
-				blockIdCounter++
 
 				console.log(`        ✅ Uploaded option block ${blockFolder.name}`)
 			} catch (error) {
@@ -685,12 +682,11 @@ function generateTemplateData(
 ): {templates: TODO; templateFolderIdToIdMap: Map<string, string>} {
 	const templates: TODO = {}
 	const templateFolderIdToIdMap = new Map<string, string>()
-	let idCounter = 1
 
 	processedData.forEach(({template}) => {
 		if (!template) return
 
-		const templateId = idCounter.toString()
+		const templateId = uuidv4()
 		templates[brand] = templates[brand] || []
 		templates[brand].push({
 			_id: templateId,
@@ -707,7 +703,6 @@ function generateTemplateData(
 
 		// Store mapping using unique Google Drive folder ID - guaranteed to be unique
 		templateFolderIdToIdMap.set(template.folderId, templateId)
-		idCounter++
 	})
 
 	return {templates, templateFolderIdToIdMap}
@@ -715,7 +710,6 @@ function generateTemplateData(
 
 function generateBlockData(processedData: TODO[], brand: string, templateFolderIdToIdMap: Map<string, string>): TODO {
 	const blocks: TODO = {}
-	let idCounter = 1
 
 	processedData.forEach(({blocks: templateBlocks, optionBlocks}) => {
 		// Process regular template blocks
@@ -724,7 +718,7 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 			// Use unique Google Drive folder ID to find the correct template ID
 			const templateId = templateFolderIdToIdMap.get(block.templateFolderId) || block.templateName // Fallback to name if ID not found
 			blocks[brand].push({
-				_id: idCounter.toString(),
+				_id: uuidv4(),
 				thumb: block.thumbUrl,
 				modelFile: block.modelUrl,
 				blockName: block.blockName,
@@ -734,14 +728,13 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 				templateName: block.templateName,
 				templateCategory: block.templateCategory,
 			})
-			idCounter++
 		})
 
 		// Process option blocks (without templateId and templateName)
 		optionBlocks.forEach((block: TODO) => {
 			blocks[brand] = blocks[brand] || []
 			blocks[brand].push({
-				_id: idCounter.toString(),
+				_id: uuidv4(),
 				thumb: block.thumbUrl,
 				modelFile: block.modelUrl,
 				blockName: block.blockName,
@@ -751,7 +744,6 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 				templateId: '', // Empty string instead of undefined
 				templateName: '', // Empty string instead of undefined
 			})
-			idCounter++
 		})
 	})
 
@@ -760,7 +752,6 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 
 function generateFabricData(brand: string): TODO {
 	const fabrics: TODO = {}
-	let idCounter = 1
 
 	console.log(`🎨 Generating fabric data for brand: ${brand}`)
 	console.log(`📦 Total root materials available: ${rootMaterials.size}`)
@@ -773,7 +764,7 @@ function generateFabricData(brand: string): TODO {
 
 		fabrics[brand] = fabrics[brand] || []
 		fabrics[brand].push({
-			_id: idCounter.toString(),
+			_id: uuidv4(),
 			thumb: material.thumbUrl,
 			normal: material.normal,
 			baseColor: material.baseColor,
@@ -790,7 +781,6 @@ function generateFabricData(brand: string): TODO {
 			...(material.rotate !== undefined && {rotate: material.rotate}),
 			...(material.coef !== undefined && {coef: material.coef}),
 		})
-		idCounter++
 	})
 
 	return fabrics

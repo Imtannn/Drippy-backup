@@ -146,7 +146,7 @@ export class DrippyApp extends Element {
 				<div id="app-container">
 					<drippy-scene
 						id="drippy-scene"
-						selected-space=${() => (console.log('selected space', store.selectedSpace), store.selectedSpace)}
+						selected-space=${() => (console.log('selected space', store.selectedSpace), store.getEffectiveSpace())}
 						selected-avatar=${() => store.selectedAvatar}
 						selected-fabrics=${() => store.selectedFabrics}
 						selected-blocks=${() => store.selectedBlocks}

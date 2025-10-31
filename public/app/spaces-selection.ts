@@ -28,7 +28,9 @@ export class SpacesSelection extends Element {
 
 		// Show all spaces regardless of gender, with brand filtering
 		this.createEffect(() => {
-			let filteredSpaces = store.isAdmin ? spaces : spaces.filter(space => !space.isWorkInProgress)
+			let filteredSpaces = store.isAdmin
+				? spaces.filter(space => !space.isHidden)
+				: spaces.filter(space => !space.isWorkInProgress && !space.isHidden)
 
 			// Filter by brand if brand query parameter exists
 			const brandParam = searchParams().get('brand')
