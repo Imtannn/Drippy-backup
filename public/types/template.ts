@@ -29,4 +29,5 @@ export type Template = {
 	extraMaterials?: ExtraMaterial[]
 	fabricOptions?: string[] // Array of material IDs that reference fabrics
 	blockOptions?: {category: BlockCategory; blocks: Block[]}[]
+	collection?: string
 }

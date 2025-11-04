@@ -25,7 +25,7 @@ export class TemplateItemOverlay extends Element {
 
 			const {available} = blockManager.isRemixAvailableForTemplate(this.selectedTemplate, {
 				selectedBlocks: store.selectedBlocks,
-				selectedSpace: store.selectedSpace,
+				selectedSpace: store.getEffectiveSpace(),
 			})
 
 			this.isRemixAvailable = available

@@ -17,6 +17,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Dusty Mocha',
 			category: 'Silk',
+		collection: 'vaishnavi',
 			templateCategories: ['Top', 'Skirt'],
 		},
 		{
@@ -34,6 +35,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Blood Red',
 			category: 'Silk',
+		collection: 'vaishnavi',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -51,6 +53,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Coconut Milk',
 			category: 'Silk',
+		collection: 'vaishnavi',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -65,6 +68,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '281',
 			category: 'Sequin',
+		collection: 'vaishnavi',
 			templateCategories: ['Top', 'Skirt'],
 		},
 		{
@@ -79,6 +83,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Beige',
 			category: 'Silk',
+		collection: 'vaishnavi',
 			templateCategories: ['Top', 'Skirt'],
 		},
 	],
@@ -98,6 +103,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Crepe (E8bbca)',
 			category: 'Silk',
+		collection: 'haruki',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -115,6 +121,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Crepe (D6e2ea)',
 			category: 'Silk',
+		collection: 'haruki',
 			templateCategories: ['Dress', 'Skirt'],
 		},
 		{
@@ -132,6 +139,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Crepe (096372)',
 			category: 'Silk',
+		collection: 'haruki',
 			templateCategories: ['Dress', 'Skirt'],
 		},
 		{
@@ -149,6 +157,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Chiffon (2ab4c8)',
 			category: 'Silk',
+		collection: 'haruki',
 			templateCategories: ['Dress', 'Skirt'],
 		},
 		{
@@ -162,6 +171,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Red',
 			category: 'Silk',
+		collection: 'haruki',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -175,6 +185,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Crepe',
 			category: 'Silk',
+		collection: 'haruki',
 			templateCategories: ['Top', 'Dress', 'Skirt'],
 		},
 	],
@@ -194,6 +205,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Charcoal Gray',
 			category: 'Silk',
+		collection: 'lostCause',
 			templateCategories: ['Skirt'],
 		},
 		{
@@ -207,6 +219,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Silk',
+		collection: 'lostCause',
 			templateCategories: ['Top', 'Skirt'],
 		},
 		{
@@ -224,6 +237,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black Twisted',
 			category: 'Wool',
+		collection: 'lostCause',
 			templateCategories: ['Top'],
 		},
 		{
@@ -241,6 +255,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lostCause/root/SILK_-_ORGANZA_PRINT/SILK_-_ORGANZA_PRINT_-_ALPHA.jpg',
 			materialName: 'Organza Print',
 			category: 'Silk',
+		collection: 'lostCause',
 			templateCategories: [],
 		},
 		{
@@ -255,6 +270,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Twisted',
 			category: 'Wool',
+		collection: 'lostCause',
 			templateCategories: ['Top', 'Accessories'],
 		},
 		{
@@ -267,6 +283,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Fake',
 			category: 'Fur',
+		collection: 'lostCause',
 			templateCategories: [],
 		},
 		{
@@ -284,6 +301,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Print',
 			category: 'Leather',
+		collection: 'lostCause',
 			templateCategories: ['Top', 'Pants'],
 		},
 		{
@@ -301,6 +319,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lostCause/root/ABTRACT_-_BLACK_FACE/ABSTRACT_-_BLACK_FACE_-_ALPHA.jpg',
 			materialName: 'Black Face',
 			category: 'Abtract',
+		collection: 'lostCause',
 			templateCategories: ['Pants'],
 		},
 		{
@@ -318,6 +337,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lostCause/root/ABTRACT_-_NAVY_FACE/ABSTRACT_-_FACE_-_ALPHA.jpg',
 			materialName: 'Navy Face',
 			category: 'Abtract',
+		collection: 'lostCause',
 			templateCategories: ['Skirt'],
 		},
 		{
@@ -333,6 +353,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Yarn',
 			category: 'Twisted',
+		collection: 'lostCause',
 			templateCategories: ['Skirt'],
 		},
 		{
@@ -350,6 +371,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lostCause/root/SILK_-_BLACK_ORGANZA/SILK_-_BLACK_ORGANZA_-_ALPHA.jpg',
 			materialName: 'Black Organza',
 			category: 'Silk',
+		collection: 'lostCause',
 			templateCategories: ['Accessories'],
 		},
 		{
@@ -362,6 +384,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lostCause/root/WOOL_-_YARN/WOOL_-_YARN_-_ALPHA.jpg',
 			materialName: 'Yarn',
 			category: 'Wool',
+		collection: 'lostCause',
 			templateCategories: ['Top', 'Dress', 'Skirt', 'Pants'],
 		},
 	],
@@ -380,6 +403,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Mesh Small',
 			category: 'Gold',
+		collection: 'shri',
 			templateCategories: [],
 			scaleX: 1,
 			scaleY: -2,
@@ -403,6 +427,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Mesh',
 			category: 'Gold',
+		collection: 'shri',
 			templateCategories: ['Top', 'Accesorries'],
 			scaleX: 2,
 			scaleY: 3,
@@ -421,6 +446,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Texture',
 			category: 'Trim',
+		collection: 'shri',
 			templateCategories: ['Pants'],
 		},
 		{
@@ -438,6 +464,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '389',
 			category: 'Tie',
+		collection: 'shri',
 			templateCategories: ['Accesorries'],
 			scaleX: 1,
 			scaleY: 0,
@@ -460,6 +487,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Chain',
 			category: 'Gold',
+		collection: 'shri',
 			templateCategories: ['Accesorries'],
 			scaleX: 1,
 			scaleY: -1,
@@ -483,6 +511,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Golden',
 			category: 'Lace',
+		collection: 'shri',
 			templateCategories: ['Top'],
 			scaleX: 11,
 			scaleY: 6,
@@ -506,6 +535,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Gold',
 			category: 'Tape',
+		collection: 'shri',
 			templateCategories: ['Skirt'],
 			scaleX: 2,
 			scaleY: 0,
@@ -530,6 +560,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/shri/root/MESH_-_METALLIC_<2,_2,_0,_0,_1000,_0>/MESH_-_METALLIC_-_ALPHA.jpg',
 			materialName: 'Metallic',
 			category: 'Mesh',
+		collection: 'shri',
 			templateCategories: ['Skirt', 'Top'],
 			scaleX: 2,
 			scaleY: 2,
@@ -553,6 +584,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Quilting',
+		collection: 'shri',
 			templateCategories: ['Pants', 'Top', 'Accesorries'],
 			scaleX: -4,
 			scaleY: 4,
@@ -576,6 +608,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Golden',
 			category: 'Quilting',
+		collection: 'shri',
 			templateCategories: ['Top', 'Skirt', 'Accesorries', 'Pants'],
 			scaleX: 2,
 			scaleY: 1,
@@ -599,6 +632,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Quilting',
+		collection: 'shri',
 			templateCategories: ['Top', 'Skirt', 'Accesorries', 'Pants'],
 			scaleX: 19,
 			scaleY: 10,
@@ -622,6 +656,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Seethrough',
 			category: 'Seersucker',
+		collection: 'shri',
 			templateCategories: ['Top'],
 		},
 		{
@@ -635,6 +670,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Cotton',
+		collection: 'shri',
 			templateCategories: ['Top', 'Skirt'],
 		},
 		{
@@ -647,6 +683,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/shri/root/ORGANZA_-_BLACK/ORGANZA_-_BLACK_-_ALPHA.jpg',
 			materialName: 'Black',
 			category: 'Organza',
+		collection: 'shri',
 			templateCategories: ['Top', 'Skirt'],
 		},
 		{
@@ -659,6 +696,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/shri/root/LACE_-_TULLE/LACE_-_TULLE_-_ALPHA.jpg',
 			materialName: 'Tulle',
 			category: 'Lace',
+		collection: 'shri',
 			templateCategories: ['Top'],
 		},
 		{
@@ -671,6 +709,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Silk',
+		collection: 'shri',
 			templateCategories: ['Top', 'Skirt'],
 		},
 		{
@@ -684,6 +723,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Golden',
 			category: 'Fabric',
+		collection: 'shri',
 			templateCategories: ['Top', 'Skirt'],
 		},
 		{
@@ -697,6 +737,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Bronze',
 			category: 'Silk',
+		collection: 'shri',
 			templateCategories: ['Pants', 'Skirt'],
 		},
 		{
@@ -710,12 +751,13 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Velvet',
+		collection: 'shri',
 			templateCategories: ['Top'],
 		},
 	],
 	eliseF: [
 		{
-			_id: 'c50b305b-6009-4e6b-9e87-c8915a8d1b70',
+			_id: 'f912ff09-1152-4624-b10b-ca54f1889641',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_LAVENDER_BLUE_<6,_16,_0,_0,_1000,_0>/_COTTON_-_LAVENDER_BLUE_-_RENDER.webp',
 			normal:
@@ -729,6 +771,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Lavender Blue',
 			category: 'Cotton',
+		collection: 'eliseF',
 			templateCategories: ['Top'],
 			scaleX: 6,
 			scaleY: 16,
@@ -738,7 +781,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			coef: 1000,
 		},
 		{
-			_id: '210addc4-d3cc-4b9b-ac3e-7fd27669c7c0',
+			_id: '4539f629-90ba-4162-8866-9f18d2b0d866',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/KNIT_-_FLEECE/KNIT_-_FLEECE_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/KNIT_-_FLEECE/KNIT_-_FLEECE_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/KNIT_-_FLEECE/KNIT_-_FLEECE_-_BASE.jpg',
@@ -748,10 +791,11 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Fleece',
 			category: 'Knit',
+		collection: 'eliseF',
 			templateCategories: ['Top'],
 		},
 		{
-			_id: 'e222031a-d3fe-4ea9-92d4-8e06540eae77',
+			_id: '85e0dd6a-a279-4937-a9f6-c4c37a1cdc59',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_RENDER.webp',
 			normal:
@@ -765,10 +809,11 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Dusty Blue',
 			category: 'Poly',
+		collection: 'eliseF',
 			templateCategories: ['Pants'],
 		},
 		{
-			_id: '0ae7fba9-85b4-4249-9cad-360c19b9e772',
+			_id: '38adf028-0169-4dd4-bfa2-f9818f6416d4',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/DENIM_-_BACK/DENIM_-_BACK_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/DENIM_-_BACK/DENIM_-_BACK_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/DENIM_-_BACK/DENIM_-_BACK_-_BASE.jpg',
@@ -778,10 +823,11 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Back',
 			category: 'Denim',
+		collection: 'eliseF',
 			templateCategories: ['Pants'],
 		},
 		{
-			_id: 'f4a1f51d-026f-490e-9e57-118ebbb1ce0a',
+			_id: '602b3d7c-419e-419c-ac7f-00f428c02eb3',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_CANVAS/STRIPED_-_CANVAS_-_RENDER.webp',
 			normal:
@@ -795,10 +841,11 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Canvas',
 			category: 'Striped',
+		collection: 'eliseF',
 			templateCategories: ['Top'],
 		},
 		{
-			_id: 'a3041f84-7179-48f0-8ddb-618ec4cbe412',
+			_id: '382c8904-7288-4b9e-b023-d5409f0a22d9',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/DENIM_-_276/DENIM_-_276_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/DENIM_-_276/DENIM_-_276_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/DENIM_-_276/DENIM_-_276_-_BASE.jpg',
@@ -807,10 +854,11 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '276',
 			category: 'Denim',
+		collection: 'eliseF',
 			templateCategories: ['Pants'],
 		},
 		{
-			_id: '4fa39f53-9d25-4c36-8443-02f5691ea88b',
+			_id: 'c21f3396-6e86-4866-b7a8-3286fa8ca0a4',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_RENDER.webp',
 			normal:
@@ -824,10 +872,11 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Navy',
 			category: 'Polyester',
+		collection: 'eliseF',
 			templateCategories: ['Top', 'Pants'],
 		},
 		{
-			_id: '9d135e92-0d89-45d5-b5c2-4de45fac5a14',
+			_id: 'c649c0e5-bf6a-4c2f-a859-73c7ffec250c',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_BASE.jpg',
@@ -838,10 +887,11 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Orange',
 			category: 'Cotton',
+		collection: 'eliseF',
 			templateCategories: ['Top', 'Pants'],
 		},
 		{
-			_id: '0714bbf3-2f5e-4919-9e14-57483e1110df',
+			_id: 'ed9512f6-a7a8-40a5-bb09-bb1cc250c2ed',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_RENDER.webp',
 			normal:
@@ -855,10 +905,11 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Tanktop',
 			category: 'Striped',
+		collection: 'eliseF',
 			templateCategories: ['Top'],
 		},
 		{
-			_id: '42ca8888-934f-4658-a56b-788c40bed98b',
+			_id: '949fbe01-09e4-45b9-81ef-2f0f92dd01a5',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
@@ -868,10 +919,11 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Cotton',
+		collection: 'eliseF',
 			templateCategories: ['Top'],
 		},
 		{
-			_id: '5d588731-b59d-4b62-bd41-52e024e31923',
+			_id: '4f4c8a73-13c8-4347-8a91-04f9fab48125',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLY_-_TWILL/POLY_-_TWILL_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLY_-_TWILL/POLY_-_TWILL_-_NORMAL_.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLY_-_TWILL/POLY_-_TWILL_-_BASE.jpg',
@@ -881,6 +933,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Twill',
 			category: 'Poly',
+		collection: 'eliseF',
 			templateCategories: ['Pants', 'Top'],
 		},
 	],
@@ -900,6 +953,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Square',
 			category: '3d',
+		collection: 'oofya',
 			templateCategories: ['Accessory', 'Skirt'],
 			scaleX: 11,
 			scaleY: 10,
@@ -919,6 +973,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Gray',
 			category: 'Cotton',
+		collection: 'oofya',
 			templateCategories: ['Top', 'Dress', 'Pants'],
 		},
 		{
@@ -932,6 +987,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Grid',
 			category: 'Corduroy',
+		collection: 'oofya',
 			templateCategories: ['Skirt', 'Dress', 'Pants'],
 		},
 		{
@@ -945,6 +1001,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Taffeta',
+		collection: 'oofya',
 			templateCategories: ['Accessory', 'Top'],
 		},
 		{
@@ -962,6 +1019,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Golden Brown Grid',
 			category: 'Corduroy',
+		collection: 'oofya',
 			templateCategories: ['Top', 'Skirt', 'Accessory', 'Pants'],
 		},
 		{
@@ -979,6 +1037,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black Seethrough',
 			category: 'Cotton',
+		collection: 'oofya',
 			templateCategories: ['Top', 'Dress'],
 		},
 		{
@@ -992,6 +1051,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Cotton',
+		collection: 'oofya',
 			templateCategories: ['Top', 'Skirt', 'Dress', 'Accessory', 'Pants'],
 		},
 		{
@@ -1005,6 +1065,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Cotton',
+		collection: 'oofya',
 			templateCategories: ['Top', 'Dress', 'Pants', 'Skirt', 'Accessory'],
 		},
 	],
@@ -1020,6 +1081,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Cotton',
+		collection: 'theSoul',
 			templateCategories: ['Top'],
 		},
 		{
@@ -1032,6 +1094,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '331',
 			category: 'Tweed',
+		collection: 'theSoul',
 			templateCategories: ['Top'],
 		},
 		{
@@ -1048,6 +1111,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Olive Gray',
 			category: 'Wool',
+		collection: 'theSoul',
 			templateCategories: ['Pants', 'Top'],
 		},
 		{
@@ -1065,6 +1129,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Honey Mustard',
 			category: 'Suiting',
+		collection: 'theSoul',
 			templateCategories: ['Pants', 'Top'],
 		},
 		{
@@ -1082,6 +1147,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Floral',
 			category: 'Print Chiffon',
+		collection: 'theSoul',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1095,6 +1161,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Sateen',
+		collection: 'theSoul',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1110,6 +1177,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Taffeta',
+		collection: 'theSoul',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1128,6 +1196,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/theSoul/root/LACE_-_WHITE_FLOWER/LACE_-_WHITE_FLOWER_-_ALPHA.jpg',
 			materialName: 'White Flower',
 			category: 'Lace',
+		collection: 'theSoul',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1141,6 +1210,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/theSoul/root/LACE_-_FLOWER/LACE_-_FLOWER_(ALPHA).jpg',
 			materialName: 'Flower',
 			category: 'Lace',
+		collection: 'theSoul',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1153,6 +1223,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Tan',
 			category: 'Silk',
+		collection: 'theSoul',
 			templateCategories: ['Dress'],
 		},
 	],
@@ -1172,6 +1243,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Random White',
 			category: 'Pleated',
+		collection: 'moidien',
 			templateCategories: ['Hat', 'Bag'],
 		},
 		{
@@ -1189,6 +1261,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Random Black',
 			category: 'Pleated',
+		collection: 'moidien',
 			templateCategories: ['Bag'],
 		},
 		{
@@ -1206,6 +1279,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Jacquard',
 			category: 'Poly',
+		collection: 'moidien',
 			templateCategories: ['Top'],
 			scaleX: 8,
 			scaleY: 10,
@@ -1229,6 +1303,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'T',
 			category: 'Washed',
+		collection: 'moidien',
 			templateCategories: ['Top'],
 			scaleX: -7,
 			scaleY: 54,
@@ -1252,6 +1327,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Seethrough',
 			category: 'Seersucker',
+		collection: 'moidien',
 			templateCategories: ['Top'],
 		},
 		{
@@ -1269,6 +1345,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Seersucker',
+		collection: 'moidien',
 			templateCategories: ['Pants'],
 		},
 		{
@@ -1284,6 +1361,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Brown',
 			category: 'Pleated',
+		collection: 'moidien',
 			templateCategories: ['Top', 'Accessories'],
 		},
 		{
@@ -1301,6 +1379,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Pleated',
+		collection: 'moidien',
 			templateCategories: ['Top', 'Dress', 'Pants'],
 		},
 		{
@@ -1314,6 +1393,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '235',
 			category: 'Twill',
+		collection: 'moidien',
 			templateCategories: ['Pants', 'Dress'],
 		},
 		{
@@ -1327,6 +1407,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Brown',
 			category: 'Cotton',
+		collection: 'moidien',
 			templateCategories: ['Accessories', 'Dress', 'Pants'],
 		},
 		{
@@ -1340,6 +1421,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Cotton',
+		collection: 'moidien',
 			templateCategories: ['Accessories'],
 		},
 		{
@@ -1357,6 +1439,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Navy',
 			category: 'Crinkle Fabric',
+		collection: 'moidien',
 			templateCategories: ['Top', 'Accessories', 'Dress', 'Pants'],
 		},
 		{
@@ -1370,6 +1453,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Taupe',
 			category: 'Cotton',
+		collection: 'moidien',
 			templateCategories: ['Dress', 'Accessories'],
 		},
 		{
@@ -1383,6 +1467,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Cotton',
+		collection: 'moidien',
 			templateCategories: ['Top', 'Accessories'],
 		},
 	],
@@ -1402,6 +1487,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Seethrough (Fffaed)',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Skirt', 'Dress'],
 		},
 		{
@@ -1419,6 +1505,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Seethrough (Cce9ff)',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Coat', 'Dress'],
 		},
 		{
@@ -1437,6 +1524,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/emwear/root/MESH_-_FLOWER_<25,_35,_0,_0,_1000,_0>/MESH_-_FLOWER_-_ALPHA.jpg',
 			materialName: 'Flower',
 			category: 'Mesh',
+		collection: 'emwear',
 			templateCategories: ['Coat'],
 			scaleX: 25,
 			scaleY: 35,
@@ -1461,6 +1549,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/emwear/root/LACE_-_WHITE_<5,_9,_0,_0,_1000,_0>/LACE_-_WHITE_-_ALPHA.jpg',
 			materialName: 'White',
 			category: 'Lace',
+		collection: 'emwear',
 			templateCategories: ['Skirt'],
 			scaleX: 5,
 			scaleY: 9,
@@ -1485,6 +1574,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/emwear/root/LACE_-_FFE6F2_<13,_7,_0,_0,_1000,_0>/LACE_-_FFE6F2_-_ALPHA.jpg',
 			materialName: 'Ffe6f2',
 			category: 'Lace',
+		collection: 'emwear',
 			templateCategories: ['Dress'],
 			scaleX: 13,
 			scaleY: 7,
@@ -1508,6 +1598,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Mustard Yellow Green',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Top'],
 		},
 		{
@@ -1525,6 +1616,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Deep Rasberry',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Top'],
 		},
 		{
@@ -1538,6 +1630,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Top'],
 		},
 		{
@@ -1551,6 +1644,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Fffaed',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Dress', 'Coat'],
 		},
 		{
@@ -1564,6 +1658,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Cce9ff',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1577,6 +1672,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Ffe6f2',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Dress', 'Coat'],
 		},
 		{
@@ -1594,6 +1690,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Off White',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Dress', 'Skirt'],
 		},
 		{
@@ -1607,6 +1704,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Ffc85a',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1620,6 +1718,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Ffebb7',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1638,6 +1737,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/emwear/root/MESH_-_LAVENDER_BLUSH/MESH_-_LAVENDER_BLUSH_-_ALPHA.jpg',
 			materialName: 'Lavender Blush',
 			category: 'Mesh',
+		collection: 'emwear',
 			templateCategories: ['Skirt', 'Coat'],
 		},
 		{
@@ -1655,6 +1755,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/emwear/root/LACE_-_LAVENDER_BLUSH/LACE_-_LAVENDER_BLUSH_-_ALPHA.jpg',
 			materialName: 'Lavender Blush',
 			category: 'Lace',
+		collection: 'emwear',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1672,6 +1773,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Lavender Blush',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1689,6 +1791,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/emwear/root/LACE_-_LIGHT_CREAM/LACE_-_LIGHT_CREAM_-_ALPHA.jpg',
 			materialName: 'Light Cream',
 			category: 'Lace',
+		collection: 'emwear',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1706,6 +1809,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Light Cream',
 			category: 'Silk',
+		collection: 'emwear',
 			templateCategories: ['Dress', 'Skirt'],
 		},
 	],
@@ -1726,6 +1830,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/atelierGourney/root/EMBROIDERED_-_HORSEHAIR_<12,_5,_0,_0,_1000,_0>/EMBROIDERED_-_HORSEHAIR_-_ALPHA.jpg',
 			materialName: 'Horsehair',
 			category: 'Embroidered',
+		collection: 'atelierGourney',
 			templateCategories: ['Accessories', 'Dress'],
 			scaleX: 12,
 			scaleY: 5,
@@ -1750,6 +1855,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/atelierGourney/root/WOOL_-_SEQUIN_<11,_4,_0,_0,_1000,_0>/WOOL-__SEQUIN_-_ALPHA.jpg',
 			materialName: 'Sequin',
 			category: 'Wool',
+		collection: 'atelierGourney',
 			templateCategories: ['Dress', 'Accessories'],
 			scaleX: 11,
 			scaleY: 4,
@@ -1768,6 +1874,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Cotton',
+		collection: 'atelierGourney',
 			templateCategories: [],
 		},
 		{
@@ -1785,6 +1892,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Lamb',
 			category: 'Leather',
+		collection: 'atelierGourney',
 			templateCategories: ['Jumpsuit', 'Pants', 'Top', 'Dress'],
 		},
 		{
@@ -1802,6 +1910,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '252',
 			category: 'Leather',
+		collection: 'atelierGourney',
 			templateCategories: ['Pants', 'Top', 'Jumpsuit'],
 		},
 		{
@@ -1819,6 +1928,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Brown',
 			category: 'Leather',
+		collection: 'atelierGourney',
 			templateCategories: ['Jumpsuit', 'Pants', 'Top'],
 		},
 		{
@@ -1836,6 +1946,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Leather',
+		collection: 'atelierGourney',
 			templateCategories: ['Jumpsuit', 'Pants', 'Top'],
 		},
 		{
@@ -1848,6 +1959,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '383',
 			category: 'Denim',
+		collection: 'atelierGourney',
 			templateCategories: ['Pants', 'Top', 'Jumpsuit'],
 		},
 		{
@@ -1865,6 +1977,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Fringe',
 			category: 'Metallic',
+		collection: 'atelierGourney',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1883,6 +1996,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/atelierGourney/root/YARN_LACE_-_RED/YARN_LACE_-_RED_-_ALPHA.jpg',
 			materialName: 'Red',
 			category: 'Yarn Lace',
+		collection: 'atelierGourney',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -1897,6 +2011,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '360',
 			category: 'Black',
+		collection: 'atelierGourney',
 			templateCategories: ['Jumpsuit'],
 		},
 		{
@@ -1910,6 +2025,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '361',
 			category: 'Wool',
+		collection: 'atelierGourney',
 			templateCategories: ['Dress', 'Pants', 'Top', 'Accessories'],
 		},
 		{
@@ -1928,6 +2044,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/atelierGourney/root/YARN_LACE_-_WHITE/YARN_LACE_-_WHITE_-_ALPHA.jpg',
 			materialName: 'White',
 			category: 'Yarn Lace',
+		collection: 'atelierGourney',
 			templateCategories: ['Accessories'],
 		},
 	],
@@ -1943,6 +2060,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Golden',
 			category: 'Fabric',
+		collection: 'zove',
 			templateCategories: ['Dress', 'Top', 'Skirt'],
 		},
 		{
@@ -1956,6 +2074,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Grid',
 			category: 'Corduroy',
+		collection: 'zove',
 			templateCategories: ['Skirt'],
 		},
 		{
@@ -1973,6 +2092,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Golden Brown Grid',
 			category: 'Corduroy',
+		collection: 'zove',
 			templateCategories: ['Skirt'],
 		},
 		{
@@ -1986,6 +2106,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Taffeta',
+		collection: 'zove',
 			templateCategories: ['Dress', 'Skirt'],
 		},
 		{
@@ -2003,6 +2124,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Seethrough Cce9ff',
 			category: 'Silk',
+		collection: 'zove',
 			templateCategories: ['Top'],
 		},
 		{
@@ -2015,6 +2137,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '276',
 			category: 'Denim',
+		collection: 'zove',
 			templateCategories: ['Top'],
 		},
 		{
@@ -2027,6 +2150,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Texture',
 			category: 'Trim',
+		collection: 'zove',
 			templateCategories: ['Dress', 'Top'],
 		},
 		{
@@ -2040,6 +2164,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Light',
 			category: 'Denim',
+		collection: 'zove',
 			templateCategories: ['Top', 'Dress', 'Skirt'],
 		},
 		{
@@ -2053,6 +2178,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Twill',
 			category: 'Cotton',
+		collection: 'zove',
 			templateCategories: ['Top', 'Skirt', 'Dress'],
 		},
 		{
@@ -2065,6 +2191,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '235',
 			category: 'Twill',
+		collection: 'zove',
 			templateCategories: ['Dress', 'Top', 'Skirt'],
 		},
 		{
@@ -2078,6 +2205,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Leather',
+		collection: 'zove',
 			templateCategories: ['Top', 'Skirt'],
 		},
 	],
@@ -2097,6 +2225,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Red',
 			category: 'Jacquard',
+		collection: 'jaSengBu',
 			templateCategories: ['Dress'],
 			scaleX: 9,
 			scaleY: 12,
@@ -2120,6 +2249,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '359',
 			category: 'Tweed Modern',
+		collection: 'jaSengBu',
 			templateCategories: ['Dress'],
 			scaleX: 4,
 			scaleY: 7,
@@ -2143,6 +2273,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jaSengBu/root/GOLDEN_-_349_<9,_5,_0,_0,_1000,_0>/GOLDEN_-_349_-_ALPHA.jpg',
 			materialName: '349',
 			category: 'Golden',
+		collection: 'jaSengBu',
 			templateCategories: ['Skirt'],
 			scaleX: 9,
 			scaleY: 5,
@@ -2163,6 +2294,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '344',
 			category: 'Smocking',
+		collection: 'jaSengBu',
 			templateCategories: [],
 		},
 		{
@@ -2180,6 +2312,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Charcoal Teal',
 			category: 'Cotton',
+		collection: 'jaSengBu',
 			templateCategories: ['Top'],
 		},
 		{
@@ -2194,6 +2327,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White Print',
 			category: 'Taffeta',
+		collection: 'jaSengBu',
 			templateCategories: ['Skirt'],
 		},
 		{
@@ -2211,6 +2345,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '348',
 			category: 'Dark Green',
+		collection: 'jaSengBu',
 			templateCategories: ['Skirt'],
 		},
 		{
@@ -2227,6 +2362,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Red Print',
 			category: 'Taffeta',
+		collection: 'jaSengBu',
 			templateCategories: ['Skirt'],
 		},
 		{
@@ -2240,6 +2376,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '343',
 			category: 'Muslin',
+		collection: 'jaSengBu',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -2254,6 +2391,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Jersey',
+		collection: 'jaSengBu',
 			templateCategories: ['Skirt', 'Top'],
 		},
 		{
@@ -2271,6 +2409,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jaSengBu/root/ORGANZA_-_BLACK/ORGANZA_-_BLACK_-_ALPHA.jpg',
 			materialName: 'Black',
 			category: 'Organza',
+		collection: 'jaSengBu',
 			templateCategories: ['Top', 'Skirt'],
 		},
 	],
@@ -2290,6 +2429,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Camo',
 			category: 'Poly',
+		collection: 'mssPark',
 			templateCategories: ['Skirt', 'Pants', 'Bag', 'Top'],
 			scaleX: 6,
 			scaleY: 2,
@@ -2313,6 +2453,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '373',
 			category: 'Fur',
+		collection: 'mssPark',
 			templateCategories: ['Pants'],
 			scaleX: -3,
 			scaleY: 11,
@@ -2336,6 +2477,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Stretch',
 			category: 'Jersey',
+		collection: 'mssPark',
 			templateCategories: ['Skirt', 'Top', 'Dress', 'Bag', 'Pants'],
 		},
 		{
@@ -2349,6 +2491,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/mssPark/root/LACE_-_WHITE/WHITE_-_LACE_-_ALPHA.jpg',
 			materialName: 'White',
 			category: 'Lace',
+		collection: 'mssPark',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -2361,6 +2504,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Texture',
 			category: 'Trim',
+		collection: 'mssPark',
 			templateCategories: ['Bag'],
 		},
 		{
@@ -2376,6 +2520,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Leather',
+		collection: 'mssPark',
 			templateCategories: ['Bag'],
 		},
 		{
@@ -2393,6 +2538,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '357',
 			category: 'Basketball',
+		collection: 'mssPark',
 			templateCategories: ['Bag'],
 		},
 		{
@@ -2406,6 +2552,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Twill',
 			category: 'Cotton',
+		collection: 'mssPark',
 			templateCategories: ['Top', 'Bag'],
 		},
 		{
@@ -2423,6 +2570,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black Seethrough',
 			category: 'Cotton',
+		collection: 'mssPark',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -2440,6 +2588,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Cracked',
 			category: 'Leather',
+		collection: 'mssPark',
 			templateCategories: ['Pants', 'Top'],
 		},
 		{
@@ -2453,6 +2602,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Black',
 			category: 'Jersey',
+		collection: 'mssPark',
 			templateCategories: ['Skirt', 'Top'],
 		},
 	],
@@ -2470,6 +2620,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Suede',
+		collection: 'imzadFemale',
 			templateCategories: ['Coat'],
 		},
 		{
@@ -2487,6 +2638,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/imzadFemale/root/ORGAN_-_BEADED_RHINSTONES_<2,_21,_0,_0,_1000,_0>/ORGAN_-_BEADED_RHINSTONES_-_ALPHA.jpg',
 			materialName: 'Beaded Rhinstones',
 			category: 'Organ',
+		collection: 'imzadFemale',
 			templateCategories: [],
 			scaleX: 2,
 			scaleY: 21,
@@ -2511,6 +2663,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/imzadFemale/root/SEQUIN_-_WHITE_<15,_5,_0,_0,_1000,_0>/SEQUIN_-_WHITE_-_ALPHA.jpg',
 			materialName: 'White',
 			category: 'Sequin',
+		collection: 'imzadFemale',
 			templateCategories: ['Top'],
 			scaleX: 15,
 			scaleY: 5,
@@ -2530,6 +2683,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Beige',
 			category: 'Silk',
+		collection: 'imzadFemale',
 			templateCategories: ['Skirt'],
 		},
 		{
@@ -2545,6 +2699,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Beige',
 			category: 'Twill',
+		collection: 'imzadFemale',
 			templateCategories: ['Skirt', 'Accessories', 'Top'],
 		},
 		{
@@ -2561,6 +2716,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Texture',
 			category: 'Trim',
+		collection: 'imzadFemale',
 			templateCategories: ['Accessories', 'Top'],
 		},
 		{
@@ -2578,6 +2734,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Shimmery',
 			category: 'Denim',
+		collection: 'imzadFemale',
 			templateCategories: [],
 		},
 		{
@@ -2595,6 +2752,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/imzadFemale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_-_ALPHA.jpg',
 			materialName: 'Dark Indigo',
 			category: 'Organza',
+		collection: 'imzadFemale',
 			templateCategories: ['Top'],
 		},
 		{
@@ -2612,6 +2770,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Shimmery',
 			category: 'Back Denim',
+		collection: 'imzadFemale',
 			templateCategories: ['Coat'],
 		},
 		{
@@ -2629,6 +2788,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Dark Indigo',
 			category: 'Leather',
+		collection: 'imzadFemale',
 			templateCategories: ['Skirt', 'Accessories'],
 		},
 		{
@@ -2646,6 +2806,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Blue Velvet',
 			category: 'Charcoal',
+		collection: 'imzadFemale',
 			templateCategories: ['Top'],
 		},
 	],
@@ -2665,6 +2826,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/imzadMale/root/ORGAN_-_BEADED_RHINSTONES_<2,_21,_0,_0,_1000,_0>/ORGAN_-_BEADED_RHINSTONES_-_ALPHA.jpg',
 			materialName: 'Beaded Rhinstones',
 			category: 'Organ',
+		collection: 'imzadMale',
 			templateCategories: ['Top'],
 			scaleX: 2,
 			scaleY: 21,
@@ -2689,6 +2851,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/imzadMale/root/SEQUIN_-_WHITE_<15,_5,_0,_0,_1000,_0>/SEQUIN_-_WHITE_-_ALPHA.jpg',
 			materialName: 'White',
 			category: 'Sequin',
+		collection: 'imzadMale',
 			templateCategories: ['Top'],
 			scaleX: 15,
 			scaleY: 5,
@@ -2708,6 +2871,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Beige',
 			category: 'Twill',
+		collection: 'imzadMale',
 			templateCategories: ['Top', 'Skirt', 'Accessories'],
 		},
 		{
@@ -2722,6 +2886,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Texture',
 			category: 'Trim',
+		collection: 'imzadMale',
 			templateCategories: ['Top', 'Accessories'],
 		},
 		{
@@ -2735,6 +2900,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Beige',
 			category: 'Silk',
+		collection: 'imzadMale',
 			templateCategories: ['Skirt'],
 		},
 		{
@@ -2752,6 +2918,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/imzadMale/root/ORGANZA_-_DARK_INDIGO/ORGANZA_-_DARK_INDIGO_-_ALPHA.jpg',
 			materialName: 'Dark Indigo',
 			category: 'Organza',
+		collection: 'imzadMale',
 			templateCategories: ['Top'],
 		},
 		{
@@ -2769,6 +2936,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Dark Indigo',
 			category: 'Leather',
+		collection: 'imzadMale',
 			templateCategories: ['Accessories', 'Skirt'],
 		},
 		{
@@ -2786,6 +2954,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Shimmery',
 			category: 'Denim',
+		collection: 'imzadMale',
 			templateCategories: ['Pants'],
 		},
 		{
@@ -2803,6 +2972,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Shimmery',
 			category: 'Back Denim',
+		collection: 'imzadMale',
 			templateCategories: ['Pants'],
 		},
 		{
@@ -2820,6 +2990,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Blue Velvet',
 			category: 'Charcoal',
+		collection: 'imzadMale',
 			templateCategories: ['Top'],
 		},
 	],
@@ -2839,6 +3010,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Red',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -2856,6 +3028,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '12',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: [],
 		},
 		{
@@ -2873,6 +3046,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '11',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: [],
 		},
 		{
@@ -2890,6 +3064,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '10',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: [],
 		},
 		{
@@ -2907,6 +3082,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '09',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: [],
 		},
 		{
@@ -2924,6 +3100,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Micro 1',
 			category: 'Texture',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: [],
 		},
 		{
@@ -2942,6 +3119,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_05/LACE_-_FLOWER_05_-_ALPHA.jpg',
 			materialName: 'Flower 05',
 			category: 'Lace',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -2960,6 +3138,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_04/LACE_-_FLOWER_04_-_ALPHA.jpg',
 			materialName: 'Flower 04',
 			category: 'Lace',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -2978,6 +3157,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_03/LACE_-_FLOWER_03_-_ALPHA.jpg',
 			materialName: 'Flower 03',
 			category: 'Lace',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -2996,6 +3176,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_02/LACE_-_FLOWER_02_-_ALPHA.jpg',
 			materialName: 'Flower 02',
 			category: 'Lace',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3014,6 +3195,7 @@ export const fabrics: Record<string, Fabric[]> = {
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/sapienzaUniversityOfRome/root/LACE_-_FLOWER_01/LACE_-_FLOWER_01_-_ALPHA.jpg',
 			materialName: 'Flower 01',
 			category: 'Lace',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3031,6 +3213,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Metallic 05',
 			category: 'Striped',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3048,6 +3231,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Metallic 04',
 			category: 'Striped',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3065,6 +3249,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Metallic 03',
 			category: 'Striped',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3082,6 +3267,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Metallic 02',
 			category: 'Striped',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3099,6 +3285,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Metallic 01',
 			category: 'Striped',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3116,6 +3303,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '08',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3133,6 +3321,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '07',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3150,6 +3339,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '06',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3167,6 +3357,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '05',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3184,6 +3375,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '04',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3201,6 +3393,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '03',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3218,6 +3411,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '02',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3235,6 +3429,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: '01',
 			category: 'Velvet',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3252,6 +3447,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Green',
 			category: 'Muslin',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3269,6 +3465,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Brown',
 			category: 'Muslin',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3286,6 +3483,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Blue',
 			category: 'Muslin',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3303,6 +3501,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Pink',
 			category: 'Muslin',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3320,6 +3519,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'White',
 			category: 'Muslin',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3337,6 +3537,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Silk White',
 			category: 'Cotton',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3354,6 +3555,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Micro 3',
 			category: 'Texture',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3371,6 +3573,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Micro 2',
 			category: 'Texture',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
 		},
 		{
@@ -3388,7 +3591,245 @@ export const fabrics: Record<string, Fabric[]> = {
 			alpha: '',
 			materialName: 'Micro Velvet',
 			category: 'Texture',
+		collection: 'sapienzaUniversityOfRome',
 			templateCategories: ['Dress'],
+		},
+	],
+	oneThousandPoets: [
+		{
+			_id: '93f79b6c-0cde-40ca-ac53-3c5d6d710e37',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/VELVET_-_BLACK/VELVET_-_BLACK_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/VELVET_-_BLACK/VELVET_-_BLACK_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/VELVET_-_BLACK/VELVET_-_BLACK_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/VELVET_-_BLACK/VELVET_-_BLACK_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/VELVET_-_BLACK/VELVET_-_BLACK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Black',
+			category: 'Velvet',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Dress', 'Accessories'],
+		},
+		{
+			_id: '34126243-de38-4306-ac2b-793e8172c0c0',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LACE_-_FLOWER/LACE_-_FLOWER_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LACE_-_FLOWER/LACE_-_FLOWER_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LACE_-_FLOWER/LACE_-_FLOWER_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LACE_-_FLOWER/LACE_-_FLOWER_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LACE_-_FLOWER/LACE_-_FLOWER_-_ROUGH.jpg',
+			alpha:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LACE_-_FLOWER/LACE_-_FLOWER_-_ALPHA.jpg',
+			materialName: 'Flower',
+			category: 'Lace',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Dress'],
+		},
+		{
+			_id: '33213982-f7de-4131-86bd-82c7dec7b433',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SUEDE_-_BLACK/SUEDE_-_BLACK_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SUEDE_-_BLACK/SUEDE_-_BLACK_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SUEDE_-_BLACK/SUEDE_-_BLACK_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SUEDE_-_BLACK/SUEDE_-_BLACK_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SUEDE_-_BLACK/SUEDE_-_BLACK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Black',
+			category: 'Suede',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Dress', 'Top'],
+		},
+		{
+			_id: 'd9200bcd-e4ce-4f5b-89a6-7f84285f5ff7',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Navy',
+			category: 'Polyester',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Top', 'Pants'],
+		},
+		{
+			_id: 'c1d446d7-895e-4f11-88bf-57c4c11aacf8',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/GOLDEN_-_349/GOLDEN_-_349_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/GOLDEN_-_349/GOLDEN_-_349_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/GOLDEN_-_349/GOLDEN_-_349_-_BASE.png',
+			displacement: '',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/GOLDEN_-_349/GOLDEN_-_349_-_ROUGH.jpg',
+			alpha: '',
+			materialName: '349',
+			category: 'Golden',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Accessories', 'Dress'],
+		},
+		{
+			_id: 'ae52febe-698f-4e78-a2ed-c25da74e6bdb',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LEATHER_-_BLACK/LEATHER_-_BLACK_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LEATHER_-_BLACK/LEATHER_-_BLACK_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LEATHER_-_BLACK/LEATHER_-_BLACK_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LEATHER_-_BLACK/LEATHER_-_BLACK_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LEATHER_-_BLACK/LEATHER_-_BLACK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Black',
+			category: 'Leather',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Skirt', 'Top', 'Dress'],
+		},
+		{
+			_id: 'd948ad23-010a-4ca4-8000-93a3a0e9ff7c',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/VEIL_-_BEIGE/VEIL_-_BEIGE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/VEIL_-_BEIGE/VEIL_-_BEIGE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/VEIL_-_BEIGE/VEIL_-_BEIGE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/VEIL_-_BEIGE/VEIL_-_BEIGE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/VEIL_-_BEIGE/VEIL_-_BEIGE_-_ROUGH.jpg',
+			alpha:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/VEIL_-_BEIGE/VEIL_-_BEIGE_-_ALPHA.jpg',
+			materialName: 'Beige',
+			category: 'Veil',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Dress', 'Accessories'],
+		},
+		{
+			_id: '5c9a2b24-6130-4399-bfe3-79a1de92f94e',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SILK_-_BEIGE/SILK_-_BEIGE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SILK_-_BEIGE/SILK_-_BEIGE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SILK_-_BEIGE/SILK_-_BEIGE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SILK_-_BEIGE/SILK_-_BEIGE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SILK_-_BEIGE/SILK_-_BEIGE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Beige',
+			category: 'Silk',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Dress'],
+		},
+		{
+			_id: '0fab0057-cb0e-4497-9a02-55a04eb50ea8',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/COTTON_-_WHITE/COTTON_-_WHITE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'White',
+			category: 'Cotton',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Top', 'Pants'],
+		},
+		{
+			_id: '367b4499-e24d-42c0-87b9-27a65b00c7ad',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/DENIM_-_BLACK/DENIM_-_BLACK_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/DENIM_-_BLACK/DENIM_-_BLACK_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/DENIM_-_BLACK/DENIM_-_BLACK_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/DENIM_-_BLACK/DENIM_-_BLACK_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/DENIM_-_BLACK/DENIM_-_BLACK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Black',
+			category: 'Denim',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Top', 'Dress', 'Skirt'],
+		},
+		{
+			_id: '9f8ba33b-3efd-49ed-a610-9c4ae4c16fb6',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SUEDE_-_WHITE/SUEDE_-_WHITE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SUEDE_-_WHITE/SUEDE_-_WHITE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SUEDE_-_WHITE/SUEDE_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SUEDE_-_WHITE/SUEDE_-_WHITE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/SUEDE_-_WHITE/SUEDE_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'White',
+			category: 'Suede',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Top', 'Accessories', 'Skirt', 'Dress'],
+		},
+		{
+			_id: 'fbd38603-7b87-4054-8144-2b6353ba4413',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LACE_-_BEIGE/LACE_-_BEIGE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LACE_-_BEIGE/LACE_-_BEIGE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LACE_-_BEIGE/LACE_-_BEIGE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LACE_-_BEIGE/LACE_-_BEIGE_-_DISPLACE.jpg',
+			roughness: '',
+			alpha:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/LACE_-_BEIGE/LACE_-_BEIGE_-_ALPHA.jpg',
+			materialName: 'Beige',
+			category: 'Lace',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Dress'],
+		},
+		{
+			_id: 'ede1a842-0274-47ed-850e-02576dae0f85',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/WOOL_-_BLACK_SUITING/WOOL_-_BLACK_SUITING_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/WOOL_-_BLACK_SUITING/WOOL_-_BLACK_SUITING_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/WOOL_-_BLACK_SUITING/WOOL_-_BLACK_SUITING_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/WOOL_-_BLACK_SUITING/WOOL_-_BLACK_SUITING_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oneThousandPoets/root/WOOL_-_BLACK_SUITING/WOOL_-_BLACK_SUITING_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Black Suiting',
+			category: 'Wool',
+		collection: 'oneThousandPoets',
+			templateCategories: ['Dress', 'Accessories', 'Skirt'],
 		},
 	],
 }

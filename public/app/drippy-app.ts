@@ -1,6 +1,7 @@
 import {batch, createMemo, css, Element, element, html, signal} from 'lume'
 import {fabrics} from '../consts/fabrics.js'
 import {templates} from '../consts/templates.js'
+import {spaces} from '../consts/spaces.js'
 import '../elements/connection-warning.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
@@ -24,7 +25,7 @@ import './order-view.js'
 import './outfit-preview.js'
 import './share-view.js'
 import './spaces-selection.js'
-import {store} from './store.js'
+import {parseSpaceQualifiedEntry, store} from './store.js'
 import './success-view.js'
 import './template-view.js'
 
@@ -85,56 +86,114 @@ export class DrippyApp extends Element {
 		const garmentsParam = searchParams().get('garments')
 		const fabricsParam = searchParams().get('fabrics')
 
-		if ((garmentsParam || fabricsParam) && store.selectedSpace && store.selectedTemplates.size === 0) {
-			const spaceTemplates = templates[store.selectedSpace.collection]
-			const spaceFabrics = fabrics[store.selectedSpace.collection]
+		if (!store.selectedSpace || store.selectedTemplates.size > 0) {
+			return
+		}
 
-			if (spaceTemplates) {
-				const templates = new Map<TemplateCategory, Template>()
-				const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-				const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+		const fallbackSpace = store.getEffectiveSpace() ?? space ?? null
+		const garmentGroups = new Map<string, {space: Space; ids: string[]}>()
+		const fabricGroups = new Map<string, string[]>()
 
-				const fabricOverrides =
-					fabricsParam && spaceFabrics
-						? blockManager.buildFabricOverridesFromUrl(fabricsParam, spaceFabrics)
-						: new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+		if (garmentsParam) {
+			const garmentEntries = garmentsParam
+				.split(',')
+				.map(entry => entry.trim())
+				.filter(Boolean)
+			for (const entry of garmentEntries) {
+				const {spaceSlug, value} = parseSpaceQualifiedEntry(entry)
+				if (!value) continue
 
-				// Load garments if present
-				if (garmentsParam) {
-					const garmentIds = garmentsParam.split(',')
-					for (const garmentId of garmentIds) {
-						const template = spaceTemplates.find(t => t._id === garmentId.trim())
-						if (template) {
-							templates.set(template.category, template)
-							const templateBlockData = blockManager.convertTemplateToBlockData(template, space)
+				const resolvedSpace = this.#resolveSpace(spaceSlug) ?? (!spaceSlug ? fallbackSpace : null)
 
-							const templateFabricOverrides = fabricOverrides.get(template.category)
+				if (!resolvedSpace) continue
 
-							const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
-								templateBlockData,
-								space,
-								templateFabricOverrides,
-							)
-							newBlocks.set(template.category, newBlocksMap)
-							newFabrics.set(template.category, newFabricsMap)
-						}
-					}
-				}
-
-				batch(() => {
-					store.selectedFabrics = newFabrics
-					console.log('selected fabrics from url', newFabrics)
-
-					// @ts-expect-error FIXME we should avoid having two different
-					// ways of setting the same thing (see store.setSelectedBlocks
-					// and onItemClick in template-view.ts). This will get more
-					// difficult to manage and error prone/buggy.
-					store.__selectedBlocks = newBlocks
-
-					store.selectedTemplates = templates
-				})
+				const key = resolvedSpace.slug
+				const group = garmentGroups.get(key)
+				if (group) group.ids.push(value)
+				else garmentGroups.set(key, {space: resolvedSpace, ids: [value]})
 			}
 		}
+
+		if (fabricsParam) {
+			const fabricEntries = fabricsParam
+				.split(',')
+				.map(entry => entry.trim())
+				.filter(Boolean)
+			for (const entry of fabricEntries) {
+				const {spaceSlug, value} = parseSpaceQualifiedEntry(entry)
+				if (!value) continue
+
+				const resolvedSpace = this.#resolveSpace(spaceSlug) ?? (!spaceSlug ? fallbackSpace : null)
+				if (!resolvedSpace) continue
+
+				const key = resolvedSpace.slug
+				const group = fabricGroups.get(key)
+				if (group) group.push(value)
+				else fabricGroups.set(key, [value])
+			}
+		}
+
+		if (garmentGroups.size === 0) {
+			return
+		}
+
+		const aggregatedTemplates = new Map<TemplateCategory, Template>()
+		const aggregatedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
+		const aggregatedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+
+		for (const {space: targetSpace, ids} of garmentGroups.values()) {
+			const spaceTemplates = templates[targetSpace.collection]
+			if (!spaceTemplates) continue
+
+			const spaceFabrics = fabrics[targetSpace.collection]
+			const fabricEntriesForSpace = fabricGroups.get(targetSpace.slug) ?? []
+			const fabricOverrides =
+				fabricEntriesForSpace.length > 0 && spaceFabrics
+					? blockManager.buildFabricOverridesFromUrl(fabricEntriesForSpace.join(','), spaceFabrics)
+					: new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+
+			for (const garmentId of ids) {
+				const trimmedId = garmentId.trim()
+				if (!trimmedId) continue
+
+				const template = spaceTemplates.find(t => t._id === trimmedId)
+				if (!template) continue
+
+				aggregatedTemplates.set(template.category, template)
+
+				const templateBlockData = blockManager.convertTemplateToBlockData(template, targetSpace)
+				const templateFabricOverrides = fabricOverrides.get(template.category)
+
+				const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
+					templateBlockData,
+					targetSpace,
+					templateFabricOverrides,
+				)
+
+				aggregatedBlocks.set(template.category, newBlocksMap)
+				aggregatedFabrics.set(template.category, newFabricsMap)
+			}
+		}
+
+		if (aggregatedTemplates.size === 0) return
+
+		batch(() => {
+			store.selectedFabrics = aggregatedFabrics
+			console.log('selected fabrics from url', aggregatedFabrics)
+
+			// @ts-expect-error FIXME we should avoid having two different
+			// ways of setting the same thing (see store.setSelectedBlocks
+			// and onItemClick in template-view.ts). This will get more
+			// difficult to manage and error prone/buggy.
+			store.__selectedBlocks = aggregatedBlocks
+
+			store.selectedTemplates = aggregatedTemplates
+		})
+	}
+
+	#resolveSpace(spaceSlug: string | null): Space | null {
+		if (!spaceSlug) return null
+		return spaces.find(space => space.slug === spaceSlug) ?? null
 	}
 
 	template = () => html`

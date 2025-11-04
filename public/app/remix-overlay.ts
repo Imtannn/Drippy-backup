@@ -91,7 +91,7 @@ export class RemixOverlay extends Element {
 			} else {
 				const {blocksCategories} = blockManager.isRemixAvailableForTemplate(this.selectedTemplate, {
 					selectedBlocks: untrack(() => store.selectedBlocks),
-					selectedSpace: untrack(() => store.selectedSpace),
+					selectedSpace: untrack(() => store.getEffectiveSpace()),
 					sourceCollection: this.spaceCollection,
 				})
 				this.blocksCategories = blocksCategories
