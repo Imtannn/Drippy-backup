@@ -681,178 +681,109 @@ function calculateCameraFromBoundingBox(boundingBox: THREE.Box3, fov: number = 5
  * @returns Promise<string> - Base64 data URL of the screenshot
  */
 export async function captureGarmentScreenshot(category: string): Promise<string> {
-	const drippyScene = document
-		.querySelector('home-page')
-		?.shadowRoot?.querySelector('drippy-app')
-		?.shadowRoot?.querySelector('drippy-scene') as any
-	if (!drippyScene?.shadowRoot) return ''
+	const drippyScene = querySelectorDeep(document, 'drippy-scene') as any
+	if (!drippyScene) return ''
 
-	const lumeScene = drippyScene.shadowRoot.querySelector('lume-scene') as any
-	if (!lumeScene?.shadowRoot) return ''
+	const lumeScene = querySelectorDeep(document, 'lume-scene') as any
+	if (!lumeScene) return ''
 
-	const clothModels = Array.from(drippyScene.shadowRoot.querySelectorAll('lume-gltf-model[data-cloth]') ?? [])
+	const clothModels = querySelectorAllDeep(document, 'lume-gltf-model[data-cloth]')
+	const visibilityStates: {obj: any; originalVisible: boolean}[] = []
 
-	const modelsToHide: any[] = []
-
+	// Collect all objects and their visibility states
 	clothModels.forEach((model: any) => {
 		const modelId = model.getAttribute('id') || ''
 		const shouldKeep = modelId.includes(category + '-')
 
-		if (!shouldKeep) {
-			if (model.three) {
-				model.three.visible = false
-				modelsToHide.push(model)
-			}
+		if (!shouldKeep && model.three) {
+			visibilityStates.push({obj: model.three, originalVisible: model.three.visible})
 		}
 	})
 
-	// Hide scene and other elements
-	const otherModelsToHide: any[] = []
-
-	// Use drippy-scene's avatarModel property to hide avatar
+	// Use drippy-scene's avatarModel property to collect avatar parts
 	if (drippyScene && drippyScene.avatarModel) {
-		// Selectively hide only avatar body (not garments)
-		let hiddenAvatarParts: any[] = []
-
 		drippyScene.avatarModel.three.children.forEach((child: any) => {
 			const childName = child.name || ''
 			const isGarment = childName.includes('LUME-ELEMENT3D')
 
 			if (!isGarment) {
-				// This is avatar body - hide it
-				child.visible = false
-				hiddenAvatarParts.push(child)
+				visibilityStates.push({obj: child, originalVisible: child.visible})
 			}
 		})
-
-		if (hiddenAvatarParts.length > 0) {
-			otherModelsToHide.push({restore: 'avatarParts', parts: hiddenAvatarParts})
-			// Wait for the change to take effect
-			await new Promise(resolve => requestAnimationFrame(resolve))
-		}
 	}
 
-	// Hide scene/background
+	// Collect scene/background
 	const sceneModel = lumeScene.querySelector('#scene')
 	if (sceneModel?.three) {
-		sceneModel.three.visible = false
-		otherModelsToHide.push(sceneModel)
+		visibilityStates.push({obj: sceneModel.three, originalVisible: sceneModel.three.visible})
 	}
 
-	// Hide shoes and any other non-cloth models
+	// Collect shoes and any other non-cloth models
 	const allOtherModels = lumeScene.querySelectorAll('lume-gltf-model:not([data-cloth])')
 	allOtherModels.forEach((model: any) => {
 		const modelId = model.getAttribute('id') || 'unnamed'
 		if (model.three && modelId !== 'avatar' && modelId !== 'scene') {
-			model.three.visible = false
-			otherModelsToHide.push(model)
+			visibilityStates.push({obj: model.three, originalVisible: model.three.visible})
 		}
 	})
 
-	// Create a new lume-perspective-camera for screenshot
-	const screenshotCamera = document.createElement('lume-perspective-camera')
-	screenshotCamera.setAttribute('fov', '50')
-	screenshotCamera.setAttribute('near', '0.1')
-	screenshotCamera.setAttribute('far', '1000')
+	// Calculate camera position for the garment (without modifying the live scene)
+	const boundingBox = calculateGarmentBoundingBox(category, lumeScene)
+	const {position, lookAt} = calculateCameraFromBoundingBox(boundingBox, 50)
 
-	// Add camera to scene and make it active
-	lumeScene.appendChild(screenshotCamera)
-	screenshotCamera.setAttribute('active', 'true')
+	// Get main renderer to copy settings from
+	const mainRenderer = lumeScene.glRenderer || lumeScene._glRenderer || lumeScene.renderer
+	if (!mainRenderer) return ''
 
-	// Wait for camera to be positioned and activated
-	await new Promise(resolve => requestAnimationFrame(resolve))
+	const threeScene = lumeScene.three || mainRenderer.scene
+	if (!threeScene) return ''
 
-	// Use bounding box to position camera optimally
-	const threeCamera = (screenshotCamera as any).three
-	if (threeCamera) {
-		const boundingBox = calculateGarmentBoundingBox(category, lumeScene)
-		const {position, lookAt} = calculateCameraFromBoundingBox(boundingBox, 50)
+	// Create offscreen canvas for screenshot
+	const screenshotSize = 512
+	const offscreenCanvas = document.createElement('canvas')
+	offscreenCanvas.width = screenshotSize
+	offscreenCanvas.height = screenshotSize
 
-		const pos = position.clone()
-		const lookAtVec = lookAt.clone()
-
-		threeCamera.position.copy(pos)
-		threeCamera.lookAt(lookAtVec)
-		threeCamera.rotation.set(0, 0, 0)
-		threeCamera.updateMatrix()
-		threeCamera.updateMatrixWorld(true)
-
-		// Wait for camera positioning to take effect
-		await new Promise(resolve => requestAnimationFrame(resolve))
-		await new Promise(resolve => requestAnimationFrame(resolve))
-	}
-
-	// Wait for scene to fully render
-	await new Promise(resolve => setTimeout(resolve, 100))
-
-	// Get canvas and renderer
-	const canvas = lumeScene.shadowRoot.querySelector('canvas')
-	if (!canvas) return ''
-
-	const renderer = lumeScene.glRenderer || lumeScene._glRenderer || lumeScene.renderer
-	let screenshot = ''
-
-	if (renderer) {
-		const threeScene = lumeScene.three || renderer.scene
-		const threeCamera = (screenshotCamera as any).three || lumeScene.camera?.three || lumeScene.three?.camera
-
-		if (threeScene && threeCamera) {
-			// Store original renderer size
-			const originalSize = renderer.getSize(new THREE.Vector2())
-
-			// Set standardized screenshot dimensions (square format, good for product shots)
-			const screenshotSize = 512
-			renderer.setSize(screenshotSize, screenshotSize)
-
-			// Update camera aspect ratio for square format
-			threeCamera.aspect = 1
-			threeCamera.updateProjectionMatrix()
-
-			// Set a clean light background for product shots
-			const originalBackground = renderer.getClearColor(new THREE.Color())
-			const originalAlpha = renderer.getClearAlpha()
-			renderer.setClearColor(0xf5f5f5, 1.0)
-
-			renderer.render(threeScene, threeCamera)
-			screenshot = renderer.domElement.toDataURL('image/png')
-
-			// Restore original background and size
-			renderer.setClearColor(originalBackground, originalAlpha)
-			renderer.setSize(originalSize.x, originalSize.y)
-
-			// Restore original camera aspect ratio
-			threeCamera.aspect = originalSize.x / originalSize.y
-			threeCamera.updateProjectionMatrix()
-		}
-	}
-
-	if (!screenshot) {
-		screenshot = canvas.toDataURL('image/png')
-	}
-
-	// Restore hidden models
-	modelsToHide.forEach(model => {
-		if (model.three) {
-			model.three.visible = true
-		}
+	// Create offscreen renderer with same settings as main renderer
+	const offscreenRenderer = new THREE.WebGLRenderer({
+		canvas: offscreenCanvas,
+		alpha: true,
+		preserveDrawingBuffer: true,
+		antialias: true,
 	})
 
-	// Restore avatar and scene
-	otherModelsToHide.forEach(model => {
-		if (model.restore === 'avatarParts') {
-			model.parts.forEach((part: any) => {
-				part.visible = true
-			})
-		} else {
-			if (model.three) {
-				model.three.visible = true
-			}
-		}
+	// Copy rendering settings from main renderer
+	offscreenRenderer.shadowMap.enabled = mainRenderer.shadowMap.enabled
+	offscreenRenderer.shadowMap.type = mainRenderer.shadowMap.type
+	offscreenRenderer.toneMapping = mainRenderer.toneMapping
+	offscreenRenderer.toneMappingExposure = mainRenderer.toneMappingExposure
+	offscreenRenderer.outputColorSpace = mainRenderer.outputColorSpace
+
+	// Set clean background for product shots
+	offscreenRenderer.setClearColor(0xf5f5f5, 1.0)
+
+	// Create a dedicated camera for the screenshot (never affects the live scene)
+	const screenshotCamera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000)
+	screenshotCamera.position.copy(position)
+	screenshotCamera.lookAt(lookAt)
+	screenshotCamera.updateMatrixWorld(true)
+
+	// Hide objects ONLY right before screenshot (minimal visibility duration)
+	visibilityStates.forEach(({obj}) => {
+		obj.visible = false
 	})
 
-	// Remove screenshot camera and revert to main camera
-	screenshotCamera.removeAttribute('active')
-	lumeScene.removeChild(screenshotCamera)
+	// Render to offscreen canvas immediately
+	offscreenRenderer.render(threeScene, screenshotCamera)
+	const screenshot = offscreenCanvas.toDataURL('image/png')
+
+	// Restore visibility states immediately
+	visibilityStates.forEach(({obj, originalVisible}) => {
+		obj.visible = originalVisible
+	})
+
+	// Cleanup offscreen renderer
+	offscreenRenderer.dispose()
 
 	return screenshot
 }
