@@ -30,6 +30,7 @@ import {
 	createMutationsSignal,
 	enableFrontsideOnModelLoad,
 	enableShadowOnModelLoad,
+	getArmatureObject,
 	hasAncestorWithName,
 	isDesktop,
 	meshesInTree,
@@ -46,29 +47,6 @@ import {textureManager} from './texture-manager.js'
 const env = '/images/envs/brown_photostudio_02.jpg'
 
 type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
-
-function excludeBonesFromBlock(block: Block) {
-	const baseBones = ['Right_Pectoral', 'Left_Pectoral', 'Neck', 'Right_Heel', 'Left_Heel']
-
-	const isDress = block.templateCategory === 'Dress' || block._id === '12' || block._id === '9'
-
-	if (isDress) {
-		return baseBones.concat(['Right_Arm', 'Left_Arm'])
-	}
-
-	if (block.templateCategory === 'Pants') {
-		// Could also exclude bones above the waist but I don't see it being an issue.
-		return baseBones.concat(['Right_Arm', 'Left_Arm'])
-	}
-
-	const isShortSleeves = block._id == '13' || block._id == '14'
-
-	if (isShortSleeves) {
-		return baseBones.concat(['Right_ForeArm', 'Left_ForeArm'])
-	}
-
-	return baseBones
-}
 
 @element
 export class DrippyScene extends Element {
@@ -90,8 +68,6 @@ export class DrippyScene extends Element {
 
 	// When `false`, disable animations and rigging.
 	@signal private animsEnabled = false
-
-	@signal private animsStopped = true
 
 	@signal private animName: string | null = null
 	@signal private animSrc: string | null = null
@@ -186,6 +162,20 @@ export class DrippyScene extends Element {
 		}
 
 		el.needsUpdate()
+	}
+
+	/**
+	 * Checks if the model is rigged, if so, sets the skeleton to the avatar's.
+	 * @param model
+	 */
+	#checkRiggedMesh(model: GltfModel) {
+		if (!this.avatarModel) return
+
+		const sourceSkeleton = getArmatureObject(this.avatarModel.three)?.skeleton
+
+		model.three.traverse((obj: any) => {
+			if (obj.skeleton) obj.skeleton = sourceSkeleton
+		})
 	}
 
 	connectedCallback() {
@@ -459,30 +449,9 @@ export class DrippyScene extends Element {
 				onCleanup(() => (shouldCancel = true))
 			})
 
-			// Play animation when blocks are added, pause animation when no blocks.
-			createEffect(() => {
-				// When rigging the garments to the skeleton, the model needs to be stationary,
-				// ideally in T-pose. We need to wait for all the blocks to be fully loaded before
-				// rigging.
-
-				if (store.loadingBlocks.size > 0) {
-					this.animsStopped = true
-				} else {
-					// Wait 1 more frame just for good measure. The rigging should happen as soon as
-					// the bocks are loaded, so this makes sure that the animations start on the next
-					// frame, when the rigging is finished.
-					if (this.animsEnabled) {
-						requestAnimationFrame(() => {
-							this.animsStopped = false
-						})
-					}
-				}
-			})
-
 			createEffect(() => {
 				if (store.selectedAnimation === 'none') {
 					this.animsEnabled = false
-					this.animsStopped = true
 
 					this.animName = null
 					this.animSrc = null
@@ -672,25 +641,30 @@ export class DrippyScene extends Element {
 								<${For} each=${() => this.renderBlocks}>
 									${(item: RenderBlock, index: Accessor<number>) => html`
 										<lume-gltf-model
-											ref=${(el: GltfModel) => (enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
+											ref=${(el: GltfModel) => {
+												enableShadowOnModelLoad(el)
+												setEnvMapOnModelLoad(el, env)
+
+												setTimeout(() => {
+													const modelLoaded = onModelLoad(el)
+													createEffect(() => {
+														if (!this.avatarModel) return
+
+														const avatarLoaded = onModelLoad(this.avatarModel!)
+														createEffect(() => {
+															if (!avatarLoaded() || !modelLoaded()) return
+
+															this.#checkRiggedMesh(el)
+														})
+													})
+												})
+											}}
 											id=${item.id}
 											data-index=${index()}
 											data-cloth
 											attr:src=${item.block.modelFile}
 											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
 										>
-											<!-- The lume-auto-rigger will rig the parent lume-gltf-model to the next nearest lume-gltf-model skeleton. -->
-											<lume-auto-rigger
-												excluded-bones=${() => excludeBonesFromBlock(item.block)}
-												onrig=${() => {
-													this.animsStopped = false
-												}}
-												disabled=${() => {
-													//
-													// return false
-													return !this.animsEnabled
-												}}
-											></lume-auto-rigger>
 										</lume-gltf-model>
 									`}
 								</>
@@ -699,7 +673,7 @@ export class DrippyScene extends Element {
 							<lume-animation
 								attr:src=${() => this.animSrc}
 								clip-name=${() => this.animName}
-								stopped=${() => this.animsStopped || !this.animsEnabled}
+								stopped=${() => !this.animsEnabled}
 							></lume-animation>
 						</lume-gltf-model>
 
