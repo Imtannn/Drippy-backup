@@ -447,6 +447,27 @@ export function findInTree(root: THREE.Object3D, predicate: (obj: THREE.Object3D
 }
 
 /**
+ * Gets the first skinned mesh that contains the avatar's skeleton. To be used in the mixer to make
+ * sure the right armature is used.
+ */
+export function getArmatureObject(avatarRoot: THREE.Object3D) {
+	// The avatar will have the object in its Threejs tree. We're currently identifying
+	// the avatar skeleton by if the parent object's name has "body_" in it.
+	// An alternative is to find the garment's skeleton (if present), and ignore that
+	// when traversing the avatar's Threejs tree. Although, this would probably be
+	// heavy on performance since it has to search the the garment's tree once to find
+	// the skeleton, then the avatar's tree to find the avatar's skeleton (while
+	// ignoring the garment's), and then the garment's tree again to actually swap
+	// (or create) the skeleton.
+
+	// If there's an issue because of an avatar not having a skinned mesh named "body_", just
+	// do the above method instead.
+	return findInTree(avatarRoot, (obj: any) => {
+		return obj.skeleton && obj.name.includes('body_')
+	}) as THREE.SkinnedMesh | null
+}
+
+/**
  * Returns a signal that is true when the model is loaded, false otherwise.
  * @param model The GltfModel element to monitor for loading completion.
  */

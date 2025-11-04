@@ -1377,7 +1377,8 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: 'b73f6981-1ee0-4cae-b220-7cfaf09c53dd',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/moidien/blocks/Top/Item_8___Bodice/bodice__1455.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Top/Item_8___Bodice/bodice__1455.gltf',
+			/* modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Top/Item_8___Bodice/bodice__1455.gltf', */
+			modelFile: '/models/shirt.glb',
 			blockName: 'bodice 1455',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1573,8 +1574,9 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: 'a488baf2-916d-45b4-bf5d-604f88c5ebb0',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/moidien/blocks/Dress/Item_3___fullbody/fullbody_125.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Dress/Item_3___fullbody/fullbody_125.gltf',
+			/* modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Dress/Item_3___fullbody/fullbody_125.gltf', */
+			modelFile: '/models/dress.glb',
 			blockName: 'fullbody 125',
 			avatar: 'female',
 			category: 'Full Body',
@@ -1585,7 +1587,8 @@ export const blocks: Record<string, Block[]> = {
 		{
 			_id: '6907906a-db41-4cda-95ae-9d012de29e98',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/moidien/blocks/Pants/Item_7_Pants/pants_1453.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Pants/Item_7_Pants/pants_1453.gltf',
+			/* modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Pants/Item_7_Pants/pants_1453.gltf', */
+			modelFile: '/models/pants.glb',
 			blockName: 'pants 1453',
 			avatar: 'female',
 			category: 'Pants',
