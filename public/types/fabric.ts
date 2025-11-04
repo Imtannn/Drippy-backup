@@ -43,4 +43,5 @@ export type Fabric = {
 	category?: FabricCategory
 
 	templateCategories?: string[]
+	collection?: string
 }

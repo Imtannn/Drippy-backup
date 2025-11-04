@@ -135,7 +135,6 @@ export class TemplateView extends Element {
 
 		// Update URL when fabrics change
 		this.createEffect(() => {
-			console.log('Fabrics to update URL:', store.selectedFabrics)
 			updateFabricsInUrl(store.selectedFabrics)
 		})
 
@@ -498,7 +497,13 @@ export class TemplateView extends Element {
 					</div>
 				</top-navigation>
 				<show-when
-					condition=${() => store.selectedSpace?.collection === 'drippy'}
+					condition=${() =>
+						store.selectedSpace?.collection === 'drippy' &&
+						!this.showAvatarSelection &&
+						!this.showPoseSelection &&
+						!this.showDetailView &&
+						this.selectedTab !== null &&
+						!this.showRemixOverlay}
 					content=${() => html`
 						<top-navigation class="spaces-navigation">
 							<div class="spaces-scroll-container">
@@ -1016,10 +1021,22 @@ export class TemplateView extends Element {
 
 		.spaces-navigation {
 			margin-top: 0;
+			display: none;
 		}
 
 		.spaces-mobile-navigation {
 			padding: 0 20px 12px;
+			display: block;
+		}
+
+		@media (min-width: 768px) {
+			.spaces-mobile-navigation {
+				display: none;
+			}
+
+			.spaces-navigation {
+				display: block;
+			}
 		}
 	`
 }

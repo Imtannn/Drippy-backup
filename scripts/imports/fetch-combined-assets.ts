@@ -17,6 +17,7 @@ const S3_REGION = process.env.S3_REGION || 'us-east-1'
 const S3_ACCESS_KEY = process.env.AWS_ACCESS_KEY_ID
 const S3_SECRET_KEY = process.env.AWS_SECRET_ACCESS_KEY
 const CLOUDFRONT_URL = 'https://d1e6s1h8cqcr26.cloudfront.net'
+const S3_URL = 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com'
 
 // Configure AWS
 AWS.config.update({
@@ -194,9 +195,9 @@ async function uploadToS3(
 	}
 
 	try {
-		await s3.upload(params).promise()
+		const result = await s3.upload(params).promise()
 		// Return CloudFront URL instead of S3 URL
-		return `${CLOUDFRONT_URL}/${uploadKey.replace(/ /g, '_')}`
+		return result.Location.replace(S3_URL, CLOUDFRONT_URL)
 	} catch (error) {
 		console.error('Error uploading to S3:', error)
 		throw error
@@ -695,6 +696,7 @@ function generateTemplateData(
 			price: template.price,
 			avatar: template.avatar,
 			category: template.category,
+			collection: brand,
 			materialId: template.materialId,
 			...(template.extraMaterials && {extraMaterials: template.extraMaterials}),
 			...(template.fabricOptions && {fabricOptions: template.fabricOptions}),
@@ -724,6 +726,7 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 				blockName: block.blockName,
 				avatar: block.avatar, // Use avatar gender from block (inherited from template)
 				category: block.category,
+				collection: brand,
 				templateId: templateId, // Now using actual template _id with guaranteed unique identification
 				templateName: block.templateName,
 				templateCategory: block.templateCategory,
@@ -740,6 +743,7 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 				blockName: block.blockName,
 				avatar: block.avatar,
 				category: block.category,
+				collection: brand,
 				templateCategory: block.templateCategory,
 				templateId: '', // Empty string instead of undefined
 				templateName: '', // Empty string instead of undefined
@@ -773,6 +777,7 @@ function generateFabricData(brand: string): TODO {
 			alpha: material.alpha,
 			materialName: material.materialName,
 			category: material.category,
+			collection: brand,
 			templateCategories: material.templateCategories.size > 0 ? Array.from(material.templateCategories) : [], // Convert Set to Array
 			...(material.scaleX !== undefined && {scaleX: material.scaleX}),
 			...(material.scaleY !== undefined && {scaleY: material.scaleY}),
@@ -826,6 +831,7 @@ function generateTemplatesFileContent(templates: TODO): string {
 		price: '${template.price}',
 		avatar: '${template.avatar}',
 		category: '${template.category}',
+		collection: '${template.collection}',
 		materialId: '${template.materialId || ''}'${extraMaterialsString}${fabricOptionsString}${blockOptionsString}
 	}`
 			})
@@ -859,6 +865,7 @@ function generateBlocksFileContent(blocks: TODO): string {
 		blockName: '${block.blockName}',
 		avatar: '${block.avatar}',
 		category: '${block.category}',
+		collection: '${block.collection}',
 		templateId: '${block.templateId}',
 		templateName: '${block.templateName}',
 		templateCategory: '${block.templateCategory}',
@@ -907,6 +914,7 @@ function generateFabricsFileContent(fabrics: TODO): string {
 		alpha: '${fabric.alpha || ''}',
 		materialName: '${fabric.materialName}',
 		category: '${fabric.category || ''}',
+		collection: '${fabric.collection}',
 		templateCategories: [${fabric.templateCategories.map((cat: string) => `'${cat}'`).join(', ')}]${texturePropsString}
 	}`
 			})

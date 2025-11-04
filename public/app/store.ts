@@ -710,7 +710,13 @@ export type SelectedFabrics = Map<TemplateCategory, Map<BlockCategory, Map<strin
 
 export function updateGarmentsInUrl(garments: Map<TemplateCategory, Template>) {
 	if (garments.size > 0) {
-		const garmentIds = Array.from(garments.values()).map(garment => garment._id)
+		const garmentIds = Array.from(garments.values()).map(garment => {
+			const collectionSlug = garment.collection
+				? (spaces.find(space => space.collection === garment.collection)?.slug ?? null)
+				: null
+			if (collectionSlug) return `${collectionSlug}|${garment._id}`
+			return garment._id
+		})
 		untrack(searchParams).set('garments', garmentIds.join(','))
 	} else untrack(searchParams).delete('garments')
 
@@ -722,7 +728,11 @@ export function updateBlocksInUrl(selectedBlocks: Map<TemplateCategory, Map<Bloc
 		const blockIds: string[] = []
 		for (const [, blockMap] of selectedBlocks) {
 			for (const [, block] of blockMap) {
-				blockIds.push(block._id)
+				const collectionSlug = block.collection
+					? (spaces.find(space => space.collection === block.collection)?.slug ?? null)
+					: null
+				if (collectionSlug) return `${collectionSlug}|${block._id}`
+				return block._id
 			}
 		}
 		untrack(searchParams).set('garments', blockIds.join(','))
@@ -740,8 +750,16 @@ export function updateFabricsInUrl(fabrics: Map<TemplateCategory, Map<BlockCateg
 
 		for (const [templateCategory, blockMap] of fabrics.entries())
 			for (const [blockCategory, pieceMap] of blockMap.entries())
-				for (const [piece, fabric] of pieceMap.entries())
-					fabricEntries.push(`${templateCategory}-${blockCategory}-${piece}:${fabric._id}`)
+				for (const [piece, fabric] of pieceMap.entries()) {
+					const collectionSlug = fabric.collection
+						? (spaces.find(space => space.collection === fabric.collection)?.slug ?? null)
+						: null
+					fabricEntries.push(
+						collectionSlug
+							? `${collectionSlug}|${templateCategory}-${blockCategory}-${piece}:${fabric._id}`
+							: `${templateCategory}-${blockCategory}-${piece}:${fabric._id}`,
+					)
+				}
 
 		if (fabricEntries.length > 0) untrack(searchParams).set('fabrics', fabricEntries.join(','))
 		else {
@@ -764,17 +782,23 @@ export function selectedBlocksFromUrl() {
 
 	// Get the brand/collection from the scene URL parameter
 	const sceneParam = untrack(searchParams).get('scene')
-	const space = spaces.find(space => space.slug === sceneParam)
-	const collection = space?.collection
+	const fallbackSpace = spaces.find(space => space.slug === sceneParam) ?? null
 
 	// Parse garments parameter (comma-separated block IDs)
 	const garmentsParam = untrack(searchParams).get('garments')
-	if (garmentsParam && collection) {
-		const blockIds = garmentsParam.split(',').filter(id => id.trim())
+	if (garmentsParam) {
+		const entries = garmentsParam
+			.split(',')
+			.map(entry => entry.trim())
+			.filter(Boolean)
 
-		// Find blocks by ID within the specific brand collection
-		for (const blockId of blockIds) {
-			const block = findBlockById(blockId, collection)
+		for (const entry of entries) {
+			const {spaceSlug, value: blockId} = parseSpaceQualifiedEntry(entry)
+			if (!blockId) continue
+
+			const resolvedSpace =
+				(spaceSlug ? (spaces.find(space => space.slug === spaceSlug) ?? null) : null) ?? fallbackSpace
+			const block = findBlockById(blockId, resolvedSpace?.collection)
 			if (block) {
 				blockData.push({
 					block,
@@ -788,11 +812,18 @@ export function selectedBlocksFromUrl() {
 }
 
 // Helper function to find a block by ID within a specific brand collection
-function findBlockById(blockId: string, collection: string): Block | null {
-	// Search within the specific brand collection
-	const brandBlocks = blocks[collection]
-	if (brandBlocks) {
-		return brandBlocks.find(b => b._id === blockId) || null
+function findBlockById(blockId: string, collection?: string): Block | null {
+	if (collection) {
+		const brandBlocks = blocks[collection]
+		if (brandBlocks) {
+			return brandBlocks.find(b => b._id === blockId) || null
+		}
+		return null
+	}
+
+	for (const brandBlocks of Object.values(blocks)) {
+		const found = brandBlocks?.find?.(b => b._id === blockId)
+		if (found) return found
 	}
 
 	return null
@@ -801,13 +832,12 @@ function findBlockById(blockId: string, collection: string): Block | null {
 function selectedFabricsFromUrl() {
 	// Get the brand/collection from the scene URL parameter
 	const sceneParam = untrack(searchParams).get('scene')
-	const space = spaces.find(space => space.slug === sceneParam)
-	const collection = space?.collection
+	const fallbackSpace = spaces.find(space => space.slug === sceneParam) ?? null
 
 	// Parse fabrics parameter (comma-separated entries in format: templateCategory-blockCategory-piece:fabricId)
 	const fabricsParam = untrack(searchParams).get('fabrics')
 
-	if (!fabricsParam || !collection) {
+	if (!fabricsParam) {
 		return
 	}
 
@@ -821,7 +851,10 @@ function selectedFabricsFromUrl() {
 	}[] = []
 
 	for (const entry of fabricEntries) {
-		const [keyPart, fabricId] = entry.split(':')
+		const {spaceSlug, value} = parseSpaceQualifiedEntry(entry)
+		if (!value) continue
+
+		const [keyPart, fabricId] = value.split(':')
 
 		if (!keyPart || !fabricId) {
 			continue
@@ -845,7 +878,8 @@ function selectedFabricsFromUrl() {
 			continue
 		}
 
-		const fabric = findFabricById(fabricId, collection)
+		const resolvedSpace = (spaceSlug ? (spaces.find(space => space.slug === spaceSlug) ?? null) : null) ?? fallbackSpace
+		const fabric = findFabricById(fabricId, resolvedSpace?.collection)
 		if (fabric) {
 			fabricData.push({
 				fabric,
@@ -860,12 +894,41 @@ function selectedFabricsFromUrl() {
 }
 
 // Helper function to find a fabric by ID within a specific brand collection
-function findFabricById(fabricId: string, collection: string): Fabric | null {
-	// Search within the specific brand collection
-	const brandFabrics = fabrics[collection]
-	if (brandFabrics) {
-		return brandFabrics.find(f => f._id === fabricId) || null
+function findFabricById(fabricId: string, collection?: string): Fabric | null {
+	if (collection) {
+		const brandFabrics = fabrics[collection]
+		if (brandFabrics) {
+			return brandFabrics.find(f => f._id === fabricId) || null
+		}
+		return null
+	}
+
+	for (const brandFabrics of Object.values(fabrics)) {
+		const found = brandFabrics?.find?.(f => f._id === fabricId)
+		if (found) return found
 	}
 
 	return null
+}
+
+export function parseSpaceQualifiedEntry(entry: string): {spaceSlug: string | null; value: string | null} {
+	const trimmed = entry.trim()
+	if (!trimmed) return {spaceSlug: null, value: null}
+
+	const pipeIndex = trimmed.indexOf('|')
+	if (pipeIndex === -1) {
+		return {spaceSlug: null, value: trimmed}
+	}
+
+	const spaceSlug = trimmed.substring(0, pipeIndex).trim()
+	const value = trimmed.substring(pipeIndex + 1).trim()
+
+	if (!value) {
+		return {spaceSlug: null, value: trimmed}
+	}
+
+	return {
+		spaceSlug: spaceSlug.length > 0 ? spaceSlug : null,
+		value,
+	}
 }

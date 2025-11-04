@@ -23,4 +23,5 @@ export type Block = {
 	templateId?: string
 	templateName?: string
 	templateCategory: TemplateCategory
+	collection?: string
 }

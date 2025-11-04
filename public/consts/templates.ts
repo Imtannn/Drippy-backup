@@ -9,6 +9,7 @@ export const templates: Record<string, Template[]> = {
 			price: '250',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'vaishnavi',
 			materialId: 'Silk - Dusty Mocha',
 		},
 		{
@@ -18,6 +19,7 @@ export const templates: Record<string, Template[]> = {
 			price: '250',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'vaishnavi',
 			materialId: 'Sequin - 281',
 		},
 		{
@@ -27,6 +29,7 @@ export const templates: Record<string, Template[]> = {
 			price: '150',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'vaishnavi',
 			materialId: 'Silk - Dusty Mocha',
 		},
 		{
@@ -36,6 +39,7 @@ export const templates: Record<string, Template[]> = {
 			price: '150',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'vaishnavi',
 			materialId: 'Sequin - 281',
 		},
 		{
@@ -45,6 +49,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'vaishnavi',
 			materialId: 'Silk - Blood Red',
 		},
 		{
@@ -54,6 +59,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'vaishnavi',
 			materialId: 'Silk - Coconut Milk',
 		},
 	],
@@ -65,6 +71,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2000',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'haruki',
 			materialId: 'Silk - Crepe',
 		},
 		{
@@ -75,6 +82,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2100',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'haruki',
 			materialId: 'Silk - Crepe (E8bbca)',
 		},
 		{
@@ -85,6 +93,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2100',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'haruki',
 			materialId: 'Silk - Crepe (D6e2ea)',
 		},
 		{
@@ -95,6 +104,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2200',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'haruki',
 			materialId: 'Silk - Crepe',
 			extraMaterials: [
 				{
@@ -119,6 +129,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2100',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'haruki',
 			materialId: 'Silk - Crepe',
 			extraMaterials: [
 				{
@@ -143,6 +154,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2100',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'haruki',
 			materialId: 'Silk - Crepe (096372)',
 		},
 		{
@@ -152,6 +164,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2200',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'haruki',
 			materialId: 'Silk - Crepe (096372)',
 		},
 		{
@@ -162,6 +175,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2200',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'haruki',
 			materialId: 'Silk - Crepe (E8bbca)',
 		},
 		{
@@ -172,6 +186,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2200',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'haruki',
 			materialId: 'Silk - Crepe (D6e2ea)',
 		},
 		{
@@ -182,6 +197,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2200',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'haruki',
 			materialId: 'Silk - Chiffon (2ab4c8)',
 		},
 		{
@@ -192,6 +208,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2100',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'haruki',
 			materialId: 'Silk - Chiffon (2ab4c8)',
 		},
 		{
@@ -202,6 +219,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2100',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'haruki',
 			materialId: 'Silk - Crepe',
 			extraMaterials: [
 				{
@@ -226,6 +244,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2300',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'haruki',
 			materialId: 'Silk - Crepe',
 			extraMaterials: [
 				{
@@ -251,6 +270,7 @@ export const templates: Record<string, Template[]> = {
 			price: '350',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'lostCause',
 			materialId: 'Wool - Yarn',
 		},
 		{
@@ -260,6 +280,7 @@ export const templates: Record<string, Template[]> = {
 			price: '250',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'lostCause',
 			materialId: 'Wool - Black Twisted',
 		},
 		{
@@ -269,6 +290,7 @@ export const templates: Record<string, Template[]> = {
 			price: '350',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'lostCause',
 			materialId: 'Wool - Yarn',
 		},
 		{
@@ -278,6 +300,7 @@ export const templates: Record<string, Template[]> = {
 			price: '220',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'lostCause',
 			materialId: 'Wool - Black Twisted',
 			extraMaterials: [
 				{
@@ -293,6 +316,7 @@ export const templates: Record<string, Template[]> = {
 			price: '350',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'lostCause',
 			materialId: 'Wool - Yarn',
 		},
 		{
@@ -302,6 +326,7 @@ export const templates: Record<string, Template[]> = {
 			price: '250',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'lostCause',
 			materialId: 'Wool - Yarn',
 		},
 		{
@@ -312,6 +337,7 @@ export const templates: Record<string, Template[]> = {
 			price: '0',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'lostCause',
 			materialId: 'Wool - Twisted',
 		},
 		{
@@ -321,6 +347,7 @@ export const templates: Record<string, Template[]> = {
 			price: '0',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'lostCause',
 			materialId: 'Wool - Black Twisted',
 		},
 		{
@@ -330,6 +357,7 @@ export const templates: Record<string, Template[]> = {
 			price: '0',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'lostCause',
 			materialId: 'Leather - Print',
 		},
 		{
@@ -340,6 +368,7 @@ export const templates: Record<string, Template[]> = {
 			price: '600',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'lostCause',
 			materialId: 'Wool - Yarn',
 		},
 		{
@@ -350,6 +379,7 @@ export const templates: Record<string, Template[]> = {
 			price: '500',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'lostCause',
 			materialId: 'Twisted - Yarn',
 			extraMaterials: [
 				{
@@ -365,6 +395,7 @@ export const templates: Record<string, Template[]> = {
 			price: '550',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'lostCause',
 			materialId: 'Silk - Charcoal Gray',
 			extraMaterials: [
 				{
@@ -380,6 +411,7 @@ export const templates: Record<string, Template[]> = {
 			price: '500',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'lostCause',
 			materialId: 'Leather - Print',
 		},
 		{
@@ -389,6 +421,7 @@ export const templates: Record<string, Template[]> = {
 			price: '450',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'lostCause',
 			materialId: 'Abtract - Black Face',
 			extraMaterials: [
 				{
@@ -406,6 +439,7 @@ export const templates: Record<string, Template[]> = {
 			price: '150',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'shri',
 			materialId: 'Quilting - White',
 			extraMaterials: [
 				{
@@ -429,6 +463,7 @@ export const templates: Record<string, Template[]> = {
 			price: '150',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'shri',
 			materialId: 'Organza - Black',
 			extraMaterials: [
 				{
@@ -448,6 +483,7 @@ export const templates: Record<string, Template[]> = {
 			price: '100',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'shri',
 			materialId: 'Cotton - White',
 		},
 		{
@@ -457,6 +493,7 @@ export const templates: Record<string, Template[]> = {
 			price: '150',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'shri',
 			materialId: 'Velvet - Black',
 		},
 		{
@@ -466,6 +503,7 @@ export const templates: Record<string, Template[]> = {
 			price: '200',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'shri',
 			materialId: 'Quilting - Golden',
 		},
 		{
@@ -475,6 +513,7 @@ export const templates: Record<string, Template[]> = {
 			price: '100',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'shri',
 			materialId: 'Quilting - Golden',
 			extraMaterials: [
 				{
@@ -491,6 +530,7 @@ export const templates: Record<string, Template[]> = {
 			price: '220',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'shri',
 			materialId: 'Silk - Black',
 			extraMaterials: [
 				{
@@ -506,6 +546,7 @@ export const templates: Record<string, Template[]> = {
 			price: '200',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'shri',
 			materialId: 'Seersucker - Seethrough',
 			extraMaterials: [
 				{
@@ -522,6 +563,7 @@ export const templates: Record<string, Template[]> = {
 			price: '100',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'shri',
 			materialId: 'Cotton - White',
 		},
 		{
@@ -532,6 +574,7 @@ export const templates: Record<string, Template[]> = {
 			price: '100',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'shri',
 			materialId: 'Fabric - Golden',
 		},
 		{
@@ -541,6 +584,7 @@ export const templates: Record<string, Template[]> = {
 			price: '120',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'shri',
 			materialId: 'Quilting - White',
 		},
 		{
@@ -550,6 +594,7 @@ export const templates: Record<string, Template[]> = {
 			price: '250',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'shri',
 			materialId: 'Fabric - Golden',
 			extraMaterials: [
 				{
@@ -565,6 +610,7 @@ export const templates: Record<string, Template[]> = {
 			price: '100',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'shri',
 			materialId: 'Fabric - Golden',
 		},
 		{
@@ -574,6 +620,7 @@ export const templates: Record<string, Template[]> = {
 			price: '100',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'shri',
 			materialId: 'Mesh - Metallic',
 			extraMaterials: [
 				{
@@ -589,6 +636,7 @@ export const templates: Record<string, Template[]> = {
 			price: '60',
 			avatar: 'female',
 			category: 'Accesorries',
+		collection: 'shri',
 			materialId: 'Quilting - White',
 		},
 		{
@@ -599,6 +647,7 @@ export const templates: Record<string, Template[]> = {
 			price: '300',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'shri',
 			materialId: 'Silk - Bronze',
 			extraMaterials: [
 				{
@@ -614,6 +663,7 @@ export const templates: Record<string, Template[]> = {
 			price: '200',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'shri',
 			materialId: 'Quilting - Black',
 			extraMaterials: [
 				{
@@ -625,12 +675,13 @@ export const templates: Record<string, Template[]> = {
 	],
 	eliseF: [
 		{
-			_id: '63bbf581-6141-48a6-9d55-7bf3798b6cce',
+			_id: '92e88b2c-3c2d-4a1d-878d-c6e19de7b071',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Top/Reversible_Jacket_-_180.webp',
 			name: 'Reversible Jacket',
 			price: '180',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'eliseF',
 			materialId: 'Striped - Canvas',
 			extraMaterials: [
 				{
@@ -644,12 +695,13 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: 'f7e0c226-7450-468c-845d-6fbf2bc9f821',
+			_id: 'a46373b8-d110-4df3-bc1d-77efe8504c88',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Top/Oversized_Bomber_-_230.webp',
 			name: 'Oversized Bomber',
 			price: '230',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'eliseF',
 			materialId: 'Polyester - Navy',
 			extraMaterials: [
 				{
@@ -659,12 +711,13 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: '7c6fec02-7fd8-48a6-bf45-40526ab97af0',
+			_id: '3d1acf1d-d522-4231-8247-f17faf833c8c',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Top/Mesh_shirt_LS_-_140.webp',
 			name: 'Mesh shirt LS',
 			price: '140',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'eliseF',
 			materialId: 'Cotton - White',
 			extraMaterials: [
 				{
@@ -674,12 +727,13 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: '06538d6c-0332-455c-8dcb-0ddb49a394a3',
+			_id: '52f09c14-962c-4d0a-b933-21d6a531439f',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Top/Hoodie_-_90.webp',
 			name: 'Hoodie',
 			price: '90',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'eliseF',
 			materialId: 'Knit - Fleece',
 			extraMaterials: [
 				{
@@ -689,12 +743,13 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: '8d4a1b7c-e881-4d5a-8dd9-7e43bcdffba9',
+			_id: '80123b2b-ed91-4931-8bce-a0b00b4d9160',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Top/Pleats_shirt_-_130.webp',
 			name: 'Pleats shirt',
 			price: '130',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'eliseF',
 			materialId: 'Cotton - Lavender Blue',
 			extraMaterials: [
 				{
@@ -704,12 +759,13 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: '40cb3909-d52c-4267-a554-cb1dad3108fe',
+			_id: 'e4bd9cc1-8c59-4050-a03a-15497b5cadc5',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Top/Mesh_shirt_SS_-_130.webp',
 			name: 'Mesh shirt SS',
 			price: '130',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'eliseF',
 			materialId: 'Cotton - White',
 			extraMaterials: [
 				{
@@ -719,12 +775,13 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: '2c5b1c58-541c-4b4e-9a37-e9c0a8772cd5',
+			_id: '78593220-d78d-4835-925d-c38beed7365f',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Top/Tanktop_-_45.webp',
 			name: 'Tanktop',
 			price: '45',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'eliseF',
 			materialId: 'Striped - Tanktop',
 			extraMaterials: [
 				{
@@ -734,22 +791,24 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: '0c551054-375c-4e65-8189-0ae95e14fc38',
+			_id: 'c999143e-6100-4b6a-ac36-bb26cff0fa3b',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Pants/Oversized_Denim_Pants_-_180.webp',
 			name: 'Oversized Denim Pants',
 			price: '180',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'eliseF',
 			materialId: 'Denim - 276',
 		},
 		{
-			_id: '878465cd-06b8-42f2-a2f0-6f31e3489077',
+			_id: '35a9b8b5-4a59-4436-aa13-15d089f47bf8',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Pants/Denim_Pockets_Pants_+_Bermuda_Short_-_300.webp',
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Pants/Denim_Pockets_Pants_%2B_Bermuda_Short_-_300.webp',
 			name: 'Denim Pockets Pants + Bermuda Short',
 			price: '300',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'eliseF',
 			materialId: 'Polyester - Navy',
 			extraMaterials: [
 				{
@@ -767,12 +826,13 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: '9ad94a5d-3f47-4caa-b874-85bc3d9b35b1',
+			_id: 'a8491a75-4b12-4bf0-9c50-e1e3d008b9b7',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Pants/Bermuda_Short_-_100.webp',
 			name: 'Bermuda Short',
 			price: '100',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'eliseF',
 			materialId: 'Polyester - Navy',
 			extraMaterials: [
 				{
@@ -782,13 +842,14 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: '55e693ea-106e-4d8d-bb39-8e7988ce66fc',
+			_id: 'b7f81899-83a4-49fe-90b2-1404813ad647',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Pants/Denim_Pocket_Pants_+_Pleats_Skirt_-_285.webp',
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Pants/Denim_Pocket_Pants_%2B_Pleats_Skirt_-_285.webp',
 			name: 'Denim Pocket Pants + Pleats Skirt',
 			price: '285',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'eliseF',
 			materialId: 'Denim - 276',
 			extraMaterials: [
 				{
@@ -802,21 +863,23 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: 'b396effe-7525-4b89-9864-6385f733a154',
+			_id: '0577b2ab-b67d-4ee5-88b8-dc459ca57026',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Pants/Pleats_Skirt_-_85.webp',
 			name: 'Pleats Skirt',
 			price: '85',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'eliseF',
 			materialId: 'Polyester - Navy',
 		},
 		{
-			_id: 'ab20c4c2-0cdb-4dd7-ac38-8a971a18d462',
+			_id: '00c90450-85c2-424a-9852-74ad80236763',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Pants/Track_Short_-_90.webp',
 			name: 'Track Short',
 			price: '90',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'eliseF',
 			materialId: 'Poly - Twill',
 			extraMaterials: [
 				{
@@ -830,12 +893,13 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: 'cf540fc1-d805-4e4d-8ba3-8b58b6c9aa29',
+			_id: 'f870ee73-2396-4cdf-a922-e7ca1a8d49ee',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Pants/Track_Pants_-_110.webp',
 			name: 'Track Pants',
 			price: '110',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'eliseF',
 			materialId: 'Poly - Twill',
 			extraMaterials: [
 				{
@@ -849,12 +913,13 @@ export const templates: Record<string, Template[]> = {
 			],
 		},
 		{
-			_id: '5fd47905-f3ac-45a2-bd2f-2bbf316e721e',
+			_id: 'cebb132b-c949-4b7a-beba-f9140c6b3589',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/templates/Pants/Denim_Pockets_Pants_-_200.webp',
 			name: 'Denim Pockets Pants',
 			price: '200',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'eliseF',
 			materialId: 'Denim - 276',
 			extraMaterials: [
 				{
@@ -872,6 +937,7 @@ export const templates: Record<string, Template[]> = {
 			price: '130',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'oofya',
 			materialId: 'Cotton - Black',
 		},
 		{
@@ -881,6 +947,7 @@ export const templates: Record<string, Template[]> = {
 			price: '130',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'oofya',
 			materialId: 'Cotton - White',
 		},
 		{
@@ -890,6 +957,7 @@ export const templates: Record<string, Template[]> = {
 			price: '200',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'oofya',
 			materialId: 'Cotton - Black',
 		},
 		{
@@ -899,6 +967,7 @@ export const templates: Record<string, Template[]> = {
 			price: '170',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'oofya',
 			materialId: 'Corduroy - Grid',
 		},
 		{
@@ -908,6 +977,7 @@ export const templates: Record<string, Template[]> = {
 			price: '300',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'oofya',
 			materialId: 'Cotton - Black',
 			extraMaterials: [
 				{
@@ -923,6 +993,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'oofya',
 			materialId: 'Cotton - Black',
 			extraMaterials: [
 				{
@@ -938,6 +1009,7 @@ export const templates: Record<string, Template[]> = {
 			price: '170',
 			avatar: 'female',
 			category: 'Accessory',
+		collection: 'oofya',
 			materialId: 'Taffeta - Black',
 		},
 		{
@@ -947,6 +1019,7 @@ export const templates: Record<string, Template[]> = {
 			price: '170',
 			avatar: 'female',
 			category: 'Accessory',
+		collection: 'oofya',
 			materialId: '3d - Square',
 		},
 		{
@@ -956,6 +1029,7 @@ export const templates: Record<string, Template[]> = {
 			price: '130',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'oofya',
 			materialId: 'Cotton - Black',
 		},
 	],
@@ -968,6 +1042,7 @@ export const templates: Record<string, Template[]> = {
 			price: '0',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'theSoul',
 			materialId: 'Wool - Olive Gray',
 		},
 		{
@@ -977,6 +1052,7 @@ export const templates: Record<string, Template[]> = {
 			price: '0',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'theSoul',
 			materialId: 'Suiting - Honey Mustard',
 		},
 		{
@@ -986,6 +1062,7 @@ export const templates: Record<string, Template[]> = {
 			price: '0',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'theSoul',
 			materialId: 'Suiting - Honey Mustard',
 		},
 		{
@@ -995,6 +1072,7 @@ export const templates: Record<string, Template[]> = {
 			price: '305',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'theSoul',
 			materialId: 'Cotton - White',
 		},
 		{
@@ -1005,6 +1083,7 @@ export const templates: Record<string, Template[]> = {
 			price: '0',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'theSoul',
 			materialId: 'Wool - Olive Gray',
 		},
 		{
@@ -1014,6 +1093,7 @@ export const templates: Record<string, Template[]> = {
 			price: '515',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'theSoul',
 			materialId: 'Tweed - 331',
 		},
 		{
@@ -1024,6 +1104,7 @@ export const templates: Record<string, Template[]> = {
 			price: '450',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'theSoul',
 			materialId: 'Lace - Flower',
 			extraMaterials: [
 				{
@@ -1039,6 +1120,7 @@ export const templates: Record<string, Template[]> = {
 			price: '570',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'theSoul',
 			materialId: 'Taffeta - Black',
 		},
 		{
@@ -1048,6 +1130,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'theSoul',
 			materialId: 'Silk - Tan',
 		},
 		{
@@ -1058,6 +1141,7 @@ export const templates: Record<string, Template[]> = {
 			price: '465',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'theSoul',
 			materialId: 'Print Chiffon - Floral',
 		},
 		{
@@ -1067,6 +1151,7 @@ export const templates: Record<string, Template[]> = {
 			price: '410',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'theSoul',
 			materialId: 'Sateen - Black',
 		},
 		{
@@ -1076,6 +1161,7 @@ export const templates: Record<string, Template[]> = {
 			price: '465',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'theSoul',
 			materialId: 'Lace - White Flower',
 		},
 	],
@@ -1087,6 +1173,7 @@ export const templates: Record<string, Template[]> = {
 			price: '0',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'moidien',
 			materialId: 'Seersucker - Seethrough',
 		},
 		{
@@ -1096,6 +1183,7 @@ export const templates: Record<string, Template[]> = {
 			price: '65',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'moidien',
 			materialId: 'Crinkle Fabric - Navy',
 		},
 		{
@@ -1105,6 +1193,7 @@ export const templates: Record<string, Template[]> = {
 			price: '65',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'moidien',
 			materialId: 'Poly - Jacquard',
 		},
 		{
@@ -1114,6 +1203,7 @@ export const templates: Record<string, Template[]> = {
 			price: '40',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'moidien',
 			materialId: 'Washed - T',
 		},
 		{
@@ -1123,6 +1213,7 @@ export const templates: Record<string, Template[]> = {
 			price: '65',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'moidien',
 			materialId: 'Pleated - White',
 		},
 		{
@@ -1132,6 +1223,7 @@ export const templates: Record<string, Template[]> = {
 			price: '45',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'moidien',
 			materialId: 'Pleated - Brown',
 		},
 		{
@@ -1141,6 +1233,7 @@ export const templates: Record<string, Template[]> = {
 			price: '65',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'moidien',
 			materialId: 'Cotton - White',
 		},
 		{
@@ -1150,6 +1243,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Hat',
+		collection: 'moidien',
 			materialId: 'Pleated - Random White',
 		},
 		{
@@ -1159,6 +1253,7 @@ export const templates: Record<string, Template[]> = {
 			price: '55',
 			avatar: 'female',
 			category: 'Bag',
+		collection: 'moidien',
 			materialId: 'Pleated - Random White',
 		},
 		{
@@ -1168,6 +1263,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Bag',
+		collection: 'moidien',
 			materialId: 'Pleated - Random Black',
 		},
 		{
@@ -1177,6 +1273,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Accessories',
+		collection: 'moidien',
 			materialId: 'Cotton - White',
 		},
 		{
@@ -1186,6 +1283,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Accessories',
+		collection: 'moidien',
 			materialId: 'Cotton - White',
 		},
 		{
@@ -1195,6 +1293,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Accessories',
+		collection: 'moidien',
 			materialId: 'Cotton - White',
 		},
 		{
@@ -1204,6 +1303,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Accessories',
+		collection: 'moidien',
 			materialId: 'Cotton - White',
 		},
 		{
@@ -1213,6 +1313,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Accessories',
+		collection: 'moidien',
 			materialId: 'Cotton - White',
 		},
 		{
@@ -1222,6 +1323,7 @@ export const templates: Record<string, Template[]> = {
 			price: '105',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'moidien',
 			materialId: 'Cotton - Taupe',
 		},
 		{
@@ -1231,6 +1333,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'moidien',
 			materialId: 'Twill - 235',
 		},
 		{
@@ -1240,6 +1343,7 @@ export const templates: Record<string, Template[]> = {
 			price: '40',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'moidien',
 			materialId: 'Seersucker - Black',
 		},
 		{
@@ -1249,6 +1353,7 @@ export const templates: Record<string, Template[]> = {
 			price: '65',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'moidien',
 			materialId: 'Twill - 235',
 		},
 	],
@@ -1260,6 +1365,7 @@ export const templates: Record<string, Template[]> = {
 			price: '28',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'emwear',
 			materialId: 'Lace - White',
 		},
 		{
@@ -1269,6 +1375,7 @@ export const templates: Record<string, Template[]> = {
 			price: '45',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'emwear',
 			materialId: 'Silk - White',
 		},
 		{
@@ -1278,6 +1385,7 @@ export const templates: Record<string, Template[]> = {
 			price: '57',
 			avatar: 'female',
 			category: 'Coat',
+		collection: 'emwear',
 			materialId: 'Mesh - Flower',
 			extraMaterials: [
 				{
@@ -1293,6 +1401,7 @@ export const templates: Record<string, Template[]> = {
 			price: '120',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'emwear',
 			materialId: 'Silk - Lavender Blush',
 			extraMaterials: [
 				{
@@ -1312,6 +1421,7 @@ export const templates: Record<string, Template[]> = {
 			price: '100',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'emwear',
 			materialId: 'Silk - Cce9ff',
 			extraMaterials: [
 				{
@@ -1327,6 +1437,7 @@ export const templates: Record<string, Template[]> = {
 			price: '67',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'emwear',
 			materialId: 'Silk - Ffebb7',
 		},
 		{
@@ -1336,6 +1447,7 @@ export const templates: Record<string, Template[]> = {
 			price: '60',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'emwear',
 			materialId: 'Silk - Off White',
 			extraMaterials: [
 				{
@@ -1351,6 +1463,7 @@ export const templates: Record<string, Template[]> = {
 			price: '67',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'emwear',
 			materialId: 'Silk - Ffc85a',
 		},
 		{
@@ -1360,6 +1473,7 @@ export const templates: Record<string, Template[]> = {
 			price: '55',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'emwear',
 			materialId: 'Silk - Ffe6f2',
 			extraMaterials: [
 				{
@@ -1375,6 +1489,7 @@ export const templates: Record<string, Template[]> = {
 			price: '90',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'emwear',
 			materialId: 'Silk - Fffaed',
 			extraMaterials: [
 				{
@@ -1390,6 +1505,7 @@ export const templates: Record<string, Template[]> = {
 			price: '55',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'emwear',
 			materialId: 'Silk - Light Cream',
 			extraMaterials: [
 				{
@@ -1407,6 +1523,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'atelierGourney',
 			materialId: 'Denim - 383',
 		},
 		{
@@ -1416,6 +1533,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'atelierGourney',
 			materialId: 'Denim - 383',
 		},
 		{
@@ -1425,6 +1543,7 @@ export const templates: Record<string, Template[]> = {
 			price: '300',
 			avatar: 'female',
 			category: 'Jumpsuit',
+		collection: 'atelierGourney',
 			materialId: 'Denim - 383',
 		},
 		{
@@ -1434,6 +1553,7 @@ export const templates: Record<string, Template[]> = {
 			price: '350',
 			avatar: 'female',
 			category: 'Jumpsuit',
+		collection: 'atelierGourney',
 			materialId: 'Leather - White',
 			extraMaterials: [
 				{
@@ -1449,6 +1569,7 @@ export const templates: Record<string, Template[]> = {
 			price: '350',
 			avatar: 'female',
 			category: 'Jumpsuit',
+		collection: 'atelierGourney',
 			materialId: 'Leather - Brown',
 		},
 		{
@@ -1458,6 +1579,7 @@ export const templates: Record<string, Template[]> = {
 			price: '350',
 			avatar: 'female',
 			category: 'Jumpsuit',
+		collection: 'atelierGourney',
 			materialId: 'Leather - Lamb',
 			extraMaterials: [
 				{
@@ -1473,6 +1595,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2500',
 			avatar: 'female',
 			category: 'Jumpsuit',
+		collection: 'atelierGourney',
 			materialId: 'Black - 360',
 		},
 		{
@@ -1482,6 +1605,7 @@ export const templates: Record<string, Template[]> = {
 			price: '3500',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'atelierGourney',
 			materialId: 'Metallic - Fringe',
 		},
 		{
@@ -1491,6 +1615,7 @@ export const templates: Record<string, Template[]> = {
 			price: '3500',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'atelierGourney',
 			materialId: 'Wool - Sequin',
 		},
 		{
@@ -1500,6 +1625,7 @@ export const templates: Record<string, Template[]> = {
 			price: '3000',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'atelierGourney',
 			materialId: 'Wool - 361',
 		},
 		{
@@ -1509,6 +1635,7 @@ export const templates: Record<string, Template[]> = {
 			price: '4500',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'atelierGourney',
 			materialId: 'Wool - 361',
 		},
 		{
@@ -1518,6 +1645,7 @@ export const templates: Record<string, Template[]> = {
 			price: '2500',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'atelierGourney',
 			materialId: 'Wool - 361',
 			extraMaterials: [
 				{
@@ -1535,6 +1663,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'zove',
 			materialId: 'Twill - 235',
 			extraMaterials: [
 				{
@@ -1550,6 +1679,7 @@ export const templates: Record<string, Template[]> = {
 			price: '890',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'zove',
 			materialId: 'Silk - Seethrough Cce9ff',
 		},
 		{
@@ -1559,6 +1689,7 @@ export const templates: Record<string, Template[]> = {
 			price: '230',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'zove',
 			materialId: 'Denim - Light',
 			extraMaterials: [
 				{
@@ -1574,6 +1705,7 @@ export const templates: Record<string, Template[]> = {
 			price: '230',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'zove',
 			materialId: 'Leather - Black',
 			extraMaterials: [
 				{
@@ -1589,6 +1721,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'zove',
 			materialId: 'Cotton - Twill',
 			extraMaterials: [
 				{
@@ -1604,6 +1737,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'zove',
 			materialId: 'Twill - 235',
 			extraMaterials: [
 				{
@@ -1619,6 +1753,7 @@ export const templates: Record<string, Template[]> = {
 			price: '8600',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'zove',
 			materialId: 'Cotton - Twill',
 			extraMaterials: [
 				{
@@ -1638,6 +1773,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'zove',
 			materialId: 'Twill - 235',
 		},
 	],
@@ -1649,6 +1785,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'jaSengBu',
 			materialId: 'Jersey - Black',
 			extraMaterials: [
 				{
@@ -1664,6 +1801,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'jaSengBu',
 			materialId: 'Dark Green - 348',
 			extraMaterials: [
 				{
@@ -1679,6 +1817,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'jaSengBu',
 			materialId: 'Taffeta - Red Print',
 			extraMaterials: [
 				{
@@ -1694,6 +1833,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'jaSengBu',
 			materialId: 'Jersey - Black',
 		},
 		{
@@ -1703,6 +1843,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'jaSengBu',
 			materialId: 'Cotton - Charcoal Teal',
 		},
 		{
@@ -1712,6 +1853,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'jaSengBu',
 			materialId: 'Organza - Black',
 			extraMaterials: [
 				{
@@ -1727,6 +1869,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'jaSengBu',
 			materialId: 'Tweed Modern - 359',
 		},
 		{
@@ -1737,6 +1880,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'jaSengBu',
 			materialId: 'Jacquard - Red',
 		},
 		{
@@ -1746,6 +1890,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'jaSengBu',
 			materialId: 'Muslin - 343',
 		},
 	],
@@ -1757,6 +1902,7 @@ export const templates: Record<string, Template[]> = {
 			price: '400',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'mssPark',
 			materialId: 'Poly - Camo',
 		},
 		{
@@ -1766,6 +1912,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'mssPark',
 			materialId: 'Jersey - Stretch',
 		},
 		{
@@ -1775,6 +1922,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'mssPark',
 			materialId: 'Jersey - Black',
 		},
 		{
@@ -1784,6 +1932,7 @@ export const templates: Record<string, Template[]> = {
 			price: '300',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'mssPark',
 			materialId: 'Poly - Camo',
 		},
 		{
@@ -1793,6 +1942,7 @@ export const templates: Record<string, Template[]> = {
 			price: '420',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'mssPark',
 			materialId: 'Leather - Cracked',
 			extraMaterials: [
 				{
@@ -1808,6 +1958,7 @@ export const templates: Record<string, Template[]> = {
 			price: '1100',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'mssPark',
 			materialId: 'Fur - 373',
 		},
 		{
@@ -1817,6 +1968,7 @@ export const templates: Record<string, Template[]> = {
 			price: '600',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'mssPark',
 			materialId: 'Jersey - Stretch',
 			extraMaterials: [
 				{
@@ -1836,6 +1988,7 @@ export const templates: Record<string, Template[]> = {
 			price: '650',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'mssPark',
 			materialId: 'Jersey - Black',
 			extraMaterials: [
 				{
@@ -1852,6 +2005,7 @@ export const templates: Record<string, Template[]> = {
 			price: '0',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'mssPark',
 			materialId: 'Cotton - Twill',
 		},
 		{
@@ -1861,6 +2015,7 @@ export const templates: Record<string, Template[]> = {
 			price: '645',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'mssPark',
 			materialId: 'Leather - Cracked',
 		},
 		{
@@ -1870,6 +2025,7 @@ export const templates: Record<string, Template[]> = {
 			price: '550',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'mssPark',
 			materialId: 'Jersey - Stretch',
 		},
 		{
@@ -1879,6 +2035,7 @@ export const templates: Record<string, Template[]> = {
 			price: '650',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'mssPark',
 			materialId: 'Lace - White',
 		},
 		{
@@ -1888,6 +2045,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'mssPark',
 			materialId: 'Cotton - Black Seethrough',
 		},
 	],
@@ -1899,6 +2057,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Coat',
+		collection: 'imzadFemale',
 			materialId: 'Suede - White',
 			extraMaterials: [
 				{
@@ -1914,6 +2073,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'imzadFemale',
 			materialId: 'Leather - Dark Indigo',
 			extraMaterials: [
 				{
@@ -1929,6 +2089,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'imzadFemale',
 			materialId: 'Organza - Dark Indigo',
 			extraMaterials: [
 				{
@@ -1944,6 +2105,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'imzadFemale',
 			materialId: 'Charcoal - Blue Velvet',
 			extraMaterials: [
 				{
@@ -1961,6 +2123,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Skirt',
+		collection: 'imzadMale',
 			materialId: 'Silk - Beige',
 		},
 		{
@@ -1970,6 +2133,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'imzadMale',
 			materialId: 'Sequin - White',
 		},
 		{
@@ -1979,6 +2143,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'imzadMale',
 			materialId: 'Organ - Beaded Rhinstones',
 		},
 		{
@@ -1988,6 +2153,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Top',
+		collection: 'imzadMale',
 			materialId: 'Twill - Beige',
 		},
 		{
@@ -1997,6 +2163,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Accessories',
+		collection: 'imzadMale',
 			materialId: 'Leather - Dark Indigo',
 			extraMaterials: [
 				{
@@ -2012,6 +2179,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Pants',
+		collection: 'imzadMale',
 			materialId: 'Denim - Shimmery',
 			extraMaterials: [
 				{
@@ -2033,6 +2201,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'sapienzaUniversityOfRome',
 			materialId: 'Cotton - Silk White',
 			extraMaterials: [
 				{
@@ -2077,6 +2246,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 5',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2088,6 +2258,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 4',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2099,6 +2270,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 3',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2110,6 +2282,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 2',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2121,6 +2294,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 1',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
@@ -2137,6 +2311,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 5',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2148,6 +2323,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 4',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2159,6 +2335,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 3',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2170,6 +2347,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 2',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2181,6 +2359,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 1',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
@@ -2197,6 +2376,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 5',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2208,6 +2388,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 4',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2219,6 +2400,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 3',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2230,6 +2412,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 2',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2241,6 +2424,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 1',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
@@ -2254,6 +2438,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'sapienzaUniversityOfRome',
 			materialId: 'Texture - Micro Velvet',
 			extraMaterials: [
 				{
@@ -2295,6 +2480,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 5',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2306,6 +2492,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 4',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2317,6 +2504,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 3',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2328,6 +2516,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 2',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2339,6 +2528,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 1',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
@@ -2355,6 +2545,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 5',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2366,6 +2557,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 4',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2377,6 +2569,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 3',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2388,6 +2581,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 2',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2399,6 +2593,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 1',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
@@ -2412,6 +2607,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'sapienzaUniversityOfRome',
 			materialId: 'Striped - Metallic 01',
 			extraMaterials: [
 				{
@@ -2439,6 +2635,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 5',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2450,6 +2647,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 4',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2461,6 +2659,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 3',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2472,6 +2671,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 2',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2483,6 +2683,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 1',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
@@ -2499,6 +2700,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 5',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2510,6 +2712,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 4',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2521,6 +2724,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 3',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2532,6 +2736,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 2',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2543,6 +2748,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 1',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
@@ -2559,6 +2765,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 5',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2570,6 +2777,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 4',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2581,6 +2789,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 3',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2592,6 +2801,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 2',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2603,6 +2813,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 1',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
@@ -2616,6 +2827,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'sapienzaUniversityOfRome',
 			materialId: 'Velvet - 01',
 			extraMaterials: [
 				{
@@ -2654,6 +2866,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 5',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2665,6 +2878,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 4',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2676,6 +2890,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 3',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2687,6 +2902,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 2',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2698,6 +2914,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 1',
 							avatar: 'female',
 							category: 'Skirt',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
@@ -2714,6 +2931,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 5',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2725,6 +2943,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 4',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2736,6 +2955,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 3',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2747,6 +2967,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 2',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2758,6 +2979,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 1',
 							avatar: 'female',
 							category: 'Bodice',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
@@ -2774,6 +2996,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 5',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2785,6 +3008,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 4',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2796,6 +3020,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 3',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2807,6 +3032,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 2',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2818,6 +3044,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Item 1',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
@@ -2831,6 +3058,7 @@ export const templates: Record<string, Template[]> = {
 			price: 'N/A',
 			avatar: 'female',
 			category: 'Dress',
+		collection: 'sapienzaUniversityOfRome',
 			materialId: 'Muslin - White',
 			extraMaterials: [
 				{
@@ -2852,6 +3080,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Sleeves 5',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2863,6 +3092,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Sleeves 4',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2874,6 +3104,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Sleeves 3',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2885,6 +3116,7 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Sleeves 2',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 						{
@@ -2896,11 +3128,228 @@ export const templates: Record<string, Template[]> = {
 							blockName: 'Sleeves 1',
 							avatar: 'female',
 							category: 'Sleeves',
+		collection: 'sapienzaUniversityOfRome',
 							templateCategory: 'Dress',
 						},
 					],
 				},
 			],
+		},
+	],
+	oneThousandPoets: [
+		{
+			_id: '965644e5-f461-4c53-8124-6fe2c9cc0b6d',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Top/OVERSIZE_TOP_-_270.webp',
+			name: 'OVERSIZE TOP',
+			price: '270',
+			avatar: 'female',
+			category: 'Top',
+		collection: 'oneThousandPoets',
+			materialId: 'Cotton - White',
+			extraMaterials: [
+				{
+					mesh: 'trim',
+					materialId: 'Polyester - Navy',
+				},
+			],
+		},
+		{
+			_id: 'c91d6487-b3e1-45b1-b9ca-711da1b9a5be',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Top/DENIM_JACKET_-_290.webp',
+			name: 'DENIM JACKET',
+			price: '290',
+			avatar: 'female',
+			category: 'Top',
+		collection: 'oneThousandPoets',
+			materialId: 'Denim - Black',
+		},
+		{
+			_id: '4dbe928d-5cc1-45d5-b294-290f09e8f067',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Top/Item_1.webp',
+			name: 'Item 1',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Top',
+		collection: 'oneThousandPoets',
+			materialId: 'Denim - Black',
+		},
+		{
+			_id: 'fbd2b9bd-193e-4c95-a725-dcb133af1094',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Pants/OVERSIZE_PANTS_-_270.webp',
+			name: 'OVERSIZE PANTS',
+			price: '270',
+			avatar: 'female',
+			category: 'Pants',
+		collection: 'oneThousandPoets',
+			materialId: 'Cotton - White',
+			extraMaterials: [
+				{
+					mesh: 'trim',
+					materialId: 'Polyester - Navy',
+				},
+			],
+		},
+		{
+			_id: '514d9098-2b8f-4a15-906f-f49122784e36',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Accessories/Item_1.webp',
+			name: 'Item 1',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Accessories',
+		collection: 'oneThousandPoets',
+			materialId: 'Black - Velvet',
+		},
+		{
+			_id: '4dff40dd-a739-469b-a06f-38d47aa951e8',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Skirt/Item_1.webp',
+			name: 'Item 1',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Skirt',
+		collection: 'oneThousandPoets',
+			materialId: 'Leather - Black',
+		},
+		{
+			_id: 'a520ba75-edd5-4f93-b9ae-3061e9a7c013',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Dress/SHORT_A_LINE_DRESS_-_650.webp',
+			name: 'SHORT A LINE DRESS',
+			price: '650',
+			avatar: 'female',
+			category: 'Dress',
+		collection: 'oneThousandPoets',
+			materialId: '',
+			extraMaterials: [
+				{
+					mesh: 'pattern_19771853',
+					materialId: 'Velvet - Black',
+				},
+			],
+		},
+		{
+			_id: '5d0f41f0-1839-4409-86f6-870501c83be0',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Dress/LACE_DRESS_-_200.webp',
+			name: 'LACE DRESS',
+			price: '200',
+			avatar: 'female',
+			category: 'Dress',
+		collection: 'oneThousandPoets',
+			materialId: 'Lace - Beige',
+		},
+		{
+			_id: '05a32f14-d709-4d9a-888b-3735d0ae5007',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Dress/TIGHTLY_FITTED_VELVET_DRESS_-_1100.webp',
+			name: 'TIGHTLY FITTED VELVET DRESS',
+			price: '1100',
+			avatar: 'female',
+			category: 'Dress',
+		collection: 'oneThousandPoets',
+			materialId: 'Suede - Black',
+			extraMaterials: [
+				{
+					mesh: 'topstitch',
+					materialId: 'Lace - Beige',
+				},
+			],
+		},
+		{
+			_id: 'd9000436-4391-4331-889e-216b40f8b41f',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Dress/VELVET_DRESS_-_800.webp',
+			name: 'VELVET DRESS',
+			price: '800',
+			avatar: 'female',
+			category: 'Dress',
+		collection: 'oneThousandPoets',
+			materialId: 'Velvet - Black',
+			extraMaterials: [
+				{
+					mesh: 'handform001',
+					materialId: 'Golden - 349',
+				},
+			],
+		},
+		{
+			_id: 'f90b1d08-c273-40d7-ae77-f65ae4880bf3',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Dress/Item_11.webp',
+			name: 'Item 11',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Dress',
+		collection: 'oneThousandPoets',
+			materialId: 'Silk - Beige',
+		},
+		{
+			_id: 'fd907f49-dee0-48fc-a508-f533aca16d00',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Dress/Item_8.webp',
+			name: 'Item 8',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Dress',
+		collection: 'oneThousandPoets',
+			materialId: 'Denim - Black',
+		},
+		{
+			_id: '87dbfaae-e9bb-4b36-bee5-d93aa0d87f79',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Dress/Item_7.webp',
+			name: 'Item 7',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Dress',
+		collection: 'oneThousandPoets',
+			materialId: 'Veil - Beige',
+		},
+		{
+			_id: '9ef02a52-2b66-4349-a43b-c95a39e07cb2',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Dress/Item_6.webp',
+			name: 'Item 6',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Dress',
+		collection: 'oneThousandPoets',
+			materialId: 'Lace - Beige',
+		},
+		{
+			_id: '0e54a176-96d3-406a-9381-aa4fb246601a',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Dress/Item_5.webp',
+			name: 'Item 5',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Dress',
+		collection: 'oneThousandPoets',
+			materialId: 'Suede - Black',
+			extraMaterials: [
+				{
+					mesh: 'pattern_9095729-pattern_11672968-base_drippy_tight_regular_shoulder_4-topstitch',
+					materialId: 'Lace - Beige',
+				},
+			],
+		},
+		{
+			_id: 'f6e46294-d631-4312-9805-b5ba3e41d581',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Dress/Item_4.webp',
+			name: 'Item 4',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Dress',
+		collection: 'oneThousandPoets',
+			materialId: 'Wool - Black Suiting',
+			extraMaterials: [
+				{
+					mesh: 'pattern_9095729-pattern_7916207-pattern_7916208-pattern_7916209-pattern_7916206-pattern_275982-pattern_275980',
+					materialId: 'Lace - Beige',
+				},
+			],
+		},
+		{
+			_id: 'e83aa438-705a-42dd-9c47-615b57b60f5b',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oneThousandPoets/templates/Dress/Item_1.webp',
+			name: 'Item 1',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Dress',
+		collection: 'oneThousandPoets',
+			materialId: 'Wool - Black Suiting',
 		},
 	],
 }
