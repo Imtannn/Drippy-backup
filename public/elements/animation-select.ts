@@ -4,7 +4,7 @@ import {store} from '../app/store.js'
 @element
 export class AnimationSelect extends Element {
 	template = () => html`
-		<div style=${() => 'display: none;'}>
+		<div>
 			<select
 				id="animation-select"
 				onchange=${(ev: any) => {
