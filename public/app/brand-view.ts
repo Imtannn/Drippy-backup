@@ -1,10 +1,13 @@
-import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {batch, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import type {Accessor} from 'solid-js'
 import {spaces} from '../consts/spaces.js'
 import {templates} from '../consts/templates.js'
 import {pushState, searchParams} from '../routes.js'
+import type {Block, BlockCategory} from '../types/block.js'
+import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import {currentUser, store} from './store.js'
+import {blockManager} from './block-manager.js'
+import {currentUser, store, updateFabricsInUrl, updateGarmentsInUrl} from './store.js'
 
 import '../elements/avatar-dropdown.js'
 import '../elements/dialog-element.js'
@@ -13,7 +16,9 @@ import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/tabs.js'
 import './item-card.js'
+import './loading-spinner-overlay.js'
 import './spaces-selection.js'
+import './template-item-overlay.js'
 
 type BrandViewAttributes = keyof {}
 
@@ -23,9 +28,29 @@ export class BrandView extends Element {
 
 	@signal selectedTab: TemplateCategory | null = null
 	@signal showLoginDialog = false
+	@signal showTemplateOverlay: Template | null = null
+
+	private isOpeningOverlay = false
+
+	connectedCallback() {
+		super.connectedCallback()
+		document.addEventListener('click', this.#onDocumentClick)
+
+		this.createEffect(() => {
+			const templates = store.selectedTemplates
+			updateGarmentsInUrl(templates)
+		})
+
+		// Update URL when fabrics change
+		this.createEffect(() => {
+			const fabrics = store.selectedFabrics
+			updateFabricsInUrl(fabrics)
+		})
+	}
 
 	disconnectedCallback() {
 		super.disconnectedCallback()
+		document.removeEventListener('click', this.#onDocumentClick)
 		// Clear brand param from URL and reset view when component is unmounted
 		if (searchParams().get('brand')) {
 			searchParams().delete('brand')
@@ -39,6 +64,135 @@ export class BrandView extends Element {
 	}
 	#onSignInClick = () => {
 		this.showLoginDialog = true
+	}
+
+	#onItemClick = async (e: CustomEvent) => {
+		const template = e.detail.itemValue as Template
+
+		store.setLoadingTemplate(template._id)
+
+		// Brand-view only displays when brand param exists, so we always navigate
+		const brandParam = searchParams().get('brand')
+		if (brandParam) {
+			const space = spaces.find(s => s.collection === brandParam)
+			if (space) {
+				// Remove brand parameter and set scene parameter in URL
+				searchParams().delete('brand')
+				searchParams().set('scene', space.slug)
+
+				// Ensure avatar parameter is set
+				if (!searchParams().get('avatar')) {
+					searchParams().set('avatar', store.selectedAvatar)
+				}
+
+				// Set space in store if not already set
+				if (!store.selectedSpace) {
+					store.selectSpace = space
+				}
+
+				// Navigate to template view
+				store.view = 'template'
+				pushState()
+			}
+		}
+
+		this.#selectTemplate(template)
+	}
+
+	#selectTemplate = (template: Template) => {
+		const effectiveSpace = store.getEffectiveSpace()
+		if (!effectiveSpace) return
+
+		const newTemplates = new Map<TemplateCategory, Template>(store.selectedTemplates)
+		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(store.selectedBlocks)
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(store.selectedFabrics)
+
+		// check if the template with same category already exists
+		const interchangeableCategories = blockManager.checkInterchangeableCategories(
+			template.category,
+			store.selectedTemplates,
+		)
+		if (interchangeableCategories.length > 0) {
+			for (const category of interchangeableCategories) {
+				if (store.selectedTemplates.has(category as TemplateCategory)) {
+					newTemplates.delete(category as TemplateCategory)
+					newBlocks.delete(category as TemplateCategory)
+					newFabrics.delete(category as TemplateCategory)
+				}
+			}
+		}
+
+		newTemplates.set(template.category, template)
+		const templateBlockData = blockManager.convertTemplateToBlockData(template, effectiveSpace)
+		const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
+			templateBlockData,
+			effectiveSpace,
+		)
+		newBlocks.set(template.category, newBlocksMap)
+		newFabrics.set(template.category, newFabricsMap)
+
+		batch(() => {
+			store.selectedFabrics = newFabrics
+
+			// @ts-expect-error FIXME we should avoid having different ways of
+			// setting the same thing (see store.setSelectedBlocks, and
+			// loadFromUrlParameters in drippy-app.ts).  This will get more
+			// difficult to manage and error prone/buggy.
+			store.__selectedBlocks = newBlocks
+
+			store.selectedTemplates = newTemplates
+		})
+
+		// Immediately update URL parameters after selecting template
+		updateGarmentsInUrl(newTemplates)
+		updateFabricsInUrl(newFabrics)
+	}
+
+	#onTemplateOverlayClose = () => {
+		batch(() => {
+			this.showTemplateOverlay = null
+			this.isOpeningOverlay = false
+		})
+	}
+
+	#handleTemplateOverlayRemix = (template: Template) => {
+		batch(() => {
+			this.showTemplateOverlay = null
+			this.isOpeningOverlay = false
+			store.setRemixOverlayTemplate = template
+			// Navigate to template view to show remix overlay
+			const brandParam = searchParams().get('brand')
+			if (brandParam) {
+				const space = spaces.find(s => s.collection === brandParam)
+				if (space) {
+					searchParams().delete('brand')
+					searchParams().set('scene', space.slug)
+					store.selectSpace = space
+					store.view = 'template'
+					pushState()
+				}
+			}
+		})
+	}
+
+	#onTemplateOverlayRemix = (e: CustomEvent) => {
+		const template = e.detail.template
+		this.#handleTemplateOverlayRemix(template)
+	}
+
+	#onDocumentClick = (e: Event) => {
+		if (this.isOpeningOverlay) return
+
+		if (
+			this.showTemplateOverlay &&
+			!e.composedPath().some(el => el instanceof Element && el.tagName === 'TEMPLATE-ITEM-OVERLAY')
+		) {
+			this.showTemplateOverlay = null
+		}
+	}
+
+	#isTemplateActive = (template: Template) => {
+		return store.selectedTemplates.get(template.category)?._id === template._id
 	}
 
 	template = () => html`
@@ -68,7 +222,6 @@ export class BrandView extends Element {
 
 			${() => {
 				const brandParam = searchParams().get('brand')
-				console.log('brandParam', brandParam)
 				const space = spaces.find(space => space.collection === brandParam)
 
 				if (!brandParam) {
@@ -76,7 +229,6 @@ export class BrandView extends Element {
 				}
 
 				if (!space) {
-					console.warn('Space not found for brand:', brandParam)
 					return null
 				}
 
@@ -155,15 +307,31 @@ export class BrandView extends Element {
 										<div class="template-item">
 											<div class="template-item-container">
 												<item-card
-													item-active=${() => false}
+													item-active=${() => this.#isTemplateActive(template())}
 													item-src=${template().thumb}
 													item-alt=${template().name}
 													item-value=${template()}
-													oncardselected=${() => {}}
+													oncardselected=${this.#onItemClick}
 													object-fit="contain"
 													object-position="center"
 													aspect-ratio="0.79"
 												></item-card>
+												<show-when
+													condition=${() =>
+														this.showTemplateOverlay?._id === template()._id &&
+														!store.isTemplateLoading(template()._id)}
+													content=${() => html`
+														<template-item-overlay
+															selected-template=${() => template()}
+															onclose=${this.#onTemplateOverlayClose}
+															onremix=${this.#onTemplateOverlayRemix}
+														></template-item-overlay>
+													`}
+												></show-when>
+												<show-when
+													condition=${() => store.isTemplateLoading(template()._id)}
+													content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
+												></show-when>
 											</div>
 											<div class="template-product-name">${template().name}</div>
 											<div
