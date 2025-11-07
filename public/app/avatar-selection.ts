@@ -42,7 +42,7 @@ export class AvatarSelection extends Element {
 			ontabchange=${(e: CustomEvent) => (this.selectedTab = e.detail.value)}
 		>
 			<bottom-sheet-header>
-				<div class="tabs-container" style="padding-top:15px;">
+				<div class="tabs-container">
 					<tabs-list>
 						<tabs-trigger
 							selected-value="female"

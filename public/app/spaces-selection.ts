@@ -1,17 +1,12 @@
 import {batch, css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
 import {spaces} from '../consts/spaces.js'
-import {scenes} from '../consts/scenes.js'
-import {templates} from '../consts/templates.js'
-import type {Template, TemplateCategory} from '../types/template.js'
 import '../elements/avatar-dropdown.js'
 import '../elements/placeholder-image.js'
-import '../elements/tabs.js'
-import './item-card.js'
 import {pushState, searchParams} from '../routes.js'
 import type {Space} from '../types/types.js'
 import {currentUser, store} from './store.js'
-import {getSpacePrimaryCollection, getSpaceSceneThumbnail} from '../utils.js'
+
 import '../elements/dialog-element.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
@@ -23,12 +18,20 @@ export class SpacesSelection extends Element {
 
 	@signal filteredSpace: Space[] = []
 	@signal showLoginDialog = false
-	@signal selectedTab: 'Spaces' | 'Items' | null = 'Spaces'
 
 	connectedCallback() {
 		super.connectedCallback()
 
-		// Show all spaces regardless of gender, with brand filtering
+		this.createEffect(() => {
+			const brandParam = searchParams().get('brand')
+			if (brandParam) {
+				this.classList.add('has-brand')
+			} else {
+				this.classList.remove('has-brand')
+			}
+		})
+
+		// Show all spaces regardless of gender
 		this.createEffect(() => {
 			let filteredSpaces = store.isAdmin
 				? spaces.filter(space => !space.isHidden)
@@ -37,7 +40,7 @@ export class SpacesSelection extends Element {
 			// Filter by brand if brand query parameter exists
 			const brandParam = searchParams().get('brand')
 			if (brandParam) {
-				filteredSpaces = filteredSpaces.filter(space => space.collections.includes(brandParam))
+				filteredSpaces = filteredSpaces.filter((space: Space) => space.collections.includes(brandParam))
 			}
 
 			this.filteredSpace = filteredSpaces
@@ -59,8 +62,8 @@ export class SpacesSelection extends Element {
 		}, 300) // Match animation duration
 	}
 
-	#onSpaceSelected = (space: Space) => {
-		searchParams().set('space', space.slug)
+	#onSceneSelected = (space: Space) => {
+		searchParams().set('scene', space.slug)
 
 		batch(() => {
 			pushState()
@@ -78,250 +81,88 @@ export class SpacesSelection extends Element {
 		store.view = 'avatar'
 	}
 
-	#onDescriptionClick = (space: Space) => {
-		const primaryCollection = getSpacePrimaryCollection(space)
-		if (primaryCollection) {
-			searchParams().set('brand', primaryCollection)
-			pushState()
-		}
+	#onBrandViewClick = (brand: string) => {
+		console.log('onBrandViewClick', brand)
+		const params = searchParams()
+		// Clear all existing params first
+		const paramKeys = Array.from(params.keys())
+		paramKeys.forEach(key => params.delete(key))
+		// Set only brand param
+		params.set('brand', brand)
+		pushState()
 	}
 
 	template = () => html`
 		<div class="spaces-container">
 			<!-- Navigation -->
-			<div class="navigation">
-				<a href="#" class="avatar-link" onclick=${this.#onAvatarClick}>
-					<avatar-dropdown hide-chevron></avatar-dropdown>
-				</a>
-				<div class="nav-links">
-					<a href="/landing" class="learn-more-link">Learn more</a>
-					${() => {
-						const user = currentUser()
-						return user !== null
-							? html`<login-ui></login-ui>`
-							: html`<button class="sign-in-button" onclick=${this.#onSignInClick}>Sign in</button>`
-					}}
-				</div>
-			</div>
+			<show-when
+				condition=${() => !searchParams().has('brand')}
+				content=${() => html`
+					<div class="navigation">
+						<a href="#" class="avatar-link" onclick=${this.#onAvatarClick}>
+							<avatar-dropdown hide-chevron></avatar-dropdown>
+						</a>
+						<div class="nav-links">
+							<a href="/landing" class="learn-more-link">Learn more</a>
+							${() => {
+								const user = currentUser()
+								return user !== null
+									? html`<login-ui></login-ui>`
+									: html`<button class="sign-in-button" onclick=${this.#onSignInClick}>Sign in</button>`
+							}}
+						</div>
+					</div>
+				`}
+			></show-when>
 
 			<!-- Main Title and Description -->
-			<div class="header">
-				${() => {
-					const brandParam = searchParams().get('brand')
-					const space = spaces.find(space => space.collections.includes(brandParam || ''))
-					if (brandParam && space) {
-						const primaryCollection = getSpacePrimaryCollection(space)
-						return html`
-							<div class="brand-logo">
-								<img src=${space?.logo} alt=${space?.name} />
-							</div>
-							<h1 class="main-title brand">${space?.description}</h1>
-							<p class="description brand">${primaryCollection}@paris</p>
-							<p class="sub-description brand">
-								Welcome to the enchanting world of the <strong>${primaryCollection}</strong> , where high fashion meets
-								artistic innovation. <strong>Read more</strong>
-							</p>
-						`
-					} else {
-						return html`
-							<h1 class="main-title">Discover & immerse.</h1>
-							<p class="description">Step into the space of each curated collection.</p>
-							<p class="description">Remix, customize, and shop the drip.</p>
-						`
-					}
-				}}
-			</div>
+			<show-when
+				condition=${() => !searchParams().has('brand')}
+				content=${() => html`
+					<div class="header">
+						<h1 class="main-title">Discover & immerse.</h1>
+						<p class="description">Step into the space of each curated collection.</p>
+						<p class="description">Remix, customize, and shop the drip.</p>
+					</div>
+				`}
+			></show-when>
 
-			<!-- Conditional Tabs and Content -->
-			${() => {
-				const brandParam = searchParams().get('brand')
-				if (brandParam) {
-					// Show tabs when brandParam exists
-					return html`
-						<tabs-provider
-							default-value="Spaces"
-							ontabchange=${(e: CustomEvent) => {
-								this.selectedTab = e.detail.value
-							}}
-						>
-							<tabs-list>
-								<tabs-trigger selected-value="Spaces">Spaces</tabs-trigger>
-								<tabs-trigger selected-value="Items">Items</tabs-trigger>
-							</tabs-list>
-
-							<tabs-content selected-value="Spaces">
-								<!-- Space Cards -->
-								<div class="cards-container">
-									<index-each
-										items=${() => this.filteredSpace}
-										content=${() => (space: Accessor<Space>) => html`
-											<!-- Bloom Realm Card -->
-											<div class="space-card">
-												<div class="scene-preview">
-													<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
-														<placeholder-image
-															src=${getSpaceSceneThumbnail(space(), scenes)}
-															alt=${space().name}
-															object-fit="cover"
-														/>
-													</div>
-													<div class="garments-count">${space().garmentsCount} garments</div>
-												</div>
-												<div class="card-content">
-													<div class="text-content">
-														<h3 class="card-title">${space().name}</h3>
-														<p class="card-subtitle" onclick=${() => this.#onDescriptionClick(space())}>
-															${space().description}
-														</p>
-													</div>
-													<button class="explore-button" onclick=${() => this.#onSpaceSelected(space())}>
-														Explore space →
-													</button>
-												</div>
-											</div>
-										`}
-									></index-each>
-
-									<show-when
-										condition=${() => this.filteredSpace.length === 0}
-										content=${() => html`
-											<div class="no-spaces-container">
-												<p class="no-spaces-text">Spaces for this avatar are coming soon!</p>
-												<button class="no-spaces-button" onclick=${() => (store.view = 'avatar')}>
-													Select avatar →
-												</button>
-											</div>
-										`}
-									></show-when>
+			<!-- Space Cards -->
+			<div class="cards-container">
+				<index-each
+					items=${() => this.filteredSpace}
+					content=${() => (space: Accessor<Space>) => html`
+						<!-- Bloom Realm Card -->
+						<div class="space-card">
+							<div class="scene-preview">
+								<div class="scene-placeholder" onclick=${() => this.#onSceneSelected(space())}>
+									<placeholder-image src=${space().spaceThumbnail} alt=${space().name} object-fit="cover" />
 								</div>
-							</tabs-content>
-
-							<tabs-content selected-value="Items">
-								${() => {
-									const brandParam = searchParams().get('brand')
-									const collection = brandParam || store.getEffectiveCollection() || 'gap'
-									const collectionTemplates = (templates as any)[collection] || []
-
-									// Apply same ordering logic as template-view
-									const defaultCategories: TemplateCategory[] = [
-										'Dress',
-										'Shirt',
-										'Top',
-										'Jacket',
-										'Skirt',
-										'Pants',
-										'Jumpsuit',
-									]
-									const orderedTemplates: Template[] = []
-
-									for (const category of defaultCategories) {
-										const templatesForCategory = collectionTemplates.filter(
-											(template: Template) => template.category === category,
-										)
-										if (templatesForCategory.length > 0) {
-											orderedTemplates.push(...templatesForCategory)
-										}
-									}
-
-									const accessoryTemplates = collectionTemplates.filter(
-										(template: Template) => !defaultCategories.includes(template.category as TemplateCategory),
-									)
-
-									if (accessoryTemplates.length > 0) {
-										orderedTemplates.push(...accessoryTemplates)
-									}
-
-									return html`
-										<div class="items-grid">
-											<index-each
-												items=${() => orderedTemplates}
-												content=${() => (template: Accessor<Template>) => html`
-													<div class="template-item">
-														<div class="template-item-container">
-															<item-card
-																item-active=${() => false}
-																item-src=${template().thumb}
-																item-alt=${template().name}
-																item-value=${template()}
-																oncardselected=${() => {}}
-																object-fit="contain"
-																object-position="center"
-																aspect-ratio="0.79"
-															></item-card>
-														</div>
-														<div class="template-product-name">${template().name}</div>
-														<div
-															class="template-product-price-container"
-															classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}
-														>
-															<div
-																class="template-product-price"
-																classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
-															>
-																<img src="/images/ruby.png" alt="ruby" />
-																${template().price}
-															</div>
-															<show-when
-																condition=${() => store.selectedSpace?.isWholesale}
-																content=${() => html`<div class="template-product-wholesale">MOQ: 5pcs</div>`}
-															></show-when>
-														</div>
-													</div>
-												`}
-											></index-each>
-										</div>
-									`
-								}}
-							</tabs-content>
-						</tabs-provider>
-					`
-				} else {
-					// Show only spaces content when no brandParam
-					return html`
-						<div class="cards-container">
-							<index-each
-								items=${() => this.filteredSpace}
-								content=${() => (space: Accessor<Space>) => html`
-									<!-- Bloom Realm Card -->
-									<div class="space-card">
-										<div class="scene-preview">
-											<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
-												<placeholder-image
-													src=${getSpaceSceneThumbnail(space(), scenes)}
-													alt=${space().name}
-													object-fit="cover"
-												/>
-											</div>
-											<div class="garments-count">${space().garmentsCount} garments</div>
-										</div>
-										<div class="card-content">
-											<div class="text-content">
-												<h3 class="card-title">${space().name}</h3>
-												<p class="card-subtitle" onclick=${() => this.#onDescriptionClick(space())}>
-													${space().description}
-												</p>
-											</div>
-											<button class="explore-button" onclick=${() => this.#onSpaceSelected(space())}>
-												Explore space →
-											</button>
-										</div>
-									</div>
-								`}
-							></index-each>
-
-							<show-when
-								condition=${() => this.filteredSpace.length === 0}
-								content=${() => html`
-									<div class="no-spaces-container">
-										<p class="no-spaces-text">Spaces for this avatar are coming soon!</p>
-										<button class="no-spaces-button" onclick=${() => (store.view = 'avatar')}>Select avatar →</button>
-									</div>
-								`}
-							></show-when>
+								<div class="garments-count">${space().garmentsCount} garments</div>
+							</div>
+							<div class="card-content">
+								<div class="text-content">
+									<h3 class="card-title">${space().name}</h3>
+									<p class="card-subtitle" onclick=${() => this.#onBrandViewClick(space().collections[0])}>
+										${space().description}
+									</p>
+								</div>
+								<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>Explore space →</button>
+							</div>
 						</div>
-					`
-				}
-			}}
+					`}
+				></index-each>
+
+				<show-when
+					condition=${() => this.filteredSpace.length === 0}
+					content=${() => html`
+						<div class="no-spaces-container">
+							<p class="no-spaces-text">Spaces for this avatar are coming soon!</p>
+							<button class="no-spaces-button" onclick=${() => (store.view = 'avatar')}>Select avatar →</button>
+						</div>
+					`}
+				></show-when>
+			</div>
 		</div>
 
 		<dialog-element
@@ -349,10 +190,14 @@ export class SpacesSelection extends Element {
 			width: 100%;
 			height: 100%;
 			background: white;
-			z-index: 100;
+			z-index: 1000;
 			opacity: 0;
 			animation: fadeIn 0.3s ease-out forwards;
 			overflow-y: auto;
+		}
+
+		:host(.has-brand) {
+			position: unset;
 		}
 
 		@keyframes fadeIn {
@@ -439,8 +284,6 @@ export class SpacesSelection extends Element {
 
 		.avatar-link {
 			text-decoration: none;
-			position: relative;
-			z-index: 100;
 		}
 
 		.nav-links {
@@ -499,18 +342,6 @@ export class SpacesSelection extends Element {
 			margin-bottom: 2rem;
 		}
 
-		.brand-logo {
-			width: 58px;
-			height: 58px;
-			margin: 0 auto;
-		}
-
-		.brand-logo img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-		}
-
 		.main-title {
 			font-size: 28px;
 			font-weight: var(--fontWeightSemiBold);
@@ -522,12 +353,6 @@ export class SpacesSelection extends Element {
 			}
 		}
 
-		.main-title.brand {
-			font-size: 24px;
-			margin-bottom: 0rem;
-			margin-top: 0.2rem;
-		}
-
 		.description {
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightNormal);
@@ -536,145 +361,6 @@ export class SpacesSelection extends Element {
 
 			:host-context([data-theme='dark']) & {
 				color: #ccc;
-			}
-		}
-
-		.description.brand {
-			margin-bottom: 0.4rem;
-			margin-top: -4px;
-		}
-
-		.sub-description {
-			font-size: var(--fontSizeTextXxs);
-			font-weight: var(--fontWeightNormal);
-			line-height: var(--lineHeightLoose);
-			margin: 0 auto;
-			padding: 0 15px;
-			:host-context([data-theme='dark']) & {
-				color: #ccc;
-			}
-		}
-
-		/* Center tabs without modifying tabs component */
-
-		tabs-provider {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			margin-top: 1rem;
-		}
-
-		/* Force tabs-list to be centered by overriding its width */
-		tabs-provider tabs-list {
-			width: auto !important;
-			max-width: fit-content !important;
-			margin: 0 auto !important;
-		}
-		tabs-provider .tab {
-			padding: 10px 16px !important;
-		}
-
-		/* Ensure tabs-content containers are also centered */
-		tabs-provider tabs-content {
-			width: 100%;
-			display: flex;
-			justify-content: center;
-			margin-top: 1rem;
-		}
-
-		.items-grid {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: var(--gridGapMobile);
-			max-width: var(--breakpointLargeDesktop);
-			margin: 0 auto;
-		}
-
-		@media (min-width: 768px) {
-			.items-grid {
-				grid-template-columns: repeat(4, 1fr);
-				gap: var(--gridGapTablet);
-			}
-		}
-
-		@media (min-width: 1024px) {
-			.items-grid {
-				grid-template-columns: repeat(6, 1fr);
-				gap: var(--gridGapDesktop);
-			}
-		}
-
-		.template-item {
-			min-width: 0;
-			width: 100%;
-			display: flex;
-			flex-direction: column;
-			gap: var(--uiSpacingTiny);
-			position: relative;
-		}
-
-		.template-item-container {
-			position: relative;
-			width: 100%;
-			aspect-ratio: 0.79;
-			border-radius: var(--borderRadiusLarge);
-			overflow: hidden;
-		}
-
-		.template-product-name {
-			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightSemiBold);
-			color: var(--uiColorPrimaryBlack);
-			text-align: start;
-			margin: 0;
-
-			:host-context([data-theme='dark']) & {
-				color: var(--uiColorPrimaryWhite);
-			}
-		}
-
-		.template-product-price-container {
-			display: flex;
-			flex-direction: column;
-			align-items: start;
-			gap: 2px;
-		}
-
-		.template-product-price {
-			font-size: var(--fontSizeTextXxs);
-			font-weight: var(--fontWeightSemiBold);
-			color: var(--uiColorPrimaryBlack);
-			display: flex;
-			justify-content: start;
-			align-items: center;
-
-			:host-context([data-theme='dark']) & {
-				color: #ccc;
-			}
-
-			&.wholesale {
-				color: var(--uiColorPrimaryBlack);
-				font-weight: var(--fontWeightSemiBold);
-
-				:host-context([data-theme='dark']) & {
-					color: var(--uiColorPrimaryWhite);
-				}
-			}
-		}
-
-		.template-product-price img {
-			margin-right: 6px;
-			width: 12px;
-			height: 9.5px;
-		}
-
-		.template-product-wholesale {
-			font-size: 10px;
-			color: #999;
-			text-align: center;
-
-			:host-context([data-theme='dark']) & {
-				color: #777;
 			}
 		}
 
@@ -792,6 +478,7 @@ export class SpacesSelection extends Element {
 			margin: 0;
 			display: block;
 			cursor: pointer;
+
 			:host-context([data-theme='dark']) & {
 				color: #ccc;
 			}

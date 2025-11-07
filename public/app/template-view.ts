@@ -759,7 +759,6 @@ export class TemplateView extends Element {
 		}
 		@media (min-width: 768px) {
 			app-buttons-left {
-				position: relative;
 				z-index: 0;
 				display: block;
 				--app-buttons-left-transform: translateX(0) !important;

@@ -8,7 +8,7 @@ import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
 import '../routes.js' // track page visits
-import {searchParams} from '../routes.js'
+import {pushState, searchParams} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
@@ -16,6 +16,7 @@ import type {Space} from '../types/types.js'
 import {getSpacePrimaryCollection} from '../utils.js'
 import './app-guard.js'
 import './avatar-selection.js'
+import './brand-view.js'
 import {blockManager} from './block-manager.js'
 import './blocks-selection.js'
 import './custom-measurement.js'
@@ -33,6 +34,7 @@ import './template-view.js'
 // const avatar = createMemo(() => searchParams().get('avatar'))
 // const scene = createMemo(() => searchParams().get('scene') as Space | null)
 const isPreview = createMemo(() => searchParams().get('isPreview'))
+const hasBrandParam = createMemo(() => !!searchParams().get('brand'))
 
 @element
 export class DrippyApp extends Element {
@@ -61,6 +63,20 @@ export class DrippyApp extends Element {
 				console.error('Error loading app', error)
 			} finally {
 				this.appLoaded = true
+			}
+		})
+
+		// Monitor URL params: if brand exists with other params, remove brand
+		this.createEffect(() => {
+			const params = searchParams()
+			const hasBrand = params.has('brand')
+			const paramKeys = Array.from(params.keys())
+			const otherParams = paramKeys.filter(k => k !== 'brand')
+
+			if (hasBrand && otherParams.length > 0) {
+				// Brand exists but there are other params → remove brand
+				params.delete('brand')
+				pushState()
 			}
 		})
 
@@ -214,63 +230,70 @@ export class DrippyApp extends Element {
 			content=${() => html`
 				<connection-warning></connection-warning>
 				<div id="app-container">
-					<drippy-scene
-						id="drippy-scene"
-						selected-space=${() => (console.log('selected space', store.selectedSpace), store.getEffectiveSpace())}
-						selected-avatar=${() => store.selectedAvatar}
-						selected-fabrics=${() => store.selectedFabrics}
-						selected-blocks=${() => store.selectedBlocks}
-					></drippy-scene>
-
 					<show-when
-						condition=${() => store.view === 'avatar'}
-						content=${() => html`<avatar-selection></avatar-selection>`}
+						condition=${() => !hasBrandParam()}
+						content=${() => html`
+							<drippy-scene
+								id="drippy-scene"
+								selected-space=${() => (console.log('selected space', store.selectedSpace), store.selectedSpace)}
+								selected-avatar=${() => store.selectedAvatar}
+								selected-fabrics=${() => store.selectedFabrics}
+								selected-blocks=${() => store.selectedBlocks}
+							></drippy-scene>
+
+							<show-when
+								condition=${() => store.view === 'avatar'}
+								content=${() => html`<avatar-selection></avatar-selection>`}
+							></show-when>
+
+							<show-when
+								condition=${() => store.view === 'space'}
+								content=${() => html`<spaces-selection></spaces-selection>`}
+							></show-when>
+
+							<show-when
+								condition=${() => store.view === 'template'}
+								content=${() => html`<template-view></template-view>`}
+							></show-when>
+
+							<show-when
+								condition=${() => store.view === 'preview'}
+								content=${() => html`<outfit-preview></outfit-preview>`}
+							></show-when>
+
+							<show-when
+								condition=${() => store.view === 'share'}
+								content=${() => html`<share-view></share-view>`}
+							></show-when>
+
+							<show-when
+								condition=${() => store.view === 'order-items'}
+								content=${() => html`<order-items></order-items>`}
+							></show-when>
+
+							<show-when
+								condition=${() => store.view === 'order-size'}
+								content=${() => html`<order-size></order-size>`}
+							></show-when>
+
+							<show-when
+								condition=${() => store.view === 'order'}
+								content=${() => html`<order-view></order-view>`}
+							></show-when>
+
+							<show-when
+								condition=${() => store.view === 'custom-measurement'}
+								content=${() => html`<custom-measurement></custom-measurement>`}
+							></show-when>
+
+							<show-when
+								condition=${() => store.view === 'success'}
+								content=${() => html`<success-view></success-view>`}
+							></show-when>
+						`}
 					></show-when>
 
-					<show-when
-						condition=${() => store.view === 'space'}
-						content=${() => html`<spaces-selection></spaces-selection>`}
-					></show-when>
-
-					<show-when
-						condition=${() => store.view === 'template'}
-						content=${() => html`<template-view></template-view>`}
-					></show-when>
-
-					<show-when
-						condition=${() => store.view === 'preview'}
-						content=${() => html`<outfit-preview></outfit-preview>`}
-					></show-when>
-
-					<show-when
-						condition=${() => store.view === 'share'}
-						content=${() => html`<share-view></share-view>`}
-					></show-when>
-
-					<show-when
-						condition=${() => store.view === 'order-items'}
-						content=${() => html`<order-items></order-items>`}
-					></show-when>
-
-					<show-when
-						condition=${() => store.view === 'order-size'}
-						content=${() => html`<order-size></order-size>`}
-					></show-when>
-
-					<show-when
-						condition=${() => store.view === 'order'}
-						content=${() => html`<order-view></order-view>`}
-					></show-when>
-
-					<show-when
-						condition=${() => store.view === 'custom-measurement'}
-						content=${() => html`<custom-measurement></custom-measurement>`}
-					></show-when>
-
-					<show-when
-						condition=${() => store.view === 'success'}
-						content=${() => html`<success-view></success-view>`}
-					></show-when>
+					<show-when condition=${() => hasBrandParam()} content=${() => html`<brand-view></brand-view>`}></show-when>
 				</div>
 			`}
 		></show-when>

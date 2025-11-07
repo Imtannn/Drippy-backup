@@ -1596,8 +1596,9 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '24e1c7a7-5a40-4142-9155-bbb763b5ca91',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/gap/blocks/Top/Item_8___Bodice/bodice__1455.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/gap/blocks/Top/Item_8___Bodice/bodice__1455.gltf',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/moidien/blocks/Top/Item_8___Bodice/bodice__1455.webp',
+			/* modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Top/Item_8___Bodice/bodice__1455.gltf', */
+			modelFile: '/models/shirt.glb',
 			blockName: 'bodice 1455',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1808,8 +1809,10 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '8c92f707-9720-48ff-963a-7680f5d7bb92',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/gap/blocks/Dress/Item_3___fullbody/fullbody_125.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/gap/blocks/Dress/Item_3___fullbody/fullbody_125.gltf',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/moidien/blocks/Dress/Item_3___fullbody/fullbody_125.webp',
+			/* modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Dress/Item_3___fullbody/fullbody_125.gltf', */
+			modelFile: '/models/dress.glb',
 			blockName: 'fullbody 125',
 			avatar: 'female',
 			category: 'Full Body',
@@ -1820,8 +1823,9 @@ export const blocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '2003b4e3-1fb9-4887-86f0-b7e705ec8556',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/gap/blocks/Pants/Item_7_Pants/pants_1453.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/gap/blocks/Pants/Item_7_Pants/pants_1453.gltf',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/moidien/blocks/Pants/Item_7_Pants/pants_1453.webp',
+			/* modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Pants/Item_7_Pants/pants_1453.gltf', */
+			modelFile: '/models/pants.glb',
 			blockName: 'pants 1453',
 			avatar: 'female',
 			category: 'Pants',

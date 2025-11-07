@@ -13,7 +13,7 @@ import {
 } from 'lume'
 import * as THREE from 'three'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
-import {onModelLoad} from '../utils.js'
+import {getArmatureObject, onModelLoad} from '../utils.js'
 
 type LumeAnimationAttributes = 'src' | 'clipName' | 'additive' | 'paused'
 
@@ -111,7 +111,10 @@ export class LumeAnimation extends Element {
 				createEffect(() => {
 					if (!clips().length) return
 
-					const mixer = new THREE.AnimationMixer((this.parentElement as Element3D).three)
+					const armatureObject = getArmatureObject((this.parentElement as Element3D).three)
+					if (!armatureObject) return
+
+					const mixer = new THREE.AnimationMixer(armatureObject)
 
 					// Update clip if `additive` changes.
 					createEffect(() => {
