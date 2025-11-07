@@ -31,8 +31,6 @@ import {parseSpaceQualifiedEntry, store} from './store.js'
 import './success-view.js'
 import './template-view.js'
 
-// const avatar = createMemo(() => searchParams().get('avatar'))
-// const scene = createMemo(() => searchParams().get('scene') as Space | null)
 const isPreview = createMemo(() => searchParams().get('isPreview'))
 const hasBrandParam = createMemo(() => !!searchParams().get('brand'))
 

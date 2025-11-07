@@ -7,10 +7,12 @@ import {pushState, searchParams} from '../routes.js'
 import type {Space} from '../types/types.js'
 import {currentUser, store} from './store.js'
 
+import {scenes} from '../consts/scenes.js'
 import '../elements/dialog-element.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
+import {getSpaceSceneThumbnail} from '../utils.js'
 
 @element
 export class SpacesSelection extends Element {
@@ -62,8 +64,8 @@ export class SpacesSelection extends Element {
 		}, 300) // Match animation duration
 	}
 
-	#onSceneSelected = (space: Space) => {
-		searchParams().set('scene', space.slug)
+	#onSpaceSelected = (space: Space) => {
+		searchParams().set('space', space.slug)
 
 		batch(() => {
 			pushState()
@@ -135,8 +137,12 @@ export class SpacesSelection extends Element {
 						<!-- Bloom Realm Card -->
 						<div class="space-card">
 							<div class="scene-preview">
-								<div class="scene-placeholder" onclick=${() => this.#onSceneSelected(space())}>
-									<placeholder-image src=${space().spaceThumbnail} alt=${space().name} object-fit="cover" />
+								<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
+									<placeholder-image
+										src=${getSpaceSceneThumbnail(space(), scenes)}
+										alt=${space().name}
+										object-fit="cover"
+									/>
 								</div>
 								<div class="garments-count">${space().garmentsCount} garments</div>
 							</div>
@@ -147,7 +153,7 @@ export class SpacesSelection extends Element {
 										${space().description}
 									</p>
 								</div>
-								<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>Explore space →</button>
+								<button class="explore-button" onclick=${() => this.#onSpaceSelected(space())}>Explore space →</button>
 							</div>
 						</div>
 					`}

@@ -320,7 +320,6 @@ export class TemplateView extends Element {
 	}
 
 	#selectTemplate = (template: Template) => {
-		console.log('selectTemplate', template)
 		const effectiveSpace = store.getEffectiveSpace()
 		if (!effectiveSpace) return
 
