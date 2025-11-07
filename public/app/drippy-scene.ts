@@ -17,12 +17,14 @@ import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
+import {scenes} from '../consts/scenes.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
 import '../elements/progress-loader.js'
 import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
+import {getSceneBySlug, getSpaceDefaultScene} from '../utils.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import type {Space} from '../types/types.js'
@@ -235,7 +237,11 @@ export class DrippyScene extends Element {
 			createEffect(() => {
 				if (!this.selectedSpace) return
 				const space = spaces.find(space => space.slug === this.selectedSpace?.slug)
-				if (space) this.sceneUrl = space.scene
+				if (space) {
+					const defaultSceneSlug = getSpaceDefaultScene(space)
+					const scene = getSceneBySlug(scenes, defaultSceneSlug)
+					if (scene) this.sceneUrl = scene.scene
+				}
 			})
 
 			const mutations = createMutationsSignal(document.documentElement, {
@@ -385,7 +391,7 @@ export class DrippyScene extends Element {
 				const blocks = Array.from(this.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
 				this.renderBlocks = blocks.flatMap(block => {
 					if (block.category === 'Sleeves') {
-						const id = `${store.getEffectiveSpace()?.collection}-${block.templateCategory}-${block.category}-${block._id}`
+						const id = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
 						let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
 						const idMirror = `${id}-mirror`
@@ -394,7 +400,7 @@ export class DrippyScene extends Element {
 						return [renderBlock, renderBlockMirror]
 					}
 
-					const id = `${store.getEffectiveSpace()?.collection}-${block.templateCategory}-${block.category}-${block._id}`
+					const id = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
 					let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
 					return renderBlock
@@ -703,21 +709,32 @@ export class DrippyScene extends Element {
 							></lume-animation>
 						</lume-gltf-model>
 
-						<lume-gltf-model
-							ref=${(el: GltfModel) => (this.backgroundModel = el)}
-							id="scene"
-							attr:src=${() => (console.log('selected background', this.selectedSpace?.scene), this.selectedSpace?.scene ?? '')}
-						></lume-gltf-model>
+					<lume-gltf-model
+						ref=${(el: GltfModel) => (this.backgroundModel = el)}
+						id="scene"
+						attr:src=${() => {
+							const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
+							const scene = getSceneBySlug(scenes, defaultSceneSlug)
+							console.log('selected background', scene?.scene)
+							return scene?.scene ?? ''
+						}}
+					></lume-gltf-model>
 
-						<${Index} each=${() => this.selectedSpace?.includedModelFiles}>
-							${(item: Accessor<string>) => html`
-								<lume-gltf-model
-									ref=${(el: GltfModel) => (enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
-									attr:src=${() => item()}
-									class="extraObjects"
-								></lume-gltf-model>
-							`}
-						</>
+					<${Index}
+						each=${() => {
+							const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
+							const scene = getSceneBySlug(scenes, defaultSceneSlug)
+							return scene?.includedModelFiles ?? []
+						}}
+					>
+						${(item: Accessor<string>) => html`
+							<lume-gltf-model
+								ref=${(el: GltfModel) => (enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
+								attr:src=${() => item()}
+								class="extraObjects"
+							></lume-gltf-model>
+						`}
+					</>
 					</lume-element3d>
 				</lume-scene>
 			</div>

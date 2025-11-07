@@ -2,6 +2,7 @@ import '../app/drippy-scene.js'
 import {spaces} from '../consts/spaces.js'
 import {avatars} from '../consts/avatars.js'
 import {blocks as allBlocks} from '../consts/blocks.js'
+import {getSpacePrimaryCollection} from '../utils.js'
 import type {DrippyScene} from '../app/drippy-scene.js'
 import type {Space} from '../types/types.js'
 import type {Block, BlockCategory} from '../types/block.js'
@@ -12,15 +13,27 @@ import type {TemplateCategory} from '../types/template.js'
 const params = new URLSearchParams(window.location.search)
 
 // Get values from query params
-const sceneParam = params.get('scene') // e.g., "GAP"
+const spaceParam = params.get('space') // e.g., "GAP"
+const collectionParam = params.get('collection') // e.g., "moidien"
 const avatarParam = params.get('avatar') // e.g., "em"
 const fabricsParam = params.get('fabrics') // e.g., "Shirt-Bodice-default:3"
 const garmentsParam = params.get('garments') // e.g., "10" or "10,11,12"
 
 // Find the space by slug
 let selectedSpace: Space | null = null
-if (sceneParam) {
-	selectedSpace = spaces.find(s => s.slug === sceneParam) || null
+let selectedCollection: string | null = null
+
+if (spaceParam) {
+	selectedSpace = spaces.find(s => s.slug === spaceParam) || null
+
+	// Determine the collection to use
+	if (selectedSpace) {
+		if (collectionParam && selectedSpace.collections.includes(collectionParam)) {
+			selectedCollection = collectionParam
+		} else {
+			selectedCollection = getSpacePrimaryCollection(selectedSpace)
+		}
+	}
 }
 
 // Find the avatar by name
@@ -71,11 +84,11 @@ if (fabricsParam) {
 // Format: "10" or "10,11,12" (block IDs)
 const selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>> = new Map()
 
-if (garmentsParam && selectedSpace) {
+if (garmentsParam && selectedCollection) {
 	const garmentIds = garmentsParam.split(',').map(id => id.trim())
 
-	// Get blocks for the selected space's collection
-	const collectionBlocks = allBlocks[selectedSpace.collection] || []
+	// Get blocks for the selected collection
+	const collectionBlocks = allBlocks[selectedCollection] ?? []
 
 	for (const garmentId of garmentIds) {
 		const block = collectionBlocks.find(b => b._id === garmentId)

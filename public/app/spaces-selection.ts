@@ -1,6 +1,7 @@
 import {batch, css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
 import {spaces} from '../consts/spaces.js'
+import {scenes} from '../consts/scenes.js'
 import {templates} from '../consts/templates.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import '../elements/avatar-dropdown.js'
@@ -10,6 +11,7 @@ import './item-card.js'
 import {pushState, searchParams} from '../routes.js'
 import type {Space} from '../types/types.js'
 import {currentUser, store} from './store.js'
+import {getSpacePrimaryCollection, getSpaceSceneThumbnail} from '../utils.js'
 import '../elements/dialog-element.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
@@ -35,7 +37,7 @@ export class SpacesSelection extends Element {
 			// Filter by brand if brand query parameter exists
 			const brandParam = searchParams().get('brand')
 			if (brandParam) {
-				filteredSpaces = filteredSpaces.filter(space => space.collection === brandParam)
+				filteredSpaces = filteredSpaces.filter(space => space.collections.includes(brandParam))
 			}
 
 			this.filteredSpace = filteredSpaces
@@ -57,8 +59,8 @@ export class SpacesSelection extends Element {
 		}, 300) // Match animation duration
 	}
 
-	#onSceneSelected = (space: Space) => {
-		searchParams().set('scene', space.slug)
+	#onSpaceSelected = (space: Space) => {
+		searchParams().set('space', space.slug)
 
 		batch(() => {
 			pushState()
@@ -77,8 +79,11 @@ export class SpacesSelection extends Element {
 	}
 
 	#onDescriptionClick = (space: Space) => {
-		searchParams().set('brand', space.collection)
-		pushState()
+		const primaryCollection = getSpacePrimaryCollection(space)
+		if (primaryCollection) {
+			searchParams().set('brand', primaryCollection)
+			pushState()
+		}
 	}
 
 	template = () => html`
@@ -103,16 +108,17 @@ export class SpacesSelection extends Element {
 			<div class="header">
 				${() => {
 					const brandParam = searchParams().get('brand')
-					const space = spaces.find(space => space.collection === brandParam)
-					if (brandParam) {
+					const space = spaces.find(space => space.collections.includes(brandParam || ''))
+					if (brandParam && space) {
+						const primaryCollection = getSpacePrimaryCollection(space)
 						return html`
 							<div class="brand-logo">
 								<img src=${space?.logo} alt=${space?.name} />
 							</div>
 							<h1 class="main-title brand">${space?.description}</h1>
-							<p class="description brand">${space?.collection}@paris</p>
+							<p class="description brand">${primaryCollection}@paris</p>
 							<p class="sub-description brand">
-								Welcome to the enchanting world of the <strong>${space?.collection}</strong> , where high fashion meets
+								Welcome to the enchanting world of the <strong>${primaryCollection}</strong> , where high fashion meets
 								artistic innovation. <strong>Read more</strong>
 							</p>
 						`
@@ -152,8 +158,12 @@ export class SpacesSelection extends Element {
 											<!-- Bloom Realm Card -->
 											<div class="space-card">
 												<div class="scene-preview">
-													<div class="scene-placeholder" onclick=${() => this.#onSceneSelected(space())}>
-														<placeholder-image src=${space().sceneThumbnail} alt=${space().name} object-fit="cover" />
+													<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
+														<placeholder-image
+															src=${getSpaceSceneThumbnail(space(), scenes)}
+															alt=${space().name}
+															object-fit="cover"
+														/>
 													</div>
 													<div class="garments-count">${space().garmentsCount} garments</div>
 												</div>
@@ -164,7 +174,7 @@ export class SpacesSelection extends Element {
 															${space().description}
 														</p>
 													</div>
-													<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>
+													<button class="explore-button" onclick=${() => this.#onSpaceSelected(space())}>
 														Explore space →
 													</button>
 												</div>
@@ -189,7 +199,7 @@ export class SpacesSelection extends Element {
 							<tabs-content selected-value="Items">
 								${() => {
 									const brandParam = searchParams().get('brand')
-									const collection = brandParam || store.selectedSpace?.collection || 'moidien'
+									const collection = brandParam || store.getEffectiveCollection() || 'gap'
 									const collectionTemplates = (templates as any)[collection] || []
 
 									// Apply same ordering logic as template-view
@@ -275,8 +285,12 @@ export class SpacesSelection extends Element {
 									<!-- Bloom Realm Card -->
 									<div class="space-card">
 										<div class="scene-preview">
-											<div class="scene-placeholder" onclick=${() => this.#onSceneSelected(space())}>
-												<placeholder-image src=${space().sceneThumbnail} alt=${space().name} object-fit="cover" />
+											<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
+												<placeholder-image
+													src=${getSpaceSceneThumbnail(space(), scenes)}
+													alt=${space().name}
+													object-fit="cover"
+												/>
 											</div>
 											<div class="garments-count">${space().garmentsCount} garments</div>
 										</div>
@@ -287,7 +301,7 @@ export class SpacesSelection extends Element {
 													${space().description}
 												</p>
 											</div>
-											<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>
+											<button class="explore-button" onclick=${() => this.#onSpaceSelected(space())}>
 												Explore space →
 											</button>
 										</div>

@@ -97,7 +97,7 @@ export class AppButtonsPreset extends Element {
 				}
 				break
 			case 'template-flow':
-				store.view = 'scene'
+				store.view = 'space'
 				break
 			case 'preview-flow':
 				batch(() => {
@@ -208,7 +208,10 @@ export class AppButtonsPreset extends Element {
 					<app-buttons-group custom-style="gap: 34px; align-items: center;margin-top: -3px;" group-direction="row">
 						${() => buttons.share && html`<share-button onclick=${this.#onShareClick}></share-button>`}
 						${() => buttons.buy && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
-						${() => buttons.preview && !this.hidePreviewButton && html`<preview-button onclick=${this.#onPreviewClick}></preview-button>`}
+						${() =>
+							buttons.preview &&
+							!this.hidePreviewButton &&
+							html`<preview-button onclick=${this.#onPreviewClick}></preview-button>`}
 					</app-buttons-group>
 				</app-buttons-right>
 			`
@@ -254,8 +257,7 @@ export class AppButtonsPreset extends Element {
 	}
 
 	template = () => html`
-		${() => this.#presetConfig().left && this.#renderLeft()}
-		${() => this.#presetConfig().right && this.#renderRight()}
+		${() => this.#presetConfig().left && this.#renderLeft()} ${() => this.#presetConfig().right && this.#renderRight()}
 		<slot></slot>
 	`
 }

@@ -33,7 +33,7 @@ export class AvatarSelection extends Element {
 	}
 
 	#onSaveClick = () => {
-		store.view = 'scene'
+		store.view = 'space'
 	}
 
 	#renderAvatarContent = () => html`

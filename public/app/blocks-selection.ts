@@ -46,7 +46,7 @@ export class BlocksSelection extends Element {
 	@signal spaceCollection: string | null = null
 	@signal pieceSelections: string[] = []
 
-	private defaultCollection = 'moidien'
+	private defaultCollection = 'gap'
 
 	private availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
 		All: [],
@@ -63,7 +63,7 @@ export class BlocksSelection extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
-			this.spaceCollection = store.getEffectiveSpace()?.collection ?? this.defaultCollection
+			this.spaceCollection = store.getEffectiveCollection() ?? this.defaultCollection
 		})
 
 		// Update available template categories from selectedTemplates
@@ -128,12 +128,11 @@ export class BlocksSelection extends Element {
 			const selectedBlock = untrack(() =>
 				store.selectedBlocks.get(this.selectedTemplateCategory!)?.get(this.selectedBlockCategory),
 			)
-			const effectiveSpace = untrack(() => store.getEffectiveSpace())
 
 			if (
 				this.selectedTemplateCategory === 'Shirt' &&
 				selectedBlock?.templateId !== 'Item 9' &&
-				effectiveSpace?.collection === 'moidien'
+				store.getEffectiveCollection() === 'gap'
 			) {
 				this.blocksCategories = []
 				return
@@ -243,7 +242,7 @@ export class BlocksSelection extends Element {
 				<person-button></person-button>
 				<cube-button></cube-button>
 				<show-when
-					condition=${() => store.getEffectiveSpace()?.collection === 'moidien'}
+					condition=${() => store.getEffectiveCollection() === 'gap'}
 					content=${() => html` <animation-select></animation-select> `}
 				></show-when>
 			</app-buttons-group>

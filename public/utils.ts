@@ -14,6 +14,7 @@ import * as THREE from 'three'
 
 import {Easing} from '@tweenjs/tween.js'
 import {effect} from './meteor-signals.js'
+import type {Collection} from './types/types.js'
 
 export async function svgTexture(
 	plane: Mesh,
@@ -901,4 +902,92 @@ export function arrayEquals<T>(a: T[], b: T[]) {
 	if (a.length !== b.length) return false
 	for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return false
 	return true
+}
+
+/**
+ * Space/Scene/Collection utility functions
+ */
+
+/**
+ * Check if a space has multiple collections (like the drippy space).
+ * @param space - The space to check.
+ * @returns True if space has more than one collection.
+ */
+export function spaceHasMultipleCollections(space: {collections: string[]} | null | undefined): boolean {
+	return (space?.collections?.length ?? 0) > 1
+}
+
+/**
+ * Get collections for a space.
+ * @param space - The space to get collections from.
+ * @returns Array of collection slugs.
+ */
+export function getSpaceCollections(space: {collections: string[]} | null | undefined): string[] {
+	return space?.collections ?? []
+}
+
+/**
+ * Get a collection by its slug.
+ * @param collections - The array of collections to search in.
+ * @param slug - The collection slug to find.
+ * @returns The collection object or undefined.
+ */
+export function getCollectionBySlug(collections: Collection[], slug: string): Collection | undefined {
+	return collections.find(c => c.slug === slug)
+}
+
+/**
+ * Get scenes for a space.
+ * @param space - The space to get scenes from.
+ * @returns Array of scene slugs.
+ */
+export function getSpaceScenes(space: {scenes: string[]} | null | undefined): string[] {
+	return space?.scenes ?? []
+}
+
+/**
+ * Get the default scene for a space.
+ * @param space - The space to get the default scene from.
+ * @returns The default scene slug or null.
+ */
+export function getSpaceDefaultScene(space: {defaultScene: string} | null | undefined): string | null {
+	return space?.defaultScene ?? null
+}
+
+/**
+ * Get the primary collection slug for a space (the first collection).
+ * @param space - The space to get the collection from.
+ * @returns The primary collection slug or null.
+ */
+export function getSpacePrimaryCollection(space: {collections: string[]} | null | undefined): string | null {
+	return space?.collections?.[0] ?? null
+}
+
+/**
+ * Get a scene by its slug from the scenes array.
+ * @param scenes - The array of scenes to search in.
+ * @param slug - The scene slug to find.
+ * @returns The scene object or undefined.
+ */
+export function getSceneBySlug<T extends {slug: string}>(scenes: T[], slug: string | null | undefined): T | undefined {
+	if (!slug) return undefined
+	return scenes.find(scene => scene.slug === slug)
+}
+
+/**
+ * Get the scene thumbnail for a space (from its default scene).
+ * @param space - The space to get the scene thumbnail from.
+ * @param scenes - The array of scenes to search in.
+ * @returns The scene thumbnail URL or empty string.
+ */
+export function getSpaceSceneThumbnail(
+	space: {defaultScene: string; spaceThumbnail?: string} | null | undefined,
+	scenes: Array<{slug: string; sceneThumbnail: string}>,
+): string {
+	if (space?.spaceThumbnail) {
+		return space.spaceThumbnail
+	}
+	const defaultScene = getSpaceDefaultScene(space)
+	const scene = getSceneBySlug(scenes, defaultScene)
+	return scene?.sceneThumbnail ?? ''
 }
