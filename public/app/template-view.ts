@@ -1,14 +1,15 @@
 import {batch, css, Element, element, html, onCleanup, signal, type ElementAttributes} from 'lume'
 import {templates} from '../consts/templates.js'
-import {spaces} from '../consts/spaces.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {Space} from '../types/types.js'
+import type {Collection} from '../types/types.js'
+import {getCollectionBySlug, getSpaceCollections, spaceHasMultipleCollections} from '../utils.js'
 import {blockManager} from './block-manager.js'
 import {currentUser, store} from './store.js'
 
+import {collections} from '../consts/collections.js'
 import '../elements/animation-select.js'
 import '../elements/avatar-dropdown.js'
 import '../elements/avatar-swap-bottom-sheet.js'
@@ -63,7 +64,7 @@ export class TemplateView extends Element {
 	@signal showDetailView = false
 
 	private isOpeningOverlay = false
-	private defaultCollection = 'moidien'
+	private defaultCollection = 'gap'
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -74,12 +75,7 @@ export class TemplateView extends Element {
 		this.addEventListener('close', this.#onDetailViewClose)
 
 		this.createEffect(() => {
-			// If we're in 'drippy' mode (all spaces), use drippySelectedSpace, otherwise use store.selectedSpace
-			if (store.selectedSpace?.collection === 'drippy') {
-				this.spaceCollection = store.drippySelectedSpace?.collection ?? this.defaultCollection
-			} else {
-				this.spaceCollection = store.selectedSpace?.collection ?? this.defaultCollection
-			}
+			this.spaceCollection = store.getEffectiveCollection() ?? this.defaultCollection
 		})
 
 		// Update template categories when templates change
@@ -319,8 +315,8 @@ export class TemplateView extends Element {
 		this.showDetailView = false
 	}
 
-	#onDrippySpaceSelect = (space: Space) => {
-		store.drippySelectedSpace = space
+	#onCollectionSelect = (collection: Collection) => {
+		store.setSelectedCollection = collection.slug
 	}
 
 	#selectTemplate = (template: Template) => {
@@ -347,10 +343,11 @@ export class TemplateView extends Element {
 		}
 
 		newTemplates.set(template.category, template)
-		const templateBlockData = blockManager.convertTemplateToBlockData(template, effectiveSpace)
+		const effectiveCollection = store.getEffectiveCollection()
+		const templateBlockData = blockManager.convertTemplateToBlockData(template, effectiveCollection)
 		const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
 			templateBlockData,
-			effectiveSpace,
+			effectiveCollection,
 		)
 		newBlocks.set(template.category, newBlocksMap)
 		newFabrics.set(template.category, newFabricsMap)
@@ -390,7 +387,7 @@ export class TemplateView extends Element {
 		<app-buttons-preset
 			preset="template-flow"
 			brand-name="MoiDien"
-			show-animation=${() => store.getEffectiveSpace()?.collection === 'moidien'}
+			show-animation=${() => store.getEffectiveCollection() === 'gap'}
 			disable-person-button=${false}
 			disable-cube-button=${false}
 			hide-preview-button=${() => this.showRemixOverlay}
@@ -498,24 +495,24 @@ export class TemplateView extends Element {
 				</top-navigation>
 				<show-when
 					condition=${() =>
-						store.selectedSpace?.collection === 'drippy' &&
+						spaceHasMultipleCollections(store.selectedSpace) &&
 						!this.showAvatarSelection &&
 						!this.showPoseSelection &&
 						!this.showDetailView &&
 						this.selectedTab !== null &&
 						!this.showRemixOverlay}
 					content=${() => html`
-						<top-navigation class="spaces-navigation">
-							<div class="spaces-scroll-container">
+						<top-navigation class="collections-navigation">
+							<div class="collections-scroll-container">
 								<for-each
-									items=${() => spaces.filter(space => !space.isHidden)}
-									content=${() => (space: Space) => html`
+									items=${() => getSpaceCollections(store.selectedSpace).map(c => getCollectionBySlug(collections, c))}
+									content=${() => (collection: Collection) => html`
 										<button
-											class="space-logo-button"
-											classList=${() => ({active: store.drippySelectedSpace?.slug === space.slug})}
-											onclick=${() => this.#onDrippySpaceSelect(space)}
+											class="collection-logo-button"
+											classList=${() => ({active: store.getEffectiveCollection() === collection.slug})}
+											onclick=${() => this.#onCollectionSelect(collection)}
 										>
-											<img src=${space.logo || space.sceneThumbnail} alt=${space.name} />
+											<img src=${collection.logo || '/images/drippy-logo.webp'} alt=${collection.name} />
 										</button>
 									`}
 								></for-each>
@@ -555,19 +552,20 @@ export class TemplateView extends Element {
 					>
 						<show-on-device device="mobile">
 							<show-when
-								condition=${() => store.selectedSpace?.collection === 'drippy'}
+								condition=${() => spaceHasMultipleCollections(store.selectedSpace)}
 								content=${() => html`
-									<div class="spaces-mobile-navigation">
-										<div class="spaces-scroll-container">
+									<div class="collections-mobile-navigation">
+										<div class="collections-scroll-container">
 											<for-each
-												items=${() => spaces.filter(space => !space.isHidden)}
-												content=${() => (space: Space) => html`
+												items=${() =>
+													getSpaceCollections(store.selectedSpace).map(c => getCollectionBySlug(collections, c))}
+												content=${() => (collection: Collection) => html`
 													<button
-														class="space-logo-button"
-														classList=${() => ({active: store.drippySelectedSpace?.slug === space.slug})}
-														onclick=${() => this.#onDrippySpaceSelect(space)}
+														class="collection-logo-button"
+														classList=${() => ({active: store.getEffectiveCollection() === collection.slug})}
+														onclick=${() => this.#onCollectionSelect(collection)}
 													>
-														<img src=${space.logo || space.sceneThumbnail} alt=${space.name} />
+														<img src=${collection.logo} alt=${collection.name} />
 													</button>
 												`}
 											></for-each>
@@ -974,7 +972,17 @@ export class TemplateView extends Element {
 			align-items: center;
 		}
 
-		.spaces-scroll-container {
+		.collections-navigation {
+			margin-top: 0;
+			display: none;
+		}
+
+		.collections-mobile-navigation {
+			padding: 0 20px 12px;
+			display: block;
+		}
+
+		.collections-scroll-container {
 			display: flex;
 			gap: var(--uiSpacingSmall);
 			overflow-x: auto;
@@ -982,11 +990,11 @@ export class TemplateView extends Element {
 			scrollbar-width: none;
 		}
 
-		.spaces-scroll-container::-webkit-scrollbar {
+		.collections-scroll-container::-webkit-scrollbar {
 			display: none;
 		}
 
-		.space-logo-button {
+		.collection-logo-button {
 			width: 42px;
 			height: 42px;
 			min-width: 42px;
@@ -1003,14 +1011,14 @@ export class TemplateView extends Element {
 			padding: 0;
 		}
 
-		.space-logo-button:hover {
+		.collection-logo-button:hover {
 		}
 
-		.space-logo-button.active {
+		.collection-logo-button.active {
 			border-color: var(--uiColorAccentViolet);
 		}
 
-		.space-logo-button img {
+		.collection-logo-button img {
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
@@ -1018,22 +1026,12 @@ export class TemplateView extends Element {
 			margin-top: 0;
 		}
 
-		.spaces-navigation {
-			margin-top: 0;
-			display: none;
-		}
-
-		.spaces-mobile-navigation {
-			padding: 0 20px 12px;
-			display: block;
-		}
-
 		@media (min-width: 768px) {
-			.spaces-mobile-navigation {
+			.collections-mobile-navigation {
 				display: none;
 			}
 
-			.spaces-navigation {
+			.collections-navigation {
 				display: block;
 			}
 		}

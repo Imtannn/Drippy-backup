@@ -12,7 +12,15 @@ import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {AppRoute, CustomMeasurement, OrderState, OrderStatus, ShippingAddress, Space} from '../types/types.js'
-import {onModelLoad, syncSignals, toSolidSignal} from '../utils.js'
+import {
+	getSpaceCollections,
+	getSpaceDefaultScene,
+	getSpacePrimaryCollection,
+	onModelLoad,
+	spaceHasMultipleCollections,
+	syncSignals,
+	toSolidSignal,
+} from '../utils.js'
 import type {ConnectionStatus} from './network-monitor.js'
 import {createNetworkEffect} from './network-monitor.js'
 
@@ -35,7 +43,7 @@ export const visits = toSolidSignal(() => {
 export const usersCount = toSolidSignal(() => Counts.get('users'))
 
 const spaceFromParam = createMemo<Space | null>(() => {
-	return spaces.find(space => space.slug === searchParams().get('scene')) ?? null
+	return spaces.find(space => space.slug === searchParams().get('space')) ?? null
 })
 
 class Store {
@@ -67,12 +75,15 @@ class Store {
 	}
 
 	// FIXME this is not in sync with the address bar back/forward buttons
-	view = searchParams().get('scene') && searchParams().get('avatar') ? ('template' as AppRoute) : ('scene' as AppRoute)
+	view = searchParams().get('space') && searchParams().get('avatar') ? ('template' as AppRoute) : ('scene' as AppRoute)
 
 	/** Selected avatar defaults based on space gender to the one in the URL. */
 	selectedAvatar = searchParams().get('avatar') ?? avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
 	selectedSpace = spaceFromParam()
-	drippySelectedSpace: Space | null = spaces[0] || null
+	/** Selected collection within a space (for multi-collection spaces) */
+	selectedCollection: string | null = null
+	/** Selected scene within a space (for multi-scene spaces) */
+	selectedScene: string | null = null
 	isPreview = searchParams().get('isPreview') === 'true'
 	// FIXME initialize other props from URL params as well
 
@@ -273,12 +284,66 @@ class Store {
 	}
 	set selectSpace(space: Space | null) {
 		this.selectedSpace = space
-	}
-	getEffectiveSpace(): Space | null {
-		if (this.selectedSpace?.collection === 'drippy') {
-			return this.drippySelectedSpace
+		// Initialize collection and scene when selecting a space
+		if (space) {
+			// Check URL params first, otherwise use primary
+			const collectionParam = searchParams().get('collection')
+			const sceneParam = searchParams().get('scene')
+
+			if (collectionParam && space.collections.includes(collectionParam)) {
+				this.selectedCollection = collectionParam
+			} else {
+				this.selectedCollection = getSpacePrimaryCollection(space)
+			}
+
+			if (sceneParam && space.scenes.includes(sceneParam)) {
+				this.selectedScene = sceneParam
+			} else {
+				this.selectedScene = getSpaceDefaultScene(space)
+			}
 		}
+	}
+
+	set setSelectedCollection(collection: string | null) {
+		this.selectedCollection = collection
+		if (collection) {
+			searchParams().set('collection', collection)
+			pushState()
+		}
+	}
+
+	set setSelectedScene(scene: string | null) {
+		this.selectedScene = scene
+		if (scene) {
+			searchParams().set('scene', scene)
+			pushState()
+		}
+	}
+
+	/** Get the effective space (just returns selectedSpace) */
+	getEffectiveSpace(): Space | null {
 		return this.selectedSpace
+	}
+
+	/** Get the effective collection for the current space */
+	getEffectiveCollection(): string | null {
+		if (!this.selectedSpace) return null
+
+		// If multi-collection space, use selectedCollection
+		if (spaceHasMultipleCollections(this.selectedSpace)) {
+			return this.selectedCollection || getSpacePrimaryCollection(this.selectedSpace)
+		}
+
+		// Single collection space, use primary
+		return getSpacePrimaryCollection(this.selectedSpace)
+	}
+
+	/** Get the effective scene for the current space */
+	getEffectiveScene(): string | null {
+		if (!this.selectedSpace) return null
+
+		// Use selectedScene if set, otherwise use default
+		return this.selectedScene || getSpaceDefaultScene(this.selectedSpace)
 	}
 	set setCustomMeasurement(measurement: CustomMeasurement) {
 		this.customMeasurement = measurement
@@ -445,9 +510,11 @@ class Store {
 
 	goBackHomeAndResetState() {
 		batch(() => {
-			this.view = 'scene'
+			this.view = 'space'
 			// this.selectedAvatar = avatars[0].name // don't reset the selected avatar
 			this.selectedSpace = null as Space | null
+			this.selectedCollection = null
+			this.selectedScene = null
 			this.selectedTemplates = new Map<TemplateCategory, Template>()
 			this.__selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
 			this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
@@ -645,14 +712,14 @@ createEffect(() => {
 	if (!store.selectedAvatar) throw new Error('Never set the selected avatar to empty!')
 })
 
-const sceneParam = createMemo(() => searchParams().get('scene'))
+const spaceParam = createMemo(() => searchParams().get('space'))
 
 // If no scene is selected, default to scene selection view (home), otherwise
 // go to template view
 createEffect(() => {
-	if (!sceneParam()) {
-		console.log('No scene param, going to scene selection view')
-		store.view = 'scene'
+	if (!spaceParam()) {
+		console.log('No space param, going to scene selection view')
+		store.view = 'space'
 	}
 	// else store.view = 'template'
 })
@@ -660,7 +727,7 @@ createEffect(() => {
 createEffect(() => {
 	// If we're in scene selection view, remove all params, and don't sync
 	// selectedAvatar with URL param
-	if (store.view === 'scene') {
+	if (store.view === 'space') {
 		untrack(() => {
 			url().search = ''
 			pushState()
@@ -711,8 +778,9 @@ export type SelectedFabrics = Map<TemplateCategory, Map<BlockCategory, Map<strin
 export function updateGarmentsInUrl(garments: Map<TemplateCategory, Template>) {
 	if (garments.size > 0) {
 		const garmentIds = Array.from(garments.values()).map(garment => {
-			const collectionSlug = garment.collection
-				? (spaces.find(space => space.collection === garment.collection)?.slug ?? null)
+			const collection = garment.collection
+			const collectionSlug = collection
+				? (spaces.find(space => space.collections.includes(collection))?.slug ?? null)
 				: null
 			if (collectionSlug) return `${collectionSlug}|${garment._id}`
 			return garment._id
@@ -728,11 +796,12 @@ export function updateBlocksInUrl(selectedBlocks: Map<TemplateCategory, Map<Bloc
 		const blockIds: string[] = []
 		for (const [, blockMap] of selectedBlocks) {
 			for (const [, block] of blockMap) {
-				const collectionSlug = block.collection
-					? (spaces.find(space => space.collection === block.collection)?.slug ?? null)
+				const collection = block.collection
+				const collectionSlug = collection
+					? (spaces.find(space => space.collections.includes(collection))?.slug ?? null)
 					: null
-				if (collectionSlug) return `${collectionSlug}|${block._id}`
-				return block._id
+				if (collectionSlug) blockIds.push(`${collectionSlug}|${block._id}`)
+				else blockIds.push(block._id)
 			}
 		}
 		untrack(searchParams).set('garments', blockIds.join(','))
@@ -751,8 +820,9 @@ export function updateFabricsInUrl(fabrics: Map<TemplateCategory, Map<BlockCateg
 		for (const [templateCategory, blockMap] of fabrics.entries())
 			for (const [blockCategory, pieceMap] of blockMap.entries())
 				for (const [piece, fabric] of pieceMap.entries()) {
-					const collectionSlug = fabric.collection
-						? (spaces.find(space => space.collection === fabric.collection)?.slug ?? null)
+					const collection = fabric.collection
+					const collectionSlug = collection
+						? (spaces.find(space => space.collections.includes(collection))?.slug ?? null)
 						: null
 					fabricEntries.push(
 						collectionSlug
@@ -781,8 +851,8 @@ export function selectedBlocksFromUrl() {
 	const blockData: {block: Block; templateCategory: TemplateCategory}[] = []
 
 	// Get the brand/collection from the scene URL parameter
-	const sceneParam = untrack(searchParams).get('scene')
-	const fallbackSpace = spaces.find(space => space.slug === sceneParam) ?? null
+	const spaceParam = untrack(searchParams).get('space')
+	const fallbackSpace = spaces.find(space => space.slug === spaceParam) ?? null
 
 	// Parse garments parameter (comma-separated block IDs)
 	const garmentsParam = untrack(searchParams).get('garments')
@@ -798,7 +868,7 @@ export function selectedBlocksFromUrl() {
 
 			const resolvedSpace =
 				(spaceSlug ? (spaces.find(space => space.slug === spaceSlug) ?? null) : null) ?? fallbackSpace
-			const block = findBlockById(blockId, resolvedSpace?.collection)
+			const block = findBlockById(blockId, resolvedSpace)
 			if (block) {
 				blockData.push({
 					block,
@@ -811,16 +881,24 @@ export function selectedBlocksFromUrl() {
 	store.setSelectedBlocks(blockData)
 }
 
-// Helper function to find a block by ID within a specific brand collection
-function findBlockById(blockId: string, collection?: string): Block | null {
-	if (collection) {
-		const brandBlocks = blocks[collection]
-		if (brandBlocks) {
-			return brandBlocks.find(b => b._id === blockId) || null
+// Helper function to find a block by ID within a space's collections
+function findBlockById(blockId: string, space: Space | null): Block | null {
+	if (space) {
+		// Get all collections for this space
+		const collections = getSpaceCollections(space)
+
+		// Search through all collections in the space
+		for (const collectionSlug of collections) {
+			const brandBlocks = blocks[collectionSlug]
+			if (brandBlocks) {
+				const found = brandBlocks.find(b => b._id === blockId)
+				if (found) return found
+			}
 		}
 		return null
 	}
 
+	// If no space provided, search through all blocks
 	for (const brandBlocks of Object.values(blocks)) {
 		const found = brandBlocks?.find?.(b => b._id === blockId)
 		if (found) return found
@@ -830,9 +908,9 @@ function findBlockById(blockId: string, collection?: string): Block | null {
 }
 
 function selectedFabricsFromUrl() {
-	// Get the brand/collection from the scene URL parameter
-	const sceneParam = untrack(searchParams).get('scene')
-	const fallbackSpace = spaces.find(space => space.slug === sceneParam) ?? null
+	// Get the brand/collection from the space URL parameter
+	const spaceParam = untrack(searchParams).get('space')
+	const fallbackSpace = spaces.find(space => space.slug === spaceParam) ?? null
 
 	// Parse fabrics parameter (comma-separated entries in format: templateCategory-blockCategory-piece:fabricId)
 	const fabricsParam = untrack(searchParams).get('fabrics')
@@ -879,7 +957,7 @@ function selectedFabricsFromUrl() {
 		}
 
 		const resolvedSpace = (spaceSlug ? (spaces.find(space => space.slug === spaceSlug) ?? null) : null) ?? fallbackSpace
-		const fabric = findFabricById(fabricId, resolvedSpace?.collection)
+		const fabric = findFabricById(fabricId, resolvedSpace)
 		if (fabric) {
 			fabricData.push({
 				fabric,
@@ -893,16 +971,24 @@ function selectedFabricsFromUrl() {
 	store.setSelectedFabrics = fabricData
 }
 
-// Helper function to find a fabric by ID within a specific brand collection
-function findFabricById(fabricId: string, collection?: string): Fabric | null {
-	if (collection) {
-		const brandFabrics = fabrics[collection]
-		if (brandFabrics) {
-			return brandFabrics.find(f => f._id === fabricId) || null
+// Helper function to find a fabric by ID within a space's collections
+function findFabricById(fabricId: string, space: Space | null): Fabric | null {
+	if (space) {
+		// Get all collections for this space
+		const collections = getSpaceCollections(space)
+
+		// Search through all collections in the space
+		for (const collectionSlug of collections) {
+			const brandFabrics = fabrics[collectionSlug]
+			if (brandFabrics) {
+				const found = brandFabrics.find(f => f._id === fabricId)
+				if (found) return found
+			}
 		}
 		return null
 	}
 
+	// If no space provided, search through all fabrics
 	for (const brandFabrics of Object.values(fabrics)) {
 		const found = brandFabrics?.find?.(f => f._id === fabricId)
 		if (found) return found

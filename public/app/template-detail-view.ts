@@ -25,7 +25,7 @@ export class TemplateDetailView extends Element {
 		const materialId = this.selectedTemplate.materialId
 		if (!materialId) return 'N/A'
 
-		const collection = store.getEffectiveSpace()?.collection
+		const collection = store.getEffectiveCollection()
 		if (!collection) return 'N/A'
 
 		const collectionFabrics = fabrics[collection]
