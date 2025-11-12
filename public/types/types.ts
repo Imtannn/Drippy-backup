@@ -30,10 +30,11 @@ export type Collection = {
 	garmentsCount: number
 }
 
-export type Scene = {
+export type BackgroundScene = {
 	name: string
 	slug: string
 	description: string
+	/** Image used as an env map for global lighting and reflections. */
 	env: string
 	sceneThumbnail: string
 	scene: string
@@ -42,19 +43,26 @@ export type Scene = {
 
 export type Space = {
 	name: string
-	slug: string
+	description: string
 	logo: string
-	/** Image used as an env map for global lighting and reflections. */
+	slug: string
+
+	/** The slugs of the Collections in this Space */
 	collections: string[]
+	/** The slugs of the BackgroundScenes in this Space */
 	scenes: string[]
 	spaceThumbnail?: string
+	/** Slug for the default BackgroundScene. */
 	defaultScene: string
-	description: string
 	gender: 'male' | 'female'
 	garmentsCount: number
 	isWholesale: boolean
-	isWorkInProgress?: boolean
+
+	/** When true, the space is view-only without pricing, and does not allow purchases. */
 	viewOnly?: boolean
+
+	// If either of these are true, the space is not shown in the public gallery.
+	isWorkInProgress?: boolean
 	isHidden?: boolean
 }
 

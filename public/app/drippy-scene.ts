@@ -17,7 +17,7 @@ import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
-import {scenes} from '../consts/scenes.js'
+import {backgroundScenes} from '../consts/scenes.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
 import '../elements/progress-loader.js'
@@ -40,6 +40,7 @@ import {
 	querySelectorAllSignal,
 	setEnvMapOnModelLoad,
 	setMaterialsVisibleOnModelLoad,
+	showSkeletonHelper,
 } from '../utils.js'
 import './app-buttons.js'
 import {store} from './store.js'
@@ -229,7 +230,7 @@ export class DrippyScene extends Element {
 				const space = spaces.find(space => space.slug === this.selectedSpace?.slug)
 				if (space) {
 					const defaultSceneSlug = getSpaceDefaultScene(space)
-					const scene = getSceneBySlug(scenes, defaultSceneSlug)
+					const scene = getSceneBySlug(backgroundScenes, defaultSceneSlug)
 					if (scene) this.sceneUrl = scene.scene
 				}
 			})
@@ -464,13 +465,17 @@ export class DrippyScene extends Element {
 				} else if (store.selectedAnimation === 'walk') {
 					this.animsEnabled = true
 
-					this.animName = 'FV2_Walking in place.mtn'
-					this.animSrc = '../models/Yuna-walkinplace.glb'
+					// this.animName = 'FV2_Walking in place.mtn'
+					// this.animSrc = new URL('../models/Yuna-walkinplace.glb', import.meta.url).href
+					// this.animName = 'animation_0'
+					// this.animSrc = new URL('../models/EM-anim-test.glb', import.meta.url).href
+					this.animName = 'animation_0'
+					this.animSrc = new URL('../models/EM_Rig_v001-anim-test.glb', import.meta.url).href
 				} else if (store.selectedAnimation === 'dance') {
 					this.animsEnabled = true
 
 					this.animName = 'FV2_Dancing_01.mtn'
-					this.animSrc = '../models/Yuna-dancing01.glb'
+					this.animSrc = new URL('../models/Yuna-dancing01.glb', import.meta.url).href
 				}
 			})
 
@@ -626,7 +631,7 @@ export class DrippyScene extends Element {
 
 						<lume-camera-rig
 							min-distance="0.5"
-							max-distance="${() => (isDesktop() ? 3 : 5)}"
+							max-distance="${() => (isDesktop() ? 30 : 50)}"
 							distance="${() => (isDesktop() ? 2.5 : 4)}"
 							min-vertical-angle="-17"
 							max-vertical-angle="45"
@@ -638,7 +643,7 @@ export class DrippyScene extends Element {
 
 						<lume-gltf-model
 							id="avatar"
-							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
+							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env), showSkeletonHelper(el, () => true))}
 							attr:src=${() => avatars.find(avatar => avatar.name === this.selectedAvatar)?.src ?? ''}
 							scale="1 1 1"
 							data-avatar
@@ -676,7 +681,7 @@ export class DrippyScene extends Element {
 								</>
 							</lume-element3d>
 
-							<lume-animation
+							<xlume-animation
 								attr:src=${() => this.animSrc}
 								clip-name=${() => this.animName}
 								stopped=${() => !this.animsEnabled}
@@ -688,7 +693,7 @@ export class DrippyScene extends Element {
 						id="scene"
 						attr:src=${() => {
 							const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
-							const scene = getSceneBySlug(scenes, defaultSceneSlug)
+							const scene = getSceneBySlug(backgroundScenes, defaultSceneSlug)
 							console.log('selected background', scene?.scene)
 							return scene?.scene ?? ''
 						}}
@@ -697,7 +702,7 @@ export class DrippyScene extends Element {
 					<${Index}
 						each=${() => {
 							const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
-							const scene = getSceneBySlug(scenes, defaultSceneSlug)
+							const scene = getSceneBySlug(backgroundScenes, defaultSceneSlug)
 							return scene?.includedModelFiles ?? []
 						}}
 					>

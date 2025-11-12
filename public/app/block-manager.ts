@@ -33,8 +33,11 @@ class BlockManager {
 	 * @param selectedTemplates - The selected templates
 	 * @returns The interchangeable categories
 	 */
-	checkInterchangeableCategories(category: TemplateCategory, selectedTemplates: Map<TemplateCategory, Template>) {
-		const interchangeableCategoriesMapping: Record<string, Partial<TemplateCategory>[]> = {
+	checkInterchangeableCategories(
+		category: TemplateCategory,
+		selectedTemplates: Map<TemplateCategory, Template>,
+	): TemplateCategory[] {
+		const interchangeableCategoriesMapping: Record<string, TemplateCategory[]> = {
 			Dress: ['Shirt', 'Top', 'Pants', 'Skirt', 'Jumpsuit', 'Jacket'],
 			Top: ['Dress', 'Jacket'],
 			Shirt: ['Dress', 'Jumpsuit', 'Jacket'],
@@ -45,9 +48,9 @@ class BlockManager {
 			Jumpsuit: ['Dress', 'Shirt', 'Skirt', 'Jacket'],
 		}
 
-		const interchangeableCategories = interchangeableCategoriesMapping[category]
+		const interchangeableCategories = interchangeableCategoriesMapping[category] as TemplateCategory[] | undefined
 
-		return interchangeableCategories?.filter(c => selectedTemplates.has(c as TemplateCategory)) ?? []
+		return interchangeableCategories?.filter(c => selectedTemplates.has(c)) ?? []
 	}
 
 	/**
@@ -118,6 +121,7 @@ class BlockManager {
 			assignedMesh: string
 		}[] = []
 
+		debugger
 		for (const block of templateData.blocks) {
 			newBlocksMap.set(block.category, block)
 
@@ -161,6 +165,11 @@ class BlockManager {
 
 				// Add all fabrics for this block category
 				for (const [assignedMesh, fabric] of Object.entries(blockFabrics)) {
+					// CONTINUE confusion is happening here in downstream code
+					// because this, for example, assigns a fabric for sweater
+					// laces (name "pattern_35-pattern_36") but the block
+					// category is "Sleeves", which is not the category for
+					// laces.
 					newFabrics.push({
 						fabric: fabric,
 						blockCategory: block.category,

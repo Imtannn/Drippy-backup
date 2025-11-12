@@ -204,6 +204,7 @@ export class DrippyApp extends Element {
 
 		batch(() => {
 			store.selectedFabrics = aggregatedFabrics
+			debugger
 			console.log('selected fabrics from url', aggregatedFabrics)
 
 			// @ts-expect-error FIXME we should avoid having two different

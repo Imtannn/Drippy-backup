@@ -145,98 +145,106 @@ class Store {
 		return this.__selectedBlocks
 	}
 
+	/**
+	 * Helper method to apply fabric inheritance for Sleeves from Bodice.
+	 * When a Sleeves block is added, it inherits the fabrics from the Bodice block if available.
+	 */
+	private applySleevesFabricInheritance(block: Block, templateCategory: TemplateCategory) {
+		console.log('applying sleeves fabric inheritance for', block.category)
+		if (block.category !== 'Sleeves') return
+
+		const templateCategoryFabrics = this.selectedFabrics.get(templateCategory)!
+		debugger
+		// if (!templateCategoryFabrics) return
+
+		const bodiceFabrics = templateCategoryFabrics.get('Bodice')
+		console.log('tmpl cat fabrics', templateCategory, ...templateCategoryFabrics.entries())
+		if (!bodiceFabrics || bodiceFabrics.size === 0) return
+
+		this.setSelectedFabrics = Array.from(bodiceFabrics.values()).map(fabric => ({
+			fabric,
+			blockCategory: 'Sleeves' as BlockCategory,
+			templateCategory,
+			assignedMesh: (console.log('assignedMesh for fabric', fabric.assignedMesh), fabric.assignedMesh ?? 'default'),
+		}))
+	}
+
 	// FIXME we should avoid having different ways of setting the same thing
 	// (onItemClick in template-view.ts and loadFromUrlParameters in
 	// drippy-app.ts).  This will get more difficult to manage and error
 	// prone/buggy.
-	setSelectedBlocks(
-		blockData:
-			| {block: Block; templateCategory: TemplateCategory}
-			| {block: Block; templateCategory: TemplateCategory}[],
-	) {
-		if (!Array.isArray(blockData)) {
-			blockData = [blockData]
-		}
-		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(this.__selectedBlocks)
-
-		for (const {block, templateCategory} of blockData) {
-			// Get or create the template's block map
-			let templateBlocks = newBlocks.get(templateCategory)
-			if (!templateBlocks) {
-				templateBlocks = new Map<BlockCategory, Block>()
-				newBlocks.set(templateCategory, templateBlocks)
+	setSelectedBlocks(blockData: BlockSelection | BlockSelection[]) {
+		batch(() => {
+			if (!Array.isArray(blockData)) {
+				blockData = [blockData]
 			}
+			const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(this.__selectedBlocks)
+			console.log('block template categories', ...newBlocks.keys())
 
-			// Check if the block with same category already exists in this template
-			if (templateBlocks.has(block.category)) {
-				// if it exists, check if the block is the same, if so, remove it
-				if (templateBlocks.get(block.category)?._id === block._id) {
-					templateBlocks.delete(block.category)
-					// also remove it from selectedFabrics
-					this.selectedFabrics.get(templateCategory)?.delete(block.category)
+			for (const {block, templateCategory} of blockData) {
+				console.log('block template category', templateCategory, block.category)
+				// Get or create the template's block map
+				let templateBlocks = newBlocks.get(templateCategory)
+				if (!templateBlocks) {
+					console.log('creating template blocks for', templateCategory)
+					templateBlocks = new Map<BlockCategory, Block>()
+					newBlocks.set(templateCategory, templateBlocks)
+				}
+
+				// Check if the block with same category already exists in this template
+				if (templateBlocks.has(block.category)) {
+					console.log('template blocks has category', block.category)
+					// if the block is already selected, unselect the block.
+					if (templateBlocks.get(block.category)?._id === block._id) {
+						console.log('unselecting block', block.category)
+						templateBlocks.delete(block.category)
+						// also remove it from selectedFabrics
+						this.selectedFabrics.get(templateCategory)?.delete(block.category)
+					} else {
+						console.log('replacing block', block.category)
+
+						// Replace with new block
+						templateBlocks.set(block.category, block)
+
+						// Apply fabric inheritance for Sleeves from Bodice
+						this.applySleevesFabricInheritance(block, templateCategory)
+					}
 				} else {
-					// check if the fabric for this block category already exists in this template
-					const templateCategoryFabrics = this.selectedFabrics.get(templateCategory)
-					if (templateCategoryFabrics) {
-						// if the block category is Sleeves, check for bodice and add it to the fabric
-						if (block.category === 'Sleeves') {
-							const bodiceFabrics = templateCategoryFabrics.get('Bodice')
-							if (!bodiceFabrics || bodiceFabrics.size === 0) return
+					console.log('adding block', block.category)
 
-							this.setSelectedFabrics = Array.from(bodiceFabrics.values()).map(fabric => ({
-								fabric,
-								blockCategory: 'Sleeves' as BlockCategory,
-								templateCategory: templateCategory,
-							}))
-						}
-					}
+					// Add new block
 					templateBlocks.set(block.category, block)
-				}
-			} else {
-				// check if the fabric for this block category already exists in this template
-				const templateCategoryFabrics = this.selectedFabrics.get(templateCategory)
-				if (templateCategoryFabrics) {
-					// if the block category is Sleeves, check for bodice and add it to the fabric
-					if (block.category === 'Sleeves') {
-						const bodiceFabrics = templateCategoryFabrics.get('Bodice')
-						if (!bodiceFabrics || bodiceFabrics.size === 0) return
 
-						this.setSelectedFabrics = Array.from(bodiceFabrics.values()).map(fabric => ({
-							fabric,
-							blockCategory: 'Sleeves' as BlockCategory,
-							templateCategory: templateCategory,
-						}))
-					}
+					// Apply fabric inheritance for Sleeves from Bodice
+					this.applySleevesFabricInheritance(block, templateCategory)
 				}
-				// if not, add it
-				templateBlocks.set(block.category, block)
+
+				// If template has no blocks left, remove the template entry
+				if (templateBlocks.size === 0) {
+					console.log('removing template blocks for', templateCategory)
+					newBlocks.delete(templateCategory)
+					this.selectedFabrics.delete(templateCategory)
+				}
 			}
 
-			// If template has no blocks left, remove the template entry
-			if (templateBlocks.size === 0) {
-				newBlocks.delete(templateCategory)
-				this.selectedFabrics.delete(templateCategory)
-			}
-		}
-
-		this.__selectedBlocks = newBlocks
+			this.selectedFabrics = this.selectedFabrics // trigger reactivity
+			debugger
+			this.__selectedBlocks = newBlocks // trigger reactivity
+		})
 	}
 
-	set setSelectedFabrics(
-		// FIXME don't repeat complex type definitions all over the place
-		fabricData:
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}
-			| {fabric: Fabric; blockCategory: BlockCategory; templateCategory: TemplateCategory; assignedMesh?: string}[],
-	) {
+	set setSelectedFabrics(fabricData: FabricSelection | FabricSelection[]) {
 		if (!Array.isArray(fabricData)) {
 			fabricData = [fabricData]
 		}
 		const newFabrics = new Map(this.selectedFabrics) as SelectedFabrics
+		console.log('fabric template categories', ...newFabrics.entries())
 
 		for (let {fabric, blockCategory, templateCategory, assignedMesh} of fabricData) {
-			if (!assignedMesh) {
-				assignedMesh = 'default'
-			}
+			console.log('fabric template category', templateCategory, fabric.category)
+			// if (!assignedMesh) {
+			// 	assignedMesh = 'default'
+			// }
 
 			// Get or create the template's fabric map
 			let templateFabrics = newFabrics.get(templateCategory)
@@ -247,61 +255,73 @@ class Store {
 
 			// Get existing fabrics for this block category
 			const existingFabrics = templateFabrics.get(blockCategory) || new Map<string, Fabric>()
+			templateFabrics.set(blockCategory, existingFabrics)
 
 			// Replace only fabrics with the same assignedMesh value (including undefined)
-			const noMatchAssignedMeshKeys = Array.from(existingFabrics.keys()).filter(
-				assignedMeshKey => assignedMeshKey !== assignedMesh,
-			)
+			// const noMatchAssignedMeshKeys = Array.from(existingFabrics.keys()).filter(
+			// 	assignedMeshKey => assignedMeshKey !== assignedMesh,
+			// )
 
-			const updatedFabricsMap = new Map<string, Fabric>()
-			for (const assignedMeshKey of noMatchAssignedMeshKeys) {
-				updatedFabricsMap.set(assignedMeshKey, existingFabrics.get(assignedMeshKey)!)
-			}
-			updatedFabricsMap.set(assignedMesh, fabric)
-			templateFabrics.set(blockCategory, updatedFabricsMap)
+			// const updatedFabricsMap = new Map<string, Fabric>()
+			console.log('updated fabrics map for', blockCategory, 'in', templateCategory, existingFabrics)
+
+			// for (const assignedMeshKey of noMatchAssignedMeshKeys) {
+			// 	updatedFabricsMap.set(assignedMeshKey, existingFabrics.get(assignedMeshKey)!)
+			// }
+
+			// updatedFabricsMap.set(assignedMesh, fabric)
+			existingFabrics.set(assignedMesh, fabric)
 
 			// If template has no fabrics left, remove the template entry
-			if (templateFabrics.size === 0) {
-				newFabrics.delete(templateCategory)
-			}
+			// if (templateFabrics.size === 0) {
+			// 	newFabrics.delete(templateCategory)
+			// }
 		}
-		this.selectedFabrics = newFabrics
-	}
-	set unselectTemplate(template: Template) {
-		const newTemplates = new Map<TemplateCategory, Template>(this.selectedTemplates)
-		newTemplates.delete(template.category)
-		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(this.__selectedBlocks)
-		newBlocks.delete(template.category)
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(this.selectedFabrics)
-		newFabrics.delete(template.category)
 
-		this.__selectedBlocks = newBlocks
-		this.selectedTemplates = newTemplates
 		this.selectedFabrics = newFabrics
+		debugger
+	}
+
+	set unselectTemplate(template: Template) {
+		batch(() => {
+			const newTemplates = new Map<TemplateCategory, Template>(this.selectedTemplates)
+			newTemplates.delete(template.category)
+			const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(this.__selectedBlocks)
+			newBlocks.delete(template.category)
+			const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(this.selectedFabrics)
+			newFabrics.delete(template.category)
+
+			this.__selectedBlocks = newBlocks
+			this.selectedTemplates = newTemplates
+			this.selectedFabrics = newFabrics
+			debugger
+		})
 	}
 	set setRemixOverlayTemplate(template: Template | null) {
 		this.remixOverlayTemplate = template
 	}
 	set selectSpace(space: Space | null) {
-		this.selectedSpace = space
-		// Initialize collection and scene when selecting a space
-		if (space) {
-			// Check URL params first, otherwise use primary
-			const collectionParam = searchParams().get('collection')
-			const sceneParam = searchParams().get('scene')
+		batch(() => {
+			this.selectedSpace = space
+			// Initialize collection and scene when selecting a space
+			if (space) {
+				// Check URL params first, otherwise use primary
+				const collectionParam = searchParams().get('collection')
+				const sceneParam = searchParams().get('scene')
 
-			if (collectionParam && space.collections.includes(collectionParam)) {
-				this.selectedCollection = collectionParam
-			} else {
-				this.selectedCollection = getSpacePrimaryCollection(space)
-			}
+				if (collectionParam && space.collections.includes(collectionParam)) {
+					this.selectedCollection = collectionParam
+				} else {
+					this.selectedCollection = getSpacePrimaryCollection(space)
+				}
 
-			if (sceneParam && space.scenes.includes(sceneParam)) {
-				this.selectedScene = sceneParam
-			} else {
-				this.selectedScene = getSpaceDefaultScene(space)
+				if (sceneParam && space.scenes.includes(sceneParam)) {
+					this.selectedScene = sceneParam
+				} else {
+					this.selectedScene = getSpaceDefaultScene(space)
+				}
 			}
-		}
+		})
 	}
 
 	set setSelectedCollection(collection: string | null) {
@@ -518,6 +538,7 @@ class Store {
 			this.selectedTemplates = new Map<TemplateCategory, Template>()
 			this.__selectedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
 			this.selectedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+			debugger
 			this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 			this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 			this.retailItemQuantities = new Map<TemplateCategory, number>()
@@ -925,7 +946,7 @@ function selectedFabricsFromUrl() {
 		fabric: Fabric
 		blockCategory: BlockCategory
 		templateCategory: TemplateCategory
-		assignedMesh?: string
+		assignedMesh: string
 	}[] = []
 
 	for (const entry of fabricEntries) {
@@ -963,7 +984,7 @@ function selectedFabricsFromUrl() {
 				fabric,
 				blockCategory: blockCategory as BlockCategory,
 				templateCategory: templateCategory as TemplateCategory,
-				assignedMesh: piece === 'default' ? undefined : piece,
+				assignedMesh: piece === 'default' ? 'default' : piece,
 			})
 		}
 	}
@@ -1018,3 +1039,12 @@ export function parseSpaceQualifiedEntry(entry: string): {spaceSlug: string | nu
 		value,
 	}
 }
+
+type FabricSelection = {
+	fabric: Fabric
+	blockCategory: BlockCategory
+	templateCategory: TemplateCategory
+	assignedMesh: string
+}
+
+type BlockSelection = {block: Block; templateCategory: TemplateCategory}

@@ -1,6 +1,6 @@
-import type {Scene} from '../types/types.js'
+import type {BackgroundScene} from '../types/types.js'
 
-export const scenes: Scene[] = [
+export const backgroundScenes: BackgroundScene[] = [
 	{
 		name: 'GẤP',
 		slug: 'gap',

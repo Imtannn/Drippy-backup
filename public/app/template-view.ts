@@ -325,19 +325,23 @@ export class TemplateView extends Element {
 
 		const newTemplates = new Map<TemplateCategory, Template>(store.selectedTemplates)
 		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(store.selectedBlocks)
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(store.selectedFabrics)
+		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<AppliedMeshNames, Fabric>>>(
+			store.selectedFabrics,
+		)
 
 		// check if the template with same category already exists
+		// CONTINUE use "replacing" or "overriding" terminology
 		const interchangeableCategories = blockManager.checkInterchangeableCategories(
 			template.category,
 			store.selectedTemplates,
-		)
+		) as TemplateCategory[]
+
 		if (interchangeableCategories.length > 0) {
 			for (const category of interchangeableCategories) {
-				if (store.selectedTemplates.has(category as TemplateCategory)) {
-					newTemplates.delete(category as TemplateCategory)
-					newBlocks.delete(category as TemplateCategory)
-					newFabrics.delete(category as TemplateCategory)
+				if (store.selectedTemplates.has(category)) {
+					newTemplates.delete(category)
+					newBlocks.delete(category)
+					newFabrics.delete(category)
 				}
 			}
 		}
@@ -354,6 +358,7 @@ export class TemplateView extends Element {
 
 		batch(() => {
 			store.selectedFabrics = newFabrics
+			debugger
 
 			// @ts-expect-error FIXME we should avoid having different ways of
 			// setting the same thing (see store.setSelectedBlocks, and
@@ -1049,3 +1054,5 @@ declare module 'lume' {
 		'template-view': ElementAttributes<TemplateView, TemplateViewAttributes>
 	}
 }
+
+type AppliedMeshNames = 'default' | string

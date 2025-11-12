@@ -416,6 +416,29 @@ export function* object3DsInTree(root: THREE.Object3D, ...skip: THREE.Object3D[]
 }
 
 /**
+ * Iterate the nodes of multiple trees that have the same structure, in
+ * parallel.  It throws an error if the tree structures do not match. The
+ * throwing behavior is loose for speed, it does not throw in all cases.
+ *
+ * @param roots The root Object3Ds of the trees to iterate. Each tree must have
+ * the same structure.
+ */
+export function* nodesOfTrees(...roots: THREE.Object3D[]): Generator<THREE.Object3D[]> {
+	if (!roots[0]) return
+	yield roots
+	for (let i = 0, l = roots[0].children.length; i < l; i++)
+		yield* nodesOfTrees(...roots.map(r => r.children[i] ?? thro(new Error('Mismatching tree structures'))))
+}
+
+/**
+ * This is for throwing errors in non-statement locations (f.e. expressions,
+ * such as a ternary, etc).
+ */
+export function thro(error: Error): never {
+	throw error
+}
+
+/**
  * Iterate all meshes in the tree, including the root.
  * @param root The root Object3D to start iterating from.
  * @param skip Optional Object3Ds to skip (including their descendants).
@@ -619,6 +642,27 @@ export function setMaterialsVisibleOnModelLoad(el: GltfModel, visible: Accessor<
 	createEffect(() => {
 		if (!loaded()) return
 		setMaterialsVisible(el, visible(), ...skip)
+	})
+}
+
+export function showSkeletonHelper(el: GltfModel, show: () => boolean) {
+	const loaded = onModelLoad(el)
+
+	createEffect(() => {
+		if (!loaded()) return
+		if (!show()) return
+
+		const helper = new THREE.SkeletonHelper(el.three)
+		// helper.material.linewidth = 2
+		el.three.add(helper)
+		el.needsUpdate()
+
+		onCleanup(() => {
+			el.three.remove(helper)
+			helper.geometry.dispose()
+			;(helper.material as THREE.Material).dispose()
+			el.needsUpdate()
+		})
 	})
 }
 
