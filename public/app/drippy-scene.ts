@@ -213,7 +213,8 @@ export class DrippyScene extends Element {
 						store.view === 'order-size' ||
 						store.view === 'custom-measurement' ||
 						store.view === 'success' ||
-						store.view === 'share'
+						store.view === 'share' ||
+						store.view === 'template'
 					) {
 						this.style.setProperty('--sceneTranslateX', 'translateX(calc(-1 * var(--sceneDesktopOffset)))')
 					} else {
