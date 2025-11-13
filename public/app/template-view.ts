@@ -36,6 +36,7 @@ import {formatNumber} from '../utils.js'
 import './app-buttons-preset.js'
 import './app-buttons.js'
 import './avatar-selection.js'
+import './buy-button.js'
 import './item-card.js'
 import './loading-spinner-overlay.js'
 import './pose-selection.js'
@@ -211,6 +212,10 @@ export class TemplateView extends Element {
 				this.showLoginDialog = true
 			}
 		})
+	}
+
+	#onBuyButtonClick = () => {
+		store.view = 'order-items'
 	}
 
 	#onBackButtonClick = () => {
@@ -393,7 +398,6 @@ export class TemplateView extends Element {
 			show-animation=${() => store.getEffectiveSpace()?.collection === 'moidien'}
 			disable-person-button=${false}
 			disable-cube-button=${false}
-			hide-preview-button=${() => this.showRemixOverlay}
 		>
 			<show-on-device device="mobile">
 				<show-when
@@ -417,17 +421,11 @@ export class TemplateView extends Element {
 			float-direction="right"
 			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
 		>
-			<app-buttons-left>
+			<app-buttons-left layout="bottom">
 				<app-buttons-group group-direction="row" custom-class="button-group-spread">
 					<show-when
 						condition=${() => !this.showRemixOverlay}
-						content=${() => html`
-							<preview-button
-								class="align-right"
-								button-disabled=${() => store.selectedTemplates.size === 0}
-								onclick=${this.#onPreviewButtonClick}
-							></preview-button>
-						`}
+						content=${() => html` <buy-button class="align-right" onclick=${this.#onBuyButtonClick}></buy-button> `}
 					></show-when>
 					<show-when
 						condition=${() => this.showRemixOverlay}

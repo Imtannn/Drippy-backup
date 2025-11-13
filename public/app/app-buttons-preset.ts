@@ -9,7 +9,6 @@ import '../elements/home-button.js'
 import '../elements/logic/show-when.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
-import '../elements/preview-button.js'
 import '../elements/show-on-device.js'
 import './app-buttons.js'
 import './buy-button.js'
@@ -39,17 +38,14 @@ type PresetConfig = {
 		all?: {
 			share?: boolean
 			buy?: boolean
-			preview?: boolean
 		}
 		desktop?: {
 			share?: boolean
 			buy?: boolean
-			preview?: boolean
 		}
 		mobile?: {
 			share?: boolean
 			buy?: boolean
-			preview?: boolean
 		}
 	}
 }
@@ -61,7 +57,6 @@ type AppButtonsPresetAttributes =
 	| 'showAnimation'
 	| 'disablePersonButton'
 	| 'disableCubeButton'
-	| 'hidePreviewButton'
 
 @element
 export class AppButtonsPreset extends Element {
@@ -74,7 +69,6 @@ export class AppButtonsPreset extends Element {
 	@booleanAttribute showAnimation = false
 	@booleanAttribute disablePersonButton = true
 	@booleanAttribute disableCubeButton = true
-	@booleanAttribute hidePreviewButton = false
 
 	#onBackClick = () => {
 		switch (this.preset) {
@@ -131,14 +125,6 @@ export class AppButtonsPreset extends Element {
 		store.view = 'order-items'
 	}
 
-	#onPreviewClick = () => {
-		batch(() => {
-			searchParams().set('isPreview', 'true')
-			pushState()
-			store.isPreview = true
-		})
-	}
-
 	#presetConfig = (): PresetConfig => {
 		const presets: Record<LayoutPreset, PresetConfig> = {
 			'order-flow': {
@@ -154,7 +140,7 @@ export class AppButtonsPreset extends Element {
 					logo: true,
 					tools: true,
 					animation: this.showAnimation,
-					mobile: {preview: true},
+					mobile: {buy: true},
 				},
 			},
 			'preview-flow': {
@@ -201,14 +187,13 @@ export class AppButtonsPreset extends Element {
 	#renderActionButtons = (config: PresetConfig['right']) => {
 		if (!config) return ''
 
-		const renderButtons = (buttons: {share?: boolean; buy?: boolean; preview?: boolean} | undefined) => {
+		const renderButtons = (buttons: {share?: boolean; buy?: boolean} | undefined) => {
 			if (!buttons) return ''
 			return html`
 				<app-buttons-right layout="bottom" style="top: 20px;">
 					<app-buttons-group custom-style="gap: 34px; align-items: center;margin-top: -3px;" group-direction="row">
 						${() => buttons.share && html`<share-button onclick=${this.#onShareClick}></share-button>`}
 						${() => buttons.buy && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
-						${() => buttons.preview && !this.hidePreviewButton && html`<preview-button onclick=${this.#onPreviewClick}></preview-button>`}
 					</app-buttons-group>
 				</app-buttons-right>
 			`
@@ -254,8 +239,7 @@ export class AppButtonsPreset extends Element {
 	}
 
 	template = () => html`
-		${() => this.#presetConfig().left && this.#renderLeft()}
-		${() => this.#presetConfig().right && this.#renderRight()}
+		${() => this.#presetConfig().left && this.#renderLeft()} ${() => this.#presetConfig().right && this.#renderRight()}
 		<slot></slot>
 	`
 }
