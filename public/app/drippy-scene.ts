@@ -200,14 +200,24 @@ export class DrippyScene extends Element {
 				for (const el of extraObjects()) disableFrustumCulledOnLoad(el)
 			})
 
+			// Watch for panel collapse state changes
+			const panelCollapseMutations = createMutationsSignal(document.documentElement, {
+				attributes: true,
+				attributeFilter: ['class'],
+			})
+
 			createEffect(() => {
+				// Trigger reactive update when panel collapse state changes
+				panelCollapseMutations()
+				const isPanelCollapsed = document.documentElement.classList.contains('panel-collapsed')
+
 				if (store.view === 'preview') {
 					this.style.setProperty('--sceneTranslateX', 'translateX(0)')
 					this.style.setProperty('--sceneTranslateY', 'translateY(0)')
 				} else {
 					this.style.setProperty('--sceneTranslateY', 'translateY(-100px)')
 
-					if (
+					const shouldShiftLeft =
 						store.view === 'order' ||
 						store.view === 'order-items' ||
 						store.view === 'order-size' ||
@@ -215,7 +225,10 @@ export class DrippyScene extends Element {
 						store.view === 'success' ||
 						store.view === 'share' ||
 						store.view === 'template'
-					) {
+
+					if (store.view === 'template' && isPanelCollapsed) {
+						this.style.setProperty('--sceneTranslateX', 'translateX(0)')
+					} else if (shouldShiftLeft) {
 						this.style.setProperty('--sceneTranslateX', 'translateX(calc(-1 * var(--sceneDesktopOffset)))')
 					} else {
 						this.style.setProperty('--sceneTranslateX', 'translateX(var(--sceneDesktopOffset))')

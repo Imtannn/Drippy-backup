@@ -293,6 +293,25 @@ export class BottomSheet extends Element {
 		}
 	}
 
+	public toggleCollapse() {
+		this.isVisible = !this.isVisible
+		if (this.sheetRef) {
+			if (this.isVisible) {
+				this.sheetRef.classList.add('is-open')
+				document.documentElement.classList.remove('panel-collapsed')
+			} else {
+				this.sheetRef.classList.remove('is-open')
+				document.documentElement.classList.add('panel-collapsed')
+			}
+
+			// Update button title based on parent state
+			const button = this.sheetRef.querySelector('.collapse-button')
+			if (button) {
+				button.setAttribute('title', this.isVisible ? 'Collapse panel' : 'Expand panel')
+			}
+		}
+	}
+
 	private handleDragHandleStart = (e: Event) => {
 		this.handleDragStart(e as MouseEvent | TouchEvent)
 	}
@@ -331,6 +350,9 @@ export class BottomSheet extends Element {
 				>
 					<div class="drag-indicator"></div>
 				</div>
+				<button class="collapse-button" onclick="${() => this.toggleCollapse()}" title="Collapse panel">
+					<img src="/images/collapse-icon.svg" alt="Collapse" />
+				</button>
 				<div class="sheet-content">
 					<slot></slot>
 				</div>
@@ -404,6 +426,7 @@ export class BottomSheet extends Element {
 			cursor: grab;
 			touch-action: none;
 			margin-bottom: 5px;
+			position: relative;
 		}
 
 		.drag-handle:active {
@@ -415,6 +438,38 @@ export class BottomSheet extends Element {
 			height: 5px;
 			background: #d1d5db;
 			border-radius: 9999px;
+		}
+
+		.collapse-button {
+			position: absolute;
+			left: -25px;
+			top: 50%;
+			transform: translateY(-50%);
+			background: transparent;
+			border: none;
+			cursor: pointer;
+			padding: 0;
+			display: none;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.3s ease;
+			z-index: 100;
+		}
+
+		.collapse-button img {
+			width: 45px;
+			height: 73px;
+			transition: transform 0.3s ease;
+		}
+
+		/* When panel is closed, expose button more to the left */
+		.bottom-sheet:not(.is-open) .collapse-button {
+			left: -35px;
+		}
+
+		/* Flip icon when panel is closed */
+		.bottom-sheet:not(.is-open) .collapse-button img {
+			transform: scaleX(-1);
 		}
 
 		.sheet-content {
@@ -431,6 +486,16 @@ export class BottomSheet extends Element {
 
 		.sheet-content::-webkit-scrollbar {
 			display: none;
+		}
+
+		/* Collapsed state - when NOT open */
+		.bottom-sheet:not(.is-open) {
+			transform: translateY(calc(100% - var(--bottom-sheet-handle-height) - 10px));
+		}
+
+		.bottom-sheet:not(.is-open) .sheet-content {
+			opacity: 0;
+			pointer-events: none;
 		}
 
 		/* Desktop styles: floating panel on the left, always full viewport height */
@@ -463,7 +528,8 @@ export class BottomSheet extends Element {
 				transform: translateY(1.25rem);
 				transition:
 					opacity 0.3s ease-out,
-					transform 0.3s ease-out;
+					transform 0.3s ease-out,
+					width 0.3s ease-out;
 			}
 
 			.bottom-sheet.is-open {
@@ -471,7 +537,32 @@ export class BottomSheet extends Element {
 				transform: translateY(0);
 			}
 
+			.collapse-button {
+				display: flex;
+			}
+
+			.bottom-sheet:not(.is-open) {
+				width: 0px;
+				transform: translateY(0);
+				opacity: 1;
+			}
+
+			.bottom-sheet:not(.is-open) .drag-handle {
+				display: none;
+			}
+
+			.bottom-sheet:not(.is-open) .sheet-content {
+				display: none;
+			}
+
 			.drag-handle {
+				display: flex;
+				cursor: default;
+				margin-bottom: 0;
+				padding: 10px 0;
+			}
+
+			.drag-handle .drag-indicator {
 				display: none;
 			}
 		}
