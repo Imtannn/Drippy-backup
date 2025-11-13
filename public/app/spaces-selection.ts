@@ -7,10 +7,12 @@ import {pushState, searchParams} from '../routes.js'
 import type {Space} from '../types/types.js'
 import {currentUser, store} from './store.js'
 
+import {scenes} from '../consts/scenes.js'
 import '../elements/dialog-element.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
+import {getSpaceSceneThumbnail} from '../utils.js'
 
 @element
 export class SpacesSelection extends Element {
@@ -40,7 +42,7 @@ export class SpacesSelection extends Element {
 			// Filter by brand if brand query parameter exists
 			const brandParam = searchParams().get('brand')
 			if (brandParam) {
-				filteredSpaces = filteredSpaces.filter((space: Space) => space.collection === brandParam)
+				filteredSpaces = filteredSpaces.filter((space: Space) => space.collections.includes(brandParam))
 			}
 
 			this.filteredSpace = filteredSpaces
@@ -62,8 +64,8 @@ export class SpacesSelection extends Element {
 		}, 300) // Match animation duration
 	}
 
-	#onSceneSelected = (space: Space) => {
-		searchParams().set('scene', space.slug)
+	#onSpaceSelected = (space: Space) => {
+		searchParams().set('space', space.slug)
 
 		batch(() => {
 			pushState()
@@ -135,19 +137,23 @@ export class SpacesSelection extends Element {
 						<!-- Bloom Realm Card -->
 						<div class="space-card">
 							<div class="scene-preview">
-								<div class="scene-placeholder" onclick=${() => this.#onSceneSelected(space())}>
-									<placeholder-image src=${space().sceneThumbnail} alt=${space().name} object-fit="cover" />
+								<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
+									<placeholder-image
+										src=${getSpaceSceneThumbnail(space(), scenes)}
+										alt=${space().name}
+										object-fit="cover"
+									/>
 								</div>
 								<div class="garments-count">${space().garmentsCount} garments</div>
 							</div>
 							<div class="card-content">
 								<div class="text-content">
 									<h3 class="card-title">${space().name}</h3>
-									<p class="card-subtitle" onclick=${() => this.#onBrandViewClick(space().collection)}>
+									<p class="card-subtitle" onclick=${() => this.#onBrandViewClick(space().collections[0])}>
 										${space().description}
 									</p>
 								</div>
-								<button class="explore-button" onclick=${() => this.#onSceneSelected(space())}>Explore space →</button>
+								<button class="explore-button" onclick=${() => this.#onSpaceSelected(space())}>Explore space →</button>
 							</div>
 						</div>
 					`}

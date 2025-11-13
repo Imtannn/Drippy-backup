@@ -28,74 +28,74 @@ AWS.config.update({
 
 const s3 = new AWS.S3()
 
-// Brand configurations with Google Drive folder IDs
-const BRAND_CONFIGS = [
+// collection configurations with Google Drive folder IDs
+const COLLECTION_CONFIGS = [
 	{
-		brand: 'vaishnavi',
+		collection: 'essence-of-her',
 		rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
 	},
 	{
-		brand: 'haruki',
+		collection: 'movement',
 		rootFolderId: '1-_x-GVUxGBn4S1VDI6t3dFN990IG-VWu',
 	},
 	{
-		brand: 'lostCause',
+		collection: 'shadow-grace',
 		rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
 	},
 	{
-		brand: 'shri',
+		collection: 'duality-in-radiance',
 		rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
 	},
 	{
-		brand: 'eliseF',
+		collection: '9heure19heuree',
 		rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
 	},
 	{
-		brand: 'oofya',
+		collection: 'metamorphosis',
 		rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
 	},
 	{
-		brand: 'theSoul',
+		collection: 'the-soul',
 		rootFolderId: '19Oq6abu1SnMTLSJHS0VY_GT1pAvpdU0T',
 	},
 	{
-		brand: 'moidien',
+		collection: 'gap',
 		rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
 	},
 	{
-		brand: 'emwear',
+		collection: 'emwear',
 		rootFolderId: '15zHjnYVfII_Z2cr17_6Vp7kscWm9UIAU',
 	},
 	{
-		brand: 'atelierGourney',
+		collection: 'fige-dans-le-temps',
 		rootFolderId: '17aBfgFcD7Liq9fB_KC57rl5S2w-O4LYf',
 	},
 	{
-		brand: 'oneThousandPoets',
+		collection: 'one-thousand-poets',
 		rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
 	},
 	{
-		brand: 'zove',
+		collection: 'zove',
 		rootFolderId: '1XlxaOIFxxh-8xCmmM6XrDOW6iqq7xNhw',
 	},
 	{
-		brand: 'jaSengBu',
+		collection: 'ja-seng-bu',
 		rootFolderId: '1BO4szN8246Y0V-AhL9zDyXzJ6rZLL7U8',
 	},
 	{
-		brand: 'mssPark',
+		collection: 'mss-park',
 		rootFolderId: '1uUtAmMj_4gV1P3xuJKWGPbATJcv63GcJ',
 	},
 	{
-		brand: 'imzadMale',
+		collection: 'imzad-man',
 		rootFolderId: '1fsA2JrL5ibuWrC_Fp_IDubvZuQj5bwpa',
 	},
 	{
-		brand: 'imzadFemale',
+		collection: 'imzad-woman',
 		rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
 	},
 	{
-		brand: 'sapienzaUniversityOfRome',
+		collection: 'changes',
 		rootFolderId: '1yficP672jh2jmHwfmHqKN5f3ca1Hd5rm',
 	},
 ]
@@ -317,7 +317,7 @@ async function processOptionMaterials(optionMaterialsFolder: TODO): Promise<stri
 async function processOptionBlocks(
 	optionBlockFolders: TODO[],
 	templateCategory: string,
-	brand: string,
+	collection: string,
 	avatarGender: string,
 ): Promise<{category: string; blocks: TODO[]}[]> {
 	const blockOptions: {category: string; blocks: TODO[]}[] = []
@@ -372,12 +372,12 @@ async function processOptionBlocks(
 				const [blockThumbS3Url, blockModelS3Url] = await Promise.all([
 					uploadToS3(
 						pngBuffer,
-						`images/${brand}/options/${templateCategory}/${blockCategory}/${blockFolder.name}.png`,
+						`images/${collection}/options/${templateCategory}/${blockCategory}/${blockFolder.name}.png`,
 						'image/png',
 					),
 					uploadToS3(
 						gltfBuffer,
-						`models/${brand}/options/${templateCategory}/${blockCategory}/${blockFolder.name}${path.extname(gltfFile.name)}`,
+						`models/${collection}/options/${templateCategory}/${blockCategory}/${blockFolder.name}${path.extname(gltfFile.name)}`,
 						'model/gltf+json',
 					),
 				])
@@ -413,7 +413,7 @@ async function processOptionBlocks(
 async function processTemplateFolder(
 	templateFolder: TODO,
 	category: string,
-	brand: string,
+	collection: string,
 ): Promise<{template: TODO; blocks: TODO[]; optionBlocks: TODO[]; unsucceeded: TODO[]}> {
 	console.log(`  📂 Processing template: ${templateFolder.name}`)
 
@@ -501,7 +501,7 @@ async function processTemplateFolder(
 	const templateThumbnailBuffer = await downloadToBuffer(templateThumbnailUrl)
 	const templateS3Url = await uploadToS3(
 		templateThumbnailBuffer,
-		`images/${brand}/templates/${category}/${templateFolder.name}.png`,
+		`images/${collection}/templates/${category}/${templateFolder.name}.png`,
 		'image/png',
 	)
 
@@ -575,7 +575,7 @@ async function processTemplateFolder(
 	let blockOptions: {category: string; blocks: TODO[]}[] = []
 	if (optionBlockFolders.length > 0) {
 		console.log(`    📁 Processing option blocks`)
-		blockOptions = await processOptionBlocks(optionBlockFolders, category, brand, avatarGender)
+		blockOptions = await processOptionBlocks(optionBlockFolders, category, collection, avatarGender)
 	}
 
 	const template = {
@@ -637,12 +637,12 @@ async function processTemplateFolder(
 					const [blockThumbS3Url, blockModelS3Url] = await Promise.all([
 						uploadToS3(
 							pngBuffer,
-							`images/${brand}/blocks/${category}/${blockTypeFolder.name}/${baseName}.png`,
+							`images/${collection}/blocks/${category}/${blockTypeFolder.name}/${baseName}.png`,
 							'image/png',
 						),
 						uploadToS3(
 							gltfBuffer,
-							`models/${brand}/blocks/${category}/${blockTypeFolder.name}/${baseName}${path.extname(gltfFile.name)}`,
+							`models/${collection}/blocks/${category}/${blockTypeFolder.name}/${baseName}${path.extname(gltfFile.name)}`,
 							'model/gltf+json',
 						),
 					])
@@ -679,7 +679,7 @@ async function processTemplateFolder(
 
 function generateTemplateData(
 	processedData: TODO[],
-	brand: string,
+	collection: string,
 ): {templates: TODO; templateFolderIdToIdMap: Map<string, string>} {
 	const templates: TODO = {}
 	const templateFolderIdToIdMap = new Map<string, string>()
@@ -688,15 +688,15 @@ function generateTemplateData(
 		if (!template) return
 
 		const templateId = uuidv4()
-		templates[brand] = templates[brand] || []
-		templates[brand].push({
+		templates[collection] = templates[collection] || []
+		templates[collection].push({
 			_id: templateId,
 			thumb: template.thumbUrl,
 			name: template.name,
 			price: template.price,
 			avatar: template.avatar,
 			category: template.category,
-			collection: brand,
+			collection: collection,
 			materialId: template.materialId,
 			...(template.extraMaterials && {extraMaterials: template.extraMaterials}),
 			...(template.fabricOptions && {fabricOptions: template.fabricOptions}),
@@ -710,23 +710,27 @@ function generateTemplateData(
 	return {templates, templateFolderIdToIdMap}
 }
 
-function generateBlockData(processedData: TODO[], brand: string, templateFolderIdToIdMap: Map<string, string>): TODO {
+function generateBlockData(
+	processedData: TODO[],
+	collection: string,
+	templateFolderIdToIdMap: Map<string, string>,
+): TODO {
 	const blocks: TODO = {}
 
 	processedData.forEach(({blocks: templateBlocks, optionBlocks}) => {
 		// Process regular template blocks
 		templateBlocks.forEach((block: TODO) => {
-			blocks[brand] = blocks[brand] || []
+			blocks[collection] = blocks[collection] || []
 			// Use unique Google Drive folder ID to find the correct template ID
 			const templateId = templateFolderIdToIdMap.get(block.templateFolderId) || block.templateName // Fallback to name if ID not found
-			blocks[brand].push({
+			blocks[collection].push({
 				_id: uuidv4(),
 				thumb: block.thumbUrl,
 				modelFile: block.modelUrl,
 				blockName: block.blockName,
 				avatar: block.avatar, // Use avatar gender from block (inherited from template)
 				category: block.category,
-				collection: brand,
+				collection: collection,
 				templateId: templateId, // Now using actual template _id with guaranteed unique identification
 				templateName: block.templateName,
 				templateCategory: block.templateCategory,
@@ -735,15 +739,15 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 
 		// Process option blocks (without templateId and templateName)
 		optionBlocks.forEach((block: TODO) => {
-			blocks[brand] = blocks[brand] || []
-			blocks[brand].push({
+			blocks[collection] = blocks[collection] || []
+			blocks[collection].push({
 				_id: uuidv4(),
 				thumb: block.thumbUrl,
 				modelFile: block.modelUrl,
 				blockName: block.blockName,
 				avatar: block.avatar,
 				category: block.category,
-				collection: brand,
+				collection: collection,
 				templateCategory: block.templateCategory,
 				templateId: '', // Empty string instead of undefined
 				templateName: '', // Empty string instead of undefined
@@ -754,10 +758,10 @@ function generateBlockData(processedData: TODO[], brand: string, templateFolderI
 	return blocks
 }
 
-function generateFabricData(brand: string): TODO {
+function generateFabricData(collection: string): TODO {
 	const fabrics: TODO = {}
 
-	console.log(`🎨 Generating fabric data for brand: ${brand}`)
+	console.log(`🎨 Generating fabric data for collection: ${collection}`)
 	console.log(`📦 Total root materials available: ${rootMaterials.size}`)
 
 	// Convert root materials to fabric data
@@ -766,8 +770,8 @@ function generateFabricData(brand: string): TODO {
 		console.log(`   📋 Template categories: ${Array.from(material.templateCategories).join(', ') || 'NONE'}`)
 		console.log(`   📏 Template categories size: ${material.templateCategories.size}`)
 
-		fabrics[brand] = fabrics[brand] || []
-		fabrics[brand].push({
+		fabrics[collection] = fabrics[collection] || []
+		fabrics[collection].push({
 			_id: uuidv4(),
 			thumb: material.thumbUrl,
 			normal: material.normal,
@@ -777,7 +781,7 @@ function generateFabricData(brand: string): TODO {
 			alpha: material.alpha,
 			materialName: material.materialName,
 			category: material.category,
-			collection: brand,
+			collection: collection,
 			templateCategories: material.templateCategories.size > 0 ? Array.from(material.templateCategories) : [], // Convert Set to Array
 			...(material.scaleX !== undefined && {scaleX: material.scaleX}),
 			...(material.scaleY !== undefined && {scaleY: material.scaleY}),
@@ -843,7 +847,7 @@ function generateTemplatesFileContent(templates: TODO): string {
 export const templates: Record<string, Template[]> = {
 	${Object.entries(finalTemplatesContent)
 		.map(
-			([collectionName, templatesArray]) => `${collectionName}: [
+			([collectionName, templatesArray]) => `'${collectionName}' : [
 ${templatesArray}
 	]`,
 		)
@@ -880,7 +884,7 @@ export const blocks: Record<string, Block[]> = {
 	${Object.entries(finalBlocksContent)
 		.map(
 			([collectionName, blocksArray]) => `
-		${collectionName}: [
+		'${collectionName}' : [
 ${blocksArray}
 ]`,
 		)
@@ -926,7 +930,7 @@ function generateFabricsFileContent(fabrics: TODO): string {
 export const fabrics: Record<string, Fabric[]> = {
 	${Object.entries(finalFabricsContent)
 		.map(
-			([collectionName, fabricsArray]) => `${collectionName}: [
+			([collectionName, fabricsArray]) => `'${collectionName}' : [
 ${fabricsArray}
 	]`,
 		)
@@ -954,7 +958,7 @@ async function updateFabricsFile(content: string): Promise<void> {
 }
 
 // Process root Materials folder and store all materials
-async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): Promise<void> {
+async function processRootMaterials(rootMaterialsFolder: TODO, collection: string): Promise<void> {
 	console.log(`📁 Processing root Materials folder`)
 
 	const materialsContents = await fetchFolderContents(rootMaterialsFolder.id)
@@ -1034,7 +1038,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 				const thumbBuffer = await downloadToBuffer(getDriveDownloadUrl(thumbnailFile.id))
 				thumbUrl = await uploadToS3(
 					thumbBuffer,
-					`fabrics/${brand}/root/${materialFolder.name}/${thumbnailFile.name}`,
+					`fabrics/${collection}/root/${materialFolder.name}/${thumbnailFile.name}`,
 					'image/png',
 				)
 
@@ -1061,7 +1065,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, brand: string): P
 
 				const fileS3Url = await uploadToS3(
 					fileBuffer,
-					`fabrics/${brand}/root/${materialFolder.name}/${file.name}`,
+					`fabrics/${collection}/root/${materialFolder.name}/${file.name}`,
 					contentType,
 					true,
 					false,
@@ -1291,7 +1295,9 @@ async function main(): Promise<void> {
 
 		console.log(`📦 Using S3 bucket: ${S3_BUCKET}`)
 		console.log(`🌍 S3 region: ${S3_REGION}`)
-		console.log(`🏷️  Processing ${BRAND_CONFIGS.length} brands: ${BRAND_CONFIGS.map(c => c.brand).join(', ')}`)
+		console.log(
+			`🏷️  Processing ${COLLECTION_CONFIGS.length} collections: ${COLLECTION_CONFIGS.map(c => c.collection).join(', ')}`,
+		)
 
 		// Initialize combined data structures
 		const allTemplates: TODO = {}
@@ -1299,13 +1305,13 @@ async function main(): Promise<void> {
 		const allCombinedFabrics: TODO = {}
 		const allUnsucceeded: TODO[] = []
 
-		// Process each brand
-		for (const brandConfig of BRAND_CONFIGS) {
-			const {brand, rootFolderId} = brandConfig
-			console.log(`\n🏢 Processing brand: ${brand}`)
+		// Process each collection
+		for (const collectionConfig of COLLECTION_CONFIGS) {
+			const {collection, rootFolderId} = collectionConfig
+			console.log(`\n🏢 Processing collection: ${collection}`)
 			console.log(`🗂️  Root folder ID: ${rootFolderId}`)
 
-			// Reset data for this brand
+			// Reset data for this collection
 			rootMaterials.clear()
 			categoryMaterialAssignments.clear()
 
@@ -1322,12 +1328,12 @@ async function main(): Promise<void> {
 
 			// Step 1: Process root Materials folder
 			if (rootMaterialsFolder) {
-				await processRootMaterials(rootMaterialsFolder, brand)
+				await processRootMaterials(rootMaterialsFolder, collection)
 			} else {
-				console.warn(`⚠️  No root Materials folder found for brand ${brand}`)
+				console.warn(`⚠️  No root Materials folder found for collection ${collection}`)
 			}
 
-			const brandProcessedData: TODO[] = []
+			const collectionProcessedData: TODO[] = []
 
 			// Step 2: Process each category
 			for (const categoryFolder of categoryFolders) {
@@ -1350,9 +1356,9 @@ async function main(): Promise<void> {
 
 				// Step 2b: Process each template in this category
 				for (const templateFolder of templateFolders) {
-					const processedTemplate = await processTemplateFolder(templateFolder, categoryFolder.name, brand)
+					const processedTemplate = await processTemplateFolder(templateFolder, categoryFolder.name, collection)
 					if (processedTemplate.template) {
-						brandProcessedData.push(processedTemplate)
+						collectionProcessedData.push(processedTemplate)
 					}
 					allUnsucceeded.push(...processedTemplate.unsucceeded)
 					// Option blocks will be handled separately in block generation
@@ -1363,7 +1369,7 @@ async function main(): Promise<void> {
 			applyCategoryAssignments()
 
 			// Debug: Check final state of materials before generating fabric data
-			console.log(`🔍 Final state check before generating fabric data for brand: ${brand}`)
+			console.log(`🔍 Final state check before generating fabric data for collection: ${collection}`)
 			console.log(`📦 Total root materials: ${rootMaterials.size}`)
 			rootMaterials.forEach((material, materialKey) => {
 				console.log(`  📎 Material: ${materialKey}`)
@@ -1371,17 +1377,20 @@ async function main(): Promise<void> {
 				console.log(`    📏 Size: ${material.templateCategories.size}`)
 			})
 
-			// Generate data for this brand
-			const {templates: brandTemplates, templateFolderIdToIdMap} = generateTemplateData(brandProcessedData, brand)
-			const brandBlocks = generateBlockData(brandProcessedData, brand, templateFolderIdToIdMap)
-			const brandFabricsData = generateFabricData(brand)
+			// Generate data for this collection
+			const {templates: collectionTemplates, templateFolderIdToIdMap} = generateTemplateData(
+				collectionProcessedData,
+				collection,
+			)
+			const collectionBlocks = generateBlockData(collectionProcessedData, collection, templateFolderIdToIdMap)
+			const collectionFabricsData = generateFabricData(collection)
 
 			// Merge with combined data
-			Object.assign(allTemplates, brandTemplates)
-			Object.assign(allBlocks, brandBlocks)
-			Object.assign(allCombinedFabrics, brandFabricsData)
+			Object.assign(allTemplates, collectionTemplates)
+			Object.assign(allBlocks, collectionBlocks)
+			Object.assign(allCombinedFabrics, collectionFabricsData)
 
-			console.log(`✅ Completed processing brand: ${brand}`)
+			console.log(`✅ Completed processing collection: ${collection}`)
 		}
 
 		console.log(`\n📊 Generated ${Object.keys(allTemplates).length} template collections`)
@@ -1411,12 +1420,12 @@ async function main(): Promise<void> {
 		console.log(`❌ Unsucceeded: ${allUnsucceeded.length} items`)
 
 		console.log(`\n📁 Assets organized as:`)
-		BRAND_CONFIGS.forEach(({brand}) => {
-			console.log(`   ${brand} Template Images: images/${brand}/templates/{category}/`)
-			console.log(`   ${brand} Template Materials: materials/${brand}/templates/{category}/{templateName}/`)
-			console.log(`   ${brand} Block Images: images/${brand}/blocks/{category}/{blockType}/`)
-			console.log(`   ${brand} Fabric Textures: fabrics/${brand}/{category}/{materialName}/`)
-			console.log(`   ${brand} Block Models: models/${brand}/blocks/{category}/{blockType}/`)
+		COLLECTION_CONFIGS.forEach(({collection}) => {
+			console.log(`   ${collection} Template Images: images/${collection}/templates/{category}/`)
+			console.log(`   ${collection} Template Materials: materials/${collection}/templates/{category}/{templateName}/`)
+			console.log(`   ${collection} Block Images: images/${collection}/blocks/{category}/{blockType}/`)
+			console.log(`   ${collection} Fabric Textures: fabrics/${collection}/{category}/{materialName}/`)
+			console.log(`   ${collection} Block Models: models/${collection}/blocks/{category}/{blockType}/`)
 		})
 
 		process.exit(0)

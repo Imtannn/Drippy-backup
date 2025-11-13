@@ -75,11 +75,11 @@ export class BrandView extends Element {
 		// Brand-view only displays when brand param exists, so we always navigate
 		const brandParam = searchParams().get('brand')
 		if (brandParam) {
-			const space = spaces.find(s => s.collection === brandParam)
+			const space = spaces.find(s => s.collections.includes(brandParam))
 			if (space) {
 				// Remove brand parameter and set scene parameter in URL
 				searchParams().delete('brand')
-				searchParams().set('scene', space.slug)
+				searchParams().set('space', space.slug)
 
 				// Ensure avatar parameter is set
 				if (!searchParams().get('avatar')) {
@@ -124,10 +124,11 @@ export class BrandView extends Element {
 		}
 
 		newTemplates.set(template.category, template)
-		const templateBlockData = blockManager.convertTemplateToBlockData(template, effectiveSpace)
+		const effectiveCollection = store.getEffectiveCollection()
+		const templateBlockData = blockManager.convertTemplateToBlockData(template, effectiveCollection)
 		const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
 			templateBlockData,
-			effectiveSpace,
+			effectiveCollection,
 		)
 		newBlocks.set(template.category, newBlocksMap)
 		newFabrics.set(template.category, newFabricsMap)
@@ -164,10 +165,10 @@ export class BrandView extends Element {
 			// Navigate to template view to show remix overlay
 			const brandParam = searchParams().get('brand')
 			if (brandParam) {
-				const space = spaces.find(s => s.collection === brandParam)
+				const space = spaces.find(s => s.collections.includes(brandParam))
 				if (space) {
 					searchParams().delete('brand')
-					searchParams().set('scene', space.slug)
+					searchParams().set('space', space.slug)
 					store.selectSpace = space
 					store.view = 'template'
 					pushState()
@@ -223,7 +224,7 @@ export class BrandView extends Element {
 
 			${() => {
 				const brandParam = searchParams().get('brand')
-				const space = spaces.find(space => space.collection === brandParam)
+				const space = spaces.find(space => space.collections.includes(brandParam || ''))
 
 				if (!brandParam) {
 					return null
@@ -239,9 +240,9 @@ export class BrandView extends Element {
 							<img src=${space.logo} alt=${space.name} />
 						</div>
 						<h1 class="main-title brand">${space.description}</h1>
-						<p class="description brand">${space.collection}@paris</p>
+						<p class="description brand">${space.collections[0]}@paris</p>
 						<p class="sub-description brand">
-							Welcome to the enchanting world of the <strong>${space.collection}</strong> , where high fashion meets
+							Welcome to the enchanting world of the <strong>${space.collections[0]}</strong> , where high fashion meets
 							artistic innovation. <strong>Read more</strong>
 						</p>
 					</div>
@@ -268,7 +269,7 @@ export class BrandView extends Element {
 				<tabs-content selected-value="Items">
 					${() => {
 						const brandParam = searchParams().get('brand')
-						const collection = brandParam || store.selectedSpace?.collection || 'moidien'
+						const collection = brandParam || store.selectedSpace?.collections[0] || 'gap'
 						const collectionTemplates = (templates as any)[collection] || []
 
 						// Apply same ordering logic as template-view

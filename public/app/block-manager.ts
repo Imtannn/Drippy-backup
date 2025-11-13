@@ -6,6 +6,7 @@ import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {Space} from '../types/types.js'
+import {getSpacePrimaryCollection} from '../utils.js'
 
 class BlockManager {
 	private readonly availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
@@ -52,11 +53,11 @@ class BlockManager {
 	/**
 	 * Convert template to block data
 	 * @param selectedTemplate - The selected template
-	 * @param selectedSpace - The selected space
+	 * @param collection - The collection to use for fetching blocks
 	 * @returns The block data
 	 */
-	convertTemplateToBlockData(selectedTemplate: Template, selectedSpace: Space) {
-		const templateBlocks = getBlocksForTemplate(selectedTemplate, selectedSpace?.collection)
+	convertTemplateToBlockData(selectedTemplate: Template, collection: string | null | undefined) {
+		const templateBlocks = getBlocksForTemplate(selectedTemplate, collection ?? undefined)
 		return {
 			blocks: templateBlocks,
 			materialId: selectedTemplate.materialId ?? '',
@@ -96,7 +97,7 @@ class BlockManager {
 	/**
 	 * Get blocks and fabrics from template data
 	 * @param blockData - The block data
-	 * @param selectedSpace - The selected space
+	 * @param collection - The collection to use for fetching fabrics
 	 * @param fabricOverrides - The fabric overrides
 	 * @returns The new blocks and fabrics
 	 */
@@ -106,7 +107,7 @@ class BlockManager {
 			materialId: string
 			extraMaterials?: {mesh: string; materialId: string}[]
 		},
-		selectedSpace: Space,
+		collection: string | null | undefined,
 		fabricOverrides?: Map<BlockCategory, Map<string, Fabric>>,
 	) {
 		// Completely replace selectedBlocks with new blocks (used for template selection)
@@ -138,7 +139,7 @@ class BlockManager {
 
 				// Add the main fabric (without assignedMesh - will be default)
 				if (templateData.materialId) {
-					const fabric = fabrics[selectedSpace?.collection ?? 'moidien']?.find(
+					const fabric = fabrics[collection ?? 'gap']?.find(
 						fabric => `${fabric.category} - ${fabric.materialName}` === templateData.materialId,
 					)
 					if (fabric) {
@@ -149,7 +150,7 @@ class BlockManager {
 				// Add extra materials with specific mesh assignments
 				if (templateData.extraMaterials) {
 					for (const extraMaterial of templateData.extraMaterials) {
-						const extraFabric = fabrics[selectedSpace?.collection ?? 'moidien']?.find(
+						const extraFabric = fabrics[collection ?? 'gap']?.find(
 							fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
 						)
 						if (extraFabric) {
@@ -253,20 +254,22 @@ class BlockManager {
 		collectionOverride?: string | null | undefined,
 	): BlockCategory[] {
 		const mappingCategories = [...(this.availableBlocksMapping[templateCategory] || [])] as BlockCategory[]
-		const collection = collectionOverride ?? options.sourceCollection ?? options.selectedSpace?.collection ?? 'moidien'
+		const collection =
+			collectionOverride ?? options.sourceCollection ?? getSpacePrimaryCollection(options.selectedSpace) ?? 'gap'
 		const blocks = this.getBlocksForTemplateCategory(templateCategory, collection)
 		const categoriesFromBlocks = new Set<BlockCategory>(blocks.map(block => block.category))
 
 		if (templateCategory === 'Shirt') {
 			const selectedBlock = options.selectedBlocks?.get(templateCategory)?.get('Bodice')
+			const spaceCollection = getSpacePrimaryCollection(options.selectedSpace)
 			if (
 				selectedBlock?.templateName !== 'Pleated long sleeve shirt' &&
-				(options.selectedSpace?.collection === 'moidien' || options.sourceCollection === 'moidien')
+				(spaceCollection === 'gap' || options.sourceCollection === 'gap')
 			) {
 				return []
 			}
 
-			if (options?.selectedSpace?.collection === 'oofya' || options?.sourceCollection === 'oofya') {
+			if (spaceCollection === 'oofya' || options?.sourceCollection === 'oofya') {
 				return []
 			}
 		}
@@ -280,7 +283,7 @@ class BlockManager {
 		sourceCollection: string | null | undefined,
 		templateCategory: TemplateCategory,
 	): Fabric[] {
-		const collection = sourceCollection ?? 'moidien'
+		const collection = sourceCollection ?? 'gap'
 		return (fabrics[collection] ?? []).filter(fabric => fabric.templateCategories?.includes(templateCategory))
 	}
 
@@ -290,7 +293,7 @@ class BlockManager {
 	): Record<string, Fabric[]> {
 		// use template.materialId to get the fabric
 		// only filter fabrics that both include template.category and fabric.category
-		const collection = sourceCollection ?? 'moidien'
+		const collection = sourceCollection ?? 'gap'
 		const availableFabrics: Record<string, Fabric[]> = {}
 
 		const defaultFabric = fabrics[collection]?.find(
@@ -312,7 +315,7 @@ class BlockManager {
 	}
 
 	getBlocksForTemplateCategory(templateCategory: TemplateCategory, collection: string | null | undefined) {
-		const resolvedCollection = collection ?? 'moidien'
+		const resolvedCollection = collection ?? 'gap'
 		return (collectionBlocks[resolvedCollection] ?? []).filter(block => block.templateCategory === templateCategory)
 	}
 
@@ -329,7 +332,7 @@ class BlockManager {
 			return {available: false, blocksCategories: [], fabrics: []}
 		const blocksCategories = this.getBlockCategoriesForTemplateCategory(templateCategory, options)
 		const fabrics = this.getAvailableFabricsForTemplate(
-			options.sourceCollection ?? options.selectedSpace?.collection,
+			options.sourceCollection ?? getSpacePrimaryCollection(options.selectedSpace),
 			template,
 		)
 		return {

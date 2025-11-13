@@ -3,7 +3,7 @@ export type AppRoute =
 	| 'preview'
 	| 'custom-measurement'
 	| 'success'
-	| 'scene'
+	| 'space'
 	| 'order'
 	| 'order-items'
 	| 'order-size'
@@ -22,17 +22,34 @@ export type Avatar = {
 	default?: boolean
 }
 
+export type Collection = {
+	name: string
+	slug: string
+	logo: string
+	gender: Gender
+	garmentsCount: number
+}
+
+export type Scene = {
+	name: string
+	slug: string
+	description: string
+	env: string
+	sceneThumbnail: string
+	scene: string
+	includedModelFiles: string[]
+}
+
 export type Space = {
 	name: string
 	slug: string
 	logo: string
 	/** Image used as an env map for global lighting and reflections. */
-	env: string
-	sceneThumbnail: string
-	collection: string
+	collections: string[]
+	scenes: string[]
+	spaceThumbnail?: string
+	defaultScene: string
 	description: string
-	scene: string
-	includedModelFiles: string[]
 	gender: 'male' | 'female'
 	garmentsCount: number
 	isWholesale: boolean
