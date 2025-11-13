@@ -29,7 +29,7 @@ import {getSpacePrimaryCollection} from '../utils.js'
  * - Templates → Fabrics: reference fabric IDs directly (materialId and extraMaterials IDs)
  */
 
-class TemplateManager {
+class TemplateHelpers {
 	private readonly availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
 		All: [],
 		Shirt: ['Sleeves'],
@@ -583,4 +583,4 @@ class TemplateManager {
 	}
 }
 
-export const templateHelpers = new TemplateManager()
+export const templateHelpers = new TemplateHelpers()
