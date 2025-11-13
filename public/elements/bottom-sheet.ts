@@ -2,8 +2,8 @@ import {attribute, booleanAttribute, css, Element, element, type ElementAttribut
 // import {store} from '../app/store.js'
 
 import '../app/app-buttons.js'
-import './back-button.js'
 import '../elements/preview-button.js'
+import './back-button.js'
 import './logic/show-when.js'
 
 // Define snap points in percentages of viewport height
@@ -76,14 +76,6 @@ export class BottomSheet extends Element {
 				this.style.setProperty('--bottom-sheet-float-direction', 'flex-end')
 			} else {
 				this.style.setProperty('--bottom-sheet-float-direction', 'flex-start')
-			}
-		})
-
-		this.createEffect(() => {
-			if (this.maxHeight) {
-				this.style.setProperty('--bottom-sheet-max-height', this.maxHeight)
-			} else {
-				this.style.setProperty('--bottom-sheet-max-height', 'calc(100vh - 3rem)')
 			}
 		})
 
@@ -349,7 +341,6 @@ export class BottomSheet extends Element {
 	css = css`
 		:host {
 			--bottom-sheet-float-direction: flex-start;
-			--bottom-sheet-max-height: calc(100vh - 3rem);
 		}
 
 		:host {
@@ -383,14 +374,13 @@ export class BottomSheet extends Element {
 			background: var(--uiColorPrimaryWhite);
 			// border-top: 1px solid #e5e7eb;
 			/* box-shadow: 0 -25px 50px -12px rgba(0, 0, 0, 0.25); */
-			border-top-left-radius: 1rem;
-			border-top-right-radius: 1rem;
+			border-top-left-radius: var(--borderRadiusXl);
+			border-top-right-radius: var(--borderRadiusXl);
 			transform: translateY(100%);
 			transition:
 				transform 0.3s ease-out,
 				height 0.3s ease-out;
 			will-change: transform, height;
-			max-height: calc(100vh - 5px);
 			pointer-events: auto;
 			display: flex;
 			flex-direction: column;
@@ -460,16 +450,15 @@ export class BottomSheet extends Element {
 				position: relative;
 				top: auto;
 				bottom: auto;
-				left: -4px;
+				left: 7px;
 				right: auto;
-				border-top-right-radius: 1rem;
-				border-bottom-right-radius: 1rem;
+				border-top-left-radius: var(--borderRadiusXl);
+				border-bottom-left-radius: var(--borderRadiusXl);
+				border-top-right-radius: 0;
 				border: 1px solid #e5e7eb;
-				padding-top: 60px;
 				width: 32rem;
 				max-width: calc(100vw - 3rem);
 				height: 100vh;
-				max-height: var(--bottom-sheet-max-height);
 				opacity: 0;
 				transform: translateY(1.25rem);
 				transition:

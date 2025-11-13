@@ -1,6 +1,6 @@
 import {batch, css, Element, element, html, onCleanup, signal, type ElementAttributes} from 'lume'
-import {templates} from '../consts/templates.js'
 import {spaces} from '../consts/spaces.js'
+import {templates} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -414,15 +414,11 @@ export class TemplateView extends Element {
 			onpreview=${this.#onPreviewButtonClick}
 			ondone=${this.#closeRemixOverlay}
 			show-remix-overlay=${() => this.showRemixOverlay}
+			float-direction="right"
 			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
 		>
 			<app-buttons-left>
 				<app-buttons-group group-direction="row" custom-class="button-group-spread">
-					<show-when
-						condition=${() => !this.showRemixOverlay}
-						content=${() => html`<back-button onclick=${this.#onBackButtonClick}></back-button>`}
-					></show-when>
-
 					<show-when
 						condition=${() => !this.showRemixOverlay}
 						content=${() => html`
