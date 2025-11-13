@@ -19,6 +19,7 @@ import './item-card.js'
 import './loading-spinner-overlay.js'
 import './spaces-selection.js'
 import './template-item-overlay.js'
+import {formatNumber} from '../utils.js'
 
 type BrandViewAttributes = keyof {}
 
@@ -342,8 +343,15 @@ export class BrandView extends Element {
 													class="template-product-price"
 													classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
 												>
-													<img src="/images/ruby.png" alt="ruby" />
-													${template().price}
+													${() => {
+														const price = template().price
+														if (!price || price === 'N/A') {
+															return 'N/A'
+														}
+
+														const numericPrice = Number(price)
+														return Number.isFinite(numericPrice) ? formatNumber(numericPrice) : price
+													}}
 												</div>
 												<show-when
 													condition=${() => store.selectedSpace?.isWholesale}

@@ -26,7 +26,7 @@ export class AvatarDropdown extends Element {
 				setTimeout(() => {
 					this.shouldShowPopup = false
 					localStorage.setItem('avatar-popup-dismissed', 'true')
-				}, 20000)
+				}, 200000)
 			}, 1000)
 		}
 
@@ -53,7 +53,7 @@ export class AvatarDropdown extends Element {
 	}
 
 	template = () => html`
-		<div class="avatar-container" onclick=${() => (!this.hideChevron ? this.#onAvatarDropdownClick() : null)}>
+		<div class="avatar-wrapper">
 			<!-- Popup notification -->
 			<div class="popup-notification" style=${() => (this.shouldShowPopup ? 'display: flex' : 'display: none')}>
 				<span class="popup-text">swap avatar here</span>
@@ -69,20 +69,26 @@ export class AvatarDropdown extends Element {
 				</button>
 			</div>
 
-			<div class="avatar-image-wrapper">
-				<img src=${() => this.currentAvatarThumbnail} alt="Avatar" class="avatar-image" />
+			<div
+				class="avatar-container"
+				classList=${() => ({'popup-visible': this.shouldShowPopup})}
+				onclick=${() => (!this.hideChevron ? this.#onAvatarDropdownClick() : null)}
+			>
+				<div class="avatar-image-wrapper">
+					<img src=${() => this.currentAvatarThumbnail} alt="Avatar" class="avatar-image" />
+				</div>
+				${() =>
+					!this.hideChevron
+						? html`
+								<button class="avatar-dropdown-btn" classList=${{active: () => this.open}}>
+									<img
+										src=${() => (this.open ? '/images/chevron-up-violet.svg' : '/images/chevron-down.svg')}
+										alt="Dropdown"
+									/>
+								</button>
+							`
+						: ''}
 			</div>
-			${() =>
-				!this.hideChevron
-					? html`
-							<button class="avatar-dropdown-btn" classList=${{active: () => this.open}}>
-								<img
-									src=${() => (this.open ? '/images/chevron-up-violet.svg' : '/images/chevron-down.svg')}
-									alt="Dropdown"
-								/>
-							</button>
-						`
-					: ''}
 		</div>
 	`
 
@@ -90,6 +96,12 @@ export class AvatarDropdown extends Element {
 		:host {
 			display: flex;
 			align-items: center;
+		}
+
+		.avatar-wrapper {
+			display: flex;
+			align-items: center;
+			position: relative;
 		}
 
 		.avatar-container {
@@ -111,7 +123,7 @@ export class AvatarDropdown extends Element {
 			transition: border-color 0.3s ease;
 		}
 
-		.avatar-container:has(.popup-notification[style*='display: flex']) .avatar-image-wrapper {
+		.avatar-container.popup-visible .avatar-image-wrapper {
 			border-color: #b897fd;
 		}
 
@@ -139,8 +151,8 @@ export class AvatarDropdown extends Element {
 		.popup-notification {
 			position: absolute;
 			top: -53px;
-			left: 100%;
-			transform: translateX(-37%);
+			left: -2px;
+			transform: translate(0, 0);
 			background: #b897fd;
 			color: white;
 			padding: 10px 12px;
@@ -158,8 +170,8 @@ export class AvatarDropdown extends Element {
 			content: '';
 			position: absolute;
 			bottom: -7px;
-			left: 10%;
-			transform: translateX(-35%);
+			left: unset;
+			transform: translate(0, 0);
 			width: 0;
 			height: 0;
 			border-left: 8px solid transparent;
