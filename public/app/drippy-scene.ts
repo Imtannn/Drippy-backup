@@ -226,7 +226,7 @@ export class DrippyScene extends Element {
 						store.view === 'share' ||
 						store.view === 'template'
 
-					if (store.view === 'template' && isPanelCollapsed) {
+					if (isPanelCollapsed) {
 						this.style.setProperty('--sceneTranslateX', 'translateX(0)')
 					} else if (shouldShiftLeft) {
 						this.style.setProperty('--sceneTranslateX', 'translateX(calc(-1 * var(--sceneDesktopOffset)))')

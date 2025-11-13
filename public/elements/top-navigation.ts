@@ -43,8 +43,8 @@ export class TopNavigation extends Element {
 			align-items: center;
 			justify-content: space-between;
 			position: relative;
-			padding-top: 10px;
 			z-index: 100;
+			margin-top: -5px;
 		}
 	`
 }

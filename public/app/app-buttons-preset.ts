@@ -1,4 +1,4 @@
-import {attribute, batch, booleanAttribute, Element, element, html, type ElementAttributes} from 'lume'
+import {attribute, batch, booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
 import {pushState, searchParams} from '../routes.js'
 import {store} from './store.js'
 
@@ -135,7 +135,7 @@ export class AppButtonsPreset extends Element {
 				},
 			},
 			'template-flow': {
-				left: {mobile: {back: true}},
+				left: {all: {back: true}},
 				right: {
 					logo: true,
 					tools: true,
@@ -207,6 +207,20 @@ export class AppButtonsPreset extends Element {
 		`
 	}
 
+	#renderToolsButtons = (config: PresetConfig['right']) => {
+		if (!config?.tools) return ''
+		return html`
+			<app-buttons-group>
+				<person-button disabled=${() => this.disablePersonButton}></person-button>
+				<cube-button disabled=${() => this.disableCubeButton}></cube-button>
+				<show-when
+					condition=${() => config.animation}
+					content=${() => html`<animation-select></animation-select>`}
+				></show-when>
+			</app-buttons-group>
+		`
+	}
+
 	#renderRight = () => {
 		const config = this.#presetConfig().right
 		if (!config) return ''
@@ -222,18 +236,16 @@ export class AppButtonsPreset extends Element {
 					`}
 				${() =>
 					config.tools &&
-					html`
-						<app-buttons-group>
-							<person-button disabled=${() => this.disablePersonButton}></person-button>
-							<cube-button disabled=${() => this.disableCubeButton}></cube-button>
-							<show-when
-								condition=${() => config.animation}
-								content=${() => html`<animation-select></animation-select>`}
-							></show-when>
-						</app-buttons-group>
-					`}
+					html` <show-on-device device="mobile"> ${() => this.#renderToolsButtons(config)} </show-on-device> `}
 			</app-buttons-right>
 
+			${() =>
+				config.tools &&
+				html`
+					<show-on-device device="desktop">
+						<div class="tools-buttons-desktop">${() => this.#renderToolsButtons(config)}</div>
+					</show-on-device>
+				`}
 			${() => this.#renderActionButtons(config)}
 		`
 	}
@@ -241,6 +253,26 @@ export class AppButtonsPreset extends Element {
 	template = () => html`
 		${() => this.#presetConfig().left && this.#renderLeft()} ${() => this.#presetConfig().right && this.#renderRight()}
 		<slot></slot>
+	`
+
+	css = css/*css*/ `
+		:host {
+			display: contents;
+		}
+
+		/* Desktop: Position tools buttons beside the bottom-sheet panel */
+		@media (min-width: 768px) {
+			.tools-buttons-desktop {
+				position: fixed;
+				right: calc(var(--bottom-sheet-panel-left, 7px) + var(--bottom-sheet-panel-width, 32rem) + 20px);
+				top: 20px;
+				z-index: 52; /* Above bottom-sheet (z-index: 50) */
+				display: flex;
+				flex-direction: column;
+				gap: 5px;
+				transition: right 0.3s ease-out;
+			}
+		}
 	`
 }
 

@@ -299,9 +299,11 @@ export class BottomSheet extends Element {
 			if (this.isVisible) {
 				this.sheetRef.classList.add('is-open')
 				document.documentElement.classList.remove('panel-collapsed')
+				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
 			} else {
 				this.sheetRef.classList.remove('is-open')
 				document.documentElement.classList.add('panel-collapsed')
+				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '0px')
 			}
 
 			// Update button title based on parent state
@@ -363,6 +365,8 @@ export class BottomSheet extends Element {
 	css = css`
 		:host {
 			--bottom-sheet-float-direction: flex-start;
+			--bottom-sheet-panel-width: 32rem;
+			--bottom-sheet-panel-left: 7px;
 		}
 
 		:host {
@@ -559,7 +563,6 @@ export class BottomSheet extends Element {
 				display: flex;
 				cursor: default;
 				margin-bottom: 0;
-				padding: 10px 0;
 			}
 
 			.drag-handle .drag-indicator {
