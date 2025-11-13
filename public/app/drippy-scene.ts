@@ -84,8 +84,6 @@ export class DrippyScene extends Element {
 	@signal private cameraRigInteractive = true
 	private dragState = {
 		isShiftDrag: false,
-		startY: -1,
-		startCameraY: -1,
 	}
 
 	async #applyFabrics(
@@ -193,8 +191,6 @@ export class DrippyScene extends Element {
 
 	#handlePointerDown = (e: PointerEvent) => {
 		this.dragState.isShiftDrag = e.shiftKey
-		this.dragState.startY = e.clientY
-		this.dragState.startCameraY = this.cameraY
 		// Only disable camera rig rotation when shift is held
 		if (this.dragState.isShiftDrag) {
 			e.stopImmediatePropagation()
@@ -205,9 +201,8 @@ export class DrippyScene extends Element {
 	#handlePointerMove = (e: PointerEvent) => {
 		if (!this.dragState.isShiftDrag) return
 		// Scale the movement - dragging down increases Y (looks up), dragging up decreases Y (looks down)
-		const cameraYChange = -(e.clientY - this.dragState.startY) / 1000
-		const newCameraY = this.dragState.startCameraY + cameraYChange
-		this.cameraY = clamp(newCameraY, -2, 0)
+		this.cameraY -= e.movementY / 1000
+		this.cameraY = clamp(this.cameraY, -2, 0)
 		e.stopImmediatePropagation()
 	}
 
