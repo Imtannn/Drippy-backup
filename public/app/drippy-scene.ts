@@ -12,27 +12,29 @@ import {
 	onCleanup,
 	Scene,
 	signal,
+	untrack,
 } from 'lume'
 import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {avatars} from '../consts/avatars.js'
-import {spaces} from '../consts/spaces.js'
 import {backgroundScenes} from '../consts/scenes.js'
+import {spaces} from '../consts/spaces.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
 import '../elements/progress-loader.js'
 import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
-import {getSceneBySlug, getSpaceDefaultScene} from '../utils.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
-import type {Space} from '../types/types.js'
+import type {PieceFabricsMap, SelectedGarments, Space} from '../types/types.js'
 import {
 	createMutationsSignal,
 	enableFrontsideOnModelLoad,
 	enableShadowOnModelLoad,
 	getArmatureObject,
+	getSceneBySlug,
+	getSpaceDefaultScene,
 	hasAncestorWithName,
 	isDesktop,
 	meshesInTree,
@@ -57,8 +59,7 @@ export class DrippyScene extends Element {
 
 	@attribute selectedSpace: Space | null = null
 	@attribute selectedAvatar: string | null = null
-	@attribute selectedFabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>> = new Map()
-	@attribute selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>> = new Map()
+	@attribute selectedGarments: SelectedGarments = {}
 	@attribute landing: boolean = false
 
 	@signal isDark = false
@@ -80,7 +81,7 @@ export class DrippyScene extends Element {
 
 	async #applyFabrics(
 		el: Element3D,
-		fabrics: Map<string, Fabric>,
+		fabrics: PieceFabricsMap,
 		isCanceled: () => boolean,
 		loadingId: symbol,
 		templateId: string | undefined,
@@ -98,7 +99,7 @@ export class DrippyScene extends Element {
 				: []
 
 			// Create a map of fabric assignments by mesh name
-			const fabricsByMesh = new Map<string, Fabric>()
+			const fabricsByMesh: PieceFabricsMap = new Map()
 
 			for (const [assignedMesh, fabric] of fabrics.entries()) {
 				fabricsByMesh.set(assignedMesh, fabric)
@@ -379,7 +380,19 @@ export class DrippyScene extends Element {
 			}
 
 			createEffect(() => {
-				const blocks = Array.from(this.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
+				const garmentSelections = this.selectedGarments ?? {}
+				const blocks: Block[] = []
+
+				for (const templateSelection of Object.values(garmentSelections)) {
+					if (!templateSelection) continue
+
+					for (const selection of Object.values(templateSelection)) {
+						if (selection?.block) {
+							blocks.push(selection.block)
+						}
+					}
+				}
+
 				this.renderBlocks = blocks.flatMap(block => {
 					if (block.category === 'Sleeves') {
 						const id = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
@@ -400,8 +413,6 @@ export class DrippyScene extends Element {
 
 			// Re-apply materials whenever the selected fabrics change or models mount
 			createEffect(() => {
-				const selectedFabrics = this.selectedFabrics
-
 				// Cause reactive re-run when the number of blocks changes
 				if (this.renderBlocks.length === 0) {
 					// nothing to bind
@@ -428,8 +439,9 @@ export class DrippyScene extends Element {
 					const blockCategory = parts[2] as BlockCategory
 
 					// Find the fabrics for this block
-					const templateFabrics = selectedFabrics.get(templateCategory)
-					const fabrics = templateFabrics?.get(blockCategory) || new Map<string, Fabric>()
+					const templateSelection = untrack(() => store.getTemplateSelection(templateCategory))
+					const fabricsRecord = templateSelection?.[blockCategory]?.fabrics ?? {}
+					const fabrics = new Map(Object.entries(fabricsRecord)) as PieceFabricsMap
 					const loadingId = Symbol(`material-${blockId}`)
 
 					const modelLoaded = onModelLoad(el)

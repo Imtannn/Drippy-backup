@@ -1,13 +1,13 @@
 import '../app/drippy-scene.js'
-import {spaces} from '../consts/spaces.js'
+import type {DrippyScene} from '../app/drippy-scene.js'
 import {avatars} from '../consts/avatars.js'
 import {blocks as allBlocks} from '../consts/blocks.js'
-import {getSpacePrimaryCollection} from '../utils.js'
-import type {DrippyScene} from '../app/drippy-scene.js'
-import type {Space} from '../types/types.js'
-import type {Block, BlockCategory} from '../types/block.js'
+import {spaces} from '../consts/spaces.js'
+import type {BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
+import type {SelectedGarments, Space, TemplateCategorySelection} from '../types/types.js'
+import {getSpacePrimaryCollection} from '../utils.js'
 
 // Parse query parameters from URL
 const params = new URLSearchParams(window.location.search)
@@ -45,9 +45,24 @@ if (avatarParam) {
 	}
 }
 
-// Parse fabrics from query param
-// Format: "Shirt-Bodice-default:3" or multiple separated by comma
-const selectedFabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>> = new Map()
+// Parse fabrics and blocks into unified selection object
+const selectedGarments: SelectedGarments = {}
+
+const ensureSelection = (templateCategory: TemplateCategory, blockCategory: BlockCategory) => {
+	if (!selectedGarments[templateCategory]) {
+		selectedGarments[templateCategory] = {} as TemplateCategorySelection
+	}
+	const templateSelection = selectedGarments[templateCategory]!
+
+	if (!templateSelection[blockCategory]) {
+		templateSelection[blockCategory] = {
+			block: null,
+			fabrics: {},
+		}
+	}
+
+	return templateSelection[blockCategory]!
+}
 
 if (fabricsParam) {
 	const fabricsList = fabricsParam.split(',')
@@ -58,32 +73,18 @@ if (fabricsParam) {
 		if (match) {
 			const [, templateCategory, blockCategory, fabricName, fabricId] = match
 
-			// Create the nested map structure
-			if (!selectedFabrics.has(templateCategory as TemplateCategory)) {
-				selectedFabrics.set(templateCategory as TemplateCategory, new Map())
-			}
-			const templateMap = selectedFabrics.get(templateCategory as TemplateCategory)!
+			const selection = ensureSelection(templateCategory as TemplateCategory, blockCategory as BlockCategory)
 
-			if (!templateMap.has(blockCategory as BlockCategory)) {
-				templateMap.set(blockCategory as BlockCategory, new Map())
-			}
-			const categoryMap = templateMap.get(blockCategory as BlockCategory)!
-
-			// Create a fabric object with the required materialName property
-			const fabric: Fabric = {
+			selection.fabrics[fabricName] = {
 				_id: fabricId,
 				materialName: fabricName,
-			}
-
-			categoryMap.set(fabricName, fabric)
+			} as Fabric
 		}
 	}
 }
 
 // Parse garments (blocks) from query param
 // Format: "10" or "10,11,12" (block IDs)
-const selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>> = new Map()
-
 if (garmentsParam && selectedCollection) {
 	const garmentIds = garmentsParam.split(',').map(id => id.trim())
 
@@ -97,14 +98,8 @@ if (garmentsParam && selectedCollection) {
 			const templateCategory = block.templateCategory
 			const blockCategory = block.category
 
-			// Create the nested map structure
-			if (!selectedBlocks.has(templateCategory)) {
-				selectedBlocks.set(templateCategory, new Map())
-			}
-			const templateMap = selectedBlocks.get(templateCategory)!
-
-			// Store the block (overwrite if same category - this matches the app behavior)
-			templateMap.set(blockCategory, block)
+			const selection = ensureSelection(templateCategory, blockCategory)
+			selection.block = block
 		}
 	}
 }
@@ -115,8 +110,7 @@ const drippyScene = document.createElement('drippy-scene') as DrippyScene
 // Set properties directly
 drippyScene.selectedSpace = selectedSpace
 drippyScene.selectedAvatar = selectedAvatar
-drippyScene.selectedFabrics = selectedFabrics
-drippyScene.selectedBlocks = selectedBlocks
+drippyScene.selectedGarments = selectedGarments
 
 // Append to body
 document.body.appendChild(drippyScene)

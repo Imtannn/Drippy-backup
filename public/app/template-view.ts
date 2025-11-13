@@ -1,13 +1,11 @@
 import {batch, css, Element, element, html, onCleanup, signal, type ElementAttributes} from 'lume'
 import {templates} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
-import type {Block, BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {Collection} from '../types/types.js'
+import type {Collection, TemplateMap} from '../types/types.js'
 import {getCollectionBySlug, getSpaceCollections, spaceHasMultipleCollections} from '../utils.js'
-import {blockManager} from './block-manager.js'
-import {currentUser, store} from './store.js'
+import {templateHelpers} from './template-helpers.js'
+import {currentUser, store, updateGarmentsInUrl, updateGarmentsSelectionInUrl} from './store.js'
 
 import {collections} from '../consts/collections.js'
 import '../elements/animation-select.js'
@@ -41,7 +39,6 @@ import './item-card.js'
 import './loading-spinner-overlay.js'
 import './pose-selection.js'
 import './remix-overlay.js'
-import {updateFabricsInUrl, updateGarmentsInUrl} from './store.js'
 import './template-detail-view.js'
 import './template-item-overlay.js'
 
@@ -131,7 +128,7 @@ export class TemplateView extends Element {
 
 		// Update URL when fabrics change
 		this.createEffect(() => {
-			updateFabricsInUrl(store.selectedFabrics)
+			updateGarmentsSelectionInUrl(store.selectedGarments)
 		})
 
 		// Auto-trigger preview button after 15s if conditions are met
@@ -159,32 +156,21 @@ export class TemplateView extends Element {
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
 
-		store.setLoadingTemplate(template._id)
-
 		// If clicking on already selected template, show overlay instead of toggling
-		this.isOpeningOverlay = true
-		this.showTemplateOverlay = template
+		if (
+			store.selectedTemplates.has(template.category) &&
+			store.selectedTemplates.get(template.category)?._id === template._id
+		) {
+			this.showTemplateOverlay = template
+			this.isOpeningOverlay = true
+			return
+		}
+
+		store.setLoadingTemplate(template._id)
 		this.#selectTemplate(template)
 		setTimeout(() => {
 			this.isOpeningOverlay = false
 		}, 0)
-		return
-
-		// Check if template requires different gender avatar
-		// const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
-		// const currentGender = currentAvatar?.gender
-		// const templateGender = template.avatar
-
-		// if (currentGender && templateGender && currentGender !== templateGender) {
-		// 	// Show avatar swap bottom sheet
-		// 	batch(() => {
-		// 		this.avatarSwapTemplate = template
-		// 		this.showAvatarSwapSheet = true
-		// 	})
-		// 	return
-		// }
-
-		// Proceed with template selection
 	}
 
 	#isTemplateActive = (template: Template) => {
@@ -323,49 +309,36 @@ export class TemplateView extends Element {
 		const effectiveSpace = store.getEffectiveSpace()
 		if (!effectiveSpace) return
 
-		const newTemplates = new Map<TemplateCategory, Template>(store.selectedTemplates)
-		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(store.selectedBlocks)
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<AppliedMeshNames, Fabric>>>(
-			store.selectedFabrics,
-		)
+		const newTemplates: TemplateMap = new Map(store.selectedTemplates)
+		let nextSelection = templateHelpers.cloneSelectedGarments(store.selectedGarments)
 
 		// check if the template with same category already exists
-		// CONTINUE use "replacing" or "overriding" terminology
-		const interchangeableCategories = blockManager.checkInterchangeableCategories(
+		const overridingCategories = templateHelpers.checkOverridingCategories(
 			template.category,
 			store.selectedTemplates,
 		) as TemplateCategory[]
 
-		if (interchangeableCategories.length > 0) {
-			for (const category of interchangeableCategories) {
+		if (overridingCategories.length > 0) {
+			nextSelection = templateHelpers.omitTemplateCategories(nextSelection, overridingCategories)
+			for (const category of overridingCategories) {
 				if (store.selectedTemplates.has(category)) {
 					newTemplates.delete(category)
-					newBlocks.delete(category)
-					newFabrics.delete(category)
 				}
 			}
 		}
 
 		newTemplates.set(template.category, template)
 		const effectiveCollection = store.getEffectiveCollection()
-		const templateBlockData = blockManager.convertTemplateToBlockData(template, effectiveCollection)
-		const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
+		const templateBlockData = templateHelpers.convertTemplateToBlockData(template, effectiveCollection)
+		const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
 			templateBlockData,
 			effectiveCollection,
 		)
-		newBlocks.set(template.category, newBlocksMap)
-		newFabrics.set(template.category, newFabricsMap)
+		const templateSelection = templateHelpers.buildTemplateSelectionFromMaps(newBlocksMap, newFabricsMap)
+		nextSelection = templateHelpers.withTemplateSelection(nextSelection, template.category, templateSelection)
 
 		batch(() => {
-			store.selectedFabrics = newFabrics
-			debugger
-
-			// @ts-expect-error FIXME we should avoid having different ways of
-			// setting the same thing (see store.setSelectedBlocks, and
-			// loadFromUrlParameters in drippy-app.ts).  This will get more
-			// difficult to manage and error prone/buggy.
-			store.__selectedBlocks = newBlocks
-
+			store.selectedGarments = nextSelection
 			store.selectedTemplates = newTemplates
 		})
 	}
@@ -1054,5 +1027,3 @@ declare module 'lume' {
 		'template-view': ElementAttributes<TemplateView, TemplateViewAttributes>
 	}
 }
-
-type AppliedMeshNames = 'default' | string

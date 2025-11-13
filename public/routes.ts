@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor'
-import {createEffect, createMemo, createSignal, untrack} from 'solid-js'
+import {createMemo, createSignal, untrack} from 'solid-js'
 import {Session} from 'meteor/session'
 import {effect} from './meteor-signals.js'
 

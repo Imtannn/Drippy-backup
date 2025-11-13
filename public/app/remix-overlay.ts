@@ -18,10 +18,10 @@ import '../elements/tabs.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template} from '../types/template.js'
-import {blockManager} from './block-manager.js'
+import {templateHelpers} from './template-helpers.js'
 import './fabric-selection.js'
 import './item-card.js'
-import {store} from './store.js'
+import {store, updateGarmentsSelectionInUrl} from './store.js'
 
 const STYLE_TAB = 'style'
 const FABRICS_TAB = 'fabrics'
@@ -44,8 +44,26 @@ export class RemixOverlay extends Element {
 
 	@eventAttribute onclose: () => void = () => {}
 
+	#scheduleUrlSync = () => {
+		queueMicrotask(() => {
+			updateGarmentsSelectionInUrl(store.selectedGarments)
+		})
+	}
+
+	#onFabricCardSelected = (event: Event) => {
+		const path = typeof event.composedPath === 'function' ? event.composedPath() : []
+		const triggeredInsideFabricSelection = path.some(
+			target => target instanceof HTMLElement && target.tagName === 'FABRIC-SELECTION',
+		)
+
+		if (triggeredInsideFabricSelection) {
+			this.#scheduleUrlSync()
+		}
+	}
+
 	connectedCallback() {
 		super.connectedCallback()
+		this.addEventListener('cardselected', this.#onFabricCardSelected)
 
 		this.createEffect(() => {
 			this.spaceCollection = store.getEffectiveCollection() ?? 'gap'
@@ -62,12 +80,12 @@ export class RemixOverlay extends Element {
 				return
 			}
 
-			// Use template blockOptions if available, otherwise fall back to blockManager
+			// Use template blockOptions if available, otherwise fall back to templateHelpers
 			if (this.selectedTemplate.blockOptions && this.selectedTemplate.blockOptions.length > 0) {
 				// Flatten all blocks from blockOptions
 				this.availableBlocks = this.selectedTemplate.blockOptions.flatMap(option => option.blocks)
 			} else {
-				this.availableBlocks = blockManager.getBlocksForTemplateCategory(
+				this.availableBlocks = templateHelpers.getBlocksForTemplateCategory(
 					this.selectedTemplate.category,
 					this.spaceCollection,
 				)
@@ -85,12 +103,12 @@ export class RemixOverlay extends Element {
 				return
 			}
 
-			// Use template blockOptions if available, otherwise fall back to blockManager
+			// Use template blockOptions if available, otherwise fall back to templateHelpers
 			if (this.selectedTemplate.blockOptions && this.selectedTemplate.blockOptions.length > 0) {
 				this.blocksCategories = this.selectedTemplate.blockOptions.map(option => option.category)
 			} else {
-				const {blocksCategories} = blockManager.isRemixAvailableForTemplate(this.selectedTemplate, {
-					selectedBlocks: untrack(() => store.selectedBlocks),
+				const {blocksCategories} = templateHelpers.isRemixAvailableForTemplate(this.selectedTemplate, {
+					selectedGarments: untrack(() => store.selectedGarments),
 					selectedSpace: untrack(() => store.getEffectiveSpace()),
 					sourceCollection: this.spaceCollection,
 				})
@@ -115,7 +133,7 @@ export class RemixOverlay extends Element {
 				return
 			}
 
-			// Use template fabricOptions if available, otherwise fall back to blockManager
+			// Use template fabricOptions if available, otherwise fall back to templateHelpers
 			if (this.selectedTemplate.fabricOptions && this.selectedTemplate.fabricOptions.length > 0) {
 				// Get fabrics from the collection that match the fabricOptions material IDs
 				const collection = this.spaceCollection
@@ -124,7 +142,7 @@ export class RemixOverlay extends Element {
 				// Get fabrics that match the fabricOptions
 				const optionFabrics = this.selectedTemplate.fabricOptions
 					.map(materialId => {
-						return fabrics[collection]?.find(fabric => `${fabric.category} - ${fabric.materialName}` === materialId)
+						return fabrics[collection]?.find(fabric => fabric._id === materialId)
 					})
 					.filter(fabric => fabric !== undefined) as Fabric[]
 
@@ -142,7 +160,7 @@ export class RemixOverlay extends Element {
 				this.availableFabrics = availableFabrics
 			} else {
 				this.availableFabrics =
-					blockManager.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
+					templateHelpers.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
 			}
 
 			// Make sure the overlay is scrolled to the top on opening
@@ -155,31 +173,36 @@ export class RemixOverlay extends Element {
 
 		// Update piece selections when selected fabrics change (following blocks-selection logic)
 		this.createEffect(() => {
-			const selectedFabrics = store.selectedFabrics.get(this.selectedTemplate!.category)
-			if (!selectedFabrics) {
+			const templateSelection = this.selectedTemplate
+				? store.getTemplateSelection(this.selectedTemplate.category)
+				: undefined
+
+			if (!templateSelection) {
 				this.pieceSelections = []
 				return
 			}
 
-			const selectedBlocks = Array.from(selectedFabrics.keys())
-			if (!selectedBlocks) {
+			const fabricsArray = Object.values(templateSelection)
+				.map(selection => selection?.fabrics ?? {})
+				.filter(fabrics => Object.keys(fabrics).length > 0)
+
+			if (fabricsArray.length === 0) {
 				this.pieceSelections = []
 				return
 			}
 
-			const selectedPieces = selectedBlocks.map(block => selectedFabrics.get(block)?.keys())?.[0]
-
-			if (!selectedPieces) {
-				this.pieceSelections = []
-				return
-			}
-
-			this.pieceSelections = Array.from(selectedPieces).sort()
+			const firstFabrics = fabricsArray[0]
+			this.pieceSelections = Object.keys(firstFabrics).sort()
 
 			onCleanup(() => {
 				this.pieceSelections = []
 			})
 		})
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback()
+		this.removeEventListener('cardselected', this.#onFabricCardSelected)
 	}
 
 	#onBlockSelect = (block: Block) => {
@@ -189,12 +212,14 @@ export class RemixOverlay extends Element {
 			block,
 			templateCategory: this.selectedTemplate.category,
 		})
+
+		this.#scheduleUrlSync()
 	}
 
 	#getIsBlockActive = (block: Block) => {
 		if (!this.selectedTemplate) return false
-		const templateBlocks = store.selectedBlocks.get(this.selectedTemplate.category)
-		return templateBlocks?.get(block.category)?._id === block._id
+		const selection = store.getBlockSelection(this.selectedTemplate.category, block.category)
+		return selection?.block?._id === block._id
 	}
 
 	#filteredBlocksByCategory = (category: BlockCategory) => {
@@ -303,7 +328,6 @@ export class RemixOverlay extends Element {
 	css = css/*css*/ `
 		:host {
 			display: block;
-			padding-top: 60px;
 		}
 
 		.overlay {

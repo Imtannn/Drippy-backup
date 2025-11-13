@@ -1,70 +1,90 @@
 import {attribute, css, Element, element, html, signal} from 'lume'
 import {store} from '../app/store.js'
 import {avatars} from '../consts/avatars.js'
-import {fabrics} from '../consts/fabrics.js'
 import {spaces} from '../consts/spaces.js'
 import {templates} from '../consts/templates.js'
 import type {TemplateCategory} from '../types/template.js'
-import type {Block} from '../types/block.js'
+import type {Block, BlockCategory} from '../types/block.js'
+import type {Fabric} from '../types/fabric.js'
 
 const block3DLanding = {
 	male: [
 		{
-			_id: '1',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/eliseF/blocks/Top/Item_6___Sleeves/sleeves_1592.gltf',
+			_id: '97e8fd99-276e-487a-9201-ec261b465673',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/9heure19heure/blocks/Top/Item_6___Sleeves/sleeves_1592.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/9heure19heure/blocks/Top/Item_6___Sleeves/sleeves_1592.gltf',
 			blockName: 'sleeves 1592',
-			avatar: 'Male',
+			avatar: 'male',
 			category: 'Sleeves',
-			templateId: 2,
-			templateName: 'Item 6',
+			templateId: '92f3b8ff-503c-4511-9700-080600e7dad5',
+			templateName: 'Oversized Bomber',
 			templateCategory: 'Top',
+			collection: '9heure19heure',
 		},
 		{
-			_id: '2',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/eliseF/blocks/Top/Item_6___Bodice/bodice_1591.gltf',
+			_id: '79494d0c-4117-4ea6-988a-f0cbd8222c15',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/9heure19heure/blocks/Top/Item_6___Bodice/bodice_1591.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/9heure19heure/blocks/Top/Item_6___Bodice/bodice_1591.gltf',
 			blockName: 'bodice 1591',
-			avatar: 'Male',
+			avatar: 'male',
 			category: 'Bodice',
-			templateId: 1,
-			templateName: 'Item 6',
+			templateId: '92f3b8ff-503c-4511-9700-080600e7dad5',
+			templateName: 'Oversized Bomber',
 			templateCategory: 'Top',
+			collection: '9heure19heure',
 		},
 		{
-			_id: '13',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/eliseF/blocks/Pants/Item_8___Pants/pants_1593.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/eliseF/blocks/Pants/Item_8___Pants/pants_1593.gltf',
+			_id: '09baaa9d-e04e-45ea-a137-47066fcd05e1',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/9heure19heure/blocks/Pants/Item_8___Pants/pants_1593.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/9heure19heure/blocks/Pants/Item_8___Pants/pants_1593.gltf',
 			blockName: 'pants 1593',
-			avatar: 'Male',
+			avatar: 'male',
 			category: 'Pants',
-			templateId: 10,
-			templateName: 'Item 8',
+			templateId: 'd6d33246-4cb4-413d-ab35-b125ad74ef89',
+			templateName: 'Bermuda Short',
 			templateCategory: 'Pants',
+			collection: '9heure19heure',
 		},
 	],
 	female: [
 		{
-			_id: '14',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455.png',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Shirt/Item_8___Bodice/bodice_1455..gltf',
-			blockName: 'bodice 1455',
-			avatar: 'Female',
-			category: 'Bodice',
-			templateId: 8,
-			templateName: 'Item 8',
-			templateCategory: 'Shirt',
+			_id: '3052f388-1da9-42fe-8cbb-f9f1fbd1412f',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/gap/blocks/Top/Item_2___Sleeves/sleeve__1629.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/gap/blocks/Top/Item_2___Sleeves/sleeve__1629.gltf',
+			blockName: 'sleeve 1629',
+			avatar: 'female',
+			category: 'Sleeves',
+			templateId: '9e7cda10-db8a-4c6e-b215-9d09207a207f',
+			templateName: 'Bomber jacket',
+			templateCategory: 'Top',
+			collection: 'gap',
 		},
 		{
-			_id: '15',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/moidien/blocks/Pants/Item_7_Pants/pants_130.png',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/moidien/blocks/Pants/Item_7_Pants/pants_130..gltf',
-			blockName: 'pants 130',
-			avatar: 'Female',
+			_id: 'd6d7f828-6cb3-44a2-b4b9-85f81d65a002',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/gap/blocks/Top/Item_2___Bodice/bodice_1628.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/gap/blocks/Top/Item_2___Bodice/bodice_1628.gltf',
+			blockName: 'bodice 1628',
+			avatar: 'female',
+			category: 'Bodice',
+			templateId: '9e7cda10-db8a-4c6e-b215-9d09207a207f',
+			templateName: 'Bomber jacket',
+			templateCategory: 'Top',
+			collection: 'gap',
+		},
+		{
+			_id: '02fdaf5d-c75a-494b-bb5f-f2ba1983eb04',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/gap/blocks/Pants/Item_1___Pants/pants_1531.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/gap/blocks/Pants/Item_1___Pants/pants_1531.gltf',
+			blockName: 'pants 1531',
+			avatar: 'female',
 			category: 'Pants',
-			templateId: 17,
+			templateId: '5c645696-f41c-484e-9ddd-8bb127a23663',
 			templateName: 'Lazy pants',
 			templateCategory: 'Pants',
+			collection: 'gap',
 		},
 	],
 }
@@ -91,6 +111,7 @@ export class AvatarSelector extends Element {
 	static readonly elementName = 'avatar-selector'
 
 	@attribute targetModel = ''
+	@attribute fabricsSelection = []
 
 	@signal private isOpen = false
 	private dropdownElement: HTMLElement | null = null
@@ -180,10 +201,10 @@ export class AvatarSelector extends Element {
 	private setBlocksForGender(gender: 'male' | 'female') {
 		try {
 			// Clear existing blocks first
-			store.selectedBlocks.clear()
+			store.clearSelectedGarments()
 
 			const genderBlocks = block3DLanding[gender]
-			const collection = gender === 'male' ? 'eliseF' : 'moidien'
+			const collection = gender === 'male' ? '9heure19heure' : 'gap'
 
 			if (!genderBlocks || genderBlocks.length === 0) {
 				return
@@ -225,183 +246,52 @@ export class AvatarSelector extends Element {
 				store.selectedTemplates = new Map(templateData.map(t => [t.category, t]))
 			}
 
-			// Force set blocks for selected gender
 			const blockData: Array<{block: Block; templateCategory: TemplateCategory}> = []
-			if (sleevesBlock) {
+			const fabricData: Array<{
+				fabric: Fabric
+				blockCategory: BlockCategory
+				templateCategory: TemplateCategory
+				assignedMesh: string
+			}> = []
+
+			const selection = this.fabricsSelection
+			const defaultFabric = Array.isArray(selection) && selection.length > 0 ? (selection[0] as Fabric) : null
+
+			const pushBlock = (block: any, templateCategoryOverride?: TemplateCategory) => {
+				if (!block) return
+
+				const templateCategory = (templateCategoryOverride ?? block.templateCategory) as TemplateCategory
+				const normalizedBlock = {...block, templateId: String(block.templateId)} as Block
+
 				blockData.push({
-					block: {...sleevesBlock, templateId: String(sleevesBlock.templateId)} as Block,
-					templateCategory: sleevesBlock.templateCategory as TemplateCategory,
+					block: normalizedBlock,
+					templateCategory,
+				})
+
+				if (!defaultFabric) return
+
+				fabricData.push({
+					fabric: {...defaultFabric},
+					blockCategory: normalizedBlock.category as BlockCategory,
+					templateCategory,
+					assignedMesh: defaultFabric.assignedMesh ?? 'default',
 				})
 			}
-			if (topBlock) {
-				blockData.push({
-					block: {...topBlock, templateId: String(topBlock.templateId)} as Block,
-					templateCategory: topBlock.templateCategory as TemplateCategory,
-				})
-			}
-			if (shirtBlock) {
-				blockData.push({
-					block: {...shirtBlock, templateId: String(shirtBlock.templateId)} as Block,
-					templateCategory: shirtBlock.templateCategory as TemplateCategory,
-				})
-			}
-			if (pantsBlock) {
-				blockData.push({
-					block: {...pantsBlock, templateId: String(pantsBlock.templateId)} as Block,
-					templateCategory: 'Pants' as TemplateCategory,
-				})
-			}
+
+			pushBlock(topBlock)
+			pushBlock(sleevesBlock)
+			pushBlock(shirtBlock)
+			pushBlock(pantsBlock, 'Pants' as TemplateCategory)
 
 			if (blockData.length > 0) {
 				store.setSelectedBlocks(blockData)
-				// Apply màu cho tất cả blocks sau khi set
-				this.applyFabricsToAllBlocks(gender)
-			}
-		} catch (error) {
-			// Error setting blocks
-		}
-	}
 
-	// private setDefaultFabricsForGender(gender: 'male' | 'female') {
-	// 	try {
-	// 		const collection = gender === 'male' ? 'eliseF' : 'moidien'
-	// 		const availableFabrics = fabrics[collection] || []
-
-	// 		const fabricData = []
-
-	// 		if (gender === 'female') {
-	// 			// Find Black fabric for Pants - prioritize one with Pants in templateCategories
-	// 			const pantsFabric =
-	// 				availableFabrics.find(f => f.materialName === 'Black' && f.templateCategories?.includes('Pants')) ||
-	// 				availableFabrics.find(f => f.materialName === 'Black')
-
-	// 			if (pantsFabric) {
-	// 				fabricData.push({
-	// 					fabric: pantsFabric,
-	// 					blockCategory: 'Pants' as BlockCategory,
-	// 					templateCategory: 'Pants' as TemplateCategory,
-	// 				})
-	// 			}
-	// 		} else if (gender === 'male') {
-	// 			// Set default fabrics for male
-	// 			const pantsFabric = availableFabrics.find(
-	// 				f => f.materialName === 'Dusty Blue' && f.templateCategories?.includes('Pants'),
-	// 			)
-
-	// 			if (pantsFabric) {
-	// 				fabricData.push({
-	// 					fabric: pantsFabric,
-	// 					blockCategory: 'Pants' as BlockCategory,
-	// 					templateCategory: 'Pants' as TemplateCategory,
-	// 				})
-	// 			}
-	// 		}
-
-	// 		if (fabricData.length > 0) {
-	// 			store.setSelectedFabrics = fabricData
-	// 		}
-	// 	} catch (error) {
-	// 		console.error(`❌ Error setting fabrics for ${gender}:`, error)
-	// 	}
-	// }
-
-	private applyFabricsToAllBlocks(gender: 'male' | 'female') {
-		try {
-			const collection = gender === 'male' ? 'eliseF' : 'moidien'
-			const availableFabrics = fabrics[collection] || []
-
-			const allBlocks = store.selectedBlocks
-
-			for (const [templateCategory, blocksMap] of allBlocks) {
-				const selectedTemplate = store.selectedTemplates.get(templateCategory)
-				const actualBlockCategories = Array.from(blocksMap.keys())
-				const existingFabrics = store.selectedFabrics.get(templateCategory)
-
-				const blocksNeedingFabric = actualBlockCategories.filter(blockCategory => {
-					const hasFabric = (existingFabrics?.get(blockCategory)?.size ?? 0) > 0
-					return !hasFabric
-				})
-
-				if (selectedTemplate) {
-					const fabricData: Array<{fabric: any; blockCategory: any; templateCategory: any; assignedMesh?: string}> = []
-					if (selectedTemplate.materialId) {
-						const mainFabric = availableFabrics.find(
-							fabric => `${fabric.category} - ${fabric.materialName}` === selectedTemplate.materialId,
-						)
-
-						if (mainFabric) {
-							for (const blockCategory of blocksNeedingFabric) {
-								fabricData.push({
-									fabric: mainFabric,
-									blockCategory: blockCategory,
-									templateCategory: templateCategory,
-									assignedMesh: 'default',
-								})
-							}
-						}
-					}
-
-					if (selectedTemplate.extraMaterials) {
-						for (const extraMaterial of selectedTemplate.extraMaterials) {
-							const extraFabric = availableFabrics.find(
-								fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
-							)
-
-							if (extraFabric) {
-								for (const blockCategory of blocksNeedingFabric) {
-									fabricData.push({
-										fabric: extraFabric,
-										blockCategory: blockCategory,
-										templateCategory: templateCategory,
-										assignedMesh: extraMaterial.mesh,
-									})
-								}
-							}
-						}
-					}
-
-					if (fabricData.length === 0) {
-						const suitableFabrics = availableFabrics.filter(fabric =>
-							fabric.templateCategories?.includes(selectedTemplate.category || templateCategory),
-						)
-
-						if (suitableFabrics.length > 0) {
-							const selectedFabric = suitableFabrics[0]
-
-							for (const blockCategory of blocksNeedingFabric) {
-								fabricData.push({
-									fabric: selectedFabric,
-									blockCategory: blockCategory,
-									templateCategory: templateCategory,
-									assignedMesh: 'default',
-								})
-							}
-						}
-					}
-
-					// Set fabrics
-					if (fabricData.length > 0) {
-						store.setSelectedFabrics = fabricData
-					}
-				} else {
-					console.log('No selectedTemplate found, using fallback fabric')
-					if (blocksNeedingFabric.length > 0 && availableFabrics.length > 0) {
-						const fallbackFabric = availableFabrics[0]
-						const fabricData = blocksNeedingFabric.map(blockCategory => ({
-							fabric: fallbackFabric,
-							blockCategory: blockCategory,
-							templateCategory: templateCategory,
-							assignedMesh: 'default',
-						}))
-
-						if (fabricData.length > 0) {
-							store.setSelectedFabrics = fabricData
-						}
-					}
+				if (fabricData.length > 0) {
+					store.setSelectedFabrics = fabricData
 				}
 			}
 		} catch (error) {
-			console.error('Error applying fabrics:', error instanceof Error ? error.message : error)
+			// Error setting blocks
 		}
 	}
 

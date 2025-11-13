@@ -31,10 +31,7 @@ export class TemplateDetailView extends Element {
 		const collectionFabrics = fabrics[collection]
 		if (!collectionFabrics) return 'N/A'
 
-		const fabric = collectionFabrics.find(f => {
-			const fabricId = `${f.category} - ${f.materialName}`
-			return fabricId === materialId
-		})
+		const fabric = collectionFabrics.find(f => f._id === materialId)
 
 		return fabric?.materialName || 'N/A'
 	}
