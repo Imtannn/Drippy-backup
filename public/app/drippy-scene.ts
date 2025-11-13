@@ -1,5 +1,6 @@
 import {
 	attribute,
+	clamp,
 	createEffect,
 	css,
 	Element,
@@ -16,15 +17,14 @@ import {
 import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {avatars} from '../consts/avatars.js'
-import {spaces} from '../consts/spaces.js'
 import {scenes} from '../consts/scenes.js'
+import {spaces} from '../consts/spaces.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
 import '../elements/progress-loader.js'
 import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
-import {getSceneBySlug, getSpaceDefaultScene} from '../utils.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import type {Space} from '../types/types.js'
@@ -33,6 +33,8 @@ import {
 	enableFrontsideOnModelLoad,
 	enableShadowOnModelLoad,
 	getArmatureObject,
+	getSceneBySlug,
+	getSpaceDefaultScene,
 	hasAncestorWithName,
 	isDesktop,
 	meshesInTree,
@@ -76,6 +78,13 @@ export class DrippyScene extends Element {
 
 	@signal private loadingProgress = 0
 	@signal private isLoading = false
+
+	// Camera rig drag state
+	@signal private cameraY = -1
+	@signal private cameraRigInteractive = true
+	private dragState = {
+		isShiftDrag: false,
+	}
 
 	async #applyFabrics(
 		el: Element3D,
@@ -178,6 +187,32 @@ export class DrippyScene extends Element {
 		model.three.traverse((obj: any) => {
 			if (obj.skeleton) obj.skeleton = sourceSkeleton
 		})
+	}
+
+	#handlePointerDown = (e: PointerEvent) => {
+		this.dragState.isShiftDrag = e.shiftKey
+		// Only disable camera rig rotation when shift is held
+		if (this.dragState.isShiftDrag) {
+			e.stopImmediatePropagation()
+			this.cameraRigInteractive = false
+		}
+	}
+
+	#handlePointerMove = (e: PointerEvent) => {
+		if (!this.dragState.isShiftDrag) return
+		// Scale the movement - dragging down increases Y (looks up), dragging up decreases Y (looks down)
+		this.cameraY -= e.movementY / 1000
+		this.cameraY = clamp(this.cameraY, -2, 0)
+		e.stopImmediatePropagation()
+	}
+
+	#handlePointerUp = (e: PointerEvent) => {
+		if (this.dragState.isShiftDrag) {
+			e.stopImmediatePropagation()
+		}
+		this.cameraRigInteractive = true
+
+		this.dragState.isShiftDrag = false
 	}
 
 	connectedCallback() {
@@ -542,6 +577,10 @@ export class DrippyScene extends Element {
 					physically-correct-lights
 					shadow-mode="vsm"
 					environment="/images/envs/brown_photostudio_02.jpg"
+					oncapture:pointerdown=${this.#handlePointerDown}
+					oncapture:pointermove=${this.#handlePointerMove}
+					oncapture:pointerup=${this.#handlePointerUp}
+
 				>
 					<lume-element3d align-point="0.5 0.5 0.5">
 						<lume-ambient-light visible="true" intensity="0.7" color="white"></lume-ambient-light>
@@ -631,7 +670,10 @@ export class DrippyScene extends Element {
 							min-vertical-angle="-17"
 							max-vertical-angle="45"
 							dolly-speed="${() => (this.landing ? 0 : 0.01)}"
-							position="0 -1 0"
+							attr:position="${() => `0 ${this.cameraY} 0`}"
+							xinteractive=${() => {
+								return this.cameraRigInteractive
+							}}
 						>
 							<lume-perspective-camera active slot="camera-child" near="0.05" far="60" fov="50"></lume-perspective-camera>
 						</lume-camera-rig>
