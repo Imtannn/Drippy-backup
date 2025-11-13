@@ -44,6 +44,7 @@ export class TopNavigation extends Element {
 			justify-content: space-between;
 			position: relative;
 			padding-top: 10px;
+			z-index: 100;
 		}
 	`
 }
