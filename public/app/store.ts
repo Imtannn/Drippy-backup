@@ -793,20 +793,6 @@ createEffect(() => {
 	}
 })
 
-export function updateGarmentsInUrl(garments: TemplateMap) {
-	if (garments.size > 0) {
-		const garmentIds = Array.from(garments.values()).map(garment => {
-			const collection = garment.collection
-			const collectionSlug = collection ?? null
-			if (collectionSlug) return `${collectionSlug}|${garment._id}`
-			return garment._id
-		})
-		untrack(searchParams).set('garments', garmentIds.join(','))
-	} else untrack(searchParams).delete('garments')
-
-	pushState()
-}
-
 export function updateGarmentsSelectionInUrl(selectedGarments: SelectedGarments) {
 	const blockEntries: string[] = []
 	const fabricEntries: string[] = []

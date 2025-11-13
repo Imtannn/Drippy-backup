@@ -5,14 +5,14 @@ import {templates} from '../consts/templates.js'
 import {pushState, searchParams} from '../routes.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {TemplateMap} from '../types/types.js'
+import {currentUser, store, updateGarmentsSelectionInUrl} from './store.js'
 import {templateHelpers} from './template-helpers.js'
-import {currentUser, store, updateGarmentsInUrl, updateGarmentsSelectionInUrl} from './store.js'
 
 import '../elements/avatar-dropdown.js'
 import '../elements/dialog-element.js'
-import '../elements/login-ui.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
+import '../elements/login-ui.js'
 import '../elements/tabs.js'
 import './item-card.js'
 import './loading-spinner-overlay.js'
@@ -35,12 +35,7 @@ export class BrandView extends Element {
 		super.connectedCallback()
 		document.addEventListener('click', this.#onDocumentClick)
 
-		this.createEffect(() => {
-			const templates = store.selectedTemplates
-			updateGarmentsInUrl(templates)
-		})
-
-		// Update URL when garment selections change
+		// Update URL when garments selection changes
 		this.createEffect(() => {
 			updateGarmentsSelectionInUrl(store.selectedGarments)
 		})
@@ -135,7 +130,6 @@ export class BrandView extends Element {
 		})
 
 		// Immediately update URL parameters after selecting template
-		updateGarmentsInUrl(newTemplates)
 		updateGarmentsSelectionInUrl(store.selectedGarments)
 	}
 

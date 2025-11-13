@@ -4,8 +4,8 @@ import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {Collection, TemplateMap} from '../types/types.js'
 import {getCollectionBySlug, getSpaceCollections, spaceHasMultipleCollections} from '../utils.js'
+import {currentUser, store, updateGarmentsSelectionInUrl} from './store.js'
 import {templateHelpers} from './template-helpers.js'
-import {currentUser, store, updateGarmentsInUrl, updateGarmentsSelectionInUrl} from './store.js'
 
 import {collections} from '../consts/collections.js'
 import '../elements/animation-select.js'
@@ -122,10 +122,6 @@ export class TemplateView extends Element {
 				this.showLoginDialog = false
 			}
 		})
-
-		// Update URL when garments change
-		this.createEffect(() => updateGarmentsInUrl(store.selectedTemplates))
-
 		// Update URL when fabrics change
 		this.createEffect(() => {
 			updateGarmentsSelectionInUrl(store.selectedGarments)
