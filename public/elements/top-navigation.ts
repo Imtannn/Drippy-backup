@@ -42,13 +42,8 @@ export class TopNavigation extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			background: rgba(255, 255, 255, 0.8);
-			backdrop-filter: blur(20px);
-			border-radius: var(--borderRadiusPill);
 			position: relative;
-			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-			border: 1px solid rgba(255, 255, 255, 0.2);
-			padding: 2px 4px;
+			padding-top: 10px;
 		}
 	`
 }
