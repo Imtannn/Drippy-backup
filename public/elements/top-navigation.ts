@@ -32,8 +32,9 @@ export class TopNavigation extends Element {
 		/* Desktop: Position at top of top-sheet */
 		@media (min-width: 768px) {
 			:host {
-				width: 30rem;
+				width: 32rem;
 				padding-bottom: 14px;
+				padding-right: var(--uiSpacing);
 			}
 		}
 
