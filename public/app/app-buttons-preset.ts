@@ -193,7 +193,7 @@ export class AppButtonsPreset extends Element {
 				<app-buttons-right layout="bottom" style="top: 20px;">
 					<app-buttons-group custom-style="gap: 34px; align-items: center;margin-top: -3px;" group-direction="row">
 						${() => buttons.share && html`<share-button onclick=${this.#onShareClick}></share-button>`}
-						${() => buttons.buy && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
+						${() => buttons.buy && store.view === 'template' && !store.remixOverlayTemplate && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
 					</app-buttons-group>
 				</app-buttons-right>
 			`
