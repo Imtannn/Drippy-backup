@@ -75,7 +75,7 @@ export class AppButtonsPreset extends Element {
 			case 'order-flow':
 				switch (store.view) {
 					case 'order-items':
-						store.view = 'preview'
+						store.view = 'template'
 						break
 					case 'order-size':
 						store.view = 'order-items'

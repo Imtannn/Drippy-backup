@@ -63,6 +63,9 @@ export class BottomSheet extends Element {
 						this.animateIn()
 					} else {
 						this.isVisible = true
+						// Update document state to notify the scene
+						document.documentElement.classList.remove('panel-collapsed')
+						document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
 					}
 				})
 			})
@@ -252,6 +255,8 @@ export class BottomSheet extends Element {
 
 		this.isVisible = false
 		this.sheetRef.classList.remove('is-open')
+		document.documentElement.classList.add('panel-collapsed')
+		document.documentElement.style.setProperty('--bottom-sheet-panel-width', '0px')
 
 		// Force a reflow to ensure the transform is applied
 		this.sheetRef.offsetHeight
@@ -259,6 +264,8 @@ export class BottomSheet extends Element {
 		requestAnimationFrame(() => {
 			this.isVisible = true
 			this.sheetRef!.classList.add('is-open')
+			document.documentElement.classList.remove('panel-collapsed')
+			document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
 		})
 	}
 
@@ -270,6 +277,8 @@ export class BottomSheet extends Element {
 
 		this.isVisible = false
 		this.sheetRef.classList.remove('is-open')
+		document.documentElement.classList.add('panel-collapsed')
+		document.documentElement.style.setProperty('--bottom-sheet-panel-width', '0px')
 
 		// Wait for animation to complete
 		setTimeout(() => {
@@ -288,6 +297,8 @@ export class BottomSheet extends Element {
 			this.isVisible = true
 			if (this.sheetRef) {
 				this.sheetRef.classList.add('is-open')
+				document.documentElement.classList.remove('panel-collapsed')
+				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
 			}
 		}
 	}
