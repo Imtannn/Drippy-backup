@@ -439,11 +439,6 @@ export class TemplateView extends Element {
 						<app-buttons-group group-direction="row" custom-class="button-group-spread">
 							<show-when
 								condition=${() => !this.showRemixOverlay}
-								content=${() => html`<back-button onclick=${this.#onBackButtonClick}></back-button>`}
-							></show-when>
-
-							<show-when
-								condition=${() => !this.showRemixOverlay}
 								content=${() => html`
 									<preview-button
 										class="align-right"
@@ -785,11 +780,27 @@ export class TemplateView extends Element {
 				--app-buttons-left-transform: translateX(0) !important;
 				--app-buttons-left-transform: translateY(-10px) !important;
 			}
+
+			show-on-device[device='desktop'] {
+				display: contents;
+			}
+
 			.template-view-buttons {
-				position: relative;
+				position: sticky;
+				top: 0;
 				display: flex;
 				align-items: center;
-				height: 120px;
+				background: var(--uiColorPrimaryWhite);
+				z-index: 100;
+				width: 100%;
+				min-height: 52px;
+			}
+
+			tabs-provider bottom-sheet-header {
+				position: sticky;
+				top: 52px;
+				z-index: 99;
+				background: var(--uiColorPrimaryWhite);
 			}
 		}
 
@@ -802,13 +813,6 @@ export class TemplateView extends Element {
 			padding-top: 0;
 			padding-bottom: var(--uiSpacingSmall);
 			background: var(--uiColorPrimaryWhite);
-		}
-
-		.bottom-sheet-header {
-			position: sticky;
-			top: 0;
-			background: var(--appBackground);
-			z-index: 10;
 			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
 		}
 

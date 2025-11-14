@@ -33,7 +33,6 @@ export class TopNavigation extends Element {
 		@media (min-width: 768px) {
 			:host {
 				width: 30rem;
-				margin: 60px auto 0 auto;
 				padding-bottom: 14px;
 			}
 		}
@@ -45,6 +44,7 @@ export class TopNavigation extends Element {
 			position: relative;
 			z-index: 100;
 			margin-top: -5px;
+			padding-left: var(--uiSpacing);
 		}
 	`
 }
