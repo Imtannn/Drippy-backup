@@ -18,6 +18,7 @@ import '../elements/bottom-navigation.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
 import '../elements/dialog-element.js'
+import '../elements/heart-button.js'
 import '../elements/home-button.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
@@ -28,6 +29,7 @@ import '../elements/person-button.js'
 import '../elements/placeholder-image.js'
 import '../elements/preview-button.js'
 import '../elements/save-button.js'
+import '../elements/search-button.js'
 import '../elements/show-on-device.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
@@ -573,6 +575,10 @@ export class TemplateView extends Element {
 						</show-on-device>
 						<bottom-sheet-header>
 							<div class="tabs-container">
+								<div class="tabs-action-buttons">
+									<heart-button></heart-button>
+									<search-button></search-button>
+								</div>
 								<tabs-list>
 									<for-each
 										items=${() => Object.keys(this.templateCategories)}
@@ -795,11 +801,21 @@ export class TemplateView extends Element {
 		}
 
 		.tabs-container {
+			display: flex;
+			align-items: center;
+			gap: var(--uiSpacingSmall);
 			padding: var(--uiSpacing);
 			padding-top: 0;
 			padding-bottom: var(--uiSpacingSmall);
 			background: var(--uiColorPrimaryWhite);
 			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
+		}
+
+		.tabs-action-buttons {
+			display: flex;
+			gap: var(--uiSpacingSmall);
+			margin-right: var(--uiSpacingSmall);
+			border: none;
 		}
 
 		.tabs-content-container {
