@@ -94,6 +94,7 @@ export class BottomSheet extends Element {
 	}
 
 	private checkDesktop = () => {
+		const wasDesktop = this.isDesktop
 		if (window.innerWidth >= 768) {
 			if (!this.isDesktop) {
 				this.isDesktop = true
@@ -103,6 +104,17 @@ export class BottomSheet extends Element {
 				this.isDesktop = false
 			}
 		}
+
+		// When switching to mobile, ensure panel is always open
+		if (wasDesktop && !this.isDesktop) {
+			this.isVisible = true
+			if (this.sheetRef) {
+				this.sheetRef.classList.add('is-open')
+				document.documentElement.classList.remove('panel-collapsed')
+				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
+			}
+		}
+
 		this.updateBottomSheetHeightVar()
 	}
 
@@ -304,6 +316,18 @@ export class BottomSheet extends Element {
 	}
 
 	public toggleCollapse() {
+		// On mobile, always keep panel open
+		if (!this.isDesktop) {
+			this.isVisible = true
+			if (this.sheetRef) {
+				this.sheetRef.classList.add('is-open')
+				document.documentElement.classList.remove('panel-collapsed')
+				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
+			}
+			return
+		}
+
+		// On desktop, allow toggle
 		this.isVisible = !this.isVisible
 		if (this.sheetRef) {
 			if (this.isVisible) {

@@ -60,11 +60,44 @@ export class NavItems extends Element {
 
 			<button
 				class="nav-item"
-				classList=${{active: () => this.activeTab === 'pose'}}
-				onclick=${() => this.#onTabClick('help')}
+				classList=${{active: () => this.activeTab === 'wardrobe'}}
+				disabled
 			>
 				<div class="nav-icon">
-					<img src=${() => (this.activeTab === 'help' ? '/images/help.svg' : '/images/help-inactive.svg')} alt="Help" />
+					<img src="/images/top-nav/wardrobes.svg" alt="Wardrobe" />
+				</div>
+				<span class="nav-label">Wardrobe</span>
+			</button>
+
+			<button
+				class="nav-item"
+				classList=${{active: () => this.activeTab === 'scenes'}}
+				disabled
+			>
+				<div class="nav-icon">
+					<img src="/images/top-nav/scenes-icon.svg" alt="Scenes" />
+				</div>
+				<span class="nav-label">Scenes</span>
+			</button>
+
+			<button
+				class="nav-item"
+				classList=${{active: () => this.activeTab === 'studio'}}
+				disabled
+			>
+				<div class="nav-icon">
+					<img src="/images/top-nav/studio-icon.svg" alt="Studio" />
+				</div>
+				<span class="nav-label">Studio</span>
+			</button>
+
+			<button
+				class="nav-item"
+				classList=${{active: () => this.activeTab === 'help'}}
+				disabled
+			>
+				<div class="nav-icon">
+					<img src="/images/top-nav/help-icon.svg" alt="Help" />
 				</div>
 				<span class="nav-label">Help</span>
 			</button>
@@ -76,13 +109,14 @@ export class NavItems extends Element {
 			display: flex;
 			align-items: center;
 			flex: 1;
-			justify-content: flex-end;
 		}
 
 		.nav-items-container {
 			display: flex;
 			align-items: center;
-			padding-right: var(--uiSpacingSmall);
+			width: 100%;
+			padding-left: var(--uiSpacingLarge);
+			justify-content: space-between;
 		}
 
 		.nav-item {
@@ -96,6 +130,11 @@ export class NavItems extends Element {
 			transition: all 0.2s ease;
 			color: var(--uiColorSecondaryDark);
 			min-width: 27px;
+		}
+
+		.nav-item:disabled {
+			opacity: 0.3;
+			cursor: not-allowed;
 		}
 
 		.nav-item.active {
