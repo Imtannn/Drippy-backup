@@ -435,16 +435,6 @@ export class TemplateView extends Element {
 			</app-buttons-left>
 			<show-on-device device="desktop">
 				<div class="template-view-buttons">
-					<app-buttons-left>
-						<app-buttons-group group-direction="row" custom-class="button-group-spread">
-							<show-when
-								condition=${() => this.showRemixOverlay}
-								content=${() => html`
-									<button class="done-button align-right" onclick=${this.#closeRemixOverlay}>Done</button>
-								`}
-							></show-when>
-						</app-buttons-group>
-					</app-buttons-left>
 					<top-navigation
 						classList=${() => ({
 							hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
@@ -1048,6 +1038,10 @@ export class TemplateView extends Element {
 			margin-top: 0;
 		}
 
+		remix-overlay {
+			margin-top: -60px;
+		}
+
 		@media (min-width: 768px) {
 			.collections-mobile-navigation {
 				display: none;
@@ -1055,6 +1049,10 @@ export class TemplateView extends Element {
 
 			.collections-navigation {
 				display: block;
+			}
+
+			remix-overlay {
+				margin-top: -85px;
 			}
 		}
 	`
