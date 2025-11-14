@@ -70,7 +70,7 @@ export const collections: Collection[] = [
 		slug: '9heure19heure',
 		logo: '',
 		gender: 'male',
-		garmentsCount: blocks['9heure19heuree']?.length ?? 0,
+		garmentsCount: blocks['9heure19heure']?.length ?? 0,
 	},
 	{
 		name: 'Fige dans le temps',

@@ -1,4 +1,5 @@
 import {attribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import type {BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import {store} from './store.js'
@@ -26,23 +27,26 @@ export class FabricSelection extends Element {
 		})
 	}
 
-	#getSelectedFabrics = () => {
-		// Get all selected fabrics for this template category
-		const selectedFabricsBlocksMap = store.selectedFabrics.get(this.selectedTemplateCategory!)
-		// Get all selected blocks keys for this template category
-		const selectedBlocks = Array.from(selectedFabricsBlocksMap?.keys() || [])
+	#getSelectedFabrics = (): Record<string, Fabric>[] => {
+		if (!this.selectedTemplateCategory) return []
 
-		// Get a flat set of fabrics that are assigned to selected blocks
-		const selectedFabrics = selectedBlocks.map(blockCategory => selectedFabricsBlocksMap?.get(blockCategory))
+		const templateSelection = store.getTemplateSelection(this.selectedTemplateCategory)
+		if (!templateSelection) return []
 
-		return selectedFabrics
+		return Object.values(templateSelection)
+			.map(selection => selection?.fabrics ?? {})
+			.filter(fabrics => Object.keys(fabrics).length > 0)
 	}
 
 	#getPieceFabric = (piece: string) => {
 		const selectedFabrics = this.#getSelectedFabrics()
 
-		const fabric = selectedFabrics.find(fabric => fabric?.get(piece))?.get(piece)
-		return fabric
+		for (const fabrics of selectedFabrics) {
+			const fabric = fabrics[piece]
+			if (fabric) return fabric
+		}
+
+		return undefined
 	}
 
 	#getPiecesFabrics = (pieceSelections: string[]) => {
@@ -67,10 +71,13 @@ export class FabricSelection extends Element {
 		if (!this.selectedTemplateCategory) return
 
 		// Get ALL actually selected block categories for this template (not just the editable ones)
-		const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory)
-		if (!templateBlocks) return
+		const templateSelection = store.getTemplateSelection(this.selectedTemplateCategory)
+		if (!templateSelection) return
 
-		const actualBlockCategories = Array.from(templateBlocks.keys())
+		const actualBlockCategories = Object.entries(templateSelection)
+			.filter(([, selection]) => selection?.block)
+			.map(([blockCategory]) => blockCategory as BlockCategory)
+
 		// Apply fabric to ALL selected blocks of this template category
 		const fabricData = actualBlockCategories.map(blockCategory => ({
 			fabric,
@@ -88,12 +95,13 @@ export class FabricSelection extends Element {
 
 	#isFabricActive = (fabric: Fabric, piece: string) => {
 		if (!this.selectedTemplateCategory) return false
-		const selectedBlocks = store.selectedFabrics.get(this.selectedTemplateCategory!)
+		const templateSelection = store.getTemplateSelection(this.selectedTemplateCategory)
 
-		if (!selectedBlocks) return false
+		if (!templateSelection) return false
 
-		const blockCategories = Array.from(selectedBlocks.keys())
-		return blockCategories.some(blockCategory => selectedBlocks.get(blockCategory)?.get(piece)?._id === fabric._id)
+		return Object.values(templateSelection).some(
+			selection => selection?.fabrics?.[piece]?._id === fabric._id,
+		)
 	}
 
 	template = () => html`

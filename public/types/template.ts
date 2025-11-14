@@ -25,6 +25,7 @@ export type Template = {
 	avatar: 'male' | 'female'
 	price?: string
 	category: TemplateCategory
+	/** Default material */
 	materialId?: string // References fabric by "${materialName} ${category}" format
 	extraMaterials?: ExtraMaterial[]
 	fabricOptions?: string[] // Array of material IDs that reference fabrics

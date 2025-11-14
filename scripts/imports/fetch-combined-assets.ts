@@ -47,7 +47,7 @@ const COLLECTION_CONFIGS = [
 		rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
 	},
 	{
-		collection: '9heure19heuree',
+		collection: '9heure19heure',
 		rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
 	},
 	{
@@ -304,10 +304,22 @@ async function processOptionMaterials(optionMaterialsFolder: TODO): Promise<stri
 
 		const materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
 		const materialName = capitalize(normalizeName(folderNameParts[1].trim()))
-		const materialKey = `${materialCategory} - ${materialName}`
+		const materialLabel = `${materialCategory} - ${materialName}`
 
-		console.log(`      🔧 Adding option material: "${materialRef.name}" -> "${materialKey}"`)
-		fabricOptions.push(materialKey)
+		if (rootMaterials.has(materialLabel)) {
+			const rootMaterial = rootMaterials.get(materialLabel)!
+			if (!rootMaterial._id) {
+				rootMaterial._id = uuidv4()
+			}
+			console.log(
+				`      🔧 Adding option material: "${materialRef.name}" -> "${materialLabel}" (fabricId: ${rootMaterial._id})`,
+			)
+			fabricOptions.push(rootMaterial._id)
+		} else {
+			console.warn(
+				`      ⚠️ Option material "${materialRef.name}" -> "${materialLabel}" not found in root materials. Skipping.`,
+			)
+		}
 	}
 
 	return fabricOptions
@@ -506,26 +518,25 @@ async function processTemplateFolder(
 	)
 
 	// Process material references if they exist
-	let materialId: string | null = null
+	let materialKey: string | null = null
+	let templateMaterialId: string | null = null
 	if (materialReferenceFolders.length > 0) {
 		console.log(`    📁 Processing material references for template`)
 
 		// Get material reference (just use the first one for template reference)
-		materialId = await getTemplateMaterialReference(materialReferenceFolders[0])
-		console.log(`     📎 Material reference: ${materialId}`)
+		materialKey = await getTemplateMaterialReference(materialReferenceFolders[0])
+		console.log(`     📎 Material reference: ${materialKey}`)
 
-		// Add this category to the material's templateCategories
-		if (materialId && rootMaterials.has(materialId)) {
-			console.log(`     🔗 Adding category "${category}" to material "${materialId}"`)
-			console.log(
-				`     📊 Before: templateCategories = ${Array.from(rootMaterials.get(materialId)!.templateCategories)}`,
-			)
-			rootMaterials.get(materialId)!.templateCategories.add(category)
-			console.log(
-				`     📊 After: templateCategories = ${Array.from(rootMaterials.get(materialId)!.templateCategories)}`,
-			)
-		} else if (materialId) {
-			console.warn(`     ⚠️ Material "${materialId}" not found in rootMaterials`)
+		// Add this category to the material's templateCategories and capture fabric id
+		if (materialKey && rootMaterials.has(materialKey)) {
+			const rootMaterial = rootMaterials.get(materialKey)!
+			console.log(`     🔗 Adding category "${category}" to material "${materialKey}" (fabricId: ${rootMaterial._id})`)
+			console.log(`     📊 Before: templateCategories = ${Array.from(rootMaterial.templateCategories)}`)
+			rootMaterial.templateCategories.add(category)
+			console.log(`     📊 After: templateCategories = ${Array.from(rootMaterial.templateCategories)}`)
+			templateMaterialId = rootMaterial._id
+		} else if (materialKey) {
+			console.warn(`     ⚠️ Material "${materialKey}" not found in rootMaterials`)
 			console.log(`     📋 Available materials: ${Array.from(rootMaterials.keys()).join(', ')}`)
 		}
 	}
@@ -583,7 +594,7 @@ async function processTemplateFolder(
 		price: templatePrice,
 		category,
 		thumbUrl: templateS3Url,
-		materialId,
+		materialId: templateMaterialId,
 		avatar: avatarGender,
 		folderId: templateFolder.id, // Add unique Google Drive folder ID
 		...(extraMaterials.length > 0 && {extraMaterials}),
@@ -770,9 +781,14 @@ function generateFabricData(collection: string): TODO {
 		console.log(`   📋 Template categories: ${Array.from(material.templateCategories).join(', ') || 'NONE'}`)
 		console.log(`   📏 Template categories size: ${material.templateCategories.size}`)
 
+		const fabricId = material._id || uuidv4()
+		if (!material._id) {
+			material._id = fabricId
+		}
+
 		fabrics[collection] = fabrics[collection] || []
 		fabrics[collection].push({
-			_id: uuidv4(),
+			_id: fabricId,
 			thumb: material.thumbUrl,
 			normal: material.normal,
 			baseColor: material.baseColor,
@@ -1021,13 +1037,15 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 
 		materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
 		materialName = capitalize(normalizeName(folderNameParts[1].trim()))
-		const materialKey = `${materialCategory} - ${materialName}`
+		const materialLabel = `${materialCategory} - ${materialName}`
 
 		// Check if already processed
-		if (rootMaterials.has(materialKey)) {
-			console.log(`    ⚠️ Material ${materialKey} already processed, skipping...`)
+		if (rootMaterials.has(materialLabel)) {
+			console.log(`    ⚠️ Material ${materialLabel} already processed, skipping...`)
 			continue
 		}
+
+		const fabricId = uuidv4()
 
 		// First, look for thumbnail file (RENDER)
 		const thumbnailFile = materialFiles.find(file => file.name.toLowerCase().includes('render'))
@@ -1093,6 +1111,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 
 		// Store material data
 		const materialData = {
+			_id: fabricId,
 			materialName,
 			category: materialCategory,
 			thumbUrl,
@@ -1108,8 +1127,8 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 			}),
 		}
 
-		rootMaterials.set(materialKey, materialData)
-		console.log(`   🥳 Processed root material: ${materialKey}`)
+		rootMaterials.set(materialLabel, materialData)
+		console.log(`   🥳 Processed root material: ${materialLabel}`)
 	}
 }
 
@@ -1138,22 +1157,22 @@ async function scanCategoryMaterials(categoryMaterialsFolder: TODO, categoryName
 
 		const materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
 		const materialName = capitalize(normalizeName(folderNameParts[1].trim()))
-		const materialKey = `${materialCategory} - ${materialName}`
+		const materialLabel = `${materialCategory} - ${materialName}`
 
-		console.log(`    🔧 Normalizing material reference: "${materialRef.name}" -> "${materialKey}"`)
+		console.log(`    🔧 Normalizing material reference: "${materialRef.name}" -> "${materialLabel}"`)
 
 		if (!categoryMaterialAssignments.has(categoryName)) {
 			categoryMaterialAssignments.set(categoryName, new Set())
 		}
-		categoryMaterialAssignments.get(categoryName)!.add(materialKey)
-		console.log(`    ✅ Assigned material ${materialKey} to category ${categoryName}`)
+		categoryMaterialAssignments.get(categoryName)!.add(materialLabel)
+		console.log(`    ✅ Assigned material ${materialLabel} to category ${categoryName}`)
 	}
 }
 
-// Get material reference from template and return material key
+// Get material reference from template and return the lookup label (used to resolve fabric IDs)
 async function getTemplateMaterialReference(materialFolder: TODO): Promise<string | null> {
 	// Template material folders are just reference folders (empty)
-	// The folder name is the material key: "${materialCategory} - ${materialName}"
+	// The folder name is the material label: "${materialCategory} - ${materialName}"
 	// Remove texture settings if present: "Category - Name <settings>" -> "Category - Name"
 	const nameWithoutSettings = materialFolder.name.replace(/\s*<[^>]+>\s*$/, '')
 	const folderNameParts = nameWithoutSettings.split('-')
@@ -1165,7 +1184,8 @@ async function getTemplateMaterialReference(materialFolder: TODO): Promise<strin
 	}
 	const materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
 	const materialName = capitalize(normalizeName(folderNameParts[1].trim()))
-	return `${materialCategory} - ${materialName}`
+	const materialLabel = `${materialCategory} - ${materialName}`
+	return materialLabel
 }
 
 // Process 'Extra Materials' folder and return mesh -> materialId mappings
@@ -1177,7 +1197,7 @@ async function processExtraMaterialsFolder(extraMaterialsFolder: TODO): Promise<
 
 	console.log(`    Found ${meshFolders.length} mesh folders`)
 
-	const materialToMeshes: Map<string, string[]> = new Map()
+	const materialToMeshes: Map<string, {meshes: string[]; materialLabel: string}> = new Map()
 
 	for (const meshFolder of meshFolders) {
 		console.log(`    📁 Processing mesh folder: ${meshFolder.name}`)
@@ -1211,27 +1231,40 @@ async function processExtraMaterialsFolder(extraMaterialsFolder: TODO): Promise<
 
 		const materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
 		const materialName = capitalize(normalizeName(folderNameParts[1].trim()))
-		const materialId = `${materialCategory} - ${materialName}`
+		const materialLabel = `${materialCategory} - ${materialName}`
 
-		console.log(`      ✅ Mesh "${meshName}" -> Material "${materialId}"`)
+		if (!rootMaterials.has(materialLabel)) {
+			console.warn(
+				`      ⚠️ Material reference "${materialReferenceFolder.name}" -> "${materialLabel}" not found in root materials. Skipping.`,
+			)
+			continue
+		}
+
+		const rootMaterial = rootMaterials.get(materialLabel)!
+		if (!rootMaterial._id) {
+			rootMaterial._id = uuidv4()
+		}
+		const fabricId = rootMaterial._id
+
+		console.log(`      ✅ Mesh "${meshName}" -> Material "${materialLabel}" (fabricId: ${fabricId})`)
 
 		const sanitizedMeshName = THREE.PropertyBinding.sanitizeNodeName(meshName)
 
 		// Group meshes by materialId
-		if (!materialToMeshes.has(materialId)) {
-			materialToMeshes.set(materialId, [])
+		if (!materialToMeshes.has(fabricId)) {
+			materialToMeshes.set(fabricId, {meshes: [], materialLabel})
 		}
-		materialToMeshes.get(materialId)!.push(sanitizedMeshName)
+		materialToMeshes.get(fabricId)!.meshes.push(sanitizedMeshName)
 	}
 
 	// Convert grouped materials to final format
 	const extraMaterials: {mesh: string; materialId: string}[] = []
-	materialToMeshes.forEach((meshes, materialId) => {
+	materialToMeshes.forEach(({meshes, materialLabel}, fabricId) => {
 		const combinedMeshKey = meshes.join('-')
-		console.log(`      🔗 Grouped material "${materialId}" -> meshes: "${combinedMeshKey}"`)
+		console.log(`      🔗 Grouped material "${materialLabel}" (fabricId: ${fabricId}) -> meshes: "${combinedMeshKey}"`)
 		extraMaterials.push({
 			mesh: combinedMeshKey,
-			materialId: materialId,
+			materialId: fabricId,
 		})
 	})
 

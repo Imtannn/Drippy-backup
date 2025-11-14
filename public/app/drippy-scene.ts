@@ -13,11 +13,13 @@ import {
 	onCleanup,
 	Scene,
 	signal,
+	untrack,
 } from 'lume'
 import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {avatars} from '../consts/avatars.js'
-import {scenes} from '../consts/scenes.js'
+
+import {backgroundScenes} from '../consts/scenes.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
@@ -27,7 +29,7 @@ import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
-import type {Space} from '../types/types.js'
+import type {PieceFabricsMap, SelectedGarments, Space} from '../types/types.js'
 import {
 	createMutationsSignal,
 	enableFrontsideOnModelLoad,
@@ -42,6 +44,7 @@ import {
 	querySelectorAllSignal,
 	setEnvMapOnModelLoad,
 	setMaterialsVisibleOnModelLoad,
+	showSkeletonHelper,
 } from '../utils.js'
 import './app-buttons.js'
 import {store} from './store.js'
@@ -58,8 +61,7 @@ export class DrippyScene extends Element {
 
 	@attribute selectedSpace: Space | null = null
 	@attribute selectedAvatar: string | null = null
-	@attribute selectedFabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>> = new Map()
-	@attribute selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>> = new Map()
+	@attribute selectedGarments: SelectedGarments = {}
 	@attribute landing: boolean = false
 
 	@signal isDark = false
@@ -88,7 +90,7 @@ export class DrippyScene extends Element {
 
 	async #applyFabrics(
 		el: Element3D,
-		fabrics: Map<string, Fabric>,
+		fabrics: PieceFabricsMap,
 		isCanceled: () => boolean,
 		loadingId: symbol,
 		templateId: string | undefined,
@@ -106,7 +108,7 @@ export class DrippyScene extends Element {
 				: []
 
 			// Create a map of fabric assignments by mesh name
-			const fabricsByMesh = new Map<string, Fabric>()
+			const fabricsByMesh: PieceFabricsMap = new Map()
 
 			for (const [assignedMesh, fabric] of fabrics.entries()) {
 				fabricsByMesh.set(assignedMesh, fabric)
@@ -264,7 +266,7 @@ export class DrippyScene extends Element {
 				const space = spaces.find(space => space.slug === this.selectedSpace?.slug)
 				if (space) {
 					const defaultSceneSlug = getSpaceDefaultScene(space)
-					const scene = getSceneBySlug(scenes, defaultSceneSlug)
+					const scene = getSceneBySlug(backgroundScenes, defaultSceneSlug)
 					if (scene) this.sceneUrl = scene.scene
 				}
 			})
@@ -413,7 +415,19 @@ export class DrippyScene extends Element {
 			}
 
 			createEffect(() => {
-				const blocks = Array.from(this.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
+				const garmentSelections = this.selectedGarments ?? {}
+				const blocks: Block[] = []
+
+				for (const templateSelection of Object.values(garmentSelections)) {
+					if (!templateSelection) continue
+
+					for (const selection of Object.values(templateSelection)) {
+						if (selection?.block) {
+							blocks.push(selection.block)
+						}
+					}
+				}
+
 				this.renderBlocks = blocks.flatMap(block => {
 					if (block.category === 'Sleeves') {
 						const id = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
@@ -434,8 +448,6 @@ export class DrippyScene extends Element {
 
 			// Re-apply materials whenever the selected fabrics change or models mount
 			createEffect(() => {
-				const selectedFabrics = this.selectedFabrics
-
 				// Cause reactive re-run when the number of blocks changes
 				if (this.renderBlocks.length === 0) {
 					// nothing to bind
@@ -462,8 +474,9 @@ export class DrippyScene extends Element {
 					const blockCategory = parts[2] as BlockCategory
 
 					// Find the fabrics for this block
-					const templateFabrics = selectedFabrics.get(templateCategory)
-					const fabrics = templateFabrics?.get(blockCategory) || new Map<string, Fabric>()
+					const templateSelection = untrack(() => store.getTemplateSelection(templateCategory))
+					const fabricsRecord = templateSelection?.[blockCategory]?.fabrics ?? {}
+					const fabrics = new Map(Object.entries(fabricsRecord)) as PieceFabricsMap
 					const loadingId = Symbol(`material-${blockId}`)
 
 					const modelLoaded = onModelLoad(el)
@@ -499,13 +512,17 @@ export class DrippyScene extends Element {
 				} else if (store.selectedAnimation === 'walk') {
 					this.animsEnabled = true
 
-					this.animName = 'FV2_Walking in place.mtn'
-					this.animSrc = '../models/Yuna-walkinplace.glb'
+					// this.animName = 'FV2_Walking in place.mtn'
+					// this.animSrc = new URL('../models/Yuna-walkinplace.glb', import.meta.url).href
+					// this.animName = 'animation_0'
+					// this.animSrc = new URL('../models/EM-anim-test.glb', import.meta.url).href
+					this.animName = 'animation_0'
+					this.animSrc = new URL('../models/EM_Rig_v001-anim-test.glb', import.meta.url).href
 				} else if (store.selectedAnimation === 'dance') {
 					this.animsEnabled = true
 
 					this.animName = 'FV2_Dancing_01.mtn'
-					this.animSrc = '../models/Yuna-dancing01.glb'
+					this.animSrc = new URL('../models/Yuna-dancing01.glb', import.meta.url).href
 				}
 			})
 
@@ -665,7 +682,7 @@ export class DrippyScene extends Element {
 
 						<lume-camera-rig
 							min-distance="0.5"
-							max-distance="${() => (isDesktop() ? 3 : 5)}"
+							max-distance="${() => (isDesktop() ? 30 : 50)}"
 							distance="${() => (isDesktop() ? 2.5 : 4)}"
 							min-vertical-angle="-17"
 							max-vertical-angle="45"
@@ -680,7 +697,7 @@ export class DrippyScene extends Element {
 
 						<lume-gltf-model
 							id="avatar"
-							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
+							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env), showSkeletonHelper(el, () => true))}
 							attr:src=${() => avatars.find(avatar => avatar.name === this.selectedAvatar)?.src ?? ''}
 							scale="1 1 1"
 							data-avatar
@@ -718,7 +735,7 @@ export class DrippyScene extends Element {
 								</>
 							</lume-element3d>
 
-							<lume-animation
+							<xlume-animation
 								attr:src=${() => this.animSrc}
 								clip-name=${() => this.animName}
 								stopped=${() => !this.animsEnabled}
@@ -730,7 +747,7 @@ export class DrippyScene extends Element {
 						id="scene"
 						attr:src=${() => {
 							const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
-							const scene = getSceneBySlug(scenes, defaultSceneSlug)
+							const scene = getSceneBySlug(backgroundScenes, defaultSceneSlug)
 							console.log('selected background', scene?.scene)
 							return scene?.scene ?? ''
 						}}
@@ -739,7 +756,7 @@ export class DrippyScene extends Element {
 					<${Index}
 						each=${() => {
 							const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
-							const scene = getSceneBySlug(scenes, defaultSceneSlug)
+							const scene = getSceneBySlug(backgroundScenes, defaultSceneSlug)
 							return scene?.includedModelFiles ?? []
 						}}
 					>

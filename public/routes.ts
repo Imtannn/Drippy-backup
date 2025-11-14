@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor'
-import {createEffect, createMemo, createSignal, untrack} from 'solid-js'
+import {createMemo, createSignal, untrack} from 'solid-js'
 import {Session} from 'meteor/session'
 import {effect} from './meteor-signals.js'
 
@@ -29,8 +29,6 @@ export const password = createMemo(() => url().password)
 
 export const hrefMinusOrigin = () => url().href.replace(url().origin, '')
 
-createEffect(() => console.trace('Current route:', hrefMinusOrigin()))
-
 export const replaceState = () => window.history.replaceState({}, '', untrack(url).href)
 export const pushState = () => window.history.pushState({}, '', untrack(url).href)
 
@@ -41,7 +39,6 @@ window.addEventListener('popstate', () => setUrl(new URL(location.href)))
 	history.pushState = History.prototype.pushState = function (...args) {
 		const ret = pushState.apply(this, args)
 		setUrl(new URL(location.href))
-		console.trace('PUSHSTATE', args, location.href)
 		return ret
 	}
 
@@ -49,7 +46,6 @@ window.addEventListener('popstate', () => setUrl(new URL(location.href)))
 	history.replaceState = History.prototype.replaceState = function (...args) {
 		const ret = replaceState.apply(this, args)
 		setUrl(new URL(location.href))
-		console.trace('REPLACESTATE', args, location.href)
 		return ret
 	}
 }

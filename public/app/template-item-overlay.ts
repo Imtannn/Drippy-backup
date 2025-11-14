@@ -1,6 +1,6 @@
 import {attribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import type {Template} from '../types/template.js'
-import {blockManager} from './block-manager.js'
+import {templateHelpers} from './template-helpers.js'
 import {store} from './store.js'
 
 type TemplateItemOverlayAttributes = 'selectedTemplate'
@@ -23,8 +23,8 @@ export class TemplateItemOverlay extends Element {
 				return
 			}
 
-			const {available} = blockManager.isRemixAvailableForTemplate(this.selectedTemplate, {
-				selectedBlocks: store.selectedBlocks,
+			const {available} = templateHelpers.isRemixAvailableForTemplate(this.selectedTemplate, {
+				selectedGarments: store.selectedGarments,
 				selectedSpace: store.getEffectiveSpace(),
 				sourceCollection: store.getEffectiveCollection(),
 			})

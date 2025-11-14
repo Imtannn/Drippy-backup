@@ -1,7 +1,4 @@
 import {batch, createMemo, css, Element, element, html, signal} from 'lume'
-import {fabrics} from '../consts/fabrics.js'
-import {templates} from '../consts/templates.js'
-import {spaces} from '../consts/spaces.js'
 import '../elements/connection-warning.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
@@ -9,16 +6,21 @@ import '../elements/theme-switch.js'
 import '../elements/video-loading.js'
 import '../routes.js' // track page visits
 import {pushState, searchParams} from '../routes.js'
-import type {Block, BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
+import type {BlockCategory} from '../types/block.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {Space} from '../types/types.js'
-import {getSpacePrimaryCollection} from '../utils.js'
+import type {
+	BlockFabricsMap,
+	CategoryBlocksMap,
+	PieceFabricsMap,
+	Space,
+	TemplateBlocksMap,
+	TemplateFabricsMap,
+	TemplateMap,
+} from '../types/types.js'
 import './app-guard.js'
 import './avatar-selection.js'
-import './brand-view.js'
-import {blockManager} from './block-manager.js'
 import './blocks-selection.js'
+import './brand-view.js'
 import './custom-measurement.js'
 import './drippy-scene.js'
 import './order-items.js'
@@ -27,8 +29,9 @@ import './order-view.js'
 import './outfit-preview.js'
 import './share-view.js'
 import './spaces-selection.js'
-import {parseSpaceQualifiedEntry, store} from './store.js'
+import {store} from './store.js'
 import './success-view.js'
+import {templateHelpers} from './template-helpers.js'
 import './template-view.js'
 
 const isPreview = createMemo(() => searchParams().get('isPreview'))
@@ -97,35 +100,107 @@ export class DrippyApp extends Element {
 	 * Load garments and fabrics from URL parameters
 	 * @param space - Selected space
 	 */
-	#loadFromUrlParameters(space: Space) {
+	#loadFromUrlParameters(_space: Space) {
 		const garmentsParam = searchParams().get('garments')
+		const blocksParam = searchParams().get('blocks')
 		const fabricsParam = searchParams().get('fabrics')
 
-		if (!store.selectedSpace || store.selectedTemplates.size > 0) {
+		if (store.selectedTemplates.size > 0) {
 			return
 		}
 
-		const fallbackSpace = store.getEffectiveSpace() ?? space ?? null
-		const garmentGroups = new Map<string, {space: Space; ids: string[]}>()
-		const fabricGroups = new Map<string, string[]>()
+		const aggregatedTemplates: TemplateMap = new Map()
+		const aggregatedBlocks: TemplateBlocksMap = new Map()
+		const aggregatedFabrics: TemplateFabricsMap = new Map()
+		const templateCollectionHints = new Map<TemplateCategory, string | null>()
+		const templatesWithExplicitBlocks = new Set<TemplateCategory>()
+
+		const rememberTemplate = (template: Template, collectionHint: string | null) => {
+			aggregatedTemplates.set(template.category, template)
+			if (!templateCollectionHints.has(template.category)) {
+				templateCollectionHints.set(template.category, collectionHint)
+			}
+		}
+
+		const mergeBlockFabrics = (existing: BlockFabricsMap | undefined, defaults: BlockFabricsMap): BlockFabricsMap => {
+			const merged = new Map() as BlockFabricsMap
+
+			if (existing) {
+				for (const [blockCategory, fabricsMap] of existing.entries()) {
+					merged.set(blockCategory, new Map(fabricsMap) as PieceFabricsMap)
+				}
+			}
+
+			for (const [blockCategory, fabricsMap] of defaults.entries()) {
+				const existingPieces = merged.get(blockCategory)
+				if (!existingPieces) {
+					merged.set(blockCategory, new Map(fabricsMap) as PieceFabricsMap)
+					continue
+				}
+
+				for (const [pieceKey, fabric] of fabricsMap.entries()) {
+					if (!existingPieces.has(pieceKey)) {
+						existingPieces.set(pieceKey, fabric)
+					}
+				}
+			}
+
+			return merged
+		}
 
 		if (garmentsParam) {
 			const garmentEntries = garmentsParam
 				.split(',')
 				.map(entry => entry.trim())
 				.filter(Boolean)
+
 			for (const entry of garmentEntries) {
-				const {spaceSlug, value} = parseSpaceQualifiedEntry(entry)
-				if (!value) continue
+				const {collectionSlug, value: templateId} = templateHelpers.parseCollectionQualifiedEntry(entry)
+				if (!templateId) continue
 
-				const resolvedSpace = this.#resolveSpace(spaceSlug) ?? (!spaceSlug ? fallbackSpace : null)
+				const template = templateHelpers.findTemplateById(templateId, collectionSlug)
+				if (!template) continue
 
-				if (!resolvedSpace) continue
+				const collectionKey = template.collection ?? collectionSlug ?? null
+				rememberTemplate(template, collectionKey)
+			}
+		}
 
-				const key = resolvedSpace.slug
-				const group = garmentGroups.get(key)
-				if (group) group.ids.push(value)
-				else garmentGroups.set(key, {space: resolvedSpace, ids: [value]})
+		if (blocksParam) {
+			const blockEntries = blocksParam
+				.split(',')
+				.map(entry => entry.trim())
+				.filter(Boolean)
+
+			for (const entry of blockEntries) {
+				const {collectionSlug, value: blockId} = templateHelpers.parseCollectionQualifiedEntry(entry)
+				if (!blockId) continue
+
+				const block = templateHelpers.findBlockById(blockId, collectionSlug)
+				if (!block) continue
+
+				const templateCategory = block.templateCategory as TemplateCategory
+				templatesWithExplicitBlocks.add(templateCategory)
+
+				const hintFromBlock = block.collection ?? collectionSlug ?? null
+				const existingTemplate = aggregatedTemplates.get(templateCategory)
+				if (existingTemplate) {
+					rememberTemplate(existingTemplate, hintFromBlock ?? existingTemplate.collection ?? null)
+				} else if (block.templateId) {
+					const templateForBlock = templateHelpers.findTemplateById(block.templateId, hintFromBlock)
+					if (templateForBlock) {
+						rememberTemplate(templateForBlock, hintFromBlock ?? templateForBlock.collection ?? null)
+					}
+				}
+
+				// Ensure the template referenced by this block is present in the aggregated templates,
+				// so URL sharing keeps working even when only block overrides are provided.
+				let templateBlocks = aggregatedBlocks.get(templateCategory)
+				if (!templateBlocks) {
+					templateBlocks = new Map() as CategoryBlocksMap
+					aggregatedBlocks.set(templateCategory, templateBlocks)
+				}
+				templateBlocks.set(block.category, block)
 			}
 		}
 
@@ -134,91 +209,90 @@ export class DrippyApp extends Element {
 				.split(',')
 				.map(entry => entry.trim())
 				.filter(Boolean)
+
 			for (const entry of fabricEntries) {
-				const {spaceSlug, value} = parseSpaceQualifiedEntry(entry)
+				const {collectionSlug, value} = templateHelpers.parseCollectionQualifiedEntry(entry)
 				if (!value) continue
 
-				const resolvedSpace = this.#resolveSpace(spaceSlug) ?? (!spaceSlug ? fallbackSpace : null)
-				if (!resolvedSpace) continue
+				const [keyPart, fabricId] = value.split(':')
+				if (!keyPart || !fabricId) continue
 
-				const key = resolvedSpace.slug
-				const group = fabricGroups.get(key)
-				if (group) group.push(value)
-				else fabricGroups.set(key, [value])
-			}
-		}
+				const dashIndex1 = keyPart.indexOf('-')
+				if (dashIndex1 === -1) continue
+				const templateCategory = keyPart.substring(0, dashIndex1) as TemplateCategory
+				const remaining = keyPart.substring(dashIndex1 + 1)
 
-		if (garmentGroups.size === 0) {
-			return
-		}
+				const dashIndex2 = remaining.indexOf('-')
+				if (dashIndex2 === -1) continue
+				const blockCategory = remaining.substring(0, dashIndex2) as BlockCategory
+				const piece = remaining.substring(dashIndex2 + 1)
 
-		const aggregatedTemplates = new Map<TemplateCategory, Template>()
-		const aggregatedBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		const aggregatedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+				if (!templateCategory || !blockCategory || !piece) continue
 
-		for (const {space: targetSpace, ids} of garmentGroups.values()) {
-			// Check if there's a collection param for this space, otherwise use primary
-			const collectionParam = searchParams().get('collection')
-			let effectiveCollection: string | null = null
+				const fabric = templateHelpers.findFabricById(fabricId, collectionSlug)
+				if (!fabric) continue
 
-			if (collectionParam && targetSpace.collections.includes(collectionParam)) {
-				effectiveCollection = collectionParam
-			} else {
-				effectiveCollection = getSpacePrimaryCollection(targetSpace)
-			}
+				const existingTemplate = aggregatedTemplates.get(templateCategory)
+				if (existingTemplate) {
+					const hintFromFabric = collectionSlug ?? existingTemplate.collection ?? null
+					rememberTemplate(existingTemplate, hintFromFabric)
+				}
 
-			const spaceTemplates = effectiveCollection ? templates[effectiveCollection] : undefined
-			if (!spaceTemplates) continue
+				let templateFabrics = aggregatedFabrics.get(templateCategory)
+				if (!templateFabrics) {
+					templateFabrics = new Map() as BlockFabricsMap
+					aggregatedFabrics.set(templateCategory, templateFabrics)
+				}
 
-			const spaceFabrics = effectiveCollection ? fabrics[effectiveCollection] : undefined
-			const fabricEntriesForSpace = fabricGroups.get(targetSpace.slug) ?? []
-			const fabricOverrides =
-				fabricEntriesForSpace.length > 0 && spaceFabrics
-					? blockManager.buildFabricOverridesFromUrl(fabricEntriesForSpace.join(','), spaceFabrics)
-					: new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+				let blockFabrics = templateFabrics.get(blockCategory)
+				if (!blockFabrics) {
+					blockFabrics = new Map() as PieceFabricsMap
+					templateFabrics.set(blockCategory, blockFabrics)
+				}
 
-			for (const garmentId of ids) {
-				const trimmedId = garmentId.trim()
-				if (!trimmedId) continue
-
-				const template = spaceTemplates.find(t => t._id === trimmedId)
-				if (!template) continue
-
-				aggregatedTemplates.set(template.category, template)
-
-				const templateBlockData = blockManager.convertTemplateToBlockData(template, effectiveCollection)
-				const templateFabricOverrides = fabricOverrides.get(template.category)
-
-				const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
-					templateBlockData,
-					effectiveCollection,
-					templateFabricOverrides,
-				)
-
-				aggregatedBlocks.set(template.category, newBlocksMap)
-				aggregatedFabrics.set(template.category, newFabricsMap)
+				blockFabrics.set(piece === 'default' ? 'default' : piece, fabric)
 			}
 		}
 
 		if (aggregatedTemplates.size === 0) return
 
+		for (const [templateCategory, template] of aggregatedTemplates.entries()) {
+			const hasExplicitBlocks = templatesWithExplicitBlocks.has(templateCategory)
+			let templateBlocks = aggregatedBlocks.get(templateCategory)
+
+			if (!templateBlocks || templateBlocks.size === 0) {
+				const collectionHint = templateCollectionHints.get(templateCategory) ?? template.collection ?? null
+
+				if (!hasExplicitBlocks) {
+					const templateBlockData = templateHelpers.convertTemplateToBlockData(template, collectionHint)
+					const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
+						templateBlockData,
+						collectionHint,
+					)
+
+					if (newBlocksMap.size > 0) {
+						aggregatedBlocks.set(templateCategory, newBlocksMap)
+						templateBlocks = newBlocksMap
+					} else if (!templateBlocks) {
+						aggregatedBlocks.set(templateCategory, new Map() as CategoryBlocksMap)
+					}
+
+					if (newFabricsMap.size > 0) {
+						const merged = mergeBlockFabrics(aggregatedFabrics.get(templateCategory), newFabricsMap)
+						if (merged.size > 0) {
+							aggregatedFabrics.set(templateCategory, merged)
+						}
+					}
+				} else if (!templateBlocks) {
+					aggregatedBlocks.set(templateCategory, new Map() as CategoryBlocksMap)
+				}
+			}
+		}
+
 		batch(() => {
-			store.selectedFabrics = aggregatedFabrics
-			console.log('selected fabrics from url', aggregatedFabrics)
-
-			// @ts-expect-error FIXME we should avoid having two different
-			// ways of setting the same thing (see store.setSelectedBlocks
-			// and onItemClick in template-view.ts). This will get more
-			// difficult to manage and error prone/buggy.
-			store.__selectedBlocks = aggregatedBlocks
-
+			store.replaceSelectedGarments(aggregatedBlocks, aggregatedFabrics)
 			store.selectedTemplates = aggregatedTemplates
 		})
-	}
-
-	#resolveSpace(spaceSlug: string | null): Space | null {
-		if (!spaceSlug) return null
-		return spaces.find(space => space.slug === spaceSlug) ?? null
 	}
 
 	template = () => html`
@@ -235,8 +309,7 @@ export class DrippyApp extends Element {
 								id="drippy-scene"
 								selected-space=${() => (console.log('selected space', store.selectedSpace), store.selectedSpace)}
 								selected-avatar=${() => store.selectedAvatar}
-								selected-fabrics=${() => store.selectedFabrics}
-								selected-blocks=${() => store.selectedBlocks}
+								selected-garments=${() => store.selectedGarments}
 							></drippy-scene>
 
 							<show-when

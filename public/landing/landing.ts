@@ -13,9 +13,9 @@ import type {BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 
-const materials = [
+const materials: Fabric[] = [
 	{
-		id: '6',
+		_id: '6',
 		thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_RENDER.webp',
 		normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_NORMAL.jpg',
 		baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_BASE.jpg',
@@ -26,10 +26,10 @@ const materials = [
 		alpha: '',
 		materialName: 'Navy',
 		category: 'Polyester',
-		templateCategories: ['Top'],
+		templateCategories: ['Top', 'Pants'],
 	},
 	{
-		id: '9',
+		_id: '9',
 		thumb:
 			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_RENDER.webp',
 		normal:
@@ -46,7 +46,7 @@ const materials = [
 		templateCategories: ['Top'],
 	},
 	{
-		id: '8',
+		_id: '8',
 		thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_RENDER.webp',
 		normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_NORMAL.jpg',
 		baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_BASE.jpg',
@@ -86,7 +86,7 @@ const [isYearlyActive, setIsYearlyActive] = createSignal(true)
 
 const currentMaterials = materials
 
-function handleMaterialClick(material: (typeof materials)[0]) {
+function handleMaterialClick(material: Fabric) {
 	const fabricData: {
 		fabric: Fabric
 		blockCategory: BlockCategory
@@ -96,16 +96,7 @@ function handleMaterialClick(material: (typeof materials)[0]) {
 
 	// Convert material to Fabric format
 	const fabric: Fabric = {
-		_id: material.id,
-		thumb: material.thumb,
-		normal: material.normal,
-		baseColor: material.baseColor,
-		displacement: material.displacement,
-		roughness: material.roughness,
-		alpha: material.alpha,
-		materialName: material.materialName,
-		category: material.category as Fabric['category'],
-		templateCategories: material.templateCategories,
+		...material,
 	}
 
 	// Set fabric for Top template and Bodice block category
@@ -356,15 +347,14 @@ const mainContent = html`
 												)}
 											</div>
 
-											<avatar-selector target-model=".showcase__avatar-model" class="showcase__selector"></avatar-selector>
+											<avatar-selector fabrics-selection=${materials} target-model=".showcase__avatar-model" class="showcase__selector"></avatar-selector>
 
 											<div class="showcase__model-center">
 												<drippy-scene
 													class="showcase__model"
 													selected-space=${() => store.selectedSpace}
 													selected-avatar=${() => store.selectedAvatar}
-													selected-fabrics=${() => store.selectedFabrics}
-													selected-blocks=${() => store.selectedBlocks}
+													selected-garments=${() => store.selectedGarments}
 													landing=${true}
 												></drippy-scene>
 											</div>

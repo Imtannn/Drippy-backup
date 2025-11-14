@@ -1,3 +1,7 @@
+import type {Block, BlockCategory} from './block.js'
+import type {Fabric} from './fabric.js'
+import type {Template, TemplateCategory} from './template.js'
+
 export type AppRoute =
 	| 'avatar'
 	| 'preview'
@@ -30,10 +34,11 @@ export type Collection = {
 	garmentsCount: number
 }
 
-export type Scene = {
+export type BackgroundScene = {
 	name: string
 	slug: string
 	description: string
+	/** Image used as an env map for global lighting and reflections. */
 	env: string
 	sceneThumbnail: string
 	scene: string
@@ -42,19 +47,26 @@ export type Scene = {
 
 export type Space = {
 	name: string
-	slug: string
+	description: string
 	logo: string
-	/** Image used as an env map for global lighting and reflections. */
+	slug: string
+
+	/** The slugs of the Collections in this Space */
 	collections: string[]
+	/** The slugs of the BackgroundScenes in this Space */
 	scenes: string[]
 	spaceThumbnail?: string
+	/** Slug for the default BackgroundScene. */
 	defaultScene: string
-	description: string
 	gender: 'male' | 'female'
 	garmentsCount: number
 	isWholesale: boolean
-	isWorkInProgress?: boolean
+
+	/** When true, the space is view-only without pricing, and does not allow purchases. */
 	viewOnly?: boolean
+
+	// If either of these are true, the space is not shown in the public gallery.
+	isWorkInProgress?: boolean
 	isHidden?: boolean
 }
 
@@ -143,3 +155,28 @@ export type OrderData = {
 
 	spaceDescription?: string
 }
+export type TemplateMap = Map<TemplateCategory, Template>
+export type CategoryBlocksMap = Map<BlockCategory, Block>
+export type TemplateBlocksMap = Map<TemplateCategory, CategoryBlocksMap>
+
+export type PieceFabricsMap = Map<string, Fabric>
+export type BlockFabricsMap = Map<BlockCategory, PieceFabricsMap>
+export type TemplateFabricsMap = Map<TemplateCategory, BlockFabricsMap>
+
+export type FabricSelection = {
+	fabric: Fabric
+	blockCategory: BlockCategory
+	templateCategory: TemplateCategory
+	assignedMesh: string
+}
+
+export type BlockSelection = {block: Block; templateCategory: TemplateCategory}
+
+export type SelectedGarment = {
+	block: Block | null
+	fabrics: Record<string, Fabric>
+}
+
+export type TemplateCategorySelection = Partial<Record<BlockCategory, SelectedGarment>>
+
+export type SelectedGarments = Partial<Record<TemplateCategory, TemplateCategorySelection>>
