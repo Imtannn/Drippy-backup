@@ -35,6 +35,7 @@ import {formatNumber} from '../utils.js'
 import './app-buttons-preset.js'
 import './app-buttons.js'
 import './avatar-selection.js'
+import './buy-button.js'
 import './item-card.js'
 import './loading-spinner-overlay.js'
 import './pose-selection.js'
@@ -189,6 +190,10 @@ export class TemplateView extends Element {
 				this.showLoginDialog = true
 			}
 		})
+	}
+
+	#onBuyButtonClick = () => {
+		store.view = 'order-items'
 	}
 
 	#onBackButtonClick = () => {
@@ -364,7 +369,6 @@ export class TemplateView extends Element {
 			show-animation=${() => store.getEffectiveCollection() === 'gap'}
 			disable-person-button=${false}
 			disable-cube-button=${false}
-			hide-preview-button=${() => this.showRemixOverlay}
 		>
 			<show-on-device device="mobile">
 				<show-when
@@ -385,36 +389,26 @@ export class TemplateView extends Element {
 			onpreview=${this.#onPreviewButtonClick}
 			ondone=${this.#closeRemixOverlay}
 			show-remix-overlay=${() => this.showRemixOverlay}
+			float-direction="right"
 			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
 			max-height="100vh"
 		>
+			<app-buttons-left layout="bottom">
+				<app-buttons-group group-direction="row" custom-class="button-group-spread">
+					<show-when
+						condition=${() => !this.showRemixOverlay}
+						content=${() => html` <buy-button class="align-right" onclick=${this.#onBuyButtonClick}></buy-button> `}
+					></show-when>
+					<show-when
+						condition=${() => this.showRemixOverlay}
+						content=${() => html`
+							<button class="done-button align-right" onclick=${this.#closeRemixOverlay}>Done</button>
+						`}
+					></show-when>
+				</app-buttons-group>
+			</app-buttons-left>
 			<show-on-device device="desktop">
 				<div class="template-view-buttons">
-					<app-buttons-left>
-						<app-buttons-group group-direction="row" custom-class="button-group-spread">
-							<show-when
-								condition=${() => !this.showRemixOverlay}
-								content=${() => html`<back-button onclick=${this.#onBackButtonClick}></back-button>`}
-							></show-when>
-
-							<show-when
-								condition=${() => !this.showRemixOverlay}
-								content=${() => html`
-									<preview-button
-										class="align-right"
-										button-disabled=${() => store.selectedTemplates.size === 0}
-										onclick=${this.#onPreviewButtonClick}
-									></preview-button>
-								`}
-							></show-when>
-							<show-when
-								condition=${() => this.showRemixOverlay}
-								content=${() => html`
-									<button class="done-button align-right" onclick=${this.#closeRemixOverlay}>Done</button>
-								`}
-							></show-when>
-						</app-buttons-group>
-					</app-buttons-left>
 					<top-navigation
 						classList=${() => ({
 							hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
@@ -740,11 +734,27 @@ export class TemplateView extends Element {
 				--app-buttons-left-transform: translateX(0) !important;
 				--app-buttons-left-transform: translateY(-10px) !important;
 			}
+
+			show-on-device[device='desktop'] {
+				display: contents;
+			}
+
 			.template-view-buttons {
-				position: relative;
+				position: sticky;
+				top: 0;
 				display: flex;
 				align-items: center;
-				height: 120px;
+				background: var(--uiColorPrimaryWhite);
+				z-index: 100;
+				width: 100%;
+				min-height: 52px;
+			}
+
+			tabs-provider bottom-sheet-header {
+				position: sticky;
+				top: 52px;
+				z-index: 99;
+				background: var(--uiColorPrimaryWhite);
 			}
 		}
 
@@ -757,13 +767,6 @@ export class TemplateView extends Element {
 			padding-top: 0;
 			padding-bottom: var(--uiSpacingSmall);
 			background: var(--uiColorPrimaryWhite);
-		}
-
-		.bottom-sheet-header {
-			position: sticky;
-			top: 0;
-			background: var(--appBackground);
-			z-index: 10;
 			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
 		}
 
@@ -1009,6 +1012,10 @@ export class TemplateView extends Element {
 			margin-top: 0;
 		}
 
+		remix-overlay {
+			margin-top: -60px;
+		}
+
 		@media (min-width: 768px) {
 			.collections-mobile-navigation {
 				display: none;
@@ -1016,6 +1023,10 @@ export class TemplateView extends Element {
 
 			.collections-navigation {
 				display: block;
+			}
+
+			remix-overlay {
+				margin-top: -85px;
 			}
 		}
 	`

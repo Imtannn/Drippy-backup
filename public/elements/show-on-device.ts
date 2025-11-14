@@ -25,6 +25,11 @@ export class ShowOnDevice extends Element {
 			display: contents;
 		}
 
+		.show-on-desktop,
+		.show-on-mobile {
+			display: contents;
+		}
+
 		@media (min-width: 767px) {
 			.show-on-desktop {
 				visibility: visible;

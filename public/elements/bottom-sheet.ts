@@ -3,7 +3,6 @@ import {attribute, booleanAttribute, css, Element, element, type ElementAttribut
 
 import '../app/app-buttons.js'
 import './back-button.js'
-import '../elements/preview-button.js'
 import './logic/show-when.js'
 
 // Define snap points in percentages of viewport height
@@ -64,6 +63,9 @@ export class BottomSheet extends Element {
 						this.animateIn()
 					} else {
 						this.isVisible = true
+						// Update document state to notify the scene
+						document.documentElement.classList.remove('panel-collapsed')
+						document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
 					}
 				})
 			})
@@ -76,14 +78,6 @@ export class BottomSheet extends Element {
 				this.style.setProperty('--bottom-sheet-float-direction', 'flex-end')
 			} else {
 				this.style.setProperty('--bottom-sheet-float-direction', 'flex-start')
-			}
-		})
-
-		this.createEffect(() => {
-			if (this.maxHeight) {
-				this.style.setProperty('--bottom-sheet-max-height', this.maxHeight)
-			} else {
-				this.style.setProperty('--bottom-sheet-max-height', 'calc(100vh - 3rem)')
 			}
 		})
 
@@ -261,6 +255,8 @@ export class BottomSheet extends Element {
 
 		this.isVisible = false
 		this.sheetRef.classList.remove('is-open')
+		document.documentElement.classList.add('panel-collapsed')
+		document.documentElement.style.setProperty('--bottom-sheet-panel-width', '0px')
 
 		// Force a reflow to ensure the transform is applied
 		this.sheetRef.offsetHeight
@@ -268,6 +264,8 @@ export class BottomSheet extends Element {
 		requestAnimationFrame(() => {
 			this.isVisible = true
 			this.sheetRef!.classList.add('is-open')
+			document.documentElement.classList.remove('panel-collapsed')
+			document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
 		})
 	}
 
@@ -279,6 +277,8 @@ export class BottomSheet extends Element {
 
 		this.isVisible = false
 		this.sheetRef.classList.remove('is-open')
+		document.documentElement.classList.add('panel-collapsed')
+		document.documentElement.style.setProperty('--bottom-sheet-panel-width', '0px')
 
 		// Wait for animation to complete
 		setTimeout(() => {
@@ -297,6 +297,29 @@ export class BottomSheet extends Element {
 			this.isVisible = true
 			if (this.sheetRef) {
 				this.sheetRef.classList.add('is-open')
+				document.documentElement.classList.remove('panel-collapsed')
+				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
+			}
+		}
+	}
+
+	public toggleCollapse() {
+		this.isVisible = !this.isVisible
+		if (this.sheetRef) {
+			if (this.isVisible) {
+				this.sheetRef.classList.add('is-open')
+				document.documentElement.classList.remove('panel-collapsed')
+				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
+			} else {
+				this.sheetRef.classList.remove('is-open')
+				document.documentElement.classList.add('panel-collapsed')
+				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '0px')
+			}
+
+			// Update button title based on parent state
+			const button = this.sheetRef.querySelector('.collapse-button')
+			if (button) {
+				button.setAttribute('title', this.isVisible ? 'Collapse panel' : 'Expand panel')
 			}
 		}
 	}
@@ -339,6 +362,9 @@ export class BottomSheet extends Element {
 				>
 					<div class="drag-indicator"></div>
 				</div>
+				<button class="collapse-button" onclick="${() => this.toggleCollapse()}" title="Collapse panel">
+					<img src="/images/collapse-icon.svg" alt="Collapse" />
+				</button>
 				<div class="sheet-content">
 					<slot></slot>
 				</div>
@@ -349,7 +375,8 @@ export class BottomSheet extends Element {
 	css = css`
 		:host {
 			--bottom-sheet-float-direction: flex-start;
-			--bottom-sheet-max-height: calc(100vh - 3rem);
+			--bottom-sheet-panel-width: 32rem;
+			--bottom-sheet-panel-left: 7px;
 		}
 
 		:host {
@@ -383,14 +410,13 @@ export class BottomSheet extends Element {
 			background: var(--uiColorPrimaryWhite);
 			// border-top: 1px solid #e5e7eb;
 			/* box-shadow: 0 -25px 50px -12px rgba(0, 0, 0, 0.25); */
-			border-top-left-radius: 1rem;
-			border-top-right-radius: 1rem;
+			border-top-left-radius: var(--borderRadiusXl);
+			border-top-right-radius: var(--borderRadiusXl);
 			transform: translateY(100%);
 			transition:
 				transform 0.3s ease-out,
 				height 0.3s ease-out;
 			will-change: transform, height;
-			max-height: calc(100vh - 5px);
 			pointer-events: auto;
 			display: flex;
 			flex-direction: column;
@@ -414,6 +440,7 @@ export class BottomSheet extends Element {
 			cursor: grab;
 			touch-action: none;
 			margin-bottom: 5px;
+			position: relative;
 		}
 
 		.drag-handle:active {
@@ -427,12 +454,44 @@ export class BottomSheet extends Element {
 			border-radius: 9999px;
 		}
 
+		.collapse-button {
+			position: absolute;
+			left: -25px;
+			top: 50%;
+			transform: translateY(-50%);
+			background: transparent;
+			border: none;
+			cursor: pointer;
+			padding: 0;
+			display: none;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.3s ease;
+			z-index: 100;
+		}
+
+		.collapse-button img {
+			width: 45px;
+			height: 73px;
+			transition: transform 0.3s ease;
+		}
+
+		/* When panel is closed, expose button more to the left */
+		.bottom-sheet:not(.is-open) .collapse-button {
+			left: -35px;
+		}
+
+		/* Flip icon when panel is closed */
+		.bottom-sheet:not(.is-open) .collapse-button img {
+			transform: scaleX(-1);
+		}
+
 		.sheet-content {
 			/* Keep scroll behavior with flex container */
 			padding: 0;
 			flex: 1 1 auto;
 			min-height: 0;
-			overflow: visible;
+			overflow-y: auto;
 			/* Hide scrollbar for Webkit browsers */
 			scrollbar-width: none;
 			-ms-overflow-style: none;
@@ -441,6 +500,16 @@ export class BottomSheet extends Element {
 
 		.sheet-content::-webkit-scrollbar {
 			display: none;
+		}
+
+		/* Collapsed state - when NOT open */
+		.bottom-sheet:not(.is-open) {
+			transform: translateY(calc(100% - var(--bottom-sheet-handle-height) - 10px));
+		}
+
+		.bottom-sheet:not(.is-open) .sheet-content {
+			opacity: 0;
+			pointer-events: none;
 		}
 
 		/* Desktop styles: floating panel on the left, always full viewport height */
@@ -460,20 +529,21 @@ export class BottomSheet extends Element {
 				position: relative;
 				top: auto;
 				bottom: auto;
-				left: -4px;
+				left: 7px;
 				right: auto;
-				border-top-right-radius: 1rem;
-				border-bottom-right-radius: 1rem;
+				border-top-left-radius: var(--borderRadiusXl);
+				border-bottom-left-radius: var(--borderRadiusXl);
+				border-top-right-radius: 0;
 				border: 1px solid #e5e7eb;
 				width: 32rem;
 				max-width: calc(100vw - 3rem);
 				height: 100vh;
-				max-height: var(--bottom-sheet-max-height);
 				opacity: 0;
 				transform: translateY(1.25rem);
 				transition:
 					opacity 0.3s ease-out,
-					transform 0.3s ease-out;
+					transform 0.3s ease-out,
+					width 0.3s ease-out;
 			}
 
 			.bottom-sheet.is-open {
@@ -481,7 +551,31 @@ export class BottomSheet extends Element {
 				transform: translateY(0);
 			}
 
+			.collapse-button {
+				display: flex;
+			}
+
+			.bottom-sheet:not(.is-open) {
+				width: 0px;
+				transform: translateY(0);
+				opacity: 1;
+			}
+
+			.bottom-sheet:not(.is-open) .drag-handle {
+				display: none;
+			}
+
+			.bottom-sheet:not(.is-open) .sheet-content {
+				display: none;
+			}
+
 			.drag-handle {
+				display: flex;
+				cursor: default;
+				margin-bottom: 0;
+			}
+
+			.drag-handle .drag-indicator {
 				display: none;
 			}
 		}
