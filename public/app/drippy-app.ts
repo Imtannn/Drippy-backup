@@ -13,6 +13,7 @@ import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {Space} from '../types/types.js'
+import {getSpacePrimaryCollection} from '../utils.js'
 import './app-guard.js'
 import './avatar-selection.js'
 import './brand-view.js'
@@ -30,8 +31,6 @@ import {parseSpaceQualifiedEntry, store} from './store.js'
 import './success-view.js'
 import './template-view.js'
 
-// const avatar = createMemo(() => searchParams().get('avatar'))
-// const scene = createMemo(() => searchParams().get('scene') as Space | null)
 const isPreview = createMemo(() => searchParams().get('isPreview'))
 const hasBrandParam = createMemo(() => !!searchParams().get('brand'))
 
@@ -82,7 +81,7 @@ export class DrippyApp extends Element {
 		this.createEffect(() => {
 			if (
 				store.view !== 'avatar' &&
-				store.view !== 'scene' &&
+				store.view !== 'space' &&
 				store.selectedAvatar &&
 				store.selectedSpace &&
 				store.drippySceneLoads.size > 0
@@ -158,10 +157,20 @@ export class DrippyApp extends Element {
 		const aggregatedFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
 
 		for (const {space: targetSpace, ids} of garmentGroups.values()) {
-			const spaceTemplates = templates[targetSpace.collection]
+			// Check if there's a collection param for this space, otherwise use primary
+			const collectionParam = searchParams().get('collection')
+			let effectiveCollection: string | null = null
+
+			if (collectionParam && targetSpace.collections.includes(collectionParam)) {
+				effectiveCollection = collectionParam
+			} else {
+				effectiveCollection = getSpacePrimaryCollection(targetSpace)
+			}
+
+			const spaceTemplates = effectiveCollection ? templates[effectiveCollection] : undefined
 			if (!spaceTemplates) continue
 
-			const spaceFabrics = fabrics[targetSpace.collection]
+			const spaceFabrics = effectiveCollection ? fabrics[effectiveCollection] : undefined
 			const fabricEntriesForSpace = fabricGroups.get(targetSpace.slug) ?? []
 			const fabricOverrides =
 				fabricEntriesForSpace.length > 0 && spaceFabrics
@@ -177,12 +186,12 @@ export class DrippyApp extends Element {
 
 				aggregatedTemplates.set(template.category, template)
 
-				const templateBlockData = blockManager.convertTemplateToBlockData(template, targetSpace)
+				const templateBlockData = blockManager.convertTemplateToBlockData(template, effectiveCollection)
 				const templateFabricOverrides = fabricOverrides.get(template.category)
 
 				const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
 					templateBlockData,
-					targetSpace,
+					effectiveCollection,
 					templateFabricOverrides,
 				)
 
@@ -236,7 +245,7 @@ export class DrippyApp extends Element {
 							></show-when>
 
 							<show-when
-								condition=${() => store.view === 'scene'}
+								condition=${() => store.view === 'space'}
 								content=${() => html`<spaces-selection></spaces-selection>`}
 							></show-when>
 

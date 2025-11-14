@@ -481,7 +481,7 @@ export class BottomSheet extends Element {
 			padding: 0;
 			flex: 1 1 auto;
 			min-height: 0;
-			overflow-y: auto;
+			overflow: visible;
 			/* Hide scrollbar for Webkit browsers */
 			scrollbar-width: none;
 			-ms-overflow-style: none;

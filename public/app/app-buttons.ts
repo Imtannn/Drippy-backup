@@ -81,7 +81,7 @@ export class AppButtonsLeft extends Element {
 			.app-buttons-left {
 				left: 20px;
 				transform: var(--app-buttons-left-transform);
-				z-index: 51;
+				z-index: 10;
 			}
 		}
 	`
