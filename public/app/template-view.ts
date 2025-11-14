@@ -386,87 +386,90 @@ export class TemplateView extends Element {
 			ondone=${this.#closeRemixOverlay}
 			show-remix-overlay=${() => this.showRemixOverlay}
 			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
+			max-height="100vh"
 		>
-			<app-buttons-left>
-				<app-buttons-group group-direction="row" custom-class="button-group-spread">
-					<show-when
-						condition=${() => !this.showRemixOverlay}
-						content=${() => html`<back-button onclick=${this.#onBackButtonClick}></back-button>`}
-					></show-when>
-
-					<show-when
-						condition=${() => !this.showRemixOverlay}
-						content=${() => html`
-							<preview-button
-								class="align-right"
-								button-disabled=${() => store.selectedTemplates.size === 0}
-								onclick=${this.#onPreviewButtonClick}
-							></preview-button>
-						`}
-					></show-when>
-					<show-when
-						condition=${() => this.showRemixOverlay}
-						content=${() => html`
-							<button class="done-button align-right" onclick=${this.#closeRemixOverlay}>Done</button>
-						`}
-					></show-when>
-				</app-buttons-group>
-			</app-buttons-left>
 			<show-on-device device="desktop">
-				<top-navigation
-					classList=${() => ({
-						hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
-					})}
-				>
-					<div
-						class="template-info"
-						classList=${() => {
-							const templates = Array.from(store.selectedTemplates.values())
-							return {hidden: templates.length === 0 || true}
-						}}
+				<div class="template-view-buttons">
+					<app-buttons-left>
+						<app-buttons-group group-direction="row" custom-class="button-group-spread">
+							<show-when
+								condition=${() => !this.showRemixOverlay}
+								content=${() => html`<back-button onclick=${this.#onBackButtonClick}></back-button>`}
+							></show-when>
+
+							<show-when
+								condition=${() => !this.showRemixOverlay}
+								content=${() => html`
+									<preview-button
+										class="align-right"
+										button-disabled=${() => store.selectedTemplates.size === 0}
+										onclick=${this.#onPreviewButtonClick}
+									></preview-button>
+								`}
+							></show-when>
+							<show-when
+								condition=${() => this.showRemixOverlay}
+								content=${() => html`
+									<button class="done-button align-right" onclick=${this.#closeRemixOverlay}>Done</button>
+								`}
+							></show-when>
+						</app-buttons-group>
+					</app-buttons-left>
+					<top-navigation
+						classList=${() => ({
+							hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
+						})}
 					>
-						${() => {
-							const templates = Array.from(store.selectedTemplates.values())
-							if (templates.length > 0) {
-								const selectedTemplate = templates[0]
-								return html`
-									<div class="template-image-wrapper">
-										<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
-									</div>
-									<div class="template-details">
-										<div class="template-name">${selectedTemplate.name}</div>
-										<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
-									</div>
-								`
-							}
-							return ''
-						}}
-					</div>
-					<button
-						class="view-details-btn"
-						classList=${() => {
-							const templates = Array.from(store.selectedTemplates.values())
-							return {hidden: templates.length === 0 || true}
-						}}
-						disabled
-					>
-						View details
-					</button>
-					<div
-						class="default-nav"
-						classList=${() => {
-							const templates = Array.from(store.selectedTemplates.values())
-							return {hidden: templates.length > 0 && false}
-						}}
-					>
-						<avatar-dropdown
-							open=${() => this.showAvatarSelection}
-							show-popup
-							onavatar-dropdown-click=${this.#onAvatarDropdownClick}
-						></avatar-dropdown>
-						<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
-					</div>
-				</top-navigation>
+						<div
+							class="template-info"
+							classList=${() => {
+								const templates = Array.from(store.selectedTemplates.values())
+								return {hidden: templates.length === 0 || true}
+							}}
+						>
+							${() => {
+								const templates = Array.from(store.selectedTemplates.values())
+								if (templates.length > 0) {
+									const selectedTemplate = templates[0]
+									return html`
+										<div class="template-image-wrapper">
+											<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+										</div>
+										<div class="template-details">
+											<div class="template-name">${selectedTemplate.name}</div>
+											<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+										</div>
+									`
+								}
+								return ''
+							}}
+						</div>
+						<button
+							class="view-details-btn"
+							classList=${() => {
+								const templates = Array.from(store.selectedTemplates.values())
+								return {hidden: templates.length === 0 || true}
+							}}
+							disabled
+						>
+							View details
+						</button>
+						<div
+							class="default-nav"
+							classList=${() => {
+								const templates = Array.from(store.selectedTemplates.values())
+								return {hidden: templates.length > 0 && false}
+							}}
+						>
+							<avatar-dropdown
+								open=${() => this.showAvatarSelection}
+								show-popup
+								onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+							></avatar-dropdown>
+							<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+						</div>
+					</top-navigation>
+				</div>
 				<show-when
 					condition=${() =>
 						spaceHasMultipleCollections(store.selectedSpace) &&
@@ -736,6 +739,12 @@ export class TemplateView extends Element {
 				display: block;
 				--app-buttons-left-transform: translateX(0) !important;
 				--app-buttons-left-transform: translateY(-10px) !important;
+			}
+			.template-view-buttons {
+				position: relative;
+				display: flex;
+				align-items: center;
+				height: 120px;
 			}
 		}
 
