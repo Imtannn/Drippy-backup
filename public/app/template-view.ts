@@ -781,6 +781,12 @@ export class TemplateView extends Element {
 				top: 52px;
 				z-index: 99;
 				background: var(--uiColorPrimaryWhite);
+				border-top: var(--borderWidth) solid var(--uiColorBorderColor);
+				padding-top: var(--uiSpacingMedium);
+			}
+
+			tabs-provider .tabs-container {
+				border-bottom: none;
 			}
 		}
 

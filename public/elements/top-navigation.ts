@@ -33,7 +33,6 @@ export class TopNavigation extends Element {
 		@media (min-width: 768px) {
 			:host {
 				width: 32rem;
-				padding-bottom: 14px;
 				padding-right: var(--uiSpacing);
 			}
 		}
