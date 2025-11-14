@@ -4,12 +4,16 @@ import {store} from './store.js'
 
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
+import '../elements/control-button-group.js'
 import '../elements/cube-button.js'
 import '../elements/home-button.js'
 import '../elements/logic/show-when.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
+import '../elements/redo-button.js'
+import '../elements/reload-button.js'
 import '../elements/show-on-device.js'
+import '../elements/undo-button.js'
 import './app-buttons.js'
 import './buy-button.js'
 import './share-button.js'
@@ -211,20 +215,6 @@ export class AppButtonsPreset extends Element {
 		`
 	}
 
-	#renderToolsButtons = (config: PresetConfig['right']) => {
-		if (!config?.tools) return ''
-		return html`
-			<app-buttons-group>
-				<person-button disabled=${() => this.disablePersonButton}></person-button>
-				<cube-button disabled=${() => this.disableCubeButton}></cube-button>
-				<show-when
-					condition=${() => config.animation}
-					content=${() => html`<animation-select></animation-select>`}
-				></show-when>
-			</app-buttons-group>
-		`
-	}
-
 	#renderRight = () => {
 		const config = this.#presetConfig().right
 		if (!config) return ''
@@ -232,22 +222,48 @@ export class AppButtonsPreset extends Element {
 		return html`
 			<app-buttons-right>
 				${() =>
-					config.logo &&
+					(config.logo || config.tools) &&
 					html`
-						<app-buttons-group>
-							<logo-button brand-name=${() => this.brandName}></logo-button>
-						</app-buttons-group>
+						<show-on-device device="mobile">
+							<app-buttons-group>
+								${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
+								<control-button-group>
+									<undo-button></undo-button>
+									<redo-button></redo-button>
+									<reload-button></reload-button>
+								</control-button-group>
+								${() =>
+									config.tools &&
+									html`
+										<person-button disabled=${() => this.disablePersonButton}></person-button>
+										<cube-button disabled=${() => this.disableCubeButton}></cube-button>
+									`}
+							</app-buttons-group>
+						</show-on-device>
 					`}
-				${() =>
-					config.tools &&
-					html` <show-on-device device="mobile"> ${() => this.#renderToolsButtons(config)} </show-on-device> `}
 			</app-buttons-right>
 
 			${() =>
-				config.tools &&
+				(config.logo || config.tools) &&
 				html`
 					<show-on-device device="desktop">
-						<div class="tools-buttons-desktop">${() => this.#renderToolsButtons(config)}</div>
+						<div class="tools-buttons-desktop">
+							<app-buttons-group>
+								${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
+								<control-button-group>
+									<undo-button></undo-button>
+									<redo-button></redo-button>
+									<reload-button></reload-button>
+								</control-button-group>
+								${() =>
+									config.tools &&
+									html`
+										<person-button disabled=${() => this.disablePersonButton}></person-button>
+										<cube-button disabled=${() => this.disableCubeButton}></cube-button>
+									`}
+								${() => config.animation && html`<animation-select></animation-select>`}
+							</app-buttons-group>
+						</div>
 					</show-on-device>
 				`}
 			${() => this.#renderActionButtons(config)}
