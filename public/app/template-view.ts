@@ -438,16 +438,6 @@ export class TemplateView extends Element {
 					<app-buttons-left>
 						<app-buttons-group group-direction="row" custom-class="button-group-spread">
 							<show-when
-								condition=${() => !this.showRemixOverlay}
-								content=${() => html`
-									<preview-button
-										class="align-right"
-										button-disabled=${() => store.selectedTemplates.size === 0}
-										onclick=${this.#onPreviewButtonClick}
-									></preview-button>
-								`}
-							></show-when>
-							<show-when
 								condition=${() => this.showRemixOverlay}
 								content=${() => html`
 									<button class="done-button align-right" onclick=${this.#closeRemixOverlay}>Done</button>
