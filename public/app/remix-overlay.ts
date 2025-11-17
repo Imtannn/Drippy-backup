@@ -12,8 +12,10 @@ import {
 } from 'lume'
 
 import {fabrics} from '../consts/fabrics.js'
+import '../elements/bottom-sheet.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
+import '../elements/show-on-device.js'
 import '../elements/tabs.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -238,91 +240,113 @@ export class RemixOverlay extends Element {
 	}
 
 	template = () => html`
-		<div class="overlay">
-			<show-when
-				condition=${() => this.activeTab !== null}
-				content=${() => html`
-					<tabs-provider
-						default-value=${() => this.activeTab}
-						ontabchange=${(e: CustomEvent) => (this.activeTab = e.detail.value)}
+		<bottom-sheet
+			class="remix-overlay-sheet"
+			default-snap="0.27"
+			snap-points="0.2,0.27,0.27"
+			z-index="2000"
+			collapse-button="false"
+			max-height="100vh"
+			float-direction="right"
+		>
+			<div class="overlay">
+				<div class="done-button-container">
+					<button
+						class="done-button"
+						onclick=${() => {
+							this.onclose()
+							this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}))
+						}}
 					>
-						<div class="tabs-list-container">
-							<tabs-list>
-								<tabs-trigger selected-value=${FABRICS_TAB}> Fabrics </tabs-trigger>
+						Done
+					</button>
+				</div>
+				<show-when
+					condition=${() => this.activeTab !== null}
+					content=${() => html`
+						<tabs-provider
+							default-value=${() => this.activeTab}
+							ontabchange=${(e: CustomEvent) => (this.activeTab = e.detail.value)}
+						>
+							<div class="tabs-list-container">
+								<tabs-list>
+									<tabs-trigger selected-value=${FABRICS_TAB}> Fabrics </tabs-trigger>
+									<show-when
+										condition=${() => this.blocksCategories.length > 0}
+										content=${() => html`<tabs-trigger selected-value=${STYLE_TAB}>Style</tabs-trigger>`}
+									></show-when>
+								</tabs-list>
+							</div>
+
+							<tabs-content selected-value=${FABRICS_TAB}>
+								<div class="scroll-content"></div>
+
+								<fabric-selection
+									is-remix
+									piece-selections=${() => this.pieceSelections}
+									available-fabrics=${() => this.availableFabrics}
+									selected-template-category=${() => this.selectedTemplate!.category}
+								></fabric-selection>
+							</tabs-content>
+
+							<tabs-content selected-value=${STYLE_TAB}>
+								<div class="scroll-content"></div>
 								<show-when
 									condition=${() => this.blocksCategories.length > 0}
-									content=${() => html`<tabs-trigger selected-value=${STYLE_TAB}>Style</tabs-trigger>`}
-								></show-when>
-							</tabs-list>
-						</div>
+									content=${() => html`
+										<tabs-provider default-value=${() => this.selectedSubTab} ontabchange=${this.#onSubTabChange}>
+											<div class="category-tabs">
+												<for-each
+													items=${() => this.blocksCategories}
+													content=${() => (category: BlockCategory) => html`
+														<button
+															class="category-tab"
+															classList=${() => ({active: this.selectedSubTab === category})}
+															onclick=${() => {
+																this.selectedSubTab = category
+															}}
+														>
+															${category}
+														</button>
+													`}
+												></for-each>
+											</div>
 
-						<tabs-content selected-value=${FABRICS_TAB}>
-							<div class="scroll-content"></div>
-
-							<fabric-selection
-								piece-selections=${() => this.pieceSelections}
-								available-fabrics=${() => this.availableFabrics}
-								selected-template-category=${() => this.selectedTemplate!.category}
-							></fabric-selection>
-						</tabs-content>
-
-						<tabs-content selected-value=${STYLE_TAB}>
-							<div class="scroll-content"></div>
-							<show-when
-								condition=${() => this.blocksCategories.length > 0}
-								content=${() => html`
-									<tabs-provider default-value=${() => this.selectedSubTab} ontabchange=${this.#onSubTabChange}>
-										<div class="category-tabs">
 											<for-each
 												items=${() => this.blocksCategories}
-												content=${() => (category: BlockCategory) => html`
-													<button
-														class="category-tab"
-														classList=${() => ({active: this.selectedSubTab === category})}
-														onclick=${() => {
-															this.selectedSubTab = category
-														}}
-													>
-														${category}
-													</button>
+												content=${() => (blockCategory: BlockCategory) => html`
+													<show-when
+														condition=${() => this.selectedSubTab === blockCategory}
+														content=${() => html`
+															<div class="items-grid">
+																<for-each
+																	items=${() => this.#filteredBlocksByCategory(blockCategory)}
+																	content=${() => (block: Block) => html`
+																		<item-card
+																			item-active=${() => this.#getIsBlockActive(block)}
+																			item-src=${() => block.thumb}
+																			item-alt=${() => block.blockName}
+																			item-value=${() => block}
+																			oncardselected=${() => this.#onBlockSelect(block)}
+																		></item-card>
+																	`}
+																></for-each>
+															</div>
+														`}
+													></show-when>
 												`}
 											></for-each>
-										</div>
-
-										<for-each
-											items=${() => this.blocksCategories}
-											content=${() => (blockCategory: BlockCategory) => html`
-												<show-when
-													condition=${() => this.selectedSubTab === blockCategory}
-													content=${() => html`
-														<div class="items-grid">
-															<for-each
-																items=${() => this.#filteredBlocksByCategory(blockCategory)}
-																content=${() => (block: Block) => html`
-																	<item-card
-																		item-active=${() => this.#getIsBlockActive(block)}
-																		item-src=${() => block.thumb}
-																		item-alt=${() => block.blockName}
-																		item-value=${() => block}
-																		oncardselected=${() => this.#onBlockSelect(block)}
-																	></item-card>
-																`}
-															></for-each>
-														</div>
-													`}
-												></show-when>
-											`}
-										></for-each>
-									</tabs-provider>
-								`}
-								fallback=${() => html`<div class="empty-state">No variations available.</div>`}
-							></show-when>
-						</tabs-content>
-					</tabs-provider>
-				`}
-			>
-			</show-when>
-		</div>
+										</tabs-provider>
+									`}
+									fallback=${() => html`<div class="empty-state">No variations available.</div>`}
+								></show-when>
+							</tabs-content>
+						</tabs-provider>
+					`}
+				>
+				</show-when>
+			</div>
+		</bottom-sheet>
 	`
 
 	css = css/*css*/ `
@@ -334,12 +358,37 @@ export class RemixOverlay extends Element {
 			display: flex;
 			flex-direction: column;
 			gap: var(--uiSpacingMedium);
+			min-height: 100%;
+		}
+
+		.done-button-container {
+			display: none;
+			justify-content: flex-end;
+			margin-bottom: var(--uiSpacingSmall);
+			padding: 0 var(--uiSpacing);
+		}
+		.done-button {
+			background: var(--uiColorPrimaryBlack);
+			color: var(--uiColorPrimaryWhite);
+			border: none;
+			border-radius: var(--borderRadiusPill);
+			height: var(--buttonHeight);
+			padding: var(--uiSpacingSmall) var(--uiSpacingMedium);
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightSemiBold);
+			cursor: pointer;
+			transition: var(--transitionFast);
+		}
+
+		.done-button:hover {
+			background: var(--uiColorPrimaryBlack);
+			opacity: 0.8;
 		}
 
 		.category-tabs {
 			display: flex;
 			gap: var(--uiGapLarge);
-			margin-bottom: var(--uiSpacingMedium);
+			margin-bottom: var(--uiSpacingTiny);
 		}
 
 		.category-tab {
@@ -360,8 +409,22 @@ export class RemixOverlay extends Element {
 
 		.items-grid {
 			display: grid;
-			grid-template-columns: repeat(3, 1fr);
+			grid-auto-flow: column;
+			grid-auto-columns: calc((100% - (var(--uiGap) * 3)) / 4);
 			gap: var(--uiGap);
+			overflow-x: auto;
+			overflow-y: hidden;
+			scroll-snap-type: x proximity;
+			-webkit-overflow-scrolling: touch;
+			padding-bottom: var(--uiSpacingSmall);
+		}
+
+		.items-grid::-webkit-scrollbar {
+			display: none;
+		}
+
+		.items-grid > * {
+			scroll-snap-align: start;
 		}
 
 		.empty-state {
@@ -372,8 +435,8 @@ export class RemixOverlay extends Element {
 		}
 
 		.tabs-list-container {
-			position: absolute;
-
+			position: sticky;
+			top: 0;
 			right: 0;
 			left: 0;
 			z-index: 100;
@@ -383,7 +446,7 @@ export class RemixOverlay extends Element {
 			justify-content: space-between;
 			padding: var(--uiSpacing);
 			padding-top: 0;
-			padding-bottom: var(--uiSpacingSmall);
+			padding-bottom: 0;
 		}
 
 		.close-button-container {
@@ -402,9 +465,47 @@ export class RemixOverlay extends Element {
 		tabs-content {
 			padding: var(--uiSpacing);
 			padding-bottom: var(--uiSpacingXxl);
+			padding-top: 0;
+			margin-top: -10px;
+		}
+
+		.remix-overlay-sheet {
+			--bottom-sheet-panel-width: min(32rem, 100vw);
+		}
+
+		@media (max-width: 768px) {
+			.overlay {
+				height: 100%;
+				overflow: hidden;
+				touch-action: pan-x;
+				overscroll-behavior: contain;
+			}
+
+			tabs-content {
+				overflow: visible;
+			}
+
+			.template-item {
+				transform: scale(0.8);
+				transform-origin: top center;
+			}
 		}
 
 		@media (min-width: 769px) {
+			.done-button-container {
+				display: flex;
+			}
+			.category-tabs {
+				margin-bottom: var(--uiSpacingMedium);
+			}
+			.items-grid {
+				grid-auto-flow: row;
+				grid-auto-columns: unset;
+				grid-template-columns: repeat(3, 1fr);
+				overflow-x: visible;
+				padding-bottom: var(--uiSpacingXxs);
+				scroll-snap-type: none;
+			}
 			tabs-content {
 				padding-top: 15px;
 			}

@@ -16,6 +16,9 @@ type BottomSheetAttributes =
 	| 'floatDirection'
 	| 'maxHeight'
 	| 'showRemixOverlay'
+	| 'zIndex'
+	| 'snapPoints'
+	| 'collapseButton'
 
 @element
 export class BottomSheet extends Element {
@@ -30,6 +33,9 @@ export class BottomSheet extends Element {
 	@attribute floatDirection: 'left' | 'right' = 'left'
 	@attribute maxHeight: string | null = null
 	@booleanAttribute showRemixOverlay = false
+	@attribute zIndex: string | number | null = null
+	@attribute snapPoints: string | null = null
+	@booleanAttribute collapseButton = true
 
 	private sheetHeight: number | null = null
 	private dragState = {
@@ -86,6 +92,20 @@ export class BottomSheet extends Element {
 			this.defaultSnap
 			this.handleResize()
 		})
+
+		this.createEffect(() => {
+			this.snapPoints
+			this.handleResize()
+		})
+
+		this.createEffect(() => {
+			const zIndex = this.zIndex
+			if (zIndex === null || zIndex === undefined || zIndex === '') {
+				this.style.removeProperty('--bottom-sheet-z-index')
+			} else {
+				this.style.setProperty('--bottom-sheet-z-index', zIndex.toString())
+			}
+		})
 	}
 
 	disconnectedCallback() {
@@ -140,13 +160,14 @@ export class BottomSheet extends Element {
 	}
 
 	#resolveDefaultSnapFraction(): number {
+		const snapPoints = this.#getSnapPoints()
 		const raw = (this.defaultSnap ?? '').toString().trim()
-		if (!raw) return SNAP_POINTS[0]
+		if (!raw) return snapPoints[0]
 
 		// Support index (e.g., "0", "1", ...)
 		if (/^\d+$/.test(raw)) {
-			const index = Math.max(0, Math.min(SNAP_POINTS.length - 1, parseInt(raw, 10)))
-			return SNAP_POINTS[index]
+			const index = Math.max(0, Math.min(snapPoints.length - 1, parseInt(raw, 10)))
+			return snapPoints[index]
 		}
 
 		// Support percent or decimal (e.g., "55%" or "0.55")
@@ -159,7 +180,7 @@ export class BottomSheet extends Element {
 		if (!isNaN(fraction)) {
 			return Math.max(0, Math.min(1, fraction))
 		}
-		return SNAP_POINTS[0]
+		return snapPoints[0]
 	}
 
 	#resolveDefaultSheetHeight(): number | null {
@@ -190,9 +211,34 @@ export class BottomSheet extends Element {
 	private getClosestSnapPoint(height: number) {
 		const viewportHeight = window.innerHeight
 		const currentPos = height / viewportHeight
-		return SNAP_POINTS.reduce((prev, curr) => {
+		const snapPoints = this.#getSnapPoints()
+		return snapPoints.reduce((prev, curr) => {
 			return Math.abs(curr - currentPos) < Math.abs(prev - currentPos) ? curr : prev
 		})
+	}
+
+	#getSnapPoints(): number[] {
+		const raw = (this.snapPoints ?? '').toString().trim()
+		if (!raw) return SNAP_POINTS
+
+		const parsed = raw
+			.split(',')
+			.map(part => part.trim())
+			.filter(Boolean)
+			.map(part => {
+				let value = NaN
+				if (part.endsWith('%')) {
+					value = parseFloat(part) / 100
+				} else {
+					value = parseFloat(part)
+				}
+				if (isNaN(value)) return null
+				return Math.max(0, Math.min(1, value))
+			})
+			.filter((value): value is number => value !== null)
+			.sort((a, b) => a - b)
+
+		return parsed.length ? parsed : SNAP_POINTS
 	}
 
 	private handleDragStart = (e: MouseEvent | TouchEvent) => {
@@ -216,8 +262,9 @@ export class BottomSheet extends Element {
 		const newHeight = this.dragState.startHeight - deltaY
 
 		const viewportHeight = window.innerHeight
-		const minHeight = SNAP_POINTS[0] * viewportHeight * 0.8
-		const maxHeight = SNAP_POINTS[SNAP_POINTS.length - 1] * viewportHeight * 1.1
+		const snapPoints = this.#getSnapPoints()
+		const minHeight = snapPoints[0] * viewportHeight * 0.8
+		const maxHeight = snapPoints[snapPoints.length - 1] * viewportHeight * 1.1
 
 		const constrainedHeight = Math.max(minHeight, Math.min(newHeight, maxHeight))
 		this.sheetRef.style.height = `${constrainedHeight}px`
@@ -386,9 +433,11 @@ export class BottomSheet extends Element {
 				>
 					<div class="drag-indicator"></div>
 				</div>
-				<button class="collapse-button" onclick="${() => this.toggleCollapse()}" title="Collapse panel">
-					<img src="/images/collapse-icon.svg" alt="Collapse" />
-				</button>
+				${this.collapseButton
+					? html`<button class="collapse-button" onclick="${() => this.toggleCollapse()}" title="Collapse panel">
+							<img src="/images/collapse-icon.svg" alt="Collapse" />
+						</button>`
+					: ''}
 				<div class="sheet-content">
 					<slot></slot>
 				</div>
@@ -405,11 +454,12 @@ export class BottomSheet extends Element {
 
 		:host {
 			--bottom-sheet-handle-height: 15px;
+			--bottom-sheet-z-index: 50;
 			position: fixed;
 			bottom: 0;
 			left: 5px;
 			right: 5px;
-			z-index: 50;
+			z-index: var(--bottom-sheet-z-index);
 			pointer-events: none;
 		}
 
@@ -548,7 +598,9 @@ export class BottomSheet extends Element {
 				padding-left: 0;
 				padding-right: 0;
 			}
-
+			:host([collapse-button='false']) .bottom-sheet {
+				border: unset;
+			}
 			.bottom-sheet {
 				position: relative;
 				top: auto;

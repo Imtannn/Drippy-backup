@@ -1,10 +1,11 @@
-import {attribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {attribute, booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import type {BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import {store} from './store.js'
+import '../elements/logic/show-when.js'
 
-type FabricSelectionAttributes = 'pieceSelections' | 'availableFabrics' | 'selectedTemplateCategory'
+type FabricSelectionAttributes = 'pieceSelections' | 'availableFabrics' | 'selectedTemplateCategory' | 'isRemix'
 
 @element
 export class FabricSelection extends Element {
@@ -13,6 +14,7 @@ export class FabricSelection extends Element {
 	@attribute pieceSelections: string[] = []
 	@attribute availableFabrics: Record<string, Fabric[]> = {}
 	@attribute selectedTemplateCategory: TemplateCategory | null = null
+	@booleanAttribute isRemix = false
 
 	@signal _selectingPiece: string | undefined = undefined
 
@@ -99,27 +101,32 @@ export class FabricSelection extends Element {
 
 		if (!templateSelection) return false
 
-		return Object.values(templateSelection).some(
-			selection => selection?.fabrics?.[piece]?._id === fabric._id,
-		)
+		return Object.values(templateSelection).some(selection => selection?.fabrics?.[piece]?._id === fabric._id)
 	}
 
 	template = () => html`
-		<div class="fabric-selection">
-			<for-each
-				items=${() => this.#getPiecesFabrics(this.pieceSelections)}
-				content=${() => (pieceFabric: Fabric & {assignedMesh: string}) => html`
-					<button
-						class="piece-select-button"
-						onclick=${() => this.#onPieceSelect(pieceFabric.assignedMesh)}
-						data-piece=${() => pieceFabric.assignedMesh}
-						classList=${() => ({active: pieceFabric.assignedMesh === this._selectingPiece})}
-					>
-						<img src=${() => pieceFabric.thumb} alt=${() => pieceFabric.materialName} />
-					</button>
+
+			<show-when
+				condition=${() => this.#getPiecesFabrics(this.pieceSelections).length > 1}
+				content=${() => html`
+					<div class="fabric-selection">
+						<for-each
+							items=${() => this.#getPiecesFabrics(this.pieceSelections)}
+							content=${() => (pieceFabric: Fabric & {assignedMesh: string}) => html`
+								<button
+									class="piece-select-button"
+									onclick=${() => this.#onPieceSelect(pieceFabric.assignedMesh)}
+									data-piece=${() => pieceFabric.assignedMesh}
+									classList=${() => ({active: pieceFabric.assignedMesh === this._selectingPiece})}
+								>
+									<img src=${() => pieceFabric.thumb} alt=${() => pieceFabric.materialName} />
+								</button>
+							`}
+						></for-each>
+					</div>
 				`}
-			></for-each>
-		</div>
+			></show-when>
+
 		<for-each items=${() => this.pieceSelections} content=${() => (piece: string) => html`
 			<show-when
 				condition=${() => piece === this._selectingPiece}
@@ -151,7 +158,6 @@ export class FabricSelection extends Element {
 			display: flex;
 			flex-direction: column;
 			gap: var(--uiGap);
-			margin-top: 10px;
 		}
 
 		.fabric-selection {
@@ -195,6 +201,29 @@ export class FabricSelection extends Element {
 		@media (min-width: 768px) {
 			.items-grid {
 				grid-template-columns: repeat(4, 1fr);
+			}
+		}
+
+		/* Remix-only mobile horizontal scrolling */
+		@media (max-width: 768px) {
+			:host([is-remix]) .items-grid {
+				/* override default 3-column grid */
+				grid-template-columns: none;
+				grid-auto-flow: column;
+				/* keep 4 columns visible, overflow to scroll horizontally */
+				grid-auto-columns: calc((100% - (var(--uiGap) * 3)) / 4);
+				gap: var(--uiGap);
+				overflow-x: auto;
+				overflow-y: hidden;
+				scroll-snap-type: x proximity;
+				-webkit-overflow-scrolling: touch;
+				padding-bottom: var(--uiSpacingSmall);
+			}
+			:host([is-remix]) .items-grid::-webkit-scrollbar {
+				display: none;
+			}
+			:host([is-remix]) .items-grid > * {
+				scroll-snap-align: start;
 			}
 		}
 	`

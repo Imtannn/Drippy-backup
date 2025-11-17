@@ -90,7 +90,7 @@ export class TemplateItemOverlay extends Element {
 										fill="white"
 									/>
 								</svg>
-								Remix
+								Options
 							</button>
 						`
 					: null}

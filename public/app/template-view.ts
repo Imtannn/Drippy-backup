@@ -409,6 +409,14 @@ export class TemplateView extends Element {
 					></show-when>
 				</app-buttons-group>
 			</app-buttons-left>
+
+			<show-on-device device="mobile">
+				<show-when
+					condition=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
+					content=${() => html`<div class="template-sheet-overlay" onclick=${this.#closeRemixOverlay}></div>`}
+				></show-when>
+			</show-on-device>
+
 			<show-on-device device="desktop">
 				<div class="template-view-buttons">
 					<top-navigation
@@ -472,8 +480,7 @@ export class TemplateView extends Element {
 						!this.showAvatarSelection &&
 						!this.showPoseSelection &&
 						!this.showDetailView &&
-						this.selectedTab !== null &&
-						!this.showRemixOverlay}
+						this.selectedTab !== null}
 					content=${() => html`
 						<top-navigation class="collections-navigation">
 							<div class="collections-scroll-container">
@@ -513,11 +520,7 @@ export class TemplateView extends Element {
 			></show-when>
 			<show-when
 				condition=${() =>
-					!this.showAvatarSelection &&
-					!this.showPoseSelection &&
-					!this.showDetailView &&
-					this.selectedTab !== null &&
-					!this.showRemixOverlay}
+					!this.showAvatarSelection && !this.showPoseSelection && !this.showDetailView && this.selectedTab !== null}
 				content=${() => html`
 					<tabs-provider
 						default-value=${() => this.selectedTab}
@@ -733,6 +736,19 @@ export class TemplateView extends Element {
 			pointer-events: auto;
 			z-index: 100;
 		}
+		.template-sheet-overlay {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			top: 0;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 20;
+			pointer-events: auto;
+			border-top-left-radius: 1rem;
+			border-top-right-radius: 1rem;
+		}
+
 		@media (min-width: 768px) {
 			app-buttons-left {
 				z-index: 0;
