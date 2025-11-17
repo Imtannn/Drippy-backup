@@ -242,12 +242,13 @@ export class RemixOverlay extends Element {
 	template = () => html`
 		<bottom-sheet
 			class="remix-overlay-sheet"
-			default-snap="0.27"
-			snap-points="0.2,0.27,0.27"
+			default-snap="0.26"
+			snap-points="0.26,0.26,0.26"
 			z-index="2000"
 			collapse-button="false"
 			max-height="100vh"
 			float-direction="right"
+			panel-width="28rem"
 		>
 			<div class="overlay">
 				<div class="done-button-container">
@@ -413,7 +414,7 @@ export class RemixOverlay extends Element {
 			grid-auto-columns: calc((100% - (var(--uiGap) * 3)) / 4);
 			gap: var(--uiGap);
 			overflow-x: auto;
-			overflow-y: hidden;
+			overflow-y: auto;
 			scroll-snap-type: x proximity;
 			-webkit-overflow-scrolling: touch;
 			padding-bottom: var(--uiSpacingSmall);
@@ -470,14 +471,14 @@ export class RemixOverlay extends Element {
 		}
 
 		.remix-overlay-sheet {
-			--bottom-sheet-panel-width: min(32rem, 100vw);
+			/* panel-width is controlled via attribute */
 		}
 
 		@media (max-width: 768px) {
 			.overlay {
 				height: 100%;
-				overflow: hidden;
-				touch-action: pan-x;
+				overflow-y: auto;
+				overflow-x: hidden;
 				overscroll-behavior: contain;
 			}
 

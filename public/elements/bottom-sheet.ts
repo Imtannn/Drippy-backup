@@ -19,6 +19,7 @@ type BottomSheetAttributes =
 	| 'zIndex'
 	| 'snapPoints'
 	| 'collapseButton'
+	| 'panelWidth'
 
 @element
 export class BottomSheet extends Element {
@@ -36,6 +37,7 @@ export class BottomSheet extends Element {
 	@attribute zIndex: string | number | null = null
 	@attribute snapPoints: string | null = null
 	@booleanAttribute collapseButton = true
+	@attribute panelWidth: string | null = null
 
 	private sheetHeight: number | null = null
 	private dragState = {
@@ -104,6 +106,15 @@ export class BottomSheet extends Element {
 				this.style.removeProperty('--bottom-sheet-z-index')
 			} else {
 				this.style.setProperty('--bottom-sheet-z-index', zIndex.toString())
+			}
+		})
+
+		this.createEffect(() => {
+			const panelWidth = this.panelWidth
+			if (panelWidth === null || panelWidth === undefined || panelWidth === '') {
+				this.style.removeProperty('--bottom-sheet-panel-width')
+			} else {
+				this.style.setProperty('--bottom-sheet-panel-width', panelWidth)
 			}
 		})
 	}
@@ -611,7 +622,7 @@ export class BottomSheet extends Element {
 				border-bottom-left-radius: var(--borderRadiusXl);
 				border-top-right-radius: 0;
 				border: 1px solid #e5e7eb;
-				width: 32rem;
+				width: var(--bottom-sheet-panel-width, 32rem);
 				max-width: calc(100vw - 3rem);
 				height: 100vh;
 				opacity: 0;

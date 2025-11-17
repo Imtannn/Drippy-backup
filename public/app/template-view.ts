@@ -417,12 +417,10 @@ export class TemplateView extends Element {
 				</app-buttons-group>
 			</app-buttons-left>
 
-			<show-on-device device="mobile">
-				<show-when
-					condition=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
-					content=${() => html`<div class="template-sheet-overlay" onclick=${this.#closeRemixOverlay}></div>`}
-				></show-when>
-			</show-on-device>
+			<show-when
+				condition=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
+				content=${() => html`<div class="template-sheet-overlay" onclick=${this.#closeRemixOverlay}></div>`}
+			></show-when>
 
 			<show-on-device device="desktop">
 				<div class="template-view-buttons">
@@ -744,7 +742,7 @@ export class TemplateView extends Element {
 			z-index: 100;
 		}
 		.template-sheet-overlay {
-			position: absolute;
+			position: fixed;
 			left: 0;
 			right: 0;
 			bottom: 0;
@@ -774,7 +772,7 @@ export class TemplateView extends Element {
 				display: flex;
 				align-items: center;
 				background: var(--uiColorPrimaryWhite);
-				z-index: 100;
+				z-index: 10;
 				width: 100%;
 				min-height: 52px;
 			}
@@ -782,7 +780,7 @@ export class TemplateView extends Element {
 			tabs-provider bottom-sheet-header {
 				position: sticky;
 				top: 52px;
-				z-index: 99;
+				z-index: 10;
 				background: var(--uiColorPrimaryWhite);
 				border-top: var(--borderWidth) solid var(--uiColorBorderColor);
 				padding-top: var(--uiSpacingMedium);
@@ -790,6 +788,11 @@ export class TemplateView extends Element {
 
 			tabs-provider .tabs-container {
 				border-bottom: none;
+			}
+			.template-sheet-overlay {
+				border-top-left-radius: 1rem;
+				border-top-right-radius: unset;
+				border-bottom-left-radius: 1rem;
 			}
 		}
 

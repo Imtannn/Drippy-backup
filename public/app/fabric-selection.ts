@@ -105,28 +105,26 @@ export class FabricSelection extends Element {
 	}
 
 	template = () => html`
-
+		<div class="fabric-selection">
 			<show-when
 				condition=${() => this.#getPiecesFabrics(this.pieceSelections).length > 1}
 				content=${() => html`
-					<div class="fabric-selection">
-						<for-each
-							items=${() => this.#getPiecesFabrics(this.pieceSelections)}
-							content=${() => (pieceFabric: Fabric & {assignedMesh: string}) => html`
-								<button
-									class="piece-select-button"
-									onclick=${() => this.#onPieceSelect(pieceFabric.assignedMesh)}
-									data-piece=${() => pieceFabric.assignedMesh}
-									classList=${() => ({active: pieceFabric.assignedMesh === this._selectingPiece})}
-								>
-									<img src=${() => pieceFabric.thumb} alt=${() => pieceFabric.materialName} />
-								</button>
-							`}
-						></for-each>
-					</div>
+					<for-each
+						items=${() => this.#getPiecesFabrics(this.pieceSelections)}
+						content=${() => (pieceFabric: Fabric & {assignedMesh: string}) => html`
+							<button
+								class="piece-select-button"
+								onclick=${() => this.#onPieceSelect(pieceFabric.assignedMesh)}
+								data-piece=${() => pieceFabric.assignedMesh}
+								classList=${() => ({active: pieceFabric.assignedMesh === this._selectingPiece})}
+							>
+								<img src=${() => pieceFabric.thumb} alt=${() => pieceFabric.materialName} />
+							</button>
+						`}
+					></for-each>
 				`}
 			></show-when>
-
+		</div>
 		<for-each items=${() => this.pieceSelections} content=${() => (piece: string) => html`
 			<show-when
 				condition=${() => piece === this._selectingPiece}
