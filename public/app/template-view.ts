@@ -130,6 +130,13 @@ export class TemplateView extends Element {
 			updateGarmentsSelectionInUrl(store.selectedGarments)
 		})
 
+		// Sync showRemixOverlay with store.remixOverlayTemplate
+		this.createEffect(() => {
+			if (store.remixOverlayTemplate === null && this.showRemixOverlay) {
+				this.showRemixOverlay = false
+			}
+		})
+
 		// Auto-trigger preview button after 15s if conditions are met
 		this.createEffect(() => {
 			const user = currentUser()

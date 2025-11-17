@@ -95,7 +95,7 @@ export class AppButtonsPreset extends Element {
 				}
 				break
 			case 'template-flow':
-				store.view = 'space'
+				store.goBackHomeAndResetState()
 				break
 			case 'preview-flow':
 				batch(() => {
