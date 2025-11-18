@@ -748,8 +748,12 @@ export class TemplateView extends Element {
 			bottom: 0;
 			top: 0;
 			background: rgba(0, 0, 0, 0.5);
-			z-index: 20;
+			z-index: 1999;
 			pointer-events: auto;
+			touch-action: none;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			user-select: none;
 			border-top-left-radius: 1rem;
 			border-top-right-radius: 1rem;
 		}
@@ -772,7 +776,7 @@ export class TemplateView extends Element {
 				display: flex;
 				align-items: center;
 				background: var(--uiColorPrimaryWhite);
-				z-index: 10;
+				z-index: 11;
 				width: 100%;
 				min-height: 52px;
 			}

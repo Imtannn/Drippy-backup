@@ -242,8 +242,8 @@ export class RemixOverlay extends Element {
 	template = () => html`
 		<bottom-sheet
 			class="remix-overlay-sheet"
-			default-snap="0.26"
-			snap-points="0.26,0.26,0.26"
+			default-snap="0.25"
+			snap-points="0.25,0.25,0.25"
 			z-index="2000"
 			collapse-button="false"
 			max-height="100vh"
