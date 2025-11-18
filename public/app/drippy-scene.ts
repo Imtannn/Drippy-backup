@@ -84,9 +84,7 @@ export class DrippyScene extends Element {
 	// Camera rig drag state
 	@signal private cameraY = -1
 	@signal private cameraRigInteractive = true
-	private dragState = {
-		isShiftDrag: false,
-	}
+	@signal private isShiftDrag = false
 
 	async #applyFabrics(
 		el: Element3D,
@@ -192,16 +190,16 @@ export class DrippyScene extends Element {
 	}
 
 	#handlePointerDown = (e: PointerEvent) => {
-		this.dragState.isShiftDrag = e.shiftKey
+		this.isShiftDrag = e.shiftKey
 		// Only disable camera rig rotation when shift is held
-		if (this.dragState.isShiftDrag) {
+		if (this.isShiftDrag) {
 			e.stopImmediatePropagation()
 			this.cameraRigInteractive = false
 		}
 	}
 
 	#handlePointerMove = (e: PointerEvent) => {
-		if (!this.dragState.isShiftDrag) return
+		if (!this.isShiftDrag) return
 		// Scale the movement - dragging down increases Y (looks up), dragging up decreases Y (looks down)
 		this.cameraY -= e.movementY / 1000
 		this.cameraY = clamp(this.cameraY, -2, 0)
@@ -209,12 +207,12 @@ export class DrippyScene extends Element {
 	}
 
 	#handlePointerUp = (e: PointerEvent) => {
-		if (this.dragState.isShiftDrag) {
+		if (this.isShiftDrag) {
 			e.stopImmediatePropagation()
 		}
 		this.cameraRigInteractive = true
 
-		this.dragState.isShiftDrag = false
+		this.isShiftDrag = false
 	}
 
 	connectedCallback() {
@@ -698,8 +696,8 @@ export class DrippyScene extends Element {
 							min-distance="0.5"
 							max-distance="${() => (isDesktop() ? 30 : 50)}"
 							distance="${() => (isDesktop() ? 2.5 : 4)}"
-							min-vertical-angle="-17"
-							max-vertical-angle="45"
+							min-vertical-angle="0"
+							max-vertical-angle="0"
 							dolly-speed="${() => (this.landing ? 0 : 0.01)}"
 							attr:position="${() => `0 ${this.cameraY} 0`}"
 							xinteractive=${() => {
