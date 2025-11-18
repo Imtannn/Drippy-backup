@@ -190,9 +190,11 @@ export class DrippyScene extends Element {
 	}
 
 	#handlePointerDown = (e: PointerEvent) => {
-		this.isShiftDrag = e.shiftKey
-		// Only disable camera rig rotation when shift is held
-		if (this.isShiftDrag) {
+		const isMobile = !isDesktop()
+
+		// Mobile: always enable vertical drag, Desktop: only with shift key
+		if (isMobile || e.shiftKey) {
+			this.isShiftDrag = true
 			e.stopImmediatePropagation()
 			this.cameraRigInteractive = false
 		}
@@ -696,8 +698,8 @@ export class DrippyScene extends Element {
 							min-distance="0.5"
 							max-distance="${() => (isDesktop() ? 30 : 50)}"
 							distance="${() => (isDesktop() ? 2.5 : 4)}"
-							min-vertical-angle="0"
-							max-vertical-angle="0"
+							min-vertical-angle="${() => (isDesktop() ? '-17' : '0')}"
+							max-vertical-angle="${() => (isDesktop() ? '45' : '0')}"
 							dolly-speed="${() => (this.landing ? 0 : 0.01)}"
 							attr:position="${() => `0 ${this.cameraY} 0`}"
 							xinteractive=${() => {
