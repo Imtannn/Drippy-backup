@@ -323,7 +323,7 @@ export class AvatarSelector extends Element {
 				})
 
 				if (selectedTemplate) {
-					const fabricData: Array<{fabric: any; blockCategory: any; templateCategory: any; assignedMesh?: string}> = []
+					const fabricData: Array<{fabric: any; blockCategory: any; templateCategory: any; assignedMesh: string}> = []
 					if (selectedTemplate.materialId) {
 						const mainFabric = availableFabrics.find(
 							fabric => `${fabric.category} - ${fabric.materialName}` === selectedTemplate.materialId,
@@ -353,7 +353,7 @@ export class AvatarSelector extends Element {
 										fabric: extraFabric,
 										blockCategory: blockCategory,
 										templateCategory: templateCategory,
-										assignedMesh: extraMaterial.mesh,
+										assignedMesh: extraMaterial.mesh || 'default',
 									})
 								}
 							}
