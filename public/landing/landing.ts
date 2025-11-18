@@ -592,7 +592,7 @@ const mainContent = html`
 											<div class="pricing__plan-header">
 												<div class="pricing__plan-name text-md">Studio</div>
 												<p class="pricing__plan-price">
-													<span class="interactive__title text-md">€${() => (isYearlyActive() ? '45' : '50')}</span> <span class="pricing__plan-period text-md">/month/studio</span>
+													<span class="interactive__title text-md">€${() => (isYearlyActive() ? '70' : '50')}</span> <span class="pricing__plan-period text-md">/month/studio</span>
 												</p>
 											</div>
 											<div class="pricing__features-list">
@@ -621,7 +621,7 @@ const mainContent = html`
 													<div class="pricing__plan-badge"><div class="pricing__plan-badge-text text-md">Best value</div></div>
 												</div>
 												<p class="pricing__plan-price--pro">
-													<span class="interactive__title text-md">€${() => (isYearlyActive() ? '70' : '75')}</span> <span class="pricing__plan-period--pro text-md">/month/studio</span>
+													<span class="interactive__title text-md">€${() => (isYearlyActive() ? '145' : '75')}</span> <span class="pricing__plan-period--pro text-md">/month/studio</span>
 												</p>
 											</div>
 											<div class="pricing__features-list--pro">
