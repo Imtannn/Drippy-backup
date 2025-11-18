@@ -251,17 +251,6 @@ export class RemixOverlay extends Element {
 			panel-width="28rem"
 		>
 			<div class="overlay">
-				<div class="done-button-container">
-					<button
-						class="done-button"
-						onclick=${() => {
-							this.onclose()
-							this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}))
-						}}
-					>
-						Done
-					</button>
-				</div>
 				<show-when
 					condition=${() => this.activeTab !== null}
 					content=${() => html`
@@ -480,6 +469,7 @@ export class RemixOverlay extends Element {
 				overflow-y: auto;
 				overflow-x: hidden;
 				overscroll-behavior: contain;
+				padding-top: var(--uiSpacing);
 			}
 
 			tabs-content {
@@ -493,8 +483,8 @@ export class RemixOverlay extends Element {
 		}
 
 		@media (min-width: 769px) {
-			.done-button-container {
-				display: flex;
+			.overlay {
+				padding-top: var(--uiSpacing);
 			}
 			.category-tabs {
 				margin-bottom: var(--uiSpacingMedium);
