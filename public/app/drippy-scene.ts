@@ -84,7 +84,7 @@ export class DrippyScene extends Element {
 	// Camera rig drag state
 	@signal private cameraY = -1
 	@signal private cameraRigInteractive = true
-	@signal private isShiftDrag = false
+	@signal private isVerticalPan = false
 
 	async #applyFabrics(
 		el: Element3D,
@@ -194,27 +194,31 @@ export class DrippyScene extends Element {
 
 		// Mobile: always enable vertical drag, Desktop: only with shift key
 		if (isMobile || e.shiftKey) {
-			this.isShiftDrag = true
-			e.stopImmediatePropagation()
-			this.cameraRigInteractive = false
+			this.isVerticalPan = true
+			if (!isMobile) {
+				e.stopImmediatePropagation()
+			}
 		}
 	}
 
 	#handlePointerMove = (e: PointerEvent) => {
-		if (!this.isShiftDrag) return
+		const isMobile = !isDesktop()
+		if (!this.isVerticalPan) return
 		// Scale the movement - dragging down increases Y (looks up), dragging up decreases Y (looks down)
 		this.cameraY -= e.movementY / 1000
 		this.cameraY = clamp(this.cameraY, -2, 0)
-		e.stopImmediatePropagation()
+		if (!isMobile) {
+			e.stopImmediatePropagation()
+		}
 	}
 
 	#handlePointerUp = (e: PointerEvent) => {
-		if (this.isShiftDrag) {
+		const isMobile = !isDesktop()
+		if (this.isVerticalPan && !isMobile) {
 			e.stopImmediatePropagation()
 		}
-		this.cameraRigInteractive = true
 
-		this.isShiftDrag = false
+		this.isVerticalPan = false
 	}
 
 	connectedCallback() {
