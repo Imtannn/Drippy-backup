@@ -220,8 +220,6 @@ export class TemplateView extends Element {
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
-
-			store.goBackHomeAndResetState()
 		})
 	}
 
@@ -378,6 +376,7 @@ export class TemplateView extends Element {
 			show-animation=${() => store.getEffectiveCollection() === 'gap'}
 			disable-person-button=${false}
 			disable-cube-button=${false}
+			on:backclick=${this.#onBackButtonClick}
 		>
 			<show-on-device device="mobile">
 				<show-when
@@ -394,9 +393,6 @@ export class TemplateView extends Element {
 		</app-buttons-preset>
 
 		<bottom-sheet
-			onback=${this.#onBackButtonClick}
-			onpreview=${this.#onPreviewButtonClick}
-			ondone=${this.#closeRemixOverlay}
 			show-remix-overlay=${() => this.showRemixOverlay}
 			float-direction="right"
 			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}

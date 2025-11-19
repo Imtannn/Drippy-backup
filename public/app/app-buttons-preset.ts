@@ -95,6 +95,7 @@ export class AppButtonsPreset extends Element {
 				}
 				break
 			case 'template-flow':
+				this.dispatchEvent(new CustomEvent('backclick', {bubbles: true}))
 				store.goBackHomeAndResetState()
 				break
 			case 'preview-flow':
