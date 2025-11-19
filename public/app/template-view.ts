@@ -220,8 +220,6 @@ export class TemplateView extends Element {
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
-
-			store.goBackHomeAndResetState()
 		})
 	}
 
@@ -378,6 +376,7 @@ export class TemplateView extends Element {
 			show-animation=${() => store.getEffectiveCollection() === 'gap'}
 			disable-person-button=${false}
 			disable-cube-button=${false}
+			on:backclick=${this.#onBackButtonClick}
 		>
 			<show-on-device device="mobile">
 				<show-when
@@ -394,9 +393,6 @@ export class TemplateView extends Element {
 		</app-buttons-preset>
 
 		<bottom-sheet
-			onback=${this.#onBackButtonClick}
-			onpreview=${this.#onPreviewButtonClick}
-			ondone=${this.#closeRemixOverlay}
 			show-remix-overlay=${() => this.showRemixOverlay}
 			float-direction="right"
 			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
@@ -1013,6 +1009,9 @@ export class TemplateView extends Element {
 		.collections-navigation {
 			margin-top: 0;
 			display: none;
+			padding-right: 0;
+			margin-top: 10px;
+			margin-bottom: 10px;
 		}
 
 		.collections-mobile-navigation {
@@ -1026,6 +1025,7 @@ export class TemplateView extends Element {
 			overflow-x: auto;
 			align-items: center;
 			scrollbar-width: none;
+			padding-right: 20px;
 		}
 
 		.collections-scroll-container::-webkit-scrollbar {
@@ -1038,14 +1038,14 @@ export class TemplateView extends Element {
 			min-width: 42px;
 			min-height: 42px;
 			border-radius: var(--borderRadiusCircular);
-			background: var(--uiColorPrimaryBlack);
+			background: var(--uiColorPrimaryWhite);
 			cursor: pointer;
 			transition: all var(--transitionFast);
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			overflow: hidden;
-			border: 2px solid transparent;
+			border: 2px solid var(--uiColorPrimaryBlack);
 			padding: 0;
 		}
 
