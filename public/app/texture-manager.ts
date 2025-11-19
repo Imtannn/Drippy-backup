@@ -104,11 +104,11 @@ class TextureManager {
 	/**
 	 * Get base texture with caching (no config-specific scaling)
 	 */
-	private async getBaseTexture(url: string, config: TextureConfig): Promise<CachedTexture | null> {
+	private async getBaseTexture(url: string): Promise<CachedTexture | null> {
 		if (!url) return null
 
 		// Use URL only as cache key
-		const cacheKey = `${url}-${config.coef}-${config.offset[0]}-${config.offset[1]}-${config.rotate}-${config.repeat[0]}-${config.repeat[1]}`
+		const cacheKey = `${url}`
 
 		// Return cached texture if available
 		if (this.textureCache.has(cacheKey)) {
@@ -168,6 +168,8 @@ class TextureManager {
 			repeatX *= cachedTexture.aspectRatio
 		}
 
+		console.log('configureTexture for', cachedTexture.texture.image.src, {repeatX, repeatY})
+
 		texture.repeat.set(repeatX, repeatY)
 
 		return texture
@@ -177,7 +179,7 @@ class TextureManager {
 	 * Get texture with specific configuration applied
 	 */
 	async getTexture(url: string, config: TextureConfig): Promise<THREE.Texture | null> {
-		const cachedTexture = await this.getBaseTexture(url, config)
+		const cachedTexture = await this.getBaseTexture(url)
 		if (!cachedTexture) return null
 
 		return this.configureTexture(cachedTexture, config)
@@ -189,63 +191,23 @@ class TextureManager {
 	async preloadFabricBaseTextures(fabric: Fabric): Promise<(CachedTexture | null)[]> {
 		// Just load base textures into cache, no configuration needed
 		return await Promise.all([
-			this.getBaseTexture(fabric.baseColor || '', this.defaultConfig),
-			this.getBaseTexture(fabric.normal || '', this.defaultConfig),
-			this.getBaseTexture(fabric.displacement || '', this.defaultConfig),
-			this.getBaseTexture(fabric.roughness || '', this.defaultConfig),
-			this.getBaseTexture(fabric.alpha || '', this.defaultConfig),
+			this.getBaseTexture(fabric.baseColor || ''),
+			this.getBaseTexture(fabric.normal || ''),
+			this.getBaseTexture(fabric.displacement || ''),
+			this.getBaseTexture(fabric.roughness || ''),
+			this.getBaseTexture(fabric.alpha || ''),
 		])
 	}
-
-	/**
-	 * Preload fabric textures using default configuration
-	 */
-	async preloadFabricTextures(fabric: Fabric): Promise<TextureSet> {
-		const config = {...this.defaultConfig}
-		if (fabric.scaleX) {
-			config.repeat[0] = 60 / fabric.scaleX
-		}
-		if (fabric.scaleY) {
-			config.repeat[1] = 60 / fabric.scaleY
-		}
-		if (fabric.offsetX) {
-			config.offset[0] = fabric.offsetX
-		}
-		if (fabric.offsetY) {
-			config.offset[1] = fabric.offsetY
-		}
-		if (fabric.coef) {
-			config.coef = fabric.coef
-		}
-		if (fabric.rotate) {
-			config.rotate = fabric.rotate
-		}
-
-		const [baseColor, normal, displacement, roughness, alpha] = await Promise.all([
-			this.getTexture(fabric.baseColor || '', config),
-			this.getTexture(fabric.normal || '', config),
-			this.getTexture(fabric.displacement || '', config),
-			this.getTexture(fabric.roughness || '', config),
-			this.getTexture(fabric.alpha || '', config),
-		])
-
-		return {
-			baseColor: baseColor || undefined,
-			normal: normal || undefined,
-			displacement: displacement || undefined,
-			roughness: roughness || undefined,
-			alpha: alpha || undefined,
-		}
-	}
-
 	/**
 	 * Load fabric textures with UV-aware configuration
 	 */
 	async loadFabricTexturesWithUV(fabric: Fabric, uvArray: number[]): Promise<TextureSet> {
 		const defaultCoef = this.calculateCoef(uvArray)
 		const config: TextureConfig = {
-			...this.defaultConfig,
+			repeat: [...this.defaultConfig.repeat],
 			coef: fabric.coef || defaultCoef,
+			offset: [...this.defaultConfig.offset],
+			rotate: this.defaultConfig.rotate,
 		}
 
 		if (fabric.scaleX) {
@@ -271,6 +233,8 @@ class TextureManager {
 			this.getTexture(fabric.roughness || '', config),
 			this.getTexture(fabric.alpha || '', config),
 		])
+
+		console.log('texture set for', fabric.materialName, {baseColor, normal, displacement, roughness, alpha})
 
 		return {
 			baseColor: baseColor || undefined,
@@ -286,7 +250,7 @@ class TextureManager {
 	 */
 	private calculateCoef(uvArray: number[]): number {
 		if (uvArray.length === 0) return 1
-		const absValues = uvArray.slice(0, 5).map(el => Math.abs(el))
+		const absValues = uvArray.map((u: number) => Math.abs(u))
 		const max = Math.max(...absValues)
 		return max > 1 ? 1000 : 1
 	}
