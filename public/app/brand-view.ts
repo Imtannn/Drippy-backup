@@ -5,7 +5,7 @@ import {templates} from '../consts/templates.js'
 import {pushState, searchParams} from '../routes.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {TemplateMap} from '../types/types.js'
-import {currentUser, store, updateGarmentsSelectionInUrl} from './store.js'
+import {store, updateGarmentsSelectionInUrl} from './store.js'
 import {templateHelpers} from './template-helpers.js'
 
 import '../elements/avatar-dropdown.js'
@@ -50,14 +50,6 @@ export class BrandView extends Element {
 			searchParams().delete('brand')
 			pushState()
 		}
-	}
-
-	#onAvatarClick = (e: Event) => {
-		e.preventDefault()
-		store.view = 'avatar'
-	}
-	#onSignInClick = () => {
-		this.showLoginDialog = true
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -184,25 +176,6 @@ export class BrandView extends Element {
 	template = () => html`
 		<div class="brand-container">
 			<!-- Navigation -->
-			<show-when
-				condition=${() => searchParams().has('brand')}
-				content=${() => html`
-					<div class="navigation">
-						<a href="#" class="avatar-link" onclick=${this.#onAvatarClick}>
-							<avatar-dropdown hide-chevron></avatar-dropdown>
-						</a>
-						<div class="nav-links">
-							<a href="/landing" class="learn-more-link">Learn more</a>
-							${() => {
-								const user = currentUser()
-								return user !== null
-									? html`<login-ui></login-ui>`
-									: html`<button class="sign-in-button" onclick=${this.#onSignInClick}>Sign in</button>`
-							}}
-						</div>
-					</div>
-				`}
-			></show-when>
 
 			<!-- Main Title and Description -->
 
@@ -416,7 +389,6 @@ export class BrandView extends Element {
 
 		/* SpacesPage-specific styles */
 		.brand-container {
-			padding: var(--uiSpacing);
 			background: var(--uiColorPrimaryWhite);
 			min-height: 100vh;
 
@@ -490,7 +462,7 @@ export class BrandView extends Element {
 
 		.header {
 			text-align: center;
-			margin-bottom: 2rem;
+			margin: 30px 15px 15px 15px;
 		}
 
 		.brand-logo {
@@ -534,12 +506,12 @@ export class BrandView extends Element {
 		}
 
 		.description.brand {
-			margin-bottom: 0.4rem;
+			margin-bottom: 15px;
 			margin-top: -4px;
 		}
 
 		.sub-description {
-			font-size: var(--fontSizeTextXxs);
+			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightNormal);
 			line-height: var(--lineHeightLoose);
 			margin: 0 auto;
@@ -673,6 +645,14 @@ export class BrandView extends Element {
 			:host-context([data-theme='dark']) & {
 				color: #777;
 			}
+		}
+
+		/* Override spaces-container from spaces-selection component */
+		spaces-selection .spaces-container {
+			/* Add your custom styles here */
+			/* Example: */
+			/* padding: 0; */
+			/* background: transparent; */
 		}
 
 		/* Mobile responsive */
