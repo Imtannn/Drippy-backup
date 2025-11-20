@@ -469,7 +469,6 @@ export class RemixOverlay extends Element {
 				overflow-y: auto;
 				overflow-x: hidden;
 				overscroll-behavior: contain;
-				padding-top: var(--uiSpacing);
 			}
 
 			tabs-content {

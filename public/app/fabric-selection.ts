@@ -105,26 +105,28 @@ export class FabricSelection extends Element {
 	}
 
 	template = () => html`
-		<div class="fabric-selection">
+
 			<show-when
 				condition=${() => this.#getPiecesFabrics(this.pieceSelections).length > 1}
 				content=${() => html`
-					<for-each
-						items=${() => this.#getPiecesFabrics(this.pieceSelections)}
-						content=${() => (pieceFabric: Fabric & {assignedMesh: string}) => html`
-							<button
-								class="piece-select-button"
-								onclick=${() => this.#onPieceSelect(pieceFabric.assignedMesh)}
-								data-piece=${() => pieceFabric.assignedMesh}
-								classList=${() => ({active: pieceFabric.assignedMesh === this._selectingPiece})}
-							>
-								<img src=${() => pieceFabric.thumb} alt=${() => pieceFabric.materialName} />
-							</button>
-						`}
-					></for-each>
+					<div class="fabric-selection">
+						<for-each
+							items=${() => this.#getPiecesFabrics(this.pieceSelections)}
+							content=${() => (pieceFabric: Fabric & {assignedMesh: string}) => html`
+								<button
+									class="piece-select-button"
+									onclick=${() => this.#onPieceSelect(pieceFabric.assignedMesh)}
+									data-piece=${() => pieceFabric.assignedMesh}
+									classList=${() => ({active: pieceFabric.assignedMesh === this._selectingPiece})}
+								>
+									<img src=${() => pieceFabric.thumb} alt=${() => pieceFabric.materialName} />
+								</button>
+							`}
+						></for-each>
+					</div>
 				`}
 			></show-when>
-		</div>
+
 		<for-each items=${() => this.pieceSelections} content=${() => (piece: string) => html`
 			<show-when
 				condition=${() => piece === this._selectingPiece}
@@ -216,12 +218,16 @@ export class FabricSelection extends Element {
 				scroll-snap-type: x proximity;
 				-webkit-overflow-scrolling: touch;
 				padding-bottom: var(--uiSpacingSmall);
+				padding-top: var(--uiSpacingSmall);
 			}
 			:host([is-remix]) .items-grid::-webkit-scrollbar {
 				display: none;
 			}
 			:host([is-remix]) .items-grid > * {
 				scroll-snap-align: start;
+			}
+			.fabric-selection {
+				margin-top: 15px;
 			}
 		}
 	`

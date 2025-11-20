@@ -162,21 +162,20 @@ export class TemplateView extends Element {
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
 
-		// If clicking on already selected template, show overlay instead of toggling
-		if (
+		const isAlreadySelected =
 			store.selectedTemplates.has(template.category) &&
 			store.selectedTemplates.get(template.category)?._id === template._id
-		) {
-			this.showTemplateOverlay = template
-			this.isOpeningOverlay = true
-			return
+
+		if (!isAlreadySelected) {
+			store.setLoadingTemplate(template._id)
+			this.#selectTemplate(template)
+			setTimeout(() => {
+				this.isOpeningOverlay = false
+			}, 0)
 		}
 
-		store.setLoadingTemplate(template._id)
-		this.#selectTemplate(template)
-		setTimeout(() => {
-			this.isOpeningOverlay = false
-		}, 0)
+		this.showTemplateOverlay = template
+		this.isOpeningOverlay = true
 	}
 
 	#isTemplateActive = (template: Template) => {

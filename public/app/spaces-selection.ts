@@ -271,7 +271,7 @@ export class SpacesSelection extends Element {
 
 		/* SpacesPage-specific styles */
 		.spaces-container {
-			padding: var(--uiSpacing) 0;
+			padding: var(--uiSpacing);
 			background: var(--uiColorPrimaryWhite);
 			min-height: 100vh;
 
@@ -520,6 +520,9 @@ export class SpacesSelection extends Element {
 			.navigation {
 				padding: 0 1rem;
 				margin-bottom: 1.5rem;
+			}
+			.spaces-container {
+				padding: var(--uiSpacing, 0);
 			}
 
 			.nav-links {

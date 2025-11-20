@@ -554,6 +554,7 @@ export class BrandView extends Element {
 			gap: var(--gridGapMobile);
 			max-width: var(--breakpointLargeDesktop);
 			margin: 0 auto;
+			padding: 0 15px;
 		}
 
 		@media (min-width: 768px) {
@@ -649,10 +650,6 @@ export class BrandView extends Element {
 
 		/* Override spaces-container from spaces-selection component */
 		spaces-selection .spaces-container {
-			/* Add your custom styles here */
-			/* Example: */
-			/* padding: 0; */
-			/* background: transparent; */
 		}
 
 		/* Mobile responsive */
