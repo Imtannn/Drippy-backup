@@ -394,7 +394,8 @@ export class TemplateView extends Element {
 		<bottom-sheet
 			show-remix-overlay=${() => this.showRemixOverlay}
 			float-direction="right"
-			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
+			default-snap=${() => (this.showDetailView ? '0.88' : '0.41')}
+			snap-points="0.1,0.41,0.6,0.88"
 			max-height="100vh"
 		>
 			<app-buttons-left layout="bottom">
