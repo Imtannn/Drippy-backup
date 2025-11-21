@@ -17,6 +17,7 @@ import type {TextureSet} from './app/texture-manager.js'
 import {effect} from './meteor-signals.js'
 import type {Fabric} from './types/fabric.js'
 import type {Collection} from './types/types.js'
+const {textureManager} = await import('./app/texture-manager.js')
 
 export async function svgTexture(
 	plane: Mesh,
@@ -1062,7 +1063,6 @@ export function createFabricTexture(
 			setError(null)
 
 			try {
-				const {textureManager} = await import('./app/texture-manager.js')
 				const textureSet = await textureManager.loadFabricTexturesWithUV(currentFabric, uvArray)
 
 				if (canceled) return
