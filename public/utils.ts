@@ -15,7 +15,6 @@ import * as THREE from 'three'
 import {Easing} from '@tweenjs/tween.js'
 import {effect} from './meteor-signals.js'
 import type {Collection} from './types/types.js'
-const {textureManager} = await import('./app/texture-manager.js')
 
 export async function svgTexture(
 	plane: Mesh,
