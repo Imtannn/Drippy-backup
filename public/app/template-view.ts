@@ -372,7 +372,8 @@ export class TemplateView extends Element {
 		<app-buttons-preset
 			preset="template-flow"
 			brand-name="MoiDien"
-			show-animation=${() => store.getEffectiveCollection() === 'gap'}
+			show-animation=${() =>
+				store.getEffectiveCollection() === 'gap' || store.getEffectiveCollection() === 'animation-test'}
 			disable-person-button=${false}
 			disable-cube-button=${false}
 			on:backclick=${this.#onBackButtonClick}
