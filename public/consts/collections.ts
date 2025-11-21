@@ -121,4 +121,11 @@ export const collections: Collection[] = [
 		gender: 'female',
 		garmentsCount: blocks['changes']?.length ?? 0,
 	},
+	{
+		name: 'Animation Test',
+		slug: 'animation-test',
+		logo: '',
+		gender: 'female',
+		garmentsCount: blocks['animation-test']?.length ?? 0,
+	},
 ]
