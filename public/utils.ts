@@ -13,9 +13,7 @@ import {
 import * as THREE from 'three'
 
 import {Easing} from '@tweenjs/tween.js'
-import type {TextureSet} from './app/texture-manager.js'
 import {effect} from './meteor-signals.js'
-import type {Fabric} from './types/fabric.js'
 import type {Collection} from './types/types.js'
 const {textureManager} = await import('./app/texture-manager.js')
 
@@ -989,119 +987,4 @@ export function getSpaceSceneThumbnail(
 	const defaultScene = getSpaceDefaultScene(space)
 	const scene = getSceneBySlug(scenes, defaultScene)
 	return scene?.sceneThumbnail ?? ''
-}
-
-/**
- * Fabric texture loading utilities
- */
-
-export type FabricTextureState = {
-	texture: Accessor<TextureSet | null>
-	loading: Accessor<boolean>
-	error: Accessor<Error | null>
-}
-
-/** Configuration for texture retry behavior */
-export interface FabricTextureRetryConfig {
-	maxRetries?: number
-	retryDelay?: number
-}
-
-/**
- * Creates reactive signals for fabric texture loading with automatic retry logic.
- * Converts async texture loading into reactive signals with proper cleanup.
- */
-export function createFabricTexture(
-	fabric: Accessor<Fabric | undefined>,
-	uvArray: number[],
-	retryConfig: FabricTextureRetryConfig = {},
-): FabricTextureState {
-	const {maxRetries = 3, retryDelay = 1000} = retryConfig
-
-	const [texture, setTexture] = createSignal<TextureSet | null>(null)
-	const [loading, setLoading] = createSignal(false)
-	const [error, setError] = createSignal<Error | null>(null)
-
-	const fabricIdentity = createMemo(() => {
-		const f = fabric()
-		if (!f) return null
-
-		return {
-			id: f._id,
-			baseColor: f.baseColor,
-			normal: f.normal,
-			displacement: f.displacement,
-			roughness: f.roughness,
-			alpha: f.alpha,
-			scaleX: f.scaleX,
-			scaleY: f.scaleY,
-			offsetX: f.offsetX,
-			offsetY: f.offsetY,
-			coef: f.coef,
-			rotate: f.rotate,
-		}
-	})
-
-	createEffect(() => {
-		const identity = fabricIdentity()
-
-		if (!identity) {
-			setTexture(null)
-			setLoading(false)
-			setError(null)
-			return
-		}
-
-		const currentFabric = fabric()
-		if (!currentFabric) return
-
-		let canceled = false
-		let retryCount = 0
-
-		const loadTexture = async () => {
-			setLoading(true)
-			setError(null)
-
-			try {
-				const textureSet = await textureManager.loadFabricTexturesWithUV(currentFabric, uvArray)
-
-				if (canceled) return
-
-				setTexture(textureSet)
-				setLoading(false)
-			} catch (err) {
-				if (canceled) return
-
-				const error = err instanceof Error ? err : new Error(String(err))
-
-				if (retryCount < maxRetries) {
-					retryCount++
-					setTimeout(() => {
-						if (!canceled) loadTexture()
-					}, retryDelay)
-				} else {
-					setError(error)
-					setLoading(false)
-				}
-			}
-		}
-
-		loadTexture()
-
-		onCleanup(() => {
-			canceled = true
-			setLoading(false)
-
-			const currentTexture = texture()
-			if (currentTexture) {
-				currentTexture.baseColor?.dispose()
-				currentTexture.normal?.dispose()
-				currentTexture.displacement?.dispose()
-				currentTexture.roughness?.dispose()
-				currentTexture.alpha?.dispose()
-			}
-		})
-	})
-
-	return {texture, loading, error}
 }
