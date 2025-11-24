@@ -15,6 +15,7 @@ import {
 	signal,
 } from 'lume'
 import type {Accessor} from 'solid-js'
+import {createMemo} from 'solid-js'
 import * as THREE from 'three'
 import {avatars} from '../consts/avatars.js'
 
@@ -147,10 +148,11 @@ export class DrippyScene extends Element {
 			this.fabricTextureSignals.set(blockId, new Map())
 		}
 		const blockSignals = this.fabricTextureSignals.get(blockId)!
+		const fabricsSignal = createMemo(() => fabrics())
 
 		// Reactively manage fabric texture signals
 		createEffect(() => {
-			const currentFabrics = fabrics()
+			const currentFabrics = fabricsSignal()
 			const currentFabricIds = new Set<string>()
 
 			// Create signals for new fabrics
@@ -172,7 +174,7 @@ export class DrippyScene extends Element {
 
 		// Track aggregate loading state reactively
 		createEffect(() => {
-			const currentFabrics = fabrics()
+			const currentFabrics = fabricsSignal()
 			const activeSignals = [...currentFabrics.values()]
 				.map(f => blockSignals.get(f._id))
 				.filter((s): s is NonNullable<typeof s> => !!s)
@@ -227,6 +229,7 @@ export class DrippyScene extends Element {
 						const error = textureState.error()
 
 						if (textureSet && !isLoading && !error) {
+							console.log('[DrippyScene] textures ready', {blockId, mesh: mesh.name})
 							mesh.material = new THREE.MeshPhysicalMaterial()
 							textureManager.applyTexturesToMaterial(mesh.material, textureSet)
 						}
@@ -247,6 +250,7 @@ export class DrippyScene extends Element {
 	#resetMaterialsToDefault(el: Element3D) {
 		for (const mesh of meshesInTree(el.three)) {
 			const material = mesh.material as THREE.MeshPhysicalMaterial
+			console.log('[DrippyScene] clearing material maps for', mesh.name)
 			material.map = null
 			material.normalMap = null
 			material.roughnessMap = null

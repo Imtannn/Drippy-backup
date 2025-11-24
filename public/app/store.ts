@@ -278,15 +278,21 @@ class Store {
 			}
 
 			const garmentSelection = this.getGarmentSelection(templateCategory, blockCategory)
-			console.log('updated fabrics map for', blockCategory, 'in', templateCategory, garmentSelection.fabrics)
+			console.log('STORE: Before update fabrics for', blockCategory, 'in', templateCategory, {
+				...garmentSelection.fabrics,
+			})
 
-			garmentSelection.fabrics = {
+			const newFabrics = {
 				...garmentSelection.fabrics,
 				[assignedMesh]: fabric,
 			}
+			garmentSelection.fabrics = newFabrics
+			console.log('STORE: After update fabrics for', blockCategory, 'in', templateCategory, newFabrics)
 		}
 
-		this.touchSelectedGarments()
+		// Don't call touchSelectedGarments() - with createMutable, nested property changes are automatically reactive
+		// Calling it here causes the entire selectedGarments object to be recreated, triggering ALL effects that track it
+		// this.touchSelectedGarments()
 	}
 
 	set unselectTemplate(template: Template) {
