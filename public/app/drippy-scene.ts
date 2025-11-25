@@ -253,7 +253,10 @@ export class DrippyScene extends Element {
 
 		const cleanup = () => {
 			store.removeLoadingMaterial(loadingId)
-			this.fabricTextureSignals.delete(blockId)
+			if (!el.isConnected) {
+				this.fabricTextureSignals.delete(blockId)
+				this.#resetMaterialsToDefault(el)
+			}
 		}
 		onCleanup(cleanup)
 		return cleanup
@@ -623,11 +626,6 @@ export class DrippyScene extends Element {
 						)
 
 						onCleanup(cleanup)
-
-						onCleanup(() => {
-							this.#resetMaterialsToDefault(el)
-							store.removeLoadingMaterial(loadingId!)
-						})
 					})
 				}
 			})
