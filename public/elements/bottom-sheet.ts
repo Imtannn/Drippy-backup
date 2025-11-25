@@ -437,19 +437,20 @@ export class BottomSheet extends Element {
 				ref="${(el: HTMLElement) => (this.sheetRef = el)}"
 				style="${!this.isDesktop && this.sheetHeight ? `height: ${this.sheetHeight}px` : ''}"
 			>
-				<div
-					class="drag-handle"
-					onmousedown="${this.handleDragHandleStart}"
-					ontouchstart="${this.handleDragHandleStart}"
-				>
-					<div class="drag-indicator"></div>
-				</div>
 				${this.collapseButton
 					? html`<button class="collapse-button" onclick="${() => this.toggleCollapse()}" title="Collapse panel">
 							<img src="/images/collapse-icon.svg" alt="Collapse" />
 						</button>`
 					: ''}
 				<div class="sheet-content">
+					<div
+						class="drag-handle"
+						onmousedown="${this.handleDragHandleStart}"
+						ontouchstart="${this.handleDragHandleStart}"
+					>
+						<div class="drag-indicator"></div>
+					</div>
+
 					<slot></slot>
 				</div>
 			</div>
@@ -524,8 +525,12 @@ export class BottomSheet extends Element {
 			justify-content: center;
 			cursor: grab;
 			touch-action: none;
-			margin-bottom: 5px;
-			position: relative;
+			padding-bottom: 5px;
+
+			position: sticky;
+			z-index: 10;
+			top: 0;
+			background: var(--uiColorPrimaryWhite);
 		}
 
 		.drag-handle:active {
@@ -657,9 +662,7 @@ export class BottomSheet extends Element {
 			}
 
 			.drag-handle {
-				display: flex;
-				cursor: default;
-				margin-bottom: 0;
+				display: none;
 			}
 
 			.drag-handle .drag-indicator {
@@ -686,9 +689,14 @@ export class BottomSheetHeader extends Element {
 	css = css`
 		:host {
 			position: sticky;
-			top: 0;
+			top: 20px;
 			background: var(--appBackground);
 			z-index: 10;
+		}
+		@media (min-width: 768px) {
+			:host {
+				top: 0;
+			}
 		}
 	`
 }

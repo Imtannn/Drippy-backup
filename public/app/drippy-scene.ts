@@ -84,7 +84,7 @@ export class DrippyScene extends Element {
 	// Camera rig drag state
 	@signal private cameraY = -1
 	@signal private cameraRigInteractive = true
-	@signal private isShiftDrag = false
+	@signal private isVerticalPan = false
 
 	async #applyFabrics(
 		el: Element3D,
@@ -105,16 +105,9 @@ export class DrippyScene extends Element {
 						.map((el: any) => Math.abs(el))
 				: []
 
-			// Create a map of fabric assignments by mesh name
-			const fabricsByMesh: PieceFabricsMap = new Map()
-
-			for (const [assignedMesh, fabric] of fabrics.entries()) {
-				fabricsByMesh.set(assignedMesh, fabric)
-			}
-
 			// Load texture sets for all fabrics
 			const textureSetsByFabric = new Map<Fabric, any>()
-			for (const fabric of fabricsByMesh.values()) {
+			for (const fabric of fabrics.values()) {
 				const textureSet = await textureManager.loadFabricTexturesWithUV(fabric, uvArray)
 				textureSetsByFabric.set(fabric, textureSet)
 			}
@@ -123,7 +116,7 @@ export class DrippyScene extends Element {
 
 			// Create a map for mesh to meshes key since we are grouping meshes with the same material by '-'
 			const meshToFabricMeshesMap = new Map<string, string>()
-			for (const meshes of fabricsByMesh.keys()) {
+			for (const meshes of fabrics.keys()) {
 				const meshArray = meshes.split('-')
 				for (const mesh of meshArray) {
 					meshToFabricMeshesMap.set(mesh, meshes)
@@ -131,14 +124,14 @@ export class DrippyScene extends Element {
 			}
 
 			// Get all the meshes keys
-			const allFabricMeses = [...meshToFabricMeshesMap.keys()]
+			const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
 
 			// Apply fabrics to meshes based on assignments
 			for (const mesh of meshes) {
 				// Check if there's a specific fabric assigned to this mesh
-				const meshKey = allFabricMeses.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
+				const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
 				const meshesKey = meshToFabricMeshesMap.get(meshKey)
-				const fabricToUse = fabricsByMesh.get(meshesKey || 'default')
+				const fabricToUse = fabrics.get(meshesKey || 'default')
 
 				if (fabricToUse) {
 					const textureSet = textureSetsByFabric.get(fabricToUse)
@@ -190,29 +183,35 @@ export class DrippyScene extends Element {
 	}
 
 	#handlePointerDown = (e: PointerEvent) => {
-		this.isShiftDrag = e.shiftKey
-		// Only disable camera rig rotation when shift is held
-		if (this.isShiftDrag) {
-			e.stopImmediatePropagation()
-			this.cameraRigInteractive = false
+		const isMobile = !isDesktop()
+
+		// Mobile: always enable vertical drag, Desktop: only with shift key
+		if (isMobile || e.shiftKey) {
+			this.isVerticalPan = true
+			if (!isMobile) {
+				e.stopImmediatePropagation()
+			}
 		}
 	}
 
 	#handlePointerMove = (e: PointerEvent) => {
-		if (!this.isShiftDrag) return
+		const isMobile = !isDesktop()
+		if (!this.isVerticalPan) return
 		// Scale the movement - dragging down increases Y (looks up), dragging up decreases Y (looks down)
 		this.cameraY -= e.movementY / 1000
 		this.cameraY = clamp(this.cameraY, -2, 0)
-		e.stopImmediatePropagation()
+		if (!isMobile) {
+			e.stopImmediatePropagation()
+		}
 	}
 
 	#handlePointerUp = (e: PointerEvent) => {
-		if (this.isShiftDrag) {
+		const isMobile = !isDesktop()
+		if (this.isVerticalPan && !isMobile) {
 			e.stopImmediatePropagation()
 		}
-		this.cameraRigInteractive = true
 
-		this.isShiftDrag = false
+		this.isVerticalPan = false
 	}
 
 	connectedCallback() {
@@ -696,8 +695,8 @@ export class DrippyScene extends Element {
 							min-distance="0.5"
 							max-distance="${() => (isDesktop() ? 30 : 50)}"
 							distance="${() => (isDesktop() ? 2.5 : 4)}"
-							min-vertical-angle="0"
-							max-vertical-angle="0"
+							min-vertical-angle="${() => (isDesktop() ? '-17' : '0')}"
+							max-vertical-angle="${() => (isDesktop() ? '45' : '0')}"
 							dolly-speed="${() => (this.landing ? 0 : 0.01)}"
 							attr:position="${() => `0 ${this.cameraY} 0`}"
 							xinteractive=${() => {

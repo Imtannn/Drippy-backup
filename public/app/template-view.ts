@@ -162,21 +162,20 @@ export class TemplateView extends Element {
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
 
-		// If clicking on already selected template, show overlay instead of toggling
-		if (
+		const isAlreadySelected =
 			store.selectedTemplates.has(template.category) &&
 			store.selectedTemplates.get(template.category)?._id === template._id
-		) {
-			this.showTemplateOverlay = template
-			this.isOpeningOverlay = true
-			return
+
+		if (!isAlreadySelected) {
+			store.setLoadingTemplate(template._id)
+			this.#selectTemplate(template)
+			setTimeout(() => {
+				this.isOpeningOverlay = false
+			}, 0)
 		}
 
-		store.setLoadingTemplate(template._id)
-		this.#selectTemplate(template)
-		setTimeout(() => {
-			this.isOpeningOverlay = false
-		}, 0)
+		this.showTemplateOverlay = template
+		this.isOpeningOverlay = true
 	}
 
 	#isTemplateActive = (template: Template) => {
@@ -220,8 +219,6 @@ export class TemplateView extends Element {
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
-
-			store.goBackHomeAndResetState()
 		})
 	}
 
@@ -375,9 +372,11 @@ export class TemplateView extends Element {
 		<app-buttons-preset
 			preset="template-flow"
 			brand-name="MoiDien"
-			show-animation=${() => store.getEffectiveCollection() === 'gap'}
+			show-animation=${() =>
+				store.getEffectiveCollection() === 'gap' || store.getEffectiveCollection() === 'animation-test'}
 			disable-person-button=${false}
 			disable-cube-button=${false}
+			on:backclick=${this.#onBackButtonClick}
 		>
 			<show-on-device device="mobile">
 				<show-when
@@ -394,12 +393,10 @@ export class TemplateView extends Element {
 		</app-buttons-preset>
 
 		<bottom-sheet
-			onback=${this.#onBackButtonClick}
-			onpreview=${this.#onPreviewButtonClick}
-			ondone=${this.#closeRemixOverlay}
 			show-remix-overlay=${() => this.showRemixOverlay}
 			float-direction="right"
-			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
+			default-snap=${() => (this.showDetailView ? '0.88' : '0.41')}
+			snap-points="0.1,0.41,0.6,0.88"
 			max-height="100vh"
 		>
 			<app-buttons-left layout="bottom">
@@ -748,8 +745,12 @@ export class TemplateView extends Element {
 			bottom: 0;
 			top: 0;
 			background: rgba(0, 0, 0, 0.5);
-			z-index: 20;
+			z-index: 1999;
 			pointer-events: auto;
+			touch-action: none;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			user-select: none;
 			border-top-left-radius: 1rem;
 			border-top-right-radius: 1rem;
 		}
@@ -772,7 +773,7 @@ export class TemplateView extends Element {
 				display: flex;
 				align-items: center;
 				background: var(--uiColorPrimaryWhite);
-				z-index: 10;
+				z-index: 11;
 				width: 100%;
 				min-height: 52px;
 			}
@@ -1009,6 +1010,9 @@ export class TemplateView extends Element {
 		.collections-navigation {
 			margin-top: 0;
 			display: none;
+			padding-right: 0;
+			margin-top: 10px;
+			margin-bottom: 10px;
 		}
 
 		.collections-mobile-navigation {
@@ -1022,6 +1026,7 @@ export class TemplateView extends Element {
 			overflow-x: auto;
 			align-items: center;
 			scrollbar-width: none;
+			padding-right: 20px;
 		}
 
 		.collections-scroll-container::-webkit-scrollbar {
@@ -1034,14 +1039,14 @@ export class TemplateView extends Element {
 			min-width: 42px;
 			min-height: 42px;
 			border-radius: var(--borderRadiusCircular);
-			background: var(--uiColorPrimaryBlack);
+			background: var(--uiColorPrimaryWhite);
 			cursor: pointer;
 			transition: all var(--transitionFast);
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			overflow: hidden;
-			border: 2px solid transparent;
+			border: 2px solid var(--uiColorPrimaryBlack);
 			padding: 0;
 		}
 
