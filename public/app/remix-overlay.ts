@@ -242,8 +242,8 @@ export class RemixOverlay extends Element {
 	template = () => html`
 		<bottom-sheet
 			class="remix-overlay-sheet"
-			default-snap="0.26"
-			snap-points="0.26,0.26,0.26"
+			default-snap="0.25"
+			snap-points="0.25,0.25,0.25"
 			z-index="2000"
 			collapse-button="false"
 			max-height="100vh"
@@ -251,17 +251,6 @@ export class RemixOverlay extends Element {
 			panel-width="28rem"
 		>
 			<div class="overlay">
-				<div class="done-button-container">
-					<button
-						class="done-button"
-						onclick=${() => {
-							this.onclose()
-							this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}))
-						}}
-					>
-						Done
-					</button>
-				</div>
 				<show-when
 					condition=${() => this.activeTab !== null}
 					content=${() => html`
@@ -493,8 +482,8 @@ export class RemixOverlay extends Element {
 		}
 
 		@media (min-width: 769px) {
-			.done-button-container {
-				display: flex;
+			.overlay {
+				padding-top: var(--uiSpacing);
 			}
 			.category-tabs {
 				margin-bottom: var(--uiSpacingMedium);

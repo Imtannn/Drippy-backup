@@ -151,7 +151,7 @@ export class AvatarDropdown extends Element {
 		.popup-notification {
 			position: absolute;
 			top: -53px;
-			left: -2px;
+			left: 2px;
 			transform: translate(0, 0);
 			background: #b897fd;
 			color: white;
@@ -202,6 +202,17 @@ export class AvatarDropdown extends Element {
 
 		.popup-close:hover {
 			background-color: rgba(255, 255, 255, 0.2);
+		}
+		@media (min-width: 768px) {
+			.popup-notification {
+				top: 53px;
+			}
+			.popup-notification::after {
+				bottom: unset;
+				top: -7px;
+				border-top: none;
+				border-bottom: 8px solid #b897fd;
+			}
 		}
 
 		@keyframes slideInDown {

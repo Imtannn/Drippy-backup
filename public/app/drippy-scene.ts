@@ -13,9 +13,9 @@ import {
 	onCleanup,
 	Scene,
 	signal,
-	untrack,
 } from 'lume'
 import type {Accessor} from 'solid-js'
+import {createMemo} from 'solid-js'
 import * as THREE from 'three'
 import {avatars} from '../consts/avatars.js'
 
@@ -27,10 +27,10 @@ import '../elements/progress-loader.js'
 import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import type {PieceFabricsMap, SelectedGarments, Space} from '../types/types.js'
 import {
+	createFabricTexture,
 	createMutationsSignal,
 	enableFrontsideOnModelLoad,
 	enableShadowOnModelLoad,
@@ -84,81 +84,176 @@ export class DrippyScene extends Element {
 	// Camera rig drag state
 	@signal private cameraY = -1
 	@signal private cameraRigInteractive = true
-	@signal private isShiftDrag = false
+	@signal private isVerticalPan = false
 
-	async #applyFabrics(
+	/**
+	 * Stores fabric texture signals in a two-level Map structure to keep them stable across effect reruns.
+	 *
+	 * Structure:
+	 *   Map<blockId, Map<fabricId, {texture, loading, error}>>
+	 *
+	 * Example:
+	 *   fabricTextureSignals
+	 *   ├─ "drippy_Shirt_Bodice_123" (blockId)
+	 *   │  ├─ "fabric_456" → {
+	 *   │  │     texture: Accessor<TextureSet | null>,  // Contains ALL texture maps for this fabric
+	 *   │  │     loading: Accessor<boolean>,
+	 *   │  │     error: Accessor<Error | null>
+	 *   │  │   }
+	 *   │  │   // texture() returns TextureSet with: baseColor, normal, displacement, roughness, alpha
+	 *   │  └─ "fabric_789" → {texture, loading, error}
+	 *   └─ "drippy_Pants_Bottom_456" (blockId)
+	 *      └─ "fabric_101" → {texture, loading, error}
+	 *
+	 * TextureSet (returned by texture()):
+	 *   - baseColor?: THREE.Texture      // Main color texture
+	 *   - normal?: THREE.Texture         // Normal map for surface detail
+	 *   - displacement?: THREE.Texture   // Displacement map for height
+	 *   - roughness?: THREE.Texture      // Roughness map for material properties
+	 *   - alpha?: THREE.Texture          // Alpha/transparency map
+	 *
+	 * Why this structure:
+	 * - Outer Map (blockId): Isolates signals per garment block for easy cleanup
+	 * - Inner Map (fabricId): Tracks each fabric's loading state independently
+	 * - ReturnType<typeof createFabricTexture>: The signal object returned by createFabricTexture()
+	 *   containing reactive texture, loading, and error states
+	 *
+	 * Benefits:
+	 * - Signals persist across effect reruns (no recreation)
+	 * - Enables proper reactive tracking of async texture loading
+	 * - All texture maps per fabric are bundled in TextureSet (accessed via texture())
+	 * - Easy cleanup when blocks or fabrics are removed
+	 */
+	private fabricTextureSignals = new Map<string, Map<string, ReturnType<typeof createFabricTexture>>>()
+
+	#applyFabricsWithSignals(
 		el: Element3D,
-		fabrics: PieceFabricsMap,
-		isCanceled: () => boolean,
 		loadingId: symbol,
 		templateId: string | undefined,
+		templateCategory: TemplateCategory,
+		blockCategory: BlockCategory,
 	) {
 		const root = el.three
-		store.addLoadingMaterial(loadingId)
+		const blockId = el.getAttribute('id') || 'unknown'
 
-		try {
-			// Extract UV data for proper texture scaling
-			const meshes = [...meshesInTree(root)]
-			const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
-				? Array.from(meshes[0].geometry.attributes.uv.array)
-						.slice(0, 5)
-						.map((el: any) => Math.abs(el))
-				: []
+		// Extract UV data for proper texture scaling
+		const meshes = [...meshesInTree(root)]
+		const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
+			? Array.from(meshes[0].geometry.attributes.uv.array)
+					.slice(0, 5)
+					.map((el: any) => Math.abs(el))
+			: []
 
-			// Create a map of fabric assignments by mesh name
-			const fabricsByMesh: PieceFabricsMap = new Map()
+		// Get or create signal storage for this block
+		if (!this.fabricTextureSignals.has(blockId)) {
+			this.fabricTextureSignals.set(blockId, new Map())
+		}
+		const blockSignals = this.fabricTextureSignals.get(blockId)!
+		const fabricsSignal = createMemo(() => {
+			const templateSelection = store.getTemplateSelection(templateCategory)
+			const blockSelection = templateSelection?.[blockCategory]
+			const fabricsRecord = blockSelection?.fabrics ?? {}
+			return new Map(Object.entries(fabricsRecord)) as PieceFabricsMap
+		})
 
-			for (const [assignedMesh, fabric] of fabrics.entries()) {
-				fabricsByMesh.set(assignedMesh, fabric)
-			}
+		// Reactively manage fabric texture signals
+		createEffect(() => {
+			const currentFabrics = fabricsSignal()
+			const currentFabricIds = new Set<string>()
 
-			// Load texture sets for all fabrics
-			const textureSetsByFabric = new Map<Fabric, any>()
-			for (const fabric of fabricsByMesh.values()) {
-				const textureSet = await textureManager.loadFabricTexturesWithUV(fabric, uvArray)
-				textureSetsByFabric.set(fabric, textureSet)
-			}
-
-			if (isCanceled()) return
-
-			// Create a map for mesh to meshes key since we are grouping meshes with the same material by '-'
-			const meshToFabricMeshesMap = new Map<string, string>()
-			for (const meshes of fabricsByMesh.keys()) {
-				const meshArray = meshes.split('-')
-				for (const mesh of meshArray) {
-					meshToFabricMeshesMap.set(mesh, meshes)
+			// Create signals for new fabrics
+			for (const fabric of currentFabrics.values()) {
+				currentFabricIds.add(fabric._id)
+				if (!blockSignals.has(fabric._id)) {
+					const textureState = createFabricTexture(() => fabric, uvArray)
+					blockSignals.set(fabric._id, textureState)
 				}
 			}
 
-			// Get all the meshes keys
-			const allFabricMeses = [...meshToFabricMeshesMap.keys()]
+			// Clean up signals for removed fabrics
+			for (const [fabricId] of blockSignals) {
+				if (!currentFabricIds.has(fabricId)) {
+					blockSignals.delete(fabricId)
+				}
+			}
+		})
 
-			// Apply fabrics to meshes based on assignments
+		// Track aggregate loading state reactively
+		createEffect(() => {
+			const currentFabrics = fabricsSignal()
+			const activeSignals = [...currentFabrics.values()]
+				.map(f => blockSignals.get(f._id))
+				.filter((s): s is NonNullable<typeof s> => !!s)
+
+			if (activeSignals.length === 0) {
+				store.removeLoadingMaterial(loadingId)
+				if (templateId) {
+					store.clearLoadingTemplate(templateId)
+				}
+				return
+			}
+
+			// Check if ANY signal is loading
+			const isAnyLoading = activeSignals.some(signal => signal.loading())
+
+			if (isAnyLoading) {
+				store.addLoadingMaterial(loadingId)
+			} else {
+				store.removeLoadingMaterial(loadingId)
+				if (templateId) {
+					store.clearLoadingTemplate(templateId)
+				}
+			}
+		})
+
+		// Apply textures reactively as they load
+		createEffect(() => {
+			const currentFabrics = fabricsSignal()
+
+			// Create a map for mesh to meshes key
+			const meshToFabricMeshesMap = new Map<string, string>()
+			for (const meshesKey of currentFabrics.keys()) {
+				const meshArray = meshesKey.split('-')
+				for (const mesh of meshArray) {
+					meshToFabricMeshesMap.set(mesh, meshesKey)
+				}
+			}
+
+			const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
+
 			for (const mesh of meshes) {
 				// Check if there's a specific fabric assigned to this mesh
-				const meshKey = allFabricMeses.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
+				const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
 				const meshesKey = meshToFabricMeshesMap.get(meshKey)
-				const fabricToUse = fabricsByMesh.get(meshesKey || 'default')
+				const fabricToUse = currentFabrics.get(meshesKey || 'default')
 
 				if (fabricToUse) {
-					const textureSet = textureSetsByFabric.get(fabricToUse)
-					if (textureSet) {
-						mesh.material = new THREE.MeshPhysicalMaterial()
-						textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+					const textureState = blockSignals.get(fabricToUse._id)
+					if (textureState) {
+						const textureSet = textureState.texture()
+						const isLoading = textureState.loading()
+						const error = textureState.error()
+
+						if (textureSet && !isLoading && !error) {
+							mesh.material = new THREE.MeshPhysicalMaterial()
+							textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+						}
 					}
 				}
 			}
+
 			el.needsUpdate()
-		} catch (error) {
-			console.warn('Failed to apply fabrics to object:', error)
-		} finally {
+		})
+
+		const cleanup = () => {
 			store.removeLoadingMaterial(loadingId)
-			if (templateId) {
-				store.clearLoadingTemplate(templateId)
+			if (!el.isConnected) {
+				this.fabricTextureSignals.delete(blockId)
+				this.#resetMaterialsToDefault(el)
 			}
 		}
-
-		onCleanup(() => store.removeLoadingMaterial(loadingId))
+		onCleanup(cleanup)
+		return cleanup
 	}
 
 	// Reset materials to default state (no textures)
@@ -190,29 +285,35 @@ export class DrippyScene extends Element {
 	}
 
 	#handlePointerDown = (e: PointerEvent) => {
-		this.isShiftDrag = e.shiftKey
-		// Only disable camera rig rotation when shift is held
-		if (this.isShiftDrag) {
-			e.stopImmediatePropagation()
-			this.cameraRigInteractive = false
+		const isMobile = !isDesktop()
+
+		// Mobile: always enable vertical drag, Desktop: only with shift key
+		if (isMobile || e.shiftKey) {
+			this.isVerticalPan = true
+			if (!isMobile) {
+				e.stopImmediatePropagation()
+			}
 		}
 	}
 
 	#handlePointerMove = (e: PointerEvent) => {
-		if (!this.isShiftDrag) return
+		const isMobile = !isDesktop()
+		if (!this.isVerticalPan) return
 		// Scale the movement - dragging down increases Y (looks up), dragging up decreases Y (looks down)
 		this.cameraY -= e.movementY / 1000
 		this.cameraY = clamp(this.cameraY, -2, 0)
-		e.stopImmediatePropagation()
+		if (!isMobile) {
+			e.stopImmediatePropagation()
+		}
 	}
 
 	#handlePointerUp = (e: PointerEvent) => {
-		if (this.isShiftDrag) {
+		const isMobile = !isDesktop()
+		if (this.isVerticalPan && !isMobile) {
 			e.stopImmediatePropagation()
 		}
-		this.cameraRigInteractive = true
 
-		this.isShiftDrag = false
+		this.isVerticalPan = false
 	}
 
 	connectedCallback() {
@@ -458,6 +559,9 @@ export class DrippyScene extends Element {
 				})
 			})
 
+			// Stable loading IDs per block
+			const blockLoadingIds = new Map<string, symbol>()
+
 			// Re-apply materials whenever the selected fabrics change or models mount
 			createEffect(() => {
 				// Cause reactive re-run when the number of blocks changes
@@ -465,9 +569,6 @@ export class DrippyScene extends Element {
 					// nothing to bind
 					return
 				}
-
-				let shouldCancel = false
-				const isCanceled = () => shouldCancel
 
 				// Process each model using its data-blockid to find the correct fabric
 				for (const el of garmentModels()) {
@@ -485,34 +586,34 @@ export class DrippyScene extends Element {
 					const templateCategory = parts[1] as TemplateCategory
 					const blockCategory = parts[2] as BlockCategory
 
-					// Find the fabrics for this block
-					const templateSelection = untrack(() => store.getTemplateSelection(templateCategory))
-					const fabricsRecord = templateSelection?.[blockCategory]?.fabrics ?? {}
-					const fabrics = new Map(Object.entries(fabricsRecord)) as PieceFabricsMap
-					const loadingId = Symbol(`material-${blockId}`)
+					// Get or create stable loading ID
+					let loadingId = blockLoadingIds.get(blockId)
+					if (!loadingId) {
+						loadingId = Symbol(`material-${blockId}`)
+						blockLoadingIds.set(blockId, loadingId)
+					}
 
 					const modelLoaded = onModelLoad(el)
 
 					createEffect(() => {
-						if (!modelLoaded()) return
+						const loaded = modelLoaded()
+						if (!loaded) return
 
-						if (fabrics.size > 0) {
-							const template = store.selectedTemplates.get(templateCategory)
-							this.#applyFabrics(el, fabrics, isCanceled, loadingId, template?._id)
-						} else {
-							// Reset to default material if no fabric selected for this block category
-							this.#resetMaterialsToDefault(el)
-							const template = store.selectedTemplates.get(templateCategory)
-							if (template) {
-								store.clearLoadingTemplate(template._id)
-							}
-						}
+						const template = store.selectedTemplates.get(templateCategory)
+						const fabricsRecord = store.getTemplateSelection(templateCategory)?.[blockCategory]?.fabrics
+						void fabricsRecord
 
-						onCleanup(() => this.#resetMaterialsToDefault(el))
+						const cleanup = this.#applyFabricsWithSignals(
+							el,
+							loadingId!,
+							template?._id,
+							templateCategory,
+							blockCategory,
+						)
+
+						onCleanup(cleanup)
 					})
 				}
-
-				onCleanup(() => (shouldCancel = true))
 			})
 
 			createEffect(() => {
@@ -588,7 +689,6 @@ export class DrippyScene extends Element {
 							oninput=${(e: Event) => {
 								const input = e.target as HTMLInputElement
 								const value = Number(input.value) || 0
-								console.log('Environment intensity changed to:', value)
 								this.lumeScene!.three.environmentIntensity = value
 								this.lumeScene!.needsUpdate()
 							}}
@@ -696,8 +796,8 @@ export class DrippyScene extends Element {
 							min-distance="0.5"
 							max-distance="${() => (isDesktop() ? 30 : 50)}"
 							distance="${() => (isDesktop() ? 2.5 : 4)}"
-							min-vertical-angle="0"
-							max-vertical-angle="0"
+							min-vertical-angle="${() => (isDesktop() ? '-17' : '0')}"
+							max-vertical-angle="${() => (isDesktop() ? '45' : '0')}"
 							dolly-speed="${() => (this.landing ? 0 : 0.01)}"
 							attr:position="${() => `0 ${this.cameraY} 0`}"
 							xinteractive=${() => {

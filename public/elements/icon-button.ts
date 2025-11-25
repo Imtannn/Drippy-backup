@@ -40,11 +40,6 @@ export class IconButton extends Element {
 		}
 
 		/* When inside control-button-group, remove individual background */
-		:host-context(control-button-group) .icon-button {
-			background-color: transparent;
-			backdrop-filter: none;
-			padding: 0.25rem 0.5rem;
-		}
 
 		.icon-button:disabled {
 			opacity: 0.5;

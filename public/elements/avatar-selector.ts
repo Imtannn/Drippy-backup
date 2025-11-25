@@ -286,8 +286,10 @@ export class AvatarSelector extends Element {
 			if (blockData.length > 0) {
 				store.setSelectedBlocks(blockData)
 
+
 				if (fabricData.length > 0) {
 					store.setSelectedFabrics = fabricData
+
 				}
 			}
 		} catch (error) {
