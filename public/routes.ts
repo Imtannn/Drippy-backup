@@ -1,6 +1,6 @@
 import {Meteor} from 'meteor/meteor'
-import {createMemo, createSignal, untrack} from 'solid-js'
 import {Session} from 'meteor/session'
+import {createMemo, createSignal, untrack} from 'solid-js'
 import {effect} from './meteor-signals.js'
 
 // We'll keep the title up to date once we add routing. For now it is constant.
