@@ -128,9 +128,10 @@ export class DrippyScene extends Element {
 
 	#applyFabricsWithSignals(
 		el: Element3D,
-		fabrics: () => PieceFabricsMap,
 		loadingId: symbol,
 		templateId: string | undefined,
+		templateCategory: TemplateCategory,
+		blockCategory: BlockCategory,
 	) {
 		const root = el.three
 		const blockId = el.getAttribute('id') || 'unknown'
@@ -148,7 +149,17 @@ export class DrippyScene extends Element {
 			this.fabricTextureSignals.set(blockId, new Map())
 		}
 		const blockSignals = this.fabricTextureSignals.get(blockId)!
-		const fabricsSignal = createMemo(() => fabrics())
+		const fabricsSignal = createMemo(() => {
+			const templateSelection = store.getTemplateSelection(templateCategory)
+			const blockSelection = templateSelection?.[blockCategory]
+			const fabricsRecord = blockSelection?.fabrics ?? {}
+			console.log('[DrippyScene] fabricsSignal run', {
+				blockId,
+				templateCategory,
+				blockCategory,
+			})
+			return new Map(Object.entries(fabricsRecord)) as PieceFabricsMap
+		})
 
 		// Reactively manage fabric texture signals
 		createEffect(() => {
@@ -202,7 +213,7 @@ export class DrippyScene extends Element {
 
 		// Apply textures reactively as they load
 		createEffect(() => {
-			const currentFabrics = fabrics()
+			const currentFabrics = fabricsSignal()
 
 			// Create a map for mesh to meshes key
 			const meshToFabricMeshesMap = new Map<string, string>()
@@ -240,10 +251,12 @@ export class DrippyScene extends Element {
 			el.needsUpdate()
 		})
 
-		onCleanup(() => {
+		const cleanup = () => {
 			store.removeLoadingMaterial(loadingId)
 			this.fabricTextureSignals.delete(blockId)
-		})
+		}
+		onCleanup(cleanup)
+		return cleanup
 	}
 
 	// Reset materials to default state (no textures)
@@ -587,18 +600,29 @@ export class DrippyScene extends Element {
 					const modelLoaded = onModelLoad(el)
 
 					createEffect(() => {
-						if (!modelLoaded()) return
+						const loaded = modelLoaded()
+						console.log('[DrippyScene] model load state', {
+							blockId,
+							templateCategory,
+							blockCategory,
+							isMirror,
+							loaded,
+						})
+						if (!loaded) return
 
 						const template = store.selectedTemplates.get(templateCategory)
+						const fabricsRecord = store.getTemplateSelection(templateCategory)?.[blockCategory]?.fabrics
+						void fabricsRecord
 
-						// Pass fabrics as a reactive accessor
-						const getFabrics = () => {
-							const templateSelection = store.getTemplateSelection(templateCategory)
-							const fabricsRecord = templateSelection?.[blockCategory]?.fabrics ?? {}
-							return new Map(Object.entries(fabricsRecord)) as PieceFabricsMap
-						}
+						const cleanup = this.#applyFabricsWithSignals(
+							el,
+							loadingId!,
+							template?._id,
+							templateCategory,
+							blockCategory,
+						)
 
-						this.#applyFabricsWithSignals(el, getFabrics, loadingId!, template?._id)
+						onCleanup(cleanup)
 
 						onCleanup(() => {
 							this.#resetMaterialsToDefault(el)
