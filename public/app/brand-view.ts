@@ -3,22 +3,22 @@ import type {Accessor} from 'solid-js'
 import {spaces} from '../consts/spaces.js'
 import {templates} from '../consts/templates.js'
 import {pushState, searchParams} from '../routes.js'
-import type {Block, BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import {blockManager} from './block-manager.js'
-import {currentUser, store, updateFabricsInUrl, updateGarmentsInUrl} from './store.js'
+import type {TemplateMap} from '../types/types.js'
+import {store, updateGarmentsSelectionInUrl} from './store.js'
+import {templateHelpers} from './template-helpers.js'
 
 import '../elements/avatar-dropdown.js'
 import '../elements/dialog-element.js'
-import '../elements/login-ui.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
+import '../elements/login-ui.js'
 import '../elements/tabs.js'
 import './item-card.js'
 import './loading-spinner-overlay.js'
 import './spaces-selection.js'
 import './template-item-overlay.js'
+import {formatNumber} from '../utils.js'
 
 type BrandViewAttributes = keyof {}
 
@@ -36,15 +36,9 @@ export class BrandView extends Element {
 		super.connectedCallback()
 		document.addEventListener('click', this.#onDocumentClick)
 
+		// Update URL when garments selection changes
 		this.createEffect(() => {
-			const templates = store.selectedTemplates
-			updateGarmentsInUrl(templates)
-		})
-
-		// Update URL when fabrics change
-		this.createEffect(() => {
-			const fabrics = store.selectedFabrics
-			updateFabricsInUrl(fabrics)
+			updateGarmentsSelectionInUrl(store.selectedGarments)
 		})
 	}
 
@@ -56,14 +50,6 @@ export class BrandView extends Element {
 			searchParams().delete('brand')
 			pushState()
 		}
-	}
-
-	#onAvatarClick = (e: Event) => {
-		e.preventDefault()
-		store.view = 'avatar'
-	}
-	#onSignInClick = () => {
-		this.showLoginDialog = true
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -103,50 +89,41 @@ export class BrandView extends Element {
 		const effectiveSpace = store.getEffectiveSpace()
 		if (!effectiveSpace) return
 
-		const newTemplates = new Map<TemplateCategory, Template>(store.selectedTemplates)
-		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(store.selectedBlocks)
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>(store.selectedFabrics)
+		const newTemplates: TemplateMap = new Map(store.selectedTemplates)
+		let nextSelection = templateHelpers.cloneSelectedGarments(store.selectedGarments)
 
 		// check if the template with same category already exists
-		const interchangeableCategories = blockManager.checkInterchangeableCategories(
+		const overridingCategories = templateHelpers.checkOverridingCategories(
 			template.category,
 			store.selectedTemplates,
-		)
-		if (interchangeableCategories.length > 0) {
-			for (const category of interchangeableCategories) {
-				if (store.selectedTemplates.has(category as TemplateCategory)) {
-					newTemplates.delete(category as TemplateCategory)
-					newBlocks.delete(category as TemplateCategory)
-					newFabrics.delete(category as TemplateCategory)
+		) as TemplateCategory[]
+
+		if (overridingCategories.length > 0) {
+			nextSelection = templateHelpers.omitTemplateCategories(nextSelection, overridingCategories)
+			for (const category of overridingCategories) {
+				if (store.selectedTemplates.has(category)) {
+					newTemplates.delete(category)
 				}
 			}
 		}
 
 		newTemplates.set(template.category, template)
 		const effectiveCollection = store.getEffectiveCollection()
-		const templateBlockData = blockManager.convertTemplateToBlockData(template, effectiveCollection)
-		const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
+		const templateBlockData = templateHelpers.convertTemplateToBlockData(template, effectiveCollection)
+		const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
 			templateBlockData,
 			effectiveCollection,
 		)
-		newBlocks.set(template.category, newBlocksMap)
-		newFabrics.set(template.category, newFabricsMap)
+		const templateSelection = templateHelpers.buildTemplateSelectionFromMaps(newBlocksMap, newFabricsMap)
+		nextSelection = templateHelpers.withTemplateSelection(nextSelection, template.category, templateSelection)
 
 		batch(() => {
-			store.selectedFabrics = newFabrics
-
-			// @ts-expect-error FIXME we should avoid having different ways of
-			// setting the same thing (see store.setSelectedBlocks, and
-			// loadFromUrlParameters in drippy-app.ts).  This will get more
-			// difficult to manage and error prone/buggy.
-			store.__selectedBlocks = newBlocks
-
+			store.selectedGarments = nextSelection
 			store.selectedTemplates = newTemplates
 		})
 
 		// Immediately update URL parameters after selecting template
-		updateGarmentsInUrl(newTemplates)
-		updateFabricsInUrl(newFabrics)
+		updateGarmentsSelectionInUrl(store.selectedGarments)
 	}
 
 	#onTemplateOverlayClose = () => {
@@ -199,25 +176,6 @@ export class BrandView extends Element {
 	template = () => html`
 		<div class="brand-container">
 			<!-- Navigation -->
-			<show-when
-				condition=${() => searchParams().has('brand')}
-				content=${() => html`
-					<div class="navigation">
-						<a href="#" class="avatar-link" onclick=${this.#onAvatarClick}>
-							<avatar-dropdown hide-chevron></avatar-dropdown>
-						</a>
-						<div class="nav-links">
-							<a href="/landing" class="learn-more-link">Learn more</a>
-							${() => {
-								const user = currentUser()
-								return user !== null
-									? html`<login-ui></login-ui>`
-									: html`<button class="sign-in-button" onclick=${this.#onSignInClick}>Sign in</button>`
-							}}
-						</div>
-					</div>
-				`}
-			></show-when>
 
 			<!-- Main Title and Description -->
 
@@ -343,8 +301,15 @@ export class BrandView extends Element {
 													class="template-product-price"
 													classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
 												>
-													<img src="/images/ruby.png" alt="ruby" />
-													${template().price}
+													${() => {
+														const price = template().price
+														if (!price || price === 'N/A') {
+															return 'N/A'
+														}
+
+														const numericPrice = Number(price)
+														return Number.isFinite(numericPrice) ? formatNumber(numericPrice) : price
+													}}
 												</div>
 												<show-when
 													condition=${() => store.selectedSpace?.isWholesale}
@@ -424,7 +389,6 @@ export class BrandView extends Element {
 
 		/* SpacesPage-specific styles */
 		.brand-container {
-			padding: var(--uiSpacing);
 			background: var(--uiColorPrimaryWhite);
 			min-height: 100vh;
 
@@ -498,7 +462,7 @@ export class BrandView extends Element {
 
 		.header {
 			text-align: center;
-			margin-bottom: 2rem;
+			margin: 30px 15px 15px 15px;
 		}
 
 		.brand-logo {
@@ -542,12 +506,12 @@ export class BrandView extends Element {
 		}
 
 		.description.brand {
-			margin-bottom: 0.4rem;
+			margin-bottom: 15px;
 			margin-top: -4px;
 		}
 
 		.sub-description {
-			font-size: var(--fontSizeTextXxs);
+			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightNormal);
 			line-height: var(--lineHeightLoose);
 			margin: 0 auto;
@@ -590,6 +554,7 @@ export class BrandView extends Element {
 			gap: var(--gridGapMobile);
 			max-width: var(--breakpointLargeDesktop);
 			margin: 0 auto;
+			padding: 0 15px;
 		}
 
 		@media (min-width: 768px) {
@@ -681,6 +646,10 @@ export class BrandView extends Element {
 			:host-context([data-theme='dark']) & {
 				color: #777;
 			}
+		}
+
+		/* Override spaces-container from spaces-selection component */
+		spaces-selection .spaces-container {
 		}
 
 		/* Mobile responsive */

@@ -1,3 +1,7 @@
+import type {Block, BlockCategory} from './block.js'
+import type {Fabric} from './fabric.js'
+import type {Template, TemplateCategory} from './template.js'
+
 export type AppRoute =
 	| 'avatar'
 	| 'preview'
@@ -151,3 +155,28 @@ export type OrderData = {
 
 	spaceDescription?: string
 }
+export type TemplateMap = Map<TemplateCategory, Template>
+export type CategoryBlocksMap = Map<BlockCategory, Block>
+export type TemplateBlocksMap = Map<TemplateCategory, CategoryBlocksMap>
+
+export type PieceFabricsMap = Map<string, Fabric>
+export type BlockFabricsMap = Map<BlockCategory, PieceFabricsMap>
+export type TemplateFabricsMap = Map<TemplateCategory, BlockFabricsMap>
+
+export type FabricSelection = {
+	fabric: Fabric
+	blockCategory: BlockCategory
+	templateCategory: TemplateCategory
+	assignedMesh: string
+}
+
+export type BlockSelection = {block: Block; templateCategory: TemplateCategory}
+
+export type SelectedGarment = {
+	block: Block | null
+	fabrics: Record<string, Fabric>
+}
+
+export type TemplateCategorySelection = Partial<Record<BlockCategory, SelectedGarment>>
+
+export type SelectedGarments = Partial<Record<TemplateCategory, TemplateCategorySelection>>

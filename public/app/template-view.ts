@@ -1,13 +1,11 @@
 import {batch, css, Element, element, html, onCleanup, signal, type ElementAttributes} from 'lume'
 import {templates} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
-import type {Block, BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {Collection} from '../types/types.js'
+import type {Collection, TemplateMap} from '../types/types.js'
 import {getCollectionBySlug, getSpaceCollections, spaceHasMultipleCollections} from '../utils.js'
-import {blockManager} from './block-manager.js'
-import {currentUser, store} from './store.js'
+import {currentUser, store, updateGarmentsSelectionInUrl} from './store.js'
+import {templateHelpers} from './template-helpers.js'
 
 import {collections} from '../consts/collections.js'
 import '../elements/animation-select.js'
@@ -18,6 +16,7 @@ import '../elements/bottom-navigation.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
 import '../elements/dialog-element.js'
+import '../elements/heart-button.js'
 import '../elements/home-button.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
@@ -28,6 +27,7 @@ import '../elements/person-button.js'
 import '../elements/placeholder-image.js'
 import '../elements/preview-button.js'
 import '../elements/save-button.js'
+import '../elements/search-button.js'
 import '../elements/show-on-device.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
@@ -37,11 +37,11 @@ import {formatNumber} from '../utils.js'
 import './app-buttons-preset.js'
 import './app-buttons.js'
 import './avatar-selection.js'
+import './buy-button.js'
 import './item-card.js'
 import './loading-spinner-overlay.js'
 import './pose-selection.js'
 import './remix-overlay.js'
-import {updateFabricsInUrl, updateGarmentsInUrl} from './store.js'
 import './template-detail-view.js'
 import './template-item-overlay.js'
 
@@ -125,13 +125,16 @@ export class TemplateView extends Element {
 				this.showLoginDialog = false
 			}
 		})
-
-		// Update URL when garments change
-		this.createEffect(() => updateGarmentsInUrl(store.selectedTemplates))
-
 		// Update URL when fabrics change
 		this.createEffect(() => {
-			updateFabricsInUrl(store.selectedFabrics)
+			updateGarmentsSelectionInUrl(store.selectedGarments)
+		})
+
+		// Sync showRemixOverlay with store.remixOverlayTemplate
+		this.createEffect(() => {
+			if (store.remixOverlayTemplate === null && this.showRemixOverlay) {
+				this.showRemixOverlay = false
+			}
 		})
 
 		// Auto-trigger preview button after 15s if conditions are met
@@ -159,32 +162,20 @@ export class TemplateView extends Element {
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
 
-		store.setLoadingTemplate(template._id)
+		const isAlreadySelected =
+			store.selectedTemplates.has(template.category) &&
+			store.selectedTemplates.get(template.category)?._id === template._id
 
-		// If clicking on already selected template, show overlay instead of toggling
-		this.isOpeningOverlay = true
+		if (!isAlreadySelected) {
+			store.setLoadingTemplate(template._id)
+			this.#selectTemplate(template)
+			setTimeout(() => {
+				this.isOpeningOverlay = false
+			}, 0)
+		}
+
 		this.showTemplateOverlay = template
-		this.#selectTemplate(template)
-		setTimeout(() => {
-			this.isOpeningOverlay = false
-		}, 0)
-		return
-
-		// Check if template requires different gender avatar
-		// const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
-		// const currentGender = currentAvatar?.gender
-		// const templateGender = template.avatar
-
-		// if (currentGender && templateGender && currentGender !== templateGender) {
-		// 	// Show avatar swap bottom sheet
-		// 	batch(() => {
-		// 		this.avatarSwapTemplate = template
-		// 		this.showAvatarSwapSheet = true
-		// 	})
-		// 	return
-		// }
-
-		// Proceed with template selection
+		this.isOpeningOverlay = true
 	}
 
 	#isTemplateActive = (template: Template) => {
@@ -209,6 +200,10 @@ export class TemplateView extends Element {
 		})
 	}
 
+	#onBuyButtonClick = () => {
+		store.view = 'order-items'
+	}
+
 	#onBackButtonClick = () => {
 		batch(() => {
 			// FIXME This logic is "go back to home" logic, however it is inaccessible
@@ -224,8 +219,6 @@ export class TemplateView extends Element {
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
-
-			store.goBackHomeAndResetState()
 		})
 	}
 
@@ -323,49 +316,36 @@ export class TemplateView extends Element {
 		const effectiveSpace = store.getEffectiveSpace()
 		if (!effectiveSpace) return
 
-		const newTemplates = new Map<TemplateCategory, Template>(store.selectedTemplates)
-		const newBlocks = new Map<TemplateCategory, Map<BlockCategory, Block>>(store.selectedBlocks)
-		const newFabrics = new Map<TemplateCategory, Map<BlockCategory, Map<AppliedMeshNames, Fabric>>>(
-			store.selectedFabrics,
-		)
+		const newTemplates: TemplateMap = new Map(store.selectedTemplates)
+		let nextSelection = templateHelpers.cloneSelectedGarments(store.selectedGarments)
 
 		// check if the template with same category already exists
-		// CONTINUE use "replacing" or "overriding" terminology
-		const interchangeableCategories = blockManager.checkInterchangeableCategories(
+		const overridingCategories = templateHelpers.checkOverridingCategories(
 			template.category,
 			store.selectedTemplates,
 		) as TemplateCategory[]
 
-		if (interchangeableCategories.length > 0) {
-			for (const category of interchangeableCategories) {
+		if (overridingCategories.length > 0) {
+			nextSelection = templateHelpers.omitTemplateCategories(nextSelection, overridingCategories)
+			for (const category of overridingCategories) {
 				if (store.selectedTemplates.has(category)) {
 					newTemplates.delete(category)
-					newBlocks.delete(category)
-					newFabrics.delete(category)
 				}
 			}
 		}
 
 		newTemplates.set(template.category, template)
 		const effectiveCollection = store.getEffectiveCollection()
-		const templateBlockData = blockManager.convertTemplateToBlockData(template, effectiveCollection)
-		const {newBlocksMap, newFabricsMap} = blockManager.getBlocksAndFabricsMapFromTemplateData(
+		const templateBlockData = templateHelpers.convertTemplateToBlockData(template, effectiveCollection)
+		const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
 			templateBlockData,
 			effectiveCollection,
 		)
-		newBlocks.set(template.category, newBlocksMap)
-		newFabrics.set(template.category, newFabricsMap)
+		const templateSelection = templateHelpers.buildTemplateSelectionFromMaps(newBlocksMap, newFabricsMap)
+		nextSelection = templateHelpers.withTemplateSelection(nextSelection, template.category, templateSelection)
 
 		batch(() => {
-			store.selectedFabrics = newFabrics
-			debugger
-
-			// @ts-expect-error FIXME we should avoid having different ways of
-			// setting the same thing (see store.setSelectedBlocks, and
-			// loadFromUrlParameters in drippy-app.ts).  This will get more
-			// difficult to manage and error prone/buggy.
-			store.__selectedBlocks = newBlocks
-
+			store.selectedGarments = nextSelection
 			store.selectedTemplates = newTemplates
 		})
 	}
@@ -392,10 +372,11 @@ export class TemplateView extends Element {
 		<app-buttons-preset
 			preset="template-flow"
 			brand-name="MoiDien"
-			show-animation=${() => store.getEffectiveCollection() === 'gap'}
+			show-animation=${() =>
+				store.getEffectiveCollection() === 'gap' || store.getEffectiveCollection() === 'animation-test'}
 			disable-person-button=${false}
 			disable-cube-button=${false}
-			hide-preview-button=${() => this.showRemixOverlay}
+			on:backclick=${this.#onBackButtonClick}
 		>
 			<show-on-device device="mobile">
 				<show-when
@@ -412,28 +393,17 @@ export class TemplateView extends Element {
 		</app-buttons-preset>
 
 		<bottom-sheet
-			onback=${this.#onBackButtonClick}
-			onpreview=${this.#onPreviewButtonClick}
-			ondone=${this.#closeRemixOverlay}
 			show-remix-overlay=${() => this.showRemixOverlay}
-			default-snap=${() => (this.showDetailView ? '0.88' : undefined)}
+			float-direction="right"
+			default-snap=${() => (this.showDetailView ? '0.88' : '0.41')}
+			snap-points="0.1,0.41,0.6,0.88"
+			max-height="100vh"
 		>
-			<app-buttons-left>
+			<app-buttons-left layout="bottom">
 				<app-buttons-group group-direction="row" custom-class="button-group-spread">
 					<show-when
 						condition=${() => !this.showRemixOverlay}
-						content=${() => html`<back-button onclick=${this.#onBackButtonClick}></back-button>`}
-					></show-when>
-
-					<show-when
-						condition=${() => !this.showRemixOverlay}
-						content=${() => html`
-							<preview-button
-								class="align-right"
-								button-disabled=${() => store.selectedTemplates.size === 0}
-								onclick=${this.#onPreviewButtonClick}
-							></preview-button>
-						`}
+						content=${() => html` <buy-button class="align-right" onclick=${this.#onBuyButtonClick}></buy-button> `}
 					></show-when>
 					<show-when
 						condition=${() => this.showRemixOverlay}
@@ -443,69 +413,76 @@ export class TemplateView extends Element {
 					></show-when>
 				</app-buttons-group>
 			</app-buttons-left>
+
+			<show-when
+				condition=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
+				content=${() => html`<div class="template-sheet-overlay" onclick=${this.#closeRemixOverlay}></div>`}
+			></show-when>
+
 			<show-on-device device="desktop">
-				<top-navigation
-					classList=${() => ({
-						hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
-					})}
-				>
-					<div
-						class="template-info"
-						classList=${() => {
-							const templates = Array.from(store.selectedTemplates.values())
-							return {hidden: templates.length === 0 || true}
-						}}
+				<div class="template-view-buttons">
+					<top-navigation
+						classList=${() => ({
+							hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
+						})}
 					>
-						${() => {
-							const templates = Array.from(store.selectedTemplates.values())
-							if (templates.length > 0) {
-								const selectedTemplate = templates[0]
-								return html`
-									<div class="template-image-wrapper">
-										<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
-									</div>
-									<div class="template-details">
-										<div class="template-name">${selectedTemplate.name}</div>
-										<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
-									</div>
-								`
-							}
-							return ''
-						}}
-					</div>
-					<button
-						class="view-details-btn"
-						classList=${() => {
-							const templates = Array.from(store.selectedTemplates.values())
-							return {hidden: templates.length === 0 || true}
-						}}
-						disabled
-					>
-						View details
-					</button>
-					<div
-						class="default-nav"
-						classList=${() => {
-							const templates = Array.from(store.selectedTemplates.values())
-							return {hidden: templates.length > 0 && false}
-						}}
-					>
-						<avatar-dropdown
-							open=${() => this.showAvatarSelection}
-							show-popup
-							onavatar-dropdown-click=${this.#onAvatarDropdownClick}
-						></avatar-dropdown>
-						<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
-					</div>
-				</top-navigation>
+						<div
+							class="template-info"
+							classList=${() => {
+								const templates = Array.from(store.selectedTemplates.values())
+								return {hidden: templates.length === 0 || true}
+							}}
+						>
+							${() => {
+								const templates = Array.from(store.selectedTemplates.values())
+								if (templates.length > 0) {
+									const selectedTemplate = templates[0]
+									return html`
+										<div class="template-image-wrapper">
+											<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+										</div>
+										<div class="template-details">
+											<div class="template-name">${selectedTemplate.name}</div>
+											<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+										</div>
+									`
+								}
+								return ''
+							}}
+						</div>
+						<button
+							class="view-details-btn"
+							classList=${() => {
+								const templates = Array.from(store.selectedTemplates.values())
+								return {hidden: templates.length === 0 || true}
+							}}
+							disabled
+						>
+							View details
+						</button>
+						<div
+							class="default-nav"
+							classList=${() => {
+								const templates = Array.from(store.selectedTemplates.values())
+								return {hidden: templates.length > 0 && false}
+							}}
+						>
+							<avatar-dropdown
+								open=${() => this.showAvatarSelection}
+								show-popup
+								onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+							></avatar-dropdown>
+							<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+						</div>
+					</top-navigation>
+				</div>
 				<show-when
 					condition=${() =>
 						spaceHasMultipleCollections(store.selectedSpace) &&
 						!this.showAvatarSelection &&
 						!this.showPoseSelection &&
 						!this.showDetailView &&
-						this.selectedTab !== null &&
-						!this.showRemixOverlay}
+						this.selectedTab !== null}
 					content=${() => html`
 						<top-navigation class="collections-navigation">
 							<div class="collections-scroll-container">
@@ -545,11 +522,7 @@ export class TemplateView extends Element {
 			></show-when>
 			<show-when
 				condition=${() =>
-					!this.showAvatarSelection &&
-					!this.showPoseSelection &&
-					!this.showDetailView &&
-					this.selectedTab !== null &&
-					!this.showRemixOverlay}
+					!this.showAvatarSelection && !this.showPoseSelection && !this.showDetailView && this.selectedTab !== null}
 				content=${() => html`
 					<tabs-provider
 						default-value=${() => this.selectedTab}
@@ -581,6 +554,10 @@ export class TemplateView extends Element {
 						</show-on-device>
 						<bottom-sheet-header>
 							<div class="tabs-container">
+								<div class="tabs-action-buttons">
+									<heart-button></heart-button>
+									<search-button></search-button>
+								</div>
 								<tabs-list>
 									<for-each
 										items=${() => Object.keys(this.templateCategories)}
@@ -761,12 +738,62 @@ export class TemplateView extends Element {
 			pointer-events: auto;
 			z-index: 100;
 		}
+		.template-sheet-overlay {
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			top: 0;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 1999;
+			pointer-events: auto;
+			touch-action: none;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			user-select: none;
+			border-top-left-radius: 1rem;
+			border-top-right-radius: 1rem;
+		}
+
 		@media (min-width: 768px) {
 			app-buttons-left {
 				z-index: 0;
 				display: block;
 				--app-buttons-left-transform: translateX(0) !important;
 				--app-buttons-left-transform: translateY(-10px) !important;
+			}
+
+			show-on-device[device='desktop'] {
+				display: contents;
+			}
+
+			.template-view-buttons {
+				position: sticky;
+				top: 0;
+				display: flex;
+				align-items: center;
+				background: var(--uiColorPrimaryWhite);
+				z-index: 11;
+				width: 100%;
+				min-height: 52px;
+			}
+
+			tabs-provider bottom-sheet-header {
+				position: sticky;
+				top: 52px;
+				z-index: 10;
+				background: var(--uiColorPrimaryWhite);
+				border-top: var(--borderWidth) solid var(--uiColorBorderColor);
+				padding-top: var(--uiSpacingMedium);
+			}
+
+			tabs-provider .tabs-container {
+				border-bottom: none;
+			}
+			.template-sheet-overlay {
+				border-top-left-radius: 1rem;
+				border-top-right-radius: unset;
+				border-bottom-left-radius: 1rem;
 			}
 		}
 
@@ -775,18 +802,21 @@ export class TemplateView extends Element {
 		}
 
 		.tabs-container {
+			display: flex;
+			align-items: center;
+			gap: var(--uiSpacingSmall);
 			padding: var(--uiSpacing);
 			padding-top: 0;
 			padding-bottom: var(--uiSpacingSmall);
 			background: var(--uiColorPrimaryWhite);
+			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
 		}
 
-		.bottom-sheet-header {
-			position: sticky;
-			top: 0;
-			background: var(--appBackground);
-			z-index: 10;
-			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
+		.tabs-action-buttons {
+			display: flex;
+			gap: var(--uiSpacingSmall);
+			margin-right: var(--uiSpacingSmall);
+			border: none;
 		}
 
 		.tabs-content-container {
@@ -980,6 +1010,9 @@ export class TemplateView extends Element {
 		.collections-navigation {
 			margin-top: 0;
 			display: none;
+			padding-right: 0;
+			margin-top: 10px;
+			margin-bottom: 10px;
 		}
 
 		.collections-mobile-navigation {
@@ -993,6 +1026,7 @@ export class TemplateView extends Element {
 			overflow-x: auto;
 			align-items: center;
 			scrollbar-width: none;
+			padding-right: 20px;
 		}
 
 		.collections-scroll-container::-webkit-scrollbar {
@@ -1005,14 +1039,14 @@ export class TemplateView extends Element {
 			min-width: 42px;
 			min-height: 42px;
 			border-radius: var(--borderRadiusCircular);
-			background: var(--uiColorPrimaryBlack);
+			background: var(--uiColorPrimaryWhite);
 			cursor: pointer;
 			transition: all var(--transitionFast);
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			overflow: hidden;
-			border: 2px solid transparent;
+			border: 2px solid var(--uiColorPrimaryBlack);
 			padding: 0;
 		}
 
@@ -1031,6 +1065,10 @@ export class TemplateView extends Element {
 			margin-top: 0;
 		}
 
+		remix-overlay {
+			margin-top: -60px;
+		}
+
 		@media (min-width: 768px) {
 			.collections-mobile-navigation {
 				display: none;
@@ -1038,6 +1076,10 @@ export class TemplateView extends Element {
 
 			.collections-navigation {
 				display: block;
+			}
+
+			remix-overlay {
+				margin-top: -85px;
 			}
 		}
 	`
@@ -1054,5 +1096,3 @@ declare module 'lume' {
 		'template-view': ElementAttributes<TemplateView, TemplateViewAttributes>
 	}
 }
-
-type AppliedMeshNames = 'default' | string

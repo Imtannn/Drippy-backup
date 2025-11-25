@@ -4,7 +4,7 @@ import '../app/app-buttons.js'
 import '../app/drippy-scene.js'
 import '../app/item-card.js'
 import {store} from '../app/store.js'
-import {textureManager, DEFAULT_TEXTURE_CONFIG} from '../app/texture-manager.js'
+import {DEFAULT_TEXTURE_CONFIG, textureManager} from '../app/texture-manager.js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/bottom-sheet.js'
@@ -15,7 +15,17 @@ import '../elements/tabs.js'
 import type {Block, BlockCategory, TemplateCategory as BlockTemplateCategory} from '../types/block.js'
 import type {Fabric, FabricCategory} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {Space} from '../types/types.js'
+import type {
+	BlockFabricsMap,
+	CategoryBlocksMap,
+	PieceFabricsMap,
+	SelectedGarments,
+	Space,
+	TemplateBlocksMap,
+	TemplateCategorySelection,
+	TemplateFabricsMap,
+	TemplateMap,
+} from '../types/types.js'
 
 interface UploadedMaterial {
 	_id: string
@@ -75,9 +85,9 @@ export class UploadView extends Element {
 	@signal convertedFabrics: Fabric[] = []
 	@signal selectedSpace: Space | null = null
 	@signal selectedAvatar: string | null = null
-	@signal selectedFabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>> = new Map()
-	@signal selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>> = new Map()
-	@signal selectedTemplates: Map<TemplateCategory, Template> = new Map()
+	@signal selectedFabrics: TemplateFabricsMap = new Map()
+	@signal selectedBlocks: TemplateBlocksMap = new Map()
+	@signal selectedTemplates: TemplateMap = new Map()
 	@signal fabricScaleX = 2
 	@signal fabricScaleY = 2
 	@signal fabricOffsetX = DEFAULT_TEXTURE_CONFIG.offset[0]
@@ -92,6 +102,53 @@ export class UploadView extends Element {
 
 	// DOM elements
 	private fileInput?: HTMLInputElement
+
+	#getSelectedGarments = (): SelectedGarments => {
+		const selection: SelectedGarments = {}
+
+		for (const [templateCategory, blocksMap] of this.selectedBlocks.entries()) {
+			if (!selection[templateCategory]) {
+				selection[templateCategory] = {} as TemplateCategorySelection
+			}
+			const templateSelection = selection[templateCategory] as TemplateCategorySelection
+
+			for (const [blockCategory, block] of blocksMap.entries()) {
+				if (!templateSelection[blockCategory]) {
+					templateSelection[blockCategory] = {
+						block,
+						fabrics: {},
+					}
+				} else {
+					templateSelection[blockCategory]!.block = block
+				}
+			}
+		}
+
+		for (const [templateCategory, blockMap] of this.selectedFabrics.entries()) {
+			if (!selection[templateCategory]) {
+				selection[templateCategory] = {} as TemplateCategorySelection
+			}
+			const templateSelection = selection[templateCategory] as TemplateCategorySelection
+
+			for (const [blockCategory, fabricMap] of blockMap.entries()) {
+				if (!templateSelection[blockCategory]) {
+					templateSelection[blockCategory] = {
+						block: null,
+						fabrics: {},
+					}
+				}
+
+				const fabricsObject: Record<string, Fabric> = {}
+				for (const [piece, fabric] of fabricMap.entries()) {
+					fabricsObject[piece] = fabric
+				}
+
+				templateSelection[blockCategory]!.fabrics = fabricsObject
+			}
+		}
+
+		return selection
+	}
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -615,7 +672,7 @@ export class UploadView extends Element {
 
 				const materialCategory = this.#capitalize(folderNameParts[0].trim())
 				const materialName = this.#capitalize(folderNameParts[1].trim())
-				const materialId = `${materialCategory} - ${materialName}`
+				const materialLabel = `${materialCategory} - ${materialName}`
 
 				// Process the material files and upload them
 				const processedMaterial = await this.#processMaterialFiles(
@@ -626,22 +683,25 @@ export class UploadView extends Element {
 					meshName,
 				)
 
-				if (processedMaterial) {
-					// Add the processed material to our collection
-					processedMaterials.push(processedMaterial)
-
-					console.log(`    ✅ Processed extra material: ${materialId}`)
-				}
-
 				// Sanitize mesh name (similar to THREE.PropertyBinding.sanitizeNodeName)
 				const sanitizedMeshName = THREE.PropertyBinding.sanitizeNodeName(meshName).toLowerCase()
 
+				if (!processedMaterial) {
+					console.warn(`    ⚠️ Failed to process extra material: ${materialLabel}`)
+					continue
+				}
+
+				// Add the processed material to our collection
+				processedMaterials.push(processedMaterial)
+
+				console.log(`    ✅ Processed extra material: ${materialLabel} (fabricId: ${processedMaterial._id})`)
+
 				extraMaterials.push({
 					mesh: sanitizedMeshName,
-					materialId: materialId,
+					materialId: processedMaterial._id,
 				})
 
-				console.log(`    🔗 Mesh "${meshName}" -> Material "${materialId}"`)
+				console.log(`    🔗 Mesh "${meshName}" -> Fabric "${processedMaterial._id}" (${materialLabel})`)
 			}
 		}
 
@@ -663,7 +723,7 @@ export class UploadView extends Element {
 		console.log('🔍 Converting to system format...')
 		console.log(`📦 Found ${uploadedTemplate.materials.length} materials:`)
 		uploadedTemplate.materials.forEach(material => {
-			console.log(`   📎 ${material.category} - ${material.materialName}`)
+			console.log(`   📎 ${material.materialName} (fabricId: ${material._id})`)
 		})
 
 		console.log(`🔗 Found ${uploadedTemplate.extraMaterials.length} extra material mappings:`)
@@ -673,7 +733,7 @@ export class UploadView extends Element {
 
 		// Convert materials to fabrics
 		const convertedFabrics: Fabric[] = uploadedTemplate.materials.map(material => ({
-			_id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+			_id: material._id,
 			thumb: material.thumb,
 			normal: material.normal || '',
 			baseColor: material.baseColor || '',
@@ -716,8 +776,7 @@ export class UploadView extends Element {
 			name: uploadedTemplate.templateName,
 			avatar: 'female' as const,
 			category: 'Dress' as TemplateCategory, // Default category for uploaded templates
-			materialId:
-				convertedFabrics.length > 0 ? `${convertedFabrics[0].category} - ${convertedFabrics[0].materialName}` : '',
+			materialId: convertedFabrics[0]?._id ?? '',
 			...(uploadedTemplate.extraMaterials.length > 0 && {
 				extraMaterials: uploadedTemplate.extraMaterials,
 			}),
@@ -757,23 +816,21 @@ export class UploadView extends Element {
 				console.log(`🔍 Looking for extra fabrics...`)
 				console.log(`📋 Available converted fabrics:`)
 				this.convertedFabrics.forEach(fabric => {
-					console.log(`   📎 ${fabric.category} - ${fabric.materialName}`)
+					console.log(`   📎 ${fabric.materialName} (fabricId: ${fabric._id})`)
 				})
 
 				console.log(`🔗 Extra materials to find:`)
 				for (const extraMaterial of selectedTemplate.extraMaterials) {
 					console.log(`   🔗 ${extraMaterial.mesh} -> ${extraMaterial.materialId}`)
 
-					const extraFabric = this.convertedFabrics.find(
-						fabric => `${fabric.category} - ${fabric.materialName}` === extraMaterial.materialId,
-					)
+					const extraFabric = this.convertedFabrics.find(fabric => fabric._id === extraMaterial.materialId)
 					if (extraFabric) {
 						extraFabrics.push(extraFabric)
-						console.log(`   ✅ Found fabric for ${extraMaterial.materialId}`)
+						console.log(`   ✅ Found fabric ${extraFabric.materialName} (fabricId: ${extraFabric._id})`)
 					} else {
 						console.warn(`   ❌ Extra fabric not found for materialId: ${extraMaterial.materialId}`)
 						console.warn(
-							`      Available fabrics: ${this.convertedFabrics.map(f => `${f.category} - ${f.materialName}`).join(', ')}`,
+							`      Available fabrics: ${this.convertedFabrics.map(f => `${f.materialName} (${f._id})`).join(', ')}`,
 						)
 					}
 				}
@@ -804,18 +861,18 @@ export class UploadView extends Element {
 			}
 		}
 
-		const blocks = new Map<TemplateCategory, Map<BlockCategory, Block>>()
-		const fabrics = new Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>>()
+		const blocks: TemplateBlocksMap = new Map()
+		const fabrics: TemplateFabricsMap = new Map()
 
-		blocks.set(template.category, new Map<BlockCategory, Block>())
-		fabrics.set(template.category, new Map<BlockCategory, Map<string, Fabric>>())
+		blocks.set(template.category, new Map() as CategoryBlocksMap)
+		fabrics.set(template.category, new Map() as BlockFabricsMap)
 
 		const blockMap = blocks.get(template.category)
 		const fabricMap = fabrics.get(template.category)
 
 		for (const block of this.convertedBlocks) {
 			blockMap?.set(block.category, block)
-			const blockFabrics = new Map<string, Fabric>()
+			const blockFabrics: PieceFabricsMap = new Map()
 			for (const fabric of this.convertedFabrics) {
 				blockFabrics.set(fabric.assignedMesh || 'default', fabric)
 			}
@@ -971,8 +1028,7 @@ export class UploadView extends Element {
 		<drippy-scene
 			selected-space=${() => this.selectedSpace}
 			selected-avatar=${() => this.selectedAvatar}
-			selected-blocks=${() => this.selectedBlocks}
-			selected-fabrics=${() => this.selectedFabrics}
+			selected-garments=${() => this.#getSelectedGarments()}
 		></drippy-scene>
 
 		<app-buttons-right>

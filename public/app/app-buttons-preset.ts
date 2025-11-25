@@ -1,16 +1,19 @@
-import {attribute, batch, booleanAttribute, Element, element, html, type ElementAttributes} from 'lume'
+import {attribute, batch, booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
 import {pushState, searchParams} from '../routes.js'
 import {store} from './store.js'
 
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
+import '../elements/control-button-group.js'
 import '../elements/cube-button.js'
 import '../elements/home-button.js'
 import '../elements/logic/show-when.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
-import '../elements/preview-button.js'
+import '../elements/redo-button.js'
+import '../elements/reload-button.js'
 import '../elements/show-on-device.js'
+import '../elements/undo-button.js'
 import './app-buttons.js'
 import './buy-button.js'
 import './share-button.js'
@@ -39,17 +42,14 @@ type PresetConfig = {
 		all?: {
 			share?: boolean
 			buy?: boolean
-			preview?: boolean
 		}
 		desktop?: {
 			share?: boolean
 			buy?: boolean
-			preview?: boolean
 		}
 		mobile?: {
 			share?: boolean
 			buy?: boolean
-			preview?: boolean
 		}
 	}
 }
@@ -61,7 +61,6 @@ type AppButtonsPresetAttributes =
 	| 'showAnimation'
 	| 'disablePersonButton'
 	| 'disableCubeButton'
-	| 'hidePreviewButton'
 
 @element
 export class AppButtonsPreset extends Element {
@@ -74,14 +73,13 @@ export class AppButtonsPreset extends Element {
 	@booleanAttribute showAnimation = false
 	@booleanAttribute disablePersonButton = true
 	@booleanAttribute disableCubeButton = true
-	@booleanAttribute hidePreviewButton = false
 
 	#onBackClick = () => {
 		switch (this.preset) {
 			case 'order-flow':
 				switch (store.view) {
 					case 'order-items':
-						store.view = 'preview'
+						store.view = 'template'
 						break
 					case 'order-size':
 						store.view = 'order-items'
@@ -97,7 +95,8 @@ export class AppButtonsPreset extends Element {
 				}
 				break
 			case 'template-flow':
-				store.view = 'space'
+				this.dispatchEvent(new CustomEvent('backclick', {bubbles: true}))
+				store.goBackHomeAndResetState()
 				break
 			case 'preview-flow':
 				batch(() => {
@@ -131,14 +130,6 @@ export class AppButtonsPreset extends Element {
 		store.view = 'order-items'
 	}
 
-	#onPreviewClick = () => {
-		batch(() => {
-			searchParams().set('isPreview', 'true')
-			pushState()
-			store.isPreview = true
-		})
-	}
-
 	#presetConfig = (): PresetConfig => {
 		const presets: Record<LayoutPreset, PresetConfig> = {
 			'order-flow': {
@@ -149,12 +140,12 @@ export class AppButtonsPreset extends Element {
 				},
 			},
 			'template-flow': {
-				left: {mobile: {back: true}},
+				left: {all: {back: true}},
 				right: {
 					logo: true,
 					tools: true,
 					animation: this.showAnimation,
-					mobile: {preview: true},
+					mobile: {buy: true},
 				},
 			},
 			'preview-flow': {
@@ -201,17 +192,17 @@ export class AppButtonsPreset extends Element {
 	#renderActionButtons = (config: PresetConfig['right']) => {
 		if (!config) return ''
 
-		const renderButtons = (buttons: {share?: boolean; buy?: boolean; preview?: boolean} | undefined) => {
+		const renderButtons = (buttons: {share?: boolean; buy?: boolean} | undefined) => {
 			if (!buttons) return ''
 			return html`
 				<app-buttons-right layout="bottom" style="top: 20px;">
 					<app-buttons-group custom-style="gap: 34px; align-items: center;margin-top: -3px;" group-direction="row">
 						${() => buttons.share && html`<share-button onclick=${this.#onShareClick}></share-button>`}
-						${() => buttons.buy && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
 						${() =>
-							buttons.preview &&
-							!this.hidePreviewButton &&
-							html`<preview-button onclick=${this.#onPreviewClick}></preview-button>`}
+							buttons.buy &&
+							store.view === 'template' &&
+							!store.remixOverlayTemplate &&
+							html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
 					</app-buttons-group>
 				</app-buttons-right>
 			`
@@ -232,26 +223,50 @@ export class AppButtonsPreset extends Element {
 		return html`
 			<app-buttons-right>
 				${() =>
-					config.logo &&
+					(config.logo || config.tools) &&
 					html`
-						<app-buttons-group>
-							<logo-button brand-name=${() => this.brandName}></logo-button>
-						</app-buttons-group>
-					`}
-				${() =>
-					config.tools &&
-					html`
-						<app-buttons-group>
-							<person-button disabled=${() => this.disablePersonButton}></person-button>
-							<cube-button disabled=${() => this.disableCubeButton}></cube-button>
-							<show-when
-								condition=${() => config.animation}
-								content=${() => html`<animation-select></animation-select>`}
-							></show-when>
-						</app-buttons-group>
+						<show-on-device device="mobile">
+							<app-buttons-group>
+								${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
+								<control-button-group>
+									<undo-button></undo-button>
+									<redo-button></redo-button>
+									<reload-button></reload-button>
+								</control-button-group>
+								${() =>
+									config.tools &&
+									html`
+										<person-button disabled=${() => this.disablePersonButton}></person-button>
+										<cube-button disabled=${() => this.disableCubeButton}></cube-button>
+									`}
+							</app-buttons-group>
+						</show-on-device>
 					`}
 			</app-buttons-right>
 
+			${() =>
+				(config.logo || config.tools) &&
+				html`
+					<show-on-device device="desktop">
+						<div class="tools-buttons-desktop">
+							<app-buttons-group>
+								${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
+								<control-button-group>
+									<undo-button></undo-button>
+									<redo-button></redo-button>
+									<reload-button></reload-button>
+								</control-button-group>
+								${() =>
+									config.tools &&
+									html`
+										<person-button disabled=${() => this.disablePersonButton}></person-button>
+										<cube-button disabled=${() => this.disableCubeButton}></cube-button>
+									`}
+								${() => config.animation && html`<animation-select></animation-select>`}
+							</app-buttons-group>
+						</div>
+					</show-on-device>
+				`}
 			${() => this.#renderActionButtons(config)}
 		`
 	}
@@ -259,6 +274,26 @@ export class AppButtonsPreset extends Element {
 	template = () => html`
 		${() => this.#presetConfig().left && this.#renderLeft()} ${() => this.#presetConfig().right && this.#renderRight()}
 		<slot></slot>
+	`
+
+	css = css/*css*/ `
+		:host {
+			display: contents;
+		}
+
+		/* Desktop: Position tools buttons beside the bottom-sheet panel */
+		@media (min-width: 768px) {
+			.tools-buttons-desktop {
+				position: fixed;
+				right: calc(var(--bottom-sheet-panel-left, 7px) + var(--bottom-sheet-panel-width, 32rem) + 20px);
+				top: 20px;
+				z-index: 52; /* Above bottom-sheet (z-index: 50) */
+				display: flex;
+				flex-direction: column;
+				gap: 5px;
+				transition: right 0.3s ease-out;
+			}
+		}
 	`
 }
 

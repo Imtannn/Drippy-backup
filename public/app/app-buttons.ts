@@ -18,6 +18,7 @@ export class AppButtonsLeft extends Element {
 		super.connectedCallback()
 		this.createEffect(() => {
 			if (
+				store.view === 'template' ||
 				store.view === 'preview' ||
 				store.view === 'order' ||
 				store.view === 'order-items' ||
@@ -72,15 +73,15 @@ export class AppButtonsLeft extends Element {
 			}
 
 			.bottom {
-				bottom: unset;
-				top: 20px;
-				left: 57px !important;
+				bottom: var(--uiSpacingMedium);
+				right: var(--uiSpacingMedium);
+				top: unset;
 			}
 
 			.app-buttons-left {
 				left: 20px;
 				transform: var(--app-buttons-left-transform);
-				z-index: 51;
+				z-index: 10;
 			}
 		}
 	`

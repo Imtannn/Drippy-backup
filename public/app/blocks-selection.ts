@@ -125,8 +125,8 @@ export class BlocksSelection extends Element {
 				...new Set(this.availableBlocksMapping[this.selectedTemplateCategory] || []),
 			] as BlockCategory[]
 
-			const selectedBlock = untrack(() =>
-				store.selectedBlocks.get(this.selectedTemplateCategory!)?.get(this.selectedBlockCategory),
+			const selectedBlock = untrack(
+				() => store.getBlockSelection(this.selectedTemplateCategory!, this.selectedBlockCategory)?.block,
 			)
 
 			if (
@@ -184,17 +184,28 @@ export class BlocksSelection extends Element {
 
 		// Update piece selections when selected fabrics change
 		this.createEffect(() => {
-			const selectedFabrics = store.selectedFabrics.get(this.selectedTemplateCategory!)
-			if (!selectedFabrics) return []
+			if (!this.selectedTemplateCategory) {
+				this.pieceSelections = []
+				return
+			}
 
-			const selectedBlocks = Array.from(selectedFabrics.keys())
-			if (!selectedBlocks) return []
+			const templateSelection = store.getTemplateSelection(this.selectedTemplateCategory)
+			if (!templateSelection) {
+				this.pieceSelections = []
+				return
+			}
 
-			const selectedPieces = selectedBlocks.map(block => selectedFabrics.get(block)?.keys())?.[0]
+			const fabricsArray = Object.values(templateSelection)
+				.map(selection => selection?.fabrics ?? {})
+				.filter(fabrics => Object.keys(fabrics).length > 0)
 
-			if (!selectedPieces) return []
+			if (fabricsArray.length === 0) {
+				this.pieceSelections = []
+				return
+			}
 
-			this.pieceSelections = Array.from(selectedPieces).sort()
+			const firstFabrics = fabricsArray[0]
+			this.pieceSelections = Object.keys(firstFabrics).sort()
 		})
 	}
 
@@ -351,10 +362,11 @@ export class BlocksSelection extends Element {
 																			content=${() => (block: Block) => html`
 																				<item-card
 																					item-active=${() => {
-																						const templateBlocks = store.selectedBlocks.get(
+																						const selection = store.getBlockSelection(
 																							this.selectedTemplateCategory!,
+																							block.category,
 																						)
-																						return templateBlocks?.get(block.category)?._id === block._id
+																						return selection?.block?._id === block._id
 																					}}
 																					item-src=${() => block.thumb}
 																					item-alt=${() => block.blockName}

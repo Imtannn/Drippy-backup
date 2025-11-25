@@ -521,6 +521,9 @@ export class SpacesSelection extends Element {
 				padding: 0 1rem;
 				margin-bottom: 1.5rem;
 			}
+			.spaces-container {
+				padding: var(--uiSpacing, 0);
+			}
 
 			.nav-links {
 				gap: 0.5rem;

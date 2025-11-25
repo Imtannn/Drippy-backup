@@ -39,6 +39,8 @@ export class IconButton extends Element {
 			border: none;
 		}
 
+		/* When inside control-button-group, remove individual background */
+
 		.icon-button:disabled {
 			opacity: 0.5;
 			cursor: not-allowed;

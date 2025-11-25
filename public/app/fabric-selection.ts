@@ -1,9 +1,11 @@
-import {attribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {attribute, booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import type {BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import {store} from './store.js'
+import '../elements/logic/show-when.js'
 
-type FabricSelectionAttributes = 'pieceSelections' | 'availableFabrics' | 'selectedTemplateCategory'
+type FabricSelectionAttributes = 'pieceSelections' | 'availableFabrics' | 'selectedTemplateCategory' | 'isRemix'
 
 @element
 export class FabricSelection extends Element {
@@ -12,6 +14,7 @@ export class FabricSelection extends Element {
 	@attribute pieceSelections: string[] = []
 	@attribute availableFabrics: Record<string, Fabric[]> = {}
 	@attribute selectedTemplateCategory: TemplateCategory | null = null
+	@booleanAttribute isRemix = false
 
 	@signal _selectingPiece: string | undefined = undefined
 
@@ -26,23 +29,26 @@ export class FabricSelection extends Element {
 		})
 	}
 
-	#getSelectedFabrics = () => {
-		// Get all selected fabrics for this template category
-		const selectedFabricsBlocksMap = store.selectedFabrics.get(this.selectedTemplateCategory!)
-		// Get all selected blocks keys for this template category
-		const selectedBlocks = Array.from(selectedFabricsBlocksMap?.keys() || [])
+	#getSelectedFabrics = (): Record<string, Fabric>[] => {
+		if (!this.selectedTemplateCategory) return []
 
-		// Get a flat set of fabrics that are assigned to selected blocks
-		const selectedFabrics = selectedBlocks.map(blockCategory => selectedFabricsBlocksMap?.get(blockCategory))
+		const templateSelection = store.getTemplateSelection(this.selectedTemplateCategory)
+		if (!templateSelection) return []
 
-		return selectedFabrics
+		return Object.values(templateSelection)
+			.map(selection => selection?.fabrics ?? {})
+			.filter(fabrics => Object.keys(fabrics).length > 0)
 	}
 
 	#getPieceFabric = (piece: string) => {
 		const selectedFabrics = this.#getSelectedFabrics()
 
-		const fabric = selectedFabrics.find(fabric => fabric?.get(piece))?.get(piece)
-		return fabric
+		for (const fabrics of selectedFabrics) {
+			const fabric = fabrics[piece]
+			if (fabric) return fabric
+		}
+
+		return undefined
 	}
 
 	#getPiecesFabrics = (pieceSelections: string[]) => {
@@ -67,10 +73,13 @@ export class FabricSelection extends Element {
 		if (!this.selectedTemplateCategory) return
 
 		// Get ALL actually selected block categories for this template (not just the editable ones)
-		const templateBlocks = store.selectedBlocks.get(this.selectedTemplateCategory)
-		if (!templateBlocks) return
+		const templateSelection = store.getTemplateSelection(this.selectedTemplateCategory)
+		if (!templateSelection) return
 
-		const actualBlockCategories = Array.from(templateBlocks.keys())
+		const actualBlockCategories = Object.entries(templateSelection)
+			.filter(([, selection]) => selection?.block)
+			.map(([blockCategory]) => blockCategory as BlockCategory)
+
 		// Apply fabric to ALL selected blocks of this template category
 		const fabricData = actualBlockCategories.map(blockCategory => ({
 			fabric,
@@ -88,30 +97,36 @@ export class FabricSelection extends Element {
 
 	#isFabricActive = (fabric: Fabric, piece: string) => {
 		if (!this.selectedTemplateCategory) return false
-		const selectedBlocks = store.selectedFabrics.get(this.selectedTemplateCategory!)
+		const templateSelection = store.getTemplateSelection(this.selectedTemplateCategory)
 
-		if (!selectedBlocks) return false
+		if (!templateSelection) return false
 
-		const blockCategories = Array.from(selectedBlocks.keys())
-		return blockCategories.some(blockCategory => selectedBlocks.get(blockCategory)?.get(piece)?._id === fabric._id)
+		return Object.values(templateSelection).some(selection => selection?.fabrics?.[piece]?._id === fabric._id)
 	}
 
 	template = () => html`
-		<div class="fabric-selection">
-			<for-each
-				items=${() => this.#getPiecesFabrics(this.pieceSelections)}
-				content=${() => (pieceFabric: Fabric & {assignedMesh: string}) => html`
-					<button
-						class="piece-select-button"
-						onclick=${() => this.#onPieceSelect(pieceFabric.assignedMesh)}
-						data-piece=${() => pieceFabric.assignedMesh}
-						classList=${() => ({active: pieceFabric.assignedMesh === this._selectingPiece})}
-					>
-						<img src=${() => pieceFabric.thumb} alt=${() => pieceFabric.materialName} />
-					</button>
+
+			<show-when
+				condition=${() => this.#getPiecesFabrics(this.pieceSelections).length > 1}
+				content=${() => html`
+					<div class="fabric-selection">
+						<for-each
+							items=${() => this.#getPiecesFabrics(this.pieceSelections)}
+							content=${() => (pieceFabric: Fabric & {assignedMesh: string}) => html`
+								<button
+									class="piece-select-button"
+									onclick=${() => this.#onPieceSelect(pieceFabric.assignedMesh)}
+									data-piece=${() => pieceFabric.assignedMesh}
+									classList=${() => ({active: pieceFabric.assignedMesh === this._selectingPiece})}
+								>
+									<img src=${() => pieceFabric.thumb} alt=${() => pieceFabric.materialName} />
+								</button>
+							`}
+						></for-each>
+					</div>
 				`}
-			></for-each>
-		</div>
+			></show-when>
+
 		<for-each items=${() => this.pieceSelections} content=${() => (piece: string) => html`
 			<show-when
 				condition=${() => piece === this._selectingPiece}
@@ -143,7 +158,6 @@ export class FabricSelection extends Element {
 			display: flex;
 			flex-direction: column;
 			gap: var(--uiGap);
-			margin-top: 10px;
 		}
 
 		.fabric-selection {
@@ -187,6 +201,33 @@ export class FabricSelection extends Element {
 		@media (min-width: 768px) {
 			.items-grid {
 				grid-template-columns: repeat(4, 1fr);
+			}
+		}
+
+		/* Remix-only mobile horizontal scrolling */
+		@media (max-width: 768px) {
+			:host([is-remix]) .items-grid {
+				/* override default 3-column grid */
+				grid-template-columns: none;
+				grid-auto-flow: column;
+				/* keep 4 columns visible, overflow to scroll horizontally */
+				grid-auto-columns: calc((100% - (var(--uiGap) * 3)) / 4);
+				gap: var(--uiGap);
+				overflow-x: auto;
+				overflow-y: hidden;
+				scroll-snap-type: x proximity;
+				-webkit-overflow-scrolling: touch;
+				padding-bottom: var(--uiSpacingSmall);
+				padding-top: var(--uiSpacingSmall);
+			}
+			:host([is-remix]) .items-grid::-webkit-scrollbar {
+				display: none;
+			}
+			:host([is-remix]) .items-grid > * {
+				scroll-snap-align: start;
+			}
+			.fabric-selection {
+				margin-top: 15px;
 			}
 		}
 	`

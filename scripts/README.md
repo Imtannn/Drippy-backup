@@ -10,7 +10,7 @@ cp env.example .env
 # Edit .env with your credentials
 
 # Run the combined assets script
-npm run combined-assets
+npm run fetch-combined-assets
 ```
 
 ## Environment Setup
@@ -69,14 +69,14 @@ The main deployment script handles:
 npm run fetch-combined-assets
 ```
 
-### Updating Brand Configurations
+### Updating Collection Configurations
 
-To add a new brand or update existing ones, edit the `BRAND_CONFIGS` array in `scripts/imports/fetch-combined-assets.ts`:
+To add a new collection or update existing ones, edit the `COLLECTION_CONFIGS` array in `scripts/imports/fetch-combined-assets.ts`:
 
 ```typescript
-const BRAND_CONFIGS = [
+const COLLECTION_CONFIGS = [
   {
-    brand: 'your-brand-name',
+    collection: 'your-collection-slug',
     rootFolderId: 'google-drive-folder-id',
   },
   // ... other brands
@@ -84,10 +84,14 @@ const BRAND_CONFIGS = [
 ```
 
 The script will automatically:
-1. Fetch all garment files from the Google Drive folder
+1. Fetch all template, block, and material files from the Google Drive folder
 2. Process and optimize them
-3. Upload to S3 under `drippy-app/drippy-app-3D/brands/your-brand-name/`
-4. Update the blocks configuration
+3. Upload assets to the S3 bucket using the normalized collection slug
+4. Update the generated `templates_copy.ts`, `blocks_copy.ts`, and `fabrics_copy.ts` files
+
+#### Material References
+- Root fabric folders must be named `Category - Material Name` (optionally with `<scaleX, scaleY, offsetX, offsetY, coef, rotate>` suffix).
+- `Option Materials` and `Extra Materials` folders inside templates should reference those same folder names; the script resolves them to the fabric UUIDs automatically, so you no longer need to track `Category - Name` strings manually.
 
 ## Manual Deployment
 

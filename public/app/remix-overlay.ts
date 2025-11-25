@@ -12,16 +12,18 @@ import {
 } from 'lume'
 
 import {fabrics} from '../consts/fabrics.js'
+import '../elements/bottom-sheet.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
+import '../elements/show-on-device.js'
 import '../elements/tabs.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template} from '../types/template.js'
-import {blockManager} from './block-manager.js'
+import {templateHelpers} from './template-helpers.js'
 import './fabric-selection.js'
 import './item-card.js'
-import {store} from './store.js'
+import {store, updateGarmentsSelectionInUrl} from './store.js'
 
 const STYLE_TAB = 'style'
 const FABRICS_TAB = 'fabrics'
@@ -44,8 +46,26 @@ export class RemixOverlay extends Element {
 
 	@eventAttribute onclose: () => void = () => {}
 
+	#scheduleUrlSync = () => {
+		queueMicrotask(() => {
+			updateGarmentsSelectionInUrl(store.selectedGarments)
+		})
+	}
+
+	#onFabricCardSelected = (event: Event) => {
+		const path = typeof event.composedPath === 'function' ? event.composedPath() : []
+		const triggeredInsideFabricSelection = path.some(
+			target => target instanceof HTMLElement && target.tagName === 'FABRIC-SELECTION',
+		)
+
+		if (triggeredInsideFabricSelection) {
+			this.#scheduleUrlSync()
+		}
+	}
+
 	connectedCallback() {
 		super.connectedCallback()
+		this.addEventListener('cardselected', this.#onFabricCardSelected)
 
 		this.createEffect(() => {
 			this.spaceCollection = store.getEffectiveCollection() ?? 'gap'
@@ -62,12 +82,12 @@ export class RemixOverlay extends Element {
 				return
 			}
 
-			// Use template blockOptions if available, otherwise fall back to blockManager
+			// Use template blockOptions if available, otherwise fall back to templateHelpers
 			if (this.selectedTemplate.blockOptions && this.selectedTemplate.blockOptions.length > 0) {
 				// Flatten all blocks from blockOptions
 				this.availableBlocks = this.selectedTemplate.blockOptions.flatMap(option => option.blocks)
 			} else {
-				this.availableBlocks = blockManager.getBlocksForTemplateCategory(
+				this.availableBlocks = templateHelpers.getBlocksForTemplateCategory(
 					this.selectedTemplate.category,
 					this.spaceCollection,
 				)
@@ -85,12 +105,12 @@ export class RemixOverlay extends Element {
 				return
 			}
 
-			// Use template blockOptions if available, otherwise fall back to blockManager
+			// Use template blockOptions if available, otherwise fall back to templateHelpers
 			if (this.selectedTemplate.blockOptions && this.selectedTemplate.blockOptions.length > 0) {
 				this.blocksCategories = this.selectedTemplate.blockOptions.map(option => option.category)
 			} else {
-				const {blocksCategories} = blockManager.isRemixAvailableForTemplate(this.selectedTemplate, {
-					selectedBlocks: untrack(() => store.selectedBlocks),
+				const {blocksCategories} = templateHelpers.isRemixAvailableForTemplate(this.selectedTemplate, {
+					selectedGarments: untrack(() => store.selectedGarments),
 					selectedSpace: untrack(() => store.getEffectiveSpace()),
 					sourceCollection: this.spaceCollection,
 				})
@@ -115,7 +135,7 @@ export class RemixOverlay extends Element {
 				return
 			}
 
-			// Use template fabricOptions if available, otherwise fall back to blockManager
+			// Use template fabricOptions if available, otherwise fall back to templateHelpers
 			if (this.selectedTemplate.fabricOptions && this.selectedTemplate.fabricOptions.length > 0) {
 				// Get fabrics from the collection that match the fabricOptions material IDs
 				const collection = this.spaceCollection
@@ -124,7 +144,7 @@ export class RemixOverlay extends Element {
 				// Get fabrics that match the fabricOptions
 				const optionFabrics = this.selectedTemplate.fabricOptions
 					.map(materialId => {
-						return fabrics[collection]?.find(fabric => `${fabric.category} - ${fabric.materialName}` === materialId)
+						return fabrics[collection]?.find(fabric => fabric._id === materialId)
 					})
 					.filter(fabric => fabric !== undefined) as Fabric[]
 
@@ -142,7 +162,7 @@ export class RemixOverlay extends Element {
 				this.availableFabrics = availableFabrics
 			} else {
 				this.availableFabrics =
-					blockManager.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
+					templateHelpers.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
 			}
 
 			// Make sure the overlay is scrolled to the top on opening
@@ -155,31 +175,36 @@ export class RemixOverlay extends Element {
 
 		// Update piece selections when selected fabrics change (following blocks-selection logic)
 		this.createEffect(() => {
-			const selectedFabrics = store.selectedFabrics.get(this.selectedTemplate!.category)
-			if (!selectedFabrics) {
+			const templateSelection = this.selectedTemplate
+				? store.getTemplateSelection(this.selectedTemplate.category)
+				: undefined
+
+			if (!templateSelection) {
 				this.pieceSelections = []
 				return
 			}
 
-			const selectedBlocks = Array.from(selectedFabrics.keys())
-			if (!selectedBlocks) {
+			const fabricsArray = Object.values(templateSelection)
+				.map(selection => selection?.fabrics ?? {})
+				.filter(fabrics => Object.keys(fabrics).length > 0)
+
+			if (fabricsArray.length === 0) {
 				this.pieceSelections = []
 				return
 			}
 
-			const selectedPieces = selectedBlocks.map(block => selectedFabrics.get(block)?.keys())?.[0]
-
-			if (!selectedPieces) {
-				this.pieceSelections = []
-				return
-			}
-
-			this.pieceSelections = Array.from(selectedPieces).sort()
+			const firstFabrics = fabricsArray[0]
+			this.pieceSelections = Object.keys(firstFabrics).sort()
 
 			onCleanup(() => {
 				this.pieceSelections = []
 			})
 		})
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback()
+		this.removeEventListener('cardselected', this.#onFabricCardSelected)
 	}
 
 	#onBlockSelect = (block: Block) => {
@@ -189,12 +214,14 @@ export class RemixOverlay extends Element {
 			block,
 			templateCategory: this.selectedTemplate.category,
 		})
+
+		this.#scheduleUrlSync()
 	}
 
 	#getIsBlockActive = (block: Block) => {
 		if (!this.selectedTemplate) return false
-		const templateBlocks = store.selectedBlocks.get(this.selectedTemplate.category)
-		return templateBlocks?.get(block.category)?._id === block._id
+		const selection = store.getBlockSelection(this.selectedTemplate.category, block.category)
+		return selection?.block?._id === block._id
 	}
 
 	#filteredBlocksByCategory = (category: BlockCategory) => {
@@ -213,109 +240,145 @@ export class RemixOverlay extends Element {
 	}
 
 	template = () => html`
-		<div class="overlay">
-			<show-when
-				condition=${() => this.activeTab !== null}
-				content=${() => html`
-					<tabs-provider
-						default-value=${() => this.activeTab}
-						ontabchange=${(e: CustomEvent) => (this.activeTab = e.detail.value)}
-					>
-						<div class="tabs-list-container">
-							<tabs-list>
-								<tabs-trigger selected-value=${FABRICS_TAB}> Fabrics </tabs-trigger>
+		<bottom-sheet
+			class="remix-overlay-sheet"
+			default-snap="0.25"
+			snap-points="0.25,0.25,0.25"
+			z-index="2000"
+			collapse-button="false"
+			max-height="100vh"
+			float-direction="right"
+			panel-width="28rem"
+		>
+			<div class="overlay">
+				<show-when
+					condition=${() => this.activeTab !== null}
+					content=${() => html`
+						<tabs-provider
+							default-value=${() => this.activeTab}
+							ontabchange=${(e: CustomEvent) => (this.activeTab = e.detail.value)}
+						>
+							<div class="tabs-list-container">
+								<tabs-list>
+									<tabs-trigger selected-value=${FABRICS_TAB}> Fabrics </tabs-trigger>
+									<show-when
+										condition=${() => this.blocksCategories.length > 0}
+										content=${() => html`<tabs-trigger selected-value=${STYLE_TAB}>Style</tabs-trigger>`}
+									></show-when>
+								</tabs-list>
+							</div>
+
+							<tabs-content selected-value=${FABRICS_TAB}>
+								<div class="scroll-content"></div>
+
+								<fabric-selection
+									is-remix
+									piece-selections=${() => this.pieceSelections}
+									available-fabrics=${() => this.availableFabrics}
+									selected-template-category=${() => this.selectedTemplate!.category}
+								></fabric-selection>
+							</tabs-content>
+
+							<tabs-content selected-value=${STYLE_TAB}>
+								<div class="scroll-content"></div>
 								<show-when
 									condition=${() => this.blocksCategories.length > 0}
-									content=${() => html`<tabs-trigger selected-value=${STYLE_TAB}>Style</tabs-trigger>`}
-								></show-when>
-							</tabs-list>
-						</div>
+									content=${() => html`
+										<tabs-provider default-value=${() => this.selectedSubTab} ontabchange=${this.#onSubTabChange}>
+											<div class="category-tabs">
+												<for-each
+													items=${() => this.blocksCategories}
+													content=${() => (category: BlockCategory) => html`
+														<button
+															class="category-tab"
+															classList=${() => ({active: this.selectedSubTab === category})}
+															onclick=${() => {
+																this.selectedSubTab = category
+															}}
+														>
+															${category}
+														</button>
+													`}
+												></for-each>
+											</div>
 
-						<tabs-content selected-value=${FABRICS_TAB}>
-							<div class="scroll-content"></div>
-
-							<fabric-selection
-								piece-selections=${() => this.pieceSelections}
-								available-fabrics=${() => this.availableFabrics}
-								selected-template-category=${() => this.selectedTemplate!.category}
-							></fabric-selection>
-						</tabs-content>
-
-						<tabs-content selected-value=${STYLE_TAB}>
-							<div class="scroll-content"></div>
-							<show-when
-								condition=${() => this.blocksCategories.length > 0}
-								content=${() => html`
-									<tabs-provider default-value=${() => this.selectedSubTab} ontabchange=${this.#onSubTabChange}>
-										<div class="category-tabs">
 											<for-each
 												items=${() => this.blocksCategories}
-												content=${() => (category: BlockCategory) => html`
-													<button
-														class="category-tab"
-														classList=${() => ({active: this.selectedSubTab === category})}
-														onclick=${() => {
-															this.selectedSubTab = category
-														}}
-													>
-														${category}
-													</button>
+												content=${() => (blockCategory: BlockCategory) => html`
+													<show-when
+														condition=${() => this.selectedSubTab === blockCategory}
+														content=${() => html`
+															<div class="items-grid">
+																<for-each
+																	items=${() => this.#filteredBlocksByCategory(blockCategory)}
+																	content=${() => (block: Block) => html`
+																		<item-card
+																			item-active=${() => this.#getIsBlockActive(block)}
+																			item-src=${() => block.thumb}
+																			item-alt=${() => block.blockName}
+																			item-value=${() => block}
+																			oncardselected=${() => this.#onBlockSelect(block)}
+																		></item-card>
+																	`}
+																></for-each>
+															</div>
+														`}
+													></show-when>
 												`}
 											></for-each>
-										</div>
-
-										<for-each
-											items=${() => this.blocksCategories}
-											content=${() => (blockCategory: BlockCategory) => html`
-												<show-when
-													condition=${() => this.selectedSubTab === blockCategory}
-													content=${() => html`
-														<div class="items-grid">
-															<for-each
-																items=${() => this.#filteredBlocksByCategory(blockCategory)}
-																content=${() => (block: Block) => html`
-																	<item-card
-																		item-active=${() => this.#getIsBlockActive(block)}
-																		item-src=${() => block.thumb}
-																		item-alt=${() => block.blockName}
-																		item-value=${() => block}
-																		oncardselected=${() => this.#onBlockSelect(block)}
-																	></item-card>
-																`}
-															></for-each>
-														</div>
-													`}
-												></show-when>
-											`}
-										></for-each>
-									</tabs-provider>
-								`}
-								fallback=${() => html`<div class="empty-state">No variations available.</div>`}
-							></show-when>
-						</tabs-content>
-					</tabs-provider>
-				`}
-			>
-			</show-when>
-		</div>
+										</tabs-provider>
+									`}
+									fallback=${() => html`<div class="empty-state">No variations available.</div>`}
+								></show-when>
+							</tabs-content>
+						</tabs-provider>
+					`}
+				>
+				</show-when>
+			</div>
+		</bottom-sheet>
 	`
 
 	css = css/*css*/ `
 		:host {
 			display: block;
-			padding-top: 60px;
 		}
 
 		.overlay {
 			display: flex;
 			flex-direction: column;
 			gap: var(--uiSpacingMedium);
+			min-height: 100%;
+		}
+
+		.done-button-container {
+			display: none;
+			justify-content: flex-end;
+			margin-bottom: var(--uiSpacingSmall);
+			padding: 0 var(--uiSpacing);
+		}
+		.done-button {
+			background: var(--uiColorPrimaryBlack);
+			color: var(--uiColorPrimaryWhite);
+			border: none;
+			border-radius: var(--borderRadiusPill);
+			height: var(--buttonHeight);
+			padding: var(--uiSpacingSmall) var(--uiSpacingMedium);
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightSemiBold);
+			cursor: pointer;
+			transition: var(--transitionFast);
+		}
+
+		.done-button:hover {
+			background: var(--uiColorPrimaryBlack);
+			opacity: 0.8;
 		}
 
 		.category-tabs {
 			display: flex;
 			gap: var(--uiGapLarge);
-			margin-bottom: var(--uiSpacingMedium);
+			margin-bottom: var(--uiSpacingTiny);
 		}
 
 		.category-tab {
@@ -336,8 +399,22 @@ export class RemixOverlay extends Element {
 
 		.items-grid {
 			display: grid;
-			grid-template-columns: repeat(3, 1fr);
+			grid-auto-flow: column;
+			grid-auto-columns: calc((100% - (var(--uiGap) * 3)) / 4);
 			gap: var(--uiGap);
+			overflow-x: auto;
+			overflow-y: auto;
+			scroll-snap-type: x proximity;
+			-webkit-overflow-scrolling: touch;
+			padding-bottom: var(--uiSpacingSmall);
+		}
+
+		.items-grid::-webkit-scrollbar {
+			display: none;
+		}
+
+		.items-grid > * {
+			scroll-snap-align: start;
 		}
 
 		.empty-state {
@@ -348,8 +425,8 @@ export class RemixOverlay extends Element {
 		}
 
 		.tabs-list-container {
-			position: absolute;
-
+			position: sticky;
+			top: 0;
 			right: 0;
 			left: 0;
 			z-index: 100;
@@ -359,7 +436,7 @@ export class RemixOverlay extends Element {
 			justify-content: space-between;
 			padding: var(--uiSpacing);
 			padding-top: 0;
-			padding-bottom: var(--uiSpacingSmall);
+			padding-bottom: 0;
 		}
 
 		.close-button-container {
@@ -378,9 +455,47 @@ export class RemixOverlay extends Element {
 		tabs-content {
 			padding: var(--uiSpacing);
 			padding-bottom: var(--uiSpacingXxl);
+			padding-top: 0;
+			margin-top: -10px;
+		}
+
+		.remix-overlay-sheet {
+			/* panel-width is controlled via attribute */
+		}
+
+		@media (max-width: 768px) {
+			.overlay {
+				height: 100%;
+				overflow-y: auto;
+				overflow-x: hidden;
+				overscroll-behavior: contain;
+			}
+
+			tabs-content {
+				overflow: visible;
+			}
+
+			.template-item {
+				transform: scale(0.8);
+				transform-origin: top center;
+			}
 		}
 
 		@media (min-width: 769px) {
+			.overlay {
+				padding-top: var(--uiSpacing);
+			}
+			.category-tabs {
+				margin-bottom: var(--uiSpacingMedium);
+			}
+			.items-grid {
+				grid-auto-flow: row;
+				grid-auto-columns: unset;
+				grid-template-columns: repeat(3, 1fr);
+				overflow-x: visible;
+				padding-bottom: var(--uiSpacingXxs);
+				scroll-snap-type: none;
+			}
 			tabs-content {
 				padding-top: 15px;
 			}

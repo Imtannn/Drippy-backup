@@ -1,5 +1,6 @@
 import {
 	attribute,
+	clamp,
 	createEffect,
 	css,
 	Element,
@@ -12,27 +13,30 @@ import {
 	onCleanup,
 	Scene,
 	signal,
+	untrack,
 } from 'lume'
 import type {Accessor} from 'solid-js'
 import * as THREE from 'three'
 import {avatars} from '../consts/avatars.js'
-import {spaces} from '../consts/spaces.js'
+
 import {backgroundScenes} from '../consts/scenes.js'
+import {spaces} from '../consts/spaces.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
 import '../elements/progress-loader.js'
 import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
-import {getSceneBySlug, getSpaceDefaultScene} from '../utils.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
-import type {Space} from '../types/types.js'
+import type {PieceFabricsMap, SelectedGarments, Space} from '../types/types.js'
 import {
 	createMutationsSignal,
 	enableFrontsideOnModelLoad,
 	enableShadowOnModelLoad,
 	getArmatureObject,
+	getSceneBySlug,
+	getSpaceDefaultScene,
 	hasAncestorWithName,
 	isDesktop,
 	meshesInTree,
@@ -57,8 +61,7 @@ export class DrippyScene extends Element {
 
 	@attribute selectedSpace: Space | null = null
 	@attribute selectedAvatar: string | null = null
-	@attribute selectedFabrics: Map<TemplateCategory, Map<BlockCategory, Map<string, Fabric>>> = new Map()
-	@attribute selectedBlocks: Map<TemplateCategory, Map<BlockCategory, Block>> = new Map()
+	@attribute selectedGarments: SelectedGarments = {}
 	@attribute landing: boolean = false
 
 	@signal isDark = false
@@ -78,9 +81,14 @@ export class DrippyScene extends Element {
 	@signal private loadingProgress = 0
 	@signal private isLoading = false
 
+	// Camera rig drag state
+	@signal private cameraY = -1
+	@signal private cameraRigInteractive = true
+	@signal private isVerticalPan = false
+
 	async #applyFabrics(
 		el: Element3D,
-		fabrics: Map<string, Fabric>,
+		fabrics: PieceFabricsMap,
 		isCanceled: () => boolean,
 		loadingId: symbol,
 		templateId: string | undefined,
@@ -97,16 +105,9 @@ export class DrippyScene extends Element {
 						.map((el: any) => Math.abs(el))
 				: []
 
-			// Create a map of fabric assignments by mesh name
-			const fabricsByMesh = new Map<string, Fabric>()
-
-			for (const [assignedMesh, fabric] of fabrics.entries()) {
-				fabricsByMesh.set(assignedMesh, fabric)
-			}
-
 			// Load texture sets for all fabrics
 			const textureSetsByFabric = new Map<Fabric, any>()
-			for (const fabric of fabricsByMesh.values()) {
+			for (const fabric of fabrics.values()) {
 				const textureSet = await textureManager.loadFabricTexturesWithUV(fabric, uvArray)
 				textureSetsByFabric.set(fabric, textureSet)
 			}
@@ -115,7 +116,7 @@ export class DrippyScene extends Element {
 
 			// Create a map for mesh to meshes key since we are grouping meshes with the same material by '-'
 			const meshToFabricMeshesMap = new Map<string, string>()
-			for (const meshes of fabricsByMesh.keys()) {
+			for (const meshes of fabrics.keys()) {
 				const meshArray = meshes.split('-')
 				for (const mesh of meshArray) {
 					meshToFabricMeshesMap.set(mesh, meshes)
@@ -123,14 +124,14 @@ export class DrippyScene extends Element {
 			}
 
 			// Get all the meshes keys
-			const allFabricMeses = [...meshToFabricMeshesMap.keys()]
+			const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
 
 			// Apply fabrics to meshes based on assignments
 			for (const mesh of meshes) {
 				// Check if there's a specific fabric assigned to this mesh
-				const meshKey = allFabricMeses.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
+				const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
 				const meshesKey = meshToFabricMeshesMap.get(meshKey)
-				const fabricToUse = fabricsByMesh.get(meshesKey || 'default')
+				const fabricToUse = fabrics.get(meshesKey || 'default')
 
 				if (fabricToUse) {
 					const textureSet = textureSetsByFabric.get(fabricToUse)
@@ -181,6 +182,38 @@ export class DrippyScene extends Element {
 		})
 	}
 
+	#handlePointerDown = (e: PointerEvent) => {
+		const isMobile = !isDesktop()
+
+		// Mobile: always enable vertical drag, Desktop: only with shift key
+		if (isMobile || e.shiftKey) {
+			this.isVerticalPan = true
+			if (!isMobile) {
+				e.stopImmediatePropagation()
+			}
+		}
+	}
+
+	#handlePointerMove = (e: PointerEvent) => {
+		const isMobile = !isDesktop()
+		if (!this.isVerticalPan) return
+		// Scale the movement - dragging down increases Y (looks up), dragging up decreases Y (looks down)
+		this.cameraY -= e.movementY / 1000
+		this.cameraY = clamp(this.cameraY, -2, 0)
+		if (!isMobile) {
+			e.stopImmediatePropagation()
+		}
+	}
+
+	#handlePointerUp = (e: PointerEvent) => {
+		const isMobile = !isDesktop()
+		if (this.isVerticalPan && !isMobile) {
+			e.stopImmediatePropagation()
+		}
+
+		this.isVerticalPan = false
+	}
+
 	connectedCallback() {
 		super.connectedCallback()
 
@@ -203,21 +236,35 @@ export class DrippyScene extends Element {
 				for (const el of extraObjects()) disableFrustumCulledOnLoad(el)
 			})
 
+			// Watch for panel collapse state changes
+			const panelCollapseMutations = createMutationsSignal(document.documentElement, {
+				attributes: true,
+				attributeFilter: ['class'],
+			})
+
 			createEffect(() => {
+				// Trigger reactive update when panel collapse state changes
+				panelCollapseMutations()
+				const isPanelCollapsed = document.documentElement.classList.contains('panel-collapsed')
+
 				if (store.view === 'preview') {
 					this.style.setProperty('--sceneTranslateX', 'translateX(0)')
 					this.style.setProperty('--sceneTranslateY', 'translateY(0)')
 				} else {
 					this.style.setProperty('--sceneTranslateY', 'translateY(-100px)')
 
-					if (
+					const shouldShiftLeft =
 						store.view === 'order' ||
 						store.view === 'order-items' ||
 						store.view === 'order-size' ||
 						store.view === 'custom-measurement' ||
 						store.view === 'success' ||
-						store.view === 'share'
-					) {
+						store.view === 'share' ||
+						store.view === 'template'
+
+					if (isPanelCollapsed) {
+						this.style.setProperty('--sceneTranslateX', 'translateX(0)')
+					} else if (shouldShiftLeft) {
 						this.style.setProperty('--sceneTranslateX', 'translateX(calc(-1 * var(--sceneDesktopOffset)))')
 					} else {
 						this.style.setProperty('--sceneTranslateX', 'translateX(var(--sceneDesktopOffset))')
@@ -379,7 +426,19 @@ export class DrippyScene extends Element {
 			}
 
 			createEffect(() => {
-				const blocks = Array.from(this.selectedBlocks.values()).flatMap(blocks => Array.from(blocks.values()))
+				const garmentSelections = this.selectedGarments ?? {}
+				const blocks: Block[] = []
+
+				for (const templateSelection of Object.values(garmentSelections)) {
+					if (!templateSelection) continue
+
+					for (const selection of Object.values(templateSelection)) {
+						if (selection?.block) {
+							blocks.push(selection.block)
+						}
+					}
+				}
+
 				this.renderBlocks = blocks.flatMap(block => {
 					if (block.category === 'Sleeves') {
 						const id = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
@@ -400,8 +459,6 @@ export class DrippyScene extends Element {
 
 			// Re-apply materials whenever the selected fabrics change or models mount
 			createEffect(() => {
-				const selectedFabrics = this.selectedFabrics
-
 				// Cause reactive re-run when the number of blocks changes
 				if (this.renderBlocks.length === 0) {
 					// nothing to bind
@@ -428,8 +485,9 @@ export class DrippyScene extends Element {
 					const blockCategory = parts[2] as BlockCategory
 
 					// Find the fabrics for this block
-					const templateFabrics = selectedFabrics.get(templateCategory)
-					const fabrics = templateFabrics?.get(blockCategory) || new Map<string, Fabric>()
+					const templateSelection = untrack(() => store.getTemplateSelection(templateCategory))
+					const fabricsRecord = templateSelection?.[blockCategory]?.fabrics ?? {}
+					const fabrics = new Map(Object.entries(fabricsRecord)) as PieceFabricsMap
 					const loadingId = Symbol(`material-${blockId}`)
 
 					const modelLoaded = onModelLoad(el)
@@ -547,6 +605,10 @@ export class DrippyScene extends Element {
 					physically-correct-lights
 					shadow-mode="vsm"
 					environment="/images/envs/brown_photostudio_02.jpg"
+					oncapture:pointerdown=${this.#handlePointerDown}
+					oncapture:pointermove=${this.#handlePointerMove}
+					oncapture:pointerup=${this.#handlePointerUp}
+
 				>
 					<lume-element3d align-point="0.5 0.5 0.5">
 						<lume-ambient-light visible="true" intensity="0.7" color="white"></lume-ambient-light>
@@ -633,10 +695,13 @@ export class DrippyScene extends Element {
 							min-distance="0.5"
 							max-distance="${() => (isDesktop() ? 30 : 50)}"
 							distance="${() => (isDesktop() ? 2.5 : 4)}"
-							min-vertical-angle="-17"
-							max-vertical-angle="45"
+							min-vertical-angle="${() => (isDesktop() ? '-17' : '0')}"
+							max-vertical-angle="${() => (isDesktop() ? '45' : '0')}"
 							dolly-speed="${() => (this.landing ? 0 : 0.01)}"
-							position="0 -1 0"
+							attr:position="${() => `0 ${this.cameraY} 0`}"
+							xinteractive=${() => {
+								return this.cameraRigInteractive
+							}}
 						>
 							<lume-perspective-camera active slot="camera-child" near="0.05" far="60" fov="50"></lume-perspective-camera>
 						</lume-camera-rig>
