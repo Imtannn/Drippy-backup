@@ -224,7 +224,7 @@ export class CustomButton extends Element {
 				line-height: var(--lineHeightNormal);
 			}
 			.text-md-1 {
-				font-size: var(--fontSizeTextSmTablet);
+				font-size: var(--fontSizeTextXs);
 				line-height: var(--lineHeightNormal);
 			}
 			.text-xs {
