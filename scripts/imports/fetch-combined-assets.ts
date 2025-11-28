@@ -30,73 +30,171 @@ const s3 = new AWS.S3()
 
 // collection configurations with Google Drive folder IDs
 const COLLECTION_CONFIGS = [
+	// {
+	// 	collection: 'essence-of-her',
+	// 	rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
+	// },
+	// {
+	// 	collection: 'movement',
+	// 	rootFolderId: '1-_x-GVUxGBn4S1VDI6t3dFN990IG-VWu',
+	// },
+	// {
+	// 	collection: 'shadow-grace',
+	// 	rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
+	// },
+	// {
+	// 	collection: 'duality-in-radiance',
+	// 	rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
+	// },
+	// {
+	// 	collection: '9heure19heure',
+	// 	rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
+	// },
+	// {
+	// 	collection: 'metamorphosis',
+	// 	rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
+	// },
+	// {
+	// 	collection: 'the-soul',
+	// 	rootFolderId: '19Oq6abu1SnMTLSJHS0VY_GT1pAvpdU0T',
+	// },
+	// {
+	// 	collection: 'gap',
+	// 	rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
+	// },
+	// {
+	// 	collection: 'emwear',
+	// 	rootFolderId: '15zHjnYVfII_Z2cr17_6Vp7kscWm9UIAU',
+	// },
+	// {
+	// 	collection: 'fige-dans-le-temps',
+	// 	rootFolderId: '17aBfgFcD7Liq9fB_KC57rl5S2w-O4LYf',
+	// },
+	// {
+	// 	collection: 'one-thousand-poets',
+	// 	rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
+	// },
+	// {
+	// 	collection: 'zove',
+	// 	rootFolderId: '1XlxaOIFxxh-8xCmmM6XrDOW6iqq7xNhw',
+	// },
+	// {
+	// 	collection: 'ja-seng-bu',
+	// 	rootFolderId: '1BO4szN8246Y0V-AhL9zDyXzJ6rZLL7U8',
+	// },
+	// {
+	// 	collection: 'mss-park',
+	// 	rootFolderId: '1uUtAmMj_4gV1P3xuJKWGPbATJcv63GcJ',
+	// },
+	// {
+	// 	collection: 'imzad-man',
+	// 	rootFolderId: '1fsA2JrL5ibuWrC_Fp_IDubvZuQj5bwpa',
+	// },
+	// {
+	// 	collection: 'imzad-woman',
+	// 	rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
+	// },
+	// {
+	// 	collection: 'changes',
+	// 	rootFolderId: '1yficP672jh2jmHwfmHqKN5f3ca1Hd5rm',
+	// },
+	// {
+	// 	collection: 'animation-test',
+	// 	rootFolderId: '1skW21QjedKwrGWVfRlHShth4Zcg4oT4v',
+	// },
+
 	{
-		collection: 'essence-of-her',
-		rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
+		collection: 'anyshape',
+		rootFolderId: '1k8GM9DJdR4q9emW9pGEPU1o2UYHiRog0',
 	},
 	{
-		collection: 'movement',
-		rootFolderId: '1-_x-GVUxGBn4S1VDI6t3dFN990IG-VWu',
+		collection: 'baum-und-pferdgarten',
+		rootFolderId: '14dd0YvtPvanr8owwpG9RMRl-yo4QT44x',
 	},
 	{
-		collection: 'shadow-grace',
-		rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
+		collection: 'bloom.womenswear',
+		rootFolderId: '1Fsyv0mcFup0raVjvv4gXIW6SWVRlgALR',
 	},
 	{
-		collection: 'duality-in-radiance',
-		rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
+		collection: 'cecilie-bahnsen',
+		rootFolderId: '1oLq3zGmjacJx7cA3UNp6cb2py4k9LBx9',
 	},
 	{
-		collection: '9heure19heure',
-		rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
+		collection: 'crescent',
+		rootFolderId: '1-_ccZhTYm9pV2fBQjKhjcpjOtGgE2t2f',
 	},
 	{
-		collection: 'metamorphosis',
-		rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
+		collection: 'dario-mittmann',
+		rootFolderId: '1dgfABw4Pv9hch85BPz4So1OeSuPwAO5w',
+	},
+
+	{
+		collection: 'david-black',
+		rootFolderId: '1p6FtdSkIGIA3JxB_sVhccD-zjnoyPhZw',
 	},
 	{
-		collection: 'the-soul',
-		rootFolderId: '19Oq6abu1SnMTLSJHS0VY_GT1pAvpdU0T',
+		collection: 'diane',
+		rootFolderId: '1wJWNQbh-tmmKtHH0GGrB1AsGHz5nTniJ',
 	},
 	{
-		collection: 'gap',
-		rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
+		collection: 'dico',
+		rootFolderId: '1C76QlH0zqGBYLvRXi6AYoLyB6y2uJAiR',
 	},
 	{
-		collection: 'emwear',
-		rootFolderId: '15zHjnYVfII_Z2cr17_6Vp7kscWm9UIAU',
+		collection: 'dottie',
+		rootFolderId: '1W-68fRdrKAUOKwBDAxc0WaofwqQo6nMJ',
 	},
 	{
-		collection: 'fige-dans-le-temps',
-		rootFolderId: '17aBfgFcD7Liq9fB_KC57rl5S2w-O4LYf',
+		collection: 'erroris.ltd',
+		rootFolderId: '1h1Mt2eq3xx8SQzb06t8E2nqEzBKZ4f_R',
 	},
 	{
-		collection: 'one-thousand-poets',
-		rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
+		collection: 'gola',
+		rootFolderId: '1ZBcsModfRLPD1tNn_cTSvV-nS7mUyo21',
 	},
 	{
-		collection: 'zove',
-		rootFolderId: '1XlxaOIFxxh-8xCmmM6XrDOW6iqq7xNhw',
+		collection: 'h2b',
+		rootFolderId: '1JCfZOMtSp4EfYLuH4HcBzRItb8_GFLLR',
 	},
 	{
-		collection: 'ja-seng-bu',
-		rootFolderId: '1BO4szN8246Y0V-AhL9zDyXzJ6rZLL7U8',
+		collection: 'joie-des-roses',
+		rootFolderId: '1zP_KfpEqRx3az3_03DSGWEGRXn6oc3Cm',
 	},
 	{
-		collection: 'mss-park',
-		rootFolderId: '1uUtAmMj_4gV1P3xuJKWGPbATJcv63GcJ',
+		collection: 'jubin-studio',
+		rootFolderId: '19faN1x2OpK3d2ftk0YV8WtOTU3sZU6ok',
 	},
 	{
-		collection: 'imzad-man',
-		rootFolderId: '1fsA2JrL5ibuWrC_Fp_IDubvZuQj5bwpa',
+		collection: 'julian-prohaska',
+		rootFolderId: '1BNbvcSYavMSqXUhff7NG3aHbTSSzhNpv',
 	},
 	{
-		collection: 'imzad-woman',
-		rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
+		collection: 'kido',
+		rootFolderId: '1ye_JXheFecOOh9Lbb3EobxEEK3aCdpTD',
 	},
 	{
-		collection: 'changes',
-		rootFolderId: '1yficP672jh2jmHwfmHqKN5f3ca1Hd5rm',
+		collection: 'levents',
+		rootFolderId: '1ML--cFFm0RB3FYjqGcSy5XM3FwZPL16q',
+	},
+	{
+		collection: 'lider',
+		rootFolderId: '1nQWCTO2_NloTlB5QR2A5s4j2TP-l1QkZ',
+	},
+	{
+		collection: 'ononmm',
+		rootFolderId: '1kzK8olqVK3iRg84DaA4Juf3YQ_zVns61',
+	},
+	{
+		collection: 'paradise-saigon',
+		rootFolderId: '1O-rlxQgP6s6NIqGhmK-u-QL-SKi9tq0c',
+	},
+	{
+		collection: 'pindiga-ranjith-kumar',
+		rootFolderId: '1TXY8y2y98IcqHSDgfNq_MZWkDJZ3rZau',
+	},
+	{
+		collection: 'pradies',
+		rootFolderId: '1JrDxYfDyX5wqupUclec_G-5H1QSQxNnH',
 	},
 ]
 
