@@ -1,4 +1,14 @@
-import {attribute, booleanAttribute, css, Element, element, type ElementAttributes, html, onCleanup} from 'lume'
+import {
+	attribute,
+	booleanAttribute,
+	css,
+	Element,
+	element,
+	type ElementAttributes,
+	eventAttribute,
+	html,
+	onCleanup,
+} from 'lume'
 // import {store} from '../app/store.js'
 
 import '../app/app-buttons.js'
@@ -20,6 +30,7 @@ type BottomSheetAttributes =
 	| 'snapPoints'
 	| 'collapseButton'
 	| 'panelWidth'
+	| 'onsnap'
 
 @element
 export class BottomSheet extends Element {
@@ -38,6 +49,7 @@ export class BottomSheet extends Element {
 	@attribute snapPoints: string | null = null
 	@booleanAttribute collapseButton = true
 	@attribute panelWidth: string | null = null
+	@eventAttribute onsnap: () => void = () => {}
 
 	private sheetHeight: number | null = null
 	private dragState = {
@@ -300,6 +312,11 @@ export class BottomSheet extends Element {
 			this.sheetRef.style.height = `${this.sheetHeight}px`
 		}
 		this.updateBottomSheetHeightVar()
+
+		// Fire onSnap callback
+		const snapPoints = this.#getSnapPoints()
+		const snapIndex = snapPoints.indexOf(snapPoint)
+		this.dispatchEvent(new CustomEvent('snap', {bubbles: true, detail: {snapPoint, snapIndex}}))
 	}
 
 	private addEventListeners() {

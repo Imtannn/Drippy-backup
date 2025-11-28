@@ -62,6 +62,7 @@ export class TemplateView extends Element {
 	@signal showAvatarSwapSheet = false
 	@signal avatarSwapTemplate: Template | null = null
 	@signal showDetailView = false
+	@signal showBottomNavigation = true
 
 	private isOpeningOverlay = false
 	private defaultCollection = 'gap'
@@ -134,6 +135,7 @@ export class TemplateView extends Element {
 		this.createEffect(() => {
 			if (store.remixOverlayTemplate === null && this.showRemixOverlay) {
 				this.showRemixOverlay = false
+				store.setSelectingPiece = null
 			}
 		})
 
@@ -193,6 +195,7 @@ export class TemplateView extends Element {
 				this.showPoseSelection = false
 				this.showRemixOverlay = false
 				this.showTemplateOverlay = null
+				store.setSelectingPiece = null
 				pushState()
 			} else {
 				this.showLoginDialog = true
@@ -215,6 +218,7 @@ export class TemplateView extends Element {
 			this.showPoseSelection = false
 			this.showLoginDialog = false
 			this.showRemixOverlay = false
+			store.setSelectingPiece = null
 			this.showDetailView = false
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
@@ -227,6 +231,7 @@ export class TemplateView extends Element {
 			this.showAvatarSelection = !this.showAvatarSelection
 			this.showPoseSelection = false
 			this.showRemixOverlay = false
+			store.setSelectingPiece = null
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
@@ -244,6 +249,7 @@ export class TemplateView extends Element {
 				this.showAvatarSelection = false
 			}
 			this.showRemixOverlay = false
+			store.setSelectingPiece = null
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
@@ -253,6 +259,7 @@ export class TemplateView extends Element {
 	#closeRemixOverlay = () => {
 		batch(() => {
 			this.showRemixOverlay = false
+			store.setSelectingPiece = null
 			store.setRemixOverlayTemplate = null
 		})
 	}
@@ -363,6 +370,18 @@ export class TemplateView extends Element {
 		}
 	}
 
+	#onBottomSheetSnapChange = (e: CustomEvent) => {
+		const snapPoint = e.detail.snapPoint
+		const drippyScene = document.querySelector('body')
+		if (snapPoint < 0.1) {
+			this.showBottomNavigation = false
+			drippyScene?.style.setProperty('--overrideSceneTranslateY', 'translateY(0)')
+		} else {
+			drippyScene?.style.setProperty('--overrideSceneTranslateY', 'translateY(-100px)')
+			this.showBottomNavigation = true
+		}
+	}
+
 	disconnectedCallback() {
 		super.disconnectedCallback()
 		document.removeEventListener('click', this.#onDocumentClick)
@@ -396,8 +415,9 @@ export class TemplateView extends Element {
 			show-remix-overlay=${() => this.showRemixOverlay}
 			float-direction="right"
 			default-snap=${() => (this.showDetailView ? '0.88' : '0.41')}
-			snap-points="0.1,0.41,0.6,0.88"
+			snap-points="0.02,0.2,0.41,0.6,0.88"
 			max-height="100vh"
+			onsnap=${this.#onBottomSheetSnapChange}
 		>
 			<app-buttons-left layout="bottom">
 				<app-buttons-group group-direction="row" custom-class="button-group-spread">
@@ -647,7 +667,10 @@ export class TemplateView extends Element {
 			<show-on-device device="mobile">
 				<bottom-navigation
 					classList=${() => ({
-						hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
+						hidden:
+							(this.showRemixOverlay && store.remixOverlayTemplate !== null) ||
+							this.showDetailView ||
+							!this.showBottomNavigation,
 					})}
 				>
 					<div

@@ -4003,4 +4003,941 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Skirt', 'Dress', 'Pants'],
 		},
 	],
+	anyshape: [
+		{
+			_id: 'caa7ac6b-3a3a-4248-96c5-380b6346b3ee',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_ALPHA.jpg',
+			alpha: '',
+			materialName: 'Dark Navy',
+			category: 'Silk Seethrough',
+			collection: 'anyshape',
+			templateCategories: ['Dress '],
+		},
+		{
+			_id: 'd6c29ebf-f3cc-4f19-846e-bec1a8edb8aa',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Dark Navy',
+			category: 'Silk',
+			collection: 'anyshape',
+			templateCategories: ['Dress '],
+		},
+	],
+	'baum-und-pferdgarten': [
+		{
+			_id: '00001331-4898-465f-8c38-387481fba316',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_ROUGH.jpg',
+			alpha:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_ALPHA.jpg',
+			materialName: 'Russet',
+			category: 'Lace',
+			collection: 'baum-und-pferdgarten',
+			templateCategories: ['Dress'],
+		},
+	],
+	'bloom.womenswear': [
+		{
+			_id: '82bcd0a7-1d5c-47ba-95fc-28bd511a6d08',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Black',
+			category: 'Jersey',
+			collection: 'bloom.womenswear',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '4a1f4706-d575-442d-aef1-b0b2482114fd',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT__-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT__-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT__-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Sky Batik Print',
+			category: 'Cotton',
+			collection: 'bloom.womenswear',
+			templateCategories: ['Skirt', 'Top'],
+		},
+		{
+			_id: '4cf4e57d-0e0f-4cd3-b41c-284a62426443',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Blood Batik Print',
+			category: 'Cotton',
+			collection: 'bloom.womenswear',
+			templateCategories: ['Skirt', 'Top'],
+		},
+		{
+			_id: 'e03cfce2-dab5-4506-9f50-93f861caeae8',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Champange Batik Print',
+			category: 'Cotton',
+			collection: 'bloom.womenswear',
+			templateCategories: ['Skirt', 'Top'],
+		},
+		{
+			_id: 'ab4bea0b-3ba4-451d-bf7f-fb38e68ab757',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Pink',
+			category: 'Sateen',
+			collection: 'bloom.womenswear',
+			templateCategories: ['Dress'],
+		},
+		{
+			_id: 'c16c1fe1-1bc1-4c85-af68-ace3421f098b',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-ROUGH.jpg',
+			alpha: '',
+			materialName: 'Powder Blue',
+			category: 'Sateen',
+			collection: 'bloom.womenswear',
+			templateCategories: ['Dress'],
+		},
+		{
+			_id: '378129f7-b78d-4678-9582-6fc21aa06578',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Purple Batik Print',
+			category: 'Cotton',
+			collection: 'bloom.womenswear',
+			templateCategories: ['Skirt', 'Top'],
+		},
+		{
+			_id: '4ece9436-96bf-4b0f-8604-2edbda05f61e',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Peach Batik Print',
+			category: 'Cotton',
+			collection: 'bloom.womenswear',
+			templateCategories: ['Skirt', 'Top'],
+		},
+		{
+			_id: 'e064dbbf-0dd7-42c4-a65a-16f1634df41d',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Beige Batik Print',
+			category: 'Cotton',
+			collection: 'bloom.womenswear',
+			templateCategories: ['Skirt', 'Top'],
+		},
+	],
+	'cecilie-bahnsen': [
+		{
+			_id: '74be169f-bfd2-4953-a688-0283037d6e34',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Off White',
+			category: 'Silk',
+			collection: 'cecilie-bahnsen',
+			templateCategories: ['Dress'],
+		},
+	],
+	crescent: [
+		{
+			_id: '27715f17-a155-433f-8f10-da63106904b8',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Brown',
+			category: 'Jersey',
+			collection: 'crescent',
+			templateCategories: ['Dress'],
+		},
+	],
+	'dario-mittmann': [
+		{
+			_id: '80c84e8a-db69-4211-8651-41207da37bc8',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Indigo Argyle',
+			category: 'Poly',
+			collection: 'dario-mittmann',
+			templateCategories: ['Skirt'],
+		},
+		{
+			_id: '1a597d3a-e085-4ad0-822d-378ca3bbdc71',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE__-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Plum Argyle',
+			category: 'Poly',
+			collection: 'dario-mittmann',
+			templateCategories: [],
+		},
+		{
+			_id: 'ba2cb38d-8abb-432e-a526-03e5ddf23de9',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Blue Argyle',
+			category: 'Poly',
+			collection: 'dario-mittmann',
+			templateCategories: [],
+		},
+		{
+			_id: '535c867e-3129-4331-9bf1-443fc4ff4719',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Striped',
+			category: 'Poplin',
+			collection: 'dario-mittmann',
+			templateCategories: ['Top'],
+		},
+	],
+	'david-black': [
+		{
+			_id: '5a4fcd59-6374-4cc3-856a-bf5c697488a5',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_BEIGE/SILK_-_BEIGE_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_BEIGE/SILK_-_BEIGE_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_BEIGE/SILK_-_BEIGE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_BEIGE/SILK_-_BEIGE_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_BEIGE/SILK_-_BEIGE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Beige',
+			category: 'Silk',
+			collection: 'david-black',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '132bc3b3-1c7d-4476-b643-c61bb5e02119',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_BROWN/SILK_-_BROWN_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_BROWN/SILK_-_BROWN_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_BROWN/SILK_-_BROWN_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_BROWN/SILK_-_BROWN_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_BROWN/SILK_-_BROWN_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Brown',
+			category: 'Silk',
+			collection: 'david-black',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '017d661a-1f75-4055-9d0a-fe8f00b89b9d',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_CREAM/SILK_-_CREAM_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_CREAM/SILK_-_CREAM_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_CREAM/SILK_-_CREAM_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_CREAM/SILK_-_CREAM_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/david-black/root/SILK_-_CREAM/SILK_-_CREAM_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Cream',
+			category: 'Silk',
+			collection: 'david-black',
+			templateCategories: ['Top', 'Pants'],
+		},
+	],
+	diane: [
+		{
+			_id: '569f9955-0013-4589-b9d1-09b8c339f87c',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Mustard',
+			category: 'Silk',
+			collection: 'diane',
+			templateCategories: ['Top', 'Skirt', 'Dress'],
+		},
+		{
+			_id: '26d83352-c9ad-479f-80a3-0d21cde5553d',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_BASE.jpg',
+			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Pink',
+			category: 'Silk',
+			collection: 'diane',
+			templateCategories: ['Dress', 'Top'],
+		},
+	],
+	dico: [
+		{
+			_id: '77828d22-1db5-46cd-9fd7-a46460501f2f',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_PINK_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_PINK_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Pink',
+			category: 'Jersey',
+			collection: 'dico',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '249474c0-00f4-4cb4-a6ea-984d94afadd2',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_BASE.jpg',
+			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Wash',
+			category: 'Denim',
+			collection: 'dico',
+			templateCategories: ['Pants'],
+		},
+	],
+	dottie: [
+		{
+			_id: '1601df13-44fa-4374-a92f-8ec583564a57',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.png',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'White',
+			category: 'Jersey',
+			collection: 'dottie',
+			templateCategories: [],
+		},
+		{
+			_id: '53b0a74f-3bcf-4889-850f-8342af9ce719',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Black',
+			category: 'Sateen',
+			collection: 'dottie',
+			templateCategories: ['Pants', 'Top'],
+		},
+	],
+	'erroris.ltd': [
+		{
+			_id: '230a8013-0311-45fc-abe8-cd2c193d3fca',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Gray',
+			category: 'Poly',
+			collection: 'erroris.ltd',
+			templateCategories: [],
+		},
+		{
+			_id: '1af71eb3-f548-45de-9f1a-753c52486f86',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE_/SATEEN_-_POWDER_BLUE_TEXTURE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE_/SATEEN_-_POWDER_BLUE_TEXTURE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE_/SATEEN_-_POWDER_BLUE_TEXTURE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE_/SATEEN_-_POWDER_BLUE_TEXTURE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE_/SATEEN_-_POWDER_BLUE_TEXTURE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Powder Blue Texture',
+			category: 'Sateen',
+			collection: 'erroris.ltd',
+			templateCategories: [],
+		},
+	],
+	gola: [
+		{
+			_id: '45a0bc8f-ff7e-41a8-872d-2ccf0dd4a6ac',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Powder Blue',
+			category: 'Sateen',
+			collection: 'gola',
+			templateCategories: ['Dress'],
+		},
+	],
+	h2b: [
+		{
+			_id: 'cabd466a-e10d-4532-b57c-2fdc5fe070d5',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_BASE.jpg',
+			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Cream',
+			category: 'Silk',
+			collection: 'h2b',
+			templateCategories: ['Pants', 'Top'],
+		},
+	],
+	'joie-des-roses': [
+		{
+			_id: '3f6727de-65e9-4687-96c0-8a54b654c70c',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Cream',
+			category: 'Silk',
+			collection: 'joie-des-roses',
+			templateCategories: ['Top', 'Dress'],
+		},
+	],
+	'jubin-studio': [
+		{
+			_id: '66ac35f6-d4e3-4e5a-b610-c2082ba6869e',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_ROUGH.jpg',
+			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_ALPHA.jpg',
+			materialName: 'Cream',
+			category: 'Lace',
+			collection: 'jubin-studio',
+			templateCategories: [],
+		},
+		{
+			_id: 'c15039dd-d45a-4f4a-b962-6ef4d0ac0256',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_RENDER.webp',
+			normal: '',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Dot',
+			category: 'Twill',
+			collection: 'jubin-studio',
+			templateCategories: ['Dress'],
+		},
+	],
+	'julian-prohaska': [
+		{
+			_id: '3b3be750-d5bf-423f-9b4b-779c0d4b8651',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'White',
+			category: 'Jersey',
+			collection: 'julian-prohaska',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: 'fd8a0837-1d2d-4456-bd4c-6b058da36e23',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Black',
+			category: 'Jersey',
+			collection: 'julian-prohaska',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: '60d7c8b1-814f-4b00-89c1-815bb3b93b75',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/DENIM_-_BLACK/DENIM_-_BLACK_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/DENIM_-_BLACK/DENIM_-_BLACK_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/DENIM_-_BLACK/DENIM_-_BLACK_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/DENIM_-_BLACK/DENIM_-_BLACK_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/julian-prohaska/root/DENIM_-_BLACK/DENIM_-_BLACK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Black',
+			category: 'Denim',
+			collection: 'julian-prohaska',
+			templateCategories: ['Pants'],
+		},
+	],
+	kido: [
+		{
+			_id: 'cca737a3-f417-40c4-b864-a3d994de08a2',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'White',
+			category: 'Jersey',
+			collection: 'kido',
+			templateCategories: [],
+		},
+		{
+			_id: 'f6249489-963e-4609-a5df-69e158800cef',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Striped',
+			category: 'Jersey',
+			collection: 'kido',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: 'e1f44b4c-9541-4b07-b0c3-8c53013cddea',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Beige',
+			category: 'Twill',
+			collection: 'kido',
+			templateCategories: ['Skirt'],
+		},
+	],
+	levents: [
+		{
+			_id: 'de1edef2-ec27-4fb3-a289-b80e25858d93',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_NORMAL.png',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_BASE.png',
+			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_DISPLACE.png',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_ROUGH.png',
+			alpha: '',
+			materialName: 'Rib',
+			category: 'Knit',
+			collection: 'levents',
+			templateCategories: [],
+		},
+		{
+			_id: 'a9f1ea3c-0599-44ad-886a-d3bd9c007142',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_NORMAL.png',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_BASE.png',
+			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_DISPLACE.png',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_ROUGH.png',
+			alpha: '',
+			materialName: 'Navy',
+			category: 'Knit',
+			collection: 'levents',
+			templateCategories: [],
+		},
+		{
+			_id: 'f1607da0-db28-4122-9a18-c5faf964ea3a',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.png',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'White',
+			category: 'Jersey',
+			collection: 'levents',
+			templateCategories: ['Top', 'Skirt', 'Jacket'],
+		},
+		{
+			_id: '28e52da0-a214-4224-b1a6-2346fbc691d6',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_BASE.jpg',
+			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/POLY_-_NAVY/POLY_-_DUSTY_BLUE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Navy',
+			category: 'Poly',
+			collection: 'levents',
+			templateCategories: ['Skirt'],
+		},
+	],
+	lider: [
+		{
+			_id: 'e6c0becf-26cb-4029-a706-3fc36a1bcc14',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lider/root/TWILL_-_STRIPED/TWILL_-_STRIPED_-__RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lider/root/TWILL_-_STRIPED/TWILL_-_STRIPED_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lider/root/TWILL_-_STRIPED/TWILL_-_STRIPED_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lider/root/TWILL_-_STRIPED/TWILL_-_STRIPED_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lider/root/TWILL_-_STRIPED/TWILL_-_STRIPED_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Striped',
+			category: 'Twill',
+			collection: 'lider',
+			templateCategories: [],
+		},
+		{
+			_id: 'c4748f7b-4250-46f1-9af7-1080ec37f81b',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lider/root/DENIM_-_LIGHT/DENIM_-_LIGHT_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lider/root/DENIM_-_LIGHT/DENIM_-_LIGHT_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lider/root/DENIM_-_LIGHT/DENIM_-_LIGHT_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lider/root/DENIM_-_LIGHT/DENIM_-_LIGHT_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/lider/root/DENIM_-_LIGHT/DENIM_-_LIGHT_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Light',
+			category: 'Denim',
+			collection: 'lider',
+			templateCategories: [],
+		},
+	],
+	ononmm: [
+		{
+			_id: '1ee76b7b-6507-4d71-8e5f-d2a413045621',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ononmm/root/TWILL_-_DOT/TWILL_-_DOT_-_RENDER.webp',
+			normal: '',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ononmm/root/TWILL_-_DOT/TWILL_-_DOT_-_BASE.jpg',
+			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ononmm/root/TWILL_-_DOT/TWILL_-_DOT_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ononmm/root/TWILL_-_DOT/TWILL_-_DOT_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Dot',
+			category: 'Twill',
+			collection: 'ononmm',
+			templateCategories: ['Dress'],
+		},
+	],
+	'paradise-saigon': [
+		{
+			_id: '47608173-45c7-4a59-9436-c2ff10b2ec5e',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'White',
+			category: 'Jersey',
+			collection: 'paradise-saigon',
+			templateCategories: ['Top', 'Pants'],
+		},
+		{
+			_id: 'e896d8dc-a994-4edf-bf79-a981cff45e02',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/POLY_-_MOSS_GREEN/POLY_-_MOSS_GREEN_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/POLY_-_MOSS_GREEN/POLY_-_MOSS_GREEN_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/POLY_-_MOSS_GREEN/POLY_-_MOSS_GREEN_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/POLY_-_MOSS_GREEN/POLY_-_MOSS_GREEN_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/POLY_-_MOSS_GREEN/POLY_-_MOSS_GREEN_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Moss Green',
+			category: 'Poly',
+			collection: 'paradise-saigon',
+			templateCategories: ['Pants'],
+		},
+		{
+			_id: '4ee68a5c-cd09-4426-9b93-fc672cfa73fa',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/RIB_-_BLUE/RIB_-_BLUE_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/RIB_-_BLUE/RIB_-_BLUE_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/RIB_-_BLUE/RIB_-_BLUE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/RIB_-_BLUE/RIB_-_BLUE_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/RIB_-_BLUE/RIB_-_BLUE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Blue',
+			category: 'Rib',
+			collection: 'paradise-saigon',
+			templateCategories: ['Top'],
+		},
+		{
+			_id: 'e483c5b5-2138-471c-a950-96eebd2742e1',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/POLY_-_ARTWORK_/POLY_-_ARTWORK_-_RENDER.webp',
+			normal: '',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/POLY_-_ARTWORK_/POLY_-_ARTWORK_-_BASE.jpg',
+			displacement: '',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/paradise-saigon/root/POLY_-_ARTWORK_/POLY_-_ARTWORK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Artwork',
+			category: 'Poly',
+			collection: 'paradise-saigon',
+			templateCategories: [],
+		},
+	],
+	'pindiga-ranjith-kumar': [
+		{
+			_id: '28393e7d-9781-4e46-b6de-b56d31adeeb5',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pindiga-ranjith-kumar/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pindiga-ranjith-kumar/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pindiga-ranjith-kumar/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pindiga-ranjith-kumar/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pindiga-ranjith-kumar/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Powder Blue',
+			category: 'Sateen',
+			collection: 'pindiga-ranjith-kumar',
+			templateCategories: [],
+		},
+		{
+			_id: 'd0a0ad80-0811-4434-8d68-476ad8f5db32',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pindiga-ranjith-kumar/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pindiga-ranjith-kumar/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pindiga-ranjith-kumar/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pindiga-ranjith-kumar/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pindiga-ranjith-kumar/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Off White',
+			category: 'Silk',
+			collection: 'pindiga-ranjith-kumar',
+			templateCategories: ['Dress'],
+		},
+	],
+	pradies: [
+		{
+			_id: '6aecb5b1-3769-4bbc-9345-6ba6c5ea6aa6',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/DENIM_-_LIGHT/DENIM_-_LIGHT_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/DENIM_-_LIGHT/DENIM_-_LIGHT_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/DENIM_-_LIGHT/DENIM_-_LIGHT_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/DENIM_-_LIGHT/DENIM_-_LIGHT_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/DENIM_-_LIGHT/DENIM_-_LIGHT_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Light',
+			category: 'Denim',
+			collection: 'pradies',
+			templateCategories: [],
+		},
+		{
+			_id: '8ffe2594-c94c-495a-9da6-0fc05e1bd975',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.png',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'White',
+			category: 'Jersey',
+			collection: 'pradies',
+			templateCategories: ['Top', 'Pants'],
+		},
+		{
+			_id: '3e37cf6b-da07-4814-af0c-a7cdbe3e2c21',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/DENIM_-_WHITE/DENIM_-_WHITE_-_RENDER.webp',
+			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/DENIM_-_WHITE/DENIM_-_WHITE_-_NORMAL.jpg',
+			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/DENIM_-_WHITE/DENIM_-_WHITE_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/DENIM_-_WHITE/DENIM_-_WHITE_-_DISPLACE.jpg',
+			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/pradies/root/DENIM_-_WHITE/DENIM_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'White',
+			category: 'Denim',
+			collection: 'pradies',
+			templateCategories: ['Pants'],
+		},
+	],
 }

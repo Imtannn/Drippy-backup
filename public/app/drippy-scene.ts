@@ -17,6 +17,10 @@ import {
 import type {Accessor} from 'solid-js'
 import {createMemo} from 'solid-js'
 import * as THREE from 'three'
+import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
+import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
+import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js'
 import {avatars} from '../consts/avatars.js'
 
 import {backgroundScenes} from '../consts/scenes.js'
@@ -85,6 +89,10 @@ export class DrippyScene extends Element {
 	@signal private cameraY = -1
 	@signal private cameraRigInteractive = true
 	@signal private isVerticalPan = false
+
+	// Post-processing for outline effect
+	private composer: EffectComposer | null = null
+	private outlinePass: OutlinePass | null = null
 
 	/**
 	 * Stores fabric texture signals in a two-level Map structure to keep them stable across effect reruns.
@@ -648,6 +656,149 @@ export class DrippyScene extends Element {
 			enableShadowOnModelLoad(backgroundModel)
 			setEnvMapOnModelLoad(backgroundModel, env)
 			setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
+
+			// Set up post-processing for outline effect
+			let renderPass: RenderPass | null = null
+
+			createEffect(() => {
+				if (!this.lumeScene) return
+				const renderer = this.lumeScene.glRenderer
+				if (!renderer) return
+
+				const threeScene = this.lumeScene.three
+				const camera = this.lumeScene.threeCamera
+
+				if (!threeScene || !camera) return
+
+				// Wait for valid size before initializing composer
+				const size = new THREE.Vector2()
+				renderer.getSize(size)
+				if (size.x === 0 || size.y === 0) return
+
+				// Create composer if not exists
+				if (!this.composer) {
+					this.composer = new EffectComposer(renderer)
+
+					renderPass = new RenderPass(threeScene, camera)
+					this.composer.addPass(renderPass)
+
+					this.outlinePass = new OutlinePass(size, threeScene, camera)
+					this.outlinePass.edgeStrength = 3
+					this.outlinePass.edgeGlow = 0.5
+					this.outlinePass.edgeThickness = 4
+					this.outlinePass.visibleEdgeColor.set(0x9b59b6) // purple accent
+					this.outlinePass.hiddenEdgeColor.set(0x9b59b6)
+					this.composer.addPass(this.outlinePass)
+
+					const outputPass = new OutputPass()
+					this.composer.addPass(outputPass)
+
+					// Store original drawScene
+					const originalDrawScene = this.lumeScene.drawScene.bind(this.lumeScene)
+
+					// Override the render loop to use composer
+					this.lumeScene.drawScene = () => {
+						// Skip if size is invalid
+						const currentSize = new THREE.Vector2()
+						renderer.getSize(currentSize)
+						if (currentSize.x === 0 || currentSize.y === 0) return
+
+						// Only use composer if we have objects to outline AND selectingPiece is set
+						if (store.selectingPiece && this.outlinePass && this.outlinePass.selectedObjects.length > 0) {
+							// Update cameras to current frame's camera
+							const currentCamera = this.lumeScene!.threeCamera!
+							if (renderPass) renderPass.camera = currentCamera
+							this.outlinePass.renderCamera = currentCamera
+							this.composer!.render()
+						} else {
+							// Fall back to original rendering when no outline needed
+							originalDrawScene()
+						}
+					}
+
+					// Handle resize
+					const resizeObserver = new ResizeObserver(() => {
+						if (!this.lumeScene || !this.composer) return
+						const newSize = new THREE.Vector2()
+						renderer.getSize(newSize)
+						if (newSize.x > 0 && newSize.y > 0) {
+							this.composer.setSize(newSize.x, newSize.y)
+						}
+					})
+					resizeObserver.observe(this.lumeScene)
+					onCleanup(() => resizeObserver.disconnect())
+				}
+			})
+
+			// Update outline selection based on store.selectingPiece
+			// Use debounce and async processing to avoid blocking render
+			let outlineUpdateTimeout: number | null = null
+			let lastSelectingPiece: string | null = null
+
+			createEffect(() => {
+				if (!this.outlinePass) return
+
+				const selectingPiece = store.selectingPiece
+
+				// Skip if same piece (avoid redundant work)
+				if (selectingPiece === lastSelectingPiece) return
+				lastSelectingPiece = selectingPiece
+
+				// Clear previous timeout
+				if (outlineUpdateTimeout) {
+					cancelAnimationFrame(outlineUpdateTimeout)
+					outlineUpdateTimeout = null
+				}
+
+				if (!selectingPiece) {
+					this.outlinePass.selectedObjects = []
+					this.lumeScene?.needsUpdate()
+					return
+				}
+
+				// Defer heavy work to next frame to avoid blocking
+				outlineUpdateTimeout = requestAnimationFrame(() => {
+					if (!this.outlinePass || store.selectingPiece !== selectingPiece) return
+
+					const models = garmentModels()
+					if (models.length === 0) return
+
+					// "default" means all meshes in the garment
+					const isDefault = selectingPiece === 'default'
+					const pieceNames = isDefault ? [] : selectingPiece.split('-')
+					const selectedMeshes: THREE.Object3D[] = []
+
+					// Process models in chunks to avoid long blocking
+					for (const garmentModel of models) {
+						if (!garmentModel.three) continue
+
+						garmentModel.three.traverse((obj: THREE.Object3D) => {
+							if (!(obj as THREE.Mesh).isMesh) return
+
+							if (isDefault) {
+								selectedMeshes.push(obj)
+							} else {
+								for (const pieceName of pieceNames) {
+									if (hasAncestorWithName(obj, pieceName)) {
+										selectedMeshes.push(obj)
+										break
+									}
+								}
+							}
+						})
+					}
+
+					if (this.outlinePass && store.selectingPiece === selectingPiece) {
+						this.outlinePass.selectedObjects = selectedMeshes
+						// Trigger re-render after updating outline selection
+						this.lumeScene?.needsUpdate()
+					}
+				})
+			})
+
+			onCleanup(() => {
+				if (outlineUpdateTimeout) cancelAnimationFrame(outlineUpdateTimeout)
+			})
 		})
 	}
 
@@ -939,8 +1090,8 @@ export class DrippyScene extends Element {
 				-webkit-transform: unset !important;
 			}
 			#lume-scene-container {
-				transform: var(--sceneTranslateY);
-				-webkit-transform: var(--sceneTranslateY);
+				transform: var(--overrideSceneTranslateY, var(--sceneTranslateY));
+				-webkit-transform: var(--overrideSceneTranslateY, var(--sceneTranslateY));
 			}
 
 			lume-scene {

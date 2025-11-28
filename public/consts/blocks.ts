@@ -4398,4 +4398,777 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Skirt',
 		},
 	],
+	anyshape: [
+		{
+			_id: 'fac8d8df-13e0-40d6-bcb7-88b65e833358',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/anyshape/blocks/Dress_/Item_1___Fullbody/fullbody_1788.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/anyshape/blocks/Dress_/Item_1___Fullbody/fullbody_1788.gltf',
+			blockName: 'fullbody 1788',
+			avatar: 'female',
+			category: 'Full Body',
+			collection: 'anyshape',
+			templateId: '18c19159-5851-45da-a8c0-46b544777471',
+			templateName: 'Item 1',
+			templateCategory: 'Dress ',
+		},
+	],
+
+	'baum-und-pferdgarten': [
+		{
+			_id: '17d51ed0-9dd0-4d63-9735-1d49c608ed26',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Sleeves/sleeves_1843.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Sleeves/sleeves_1843.gltf',
+			blockName: 'sleeves 1843',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'baum-und-pferdgarten',
+			templateId: '2df858a8-b3c4-4449-8ee9-b0fb89c4f2ec',
+			templateName: 'ANDINE DRESS',
+			templateCategory: 'Dress',
+		},
+		{
+			_id: '13283526-047a-443d-880c-b386087655ba',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Skirt/skirt_1842.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Skirt/skirt_1842.gltf',
+			blockName: 'skirt 1842',
+			avatar: 'female',
+			category: 'Dress',
+			collection: 'baum-und-pferdgarten',
+			templateId: '2df858a8-b3c4-4449-8ee9-b0fb89c4f2ec',
+			templateName: 'ANDINE DRESS',
+			templateCategory: 'Dress',
+		},
+		{
+			_id: 'b616b3f3-b53c-4529-8480-304bd537fe7b',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Bodice/bodice_1841.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Bodice/bodice_1841.gltf',
+			blockName: 'bodice 1841',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'baum-und-pferdgarten',
+			templateId: '2df858a8-b3c4-4449-8ee9-b0fb89c4f2ec',
+			templateName: 'ANDINE DRESS',
+			templateCategory: 'Dress',
+		},
+	],
+
+	'bloom.womenswear': [
+		{
+			_id: '1cf27e36-731b-4989-9d7c-b9af5fddf835',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Dress/Item_1___Bodice/bodice_1750.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Dress/Item_1___Bodice/bodice_1750.gltf',
+			blockName: 'bodice 1750',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'bloom.womenswear',
+			templateId: '21b2add3-b763-4ed6-b029-4bb18f1cc63d',
+			templateName: 'Item 1',
+			templateCategory: 'Dress',
+		},
+		{
+			_id: '633fd081-3c26-443c-b7cb-bcf9fd046921',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Dress/Item_1___Skirt/skirt_1751.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Dress/Item_1___Skirt/skirt_1751.gltf',
+			blockName: 'skirt 1751',
+			avatar: 'female',
+			category: 'Skirt',
+			collection: 'bloom.womenswear',
+			templateId: '21b2add3-b763-4ed6-b029-4bb18f1cc63d',
+			templateName: 'Item 1',
+			templateCategory: 'Dress',
+		},
+		{
+			_id: 'aee0df67-17c5-478a-bf05-f1c32ab17f8f',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Skirt/Item_2___Skirt/skirt_1753.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Skirt/Item_2___Skirt/skirt_1753.gltf',
+			blockName: 'skirt 1753',
+			avatar: 'female',
+			category: 'Skirt',
+			collection: 'bloom.womenswear',
+			templateId: '9f983a21-99e8-4cb7-acb1-35071ce26a6d',
+			templateName: 'Item 2',
+			templateCategory: 'Skirt',
+		},
+		{
+			_id: '38d2479a-fce5-46c2-90e3-800dcd09f559',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Skirt/Item_1___Skirt/skirt_1749.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Skirt/Item_1___Skirt/skirt_1749.gltf',
+			blockName: 'skirt 1749',
+			avatar: 'female',
+			category: 'Skirt',
+			collection: 'bloom.womenswear',
+			templateId: '216292c6-bb2f-46aa-96a9-5796410ec805',
+			templateName: 'Item 1',
+			templateCategory: 'Skirt',
+		},
+		{
+			_id: '390003aa-0efe-4389-9d76-5f2d84a53c22',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Top/Item_2___Bodice/bodice_1752.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Top/Item_2___Bodice/bodice_1752.gltf',
+			blockName: 'bodice 1752',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'bloom.womenswear',
+			templateId: '9d68ebcd-1612-424a-abc3-2fe711698362',
+			templateName: 'Item 2',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '482a7723-c3e1-4868-be54-ae6a8281a4cb',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Top/Item_1___Bodice/bodice_1748.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Top/Item_1___Bodice/bodice_1748.gltf',
+			blockName: 'bodice 1748',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'bloom.womenswear',
+			templateId: 'f4f3bf0f-947a-4216-9f08-f52c3870a4b7',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+	],
+
+	'cecilie-bahnsen': [
+		{
+			_id: 'd201838e-9ee7-4123-8e61-d34f403cd592',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/cecilie-bahnsen/blocks/Dress/Bosco_Dress___Fullbody/fullbody_1820.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/cecilie-bahnsen/blocks/Dress/Bosco_Dress___Fullbody/fullbody_1820.gltf',
+			blockName: 'fullbody 1820',
+			avatar: 'female',
+			category: 'Dress',
+			collection: 'cecilie-bahnsen',
+			templateId: '6a1037c9-a629-4511-ab58-e3f2d810256d',
+			templateName: 'Bosco Dress',
+			templateCategory: 'Dress',
+		},
+	],
+
+	crescent: [
+		{
+			_id: '61047ec7-4127-4323-84b1-c18cdd9c9bfa',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/crescent/blocks/Dress/Featuring_Auburn_Dress___Fullbody/fullbody_1776.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/crescent/blocks/Dress/Featuring_Auburn_Dress___Fullbody/fullbody_1776.gltf',
+			blockName: 'fullbody 1776',
+			avatar: 'female',
+			category: 'Dress',
+			collection: 'crescent',
+			templateId: '39d1cd2d-98d3-4436-9462-31970905a177',
+			templateName: 'Featuring Auburn Dress',
+			templateCategory: 'Dress',
+		},
+	],
+
+	'dario-mittmann': [
+		{
+			_id: 'f6e2f0cb-d4be-47d5-add7-21d9b91dbf9d',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/blocks/Skirt/Saia_Gravata_Colorida___Skirt/skirt_1794.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/blocks/Skirt/Saia_Gravata_Colorida___Skirt/skirt_1794.gltf',
+			blockName: 'skirt 1794',
+			avatar: 'female',
+			category: 'Skirt',
+			collection: 'dario-mittmann',
+			templateId: 'b7da1910-6d98-4668-b801-5a19ab28299a',
+			templateName: 'Saia Gravata Colorida',
+			templateCategory: 'Skirt',
+		},
+		{
+			_id: 'a09ea137-2548-4d9d-bc27-d5e7026baf52',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Sleeves/sleeves_1799.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Sleeves/sleeves_1799.gltf',
+			blockName: 'sleeves 1799',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'dario-mittmann',
+			templateId: '99581918-12f2-46fd-bdc2-6ced21e29821',
+			templateName: 'Camisa Alfaiataria Azul',
+			templateCategory: 'Top',
+		},
+		{
+			_id: 'b15ed2e8-3f4c-420e-926c-d53e31be76c6',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Bodice/bodice_1798.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Bodice/bodice_1798.gltf',
+			blockName: 'bodice 1798',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'dario-mittmann',
+			templateId: '99581918-12f2-46fd-bdc2-6ced21e29821',
+			templateName: 'Camisa Alfaiataria Azul',
+			templateCategory: 'Top',
+		},
+	],
+	'david-black': [
+		{
+			_id: '05c0ffc4-53b4-4d14-8010-14bb3b852d27',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/david-black/blocks/Top/The_Prelude___Sleeves/sleeves_1813.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/david-black/blocks/Top/The_Prelude___Sleeves/sleeves_1813.gltf',
+			blockName: 'sleeves 1813',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'david-black',
+			templateId: '399f7f11-9320-4026-bc4c-0f633e3b7827',
+			templateName: 'The Prelude',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '1ab04dc8-a0b2-4e20-bf0e-7d3c0b2f1c85',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/david-black/blocks/Top/The_Prelude___Bodice/bodice_1812.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/david-black/blocks/Top/The_Prelude___Bodice/bodice_1812.gltf',
+			blockName: 'bodice 1812',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'david-black',
+			templateId: '399f7f11-9320-4026-bc4c-0f633e3b7827',
+			templateName: 'The Prelude',
+			templateCategory: 'Top',
+		},
+		{
+			_id: 'a85550ea-31f6-402e-aa56-9d6d750a2cf9',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/david-black/blocks/Pants/The_Prelude___Pants/pants_1814.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/david-black/blocks/Pants/The_Prelude___Pants/pants_1814.gltf',
+			blockName: 'pants 1814',
+			avatar: 'female',
+			category: 'Pants',
+			collection: 'david-black',
+			templateId: '178b2d04-ea67-46b9-81eb-0f1c40cd0433',
+			templateName: 'The Prelude',
+			templateCategory: 'Pants',
+		},
+	],
+
+	diane: [
+		{
+			_id: '0d6d6362-f6d0-4064-ba57-06cbbe6cf70f',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/blocks/Top/AMOUR_-_POMME___Sleeves/sleeve_1746.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/diane/blocks/Top/AMOUR_-_POMME___Sleeves/sleeve_1746.gltf',
+			blockName: 'sleeve 1746',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'diane',
+			templateId: '01fab2e6-96f5-441a-937d-e0f272bdb8fb',
+			templateName: 'AMOUR',
+			templateCategory: 'Top',
+		},
+		{
+			_id: 'db5a5d9c-8eec-4cb4-87c8-6021d11108f6',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/blocks/Top/AMOUR_-_POMME___Bodice/bodice_1745.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/diane/blocks/Top/AMOUR_-_POMME___Bodice/bodice_1745.gltf',
+			blockName: 'bodice 1745',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'diane',
+			templateId: '01fab2e6-96f5-441a-937d-e0f272bdb8fb',
+			templateName: 'AMOUR',
+			templateCategory: 'Top',
+		},
+		{
+			_id: 'b63f76fe-1834-4766-9fcb-0572c6095ab2',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Skirt/skirt_1747.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Skirt/skirt_1747.gltf',
+			blockName: 'skirt 1747',
+			avatar: 'female',
+			category: 'Skirt',
+			collection: 'diane',
+			templateId: 'd38efe48-fe91-45e2-842c-d7000cf7f39f',
+			templateName: 'HÉMÉRA',
+			templateCategory: 'Dress',
+		},
+		{
+			_id: 'ba27240c-7d2e-490c-9dc0-9c0592bdf0c5',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Sleeves/sleeve_1746.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Sleeves/sleeve_1746.gltf',
+			blockName: 'sleeve 1746',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'diane',
+			templateId: 'd38efe48-fe91-45e2-842c-d7000cf7f39f',
+			templateName: 'HÉMÉRA',
+			templateCategory: 'Dress',
+		},
+		{
+			_id: '771b9ffc-9529-44f6-8c53-a77312d62b3a',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Bodice/bodice_1745.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Bodice/bodice_1745.gltf',
+			blockName: 'bodice 1745',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'diane',
+			templateId: 'd38efe48-fe91-45e2-842c-d7000cf7f39f',
+			templateName: 'HÉMÉRA',
+			templateCategory: 'Dress',
+		},
+	],
+
+	dico: [
+		{
+			_id: '20226ae4-647d-4214-a071-e69ddefbb731',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dico/blocks/Pants/Item_1___Pants/pants_1826.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dico/blocks/Pants/Item_1___Pants/pants_1826.gltf',
+			blockName: 'pants 1826',
+			avatar: 'female',
+			category: 'Pants',
+			collection: 'dico',
+			templateId: '5881c584-a6fe-4cd6-aa0b-964f3745a0e4',
+			templateName: 'Item 1',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: '9d024e8b-fd9a-44f4-a295-52bc3ca94a4c',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dico/blocks/Top/Item_1___Sleeves/sleeves_1829.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dico/blocks/Top/Item_1___Sleeves/sleeves_1829.gltf',
+			blockName: 'sleeves 1829',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'dico',
+			templateId: 'b32cadf0-a8da-4697-b4b8-add22a5bee84',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '3aac17eb-6b0c-4b70-9f2a-79fa072932f1',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dico/blocks/Top/Item_1___Bodice/bodice_1827.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dico/blocks/Top/Item_1___Bodice/bodice_1827.gltf',
+			blockName: 'bodice 1827',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'dico',
+			templateId: 'b32cadf0-a8da-4697-b4b8-add22a5bee84',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+	],
+
+	dottie: [
+		{
+			_id: '4808e397-de67-4792-b96a-71ada92995ae',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dottie/blocks/Top/Ruffled_Trim_Cami_Bodice/bodice_1808.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/dottie/blocks/Top/Ruffled_Trim_Cami_Bodice/bodice_1808.gltf',
+			blockName: 'bodice 1808',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'dottie',
+			templateId: 'ce15e3d8-a33c-4382-bb0c-668867850d23',
+			templateName: 'Ruffled Trim Cami',
+			templateCategory: 'Top',
+		},
+	],
+
+	gola: [
+		{
+			_id: 'e9e52a10-be8f-4ae5-833c-b4ba65bcb4d5',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/gola/blocks/Dress/Item_1___Fullbody/fullbody_1833.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/gola/blocks/Dress/Item_1___Fullbody/fullbody_1833.gltf',
+			blockName: 'fullbody 1833',
+			avatar: 'female',
+			category: 'Full Body',
+			collection: 'gola',
+			templateId: 'eeb79681-bb4d-4d0f-a5ea-2e385baa3c7b',
+			templateName: 'Item 1',
+			templateCategory: 'Dress',
+		},
+	],
+
+	h2b: [
+		{
+			_id: '2d34b22a-16f9-4ed9-acc0-0c7b7986460d',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h2b/blocks/Pants/Item_1___Pants/pants_1785.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/h2b/blocks/Pants/Item_1___Pants/pants_1785.gltf',
+			blockName: 'pants 1785',
+			avatar: 'female',
+			category: 'Pants',
+			collection: 'h2b',
+			templateId: '044fbb5b-14cb-4ae2-bdca-e9f2c9e995bd',
+			templateName: 'Item 1',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: 'e9a13422-23cd-449f-a45e-623038a695a6',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h2b/blocks/Top/Item_1___Fullbody/fullbody_1786.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/h2b/blocks/Top/Item_1___Fullbody/fullbody_1786.gltf',
+			blockName: 'fullbody 1786',
+			avatar: 'female',
+			category: 'Full Body',
+			collection: 'h2b',
+			templateId: '55e8a3cc-c9e6-4057-9d39-484493bc2be9',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+	],
+
+	'joie-des-roses': [
+		{
+			_id: '56ece215-7384-461d-a164-8f91c21d2d7a',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/blocks/Top/Ena_jacket___Bodice/shirt_1783.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/blocks/Top/Ena_jacket___Bodice/shirt_1783.gltf',
+			blockName: 'shirt 1783',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'joie-des-roses',
+			templateId: 'c16adfc5-daca-4af5-b93c-1616723d2eb1',
+			templateName: 'Ena jacket',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '2e895102-7696-4918-8826-589f9330c5f2',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/blocks/Top/Ena_jacket___Sleeves/sleeve_1782.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/blocks/Top/Ena_jacket___Sleeves/sleeve_1782.gltf',
+			blockName: 'sleeve 1782',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'joie-des-roses',
+			templateId: 'c16adfc5-daca-4af5-b93c-1616723d2eb1',
+			templateName: 'Ena jacket',
+			templateCategory: 'Top',
+		},
+		{
+			_id: 'c34542de-a68c-4f37-8b7c-928548c4a9e5',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/blocks/Dress/Ena_dress___Skirt/skirt_1781.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/blocks/Dress/Ena_dress___Skirt/skirt_1781.gltf',
+			blockName: 'skirt 1781',
+			avatar: 'female',
+			category: 'Dress',
+			collection: 'joie-des-roses',
+			templateId: '2bdb9a0a-57d9-4590-a8a3-866b2895fb9f',
+			templateName: 'Ena Dress',
+			templateCategory: 'Dress',
+		},
+		{
+			_id: 'f3f6434a-5c14-4779-a17c-7f4996bd067d',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/blocks/Dress/Ena_dress___Bodice/bodice_1780.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/blocks/Dress/Ena_dress___Bodice/bodice_1780.gltf',
+			blockName: 'bodice 1780',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'joie-des-roses',
+			templateId: '2bdb9a0a-57d9-4590-a8a3-866b2895fb9f',
+			templateName: 'Ena Dress',
+			templateCategory: 'Dress',
+		},
+	],
+
+	'jubin-studio': [
+		{
+			_id: 'a95dd268-d3d7-459f-9f59-a396a3f3b90c',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/jubin-studio/blocks/Dress/Item_1_Fullbody/item_1_fullbody.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/jubin-studio/blocks/Dress/Item_1_Fullbody/item_1_fullbody.gltf',
+			blockName: 'item 1 fullbody',
+			avatar: 'female',
+			category: 'Full Body',
+			collection: 'jubin-studio',
+			templateId: '4fa23fc3-ae54-4b58-b645-00246c4e1779',
+			templateName: 'Item 1',
+			templateCategory: 'Dress',
+		},
+	],
+
+	'julian-prohaska': [
+		{
+			_id: '7ba89fc2-948a-4285-855c-7c575e5a0576',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/julian-prohaska/blocks/Top/Drape_longsleeve___Sleeves/sleeves_1763.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/julian-prohaska/blocks/Top/Drape_longsleeve___Sleeves/sleeves_1763.gltf',
+			blockName: 'sleeves 1763',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'julian-prohaska',
+			templateId: '14ae4189-5e76-47c4-bf79-a579efb724e2',
+			templateName: 'Drape longsleeve',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '41408e3e-2151-473a-9d3d-9fccef666d45',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/julian-prohaska/blocks/Top/Drape_longsleeve___Bodice/bodice_1762.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/julian-prohaska/blocks/Top/Drape_longsleeve___Bodice/bodice_1762.gltf',
+			blockName: 'bodice 1762',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'julian-prohaska',
+			templateId: '14ae4189-5e76-47c4-bf79-a579efb724e2',
+			templateName: 'Drape longsleeve',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '01ef64c1-dfb0-44ae-ad0d-6027149905ae',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/julian-prohaska/blocks/Pants/Panelis___Pants/pants_1769.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/julian-prohaska/blocks/Pants/Panelis___Pants/pants_1769.gltf',
+			blockName: 'pants 1769',
+			avatar: 'female',
+			category: 'Pants',
+			collection: 'julian-prohaska',
+			templateId: '7c07cc5c-ee19-4efb-b194-8935d4f8ea6a',
+			templateName: 'Panelis',
+			templateCategory: 'Pants',
+		},
+	],
+
+	kido: [
+		{
+			_id: 'd13643f0-efe9-4686-994c-07c3f306512a',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/kido/blocks/Top/Item_1_Bodice/top_1832.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/kido/blocks/Top/Item_1_Bodice/top_1832.gltf',
+			blockName: 'top 1832',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'kido',
+			templateId: '10f5c480-2eb5-4e5d-8c45-8acdeaa9c67c',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '26701448-1fed-4bc1-bc30-ea5af9522332',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/kido/blocks/Top/Item_1_Sleeves/sleeve_1831.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/kido/blocks/Top/Item_1_Sleeves/sleeve_1831.gltf',
+			blockName: 'sleeve 1831',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'kido',
+			templateId: '10f5c480-2eb5-4e5d-8c45-8acdeaa9c67c',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+	],
+
+	levents: [
+		{
+			_id: '2b68feb8-98be-403a-9f01-c0c6911562c0',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/blocks/Top/Item_1_Sleeves/sleeves_1819.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/blocks/Top/Item_1_Sleeves/sleeves_1819.gltf',
+			blockName: 'sleeves 1819',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'levents',
+			templateId: 'b304ecb1-3b9d-4288-8ff5-c0a5710e8cbe',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+		{
+			_id: 'f21be7c6-2cd3-4001-aab8-2961d0e14a52',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/blocks/Top/Item_1_Bodice/bodice_1817.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/blocks/Top/Item_1_Bodice/bodice_1817.gltf',
+			blockName: 'bodice 1817',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'levents',
+			templateId: 'b304ecb1-3b9d-4288-8ff5-c0a5710e8cbe',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '365b755c-4887-49e2-b96a-8e69879e1bd9',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Sleeves/sleeves_1818.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Sleeves/sleeves_1818.gltf',
+			blockName: 'sleeves 1818',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'levents',
+			templateId: '1f5e8219-1e89-44eb-aa70-ef64e5c24bed',
+			templateName: 'SMALL KNIT CARDIGAN',
+			templateCategory: 'Jacket',
+		},
+		{
+			_id: '5d8925f6-8267-4d8f-9ce7-7f1298ec9300',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Bodice/bodice_1816.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Bodice/bodice_1816.gltf',
+			blockName: 'bodice 1816',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'levents',
+			templateId: '1f5e8219-1e89-44eb-aa70-ef64e5c24bed',
+			templateName: 'SMALL KNIT CARDIGAN',
+			templateCategory: 'Jacket',
+		},
+	],
+
+	lider: [
+		{
+			_id: 'c5b20f91-b4f0-4593-b45a-576928e6112d',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/lider/blocks/Pants/Item_1_Pants/pants_1844.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/lider/blocks/Pants/Item_1_Pants/pants_1844.gltf',
+			blockName: 'pants 1844',
+			avatar: 'female',
+			category: 'Pants',
+			collection: 'lider',
+			templateId: '23b76df7-155c-4ead-a8d0-3897159f2567',
+			templateName: 'Item 1',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: '06354be0-4db1-4c79-b170-4a53d96c792d',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/lider/blocks/Top/Item_1_Bodice/top_1845.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/lider/blocks/Top/Item_1_Bodice/top_1845.gltf',
+			blockName: 'top 1845',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'lider',
+			templateId: '2c3671a1-0e93-41f0-ae3f-a91a12ae0895',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '975aba31-741c-47aa-a463-86014a4e3816',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/lider/blocks/Top/Item_1_Sleeves/sleeves_1846.webp',
+			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/lider/blocks/Top/Item_1_Sleeves/sleeves_1846.gltf',
+			blockName: 'sleeves 1846',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'lider',
+			templateId: '2c3671a1-0e93-41f0-ae3f-a91a12ae0895',
+			templateName: 'Item 1',
+			templateCategory: 'Top',
+		},
+	],
+
+	'paradise-saigon': [
+		{
+			_id: '9d3053c2-356e-4500-ba19-61c807641214',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/paradise-saigon/blocks/Pants/Pedro_Nylon_Short___Pants/pants_1793.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/paradise-saigon/blocks/Pants/Pedro_Nylon_Short___Pants/pants_1793.gltf',
+			blockName: 'pants 1793',
+			avatar: 'female',
+			category: 'Pants',
+			collection: 'paradise-saigon',
+			templateId: '5bf48e72-5a78-4800-9b48-c8a9712f900f',
+			templateName: 'Pedro Nylon Short',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: 'd7ab2481-3965-4102-b211-f54ae5d03d0c',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/paradise-saigon/blocks/Top/VIETRAVE_TEE___Sleeves/sleeves_1792.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/paradise-saigon/blocks/Top/VIETRAVE_TEE___Sleeves/sleeves_1792.gltf',
+			blockName: 'sleeves 1792',
+			avatar: 'female',
+			category: 'Sleeves',
+			collection: 'paradise-saigon',
+			templateId: '3fe41b29-34da-4afd-a04d-3c06cf0f8cd5',
+			templateName: 'VIETRAVE TEE',
+			templateCategory: 'Top',
+		},
+		{
+			_id: '84496ef1-29a6-491a-8468-e14726a7a4e9',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/paradise-saigon/blocks/Top/VIETRAVE_TEE___Bodice/bodice_1791.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/paradise-saigon/blocks/Top/VIETRAVE_TEE___Bodice/bodice_1791.gltf',
+			blockName: 'bodice 1791',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'paradise-saigon',
+			templateId: '3fe41b29-34da-4afd-a04d-3c06cf0f8cd5',
+			templateName: 'VIETRAVE TEE',
+			templateCategory: 'Top',
+		},
+	],
+
+	'pindiga-ranjith-kumar': [
+		{
+			_id: '6415a671-4458-4611-8b34-5b7b774caddd',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/pindiga-ranjith-kumar/blocks/Dress/Dress_29___Fullbody/fullbody_1795.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/pindiga-ranjith-kumar/blocks/Dress/Dress_29___Fullbody/fullbody_1795.gltf',
+			blockName: 'fullbody 1795',
+			avatar: 'female',
+			category: 'Dress',
+			collection: 'pindiga-ranjith-kumar',
+			templateId: '65ce28c4-62f0-45ca-aa6f-26c213e8ea25',
+			templateName: 'Dress 29',
+			templateCategory: 'Dress',
+		},
+	],
+
+	pradies: [
+		{
+			_id: '8ac7b491-475f-44de-a5e8-f7b190a5fe32',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/pradies/blocks/Pants/PRADIES_-_Hawaii_Halter_Neck_Pants/pants_1805.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/pradies/blocks/Pants/PRADIES_-_Hawaii_Halter_Neck_Pants/pants_1805.gltf',
+			blockName: 'pants 1805',
+			avatar: 'female',
+			category: 'Pants',
+			collection: 'pradies',
+			templateId: '26cec7e9-e9d2-490e-b99a-a204c8d5b51e',
+			templateName: 'PRADIES',
+			templateCategory: 'Pants',
+		},
+		{
+			_id: 'd376d044-b16b-4a7b-84cf-a278c353c749',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/pradies/blocks/Top/PRADIES_-_Hawaii_Halter_Neck_Bodice/bodice_1804.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/pradies/blocks/Top/PRADIES_-_Hawaii_Halter_Neck_Bodice/bodice_1804.gltf',
+			blockName: 'bodice 1804',
+			avatar: 'female',
+			category: 'Bodice',
+			collection: 'pradies',
+			templateId: 'ddef1e53-27f1-4063-8127-a27dc02b7840',
+			templateName: 'PRADIES',
+			templateCategory: 'Top',
+		},
+	],
 }
