@@ -133,6 +133,8 @@ class Store {
 	// Screenshot cache for garment images
 	screenshotCache = new Map<TemplateCategory, string>()
 	remixOverlayTemplate = null as Template | null
+	// Currently selected piece for fabric selection (used for outline highlighting)
+	selectingPiece: string | null = null
 	order = {
 		status: 'idle' as OrderStatus,
 		error: null as string | null,
@@ -300,6 +302,9 @@ class Store {
 	}
 	set setRemixOverlayTemplate(template: Template | null) {
 		this.remixOverlayTemplate = template
+	}
+	set setSelectingPiece(piece: string | null) {
+		this.selectingPiece = piece
 	}
 	set selectSpace(space: Space | null) {
 		batch(() => {

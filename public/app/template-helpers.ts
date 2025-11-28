@@ -43,6 +43,17 @@ class TemplateHelpers {
 		Jumpsuit: ['Sleeves'],
 	}
 
+	private readonly overridingCategoriesMapping: Record<string, TemplateCategory[]> = {
+		Dress: ['Shirt', 'Top', 'Pants', 'Skirt', 'Jumpsuit', 'Jacket'],
+		Top: ['Dress', 'Jacket'],
+		Shirt: ['Dress', 'Jumpsuit', 'Jacket'],
+		Jacket: ['Coat', 'Shirt', 'Top', 'Jumpsuit', 'Dress'],
+		Skirt: ['Pants', 'Dress', 'Jumpsuit'],
+		Pants: ['Skirt', 'Dress'],
+		Coat: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt', 'Jacket'],
+		Jumpsuit: ['Dress', 'Shirt', 'Skirt', 'Jacket'],
+	}
+
 	/**
 	 * Resolve available fabrics scoped to a specific fabric category.
 	 *
@@ -202,18 +213,7 @@ class TemplateHelpers {
 	 * @returns Categories that conflict with the requested category.
 	 */
 	checkOverridingCategories(category: TemplateCategory, selectedTemplates: TemplateMap): TemplateCategory[] {
-		const overridingCategoriesMapping: Record<string, TemplateCategory[]> = {
-			Dress: ['Shirt', 'Top', 'Pants', 'Skirt', 'Jumpsuit', 'Jacket'],
-			Top: ['Dress', 'Jacket'],
-			Shirt: ['Dress', 'Jumpsuit', 'Jacket'],
-			Jacket: ['Coat', 'Shirt', 'Top', 'Jumpsuit', 'Dress'],
-			Skirt: ['Pants', 'Dress', 'Jumpsuit'],
-			Pants: ['Skirt', 'Dress'],
-			Coat: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt', 'Jacket'],
-			Jumpsuit: ['Dress', 'Shirt', 'Skirt', 'Jacket'],
-		}
-
-		const overridingCategories = overridingCategoriesMapping[category] as TemplateCategory[] | undefined
+		const overridingCategories = this.overridingCategoriesMapping[category] as TemplateCategory[] | undefined
 
 		return overridingCategories?.filter(c => selectedTemplates.has(c)) ?? []
 	}

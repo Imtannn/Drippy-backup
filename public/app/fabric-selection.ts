@@ -1,4 +1,4 @@
-import {attribute, booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {attribute, booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
 import type {BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
@@ -16,17 +16,20 @@ export class FabricSelection extends Element {
 	@attribute selectedTemplateCategory: TemplateCategory | null = null
 	@booleanAttribute isRemix = false
 
-	@signal _selectingPiece: string | undefined = undefined
-
 	connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => {
 			void this.selectedTemplateCategory
-			if (!this._selectingPiece && this.pieceSelections.length > 0) {
-				this._selectingPiece = this.pieceSelections[0]
+			if (!store.selectingPiece && this.pieceSelections.length > 0) {
+				store.setSelectingPiece = this.pieceSelections[0]
 			}
 		})
+	}
+
+	disconnectedCallback() {
+		super.disconnectedCallback()
+		store.setSelectingPiece = null
 	}
 
 	#getSelectedFabrics = (): Record<string, Fabric>[] => {
@@ -92,7 +95,7 @@ export class FabricSelection extends Element {
 	}
 
 	#onPieceSelect = (piece: string) => {
-		this._selectingPiece = piece
+		store.setSelectingPiece = piece
 	}
 
 	#isFabricActive = (fabric: Fabric, piece: string) => {
@@ -117,7 +120,7 @@ export class FabricSelection extends Element {
 									class="piece-select-button"
 									onclick=${() => this.#onPieceSelect(pieceFabric.assignedMesh)}
 									data-piece=${() => pieceFabric.assignedMesh}
-									classList=${() => ({active: pieceFabric.assignedMesh === this._selectingPiece})}
+									classList=${() => ({active: pieceFabric.assignedMesh === store.selectingPiece})}
 								>
 									<img src=${() => pieceFabric.thumb} alt=${() => pieceFabric.materialName} />
 								</button>
@@ -129,11 +132,11 @@ export class FabricSelection extends Element {
 
 		<for-each items=${() => this.pieceSelections} content=${() => (piece: string) => html`
 			<show-when
-				condition=${() => piece === this._selectingPiece}
+				condition=${() => piece === store.selectingPiece}
 				content=${() => html`
 					<div class="items-grid">
 						<for-each
-							items=${() => this.availableFabrics[this._selectingPiece || 'default']}
+							items=${() => this.availableFabrics[store.selectingPiece || 'default']}
 							content=${() => (fabric: Fabric) => html`
 								<item-card
 									item-active=${() => this.#isFabricActive(fabric, piece)}
