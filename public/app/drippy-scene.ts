@@ -20,6 +20,7 @@ import * as THREE from 'three'
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
 import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
+import {BloomPass} from 'three/examples/jsm/postprocessing/BloomPass.js'
 import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js'
 import {avatars} from '../consts/avatars.js'
 
@@ -690,7 +691,12 @@ export class DrippyScene extends Element {
 					this.outlinePass.hiddenEdgeColor.set(0x9b59b6)
 					this.composer.addPass(this.outlinePass)
 
+					const bloomPass = new BloomPass(1, 25, 4)
+					bloomPass.setSize(size.x, size.y)
+					this.composer.addPass(bloomPass)
+
 					const outputPass = new OutputPass()
+					outputPass.setSize(size.x, size.y)
 					this.composer.addPass(outputPass)
 
 					// Store original drawScene
@@ -704,7 +710,7 @@ export class DrippyScene extends Element {
 						if (currentSize.x === 0 || currentSize.y === 0) return
 
 						// Only use composer if we have objects to outline AND selectingPiece is set
-						if (store.selectingPiece && this.outlinePass && this.outlinePass.selectedObjects.length > 0) {
+						if (true && store.selectingPiece && this.outlinePass && this.outlinePass.selectedObjects.length > 0) {
 							// Update cameras to current frame's camera
 							const currentCamera = this.lumeScene!.threeCamera!
 							if (renderPass) renderPass.camera = currentCamera
@@ -1005,6 +1011,7 @@ export class DrippyScene extends Element {
 							></lume-animation>
 						</lume-gltf-model>
 
+					<!-- Background scene -->
 					<lume-gltf-model
 						ref=${(el: GltfModel) => (this.backgroundModel = el)}
 						id="scene"
@@ -1016,6 +1023,7 @@ export class DrippyScene extends Element {
 						}}
 					></lume-gltf-model>
 
+					<!-- Background scene extra objects -->
 					<${Index}
 						each=${() => {
 							const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
