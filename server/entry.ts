@@ -221,6 +221,7 @@ const admins = [
 	'thidieuanhle@gmail.com',
 	'kylebruceofficial@gmail.com',
 	'ntthuyen03@gmail.com',
+	'ngoc.huynhtieu1999@gmail.com',
 ]
 
 // Workaround for incorrect function signature in type definition
