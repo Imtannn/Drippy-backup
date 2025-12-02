@@ -54,6 +54,7 @@ import {
 import './app-buttons.js'
 import {store} from './store.js'
 import {textureManager} from './texture-manager.js'
+import {createMutable} from 'solid-js/store'
 
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
@@ -155,7 +156,7 @@ export class DrippyScene extends Element {
 		const blockFabricSignals = untrack(() =>
 			this.fabricTextureSignals[blockId]
 				? this.fabricTextureSignals[blockId]
-				: (this.fabricTextureSignals[blockId] = {}),
+				: ((this.fabricTextureSignals[blockId] = {}), this.fabricTextureSignals[blockId]),
 		)
 
 		const currentSelectedFabrics = createMemo(() => {
@@ -181,37 +182,20 @@ export class DrippyScene extends Element {
 		})
 
 		const isAnyFabricLoading = createMemo(() => {
-			for (const fabric of currentSelectedFabrics().values()) {
-				const textureState = blockFabricSignals[fabric._id]
-				if (textureState?.loading()) return true
-			}
-
-			return false
+			return Object.values(blockFabricSignals).some(signal => signal.loading())
 		})
-
-		// const isAnyFabricLoading = createMemo(() => {
-		// 	return Object.values(blockFabricSignals).some(signal => signal.loading())
-		// })
 
 		// Track aggregate loading state reactively
 		createEffect(() => {
-			if (isAnyFabricLoading()) store.addLoadingMaterial(loadingId)
+			if (!isAnyFabricLoading()) return
+
+			store.addLoadingMaterial(loadingId)
 
 			onCleanup(() => {
 				store.removeLoadingMaterial(loadingId)
 				if (templateId) store.clearLoadingTemplate(templateId)
 			})
 		})
-
-		createEffect(() => {
-			if (isAnyFabricLoading()) console.log('currently loading materials:', store.loadingMaterials)
-			else console.log('no materials loading')
-		})
-
-		// createEffect(() => {
-		// 	if (store.loadingMaterials.size) console.log('currently loading materials:', store.loadingMaterials)
-		// 	else console.log('no materials loading')
-		// })
 
 		// Apply textures reactively as they load
 		createEffect(() => {
