@@ -33,7 +33,7 @@ import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import '../elements/top-navigation.js'
 import {pushState, searchParams} from '../routes.js'
-import {formatNumber} from '../utils.js'
+
 import './app-buttons-preset.js'
 import './app-buttons.js'
 import './avatar-selection.js'
@@ -637,7 +637,7 @@ export class TemplateView extends Element {
 																class="template-product-price"
 																classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
 															>
-																${() => (template.price !== 'N/A' ? formatNumber(Number(template.price)) : 'N/A')}
+																${() => (template.price !== 'N/A' ? 'EU ' + template.price : 'N/A')}
 															</div>
 															<show-when
 																condition=${() => store.selectedSpace?.isWholesale}
@@ -895,6 +895,7 @@ export class TemplateView extends Element {
 			text-overflow: ellipsis;
 			white-space: nowrap;
 			height: 20px;
+			text-align: center;
 		}
 
 		.template-product-price-container {
@@ -911,9 +912,10 @@ export class TemplateView extends Element {
 
 		.template-product-price {
 			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightNormal);
+			font-weight: var(--fontWeightMedium);
 			color: #424347;
-			text-wrap: nowrap;
+			text-align: center;
+			width: 100%;
 		}
 
 		.template-product-price.wholesale {

@@ -11,6 +11,7 @@ import {
 } from 'lume'
 
 import '../elements/placeholder-image.js'
+import {getWishlistHeartIcon} from '../consts/icons.js'
 
 type ItemCardAttributes =
 	| 'itemValue'
@@ -22,12 +23,14 @@ type ItemCardAttributes =
 	| 'objectPosition'
 	| 'aspectRatio'
 	| 'imageStyle'
+	| 'isWhishlist'
 
 @element
 export class ItemCard extends Element {
 	static readonly elementName = 'item-card'
 
 	@booleanAttribute itemActive = false
+	@booleanAttribute isWhishlist = false
 	@stringAttribute itemSrc = ''
 	@stringAttribute itemAlt = ''
 	@attribute itemValue = null
@@ -62,9 +65,17 @@ export class ItemCard extends Element {
 		)
 	}
 
+	#onHeartClick = (e: Event) => {
+		e.stopPropagation() // Prevent triggering card click
+		this.isWhishlist = !this.isWhishlist
+	}
+
 	template = () => html`
 		<div class="item-card" onclick=${this.#onClick} classList=${() => ({active: this.itemActive})}>
 			<div class="item-preview">
+				<button class="wishlist-heart" onclick=${this.#onHeartClick} classList=${() => ({active: this.isWhishlist})}>
+					${getWishlistHeartIcon}
+				</button>
 				<placeholder-image
 					src=${() => this.itemSrc}
 					alt=${() => this.itemAlt}
@@ -130,6 +141,28 @@ export class ItemCard extends Element {
 				object-fit: var(--object-fit);
 				object-position: var(--object-position);
 			}
+		}
+
+		.wishlist-heart {
+			position: absolute;
+			top: 6px;
+			right: 8px;
+			background: none;
+			border: none;
+			cursor: pointer;
+			z-index: 10;
+			padding: 0;
+		}
+
+		.wishlist-heart svg {
+			width: 13px;
+			height: 14px;
+			color: #8c8c8c;
+			transition: color 0.2s ease;
+		}
+
+		.wishlist-heart.active svg {
+			color: #f40000;
 		}
 
 		.item-preview.fabric {
