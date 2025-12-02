@@ -22,7 +22,7 @@ export class BuyButton extends Element {
 			/>
 		</svg>`
 
-	template = () => html` <button class="buy-button">${this.buyIcon()} Buy it!</button> `
+	template = () => html` <button class="buy-button">${this.buyIcon()} Shop it</button> `
 
 	css = css/*css*/ `
 		.buy-button {

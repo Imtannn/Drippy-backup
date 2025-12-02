@@ -33,8 +33,11 @@ export class ControlButtonGroup extends Element {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			gap: 5px;
-			margin: 10px auto;
+			gap: 0;
+			background-color: rgba(18, 19, 22, 0.75);
+			backdrop-filter: blur(50px);
+			border-radius: 9999px;
+			margin: 8px auto;
 		}
 	`
 }
