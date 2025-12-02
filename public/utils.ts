@@ -1022,38 +1022,19 @@ export function createFabricTexture(
 	const [loading, setLoading] = createSignal(false)
 	const [error, setError] = createSignal<Error | null>(null)
 
-	const fabricIdentity = createMemo(() => {
-		const f = fabric()
-		if (!f) return null
-
-		return {
-			id: f._id,
-			baseColor: f.baseColor,
-			normal: f.normal,
-			displacement: f.displacement,
-			roughness: f.roughness,
-			alpha: f.alpha,
-			scaleX: f.scaleX,
-			scaleY: f.scaleY,
-			offsetX: f.offsetX,
-			offsetY: f.offsetY,
-			coef: f.coef,
-			rotate: f.rotate,
-		}
-	})
+	function reset() {
+		setTexture(null)
+		setLoading(false)
+		setError(null)
+	}
 
 	createEffect(() => {
-		const identity = fabricIdentity()
+		const currentFabric = fabric()
 
-		if (!identity) {
-			setTexture(null)
-			setLoading(false)
-			setError(null)
+		if (!currentFabric) {
+			reset()
 			return
 		}
-
-		const currentFabric = fabric()
-		if (!currentFabric) return
 
 		let canceled = false
 		let retryCount = 0
@@ -1090,7 +1071,7 @@ export function createFabricTexture(
 
 		onCleanup(() => {
 			canceled = true
-			setLoading(false)
+			reset()
 
 			const currentTexture = texture()
 			if (currentTexture) {

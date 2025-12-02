@@ -15,7 +15,7 @@ import {
 	signal,
 } from 'lume'
 import type {Accessor} from 'solid-js'
-import {createMemo} from 'solid-js'
+import {createMemo, untrack} from 'solid-js'
 import * as THREE from 'three'
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
@@ -133,7 +133,9 @@ export class DrippyScene extends Element {
 	 * - All texture maps per fabric are bundled in TextureSet (accessed via texture())
 	 * - Easy cleanup when blocks or fabrics are removed
 	 */
-	private fabricTextureSignals = new Map<string, Map<string, ReturnType<typeof createFabricTexture>>>()
+	private fabricTextureSignals: Record<string, Record<string, ReturnType<typeof createFabricTexture>>> = createMutable(
+		{},
+	)
 
 	#applyFabricsWithSignals(
 		el: Element3D,
@@ -147,77 +149,73 @@ export class DrippyScene extends Element {
 
 		// Extract UV data for proper texture scaling
 		const meshes = [...meshesInTree(root)]
-		const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
-			? Array.from(meshes[0].geometry.attributes.uv.array)
-					.slice(0, 5)
-					.map((el: any) => Math.abs(el))
-			: []
+		const uvArray = meshes[0]?.geometry?.attributes?.uv?.array ? Array.from(meshes[0].geometry.attributes.uv.array) : []
 
 		// Get or create signal storage for this block
-		if (!this.fabricTextureSignals.has(blockId)) {
-			this.fabricTextureSignals.set(blockId, new Map())
-		}
-		const blockSignals = this.fabricTextureSignals.get(blockId)!
-		const fabricsSignal = createMemo(() => {
+		const blockFabricSignals = untrack(() =>
+			this.fabricTextureSignals[blockId]
+				? this.fabricTextureSignals[blockId]
+				: (this.fabricTextureSignals[blockId] = {}),
+		)
+
+		const currentSelectedFabrics = createMemo(() => {
 			const templateSelection = store.getTemplateSelection(templateCategory)
 			const blockSelection = templateSelection?.[blockCategory]
 			const fabricsRecord = blockSelection?.fabrics ?? {}
-			return new Map(Object.entries(fabricsRecord)) as PieceFabricsMap
+			return new Map(Object.entries(fabricsRecord).map(([_, o]) => [_, Object.freeze({...o})])) as PieceFabricsMap
 		})
 
 		// Reactively manage fabric texture signals
 		createEffect(() => {
-			const currentFabrics = fabricsSignal()
-			const currentFabricIds = new Set<string>()
+			const currentFabrics = currentSelectedFabrics()
 
 			// Create signals for new fabrics
 			for (const fabric of currentFabrics.values()) {
-				currentFabricIds.add(fabric._id)
-				if (!blockSignals.has(fabric._id)) {
-					const textureState = createFabricTexture(() => fabric, uvArray)
-					blockSignals.set(fabric._id, textureState)
-				}
+				const textureState = createFabricTexture(() => fabric, uvArray)
+				blockFabricSignals[fabric._id] = textureState
 			}
 
-			// Clean up signals for removed fabrics
-			for (const [fabricId] of blockSignals) {
-				if (!currentFabricIds.has(fabricId)) {
-					blockSignals.delete(fabricId)
-				}
-			}
+			onCleanup(() => {
+				for (const key in blockFabricSignals) delete blockFabricSignals[key]
+			})
 		})
+
+		const isAnyFabricLoading = createMemo(() => {
+			for (const fabric of currentSelectedFabrics().values()) {
+				const textureState = blockFabricSignals[fabric._id]
+				if (textureState?.loading()) return true
+			}
+
+			return false
+		})
+
+		// const isAnyFabricLoading = createMemo(() => {
+		// 	return Object.values(blockFabricSignals).some(signal => signal.loading())
+		// })
 
 		// Track aggregate loading state reactively
 		createEffect(() => {
-			const currentFabrics = fabricsSignal()
-			const activeSignals = [...currentFabrics.values()]
-				.map(f => blockSignals.get(f._id))
-				.filter((s): s is NonNullable<typeof s> => !!s)
+			if (isAnyFabricLoading()) store.addLoadingMaterial(loadingId)
 
-			if (activeSignals.length === 0) {
+			onCleanup(() => {
 				store.removeLoadingMaterial(loadingId)
-				if (templateId) {
-					store.clearLoadingTemplate(templateId)
-				}
-				return
-			}
-
-			// Check if ANY signal is loading
-			const isAnyLoading = activeSignals.some(signal => signal.loading())
-
-			if (isAnyLoading) {
-				store.addLoadingMaterial(loadingId)
-			} else {
-				store.removeLoadingMaterial(loadingId)
-				if (templateId) {
-					store.clearLoadingTemplate(templateId)
-				}
-			}
+				if (templateId) store.clearLoadingTemplate(templateId)
+			})
 		})
+
+		createEffect(() => {
+			if (isAnyFabricLoading()) console.log('currently loading materials:', store.loadingMaterials)
+			else console.log('no materials loading')
+		})
+
+		// createEffect(() => {
+		// 	if (store.loadingMaterials.size) console.log('currently loading materials:', store.loadingMaterials)
+		// 	else console.log('no materials loading')
+		// })
 
 		// Apply textures reactively as they load
 		createEffect(() => {
-			const currentFabrics = fabricsSignal()
+			const currentFabrics = currentSelectedFabrics()
 
 			// Create a map for mesh to meshes key
 			const meshToFabricMeshesMap = new Map<string, string>()
@@ -237,7 +235,7 @@ export class DrippyScene extends Element {
 				const fabricToUse = currentFabrics.get(meshesKey || 'default')
 
 				if (fabricToUse) {
-					const textureState = blockSignals.get(fabricToUse._id)
+					const textureState = blockFabricSignals[fabricToUse._id]
 					if (textureState) {
 						const textureSet = textureState.texture()
 						const isLoading = textureState.loading()
@@ -257,12 +255,12 @@ export class DrippyScene extends Element {
 		const cleanup = () => {
 			store.removeLoadingMaterial(loadingId)
 			if (!el.isConnected) {
-				this.fabricTextureSignals.delete(blockId)
+				delete this.fabricTextureSignals[blockId]
 				this.#resetMaterialsToDefault(el)
 			}
 		}
+
 		onCleanup(cleanup)
-		return cleanup
 	}
 
 	// Reset materials to default state (no textures)
@@ -612,15 +610,7 @@ export class DrippyScene extends Element {
 						const fabricsRecord = store.getTemplateSelection(templateCategory)?.[blockCategory]?.fabrics
 						void fabricsRecord
 
-						const cleanup = this.#applyFabricsWithSignals(
-							el,
-							loadingId!,
-							template?._id,
-							templateCategory,
-							blockCategory,
-						)
-
-						onCleanup(cleanup)
+						this.#applyFabricsWithSignals(el, loadingId!, template?._id, templateCategory, blockCategory)
 					})
 				}
 			})
