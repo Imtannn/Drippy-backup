@@ -70,12 +70,25 @@ export class ItemCard extends Element {
 		this.isWhishlist = !this.isWhishlist
 	}
 
+	get #shouldShowWishlist() {
+		return this.hasAttribute('is-whishlist')
+	}
+
 	template = () => html`
 		<div class="item-card" onclick=${this.#onClick} classList=${() => ({active: this.itemActive})}>
 			<div class="item-preview">
-				<button class="wishlist-heart" onclick=${this.#onHeartClick} classList=${() => ({active: this.isWhishlist})}>
-					${getWishlistHeartIcon}
-				</button>
+				${() =>
+					this.#shouldShowWishlist
+						? html`
+								<button
+									class="wishlist-heart"
+									onclick=${this.#onHeartClick}
+									classList=${() => ({active: this.isWhishlist})}
+								>
+									${getWishlistHeartIcon}
+								</button>
+							`
+						: null}
 				<placeholder-image
 					src=${() => this.itemSrc}
 					alt=${() => this.itemAlt}
@@ -150,7 +163,7 @@ export class ItemCard extends Element {
 			background: none;
 			border: none;
 			cursor: pointer;
-			z-index: 10;
+			z-index: 4;
 			padding: 0;
 		}
 

@@ -610,6 +610,7 @@ export class TemplateView extends Element {
 																object-fit="contain"
 																object-position="center"
 																aspect-ratio="0.79"
+																is-whishlist
 															></item-card>
 															<show-when
 																condition=${() =>
