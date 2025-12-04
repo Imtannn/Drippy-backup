@@ -19,12 +19,12 @@ import type {Accessor} from 'solid-js'
 import {createMemo, untrack} from 'solid-js'
 import * as THREE from 'three'
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js'
-import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
 import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
-import {BloomPass} from 'three/examples/jsm/postprocessing/BloomPass.js'
 import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js'
+import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
 import {avatars} from '../consts/avatars.js'
 
+import {createMutable} from 'solid-js/store'
 import {backgroundScenes} from '../consts/scenes.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/logic/show-when.js'
@@ -55,7 +55,6 @@ import {
 import './app-buttons.js'
 import {store} from './store.js'
 import {textureManager} from './texture-manager.js'
-import {createMutable} from 'solid-js/store'
 
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
@@ -680,12 +679,7 @@ export class DrippyScene extends Element {
 					this.outlinePass.hiddenEdgeColor.set(0x9b59b6)
 					this.composer.addPass(this.outlinePass)
 
-					const bloomPass = new BloomPass(1, 25, 4)
-					bloomPass.setSize(size.x, size.y)
-					this.composer.addPass(bloomPass)
-
 					const outputPass = new OutputPass()
-					outputPass.setSize(size.x, size.y)
 					this.composer.addPass(outputPass)
 
 					// Store original drawScene
