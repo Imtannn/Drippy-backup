@@ -164,11 +164,9 @@ export class RemixOverlay extends Element {
 			} else {
 				const defaultFabrics = fabrics['default']
 				this.availableFabrics =
-					templateHelpers.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || []
+					templateHelpers.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
 				this.availableFabrics['default'] = [...this.availableFabrics['default'], ...defaultFabrics]
 			}
-
-			console.log('availableFabrics', this.availableFabrics)
 
 			// Make sure the overlay is scrolled to the top on opening
 			this.shadowRoot?.querySelector('.scroll-content')?.scrollIntoView({behavior: 'instant', block: 'end'})
