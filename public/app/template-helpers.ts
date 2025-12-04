@@ -219,6 +219,25 @@ class TemplateHelpers {
 	}
 
 	/**
+	 * Get all categories that override a given category.
+	 * This is the inverse lookup of overridingCategoriesMapping.
+	 *
+	 * @param category - The category to check what overrides it.
+	 * @returns Array of categories that override the given category.
+	 */
+	getCategoriesThatOverride(category: TemplateCategory): TemplateCategory[] {
+		const result: TemplateCategory[] = []
+
+		for (const [overrider, overridden] of Object.entries(this.overridingCategoriesMapping)) {
+			if (overridden.includes(category)) {
+				result.push(overrider as TemplateCategory)
+			}
+		}
+
+		return result
+	}
+
+	/**
 	 * Convert template to block data used by downstream selection flows.
 	 *
 	 * @param selectedTemplate - Template the user picked.
