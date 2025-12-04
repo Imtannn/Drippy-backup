@@ -433,13 +433,19 @@ class TemplateHelpers {
 		const availableFabrics: Record<string, Fabric[]> = {}
 
 		const defaultFabric = fabrics[collection]?.find(fabric => fabric._id === template.materialId)
-
-		availableFabrics['default'] = this.#getFabricsByFabricCategory(defaultFabric?.category, collection)
+		const defaultFabrics = fabrics['default']
+		availableFabrics['default'] = [
+			...this.#getFabricsByFabricCategory(defaultFabric?.category, collection),
+			...defaultFabrics,
+		]
 
 		if (template.extraMaterials && template.extraMaterials.length > 0) {
 			for (const extraMaterial of template.extraMaterials) {
 				const extraFabric = fabrics[collection]?.find(fabric => fabric._id === extraMaterial.materialId)
-				availableFabrics[extraMaterial.mesh] = this.#getFabricsByFabricCategory(extraFabric?.category, collection)
+				availableFabrics[extraMaterial.mesh] = [
+					...this.#getFabricsByFabricCategory(extraFabric?.category, collection),
+					...defaultFabrics,
+				]
 			}
 		}
 
