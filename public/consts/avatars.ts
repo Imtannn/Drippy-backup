@@ -76,23 +76,20 @@ export const avatars: Avatar[] = [
 		gender: 'male',
 	},
 	{
-		thumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/Avatar/Yuna-Apose.png',
+		thumbnail: 'ttps://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar/Yuna-Apose.png',
 		src: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar/Yuna-a-pose.glb',
 
 		gender: 'female',
 		name: 'yuna-a-pose',
 	},
 	{
-		thumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/Avatar/Naomi-Apose.png',
+		thumbnail: 'ttps://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar/Naomi-Apose.png',
 		src: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar/Naomi-a-pose.glb',
 		gender: 'female',
 		name: 'naomi-a-pose',
 	},
 	{
-		thumbnail:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/Avatar/Mia-Apose.png',
+		thumbnail: 'ttps://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar/Mia-Apose.png',
 		src: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar/MIA-a-pose.glb',
 		gender: 'female',
 		name: 'mia-a-pose',
