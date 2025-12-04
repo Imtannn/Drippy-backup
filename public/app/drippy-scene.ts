@@ -1,6 +1,5 @@
 import {
 	attribute,
-	CameraRig,
 	clamp,
 	createEffect,
 	css,
@@ -90,7 +89,6 @@ export class DrippyScene extends Element {
 	@signal private cameraY = -1
 	@signal private cameraRigInteractive = true
 	@signal private isVerticalPan = false
-	@signal private cameraRig: CameraRig | null = null
 
 	// Post-processing for outline effect
 	private composer: EffectComposer | null = null
@@ -328,19 +326,6 @@ export class DrippyScene extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
-
-		// Reset camera to default when space changes
-		this.createEffect(() => {
-			const space = this.selectedSpace
-			if (!space || !this.cameraRig) return
-
-			this.cameraRig.distance = isDesktop() ? 2.5 : 4
-			this.cameraRig.verticalAngle = 0
-			this.cameraRig.horizontalAngle = 0
-			this.cameraY = -1
-
-			this.cameraRig.needsUpdate()
-		})
 
 		this.createEffect(() => {
 			const {avatarModel, backgroundModel} = this
@@ -959,7 +944,6 @@ export class DrippyScene extends Element {
 						</lume-spot-light>
 
 						<lume-camera-rig
-							ref=${(el: CameraRig) => (this.cameraRig = el)}
 							min-distance="0.5"
 							max-distance="${() => (isDesktop() ? 30 : 50)}"
 							distance="${() => (isDesktop() ? 2.5 : 4)}"
