@@ -1,13 +1,14 @@
-import {booleanAttribute, element, Element, html, type ElementAttributes} from 'lume'
+import {attribute, booleanAttribute, element, Element, html, type ElementAttributes} from 'lume'
 import './icon-button.js'
 
-type RedoButtonAttributes = 'disabled'
+type RedoButtonAttributes = 'disabled' | 'group'
 
 @element
 export class RedoButton extends Element {
 	static readonly elementName = 'redo-button'
 
 	@booleanAttribute disabled = false
+	@attribute group: string | null = null
 
 	icon = () => html`
 		<svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +21,7 @@ export class RedoButton extends Element {
 		</svg>
 	`
 
-	template = () => html`<icon-button disabled=${() => this.disabled}>${() => this.icon()}</icon-button>`
+	template = () => html`<icon-button disabled=${() => this.disabled} group=${() => this.group}>${() => this.icon()}</icon-button>`
 }
 
 declare module 'solid-js' {

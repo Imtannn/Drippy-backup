@@ -64,6 +64,8 @@ export class DrippyApp extends Element {
 				console.error('Error loading app', error)
 			} finally {
 				this.appLoaded = true
+				// Mark URL params as loaded so default garments can apply after user interactions
+				store.urlParamsLoaded = true
 			}
 		})
 
@@ -183,10 +185,8 @@ export class DrippyApp extends Element {
 				templatesWithExplicitBlocks.add(templateCategory)
 
 				const hintFromBlock = block.collection ?? collectionSlug ?? null
-				const existingTemplate = aggregatedTemplates.get(templateCategory)
-				if (existingTemplate) {
-					rememberTemplate(existingTemplate, hintFromBlock ?? existingTemplate.collection ?? null)
-				} else if (block.templateId) {
+				// Always update template from block's templateId to ensure UI selection matches rendered blocks
+				if (block.templateId) {
 					const templateForBlock = templateHelpers.findTemplateById(block.templateId, hintFromBlock)
 					if (templateForBlock) {
 						rememberTemplate(templateForBlock, hintFromBlock ?? templateForBlock.collection ?? null)

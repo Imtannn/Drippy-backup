@@ -34,6 +34,7 @@ export const spaces: Space[] = [
 		collections: ['the-soul'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: 'Emwear',
@@ -47,6 +48,7 @@ export const spaces: Space[] = [
 		collections: ['emwear'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: 'Duality in Radiance',
@@ -60,6 +62,7 @@ export const spaces: Space[] = [
 		collections: ['duality-in-radiance'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: 'Metamorphosis',
@@ -86,6 +89,7 @@ export const spaces: Space[] = [
 		collections: ['zove'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: 'Movement',
@@ -99,6 +103,7 @@ export const spaces: Space[] = [
 		collections: ['movement'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: 'Essence of her',
@@ -112,6 +117,7 @@ export const spaces: Space[] = [
 		collections: ['essence-of-her'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: 'Shadow Grace',
@@ -125,6 +131,7 @@ export const spaces: Space[] = [
 		collections: ['shadow-grace'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: '9heure19heure',
@@ -138,6 +145,7 @@ export const spaces: Space[] = [
 		collections: ['9heure19heure'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: 'Fige dans le temps',
@@ -151,6 +159,7 @@ export const spaces: Space[] = [
 		collections: ['fige-dans-le-temps'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: 'Imzad-Man',
@@ -165,6 +174,7 @@ export const spaces: Space[] = [
 		isWholesale: false,
 		isWorkInProgress: false,
 		viewOnly: true,
+		isHidden: true,
 	},
 	{
 		name: 'Imzad-Woman',
@@ -179,6 +189,7 @@ export const spaces: Space[] = [
 		isWholesale: false,
 		isWorkInProgress: false,
 		viewOnly: true,
+		isHidden: true,
 	},
 	{
 		name: 'One Thousand Poets',
@@ -192,6 +203,7 @@ export const spaces: Space[] = [
 		collections: ['one-thousand-poets'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: 'Ja Seng Bu',
@@ -205,6 +217,7 @@ export const spaces: Space[] = [
 		collections: ['ja-seng-bu'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: 'Mss Park',
@@ -218,6 +231,7 @@ export const spaces: Space[] = [
 		collections: ['mss-park'],
 		isWholesale: false,
 		isWorkInProgress: false,
+		isHidden: true,
 	},
 	{
 		name: 'CHANGES',

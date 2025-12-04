@@ -1,12 +1,13 @@
-import {booleanAttribute, css, element, Element, eventAttribute, html, type ElementAttributes} from 'lume'
+import {attribute, booleanAttribute, css, element, Element, eventAttribute, html, type ElementAttributes} from 'lume'
 
-type IconButtonAttributes = 'disabled' | 'onclick'
+type IconButtonAttributes = 'disabled' | 'onclick' | 'group'
 
 @element
 export class IconButton extends Element {
 	static readonly elementName = 'icon-button'
 
 	@booleanAttribute disabled = false
+	@attribute group: string | null = null
 
 	@eventAttribute onclick = null
 
@@ -15,7 +16,12 @@ export class IconButton extends Element {
 	}
 
 	template = () => html`
-		<button class="icon-button" disabled=${() => this.disabled} onclick=${this.#onClick}>
+		<button
+			class="icon-button"
+			disabled=${() => this.disabled}
+			onclick=${this.#onClick}
+			classList=${() => ({group: this.group != null})}
+		>
 			<div class="icon-button-icon"><slot></slot></div>
 		</button>
 	`
@@ -23,7 +29,7 @@ export class IconButton extends Element {
 	css = css/*css*/ `
 		.icon-button {
 			border-radius: 9999px;
-			background-color: #12131680;
+			background-color: rgba(18, 19, 22, 0.75);
 			backdrop-filter: blur(50px);
 			padding: 0.5rem 0.75rem;
 			width: 2rem;
@@ -40,6 +46,10 @@ export class IconButton extends Element {
 		}
 
 		/* When inside control-button-group, remove individual background */
+		.icon-button.group {
+			background-color: unset;
+			backdrop-filter: unset;
+		}
 
 		.icon-button:disabled {
 			opacity: 0.5;

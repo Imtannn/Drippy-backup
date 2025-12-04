@@ -168,8 +168,6 @@ class TextureManager {
 			repeatX *= cachedTexture.aspectRatio
 		}
 
-		console.log('configureTexture for', cachedTexture.texture.image.src, {repeatX, repeatY})
-
 		texture.repeat.set(repeatX, repeatY)
 
 		return texture
@@ -233,8 +231,6 @@ class TextureManager {
 			this.getTexture(fabric.roughness || '', config),
 			this.getTexture(fabric.alpha || '', config),
 		])
-
-		console.log('texture set for', fabric.materialName, {baseColor, normal, displacement, roughness, alpha})
 
 		return {
 			baseColor: baseColor || undefined,

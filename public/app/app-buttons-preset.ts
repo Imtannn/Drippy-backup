@@ -229,9 +229,9 @@ export class AppButtonsPreset extends Element {
 							<app-buttons-group>
 								${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
 								<control-button-group>
-									<undo-button></undo-button>
-									<redo-button></redo-button>
-									<reload-button></reload-button>
+									<undo-button group></undo-button>
+									<redo-button group></redo-button>
+									<reload-button group></reload-button>
 								</control-button-group>
 								${() =>
 									config.tools &&
@@ -252,9 +252,9 @@ export class AppButtonsPreset extends Element {
 							<app-buttons-group>
 								${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
 								<control-button-group>
-									<undo-button></undo-button>
-									<redo-button></redo-button>
-									<reload-button></reload-button>
+									<undo-button group></undo-button>
+									<redo-button group></redo-button>
+									<reload-button group></reload-button>
 								</control-button-group>
 								${() =>
 									config.tools &&

@@ -219,6 +219,25 @@ class TemplateHelpers {
 	}
 
 	/**
+	 * Get all categories that override a given category.
+	 * This is the inverse lookup of overridingCategoriesMapping.
+	 *
+	 * @param category - The category to check what overrides it.
+	 * @returns Array of categories that override the given category.
+	 */
+	getCategoriesThatOverride(category: TemplateCategory): TemplateCategory[] {
+		const result: TemplateCategory[] = []
+
+		for (const [overrider, overridden] of Object.entries(this.overridingCategoriesMapping)) {
+			if (overridden.includes(category)) {
+				result.push(overrider as TemplateCategory)
+			}
+		}
+
+		return result
+	}
+
+	/**
 	 * Convert template to block data used by downstream selection flows.
 	 *
 	 * @param selectedTemplate - Template the user picked.
@@ -433,13 +452,19 @@ class TemplateHelpers {
 		const availableFabrics: Record<string, Fabric[]> = {}
 
 		const defaultFabric = fabrics[collection]?.find(fabric => fabric._id === template.materialId)
-
-		availableFabrics['default'] = this.#getFabricsByFabricCategory(defaultFabric?.category, collection)
+		const defaultFabrics = fabrics['default']
+		availableFabrics['default'] = [
+			...this.#getFabricsByFabricCategory(defaultFabric?.category, collection),
+			...defaultFabrics,
+		]
 
 		if (template.extraMaterials && template.extraMaterials.length > 0) {
 			for (const extraMaterial of template.extraMaterials) {
 				const extraFabric = fabrics[collection]?.find(fabric => fabric._id === extraMaterial.materialId)
-				availableFabrics[extraMaterial.mesh] = this.#getFabricsByFabricCategory(extraFabric?.category, collection)
+				availableFabrics[extraMaterial.mesh] = [
+					...this.#getFabricsByFabricCategory(extraFabric?.category, collection),
+					...defaultFabrics,
+				]
 			}
 		}
 

@@ -51,8 +51,7 @@ export const backgroundScenes: BackgroundScene[] = [
 		description: 'OOFYA',
 		env: '/images/envs/brown_photostudio_02.jpg',
 		sceneThumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SCENE.webp',
-		scene:
-			'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/oofya/OOFYA+SCENE-light+(3).glb',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+SCENE-light1.glb',
 		includedModelFiles: [
 			// 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SHOES.glb',
 		],

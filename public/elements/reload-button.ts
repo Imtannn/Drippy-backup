@@ -1,16 +1,18 @@
-import {element, Element, html, type ElementAttributes} from 'lume'
+import {attribute, element, Element, html, type ElementAttributes} from 'lume'
 import './icon-button.js'
 
-type ReloadButtonAttributes = keyof {}
+type ReloadButtonAttributes = 'group'
 
 @element
 export class ReloadButton extends Element {
 	static readonly elementName = 'reload-button'
 
+	@attribute group: string | null = null
+
 	#onClick = () => {}
 
 	template = () =>
-		html`<icon-button onclick=${this.#onClick}>
+		html`<icon-button onclick=${this.#onClick} group=${() => this.group}>
 			<img src="/images/controls-buttons/reload-icon.svg" alt="Reload" />
 		</icon-button>`
 }
