@@ -548,30 +548,6 @@ export class TemplateView extends Element {
 						default-value=${() => this.selectedTab}
 						ontabchange=${(e: CustomEvent) => (this.selectedTab = e.detail.value)}
 					>
-						<show-on-device device="mobile">
-							<show-when
-								condition=${() => spaceHasMultipleCollections(store.selectedSpace)}
-								content=${() => html`
-									<div class="collections-mobile-navigation">
-										<div class="collections-scroll-container">
-											<for-each
-												items=${() =>
-													getSpaceCollections(store.selectedSpace).map(c => getCollectionBySlug(collections, c))}
-												content=${() => (collection: Collection) => html`
-													<button
-														class="collection-logo-button"
-														classList=${() => ({active: store.getEffectiveCollection() === collection.slug})}
-														onclick=${() => this.#onCollectionSelect(collection)}
-													>
-														<img src=${collection.logo} alt=${collection.name} />
-													</button>
-												`}
-											></for-each>
-										</div>
-									</div>
-								`}
-							></show-when>
-						</show-on-device>
 						<bottom-sheet-header>
 							<div class="tabs-container">
 								<div class="tabs-action-buttons">
@@ -588,6 +564,30 @@ export class TemplateView extends Element {
 								</tabs-list>
 							</div>
 						</bottom-sheet-header>
+						<show-on-device device="mobile">
+							<show-when
+								condition=${() => spaceHasMultipleCollections(store.selectedSpace)}
+								content=${() => html`
+									<div class="collections-mobile-navigation">
+										<div class="collections-scroll-container">
+											<for-each
+												items=${() =>
+													getSpaceCollections(store.selectedSpace).map(c => getCollectionBySlug(collections, c))}
+												content=${() => (collection: Collection) => html`
+													<button
+														class="collection-logo-button"
+														classList=${() => ({active: store.getEffectiveCollection() === collection.slug})}
+														onclick=${() => this.#onCollectionSelect(collection)}
+													>
+														<img src=${collection.logo || '/images/drippy-logo.webp'} alt=${collection.name} />
+													</button>
+												`}
+											></for-each>
+										</div>
+									</div>
+								`}
+							></show-when>
+						</show-on-device>
 
 						<div class="tabs-content-container">
 							<for-each
@@ -797,7 +797,7 @@ export class TemplateView extends Element {
 				display: flex;
 				align-items: center;
 				background: var(--uiColorPrimaryWhite);
-				z-index: 11;
+				z-index: 1000;
 				width: 100%;
 				min-height: 52px;
 			}
@@ -834,6 +834,20 @@ export class TemplateView extends Element {
 			padding-bottom: var(--uiSpacingSmall);
 			background: var(--uiColorPrimaryWhite);
 			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
+		}
+
+		/* Remove tab-container boder-bottom on mobile and add bottom border to collections-mobile-navigation */
+		@media (max-width: 768px) {
+			.tabs-container {
+				border-bottom: none;
+				padding-top: var(--uiSpacingSmall);
+				padding-bottom: var(--uiSpacingMedium);
+			}
+
+			.collections-mobile-navigation {
+				padding: 0 var(--uiSpacing) var(--uiSpacingSmall) !important;
+				border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
+			}
 		}
 
 		.tabs-action-buttons {
@@ -1072,7 +1086,7 @@ export class TemplateView extends Element {
 			align-items: center;
 			justify-content: center;
 			overflow: hidden;
-			border: 2px solid var(--uiColorPrimaryBlack);
+			border: 1px solid #e9e9ea;
 			padding: 0;
 		}
 

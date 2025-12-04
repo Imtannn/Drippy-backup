@@ -147,22 +147,25 @@ export class RemixOverlay extends Element {
 						return fabrics[collection]?.find(fabric => fabric._id === materialId)
 					})
 					.filter(fabric => fabric !== undefined) as Fabric[]
+				const defaultFabrics = fabrics['default']
 
 				if (optionFabrics.length > 0) {
-					availableFabrics['default'] = optionFabrics
+					availableFabrics['default'] = [...optionFabrics, ...defaultFabrics]
 				}
 
 				// Handle extraMaterials if they exist - use optionFabrics directly
 				if (this.selectedTemplate.extraMaterials && this.selectedTemplate.extraMaterials.length > 0) {
 					for (const extraMaterial of this.selectedTemplate.extraMaterials) {
-						availableFabrics[extraMaterial.mesh] = optionFabrics
+						availableFabrics[extraMaterial.mesh] = [...optionFabrics, ...defaultFabrics]
 					}
 				}
 
 				this.availableFabrics = availableFabrics
 			} else {
+				const defaultFabrics = fabrics['default']
 				this.availableFabrics =
 					templateHelpers.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
+				this.availableFabrics['default'] = [...this.availableFabrics['default'], ...defaultFabrics]
 			}
 
 			// Make sure the overlay is scrolled to the top on opening
