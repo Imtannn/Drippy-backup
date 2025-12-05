@@ -112,9 +112,10 @@ class Store {
 
 	// Loading states tracked by unique symbols
 	drippySceneLoads = new Set<symbol>()
-	loadingBlocks = new Set<symbol>()
+	loadingBlocks: Record<string, number> = {}
 	loadingMaterials = new Set<symbol>()
 	loadingScreenshots = new Set<TemplateCategory>()
+	loadingFabricIds = new Set<string>()
 	loadingTemplateId: string | null = null
 	currentAbortController: AbortController | null = null
 
@@ -631,23 +632,34 @@ class Store {
 		})
 	}
 
-	addLoadingBlock(key: symbol) {
+	addLoadingBlock(blockId: string) {
+		if (!blockId) return
 		untrack(() => {
-			this.loadingBlocks.add(key)
-			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+			const currentCount = this.loadingBlocks[blockId] ?? 0
+			this.loadingBlocks = {...this.loadingBlocks, [blockId]: currentCount + 1}
 		})
 	}
-	removeLoadingBlock(key: symbol) {
+	removeLoadingBlock(blockId: string) {
+		if (!blockId) return
 		untrack(() => {
-			this.loadingBlocks.delete(key)
-			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+			const currentCount = this.loadingBlocks[blockId]
+			if (!currentCount) return
+			if (currentCount === 1) {
+				const {[blockId]: _, ...rest} = this.loadingBlocks
+				this.loadingBlocks = rest
+			} else {
+				this.loadingBlocks = {...this.loadingBlocks, [blockId]: currentCount - 1}
+			}
 		})
 	}
 	clearLoadingBlocks() {
 		untrack(() => {
-			this.loadingBlocks.clear()
-			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+			this.loadingBlocks = {}
 		})
+	}
+
+	isBlockLoading(blockId: string): boolean {
+		return Boolean(blockId && blockId in this.loadingBlocks)
 	}
 
 	addLoadingMaterial(key: symbol) {
@@ -667,6 +679,29 @@ class Store {
 			this.loadingMaterials.clear()
 			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
 		})
+	}
+
+	addLoadingFabric(fabricId: string) {
+		untrack(() => {
+			this.loadingFabricIds.add(fabricId)
+			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
+		})
+	}
+	removeLoadingFabric(fabricId: string) {
+		untrack(() => {
+			this.loadingFabricIds.delete(fabricId)
+			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
+		})
+	}
+	clearLoadingFabrics() {
+		untrack(() => {
+			this.loadingFabricIds.clear()
+			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
+		})
+	}
+
+	isFabricLoading(fabricId: string): boolean {
+		return this.loadingFabricIds.has(fabricId)
 	}
 
 	addLoadingScreenshot(category: TemplateCategory) {
@@ -714,6 +749,7 @@ class Store {
 	clearAllLoadingStates() {
 		this.clearLoadingBlocks()
 		this.clearLoadingMaterials()
+		this.clearLoadingFabrics()
 		this.clearLoadingScreenshots()
 		this.clearIsDrippySceneLoading()
 		this.loadingTemplateId = null
@@ -728,12 +764,10 @@ class Store {
 
 		createEffect(() => {
 			if (!modelLoaded()) {
-				this.addLoadingBlock(id)
 				this.addIsDrippySceneLoading(id)
 			}
 
 			onCleanup(() => {
-				this.removeLoadingBlock(id)
 				this.removeIsDrippySceneLoading(id)
 			})
 		})

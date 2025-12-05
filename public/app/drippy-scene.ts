@@ -175,6 +175,20 @@ export class DrippyScene extends Element {
 			for (const fabric of currentFabrics.values()) {
 				const textureState = createFabricTexture(() => fabric, uvArray)
 				blockFabricSignals[fabric._id] = textureState
+
+				// Track loading state per fabric ID
+				createEffect(() => {
+					const isLoading = textureState.loading()
+					if (isLoading) {
+						store.addLoadingFabric(fabric._id)
+					} else {
+						store.removeLoadingFabric(fabric._id)
+					}
+
+					onCleanup(() => {
+						store.removeLoadingFabric(fabric._id)
+					})
+				})
 			}
 
 			onCleanup(() => {
@@ -505,18 +519,29 @@ export class DrippyScene extends Element {
 				progressTimeouts.forEach(timeoutId => clearTimeout(timeoutId))
 			})
 
-			// Track block loading state
+			// Track block loading state - use WeakSet to track by element, not by ID
+			const trackedElements = new WeakSet<Element>()
+
 			createEffect(() => {
 				for (const [index, el] of garmentModels().entries()) {
-					// Use element ID + index for more stable identification
-					const elementId = el.getAttribute('id') || `unknown-${index}`
-					const blockId = Symbol(`block-${elementId}-${index}`)
-					const modelLoaded = onModelLoad(el)
+					// Only create effect once per element instance
+					if (!trackedElements.has(el)) {
+						trackedElements.add(el)
+						const blockId = el.getAttribute('data-block-id') || el.getAttribute('id') || `unknown-${index}`
+						const modelLoaded = onModelLoad(el)
 
-					createEffect(() => {
-						if (!modelLoaded()) store.addLoadingBlock(blockId)
-						onCleanup(() => store.removeLoadingBlock(blockId))
-					})
+						createEffect(() => {
+							if (!modelLoaded()) {
+								store.addLoadingBlock(blockId)
+							} else {
+								store.removeLoadingBlock(blockId)
+							}
+
+							onCleanup(() => {
+								store.removeLoadingBlock(blockId)
+							})
+						})
+					}
 
 					disableFrustumCulledOnLoad(el)
 				}
@@ -978,6 +1003,7 @@ export class DrippyScene extends Element {
 												})
 											}}
 											id=${item.id}
+											attr:data-block-id=${() => item.block._id}
 											data-index=${index()}
 											data-cloth
 											attr:src=${item.block.modelFile}
