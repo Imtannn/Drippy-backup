@@ -54,6 +54,7 @@ import {
 import './app-buttons.js'
 import {store} from './store.js'
 import {textureManager} from './texture-manager.js'
+import {AvatarSkeleton} from './avatar-skeleton.js'
 
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
@@ -75,6 +76,7 @@ export class DrippyScene extends Element {
 
 	@signal private backgroundModel: GltfModel | null = null
 	@signal private avatarModel: GltfModel | null = null
+	private avatarSkeleton = new AvatarSkeleton()
 	@signal private lumeScene: Scene | null = null
 
 	// When `false`, disable animations and rigging.
@@ -280,6 +282,7 @@ export class DrippyScene extends Element {
 		el.needsUpdate()
 	}
 
+	// TODO Move to `lume-block`
 	/**
 	 * Checks if the model is rigged, if so, sets the skeleton to the avatar's.
 	 * @param model
@@ -288,10 +291,23 @@ export class DrippyScene extends Element {
 		if (!this.avatarModel) return
 
 		const sourceSkeleton = getArmatureObject(this.avatarModel.three)?.skeleton
+		if (!sourceSkeleton) return
 
 		model.three.traverse((obj: any) => {
 			if (obj.skeleton) obj.skeleton = sourceSkeleton
 		})
+	}
+
+	// TODO Move to `lume-block`
+	/**
+	 * Checks if the block is an accessory, and if so, creates an appropriate bone target.
+	 * @param block
+	 * @param obj
+	 */
+	#checkAccessory(block: RenderBlock, obj: THREE.Object3D) {
+		if (block.block.category !== 'Accessory') return
+
+		this.avatarSkeleton.createBoneTarget(obj, 'Left_HandIndex_Tip')
 	}
 
 	#handlePointerDown = (e: PointerEvent) => {
@@ -427,8 +443,6 @@ export class DrippyScene extends Element {
 
 				store.showAnimationSelect = !!getArmatureObject(avatarModel.three)
 			})
-
-			
 
 			// Track background scene loading state (only if a scene is given)
 			const sceneId = Symbol('scene')
@@ -981,7 +995,7 @@ export class DrippyScene extends Element {
 
 						<lume-gltf-model
 							id="avatar"
-							ref=${(el: GltfModel) => ((this.avatarModel = el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env), showSkeletonHelper(el, () => true))}
+							ref=${(el: GltfModel) => ((this.avatarModel = el), this.avatarSkeleton.setAvatar(el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env), showSkeletonHelper(el, () => true))}
 							attr:src=${() => avatars.find(avatar => avatar.name === this.selectedAvatar)?.src ?? ''}
 							scale="1 1 1"
 							data-avatar
@@ -1004,6 +1018,8 @@ export class DrippyScene extends Element {
 															if (!avatarLoaded() || !modelLoaded()) return
 
 															this.#checkRiggedMesh(el)
+
+															this.#checkAccessory(item, el.three)
 														})
 													})
 												})
