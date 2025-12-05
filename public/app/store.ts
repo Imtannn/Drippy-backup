@@ -103,6 +103,7 @@ class Store {
 	isPreview = searchParams().get('isPreview') === 'true'
 	// FIXME initialize other props from URL params as well
 
+	showAnimationSelect = false
 	selectedAnimation = 'none' as 'none' | 'walk' | 'dance'
 	selectedTemplates: TemplateMap = new Map()
 	selectedGarments: SelectedGarments = {}

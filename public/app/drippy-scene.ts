@@ -421,6 +421,15 @@ export class DrippyScene extends Element {
 			const avatarId = Symbol('avatar')
 			store.trackModelLoading(avatarId, avatarModel)
 
+			const avatarLoaded = onModelLoad(avatarModel)
+			createEffect(() => {
+				if (!avatarLoaded()) return
+
+				store.showAnimationSelect = !!getArmatureObject(avatarModel.three)
+			})
+
+			
+
 			// Track background scene loading state (only if a scene is given)
 			const sceneId = Symbol('scene')
 			createEffect(() => {
@@ -648,12 +657,8 @@ export class DrippyScene extends Element {
 				} else if (store.selectedAnimation === 'walk') {
 					this.animsEnabled = true
 
-					// this.animName = 'FV2_Walking in place.mtn'
-					// this.animSrc = new URL('../models/Yuna-walkinplace.glb', import.meta.url).href
-					// this.animName = 'animation_0'
-					// this.animSrc = new URL('../models/EM-anim-test.glb', import.meta.url).href
-					this.animName = 'animation_0'
-					this.animSrc = new URL('../models/EM_Rig_v001-anim-test.glb', import.meta.url).href
+					this.animName = 'FV2_Walking in place.mtn'
+					this.animSrc = new URL('../models/Yuna-walkinplace.glb', import.meta.url).href
 				} else if (store.selectedAnimation === 'dance') {
 					this.animsEnabled = true
 
@@ -1014,7 +1019,7 @@ export class DrippyScene extends Element {
 								</>
 							</lume-element3d>
 
-							<xlume-animation
+							<lume-animation
 								attr:src=${() => this.animSrc}
 								clip-name=${() => this.animName}
 								stopped=${() => !this.animsEnabled}
