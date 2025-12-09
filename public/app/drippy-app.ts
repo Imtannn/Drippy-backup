@@ -107,18 +107,18 @@ export class DrippyApp extends Element {
 		const blocksParam = searchParams().get('blocks')
 		const fabricsParam = searchParams().get('fabrics')
 
-		if (store.selectedTemplates.size > 0) {
+		if (Object.keys(store.selectedTemplates).length > 0) {
 			return
 		}
 
-		const aggregatedTemplates: TemplateMap = new Map()
+		const aggregatedTemplates: TemplateMap = {}
 		const aggregatedBlocks: TemplateBlocksMap = new Map()
 		const aggregatedFabrics: TemplateFabricsMap = new Map()
 		const templateCollectionHints = new Map<TemplateCategory, string | null>()
 		const templatesWithExplicitBlocks = new Set<TemplateCategory>()
 
 		const rememberTemplate = (template: Template, collectionHint: string | null) => {
-			aggregatedTemplates.set(template.category, template)
+			aggregatedTemplates[template.category] = template
 			if (!templateCollectionHints.has(template.category)) {
 				templateCollectionHints.set(template.category, collectionHint)
 			}
@@ -232,7 +232,7 @@ export class DrippyApp extends Element {
 				const fabric = templateHelpers.findFabricById(fabricId, collectionSlug)
 				if (!fabric) continue
 
-				const existingTemplate = aggregatedTemplates.get(templateCategory)
+				const existingTemplate = aggregatedTemplates[templateCategory]
 				if (existingTemplate) {
 					const hintFromFabric = collectionSlug ?? existingTemplate.collection ?? null
 					rememberTemplate(existingTemplate, hintFromFabric)
@@ -254,9 +254,9 @@ export class DrippyApp extends Element {
 			}
 		}
 
-		if (aggregatedTemplates.size === 0) return
+		if (Object.keys(aggregatedTemplates).length === 0) return
 
-		for (const [templateCategory, template] of aggregatedTemplates.entries()) {
+		for (const [templateCategory, template] of Object.entries(aggregatedTemplates)) {
 			const hasExplicitBlocks = templatesWithExplicitBlocks.has(templateCategory)
 			let templateBlocks = aggregatedBlocks.get(templateCategory)
 

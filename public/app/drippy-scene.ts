@@ -665,7 +665,7 @@ export class DrippyScene extends Element {
 						const loaded = modelLoaded()
 						if (!loaded) return
 
-						const template = store.selectedTemplates.get(templateCategory)
+						const template = store.selectedTemplates[templateCategory]
 						const fabricsRecord = store.getTemplateSelection(templateCategory)?.[blockCategory]?.fabrics
 						void fabricsRecord
 

@@ -104,7 +104,7 @@ class Store {
 	// FIXME initialize other props from URL params as well
 
 	selectedAnimation = 'none' as 'none' | 'walk' | 'dance'
-	selectedTemplates: TemplateMap = new Map()
+	selectedTemplates: TemplateMap = {}
 	selectedGarments: SelectedGarments = {}
 	customMeasurement = null as CustomMeasurement | null
 	isShowAvatar = true
@@ -195,7 +195,7 @@ class Store {
 	}
 
 	private touchSelectedGarments() {
-		this.selectedGarments = {...this.selectedGarments}
+		// this.selectedGarments = {...this.selectedGarments}
 	}
 
 	getTemplateSelection(templateCategory: TemplateCategory): TemplateCategorySelection | undefined {
@@ -301,29 +301,31 @@ class Store {
 	}
 
 	set unselectTemplate(template: Template) {
-		batch(() => {
-			const newTemplates: TemplateMap = new Map(store.selectedTemplates)
-			newTemplates.delete(template.category)
-			this.selectedTemplates = newTemplates
-			delete this.selectedGarments[template.category]
-			this.touchSelectedGarments()
+		untrack(() => {
+			batch(() => {
+				delete this.selectedTemplates[template.category]
+				delete this.selectedGarments[template.category]
+				// this.touchSelectedGarments()
 
-			// Update URL params to prevent re-adding from URL when last item is removed
-			if (newTemplates.size === 0) {
-				untrack(searchParams).delete('garments')
-				untrack(searchParams).delete('blocks')
-				untrack(searchParams).delete('fabrics')
-				pushState()
-			} else {
-				// Update garments param with remaining templates
-				const garmentEntries: string[] = []
-				for (const t of newTemplates.values()) {
-					const collectionSlug = t.collection ?? null
-					garmentEntries.push(collectionSlug ? `${collectionSlug}|${t._id}` : t._id)
+				// Update URL params to prevent re-adding from URL when last item is removed
+				// TODO side effects should be in an Effect (createEffect) or
+				// derived in a memo (createMemo).
+				if (Object.keys(this.selectedTemplates).length === 0) {
+					untrack(searchParams).delete('garments')
+					untrack(searchParams).delete('blocks')
+					untrack(searchParams).delete('fabrics')
+					pushState()
+				} else {
+					// Update garments param with remaining templates
+					const garmentEntries: string[] = []
+					for (const t of Object.values(this.selectedTemplates)) {
+						const collectionSlug = t.collection ?? null
+						garmentEntries.push(collectionSlug ? `${collectionSlug}|${t._id}` : t._id)
+					}
+					untrack(searchParams).set('garments', garmentEntries.join(','))
+					pushState()
 				}
-				untrack(searchParams).set('garments', garmentEntries.join(','))
-				pushState()
-			}
+			})
 		})
 	}
 	set setRemixOverlayTemplate(template: Template | null) {
@@ -554,7 +556,7 @@ class Store {
 	initializeOrderItems() {
 		// Initialize all selected templates as checked
 		const newSelectedItems = new Map<TemplateCategory, boolean>()
-		for (const [category] of this.selectedTemplates.entries()) {
+		for (const [category] of Object.entries(this.selectedTemplates)) {
 			newSelectedItems.set(category, true)
 		}
 		this.selectedOrderItems = newSelectedItems
@@ -567,7 +569,7 @@ class Store {
 			this.selectedSpace = null as Space | null
 			this.selectedCollection = null
 			this.selectedScene = null
-			this.selectedTemplates = new Map()
+			this.selectedTemplates = {}
 			this.selectedGarments = {}
 			this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 			this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
@@ -860,10 +862,10 @@ createEffect(() => {
 
 /** Check if a default garment is needed based on current selections */
 function isDefaultGarmentNeeded(config: DefaultGarmentConfig, selectedTemplates: TemplateMap): boolean {
-	const hasCategory = selectedTemplates.has(config.category)
+	const hasCategory = config.category in selectedTemplates
 	// Dynamically get categories that override this one from templateHelpers
 	const overriddenBy = templateHelpers.getCategoriesThatOverride(config.category)
-	const isOverridden = overriddenBy.some(cat => selectedTemplates.has(cat))
+	const isOverridden = overriddenBy.some(cat => cat in selectedTemplates)
 	return !hasCategory && !isOverridden
 }
 
@@ -879,7 +881,7 @@ function applyDefaultGarment(
 		return nextSelection
 	}
 
-	newTemplates.set(config.category, template)
+	newTemplates[config.category] = template
 	const templateBlockData = templateHelpers.convertTemplateToBlockData(template, config.collection)
 	const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
 		templateBlockData,
@@ -917,7 +919,7 @@ createEffect(() => {
 	if (neededDefaults.length === 0) return
 
 	// Apply needed defaults
-	const newTemplates: TemplateMap = new Map(selectedTemplates)
+	const newTemplates: TemplateMap = {...store.selectedTemplates}
 	let nextSelection = templateHelpers.cloneSelectedGarments(store.selectedGarments)
 
 	for (const config of neededDefaults) {
