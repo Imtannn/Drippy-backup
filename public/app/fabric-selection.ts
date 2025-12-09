@@ -1,10 +1,10 @@
 import {attribute, booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
+import '../elements/logic/show-when.js'
 import type {BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
-import {store} from './store.js'
-import '../elements/logic/show-when.js'
 import './loading-spinner-overlay.js'
+import {store} from './store.js'
 
 type FabricSelectionAttributes = 'pieceSelections' | 'availableFabrics' | 'selectedTemplateCategory' | 'isRemix'
 
@@ -92,6 +92,7 @@ export class FabricSelection extends Element {
 			assignedMesh: piece,
 		}))
 
+		console.log('### fabric data', {...fabricData})
 		store.setSelectedFabrics = fabricData
 	}
 

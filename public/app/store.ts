@@ -297,7 +297,7 @@ class Store {
 
 		// Don't call touchSelectedGarments() - with createMutable, nested property changes are automatically reactive
 		// Calling it here causes the entire selectedGarments object to be recreated, triggering ALL effects that track it
-		// this.touchSelectedGarments()
+		//this.touchSelectedGarments()
 	}
 
 	set unselectTemplate(template: Template) {

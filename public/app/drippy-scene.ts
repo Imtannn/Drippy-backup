@@ -159,17 +159,34 @@ export class DrippyScene extends Element {
 				? this.fabricTextureSignals[blockId]
 				: ((this.fabricTextureSignals[blockId] = {}), this.fabricTextureSignals[blockId]),
 		)
+		// console.log('### blockFabricSignals', {...blockFabricSignals})
 
 		const currentSelectedFabrics = createMemo(() => {
-			const templateSelection = store.getTemplateSelection(templateCategory)
+			//templateId
+			const templateSelection = store.selectedGarments[templateCategory] ?? {}
 			const blockSelection = templateSelection?.[blockCategory]
-			const fabricsRecord = blockSelection?.fabrics ?? {}
-			return new Map(Object.entries(fabricsRecord).map(([_, o]) => [_, Object.freeze({...o})])) as PieceFabricsMap
+			const fabricsRecord = {...(blockSelection?.fabrics ?? {})}
+			console.log(`### [${blockCategory}] fabricsRecord:`, fabricsRecord)
+			console.log(
+				`### [${blockCategory}] fabric IDs:`,
+				Object.values(fabricsRecord).map(f => f._id),
+			)
+			const result = new Map(
+				Object.entries(fabricsRecord).map(([_, fabric]) => [_, Object.freeze({...fabric})]),
+			) as PieceFabricsMap
+			console.log(`### [${blockCategory}] currentSelectedFabrics Map size:`, result.size)
+			console.log(`### [${blockCategory}] currentSelectedFabrics Map entries:`, Array.from(result.entries()))
+			return result
 		})
 
-		// Reactively manage fabric texture signals
+		// Create texture signals when fabrics change
 		createEffect(() => {
+			//templateId
+			// console.log('### CREATE effect - running for blockId:', blockId)
 			const currentFabrics = currentSelectedFabrics()
+			// console.log('### CREATE effect currentFabrics entry count', currentFabrics.size)
+			// console.log('### BEFORE CREATE - blockFabricSignals keys:', Object.keys(blockFabricSignals))
+			// console.log('### BEFORE CREATE - blockFabricSignals reference:', blockFabricSignals)
 
 			// Create signals for new fabrics
 			for (const fabric of currentFabrics.values()) {
@@ -179,6 +196,8 @@ export class DrippyScene extends Element {
 				// Track loading state per fabric ID
 				createEffect(() => {
 					const isLoading = textureState.loading()
+					const hasTexture = !!textureState.texture()
+					console.log(`### [${fabric._id}] isLoading:`, isLoading, 'hasTexture:', hasTexture)
 					if (isLoading) {
 						store.addLoadingFabric(fabric._id)
 					} else {
@@ -192,7 +211,9 @@ export class DrippyScene extends Element {
 			}
 
 			onCleanup(() => {
+				console.log('### CREATE effect CLEANUP - deleting blockFabricSignals keys:', Object.keys(blockFabricSignals))
 				for (const key in blockFabricSignals) delete blockFabricSignals[key]
+				console.log('### CREATE effect CLEANUP - after delete, keys:', Object.keys(blockFabricSignals))
 			})
 		})
 
@@ -214,7 +235,9 @@ export class DrippyScene extends Element {
 
 		// Apply textures reactively as they load
 		createEffect(() => {
+			//console.log('### APPLY effect - running for blockId:', blockId)
 			const currentFabrics = currentSelectedFabrics()
+			console.log('### APPLY effect - START - blockFabricSignals keys:', Object.keys(blockFabricSignals))
 
 			// Create a map for mesh to meshes key
 			const meshToFabricMeshesMap = new Map<string, string>()
@@ -234,13 +257,26 @@ export class DrippyScene extends Element {
 				const fabricToUse = currentFabrics.get(meshesKey || 'default')
 
 				if (fabricToUse) {
+					console.log('### APPLY effect - blockFabricSignals keys:', Object.keys(blockFabricSignals))
+					console.log('### APPLY effect - fabricToUse._id:', fabricToUse._id)
+					console.log('### APPLY effect - fabricToUse:', fabricToUse)
 					const textureState = blockFabricSignals[fabricToUse._id]
+					console.log(
+						'### fabricToUse:',
+						fabricToUse._id,
+						'textureState exists:',
+						!!textureState,
+						'textureState:',
+						textureState,
+					)
 					if (textureState) {
 						const textureSet = textureState.texture()
 						const isLoading = textureState.loading()
 						const error = textureState.error()
+						console.log('### textureSet:', !!textureSet, 'isLoading:', isLoading, 'error:', error)
 
 						if (textureSet && !isLoading && !error) {
+							console.log('### APPLYING TEXTURE TO MESH')
 							mesh.material = new THREE.MeshPhysicalMaterial()
 							textureManager.applyTexturesToMaterial(mesh.material, textureSet)
 						}
