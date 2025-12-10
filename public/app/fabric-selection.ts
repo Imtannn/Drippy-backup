@@ -201,6 +201,27 @@ export class FabricSelection extends Element {
 			grid-template-columns: repeat(3, 1fr);
 			gap: var(--uiGap);
 		}
+		:host([is-remix]) .items-grid {
+			/* override default 3-column grid */
+			grid-template-columns: none;
+			grid-auto-flow: column;
+			/* show 4.5 columns (4 full + half of 5th) to indicate scrollable content */
+			grid-auto-columns: calc((100% - (var(--uiGap) * 4)) / 4.5);
+			gap: var(--uiGap);
+			overflow-x: auto;
+			overflow-y: hidden;
+			scroll-snap-type: x proximity;
+			-webkit-overflow-scrolling: touch;
+			padding-bottom: var(--uiSpacingSmall);
+			padding-top: var(--uiSpacingSmall);
+		}
+		:host([is-remix]) .items-grid::-webkit-scrollbar {
+			display: none;
+		}
+		:host([is-remix]) .items-grid > * {
+			scroll-snap-align: start;
+		}
+
 		@media (min-width: 768px) {
 			.items-grid {
 				grid-template-columns: repeat(4, 1fr);
@@ -209,26 +230,6 @@ export class FabricSelection extends Element {
 
 		/* Remix-only mobile horizontal scrolling */
 		@media (max-width: 768px) {
-			:host([is-remix]) .items-grid {
-				/* override default 3-column grid */
-				grid-template-columns: none;
-				grid-auto-flow: column;
-				/* keep 4 columns visible, overflow to scroll horizontally */
-				grid-auto-columns: calc((100% - (var(--uiGap) * 3)) / 4);
-				gap: var(--uiGap);
-				overflow-x: auto;
-				overflow-y: hidden;
-				scroll-snap-type: x proximity;
-				-webkit-overflow-scrolling: touch;
-				padding-bottom: var(--uiSpacingSmall);
-				padding-top: var(--uiSpacingSmall);
-			}
-			:host([is-remix]) .items-grid::-webkit-scrollbar {
-				display: none;
-			}
-			:host([is-remix]) .items-grid > * {
-				scroll-snap-align: start;
-			}
 			.fabric-selection {
 				margin-top: 15px;
 			}

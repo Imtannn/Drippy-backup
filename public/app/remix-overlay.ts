@@ -1,5 +1,6 @@
 import {
 	attribute,
+	booleanAttribute,
 	css,
 	Element,
 	element,
@@ -28,13 +29,14 @@ import {store, updateGarmentsSelectionInUrl} from './store.js'
 const STYLE_TAB = 'style'
 const FABRICS_TAB = 'fabrics'
 
-type RemixOverlayAttributes = 'selectedTemplate' | 'onclose'
+type RemixOverlayAttributes = 'selectedTemplate' | 'onclose' | 'disabledScroll'
 
 @element
 export class RemixOverlay extends Element {
 	static readonly elementName = 'remix-overlay'
 
 	@attribute selectedTemplate: Template | null = null
+	@booleanAttribute disabledScroll = false
 
 	@signal activeTab: typeof STYLE_TAB | typeof FABRICS_TAB | null = null
 	@signal spaceCollection: string | null = null
@@ -43,6 +45,7 @@ export class RemixOverlay extends Element {
 	@signal availableFabrics: Record<string, Fabric[]> = {}
 	@signal pieceSelections: string[] = []
 	@signal selectedSubTab: string | null = null
+	@signal isOpen: boolean = false
 
 	@eventAttribute onclose: () => void = () => {}
 
@@ -66,6 +69,11 @@ export class RemixOverlay extends Element {
 	connectedCallback() {
 		super.connectedCallback()
 		this.addEventListener('cardselected', this.#onFabricCardSelected)
+
+		// Set activeTab if selectedTemplate is already set
+		if (this.selectedTemplate) {
+			this.activeTab = FABRICS_TAB
+		}
 
 		this.createEffect(() => {
 			this.spaceCollection = store.getEffectiveCollection() ?? 'gap'
@@ -98,6 +106,15 @@ export class RemixOverlay extends Element {
 			})
 		})
 
+		// Set activeTab immediately when selectedTemplate is set
+		this.createEffect(() => {
+			const template = this.selectedTemplate
+			if (template) {
+				// Always ensure activeTab is set when template exists
+				this.activeTab = this.activeTab || FABRICS_TAB
+			}
+		})
+
 		// Update block categories when template category changes (following blocks-selection logic)
 		this.createEffect(() => {
 			if (!this.selectedTemplate) {
@@ -120,8 +137,6 @@ export class RemixOverlay extends Element {
 			if (this.blocksCategories.length > 0) {
 				this.selectedSubTab = this.blocksCategories[0]
 			}
-
-			this.activeTab = FABRICS_TAB
 
 			onCleanup(() => {
 				this.blocksCategories = []
@@ -147,8 +162,8 @@ export class RemixOverlay extends Element {
 						return fabrics[collection]?.find(fabric => fabric._id === materialId)
 					})
 					.filter(fabric => fabric !== undefined) as Fabric[]
-				const defaultFabrics = fabrics['default']
 
+				const defaultFabrics = fabrics['default']
 				if (optionFabrics.length > 0) {
 					availableFabrics['default'] = [...optionFabrics, ...defaultFabrics]
 				}
@@ -242,104 +257,117 @@ export class RemixOverlay extends Element {
 		this.selectedSubTab = e.detail.value
 	}
 
-	template = () => html`
-		<bottom-sheet
-			class="remix-overlay-sheet"
-			default-snap="0.25"
-			snap-points="0.25,0.25,0.25"
-			z-index="2000"
-			collapse-button="false"
-			max-height="100vh"
-			float-direction="right"
-			panel-width="28rem"
-		>
-			<div class="overlay">
-				<show-when
-					condition=${() => this.activeTab !== null}
-					content=${() => html`
-						<tabs-provider
-							default-value=${() => this.activeTab}
-							ontabchange=${(e: CustomEvent) => (this.activeTab = e.detail.value)}
-						>
-							<div class="tabs-list-container">
-								<tabs-list>
-									<tabs-trigger selected-value=${FABRICS_TAB}> Fabrics </tabs-trigger>
-									<show-when
-										condition=${() => this.blocksCategories.length > 0}
-										content=${() => html`<tabs-trigger selected-value=${STYLE_TAB}>Style</tabs-trigger>`}
-									></show-when>
-								</tabs-list>
-							</div>
-
-							<tabs-content selected-value=${FABRICS_TAB}>
-								<div class="scroll-content"></div>
-
-								<fabric-selection
-									is-remix
-									piece-selections=${() => this.pieceSelections}
-									available-fabrics=${() => this.availableFabrics}
-									selected-template-category=${() => this.selectedTemplate!.category}
-								></fabric-selection>
-							</tabs-content>
-
-							<tabs-content selected-value=${STYLE_TAB}>
-								<div class="scroll-content"></div>
+	#renderContent = () => html`
+		<div class="overlay">
+			<show-when
+				condition=${() => this.selectedTemplate !== null && this.activeTab !== null}
+				content=${() => html`
+					<tabs-provider
+						default-value=${() => this.activeTab || FABRICS_TAB}
+						ontabchange=${(e: CustomEvent) => (this.activeTab = e.detail.value)}
+					>
+						<div class="tabs-list-container">
+							<tabs-list>
+								<tabs-trigger selected-value=${FABRICS_TAB}>Fabrics</tabs-trigger>
 								<show-when
 									condition=${() => this.blocksCategories.length > 0}
-									content=${() => html`
-										<tabs-provider default-value=${() => this.selectedSubTab} ontabchange=${this.#onSubTabChange}>
-											<div class="category-tabs">
-												<for-each
-													items=${() => this.blocksCategories}
-													content=${() => (category: BlockCategory) => html`
-														<button
-															class="category-tab"
-															classList=${() => ({active: this.selectedSubTab === category})}
-															onclick=${() => {
-																this.selectedSubTab = category
-															}}
-														>
-															${category}
-														</button>
-													`}
-												></for-each>
-											</div>
+									content=${() => html`<tabs-trigger selected-value=${STYLE_TAB}>Style</tabs-trigger>`}
+								></show-when>
+							</tabs-list>
+						</div>
 
+						<tabs-content selected-value=${FABRICS_TAB}>
+							<div class="scroll-content"></div>
+
+							<fabric-selection
+								is-remix
+								piece-selections=${() => this.pieceSelections}
+								available-fabrics=${() => this.availableFabrics}
+								selected-template-category=${() => this.selectedTemplate?.category ?? ''}
+							></fabric-selection>
+						</tabs-content>
+
+						<tabs-content selected-value=${STYLE_TAB}>
+							<div class="scroll-content"></div>
+							<show-when
+								condition=${() => this.blocksCategories.length > 0}
+								content=${() => html`
+									<tabs-provider default-value=${() => this.selectedSubTab} ontabchange=${this.#onSubTabChange}>
+										<div class="category-tabs">
 											<for-each
 												items=${() => this.blocksCategories}
-												content=${() => (blockCategory: BlockCategory) => html`
-													<show-when
-														condition=${() => this.selectedSubTab === blockCategory}
-														content=${() => html`
-															<div class="items-grid">
-																<for-each
-																	items=${() => this.#filteredBlocksByCategory(blockCategory)}
-																	content=${() => (block: Block) => html`
-																		<item-card
-																			item-active=${() => this.#getIsBlockActive(block)}
-																			item-src=${() => block.thumb}
-																			item-alt=${() => block.blockName}
-																			item-value=${() => block}
-																			oncardselected=${() => this.#onBlockSelect(block)}
-																		></item-card>
-																	`}
-																></for-each>
-															</div>
-														`}
-													></show-when>
+												content=${() => (category: BlockCategory) => html`
+													<button
+														class="category-tab"
+														classList=${() => ({active: this.selectedSubTab === category})}
+														onclick=${() => {
+															this.selectedSubTab = category
+														}}
+													>
+														${category}
+													</button>
 												`}
 											></for-each>
-										</tabs-provider>
-									`}
-									fallback=${() => html`<div class="empty-state">No variations available.</div>`}
-								></show-when>
-							</tabs-content>
-						</tabs-provider>
-					`}
-				>
-				</show-when>
+										</div>
+
+										<for-each
+											items=${() => this.blocksCategories}
+											content=${() => (blockCategory: BlockCategory) => html`
+												<show-when
+													condition=${() => this.selectedSubTab === blockCategory}
+													content=${() => html`
+														<div class="items-grid">
+															<for-each
+																items=${() => this.#filteredBlocksByCategory(blockCategory)}
+																content=${() => (block: Block) => html`
+																	<item-card
+																		item-active=${() => this.#getIsBlockActive(block)}
+																		item-src=${() => block.thumb}
+																		item-alt=${() => block.blockName}
+																		item-value=${() => block}
+																		oncardselected=${() => this.#onBlockSelect(block)}
+																	></item-card>
+																`}
+															></for-each>
+														</div>
+													`}
+												></show-when>
+											`}
+										></for-each>
+									</tabs-provider>
+								`}
+								fallback=${() => html`<div class="empty-state">No variations available.</div>`}
+							></show-when>
+						</tabs-content>
+					</tabs-provider>
+				`}
+			>
+			</show-when>
+		</div>
+	`
+
+	template = () => html`
+		<!-- Mobile: wrap in bottom-sheet -->
+		<show-on-device device="mobile">
+			<bottom-sheet
+				class="remix-overlay-sheet"
+				default-snap="0.25"
+				snap-points="0.25,0.25,0.25"
+				z-index="2000"
+				collapse-button="false"
+				max-height="100vh"
+				disabled-scroll=${() => this.disabledScroll}
+			>
+				${this.#renderContent()}
+			</bottom-sheet>
+		</show-on-device>
+
+		<!-- Desktop: render directly without bottom-sheet wrapper -->
+		<show-on-device device="desktop">
+			<div class="remix-overlay-desktop" classList=${{'is-open': () => this.disabledScroll}}>
+				${this.#renderContent()}
 			</div>
-		</bottom-sheet>
+		</show-on-device>
 	`
 
 	css = css/*css*/ `
@@ -438,8 +466,8 @@ export class RemixOverlay extends Element {
 			align-items: center;
 			justify-content: space-between;
 			padding: var(--uiSpacing);
-			padding-top: 0;
-			padding-bottom: 0;
+			padding-top: 15px;
+			padding-bottom: 10px;
 		}
 
 		.close-button-container {
@@ -466,6 +494,32 @@ export class RemixOverlay extends Element {
 			/* panel-width is controlled via attribute */
 		}
 
+		/* Desktop: fixed at bottom, slide up when open */
+		.remix-overlay-desktop {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 2001;
+			background: var(--uiColorPrimaryWhite);
+			border-top-left-radius: var(--borderRadiusXl);
+			border-top-right-radius: var(--borderRadiusXl);
+			height: 25vh;
+			max-height: 25vh;
+			transform: translateY(100%);
+			transition: transform 0.3s ease-out;
+			overflow-y: auto;
+			box-shadow:
+				0 -4px 6px -1px rgba(0, 0, 0, 0.1),
+				0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+			pointer-events: none;
+		}
+
+		.remix-overlay-desktop.is-open {
+			transform: translateY(0);
+			pointer-events: auto;
+		}
+
 		@media (max-width: 768px) {
 			.overlay {
 				height: 100%;
@@ -485,22 +539,16 @@ export class RemixOverlay extends Element {
 		}
 
 		@media (min-width: 769px) {
-			.overlay {
-				padding-top: var(--uiSpacing);
-			}
 			.category-tabs {
 				margin-bottom: var(--uiSpacingMedium);
 			}
 			.items-grid {
 				grid-auto-flow: row;
 				grid-auto-columns: unset;
-				grid-template-columns: repeat(3, 1fr);
+				grid-template-columns: repeat(4, 1fr);
 				overflow-x: visible;
 				padding-bottom: var(--uiSpacingXxs);
 				scroll-snap-type: none;
-			}
-			tabs-content {
-				padding-top: 15px;
 			}
 		}
 	`

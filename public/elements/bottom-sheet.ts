@@ -31,7 +31,7 @@ type BottomSheetAttributes =
 	| 'collapseButton'
 	| 'panelWidth'
 	| 'onsnap'
-
+	| 'disabledScroll'
 @element
 export class BottomSheet extends Element {
 	static readonly elementName = 'bottom-sheet'
@@ -44,12 +44,13 @@ export class BottomSheet extends Element {
 	@attribute defaultSheetHeight: string = ''
 	@attribute floatDirection: 'left' | 'right' = 'left'
 	@attribute maxHeight: string | null = null
-	@booleanAttribute showRemixOverlay = false
+	@booleanAttribute showRemixOverlay = true
 	@attribute zIndex: string | number | null = null
 	@attribute snapPoints: string | null = null
 	@booleanAttribute collapseButton = true
 	@attribute panelWidth: string | null = null
 	@eventAttribute onsnap: () => void = () => {}
+	@booleanAttribute disabledScroll = false
 
 	private sheetHeight: number | null = null
 	private dragState = {
@@ -448,9 +449,10 @@ export class BottomSheet extends Element {
 		return html`
 			<div
 				class="bottom-sheet"
-				classList=${{
+				classList=${() => ({
 					'is-open': this.isVisible,
-				}}
+					'disable-scroll': this.disabledScroll,
+				})}
 				ref="${(el: HTMLElement) => (this.sheetRef = el)}"
 				style="${!this.isDesktop && this.sheetHeight ? `height: ${this.sheetHeight}px` : ''}"
 			>
@@ -603,6 +605,10 @@ export class BottomSheet extends Element {
 			scrollbar-width: none;
 			-ms-overflow-style: none;
 			border-radius: 1rem;
+		}
+
+		.bottom-sheet.disable-scroll .sheet-content {
+			overflow-y: hidden !important;
 		}
 
 		.sheet-content::-webkit-scrollbar {

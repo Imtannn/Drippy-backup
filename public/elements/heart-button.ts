@@ -1,15 +1,20 @@
-import {css, element, Element, html, type ElementAttributes} from 'lume'
+import {css, element, Element, html, eventAttribute, signal, type ElementAttributes} from 'lume'
 
-type HeartButtonAttributes = keyof {}
+type HeartButtonAttributes = 'onclick' | 'active'
 
 @element
 export class HeartButton extends Element {
 	static readonly elementName = 'heart-button'
 
-	#onClick = () => {}
+	@eventAttribute onclick: ((e: MouseEvent) => void) | null = null
+	@signal active = false
 
 	template = () =>
-		html`<button class="heart-button" onclick=${this.#onClick}>
+		html`<button
+			class="heart-button"
+			classList=${() => ({active: this.active})}
+			onclick=${(e: MouseEvent) => this.onclick?.(e)}
+		>
 			<img src="/images/action-buttons/heart-button.svg" alt="Favorites" />
 		</button>`
 
@@ -22,6 +27,14 @@ export class HeartButton extends Element {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			transition: opacity 0.2s ease;
+		}
+
+		.heart-button:hover {
+			opacity: 0.7;
+		}
+
+		.heart-button.active img {
 		}
 
 		.heart-button img {
