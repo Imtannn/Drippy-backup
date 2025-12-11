@@ -6137,7 +6137,7 @@ export const blocks: Record<string, Block[]> = {
 			_id: 'default-shoes',
 			thumb: '',
 			modelFile:
-				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/Avatar-1/Default+Garments/Shoes.glb',
+				'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar-1/Default+Garments/Shoes.glb',
 			blockName: 'Default Shoes',
 			avatar: 'female',
 			category: 'Shoes',
