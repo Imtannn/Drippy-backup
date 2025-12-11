@@ -64,6 +64,12 @@ export class TemplateView extends Element {
 	@signal showDetailView = false
 	@signal showBottomNavigation = true
 
+	// Drag scroll state
+	@signal isDragging = false
+	@signal startX = 0
+	@signal scrollLeft = 0
+	private hasDragged = false
+
 	private isOpeningOverlay = false
 	private defaultCollection = 'gap'
 
@@ -159,6 +165,34 @@ export class TemplateView extends Element {
 				})
 			}
 		})
+	}
+
+	#onDragStart = (e: MouseEvent) => {
+		const container = e.currentTarget as HTMLElement
+		this.isDragging = true
+		this.hasDragged = false
+		this.startX = e.pageX - container.offsetLeft
+		this.scrollLeft = container.scrollLeft
+		container.style.cursor = 'grabbing'
+	}
+
+	#onDragEnd = (e: MouseEvent) => {
+		const container = e.currentTarget as HTMLElement
+		this.isDragging = false
+		container.style.cursor = 'grab'
+		// Reset hasDragged after a short delay to allow click to be blocked
+		setTimeout(() => (this.hasDragged = false), 0)
+	}
+
+	#onDragMove = (e: MouseEvent) => {
+		if (!this.isDragging) return
+		e.preventDefault()
+		const container = e.currentTarget as HTMLElement
+		const x = e.pageX - container.offsetLeft
+		const walk = (x - this.startX) * 1.5 // Scroll speed multiplier
+		// Mark as dragged if moved more than 5px
+		if (Math.abs(x - this.startX) > 5) this.hasDragged = true
+		container.scrollLeft = this.scrollLeft - walk
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -316,6 +350,7 @@ export class TemplateView extends Element {
 	}
 
 	#onCollectionSelect = (collection: Collection) => {
+		if (this.hasDragged) return
 		store.setSelectedCollection = collection.slug
 	}
 
@@ -495,32 +530,6 @@ export class TemplateView extends Element {
 						</div>
 					</top-navigation>
 				</div>
-				<show-when
-					condition=${() =>
-						spaceHasMultipleCollections(store.selectedSpace) &&
-						!this.showAvatarSelection &&
-						!this.showPoseSelection &&
-						!this.showDetailView &&
-						this.selectedTab !== null}
-					content=${() => html`
-						<top-navigation class="collections-navigation">
-							<div class="collections-scroll-container">
-								<for-each
-									items=${() => getSpaceCollections(store.selectedSpace).map(c => getCollectionBySlug(collections, c))}
-									content=${() => (collection: Collection) => html`
-										<button
-											class="collection-logo-button"
-											classList=${() => ({active: store.getEffectiveCollection() === collection.slug})}
-											onclick=${() => this.#onCollectionSelect(collection)}
-										>
-											<img src=${collection.logo || '/images/drippy-logo.webp'} alt=${collection.name} />
-										</button>
-									`}
-								></for-each>
-							</div>
-						</top-navigation>
-					`}
-				></show-when>
 			</show-on-device>
 			<show-when
 				condition=${() => this.showDetailView}
@@ -562,23 +571,32 @@ export class TemplateView extends Element {
 									></for-each>
 								</tabs-list>
 							</div>
-						</bottom-sheet-header>
-						<show-on-device device="mobile">
 							<show-when
 								condition=${() => spaceHasMultipleCollections(store.selectedSpace)}
 								content=${() => html`
-									<div class="collections-mobile-navigation">
-										<div class="collections-scroll-container">
+									<div class="collections-navigation">
+										<div
+											class="collections-scroll-container"
+											onmousedown=${this.#onDragStart}
+											onmouseleave=${this.#onDragEnd}
+											onmouseup=${this.#onDragEnd}
+											onmousemove=${this.#onDragMove}
+										>
 											<for-each
 												items=${() =>
 													getSpaceCollections(store.selectedSpace).map(c => getCollectionBySlug(collections, c))}
 												content=${() => (collection: Collection) => html`
 													<button
+														draggable=${false}
 														class="collection-logo-button"
 														classList=${() => ({active: store.getEffectiveCollection() === collection.slug})}
 														onclick=${() => this.#onCollectionSelect(collection)}
 													>
-														<img src=${collection.logo || '/images/drippy-logo.webp'} alt=${collection.name} />
+														<img
+															draggable=${false}
+															src=${collection.logo || '/images/drippy-logo.webp'}
+															alt=${collection.name}
+														/>
 													</button>
 												`}
 											></for-each>
@@ -586,7 +604,7 @@ export class TemplateView extends Element {
 									</div>
 								`}
 							></show-when>
-						</show-on-device>
+						</bottom-sheet-header>
 
 						<div class="tabs-content-container">
 							<for-each
@@ -835,17 +853,12 @@ export class TemplateView extends Element {
 			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
 		}
 
-		/* Remove tab-container boder-bottom on mobile and add bottom border to collections-mobile-navigation */
+		/* Remove tab-container boder-bottom on mobile */
 		@media (max-width: 768px) {
 			.tabs-container {
 				border-bottom: none;
 				padding-top: var(--uiSpacingSmall);
 				padding-bottom: var(--uiSpacingMedium);
-			}
-
-			.collections-mobile-navigation {
-				padding: 0 var(--uiSpacing) var(--uiSpacingSmall) !important;
-				border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
 			}
 		}
 
@@ -1047,16 +1060,12 @@ export class TemplateView extends Element {
 		}
 
 		.collections-navigation {
-			margin-top: 0;
-			display: none;
-			padding-right: 0;
-			margin-top: 10px;
-			margin-bottom: 10px;
-		}
-
-		.collections-mobile-navigation {
-			padding: 0 20px 12px;
 			display: block;
+			padding-right: 0;
+			padding-left: var(--uiSpacing);
+			padding-top: var(--uiSpacingSmall);
+			padding-bottom: var(--uiSpacingSmall);
+			background: var(--uiColorPrimaryWhite);
 		}
 
 		.collections-scroll-container {
@@ -1066,6 +1075,8 @@ export class TemplateView extends Element {
 			align-items: center;
 			scrollbar-width: none;
 			padding-right: 20px;
+			cursor: grab;
+			user-select: none;
 		}
 
 		.collections-scroll-container::-webkit-scrollbar {
@@ -1109,14 +1120,6 @@ export class TemplateView extends Element {
 		}
 
 		@media (min-width: 768px) {
-			.collections-mobile-navigation {
-				display: none;
-			}
-
-			.collections-navigation {
-				display: block;
-			}
-
 			remix-overlay {
 				margin-top: -85px;
 			}
