@@ -4587,4 +4587,32 @@ export const templates: Record<string, Template[]> = {
 			materialId: '2fba2d27-b6bc-4e15-ac99-4908498f5419',
 		},
 	],
+	vinaygaia: [
+		{
+			_id: '9fcd5a67-8ff2-4a7f-94ad-408da28dd40b',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/vinaygaia/templates/Pants/Item_1.webp',
+			name: 'Item 1',
+			price: 'N/A',
+			avatar: 'male',
+			category: 'Pants',
+			collection: 'vinaygaia',
+			materialId: '62ce7be2-2b2f-432c-a971-6ed1994c4f09',
+		},
+		{
+			_id: '8d44d1d4-ad9f-4d36-9575-addcfd2b62a3',
+			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/vinaygaia/templates/Jacket/Item_1.webp',
+			name: 'Item 1',
+			price: 'N/A',
+			avatar: 'male',
+			category: 'Jacket',
+			collection: 'vinaygaia',
+			materialId: 'ec8fa6c5-7211-4dcf-9cae-158e45083249',
+			extraMaterials: [
+				{
+					mesh: 'jacket_1783-sleeve_1779',
+					materialId: '44dbe4e9-c9d0-4cf8-b366-bb81a4f0d9ad',
+				},
+			],
+		},
+	],
 }

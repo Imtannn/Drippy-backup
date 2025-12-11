@@ -4523,7 +4523,7 @@ export const fabrics: Record<string, Fabric[]> = {
 	],
 	vinaygaia: [
 		{
-			_id: '0d105115-7c37-40d3-8803-bef83e3ea1e1',
+			_id: '44dbe4e9-c9d0-4cf8-b366-bb81a4f0d9ad',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/vinaygaia/root/PLEATED_-_BLACK/PLEATED_-_BLACK_-_RENDER.webp',
 			normal:
@@ -4541,7 +4541,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Jacket'],
 		},
 		{
-			_id: '1c3a656f-c5d5-4e1c-9422-845953b5d35a',
+			_id: 'ec8fa6c5-7211-4dcf-9cae-158e45083249',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/vinaygaia/root/COTTON_TWILL_-_BLACK/COTTON_TWILL_-_BLACK_-_RENDER.webp',
 			normal:
@@ -4559,7 +4559,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Jacket'],
 		},
 		{
-			_id: '6e501e6c-08ee-4171-b59b-edd1a49b7e1d',
+			_id: '62ce7be2-2b2f-432c-a971-6ed1994c4f09',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/vinaygaia/root/DENIM_-_BLACK/DENIM_-_BLACK_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/vinaygaia/root/DENIM_-_BLACK/DENIM_-_BLACK_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/vinaygaia/root/DENIM_-_BLACK/DENIM_-_BLACK_-_BASE.jpg',

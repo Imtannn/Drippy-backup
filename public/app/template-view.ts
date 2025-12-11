@@ -564,32 +564,6 @@ export class TemplateView extends Element {
 						</div>
 					`}
 				></show-when>
-				<show-when
-					condition=${() =>
-						spaceHasMultipleCollections(store.selectedSpace) &&
-						!this.showAvatarSelection &&
-						!this.showPoseSelection &&
-						!this.showDetailView &&
-						this.selectedTab !== null}
-					content=${() => html`
-						<top-navigation class="collections-navigation">
-							<div class="collections-scroll-container">
-								<for-each
-									items=${() => getSpaceCollections(store.selectedSpace).map(c => getCollectionBySlug(collections, c))}
-									content=${() => (collection: Collection) => html`
-										<button
-											class="collection-logo-button"
-											classList=${() => ({active: store.getEffectiveCollection() === collection.slug})}
-											onclick=${() => this.#onCollectionSelect(collection)}
-										>
-											<img src=${collection.logo || '/images/drippy-logo.webp'} alt=${collection.name} />
-										</button>
-									`}
-								></for-each>
-							</div>
-						</top-navigation>
-					`}
-				></show-when>
 			</show-on-device>
 			<show-when
 				condition=${() => this.showDetailView}
@@ -1259,7 +1233,7 @@ export class TemplateView extends Element {
 			display: block;
 			padding-right: 0;
 			padding-left: var(--uiSpacing);
-			padding-top: var(--uiSpacingSmall);
+			padding-top: 0;
 			padding-bottom: var(--uiSpacingSmall);
 			background: var(--uiColorPrimaryWhite);
 		}
