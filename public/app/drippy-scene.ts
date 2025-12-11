@@ -629,8 +629,8 @@ export class DrippyScene extends Element {
 						if (loadingCount === 2) {
 							this.loadingProgress = 10
 						} else if (loadingCount === 1) {
-							if (previousCount === y2 || previousCount === -1) {
-								// animate smoothl through multiple steps
+							if (previousCount === 2 || previousCount === -1) {
+								// animate smoothly through multiple steps
 								const progressStages = [
 									{progress: 15, delay: 0},
 									{progress: 30, delay: 150},
