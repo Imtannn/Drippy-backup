@@ -3,9 +3,9 @@ import {store} from '../app/store.js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import {templates} from '../consts/templates.js'
-import type {TemplateCategory} from '../types/template.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
+import type {TemplateCategory} from '../types/template.js'
 
 const block3DLanding = {
 	male: [
@@ -243,7 +243,7 @@ export class AvatarSelector extends Element {
 
 			// Set templates to store
 			if (templateData.length > 0) {
-				store.selectedTemplates = new Map(templateData.map(t => [t.category, t]))
+				store.selectedTemplates = Object.fromEntries(templateData.map(t => [t.category, t]))
 			}
 
 			const blockData: Array<{block: Block; templateCategory: TemplateCategory}> = []
@@ -286,10 +286,8 @@ export class AvatarSelector extends Element {
 			if (blockData.length > 0) {
 				store.setSelectedBlocks(blockData)
 
-
 				if (fabricData.length > 0) {
 					store.setSelectedFabrics = fabricData
-
 				}
 			}
 		} catch (error) {

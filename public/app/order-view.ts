@@ -36,7 +36,7 @@ export class OrderView extends Element {
 		const orderItems = []
 		const retailOrderItems = []
 
-		for (const [category, template] of store.selectedTemplates.entries()) {
+		for (const [category, template] of Object.entries(store.selectedTemplates)) {
 			// Only include items that are selected in the order
 			if (store.selectedOrderItems.get(category)) {
 				if (isWholesale) {

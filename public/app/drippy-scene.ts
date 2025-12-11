@@ -16,7 +16,7 @@ import {
 	signal,
 } from 'lume'
 import type {Accessor} from 'solid-js'
-import {createMemo, untrack} from 'solid-js'
+import {createMemo, createRoot, untrack} from 'solid-js'
 import * as THREE from 'three'
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
@@ -34,7 +34,7 @@ import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {TemplateCategory} from '../types/template.js'
-import type {PieceFabricsMap, SelectedGarments, Space} from '../types/types.js'
+import type {SelectedGarments, Space} from '../types/types.js'
 import {
 	createFabricTexture,
 	createMutationsSignal,
@@ -159,37 +159,20 @@ export class DrippyScene extends Element {
 				? this.fabricTextureSignals[blockId]
 				: ((this.fabricTextureSignals[blockId] = {}), this.fabricTextureSignals[blockId]),
 		)
-		// console.log('### blockFabricSignals', {...blockFabricSignals})
 
 		const currentSelectedFabrics = createMemo(() => {
-			//templateId
-			const templateSelection = store.selectedGarments[templateCategory] ?? {}
-			const blockSelection = templateSelection?.[blockCategory]
-			const fabricsRecord = {...(blockSelection?.fabrics ?? {})}
-			console.log(`### [${blockCategory}] fabricsRecord:`, fabricsRecord)
-			console.log(
-				`### [${blockCategory}] fabric IDs:`,
-				Object.values(fabricsRecord).map(f => f._id),
-			)
-			const result = new Map(
-				Object.entries(fabricsRecord).map(([_, fabric]) => [_, Object.freeze({...fabric})]),
-			) as PieceFabricsMap
-			console.log(`### [${blockCategory}] currentSelectedFabrics Map size:`, result.size)
-			console.log(`### [${blockCategory}] currentSelectedFabrics Map entries:`, Array.from(result.entries()))
-			return result
+			const fabricsRecord = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
+
+			return fabricsRecord
 		})
 
 		// Create texture signals when fabrics change
 		createEffect(() => {
 			//templateId
-			// console.log('### CREATE effect - running for blockId:', blockId)
 			const currentFabrics = currentSelectedFabrics()
-			// console.log('### CREATE effect currentFabrics entry count', currentFabrics.size)
-			// console.log('### BEFORE CREATE - blockFabricSignals keys:', Object.keys(blockFabricSignals))
-			// console.log('### BEFORE CREATE - blockFabricSignals reference:', blockFabricSignals)
 
 			// Create signals for new fabrics
-			for (const fabric of currentFabrics.values()) {
+			for (const fabric of Object.values(currentFabrics)) {
 				const textureState = createFabricTexture(() => fabric, uvArray)
 				blockFabricSignals[fabric._id] = textureState
 
@@ -235,13 +218,11 @@ export class DrippyScene extends Element {
 
 		// Apply textures reactively as they load
 		createEffect(() => {
-			//console.log('### APPLY effect - running for blockId:', blockId)
 			const currentFabrics = currentSelectedFabrics()
-			console.log('### APPLY effect - START - blockFabricSignals keys:', Object.keys(blockFabricSignals))
 
 			// Create a map for mesh to meshes key
 			const meshToFabricMeshesMap = new Map<string, string>()
-			for (const meshesKey of currentFabrics.keys()) {
+			for (const meshesKey of Object.keys(currentFabrics)) {
 				const meshArray = meshesKey.split('-')
 				for (const mesh of meshArray) {
 					meshToFabricMeshesMap.set(mesh, meshesKey)
@@ -254,29 +235,16 @@ export class DrippyScene extends Element {
 				// Check if there's a specific fabric assigned to this mesh
 				const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
 				const meshesKey = meshToFabricMeshesMap.get(meshKey)
-				const fabricToUse = currentFabrics.get(meshesKey || 'default')
+				const fabricToUse = currentFabrics[meshesKey || 'default']
 
 				if (fabricToUse) {
-					console.log('### APPLY effect - blockFabricSignals keys:', Object.keys(blockFabricSignals))
-					console.log('### APPLY effect - fabricToUse._id:', fabricToUse._id)
-					console.log('### APPLY effect - fabricToUse:', fabricToUse)
 					const textureState = blockFabricSignals[fabricToUse._id]
-					console.log(
-						'### fabricToUse:',
-						fabricToUse._id,
-						'textureState exists:',
-						!!textureState,
-						'textureState:',
-						textureState,
-					)
 					if (textureState) {
 						const textureSet = textureState.texture()
 						const isLoading = textureState.loading()
 						const error = textureState.error()
-						console.log('### textureSet:', !!textureSet, 'isLoading:', isLoading, 'error:', error)
 
 						if (textureSet && !isLoading && !error) {
-							console.log('### APPLYING TEXTURE TO MESH')
 							mesh.material = new THREE.MeshPhysicalMaterial()
 							textureManager.applyTexturesToMaterial(mesh.material, textureSet)
 						}
@@ -627,17 +595,29 @@ export class DrippyScene extends Element {
 
 			// Stable loading IDs per block
 			const blockLoadingIds = new Map<string, symbol>()
+			const fabricsBindingRoots = new Map<Element, () => void>()
 
 			// Re-apply materials whenever the selected fabrics change or models mount
 			createEffect(() => {
 				// Cause reactive re-run when the number of blocks changes
 				if (this.renderBlocks.length === 0) {
-					// nothing to bind
+					for (const disposeRoot of fabricsBindingRoots.values()) {
+						disposeRoot()
+					}
+					fabricsBindingRoots.clear()
 					return
 				}
 
+				const activeElements = new Set<Element>()
+
 				// Process each model using its data-blockid to find the correct fabric
 				for (const el of garmentModels()) {
+					activeElements.add(el)
+
+					if (fabricsBindingRoots.has(el)) {
+						continue
+					}
+
 					const blockId = el.getAttribute('id')
 					if (!blockId) continue
 
@@ -652,25 +632,36 @@ export class DrippyScene extends Element {
 					const templateCategory = parts[1] as TemplateCategory
 					const blockCategory = parts[2] as BlockCategory
 
-					// Get or create stable loading ID
-					let loadingId = blockLoadingIds.get(blockId)
-					if (!loadingId) {
-						loadingId = Symbol(`material-${blockId}`)
-						blockLoadingIds.set(blockId, loadingId)
-					}
+					const disposeRoot = createRoot(dispose => {
+						// Get or create stable loading ID
+						let loadingId = blockLoadingIds.get(blockId)
+						if (!loadingId) {
+							loadingId = Symbol(`material-${blockId}`)
+							blockLoadingIds.set(blockId, loadingId)
+						}
 
-					const modelLoaded = onModelLoad(el)
+						const modelLoaded = onModelLoad(el)
 
-					createEffect(() => {
-						const loaded = modelLoaded()
-						if (!loaded) return
+						createEffect(() => {
+							if (!modelLoaded()) return
 
-						const template = store.selectedTemplates[templateCategory]
-						const fabricsRecord = store.getTemplateSelection(templateCategory)?.[blockCategory]?.fabrics
-						void fabricsRecord
+							const template = store.selectedTemplates[templateCategory]
 
-						this.#applyFabricsWithSignals(el, loadingId!, template?._id, templateCategory, blockCategory)
+							this.#applyFabricsWithSignals(el, loadingId!, template?._id, templateCategory, blockCategory)
+						})
+
+						return dispose
 					})
+
+					fabricsBindingRoots.set(el, disposeRoot)
+				}
+
+				// Dispose of roots whose elements are no longer in the scene
+				for (const [el, disposeRoot] of fabricsBindingRoots.entries()) {
+					if (!activeElements.has(el)) {
+						disposeRoot()
+						fabricsBindingRoots.delete(el)
+					}
 				}
 			})
 

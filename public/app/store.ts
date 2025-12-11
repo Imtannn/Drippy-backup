@@ -194,10 +194,6 @@ class Store {
 		}
 	}
 
-	private touchSelectedGarments() {
-		// this.selectedGarments = {...this.selectedGarments}
-	}
-
 	getTemplateSelection(templateCategory: TemplateCategory): TemplateCategorySelection | undefined {
 		return this.selectedGarments[templateCategory]
 	}
@@ -265,8 +261,6 @@ class Store {
 					this.applySleevesFabricInheritance(block, templateCategory)
 				}
 			}
-
-			this.touchSelectedGarments()
 		})
 	}
 
@@ -274,30 +268,16 @@ class Store {
 		if (!Array.isArray(fabricData)) {
 			fabricData = [fabricData]
 		}
-		console.log(
-			'fabric template categories',
-			fabricData.map(item => item.templateCategory),
-		)
 
 		for (let {fabric, blockCategory, templateCategory, assignedMesh} of fabricData) {
-			console.log('fabric template category', templateCategory, fabric.category)
-
 			if (!assignedMesh) {
 				assignedMesh = 'default'
 			}
 
 			const garmentSelection = this.getGarmentSelection(templateCategory, blockCategory)
 
-			const newFabrics = {
-				...garmentSelection.fabrics,
-				[assignedMesh]: fabric,
-			}
-			garmentSelection.fabrics = newFabrics
+			garmentSelection.fabrics = {...garmentSelection.fabrics, [assignedMesh]: fabric}
 		}
-
-		// Don't call touchSelectedGarments() - with createMutable, nested property changes are automatically reactive
-		// Calling it here causes the entire selectedGarments object to be recreated, triggering ALL effects that track it
-		//this.touchSelectedGarments()
 	}
 
 	set unselectTemplate(template: Template) {

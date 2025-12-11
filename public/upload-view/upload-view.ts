@@ -87,7 +87,7 @@ export class UploadView extends Element {
 	@signal selectedAvatar: string | null = null
 	@signal selectedFabrics: TemplateFabricsMap = new Map()
 	@signal selectedBlocks: TemplateBlocksMap = new Map()
-	@signal selectedTemplates: TemplateMap = new Map()
+	@signal selectedTemplates: TemplateMap = {}
 	@signal fabricScaleX = 2
 	@signal fabricScaleY = 2
 	@signal fabricOffsetX = DEFAULT_TEXTURE_CONFIG.offset[0]
@@ -183,7 +183,7 @@ export class UploadView extends Element {
 		this.convertedFabrics = []
 		this.selectedFabrics = new Map()
 		this.selectedBlocks = new Map()
-		this.selectedTemplates = new Map()
+		this.selectedTemplates = {}
 		this.uploadProgress = ''
 		this.showConfigPanel = false
 		this.fabricScaleX = 9
@@ -798,12 +798,9 @@ export class UploadView extends Element {
 		const template = this.convertedTemplate
 
 		// Mimic the #onItemClick logic from template-view.ts
-		this.selectedTemplates.set(template.category, template)
-		this.selectedTemplates = new Map(this.selectedTemplates)
+		this.selectedTemplates[template.category] = template
 
-		const selectedTemplate = this.selectedTemplates.get(template.category)
-
-		if (selectedTemplate) {
+		if (template) {
 			// Create a temporary fabric for the template using the first converted fabric
 			let templateFabric: Fabric | undefined
 			if (this.convertedFabrics.length > 0) {
@@ -812,7 +809,7 @@ export class UploadView extends Element {
 
 			// Get extra fabrics if they exist
 			const extraFabrics: Fabric[] = []
-			if (selectedTemplate.extraMaterials) {
+			if (template.extraMaterials) {
 				console.log(`🔍 Looking for extra fabrics...`)
 				console.log(`📋 Available converted fabrics:`)
 				this.convertedFabrics.forEach(fabric => {
@@ -820,7 +817,7 @@ export class UploadView extends Element {
 				})
 
 				console.log(`🔗 Extra materials to find:`)
-				for (const extraMaterial of selectedTemplate.extraMaterials) {
+				for (const extraMaterial of template.extraMaterials) {
 					console.log(`   🔗 ${extraMaterial.mesh} -> ${extraMaterial.materialId}`)
 
 					const extraFabric = this.convertedFabrics.find(fabric => fabric._id === extraMaterial.materialId)
