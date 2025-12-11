@@ -10,6 +10,7 @@ export type TemplateCategory =
 	| 'Dress'
 	| 'Top'
 	| 'Jumpsuit'
+	| 'Shoes'
 	| string // For custom categories
 
 export type ExtraMaterial = {

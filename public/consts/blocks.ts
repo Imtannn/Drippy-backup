@@ -6133,5 +6133,18 @@ export const blocks: Record<string, Block[]> = {
 			templateName: 'Default Top',
 			templateCategory: 'Top',
 		},
+		{
+			_id: 'default-shoes',
+			thumb: '',
+			modelFile:
+				'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/models/female/Avatar-1/Default+Garments/Shoes.glb',
+			blockName: 'Default Shoes',
+			avatar: 'female',
+			category: 'Shoes',
+			collection: 'default',
+			templateId: 'default-shoes',
+			templateName: 'Default Shoes',
+			templateCategory: 'Shoes',
+		},
 	],
 }
