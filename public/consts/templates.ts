@@ -4638,5 +4638,15 @@ export const templates: Record<string, Template[]> = {
 			collection: 'default',
 			materialId: '',
 		},
+		{
+			_id: 'default-shoes',
+			thumb: '',
+			name: 'Default Shoes',
+			price: 'N/A',
+			avatar: 'female',
+			category: 'Shoes',
+			collection: 'default',
+			materialId: '',
+		},
 	],
 }

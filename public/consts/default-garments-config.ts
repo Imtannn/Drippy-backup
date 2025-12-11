@@ -15,6 +15,11 @@ export const defaultGarmentsConfig: DefaultGarmentsConfig = {
 			templateId: 'default-shorts',
 			collection: 'default',
 		},
+		{
+			category: 'Shoes',
+			templateId: 'default-shoes',
+			collection: 'default',
+		},
 	],
 	male: [
 		{

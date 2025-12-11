@@ -9,6 +9,7 @@ export type BlockCategory =
 	| 'Skirt'
 	| 'Coat'
 	| 'Dress'
+	| 'Shoes'
 
 export type TemplateCategory = 'Jacket' | 'Shirt' | 'Pants' | 'Accessories' | 'Dress' | 'Skirt' | 'Top' | string // For custom categories
 
