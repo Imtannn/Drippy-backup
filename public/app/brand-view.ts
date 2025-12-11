@@ -89,7 +89,7 @@ export class BrandView extends Element {
 		const effectiveSpace = store.getEffectiveSpace()
 		if (!effectiveSpace) return
 
-		const newTemplates: TemplateMap = new Map(store.selectedTemplates)
+		const newTemplates: TemplateMap = {...store.selectedTemplates}
 		let nextSelection = templateHelpers.cloneSelectedGarments(store.selectedGarments)
 
 		// check if the template with same category already exists
@@ -101,13 +101,13 @@ export class BrandView extends Element {
 		if (overridingCategories.length > 0) {
 			nextSelection = templateHelpers.omitTemplateCategories(nextSelection, overridingCategories)
 			for (const category of overridingCategories) {
-				if (store.selectedTemplates.has(category)) {
-					newTemplates.delete(category)
+				if (category in store.selectedTemplates) {
+					delete newTemplates[category]
 				}
 			}
 		}
 
-		newTemplates.set(template.category, template)
+		newTemplates[template.category] = template
 		const effectiveCollection = store.getEffectiveCollection()
 		const templateBlockData = templateHelpers.convertTemplateToBlockData(template, effectiveCollection)
 		const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
@@ -170,7 +170,7 @@ export class BrandView extends Element {
 	}
 
 	#isTemplateActive = (template: Template) => {
-		return store.selectedTemplates.get(template.category)?._id === template._id
+		return store.selectedTemplates[template.category]?._id === template._id
 	}
 
 	template = () => html`

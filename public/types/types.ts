@@ -155,7 +155,7 @@ export type OrderData = {
 
 	spaceDescription?: string
 }
-export type TemplateMap = Map<TemplateCategory, Template>
+export type TemplateMap = Record<TemplateCategory, Template>
 export type CategoryBlocksMap = Map<BlockCategory, Block>
 export type TemplateBlocksMap = Map<TemplateCategory, CategoryBlocksMap>
 

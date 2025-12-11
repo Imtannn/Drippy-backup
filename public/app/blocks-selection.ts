@@ -70,7 +70,7 @@ export class BlocksSelection extends Element {
 		this.createEffect(() => {
 			// Sort template categories in the desired order
 			const templateCategoriesOrder = ['Dress', 'Shirt', 'Jacket', 'Pants', 'Skirt']
-			this.availableTemplateCategories = Array.from(store.selectedTemplates.keys())
+			this.availableTemplateCategories = Array.from(Object.keys(store.selectedTemplates))
 				.filter(category => category !== 'Accessories')
 				.sort((a, b) => templateCategoriesOrder.indexOf(a) - templateCategoriesOrder.indexOf(b))
 
@@ -84,7 +84,7 @@ export class BlocksSelection extends Element {
 		this.createEffect(() => {
 			if (!this.spaceCollection || !this.selectedTemplateCategory) return
 
-			const selectedTemplate = store.selectedTemplates.get(this.selectedTemplateCategory)
+			const selectedTemplate = store.selectedTemplates[this.selectedTemplateCategory]
 			if (selectedTemplate) {
 				this.availableBlocks = blocks[this.spaceCollection].filter(block => {
 					if (block.templateCategory === 'Pants' || block.templateCategory === 'Accessories') {
@@ -102,7 +102,7 @@ export class BlocksSelection extends Element {
 		this.createEffect(() => {
 			if (!this.spaceCollection || !this.selectedTemplateCategory) return
 
-			const selectedTemplate = store.selectedTemplates.get(this.selectedTemplateCategory)
+			const selectedTemplate = store.selectedTemplates[this.selectedTemplateCategory]
 			if (selectedTemplate) {
 				this.availableFabrics = fabrics[this.spaceCollection]?.filter(fabric =>
 					fabric.templateCategories?.includes(selectedTemplate.category),

@@ -162,7 +162,7 @@ export class TemplateView extends Element {
 			if (user !== null) return
 
 			const canShowPreview = !this.showAvatarSelection && !this.showPoseSelection
-			const hasSelectedTemplates = store.selectedTemplates.size > 0
+			const hasSelectedTemplates = Object.keys(store.selectedTemplates).length > 0
 
 			// Start timer if: button is visible, and has selected templates
 			if (canShowPreview && hasSelectedTemplates) {
@@ -209,8 +209,7 @@ export class TemplateView extends Element {
 		const template = e.detail.itemValue as Template
 
 		const isAlreadySelected =
-			store.selectedTemplates.has(template.category) &&
-			store.selectedTemplates.get(template.category)?._id === template._id
+			store.selectedTemplates[template.category] && store.selectedTemplates[template.category]._id === template._id
 
 		if (!isAlreadySelected) {
 			store.setLoadingTemplate(template._id)
@@ -225,7 +224,7 @@ export class TemplateView extends Element {
 	}
 
 	#isTemplateActive = (template: Template) => {
-		return store.selectedTemplates.get(template.category)?._id === template._id
+		return store.selectedTemplates[template.category]?._id === template._id
 	}
 
 	#onPreviewButtonClick = () => {
@@ -386,7 +385,7 @@ export class TemplateView extends Element {
 		const effectiveSpace = store.getEffectiveSpace()
 		if (!effectiveSpace) return
 
-		const newTemplates: TemplateMap = new Map(store.selectedTemplates)
+		const newTemplates: TemplateMap = {...store.selectedTemplates}
 		let nextSelection = templateHelpers.cloneSelectedGarments(store.selectedGarments)
 
 		// check if the template with same category already exists
@@ -398,13 +397,13 @@ export class TemplateView extends Element {
 		if (overridingCategories.length > 0) {
 			nextSelection = templateHelpers.omitTemplateCategories(nextSelection, overridingCategories)
 			for (const category of overridingCategories) {
-				if (store.selectedTemplates.has(category)) {
-					newTemplates.delete(category)
+				if (store.selectedTemplates[category]) {
+					delete newTemplates[category]
 				}
 			}
 		}
 
-		newTemplates.set(template.category, template)
+		newTemplates[template.category] = template
 		const effectiveCollection = store.getEffectiveCollection()
 		const templateBlockData = templateHelpers.convertTemplateToBlockData(template, effectiveCollection)
 		const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
@@ -515,12 +514,12 @@ export class TemplateView extends Element {
 								<div
 									class="template-info"
 									classList=${() => {
-										const templates = Array.from(store.selectedTemplates.values())
+										const templates = Object.values(store.selectedTemplates)
 										return {hidden: templates.length === 0 || true}
 									}}
 								>
 									${() => {
-										const templates = Array.from(store.selectedTemplates.values())
+										const templates = Object.values(store.selectedTemplates)
 										if (templates.length > 0) {
 											const selectedTemplate = templates[0]
 											return html`
@@ -539,7 +538,7 @@ export class TemplateView extends Element {
 								<button
 									class="view-details-btn"
 									classList=${() => {
-										const templates = Array.from(store.selectedTemplates.values())
+										const templates = Object.values(store.selectedTemplates)
 										return {hidden: templates.length === 0 || true}
 									}}
 									disabled
@@ -549,7 +548,7 @@ export class TemplateView extends Element {
 								<div
 									class="default-nav"
 									classList=${() => {
-										const templates = Array.from(store.selectedTemplates.values())
+										const templates = Object.values(store.selectedTemplates)
 										return {hidden: templates.length > 0 && false}
 									}}
 								>
@@ -569,7 +568,7 @@ export class TemplateView extends Element {
 				condition=${() => this.showDetailView}
 				content=${() => html`
 					<template-detail-view
-						selected-template=${() => Array.from(store.selectedTemplates.values())[0] || null}
+						selected-template=${() => Object.values(store.selectedTemplates)[0] || null}
 						onclose=${this.#onDetailViewClose}
 					></template-detail-view>
 				`}
@@ -857,12 +856,12 @@ export class TemplateView extends Element {
 					<div
 						class="template-info"
 						classList=${() => {
-							const templates = Array.from(store.selectedTemplates.values())
+							const templates = Object.values(store.selectedTemplates)
 							return {hidden: templates.length === 0 || true}
 						}}
 					>
 						${() => {
-							const templates = Array.from(store.selectedTemplates.values())
+							const templates = Object.values(store.selectedTemplates)
 							if (templates.length > 0) {
 								const selectedTemplate = templates[0]
 								return html`
@@ -881,7 +880,7 @@ export class TemplateView extends Element {
 					<button
 						class="view-details-btn"
 						classList=${() => {
-							const templates = Array.from(store.selectedTemplates.values())
+							const templates = Object.values(store.selectedTemplates)
 							return {hidden: templates.length === 0 || true}
 						}}
 						disabled
@@ -891,7 +890,7 @@ export class TemplateView extends Element {
 					<div
 						class="default-nav"
 						classList=${() => {
-							const templates = Array.from(store.selectedTemplates.values())
+							const templates = Object.values(store.selectedTemplates)
 							return {hidden: templates.length > 0 && false}
 						}}
 					>

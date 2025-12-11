@@ -24,7 +24,7 @@ export class OrderItems extends Element {
 	}
 
 	private async generateScreenshots() {
-		for (const [category] of store.selectedTemplates.entries()) {
+		for (const [category] of Object.entries(store.selectedTemplates)) {
 			try {
 				// Mark this category as loading
 				store.addLoadingScreenshot(category)
@@ -62,7 +62,7 @@ export class OrderItems extends Element {
 					<!-- Items List -->
 					<div class="items-list">
 						<for-each
-							items=${() => Array.from(store.selectedTemplates.entries())}
+							items=${() => Object.entries(store.selectedTemplates)}
 							content=${() =>
 								([category, template]: [TemplateCategory, Template]) => html`
 									<div class="item-row">
