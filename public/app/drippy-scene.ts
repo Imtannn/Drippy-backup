@@ -16,15 +16,17 @@ import {
 	signal,
 } from 'lume'
 import type {Accessor} from 'solid-js'
-import {createMemo} from 'solid-js'
+import {createMemo, createRoot, untrack} from 'solid-js'
 import * as THREE from 'three'
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js'
-import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
 import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js'
+import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
 import {avatars} from '../consts/avatars.js'
 import {defaultGarmentsConfig} from '../consts/default-garments-config.js'
 import {templates} from '../consts/templates.js'
+
+import {createMutable} from 'solid-js/store'
 import {backgroundScenes} from '../consts/scenes.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/logic/show-when.js'
@@ -34,7 +36,7 @@ import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {TemplateCategory} from '../types/template.js'
-import type {PieceFabricsMap, SelectedGarments, Space} from '../types/types.js'
+import type {SelectedGarments, Space, TemplateMap} from '../types/types.js'
 import {
 	createFabricTexture,
 	createMutationsSignal,
@@ -144,7 +146,9 @@ export class DrippyScene extends Element {
 	 * - All texture maps per fabric are bundled in TextureSet (accessed via texture())
 	 * - Easy cleanup when blocks or fabrics are removed
 	 */
-	private fabricTextureSignals = new Map<string, Map<string, ReturnType<typeof createFabricTexture>>>()
+	private fabricTextureSignals: Record<string, Record<string, ReturnType<typeof createFabricTexture>>> = createMutable(
+		{},
+	)
 
 	#applyFabricsWithSignals(
 		el: Element3D,
@@ -158,81 +162,78 @@ export class DrippyScene extends Element {
 
 		// Extract UV data for proper texture scaling
 		const meshes = [...meshesInTree(root)]
-		const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
-			? Array.from(meshes[0].geometry.attributes.uv.array)
-					.slice(0, 5)
-					.map((el: any) => Math.abs(el))
-			: []
+		const uvArray = meshes[0]?.geometry?.attributes?.uv?.array ? Array.from(meshes[0].geometry.attributes.uv.array) : []
 
 		// Get or create signal storage for this block
-		if (!this.fabricTextureSignals.has(blockId)) {
-			this.fabricTextureSignals.set(blockId, new Map())
-		}
-		const blockSignals = this.fabricTextureSignals.get(blockId)!
-		const fabricsSignal = createMemo(() => {
-			const templateSelection = store.getTemplateSelection(templateCategory)
-			const blockSelection = templateSelection?.[blockCategory]
-			const fabricsRecord = blockSelection?.fabrics ?? {}
-			return new Map(Object.entries(fabricsRecord)) as PieceFabricsMap
+		const blockFabricSignals = untrack(() =>
+			this.fabricTextureSignals[blockId]
+				? this.fabricTextureSignals[blockId]
+				: ((this.fabricTextureSignals[blockId] = {}), this.fabricTextureSignals[blockId]),
+		)
+
+		const currentSelectedFabrics = createMemo(() => {
+			const fabricsRecord = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
+
+			return fabricsRecord
 		})
 
-		// Reactively manage fabric texture signals
+		// Create texture signals when fabrics change
 		createEffect(() => {
-			const currentFabrics = fabricsSignal()
-			const currentFabricIds = new Set<string>()
+			//templateId
+			const currentFabrics = currentSelectedFabrics()
 
 			// Create signals for new fabrics
-			for (const fabric of currentFabrics.values()) {
-				currentFabricIds.add(fabric._id)
-				if (!blockSignals.has(fabric._id)) {
-					const textureState = createFabricTexture(() => fabric, uvArray)
-					blockSignals.set(fabric._id, textureState)
-				}
+			for (const fabric of Object.values(currentFabrics)) {
+				const textureState = createFabricTexture(() => fabric, uvArray)
+				blockFabricSignals[fabric._id] = textureState
+
+				// Track loading state per fabric ID
+				createEffect(() => {
+					const isLoading = textureState.loading()
+					const hasTexture = !!textureState.texture()
+					console.log(`### [${fabric._id}] isLoading:`, isLoading, 'hasTexture:', hasTexture)
+					if (isLoading) {
+						store.addLoadingFabric(fabric._id)
+					} else {
+						store.removeLoadingFabric(fabric._id)
+					}
+
+					onCleanup(() => {
+						store.removeLoadingFabric(fabric._id)
+					})
+				})
 			}
 
-			// Clean up signals for removed fabrics
-			for (const [fabricId] of blockSignals) {
-				if (!currentFabricIds.has(fabricId)) {
-					blockSignals.delete(fabricId)
-				}
-			}
+			onCleanup(() => {
+				console.log('### CREATE effect CLEANUP - deleting blockFabricSignals keys:', Object.keys(blockFabricSignals))
+				for (const key in blockFabricSignals) delete blockFabricSignals[key]
+				console.log('### CREATE effect CLEANUP - after delete, keys:', Object.keys(blockFabricSignals))
+			})
+		})
+
+		const isAnyFabricLoading = createMemo(() => {
+			return Object.values(blockFabricSignals).some(signal => signal.loading())
 		})
 
 		// Track aggregate loading state reactively
 		createEffect(() => {
-			const currentFabrics = fabricsSignal()
-			const activeSignals = [...currentFabrics.values()]
-				.map(f => blockSignals.get(f._id))
-				.filter((s): s is NonNullable<typeof s> => !!s)
+			if (!isAnyFabricLoading()) return
 
-			if (activeSignals.length === 0) {
+			store.addLoadingMaterial(loadingId)
+
+			onCleanup(() => {
 				store.removeLoadingMaterial(loadingId)
-				if (templateId) {
-					store.clearLoadingTemplate(templateId)
-				}
-				return
-			}
-
-			// Check if ANY signal is loading
-			const isAnyLoading = activeSignals.some(signal => signal.loading())
-
-			if (isAnyLoading) {
-				store.addLoadingMaterial(loadingId)
-			} else {
-				store.removeLoadingMaterial(loadingId)
-				if (templateId) {
-					store.clearLoadingTemplate(templateId)
-				}
-			}
+				if (templateId) store.clearLoadingTemplate(templateId)
+			})
 		})
 
 		// Apply textures reactively as they load
 		createEffect(() => {
-			const currentFabrics = fabricsSignal()
+			const currentFabrics = currentSelectedFabrics()
 
 			// Create a map for mesh to meshes key
 			const meshToFabricMeshesMap = new Map<string, string>()
-			for (const meshesKey of currentFabrics.keys()) {
+			for (const meshesKey of Object.keys(currentFabrics)) {
 				const meshArray = meshesKey.split('-')
 				for (const mesh of meshArray) {
 					meshToFabricMeshesMap.set(mesh, meshesKey)
@@ -245,10 +246,10 @@ export class DrippyScene extends Element {
 				// Check if there's a specific fabric assigned to this mesh
 				const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
 				const meshesKey = meshToFabricMeshesMap.get(meshKey)
-				const fabricToUse = currentFabrics.get(meshesKey || 'default')
+				const fabricToUse = currentFabrics[meshesKey || 'default']
 
 				if (fabricToUse) {
-					const textureState = blockSignals.get(fabricToUse._id)
+					const textureState = blockFabricSignals[fabricToUse._id]
 					if (textureState) {
 						const textureSet = textureState.texture()
 						const isLoading = textureState.loading()
@@ -268,12 +269,12 @@ export class DrippyScene extends Element {
 		const cleanup = () => {
 			store.removeLoadingMaterial(loadingId)
 			if (!el.isConnected) {
-				this.fabricTextureSignals.delete(blockId)
+				delete this.fabricTextureSignals[blockId]
 				this.#resetMaterialsToDefault(el)
 			}
 		}
+
 		onCleanup(cleanup)
-		return cleanup
 	}
 
 	// Reset materials to default state (no textures)
@@ -319,12 +320,12 @@ export class DrippyScene extends Element {
 	}
 
 	/** Check if a default garment should be visible based on user selections */
-	#isDefaultGarmentVisible(templateCategory: TemplateCategory, selectedTemplates: Map<TemplateCategory, any>): boolean {
+	#isDefaultGarmentVisible(templateCategory: TemplateCategory, selectedTemplates: TemplateMap): boolean {
 		// Has user selected this category?
-		if (selectedTemplates.has(templateCategory)) return false
+		if (selectedTemplates?.[templateCategory]) return false
 		// Is this category overridden by another selected category?
 		const overriddenBy = templateHelpers.getCategoriesThatOverride(templateCategory)
-		return !overriddenBy.some(cat => selectedTemplates.has(cat))
+		return !overriddenBy.some(cat => selectedTemplates[cat])
 	}
 
 	/** Apply fabrics to default garment models */
@@ -699,18 +700,29 @@ export class DrippyScene extends Element {
 				progressTimeouts.forEach(timeoutId => clearTimeout(timeoutId))
 			})
 
-			// Track block loading state
+			// Track block loading state - use WeakSet to track by element, not by ID
+			const trackedElements = new WeakSet<Element>()
+
 			createEffect(() => {
 				for (const [index, el] of garmentModels().entries()) {
-					// Use element ID + index for more stable identification
-					const elementId = el.getAttribute('id') || `unknown-${index}`
-					const blockId = Symbol(`block-${elementId}-${index}`)
-					const modelLoaded = onModelLoad(el)
+					// Only create effect once per element instance
+					if (!trackedElements.has(el)) {
+						trackedElements.add(el)
+						const blockId = el.getAttribute('data-block-id') || el.getAttribute('id') || `unknown-${index}`
+						const modelLoaded = onModelLoad(el)
 
-					createEffect(() => {
-						if (!modelLoaded()) store.addLoadingBlock(blockId)
-						onCleanup(() => store.removeLoadingBlock(blockId))
-					})
+						createEffect(() => {
+							if (!modelLoaded()) {
+								store.addLoadingBlock(blockId)
+							} else {
+								store.removeLoadingBlock(blockId)
+							}
+
+							onCleanup(() => {
+								store.removeLoadingBlock(blockId)
+							})
+						})
+					}
 
 					disableFrustumCulledOnLoad(el)
 				}
@@ -760,17 +772,29 @@ export class DrippyScene extends Element {
 
 			// Stable loading IDs per block
 			const blockLoadingIds = new Map<string, symbol>()
+			const fabricsBindingRoots = new Map<Element, () => void>()
 
 			// Re-apply materials whenever the selected fabrics change or models mount
 			createEffect(() => {
 				// Cause reactive re-run when the number of blocks changes
 				if (this.renderBlocks.length === 0) {
-					// nothing to bind
+					for (const disposeRoot of fabricsBindingRoots.values()) {
+						disposeRoot()
+					}
+					fabricsBindingRoots.clear()
 					return
 				}
 
+				const activeElements = new Set<Element>()
+
 				// Process each model using its data-blockid to find the correct fabric
 				for (const el of garmentModels()) {
+					activeElements.add(el)
+
+					if (fabricsBindingRoots.has(el)) {
+						continue
+					}
+
 					const blockId = el.getAttribute('id')
 					if (!blockId) continue
 
@@ -785,33 +809,36 @@ export class DrippyScene extends Element {
 					const templateCategory = parts[1] as TemplateCategory
 					const blockCategory = parts[2] as BlockCategory
 
-					// Get or create stable loading ID
-					let loadingId = blockLoadingIds.get(blockId)
-					if (!loadingId) {
-						loadingId = Symbol(`material-${blockId}`)
-						blockLoadingIds.set(blockId, loadingId)
-					}
+					const disposeRoot = createRoot(dispose => {
+						// Get or create stable loading ID
+						let loadingId = blockLoadingIds.get(blockId)
+						if (!loadingId) {
+							loadingId = Symbol(`material-${blockId}`)
+							blockLoadingIds.set(blockId, loadingId)
+						}
 
-					const modelLoaded = onModelLoad(el)
+						const modelLoaded = onModelLoad(el)
 
-					createEffect(() => {
-						const loaded = modelLoaded()
-						if (!loaded) return
+						createEffect(() => {
+							if (!modelLoaded()) return
 
-						const template = store.selectedTemplates.get(templateCategory)
-						const fabricsRecord = store.getTemplateSelection(templateCategory)?.[blockCategory]?.fabrics
-						void fabricsRecord
+							const template = store.selectedTemplates[templateCategory]
 
-						const cleanup = this.#applyFabricsWithSignals(
-							el,
-							loadingId!,
-							template?._id,
-							templateCategory,
-							blockCategory,
-						)
+							this.#applyFabricsWithSignals(el, loadingId!, template?._id, templateCategory, blockCategory)
+						})
 
-						onCleanup(cleanup)
+						return dispose
 					})
+
+					fabricsBindingRoots.set(el, disposeRoot)
+				}
+
+				// Dispose of roots whose elements are no longer in the scene
+				for (const [el, disposeRoot] of fabricsBindingRoots.entries()) {
+					if (!activeElements.has(el)) {
+						disposeRoot()
+						fabricsBindingRoots.delete(el)
+					}
 				}
 			})
 
@@ -891,7 +918,7 @@ export class DrippyScene extends Element {
 						if (currentSize.x === 0 || currentSize.y === 0) return
 
 						// Only use composer if we have objects to outline AND selectingPiece is set
-						if (store.selectingPiece && this.outlinePass && this.outlinePass.selectedObjects.length > 0) {
+						if (true && store.selectingPiece && this.outlinePass && this.outlinePass.selectedObjects.length > 0) {
 							// Update cameras to current frame's camera
 							const currentCamera = this.lumeScene!.threeCamera!
 							if (renderPass) renderPass.camera = currentCamera
@@ -1179,6 +1206,7 @@ export class DrippyScene extends Element {
 												})
 											}}
 											id=${item.id}
+											attr:data-block-id=${() => item.block._id}
 											data-index=${index()}
 											data-cloth
 											attr:src=${item.block.modelFile}
@@ -1200,8 +1228,9 @@ export class DrippyScene extends Element {
 												const defaultGarmentId = Symbol(`default-garment-${item.id}`)
 												store.trackModelLoading(defaultGarmentId, el)
 
+												const modelLoaded = onModelLoad(el)
+
 												setTimeout(() => {
-													const modelLoaded = onModelLoad(el)
 													createEffect(() => {
 														if (!this.avatarModel) return
 
@@ -1215,7 +1244,6 @@ export class DrippyScene extends Element {
 												})
 
 												// Apply default fabrics directly on load
-												const modelLoaded = onModelLoad(el)
 												createEffect(() => {
 													if (!modelLoaded()) return
 													this.#applyDefaultFabrics(el, item)
@@ -1241,6 +1269,7 @@ export class DrippyScene extends Element {
 							></lume-animation>
 						</lume-gltf-model>
 
+					<!-- Background scene -->
 					<lume-gltf-model
 						ref=${(el: GltfModel) => (this.backgroundModel = el)}
 						id="scene"
@@ -1252,6 +1281,7 @@ export class DrippyScene extends Element {
 						}}
 					></lume-gltf-model>
 
+					<!-- Background scene extra objects -->
 					<${Index}
 						each=${() => {
 							const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)

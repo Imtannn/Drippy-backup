@@ -102,7 +102,7 @@ class Store {
 
 	showAnimationSelect = false
 	selectedAnimation = 'none' as 'none' | 'walk' | 'dance'
-	selectedTemplates: TemplateMap = new Map()
+	selectedTemplates: TemplateMap = {}
 	selectedGarments: SelectedGarments = {}
 	customMeasurement = null as CustomMeasurement | null
 	isShowAvatar = true
@@ -110,9 +110,10 @@ class Store {
 
 	// Loading states tracked by unique symbols
 	drippySceneLoads = new Set<symbol>()
-	loadingBlocks = new Set<symbol>()
+	loadingBlocks: Record<string, number> = {}
 	loadingMaterials = new Set<symbol>()
 	loadingScreenshots = new Set<TemplateCategory>()
+	loadingFabricIds = new Set<string>()
 	loadingTemplateId: string | null = null
 	currentAbortController: AbortController | null = null
 
@@ -191,10 +192,6 @@ class Store {
 		}
 	}
 
-	private touchSelectedGarments() {
-		this.selectedGarments = {...this.selectedGarments}
-	}
-
 	getTemplateSelection(templateCategory: TemplateCategory): TemplateCategorySelection | undefined {
 		return this.selectedGarments[templateCategory]
 	}
@@ -262,8 +259,6 @@ class Store {
 					this.applySleevesFabricInheritance(block, templateCategory)
 				}
 			}
-
-			this.touchSelectedGarments()
 		})
 	}
 
@@ -271,56 +266,44 @@ class Store {
 		if (!Array.isArray(fabricData)) {
 			fabricData = [fabricData]
 		}
-		console.log(
-			'fabric template categories',
-			fabricData.map(item => item.templateCategory),
-		)
 
 		for (let {fabric, blockCategory, templateCategory, assignedMesh} of fabricData) {
-			console.log('fabric template category', templateCategory, fabric.category)
-
 			if (!assignedMesh) {
 				assignedMesh = 'default'
 			}
 
 			const garmentSelection = this.getGarmentSelection(templateCategory, blockCategory)
 
-			const newFabrics = {
-				...garmentSelection.fabrics,
-				[assignedMesh]: fabric,
-			}
-			garmentSelection.fabrics = newFabrics
+			garmentSelection.fabrics = {...garmentSelection.fabrics, [assignedMesh]: fabric}
 		}
-
-		// Don't call touchSelectedGarments() - with createMutable, nested property changes are automatically reactive
-		// Calling it here causes the entire selectedGarments object to be recreated, triggering ALL effects that track it
-		// this.touchSelectedGarments()
 	}
 
 	set unselectTemplate(template: Template) {
-		batch(() => {
-			const newTemplates: TemplateMap = new Map(store.selectedTemplates)
-			newTemplates.delete(template.category)
-			this.selectedTemplates = newTemplates
-			delete this.selectedGarments[template.category]
-			this.touchSelectedGarments()
+		untrack(() => {
+			batch(() => {
+				delete this.selectedTemplates[template.category]
+				delete this.selectedGarments[template.category]
+				// this.touchSelectedGarments()
 
-			// Update URL params to prevent re-adding from URL when last item is removed
-			if (newTemplates.size === 0) {
-				untrack(searchParams).delete('garments')
-				untrack(searchParams).delete('blocks')
-				untrack(searchParams).delete('fabrics')
-				pushState()
-			} else {
-				// Update garments param with remaining templates
-				const garmentEntries: string[] = []
-				for (const t of newTemplates.values()) {
-					const collectionSlug = t.collection ?? null
-					garmentEntries.push(collectionSlug ? `${collectionSlug}|${t._id}` : t._id)
+				// Update URL params to prevent re-adding from URL when last item is removed
+				// TODO side effects should be in an Effect (createEffect) or
+				// derived in a memo (createMemo).
+				if (Object.keys(this.selectedTemplates).length === 0) {
+					untrack(searchParams).delete('garments')
+					untrack(searchParams).delete('blocks')
+					untrack(searchParams).delete('fabrics')
+					pushState()
+				} else {
+					// Update garments param with remaining templates
+					const garmentEntries: string[] = []
+					for (const t of Object.values(this.selectedTemplates)) {
+						const collectionSlug = t.collection ?? null
+						garmentEntries.push(collectionSlug ? `${collectionSlug}|${t._id}` : t._id)
+					}
+					untrack(searchParams).set('garments', garmentEntries.join(','))
+					pushState()
 				}
-				untrack(searchParams).set('garments', garmentEntries.join(','))
-				pushState()
-			}
+			})
 		})
 	}
 	set setRemixOverlayTemplate(template: Template | null) {
@@ -551,7 +534,7 @@ class Store {
 	initializeOrderItems() {
 		// Initialize all selected templates as checked
 		const newSelectedItems = new Map<TemplateCategory, boolean>()
-		for (const [category] of this.selectedTemplates.entries()) {
+		for (const [category] of Object.entries(this.selectedTemplates)) {
 			newSelectedItems.set(category, true)
 		}
 		this.selectedOrderItems = newSelectedItems
@@ -564,7 +547,7 @@ class Store {
 			this.selectedSpace = null as Space | null
 			this.selectedCollection = null
 			this.selectedScene = null
-			this.selectedTemplates = new Map()
+			this.selectedTemplates = {}
 			this.selectedGarments = {}
 			this.selectedOrderItems = new Map<TemplateCategory, boolean>()
 			this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
@@ -629,23 +612,34 @@ class Store {
 		})
 	}
 
-	addLoadingBlock(key: symbol) {
+	addLoadingBlock(blockId: string) {
+		if (!blockId) return
 		untrack(() => {
-			this.loadingBlocks.add(key)
-			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+			const currentCount = this.loadingBlocks[blockId] ?? 0
+			this.loadingBlocks = {...this.loadingBlocks, [blockId]: currentCount + 1}
 		})
 	}
-	removeLoadingBlock(key: symbol) {
+	removeLoadingBlock(blockId: string) {
+		if (!blockId) return
 		untrack(() => {
-			this.loadingBlocks.delete(key)
-			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+			const currentCount = this.loadingBlocks[blockId]
+			if (!currentCount) return
+			if (currentCount === 1) {
+				const {[blockId]: _, ...rest} = this.loadingBlocks
+				this.loadingBlocks = rest
+			} else {
+				this.loadingBlocks = {...this.loadingBlocks, [blockId]: currentCount - 1}
+			}
 		})
 	}
 	clearLoadingBlocks() {
 		untrack(() => {
-			this.loadingBlocks.clear()
-			this.loadingBlocks = new Set(this.loadingBlocks) // trigger reactivity
+			this.loadingBlocks = {}
 		})
+	}
+
+	isBlockLoading(blockId: string): boolean {
+		return Boolean(blockId && blockId in this.loadingBlocks)
 	}
 
 	addLoadingMaterial(key: symbol) {
@@ -665,6 +659,29 @@ class Store {
 			this.loadingMaterials.clear()
 			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
 		})
+	}
+
+	addLoadingFabric(fabricId: string) {
+		untrack(() => {
+			this.loadingFabricIds.add(fabricId)
+			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
+		})
+	}
+	removeLoadingFabric(fabricId: string) {
+		untrack(() => {
+			this.loadingFabricIds.delete(fabricId)
+			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
+		})
+	}
+	clearLoadingFabrics() {
+		untrack(() => {
+			this.loadingFabricIds.clear()
+			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
+		})
+	}
+
+	isFabricLoading(fabricId: string): boolean {
+		return this.loadingFabricIds.has(fabricId)
 	}
 
 	addLoadingScreenshot(category: TemplateCategory) {
@@ -712,6 +729,7 @@ class Store {
 	clearAllLoadingStates() {
 		this.clearLoadingBlocks()
 		this.clearLoadingMaterials()
+		this.clearLoadingFabrics()
 		this.clearLoadingScreenshots()
 		this.clearIsDrippySceneLoading()
 		this.loadingTemplateId = null
@@ -726,12 +744,10 @@ class Store {
 
 		createEffect(() => {
 			if (!modelLoaded()) {
-				this.addLoadingBlock(id)
 				this.addIsDrippySceneLoading(id)
 			}
 
 			onCleanup(() => {
-				this.removeLoadingBlock(id)
 				this.removeIsDrippySceneLoading(id)
 			})
 		})

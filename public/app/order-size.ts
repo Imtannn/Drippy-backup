@@ -68,7 +68,7 @@ export class OrderSize extends Element {
 						<div class="selected-items">
 							<for-each
 								items=${() =>
-									Array.from(store.selectedTemplates.entries()).filter(([category]) =>
+									Object.entries(store.selectedTemplates).filter(([category]) =>
 										store.selectedOrderItems.get(category),
 									)}
 								content=${() =>

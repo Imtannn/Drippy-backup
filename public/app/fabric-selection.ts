@@ -1,9 +1,10 @@
 import {attribute, booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
+import '../elements/logic/show-when.js'
 import type {BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
+import './loading-spinner-overlay.js'
 import {store} from './store.js'
-import '../elements/logic/show-when.js'
 
 type FabricSelectionAttributes = 'pieceSelections' | 'availableFabrics' | 'selectedTemplateCategory' | 'isRemix'
 
@@ -91,6 +92,7 @@ export class FabricSelection extends Element {
 			assignedMesh: piece,
 		}))
 
+		console.log('### fabric data', {...fabricData})
 		store.setSelectedFabrics = fabricData
 	}
 
@@ -138,13 +140,19 @@ export class FabricSelection extends Element {
 						<for-each
 							items=${() => this.availableFabrics[store.selectingPiece || 'default']}
 							content=${() => (fabric: Fabric) => html`
-								<item-card
-									item-active=${() => this.#isFabricActive(fabric, piece)}
-									item-src=${() => fabric.thumb}
-									item-alt=${() => fabric.materialName}
-									item-value=${() => fabric}
-									oncardselected=${(e: CustomEvent) => this.#onFabricSelect(e, piece)}
-								></item-card>
+								<div class="item-card-container">
+									<item-card
+										item-active=${() => this.#isFabricActive(fabric, piece)}
+										item-src=${() => fabric.thumb}
+										item-alt=${() => fabric.materialName}
+										item-value=${() => fabric}
+										oncardselected=${(e: CustomEvent) => this.#onFabricSelect(e, piece)}
+									></item-card>
+									<show-when
+										condition=${() => store.isFabricLoading(fabric._id)}
+										content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
+									></show-when>
+								</div>
 							`}
 						></for-each>
 					</div>
@@ -201,6 +209,7 @@ export class FabricSelection extends Element {
 			grid-template-columns: repeat(3, 1fr);
 			gap: var(--uiGap);
 		}
+
 		:host([is-remix]) .items-grid {
 			/* override default 3-column grid */
 			grid-template-columns: none;

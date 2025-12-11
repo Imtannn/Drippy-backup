@@ -215,7 +215,7 @@ class TemplateHelpers {
 	checkOverridingCategories(category: TemplateCategory, selectedTemplates: TemplateMap): TemplateCategory[] {
 		const overridingCategories = this.overridingCategoriesMapping[category] as TemplateCategory[] | undefined
 
-		return overridingCategories?.filter(c => selectedTemplates.has(c)) ?? []
+		return overridingCategories?.filter(c => selectedTemplates[c]) ?? []
 	}
 
 	/**

@@ -1022,39 +1022,22 @@ export function createFabricTexture(
 	const [loading, setLoading] = createSignal(false)
 	const [error, setError] = createSignal<Error | null>(null)
 
-	const fabricIdentity = createMemo(() => {
-		const f = fabric()
-		if (!f) return null
-
-		return {
-			id: f._id,
-			baseColor: f.baseColor,
-			normal: f.normal,
-			displacement: f.displacement,
-			roughness: f.roughness,
-			alpha: f.alpha,
-			scaleX: f.scaleX,
-			scaleY: f.scaleY,
-			offsetX: f.offsetX,
-			offsetY: f.offsetY,
-			coef: f.coef,
-			rotate: f.rotate,
-		}
-	})
+	function reset() {
+		setTexture(null)
+		setLoading(false)
+		setError(null)
+	}
 
 	createEffect(() => {
-		const identity = fabricIdentity()
+		const currentFabric = fabric()
 
-		if (!identity) {
-			setTexture(null)
-			setLoading(false)
-			setError(null)
+		if (!currentFabric) {
+			console.log('### createFabricTexture - no fabric, calling reset()')
+			reset()
 			return
 		}
 
-		const currentFabric = fabric()
-		if (!currentFabric) return
-
+		console.log(`### createFabricTexture start loading for fabric ${currentFabric._id}`)
 		let canceled = false
 		let retryCount = 0
 
@@ -1062,11 +1045,21 @@ export function createFabricTexture(
 			setLoading(true)
 			setError(null)
 
+			const urls = [
+				currentFabric.baseColor || '(none)',
+				currentFabric.normal || '(none)',
+				currentFabric.displacement || '(none)',
+				currentFabric.roughness || '(none)',
+				currentFabric.alpha || '(none)',
+			]
+			console.log(`### fabric ${currentFabric._id} urls`, urls)
+
 			try {
 				const textureSet = await textureManager.loadFabricTexturesWithUV(currentFabric, uvArray)
 
 				if (canceled) return
 
+				console.log(`### fabric ${currentFabric._id} loaded textureSet`, textureSet)
 				setTexture(textureSet)
 				setLoading(false)
 			} catch (err) {
@@ -1074,6 +1067,7 @@ export function createFabricTexture(
 
 				const error = err instanceof Error ? err : new Error(String(err))
 
+				console.warn(`### fabric ${currentFabric._id} failed to load textures`, error)
 				if (retryCount < maxRetries) {
 					retryCount++
 					setTimeout(() => {
@@ -1090,7 +1084,7 @@ export function createFabricTexture(
 
 		onCleanup(() => {
 			canceled = true
-			setLoading(false)
+			reset()
 
 			const currentTexture = texture()
 			if (currentTexture) {

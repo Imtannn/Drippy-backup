@@ -21,10 +21,11 @@ import '../elements/tabs.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template} from '../types/template.js'
-import {templateHelpers} from './template-helpers.js'
 import './fabric-selection.js'
 import './item-card.js'
+import './loading-spinner-overlay.js'
 import {store, updateGarmentsSelectionInUrl} from './store.js'
+import {templateHelpers} from './template-helpers.js'
 
 const STYLE_TAB = 'style'
 const FABRICS_TAB = 'fabrics'
@@ -242,6 +243,21 @@ export class RemixOverlay extends Element {
 		return selection?.block?._id === block._id
 	}
 
+	#isBlockLoading = (block: Block) => {
+		if (!this.selectedTemplate) return false
+
+		// Check if the block model itself is still loading
+		if (store.isBlockLoading(block._id)) return true
+
+		// Only check fabrics if this block is actually the selected one
+		const selection = store.getBlockSelection(this.selectedTemplate.category, block.category)
+		if (selection?.block?._id !== block._id) return false // Not the selected block
+
+		// Check if any fabrics for this selected block are loading
+		if (!selection?.fabrics) return false
+		return Object.values(selection.fabrics).some(fabric => store.isFabricLoading(fabric._id))
+	}
+
 	#filteredBlocksByCategory = (category: BlockCategory) => {
 		// If using template blockOptions, filter from the specific category's blocks
 		if (this.selectedTemplate?.blockOptions && this.selectedTemplate.blockOptions.length > 0) {
@@ -296,16 +312,32 @@ export class RemixOverlay extends Element {
 										<div class="category-tabs">
 											<for-each
 												items=${() => this.blocksCategories}
-												content=${() => (category: BlockCategory) => html`
-													<button
-														class="category-tab"
-														classList=${() => ({active: this.selectedSubTab === category})}
-														onclick=${() => {
-															this.selectedSubTab = category
-														}}
-													>
-														${category}
-													</button>
+												content=${() => (blockCategory: BlockCategory) => html`
+													<show-when
+														condition=${() => this.selectedSubTab === blockCategory}
+														content=${() => html`
+															<div class="items-grid">
+																<for-each
+																	items=${() => this.#filteredBlocksByCategory(blockCategory)}
+																	content=${() => (block: Block) => html`
+																		<div class="item-card-container">
+																			<item-card
+																				item-active=${() => this.#getIsBlockActive(block)}
+																				item-src=${() => block.thumb}
+																				item-alt=${() => block.blockName}
+																				item-value=${() => block}
+																				oncardselected=${() => this.#onBlockSelect(block)}
+																			></item-card>
+																			<show-when
+																				condition=${() => this.#isBlockLoading(block)}
+																				content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
+																			></show-when>
+																		</div>
+																	`}
+																></for-each>
+															</div>
+														`}
+													></show-when>
 												`}
 											></for-each>
 										</div>
@@ -446,6 +478,10 @@ export class RemixOverlay extends Element {
 
 		.items-grid > * {
 			scroll-snap-align: start;
+		}
+
+		.item-card-container {
+			position: relative;
 		}
 
 		.empty-state {
