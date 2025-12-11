@@ -3,13 +3,10 @@ import {Meteor} from 'meteor/meteor'
 import {batch, createEffect, createMemo, onCleanup, untrack} from 'solid-js'
 import {createMutable} from 'solid-js/store'
 import {avatars} from '../consts/avatars.js'
-import {defaultGarmentsConfig} from '../consts/default-garments-config.js'
 import {spaces} from '../consts/spaces.js'
-import {templates} from '../consts/templates.js'
 import {Visits, type Visit} from '../imports/collections/Visits.js'
 import {pushState, searchParams, url} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
-import type {DefaultGarmentConfig} from '../types/default-garments.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {
@@ -823,78 +820,6 @@ createEffect(() => {
 			store.selectedAvatar = defaultAvatar.name
 		}
 	}
-})
-
-/** Check if a default garment is needed based on current selections */
-function isDefaultGarmentNeeded(config: DefaultGarmentConfig, selectedTemplates: TemplateMap): boolean {
-	const hasCategory = selectedTemplates.has(config.category)
-	// Dynamically get categories that override this one from templateHelpers
-	const overriddenBy = templateHelpers.getCategoriesThatOverride(config.category)
-	const isOverridden = overriddenBy.some(cat => selectedTemplates.has(cat))
-	return !hasCategory && !isOverridden
-}
-
-/** Apply a single default garment to the selection */
-function applyDefaultGarment(
-	config: DefaultGarmentConfig,
-	newTemplates: TemplateMap,
-	nextSelection: SelectedGarments,
-): SelectedGarments {
-	const template = templates[config.collection]?.find(t => t._id === config.templateId)
-	if (!template) {
-		console.warn(`Default garment template not found: ${config.templateId} in collection ${config.collection}`)
-		return nextSelection
-	}
-
-	newTemplates.set(config.category, template)
-	const templateBlockData = templateHelpers.convertTemplateToBlockData(template, config.collection)
-	const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
-		templateBlockData,
-		config.collection,
-	)
-	const templateSelection = templateHelpers.buildTemplateSelectionFromMaps(newBlocksMap, newFabricsMap)
-	return templateHelpers.withTemplateSelection(nextSelection, config.category, templateSelection)
-}
-
-// Apply default garments when avatar would otherwise be naked
-createEffect(() => {
-	// Only apply in template view when a space is selected
-	if (store.view !== 'template' || !store.selectedSpace) return
-
-	// Skip if URL has garment/block/fabric params AND they haven't been loaded yet
-	// Once urlParamsLoaded is true, defaults can apply normally (e.g., when user unselects items)
-	const params = untrack(searchParams)
-	const hasUrlParams = params.get('garments') || params.get('blocks') || params.get('fabrics')
-	if (hasUrlParams && !store.urlParamsLoaded) return
-
-	// Get avatar gender
-	const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
-	const gender = currentAvatar?.gender
-	if (!gender) return
-
-	// Get default garments config for this gender
-	const defaultGarments = defaultGarmentsConfig[gender]
-	if (!defaultGarments || defaultGarments.length === 0) return
-
-	const selectedTemplates = store.selectedTemplates
-
-	// Find which defaults are needed
-	const neededDefaults = defaultGarments.filter(config => isDefaultGarmentNeeded(config, selectedTemplates))
-
-	if (neededDefaults.length === 0) return
-
-	// Apply needed defaults
-	const newTemplates: TemplateMap = new Map(selectedTemplates)
-	let nextSelection = templateHelpers.cloneSelectedGarments(store.selectedGarments)
-
-	for (const config of neededDefaults) {
-		nextSelection = applyDefaultGarment(config, newTemplates, nextSelection)
-	}
-
-	batch(() => {
-		store.selectedGarments = nextSelection
-		store.selectedTemplates = newTemplates
-	})
 })
 
 export function updateGarmentsSelectionInUrl(selectedGarments: SelectedGarments) {
