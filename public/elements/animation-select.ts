@@ -1,6 +1,12 @@
 import {element, Element, html} from 'lume'
 import {store} from '../app/store.js'
 
+export const appAnims = [
+	{id: 'none', name: null, src: null},
+	{id: 'walk', name: 'FV2_Walking in place.mtn', src: '/models/Yuna-walkinplace.glb'},
+	{id: 'dance', name: 'FV2_Dancing_01.mtn', src: '/models/Yuna-dancing01.glb'},
+	{id: 'idle', name: 'Animation', src: '/models/Idle01.glb'},
+]
 @element
 export class AnimationSelect extends Element {
 	template = () => html`
@@ -11,9 +17,9 @@ export class AnimationSelect extends Element {
 					store.selectedAnimation = ev.target.value
 				}}
 			>
-				<option value="none">None</option>
-				<option value="walk">Walk</option>
-				<option value="dance">Dance</option>
+				${appAnims.map(
+					anim => html`<option value=${anim.id}>${anim.id.charAt(0).toUpperCase() + anim.id.slice(1)}</option>`,
+				)}
 			</select>
 		</div>
 	`

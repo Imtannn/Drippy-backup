@@ -60,6 +60,7 @@ import {templateHelpers} from './template-helpers.js'
 import {textureManager} from './texture-manager.js'
 import {AvatarSkeleton} from './avatar-skeleton.js'
 import type {Fabric} from '../types/fabric.js'
+import {appAnims} from '../elements/animation-select.js'
 
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
@@ -628,8 +629,8 @@ export class DrippyScene extends Element {
 						if (loadingCount === 2) {
 							this.loadingProgress = 10
 						} else if (loadingCount === 1) {
-							if (previousCount === 2 || previousCount === -1) {
-								// animate smoothly through multiple steps
+							if (previousCount === y2 || previousCount === -1) {
+								// animate smoothl through multiple steps
 								const progressStages = [
 									{progress: 15, delay: 0},
 									{progress: 30, delay: 150},
@@ -843,22 +844,13 @@ export class DrippyScene extends Element {
 			})
 
 			createEffect(() => {
-				if (store.selectedAnimation === 'none') {
-					this.animsEnabled = false
+				this.animsEnabled = store.selectedAnimation !== 'none'
 
-					this.animName = null
-					this.animSrc = null
-				} else if (store.selectedAnimation === 'walk') {
-					this.animsEnabled = true
+				const anim = appAnims.find(val => val.id === store.selectedAnimation)
+				if (!anim || !anim.src) return
 
-					this.animName = 'FV2_Walking in place.mtn'
-					this.animSrc = new URL('../models/Yuna-walkinplace.glb', import.meta.url).href
-				} else if (store.selectedAnimation === 'dance') {
-					this.animsEnabled = true
-
-					this.animName = 'FV2_Dancing_01.mtn'
-					this.animSrc = new URL('../models/Yuna-dancing01.glb', import.meta.url).href
-				}
+				this.animName = anim.name
+				this.animSrc = new URL(anim.src, import.meta.url).href
 			})
 
 			createEffect(() => {
