@@ -23,6 +23,8 @@ import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js'
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
 import {avatars} from '../consts/avatars.js'
+import {defaultGarmentsConfig} from '../consts/default-garments-config.js'
+import {templates} from '../consts/templates.js'
 
 import {createMutable} from 'solid-js/store'
 import {backgroundScenes} from '../consts/scenes.js'
@@ -34,7 +36,7 @@ import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {TemplateCategory} from '../types/template.js'
-import type {SelectedGarments, Space} from '../types/types.js'
+import type {SelectedGarments, Space, TemplateMap} from '../types/types.js'
 import {
 	createFabricTexture,
 	createMutationsSignal,
@@ -54,13 +56,16 @@ import {
 } from '../utils.js'
 import './app-buttons.js'
 import {store} from './store.js'
+import {templateHelpers} from './template-helpers.js'
 import {textureManager} from './texture-manager.js'
 import {AvatarSkeleton} from './avatar-skeleton.js'
+import type {Fabric} from '../types/fabric.js'
 
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
 
 type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
+type DefaultRenderBlock = RenderBlock & {fabrics: Record<string, Fabric>}
 
 @element
 export class DrippyScene extends Element {
@@ -74,6 +79,10 @@ export class DrippyScene extends Element {
 	@signal isDark = false
 	@signal sceneUrl = ''
 	@signal renderBlocks: RenderBlock[] = []
+	@signal private _defaultRenderBlocks: DefaultRenderBlock[] = []
+	@signal private _defaultGarmentVisibility: Map<TemplateCategory, boolean> = new Map()
+	defaultRenderBlocks: () => DefaultRenderBlock[] = () => this._defaultRenderBlocks
+	defaultGarmentVisibility: () => Map<TemplateCategory, boolean> = () => this._defaultGarmentVisibility
 
 	@signal private backgroundModel: GltfModel | null = null
 	@signal private avatarModel: GltfModel | null = null
@@ -310,6 +319,60 @@ export class DrippyScene extends Element {
 		this.avatarSkeleton.createBoneTarget(obj, 'Left_HandIndex_Tip')
 	}
 
+	/** Check if a default garment should be visible based on user selections */
+	#isDefaultGarmentVisible(templateCategory: TemplateCategory, selectedTemplates: TemplateMap): boolean {
+		// Has user selected this category?
+		if (selectedTemplates?.[templateCategory]) return false
+		// Is this category overridden by another selected category?
+		const overriddenBy = templateHelpers.getCategoriesThatOverride(templateCategory)
+		return !overriddenBy.some(cat => selectedTemplates[cat])
+	}
+
+	/** Apply fabrics to default garment models */
+	#applyDefaultFabrics(el: GltfModel, item: DefaultRenderBlock) {
+		const root = el.three
+		const meshes = [...meshesInTree(root)]
+		const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
+			? Array.from(meshes[0].geometry.attributes.uv.array)
+					.slice(0, 5)
+					.map((el: any) => Math.abs(el))
+			: []
+
+		// Create a map for mesh to fabrics key
+		const meshToFabricMeshesMap = new Map<string, string>()
+		for (const meshesKey of Object.keys(item.fabrics)) {
+			const meshArray = meshesKey.split('-')
+			for (const mesh of meshArray) {
+				meshToFabricMeshesMap.set(mesh, meshesKey)
+			}
+		}
+
+		const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
+
+		for (const mesh of meshes) {
+			// Check if there's a specific fabric assigned to this mesh
+			const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
+			const meshesKey = meshToFabricMeshesMap.get(meshKey)
+			const fabricToUse = item.fabrics[meshesKey || 'default']
+
+			if (fabricToUse) {
+				const textureState = createFabricTexture(() => fabricToUse, uvArray)
+				// Wait for texture to load then apply
+				createEffect(() => {
+					const textureSet = textureState.texture()
+					const isLoading = textureState.loading()
+					const error = textureState.error()
+
+					if (textureSet && !isLoading && !error) {
+						mesh.material = new THREE.MeshPhysicalMaterial()
+						textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+						el.needsUpdate()
+					}
+				})
+			}
+		}
+	}
+
 	#handlePointerDown = (e: PointerEvent) => {
 		const isMobile = !isDesktop()
 
@@ -344,6 +407,97 @@ export class DrippyScene extends Element {
 
 	connectedCallback() {
 		super.connectedCallback()
+
+		// Memoize default render blocks and visibility to prevent unnecessary re-renders
+		this.defaultRenderBlocks = createMemo(() => this._defaultRenderBlocks)
+		this.defaultGarmentVisibility = createMemo(() => this._defaultGarmentVisibility)
+
+		// Compute default garments based on avatar gender
+		// These are always rendered (preloaded) but visibility is toggled
+		this.createEffect(() => {
+			const currentAvatar = avatars.find(a => a.name === this.selectedAvatar)
+			const gender = currentAvatar?.gender
+			if (!gender) {
+				this._defaultRenderBlocks = []
+				return
+			}
+
+			const defaultGarments = defaultGarmentsConfig[gender]
+			if (!defaultGarments || defaultGarments.length === 0) {
+				this._defaultRenderBlocks = []
+				return
+			}
+
+			const blocks: DefaultRenderBlock[] = []
+			const blockCache = new Map<string, DefaultRenderBlock>()
+
+			for (const config of defaultGarments) {
+				const template = templates[config.collection]?.find(t => t._id === config.templateId)
+				if (!template) {
+					console.warn(`Default garment template not found: ${config.templateId} in collection ${config.collection}`)
+					continue
+				}
+
+				const templateBlockData = templateHelpers.convertTemplateToBlockData(template, config.collection)
+				const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
+					templateBlockData,
+					config.collection,
+				)
+
+				for (const [blockCategory, block] of newBlocksMap.entries()) {
+					const id = `default-${config.collection?.replace(/-/g, '_')}-${config.category}-${blockCategory}-${block._id}`
+
+					// Get fabrics for this block
+					const fabricsMap = newFabricsMap.get(blockCategory)
+					const fabrics: Record<string, Fabric> = {}
+					if (fabricsMap) {
+						for (const [mesh, fabric] of fabricsMap.entries()) {
+							fabrics[mesh] = fabric
+						}
+					}
+
+					let renderBlock = blockCache.get(id)
+					if (!renderBlock) {
+						renderBlock = {block, templateCategory: config.category, id, fabrics}
+						blockCache.set(id, renderBlock)
+					}
+
+					// Handle mirrored sleeves
+					if (block.category === 'Sleeves') {
+						blocks.push(renderBlock)
+						const idMirror = `${id}-mirror`
+						let mirrorBlock = blockCache.get(idMirror)
+						if (!mirrorBlock) {
+							mirrorBlock = {block, templateCategory: config.category, id: idMirror, fabrics}
+							blockCache.set(idMirror, mirrorBlock)
+						}
+						blocks.push(mirrorBlock)
+					} else {
+						blocks.push(renderBlock)
+					}
+				}
+			}
+
+			this._defaultRenderBlocks = blocks
+		})
+
+		// Update default garments visibility based on user selections
+		this.createEffect(() => {
+			const selectedTemplates = store.selectedTemplates
+			const newVisibility = new Map<TemplateCategory, boolean>()
+
+			// Check visibility for each template category in default garments
+			for (const block of this.defaultRenderBlocks()) {
+				if (!newVisibility.has(block.templateCategory)) {
+					newVisibility.set(
+						block.templateCategory,
+						this.#isDefaultGarmentVisible(block.templateCategory, selectedTemplates),
+					)
+				}
+			}
+
+			this._defaultGarmentVisibility = newVisibility
+		})
 
 		// Reset camera to default when space changes
 		this.createEffect(() => {
@@ -743,8 +897,8 @@ export class DrippyScene extends Element {
 					this.composer.addPass(renderPass)
 
 					this.outlinePass = new OutlinePass(size, threeScene, camera)
-					this.outlinePass.edgeStrength = 3
-					this.outlinePass.edgeGlow = 0.5
+					this.outlinePass.edgeStrength = 10
+					this.outlinePass.edgeGlow = 0
 					this.outlinePass.edgeThickness = 4
 					this.outlinePass.visibleEdgeColor.set(0x9b59b6) // purple accent
 					this.outlinePass.hiddenEdgeColor.set(0x9b59b6)
@@ -1027,6 +1181,7 @@ export class DrippyScene extends Element {
 							data-avatar
 						>
 							<lume-element3d ref=${(el: Element3D) => setMaterialsVisibleOnModelLoad(el.parentElement as GltfModel, () => store.isShowAvatar, el)}>
+								<!-- User-selected garments -->
 								<${For} each=${() => this.renderBlocks}>
 									${(item: RenderBlock, index: Accessor<number>) => html`
 										<lume-gltf-model
@@ -1054,6 +1209,51 @@ export class DrippyScene extends Element {
 											attr:data-block-id=${() => item.block._id}
 											data-index=${index()}
 											data-cloth
+											attr:src=${item.block.modelFile}
+											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
+										>
+										</lume-gltf-model>
+									`}
+								</>
+
+								<!-- Default garments (always loaded, visibility toggled) -->
+								<${For} each=${this.defaultRenderBlocks}>
+									${(item: DefaultRenderBlock, index: Accessor<number>) => html`
+										<lume-gltf-model
+											ref=${(el: GltfModel) => {
+												enableShadowOnModelLoad(el)
+												setEnvMapOnModelLoad(el, env)
+
+												// Track default garment loading
+												const defaultGarmentId = Symbol(`default-garment-${item.id}`)
+												store.trackModelLoading(defaultGarmentId, el)
+
+												const modelLoaded = onModelLoad(el)
+
+												setTimeout(() => {
+													createEffect(() => {
+														if (!this.avatarModel) return
+
+														const avatarLoaded = onModelLoad(this.avatarModel!)
+														createEffect(() => {
+															if (!avatarLoaded() || !modelLoaded()) return
+
+															this.#checkRiggedMesh(el)
+														})
+													})
+												})
+
+												// Apply default fabrics directly on load
+												createEffect(() => {
+													if (!modelLoaded()) return
+													this.#applyDefaultFabrics(el, item)
+												})
+											}}
+											id=${item.id}
+											data-index=${index()}
+											data-cloth
+											data-default-garment
+											visible=${() => this.defaultGarmentVisibility().get(item.templateCategory) ?? true}
 											attr:src=${item.block.modelFile}
 											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
 										>
