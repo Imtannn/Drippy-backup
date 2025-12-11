@@ -649,6 +649,7 @@ export function setMaterialsVisibleOnModelLoad(el: GltfModel, visible: Accessor<
 }
 
 export function showSkeletonHelper(el: GltfModel, show: () => boolean) {
+	return
 	const loaded = onModelLoad(el)
 
 	createEffect(() => {
