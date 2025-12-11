@@ -7,13 +7,13 @@ export const defaultGarmentsConfig: DefaultGarmentsConfig = {
 	female: [
 		{
 			category: 'Top',
-			templateId: '3561a65f-fa86-416f-b219-030d1f0c8ccd',
-			collection: 'shadow-grace',
+			templateId: 'default-top',
+			collection: 'default',
 		},
 		{
 			category: 'Pants',
-			templateId: '365f8b52-3d5f-4eff-ad51-968773105a9a',
-			collection: 'fige-dans-le-temps',
+			templateId: 'default-shorts',
+			collection: 'default',
 		},
 	],
 	male: [

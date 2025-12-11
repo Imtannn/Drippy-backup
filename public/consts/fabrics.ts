@@ -3859,43 +3859,31 @@ export const fabrics: Record<string, Fabric[]> = {
 	],
 	'animation-test': [
 		{
-			_id: 'df3101d7-4dad-4f49-b58f-c54d334b003e',
+			_id: 'fd603aea-6c9c-481b-ac7a-34f4743afeb5',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_GRAY/COTTON_-_GRAY_-_RENDER.webp',
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_GRAY/COTTON_-_GRAY_-_NORMAL.jpg',
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_GRAY/COTTON_-_GRAY_-_BASE.jpg',
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_GRAY/COTTON_-_GRAY_-_DISPLACE.jpg',
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_GRAY/COTTON_-_GRAY_-_ROUGH.jpg',
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_ROUGH.jpg',
 			alpha: '',
-			materialName: 'Gray',
-			category: 'Cotton',
+			materialName: 'Square',
+			category: '3d',
 			collection: 'animation-test',
-			templateCategories: ['Dress', 'Pants', 'Top'],
+			templateCategories: ['Accessories', 'Skirt'],
+			scaleX: 11,
+			scaleY: 10,
+			offsetX: 0,
+			offsetY: 0,
+			rotate: 0,
+			coef: 1000,
 		},
 		{
-			_id: 'be9012a2-cd98-4981-90e0-a108a746735a',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_ALPHA.jpg',
-			alpha: '',
-			materialName: 'Black Seethrough',
-			category: 'Cotton',
-			collection: 'animation-test',
-			templateCategories: ['Dress', 'Top'],
-		},
-		{
-			_id: '0cb5b762-85cc-4d44-b5b9-0d29a06d910a',
+			_id: '9a1883a6-7064-47b1-a1a0-47a45e21ec18',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK/COTTON_-_BLACK_-_RENDER.webp',
 			normal:
@@ -3913,25 +3901,59 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Dress', 'Pants', 'Top', 'Accessories', 'Skirt'],
 		},
 		{
-			_id: '50797a05-f3cf-4763-b657-28809bcdd120',
+			_id: '1a6f86a0-d527-45a1-a1d2-1d172dd18d36',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_GRAY/COTTON_-_GRAY_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_GRAY/COTTON_-_GRAY_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_GRAY/COTTON_-_GRAY_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_GRAY/COTTON_-_GRAY_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_GRAY/COTTON_-_GRAY_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Gray',
+			category: 'Cotton',
+			collection: 'animation-test',
+			templateCategories: ['Dress', 'Pants', 'Top'],
+		},
+		{
+			_id: 'a258ad98-d8ca-4354-aa09-b07718813c64',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_BASE.jpg',
+			displacement: '',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_ALPHA.jpg',
+			alpha: '',
+			materialName: 'Black Seethrough',
+			category: 'Cotton',
+			collection: 'animation-test',
+			templateCategories: ['Dress', 'Top'],
+		},
+		{
+			_id: 'f291f57f-99a7-4c1a-833a-78d7d981c2f0',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
 			normal:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
 			baseColor:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_WHITE/COTTON_-_WHITE_-_DISPLACE.jpg',
+			displacement: '',
 			roughness:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Cotton',
 			collection: 'animation-test',
-			templateCategories: ['Accessories', 'Dress', 'Pants', 'Top', 'Skirt'],
+			templateCategories: ['Top', 'Accessories', 'Dress', 'Pants', 'Skirt'],
 		},
 		{
-			_id: '1e75b6af-5746-4435-9c31-812f9dd7fde7',
+			_id: 'd3d4c2ef-ba90-4439-a44e-b8a828271cf7',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_RENDER.webp',
 			normal:
@@ -3949,7 +3971,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Accessories', 'Top'],
 		},
 		{
-			_id: 'b440245e-38c5-452d-bb42-2723197a101d',
+			_id: '552332fd-3f98-4e5e-bade-78027b9cb729',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_RENDER.webp',
 			normal:
@@ -3967,25 +3989,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Accessories', 'Pants', 'Top', 'Skirt'],
 		},
 		{
-			_id: '59437f0a-fbc4-4f17-9c9b-4b89c1133874',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/3D_-_SQUARE__11%2C_10%2C_0%2C_0%2C_1000%2C_0_/3D_-_SQUARE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/3D_-_SQUARE__11%2C_10%2C_0%2C_0%2C_1000%2C_0_/3D_-_SQUARE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/3D_-_SQUARE__11%2C_10%2C_0%2C_0%2C_1000%2C_0_/3D_-_SQUARE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/3D_-_SQUARE__11%2C_10%2C_0%2C_0%2C_1000%2C_0_/3D_-_SQUARE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/3D_-_SQUARE__11%2C_10%2C_0%2C_0%2C_1000%2C_0_/3D_-_SQUARE_-_ROUGH.jpg',
-			alpha: '',
-			materialName: 'Square 11, 10, 0, 0, 1000, 0',
-			category: '3d',
-			collection: 'animation-test',
-			templateCategories: ['Skirt'],
-		},
-		{
-			_id: '624950bc-565f-4ab0-a876-013ce99da719',
+			_id: 'cbc2fd0c-e41c-4b7c-a3b2-b8026fa58e04',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_RENDER.webp',
 			normal:
