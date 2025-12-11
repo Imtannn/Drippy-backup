@@ -70,6 +70,8 @@ export class TemplateView extends Element {
 	@signal scrollLeft = 0
 	private hasDragged = false
 
+	@signal disabledScroll = false
+	@signal showWishlistOnly = false
 	private isOpeningOverlay = false
 	private defaultCollection = 'gap'
 
@@ -90,7 +92,13 @@ export class TemplateView extends Element {
 			if (!this.spaceCollection) return
 
 			const defaultCategories: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants', 'Jumpsuit']
-			const collectionTemplates = templates[this.spaceCollection] ?? []
+			let collectionTemplates = templates[this.spaceCollection] ?? []
+
+			// Filter by wishlist if showWishlistOnly is true
+			if (this.showWishlistOnly) {
+				collectionTemplates = collectionTemplates.filter(template => template.isWhishlist === true)
+			}
+
 			const orderedTemplates: Template[] = []
 			const categories = new Map<TemplateCategory, Template[]>()
 			categories.set('All', [])
@@ -118,10 +126,20 @@ export class TemplateView extends Element {
 		})
 
 		this.createEffect(() => {
-			// Auto-select first category
-			const categories = Object.keys(this.templateCategories)
-			if (categories.length > 0) {
-				this.selectedTab = categories[0] as TemplateCategory
+			// Auto-select first category only if wishlist filter is not active
+			if (!this.showWishlistOnly) {
+				const categories = Object.keys(this.templateCategories)
+				// Reset to first category if currently on wishlist
+				if (this.selectedTab === 'wishlist' || !this.selectedTab) {
+					if (categories.length > 0) {
+						this.selectedTab = categories[0] as TemplateCategory
+					}
+				}
+			} else {
+				// When wishlist is activated, ensure selectedTab is set to 'wishlist'
+				if (this.selectedTab !== 'wishlist') {
+					this.selectedTab = 'wishlist' as TemplateCategory
+				}
 			}
 		})
 
@@ -135,14 +153,6 @@ export class TemplateView extends Element {
 		// Update URL when fabrics change
 		this.createEffect(() => {
 			updateGarmentsSelectionInUrl(store.selectedGarments)
-		})
-
-		// Sync showRemixOverlay with store.remixOverlayTemplate
-		this.createEffect(() => {
-			if (store.remixOverlayTemplate === null && this.showRemixOverlay) {
-				this.showRemixOverlay = false
-				store.setSelectingPiece = null
-			}
 		})
 
 		// Auto-trigger preview button after 15s if conditions are met
@@ -295,6 +305,7 @@ export class TemplateView extends Element {
 			this.showRemixOverlay = false
 			store.setSelectingPiece = null
 			store.setRemixOverlayTemplate = null
+			this.disabledScroll = false
 		})
 	}
 
@@ -311,6 +322,7 @@ export class TemplateView extends Element {
 			this.isOpeningOverlay = false
 			store.setRemixOverlayTemplate = template
 			this.showRemixOverlay = true
+			this.disabledScroll = true
 		})
 	}
 
@@ -352,6 +364,22 @@ export class TemplateView extends Element {
 	#onCollectionSelect = (collection: Collection) => {
 		if (this.hasDragged) return
 		store.setSelectedCollection = collection.slug
+	}
+
+	#onHeartButtonClick = () => {
+		const newWishlistState = !this.showWishlistOnly
+		this.showWishlistOnly = newWishlistState
+
+		// Set tab to "wishlist" when wishlist filter is activated, so tabs-content can display
+		if (newWishlistState) {
+			this.selectedTab = 'wishlist' as TemplateCategory
+		} else {
+			// Reset to first category when wishlist is deactivated
+			const categories = Object.keys(this.templateCategories)
+			if (categories.length > 0) {
+				this.selectedTab = categories[0] as TemplateCategory
+			}
+		}
 	}
 
 	#selectTemplate = (template: Template) => {
@@ -446,7 +474,8 @@ export class TemplateView extends Element {
 		</app-buttons-preset>
 
 		<bottom-sheet
-			show-remix-overlay=${() => this.showRemixOverlay}
+			show-remix-overlay=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
+			disabled-scroll=${() => this.disabledScroll}
 			float-direction="right"
 			default-snap=${() => (this.showDetailView ? '0.88' : '0.41')}
 			snap-points="0.02,0.2,0.41,0.6,0.88"
@@ -474,62 +503,93 @@ export class TemplateView extends Element {
 			></show-when>
 
 			<show-on-device device="desktop">
-				<div class="template-view-buttons">
-					<top-navigation
-						classList=${() => ({
-							hidden: (this.showRemixOverlay && store.remixOverlayTemplate !== null) || this.showDetailView,
-						})}
-					>
-						<div
-							class="template-info"
-							classList=${() => {
-								const templates = Array.from(store.selectedTemplates.values())
-								return {hidden: templates.length === 0 || true}
-							}}
-						>
-							${() => {
-								const templates = Array.from(store.selectedTemplates.values())
-								if (templates.length > 0) {
-									const selectedTemplate = templates[0]
-									return html`
-										<div class="template-image-wrapper">
-											<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
-										</div>
-										<div class="template-details">
-											<div class="template-name">${selectedTemplate.name}</div>
-											<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
-										</div>
-									`
-								}
-								return ''
-							}}
+				<show-when
+					condition=${() => !(this.showRemixOverlay && store.remixOverlayTemplate !== null)}
+					content=${() => html`
+						<div class="template-view-buttons">
+							<top-navigation
+								classList=${() => ({
+									hidden: this.showDetailView,
+								})}
+							>
+								<div
+									class="template-info"
+									classList=${() => {
+										const templates = Array.from(store.selectedTemplates.values())
+										return {hidden: templates.length === 0 || true}
+									}}
+								>
+									${() => {
+										const templates = Array.from(store.selectedTemplates.values())
+										if (templates.length > 0) {
+											const selectedTemplate = templates[0]
+											return html`
+												<div class="template-image-wrapper">
+													<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+												</div>
+												<div class="template-details">
+													<div class="template-name">${selectedTemplate.name}</div>
+													<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+												</div>
+											`
+										}
+										return ''
+									}}
+								</div>
+								<button
+									class="view-details-btn"
+									classList=${() => {
+										const templates = Array.from(store.selectedTemplates.values())
+										return {hidden: templates.length === 0 || true}
+									}}
+									disabled
+								>
+									View details
+								</button>
+								<div
+									class="default-nav"
+									classList=${() => {
+										const templates = Array.from(store.selectedTemplates.values())
+										return {hidden: templates.length > 0 && false}
+									}}
+								>
+									<avatar-dropdown
+										open=${() => this.showAvatarSelection}
+										show-popup
+										onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+									></avatar-dropdown>
+									<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+								</div>
+							</top-navigation>
 						</div>
-						<button
-							class="view-details-btn"
-							classList=${() => {
-								const templates = Array.from(store.selectedTemplates.values())
-								return {hidden: templates.length === 0 || true}
-							}}
-							disabled
-						>
-							View details
-						</button>
-						<div
-							class="default-nav"
-							classList=${() => {
-								const templates = Array.from(store.selectedTemplates.values())
-								return {hidden: templates.length > 0 && false}
-							}}
-						>
-							<avatar-dropdown
-								open=${() => this.showAvatarSelection}
-								show-popup
-								onavatar-dropdown-click=${this.#onAvatarDropdownClick}
-							></avatar-dropdown>
-							<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
-						</div>
-					</top-navigation>
-				</div>
+					`}
+				></show-when>
+				<show-when
+					condition=${() =>
+						spaceHasMultipleCollections(store.selectedSpace) &&
+						!this.showAvatarSelection &&
+						!this.showPoseSelection &&
+						!this.showDetailView &&
+						this.selectedTab !== null}
+					content=${() => html`
+						<top-navigation class="collections-navigation">
+							<div class="collections-scroll-container">
+								<for-each
+									items=${() => getSpaceCollections(store.selectedSpace).map(c => getCollectionBySlug(collections, c))}
+									content=${() => (collection: Collection) => html`
+										<button
+											class="collection-logo-button"
+											classList=${() => ({active: store.getEffectiveCollection() === collection.slug})}
+											onclick=${() => this.#onCollectionSelect(collection)}
+										>
+											<img src=${collection.logo || '/images/drippy-logo.webp'} alt=${collection.name} />
+										</button>
+									`}
+								></for-each>
+							</div>
+						</top-navigation>
+					`}
+				></show-when>
 			</show-on-device>
 			<show-when
 				condition=${() => this.showDetailView}
@@ -550,74 +610,113 @@ export class TemplateView extends Element {
 			></show-when>
 			<show-when
 				condition=${() =>
-					!this.showAvatarSelection && !this.showPoseSelection && !this.showDetailView && this.selectedTab !== null}
+					!this.showAvatarSelection &&
+					!this.showPoseSelection &&
+					!this.showDetailView &&
+					(this.selectedTab !== null || this.showWishlistOnly)}
 				content=${() => html`
 					<tabs-provider
-						default-value=${() => this.selectedTab}
-						ontabchange=${(e: CustomEvent) => (this.selectedTab = e.detail.value)}
+						selected-value=${() => (this.showWishlistOnly ? 'wishlist' : this.selectedTab || '')}
+						default-value=${() => this.selectedTab || ''}
+						ontabchange=${(e: CustomEvent) => {
+							// Disable wishlist filter when a tab is selected (not wishlist)
+							if (e.detail.value !== 'wishlist') {
+								this.showWishlistOnly = false
+							}
+							this.selectedTab = e.detail.value as TemplateCategory
+						}}
 					>
-						<bottom-sheet-header>
-							<div class="tabs-container">
-								<div class="tabs-action-buttons">
-									<heart-button></heart-button>
-									<search-button></search-button>
-								</div>
-								<tabs-list>
-									<for-each
-										items=${() => Object.keys(this.templateCategories)}
-										content=${() => (category: TemplateCategory) => html`
-											<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
-										`}
-									></for-each>
-								</tabs-list>
-							</div>
-							<show-when
-								condition=${() => spaceHasMultipleCollections(store.selectedSpace)}
-								content=${() => html`
-									<div class="collections-navigation">
-										<div
-											class="collections-scroll-container"
-											onmousedown=${this.#onDragStart}
-											onmouseleave=${this.#onDragEnd}
-											onmouseup=${this.#onDragEnd}
-											onmousemove=${this.#onDragMove}
-										>
+						<show-when
+							condition=${() => !(this.showRemixOverlay && store.remixOverlayTemplate !== null)}
+							content=${() => html`
+								<bottom-sheet-header>
+									<div class="tabs-container">
+										<div class="tabs-action-buttons">
+											<heart-button
+												active=${() => this.showWishlistOnly}
+												onclick=${this.#onHeartButtonClick}
+											></heart-button>
+											<search-button></search-button>
+										</div>
+										<tabs-list>
 											<for-each
-												items=${() =>
-													getSpaceCollections(store.selectedSpace).map(c => getCollectionBySlug(collections, c))}
-												content=${() => (collection: Collection) => html`
-													<button
-														draggable=${false}
-														class="collection-logo-button"
-														classList=${() => ({active: store.getEffectiveCollection() === collection.slug})}
-														onclick=${() => this.#onCollectionSelect(collection)}
-													>
-														<img
-															draggable=${false}
-															src=${collection.logo || '/images/drippy-logo.webp'}
-															alt=${collection.name}
-														/>
-													</button>
+												items=${() => Object.keys(this.templateCategories)}
+												content=${() => (category: TemplateCategory) => html`
+													<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
 												`}
 											></for-each>
-										</div>
+										</tabs-list>
 									</div>
-								`}
-							></show-when>
-						</bottom-sheet-header>
+									<show-when
+										condition=${() =>
+											spaceHasMultipleCollections(store.selectedSpace) &&
+											!this.showAvatarSelection &&
+											!this.showPoseSelection &&
+											!this.showDetailView &&
+											this.selectedTab !== null}
+										content=${() => html`
+											<div class="collections-navigation">
+												<div
+													class="collections-scroll-container"
+													onmousedown=${this.#onDragStart}
+													onmouseleave=${this.#onDragEnd}
+													onmouseup=${this.#onDragEnd}
+													onmousemove=${this.#onDragMove}
+												>
+													<for-each
+														items=${() =>
+															getSpaceCollections(store.selectedSpace).map(c => getCollectionBySlug(collections, c))}
+														content=${() => (collection: Collection) => html`
+															<button
+																draggable=${false}
+																class="collection-logo-button"
+																classList=${() => ({active: store.getEffectiveCollection() === collection.slug})}
+																onclick=${() => this.#onCollectionSelect(collection)}
+															>
+																<img
+																	draggable=${false}
+																	src=${collection.logo || '/images/drippy-logo.webp'}
+																	alt=${collection.name}
+																/>
+															</button>
+														`}
+													></for-each>
+												</div>
+											</div>
+										`}
+									></show-when>
+								</bottom-sheet-header>
+							`}
+						></show-when>
 
 						<div class="tabs-content-container">
-							<for-each
-								items=${() => Object.keys(this.templateCategories)}
-								content=${() => (category: TemplateCategory) => html`
-									<tabs-content selected-value=${category}>
+							<!-- Show wishlist items when wishlist filter is active -->
+							<show-when
+								condition=${() => this.showWishlistOnly}
+								content=${() => html`
+									<tabs-content selected-value="wishlist">
 										<div class="items-grid">
 											<for-each
-												items=${() =>
-													category === 'All' ? (this.templateCategories.All ?? []) : this.templateCategories[category]}
+												items=${() => this.templateCategories.All ?? []}
 												content=${() => (template: Template) => html`
-													<div class="template-item">
-														<div class="template-item-container">
+													<div
+														class="template-item"
+														classList=${() => ({
+															'item-active':
+																this.showRemixOverlay &&
+																store.remixOverlayTemplate !== null &&
+																this.#isTemplateActive(template),
+														})}
+													>
+														<div
+															class="template-item-container"
+															classList=${() => ({
+																'item-active':
+																	this.showRemixOverlay &&
+																	store.remixOverlayTemplate !== null &&
+																	this.#isTemplateActive(template),
+															})}
+														>
 															<item-card
 																item-active=${() => this.#isTemplateActive(template)}
 																item-src=${template.thumb}
@@ -627,7 +726,8 @@ export class TemplateView extends Element {
 																object-fit="contain"
 																object-position="center"
 																aspect-ratio="0.79"
-																is-whishlist
+																is-whishlist=${() => template.isWhishlist ?? false}
+																data-show-wishlist="true"
 															></item-card>
 															<show-when
 																condition=${() =>
@@ -668,7 +768,95 @@ export class TemplateView extends Element {
 										</div>
 									</tabs-content>
 								`}
-							></for-each>
+							></show-when>
+							<!-- Show category tabs when wishlist is not active -->
+							<show-when
+								condition=${() => !this.showWishlistOnly}
+								content=${() => html`
+									<for-each
+										items=${() => Object.keys(this.templateCategories)}
+										content=${() => (category: TemplateCategory) => html`
+											<tabs-content selected-value=${category}>
+												<div class="items-grid">
+													<for-each
+														items=${() =>
+															category === 'All'
+																? (this.templateCategories.All ?? [])
+																: this.templateCategories[category]}
+														content=${() => (template: Template) => html`
+															<div
+																class="template-item"
+																classList=${() => ({
+																	'item-active':
+																		this.showRemixOverlay &&
+																		store.remixOverlayTemplate !== null &&
+																		this.#isTemplateActive(template),
+																})}
+															>
+																<div
+																	class="template-item-container"
+																	classList=${() => ({
+																		'item-active':
+																			this.showRemixOverlay &&
+																			store.remixOverlayTemplate !== null &&
+																			this.#isTemplateActive(template),
+																	})}
+																>
+																	<item-card
+																		item-active=${() => this.#isTemplateActive(template)}
+																		item-src=${template.thumb}
+																		item-alt=${template.name}
+																		item-value=${template}
+																		oncardselected=${this.#onItemClick}
+																		object-fit="contain"
+																		object-position="center"
+																		aspect-ratio="0.79"
+																		is-whishlist=${() => template.isWhishlist ?? false}
+																		data-show-wishlist="true"
+																	></item-card>
+																	<show-when
+																		condition=${() =>
+																			this.showTemplateOverlay?._id === template._id &&
+																			!store.isTemplateLoading(template._id)}
+																		content=${() => html`
+																			<template-item-overlay
+																				selected-template=${() => template}
+																				onclose=${this.#onTemplateOverlayClose}
+																				onremix=${this.#onTemplateOverlayRemix}
+																			></template-item-overlay>
+																		`}
+																	></show-when>
+																	<show-when
+																		condition=${() => store.isTemplateLoading(template._id)}
+																		content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
+																	></show-when>
+																</div>
+																<div class="template-product-name">${template.name}</div>
+																<div
+																	class="template-product-price-container"
+																	classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}
+																>
+																	<div
+																		class="template-product-price"
+																		classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
+																	>
+																		${() => (template.price !== 'N/A' ? 'EU ' + template.price : 'N/A')}
+																	</div>
+																	<show-when
+																		condition=${() => store.selectedSpace?.isWholesale}
+																		content=${() => html`<div class="template-product-wholesale">MOQ: 5pcs</div>`}
+																	></show-when>
+																</div>
+															</div>
+														`}
+													>
+													</for-each>
+												</div>
+											</tabs-content>
+										`}
+									></for-each>
+								`}
+							></show-when>
 						</div>
 					</tabs-provider>
 				`}
@@ -679,6 +867,7 @@ export class TemplateView extends Element {
 					<remix-overlay
 						selected-template=${() => store.remixOverlayTemplate}
 						onclose=${this.#closeRemixOverlay}
+						disabled-scroll=${() => this.disabledScroll}
 					></remix-overlay>
 				`}
 			></show-when>
@@ -912,6 +1101,13 @@ export class TemplateView extends Element {
 			width: 100%;
 			height: 100%;
 			flex: 1;
+		}
+
+		@media (min-width: 768px) {
+			.template-item-container.item-active {
+				z-index: 2001;
+				position: relative;
+			}
 		}
 
 		.template-product-name {

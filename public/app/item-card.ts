@@ -71,7 +71,7 @@ export class ItemCard extends Element {
 	}
 
 	get #shouldShowWishlist() {
-		return this.hasAttribute('is-whishlist')
+		return this.hasAttribute('data-show-wishlist')
 	}
 
 	template = () => html`

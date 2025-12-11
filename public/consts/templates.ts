@@ -11,6 +11,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'essence-of-her',
 			materialId: 'c32f1c4e-0219-4037-a5e2-b126e44c954b',
+			isWhishlist: false,
 		},
 		{
 			_id: '32d0064c-73f0-4381-a90a-f64e4d86dce5',
@@ -21,6 +22,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'essence-of-her',
 			materialId: 'aad77653-ddd4-4fbc-b5dc-bf1f0a9e06da',
+			isWhishlist: false,
 		},
 		{
 			_id: 'bdd67110-5ee0-4a75-a36e-e41063b5ed87',
@@ -31,6 +33,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'essence-of-her',
 			materialId: 'c32f1c4e-0219-4037-a5e2-b126e44c954b',
+			isWhishlist: false,
 		},
 		{
 			_id: '9a6f1c12-c0bd-49f2-8b28-3efdad315edb',
@@ -41,6 +44,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'essence-of-her',
 			materialId: 'aad77653-ddd4-4fbc-b5dc-bf1f0a9e06da',
+			isWhishlist: false,
 		},
 		{
 			_id: '75709d31-3ce2-4a52-a137-ea5ff04dd9c1',
@@ -52,6 +56,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'essence-of-her',
 			materialId: 'd4d02ccb-5165-4282-9ae7-1f87290df697',
+			isWhishlist: false,
 		},
 		{
 			_id: '74d34f12-f5d8-40bb-8af4-adf0996dab13',
@@ -62,6 +67,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'essence-of-her',
 			materialId: '1aecb04e-1b58-4a26-b23d-1e711e9cc3c6',
+			isWhishlist: false,
 		},
 	],
 	movement: [
@@ -74,6 +80,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'movement',
 			materialId: 'abe0d05c-47c1-4c1f-82a1-d18e765d228e',
+			isWhishlist: false,
 		},
 		{
 			_id: '15df846b-c99a-4b2a-994e-13e630cacd69',
@@ -85,6 +92,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'movement',
 			materialId: '2bd1121b-7beb-4629-bed4-18045ebc5469',
+			isWhishlist: false,
 		},
 		{
 			_id: '58a37dcc-d1a1-4b92-a488-e4a6bab7993c',
@@ -96,6 +104,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'movement',
 			materialId: '5ab14810-1d6d-458f-b176-c782e1c8061b',
+			isWhishlist: false,
 		},
 		{
 			_id: '37e33d36-e174-421c-9ea7-ed77697f382f',
@@ -121,6 +130,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '5ab14810-1d6d-458f-b176-c782e1c8061b',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '3ab47c1e-7122-42fd-91db-2f4d6c6d4d8f',
@@ -146,6 +156,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '62dada55-4b0c-4929-87f1-7bbae27389f4',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '85e22cd4-7502-4cac-9aba-fae51fbb795e',
@@ -157,6 +168,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'movement',
 			materialId: 'bb3d3990-8ef0-49cf-b3f9-e3b0e4a09a6e',
+			isWhishlist: false,
 		},
 		{
 			_id: '1f8e18cb-c672-424b-8ef5-043c624f4582',
@@ -167,6 +179,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'movement',
 			materialId: 'bb3d3990-8ef0-49cf-b3f9-e3b0e4a09a6e',
+			isWhishlist: false,
 		},
 		{
 			_id: 'cde79f49-7bc0-4e68-a47a-661848c7474e',
@@ -178,6 +191,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'movement',
 			materialId: '2bd1121b-7beb-4629-bed4-18045ebc5469',
+			isWhishlist: false,
 		},
 		{
 			_id: '6be66217-1e75-48f1-acdd-5d25bb6ea351',
@@ -189,6 +203,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'movement',
 			materialId: '5ab14810-1d6d-458f-b176-c782e1c8061b',
+			isWhishlist: false,
 		},
 		{
 			_id: 'f8222dc8-27c2-442a-852a-8f1a20b75e71',
@@ -200,6 +215,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'movement',
 			materialId: '62dada55-4b0c-4929-87f1-7bbae27389f4',
+			isWhishlist: false,
 		},
 		{
 			_id: '1f52f230-2380-42bd-9219-71d0f2816858',
@@ -211,6 +227,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'movement',
 			materialId: '62dada55-4b0c-4929-87f1-7bbae27389f4',
+			isWhishlist: false,
 		},
 		{
 			_id: '7a881324-c44e-40e5-b05f-c6388074d135',
@@ -236,6 +253,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '5ab14810-1d6d-458f-b176-c782e1c8061b',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'd1b0f733-53d4-42d5-8ce0-bf702cbed44c',
@@ -261,6 +279,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '5ab14810-1d6d-458f-b176-c782e1c8061b',
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	'shadow-grace': [
@@ -273,6 +292,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'shadow-grace',
 			materialId: 'c7fa7661-af62-4a2f-b670-e78e18d002a4',
+			isWhishlist: false,
 		},
 		{
 			_id: '8239da47-ec90-4d29-a006-0de260c0cc5b',
@@ -283,6 +303,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'shadow-grace',
 			materialId: 'aabca169-a0b9-4adf-bf97-f7fa63c9ae45',
+			isWhishlist: false,
 		},
 		{
 			_id: 'a528c7f4-1f6a-4179-83d1-bf2c37a3335f',
@@ -293,6 +314,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'shadow-grace',
 			materialId: 'c7fa7661-af62-4a2f-b670-e78e18d002a4',
+			isWhishlist: false,
 		},
 		{
 			_id: '78a64cf2-24e7-45c5-b923-c82332e454cb',
@@ -309,6 +331,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '257efb5f-b6c0-4b4c-9600-0f6596f63126',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '4963da35-0cc3-4b93-a609-05c26cd710f3',
@@ -319,6 +342,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'shadow-grace',
 			materialId: 'c7fa7661-af62-4a2f-b670-e78e18d002a4',
+			isWhishlist: false,
 		},
 		{
 			_id: '8699e69f-4211-4e12-9f00-0aab6b1d0268',
@@ -329,6 +353,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'shadow-grace',
 			materialId: 'c7fa7661-af62-4a2f-b670-e78e18d002a4',
+			isWhishlist: false,
 		},
 		{
 			_id: 'dc07ec16-b823-43df-b2d5-fba78d08869f',
@@ -340,6 +365,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'shadow-grace',
 			materialId: 'd027f1a1-9bcd-48b9-ba86-754f310e03ac',
+			isWhishlist: false,
 		},
 		{
 			_id: '3561a65f-fa86-416f-b219-030d1f0c8ccd',
@@ -350,6 +376,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'shadow-grace',
 			materialId: 'aabca169-a0b9-4adf-bf97-f7fa63c9ae45',
+			isWhishlist: false,
 		},
 		{
 			_id: '0fbe6a1c-9fb6-4b81-a85e-86e52d4fc90c',
@@ -360,6 +387,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'shadow-grace',
 			materialId: 'c5020df4-dfd8-4105-b06f-8a27d060650e',
+			isWhishlist: false,
 		},
 		{
 			_id: '6f7ab836-0e73-4d8b-9427-671201165d7d',
@@ -371,6 +399,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'shadow-grace',
 			materialId: 'c7fa7661-af62-4a2f-b670-e78e18d002a4',
+			isWhishlist: false,
 		},
 		{
 			_id: '1670f9a2-4416-488e-b5bc-5360fd734ba2',
@@ -388,6 +417,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'c406adef-3bf7-42c6-9bb0-128f646d2ca3',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'ca1abe15-e12b-44aa-b7de-aa2d7c00b7f6',
@@ -404,6 +434,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'c7fa7661-af62-4a2f-b670-e78e18d002a4',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'de1ce9a0-209f-4d36-b9ae-e670fdc25764',
@@ -415,6 +446,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'shadow-grace',
 			materialId: 'c5020df4-dfd8-4105-b06f-8a27d060650e',
+			isWhishlist: false,
 		},
 		{
 			_id: '37457906-b4a9-4745-8b36-7bed929e1e93',
@@ -431,6 +463,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'c7fa7661-af62-4a2f-b670-e78e18d002a4',
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	'duality-in-radiance': [
@@ -458,6 +491,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '0f57bd27-ba88-49a7-8f27-97b3988abb62',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'abf3bc96-36b9-4369-9221-f975013be2c7',
@@ -479,6 +513,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '0a410100-ff5c-4fae-a771-d12968821be4',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '92988589-ca8d-4990-8adf-f5ce8eb7ab39',
@@ -490,6 +525,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'duality-in-radiance',
 			materialId: '4663cb04-5ccf-471c-a377-aa8803a99ad7',
+			isWhishlist: false,
 		},
 		{
 			_id: 'f6a02f25-b0ea-4fdd-bfd0-bff9c21d5b62',
@@ -500,6 +536,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'duality-in-radiance',
 			materialId: 'b96ae25d-ac25-4178-9f2a-5fc797410b4b',
+			isWhishlist: false,
 		},
 		{
 			_id: '94b95ebc-f50c-42a5-aa69-34bbe9f02e61',
@@ -511,6 +548,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'duality-in-radiance',
 			materialId: 'e22be3bf-cfdb-4ab4-99a5-97201e422fde',
+			isWhishlist: false,
 		},
 		{
 			_id: '9c4deb17-d552-45db-9e8d-724d92de2af4',
@@ -528,6 +566,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '991ea9fa-c12b-4da7-8940-db4157748c2f',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '4d6d02da-1600-4d0b-9a1b-444f6d3787aa',
@@ -545,6 +584,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '599a8ad4-052d-498e-8bad-21d4c5447e91',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'a9a5fcfc-a1d0-4a0c-ac08-a2d0741d1b48',
@@ -562,6 +602,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '0f57bd27-ba88-49a7-8f27-97b3988abb62',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '79f91354-ec11-4f8d-830e-3100df73f4ca',
@@ -573,6 +614,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'duality-in-radiance',
 			materialId: '4663cb04-5ccf-471c-a377-aa8803a99ad7',
+			isWhishlist: false,
 		},
 		{
 			_id: '2334b2c8-f423-40e3-ac29-b9c0b1df2308',
@@ -584,6 +626,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'duality-in-radiance',
 			materialId: '87f7c49d-3685-4e91-bdd1-f98e784faac9',
+			isWhishlist: false,
 		},
 		{
 			_id: '30678a0f-fd74-4ba7-92e3-88debf9890ce',
@@ -595,6 +638,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'duality-in-radiance',
 			materialId: '30a97ccc-2992-432e-9251-a3af81846f60',
+			isWhishlist: false,
 		},
 		{
 			_id: 'f9d3483e-f5c0-4812-aaf6-b7c388a8e0e0',
@@ -612,6 +656,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'e22be3bf-cfdb-4ab4-99a5-97201e422fde',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '973695e7-ff6f-414e-941b-7fe145346748',
@@ -623,6 +668,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'duality-in-radiance',
 			materialId: '87f7c49d-3685-4e91-bdd1-f98e784faac9',
+			isWhishlist: false,
 		},
 		{
 			_id: '9854c44c-c303-484a-a8a8-11e53411a4c3',
@@ -640,6 +686,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '95bcf927-b3a3-4524-959d-654aa6d6b75f',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'a7f486b7-0090-4a58-85ee-13865271aa11',
@@ -651,6 +698,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accesorries',
 			collection: 'duality-in-radiance',
 			materialId: '30a97ccc-2992-432e-9251-a3af81846f60',
+			isWhishlist: false,
 		},
 		{
 			_id: '48c926f2-4979-4dca-ba95-51282df66c24',
@@ -668,6 +716,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'dd331a56-2de8-41b6-9664-26536de06b71',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '3b84ef85-d6fe-4821-a289-c52e680b1e94',
@@ -685,6 +734,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '87f7c49d-3685-4e91-bdd1-f98e784faac9',
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	'9heure19heure': [
@@ -707,6 +757,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '4959f476-c5c2-4630-b65d-44a195853e7d',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '92f3b8ff-503c-4511-9700-080600e7dad5',
@@ -723,6 +774,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '956cada2-3005-4b6e-a148-df84926e7819',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '51a14124-99e6-4733-bcbb-0f18c2595901',
@@ -739,6 +791,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '4959f476-c5c2-4630-b65d-44a195853e7d',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'c0d8a93d-21d7-44bc-a83a-a61ac8e7b45f',
@@ -755,6 +808,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '4959f476-c5c2-4630-b65d-44a195853e7d',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '19e59410-05f2-4a64-8f19-6c90b8f05059',
@@ -771,6 +825,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '4959f476-c5c2-4630-b65d-44a195853e7d',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '6cf6ba88-a060-490a-9d7d-a0ec6d4bde4c',
@@ -787,6 +842,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '4959f476-c5c2-4630-b65d-44a195853e7d',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'fc42c169-9c12-47d6-ba5d-06dec5bdbd0d',
@@ -803,6 +859,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'f92953bc-fe5c-4445-9869-7fcb3b7afa49',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '876e44a4-8878-458f-a006-1dbf3dd9e456',
@@ -814,6 +871,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: '9heure19heure',
 			materialId: '4e02fbf1-d082-49fd-9465-3aef80e5fca0',
+			isWhishlist: false,
 		},
 		{
 			_id: '0228f7e5-980d-4aab-90e5-a17155b965e6',
@@ -839,6 +897,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '4e02fbf1-d082-49fd-9465-3aef80e5fca0',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'd6d33246-4cb4-413d-ab35-b125ad74ef89',
@@ -855,6 +914,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '88835508-e1f5-48bb-9a4a-5c85bbf523d6',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '6666c0fc-1709-485d-bb9d-67b1fee6b0b6',
@@ -876,6 +936,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '7f67ab43-edfe-41cf-83c7-59794f2cc9d4',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '5b71a196-e6ee-4f31-968d-818a4262e3f3',
@@ -886,6 +947,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: '9heure19heure',
 			materialId: '7f67ab43-edfe-41cf-83c7-59794f2cc9d4',
+			isWhishlist: false,
 		},
 		{
 			_id: '041b90d0-95e4-4e77-a624-378966b01808',
@@ -906,6 +968,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '88835508-e1f5-48bb-9a4a-5c85bbf523d6',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'ef0770f0-00a0-4897-96a5-63357a2feb69',
@@ -926,6 +989,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '88835508-e1f5-48bb-9a4a-5c85bbf523d6',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '9ffdbf27-835f-4736-85a2-8bcd53a491f7',
@@ -943,6 +1007,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'ec17c210-de36-4832-a80f-0af283afd400',
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	metamorphosis: [
@@ -955,6 +1020,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'metamorphosis',
 			materialId: '9e61c430-2107-489c-9081-d4c998e65991',
+			isWhishlist: false,
 		},
 		{
 			_id: '38adf1ce-4b13-464d-934c-dbf3d1fb215b',
@@ -965,6 +1031,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'metamorphosis',
 			materialId: 'a4ed94cd-815e-4443-a96c-17c935b85719',
+			isWhishlist: false,
 		},
 		{
 			_id: '48d4f7f6-2f7c-408a-a00d-7770306751d5',
@@ -975,6 +1042,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'metamorphosis',
 			materialId: '9e61c430-2107-489c-9081-d4c998e65991',
+			isWhishlist: false,
 		},
 		{
 			_id: 'c82e90ad-77a3-4fcd-854a-e36d95d0b2ec',
@@ -985,6 +1053,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'metamorphosis',
 			materialId: '4db4c4c2-920b-4831-a84d-7f57ee5221f4',
+			isWhishlist: false,
 		},
 		{
 			_id: '5e48ee1c-9aba-4858-ba8c-4c926f091084',
@@ -1001,6 +1070,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'a9615d94-e9a9-44d5-b8a6-129f638b09e1',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '89ba1c69-7872-4019-8ad1-4de51b7ac055',
@@ -1017,6 +1087,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'a9615d94-e9a9-44d5-b8a6-129f638b09e1',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'dd50ce65-5529-4f72-8fcf-ab6501b8e344',
@@ -1027,6 +1098,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accessory',
 			collection: 'metamorphosis',
 			materialId: '41f75aae-38a2-417e-8db7-7087484a154d',
+			isWhishlist: false,
 		},
 		{
 			_id: '07e7408b-63c9-4c0d-81d7-605ff78b298c',
@@ -1037,6 +1109,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accessory',
 			collection: 'metamorphosis',
 			materialId: 'ff5f275f-b0b3-4adc-9266-1199037ef85a',
+			isWhishlist: false,
 		},
 		{
 			_id: '4034848e-18ef-48dc-bf04-ff1bcc841200',
@@ -1047,6 +1120,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'metamorphosis',
 			materialId: '9e61c430-2107-489c-9081-d4c998e65991',
+			isWhishlist: false,
 		},
 	],
 	'the-soul': [
@@ -1060,6 +1134,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'the-soul',
 			materialId: '2c8c3759-fdd7-4e76-a092-0feffbec721e',
+			isWhishlist: false,
 		},
 		{
 			_id: '7d3fd460-7eeb-42ac-af3e-1ef5db07d267',
@@ -1070,6 +1145,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'the-soul',
 			materialId: '4df52b3a-1697-4e47-ba6a-0e02854fd0f9',
+			isWhishlist: false,
 		},
 		{
 			_id: '48920d1a-6b65-4388-a020-2a4fd40e2d8c',
@@ -1080,6 +1156,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'the-soul',
 			materialId: '4df52b3a-1697-4e47-ba6a-0e02854fd0f9',
+			isWhishlist: false,
 		},
 		{
 			_id: 'ee256ff8-d1ab-4ec2-82cb-328145c59cc1',
@@ -1090,6 +1167,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'the-soul',
 			materialId: '47869547-ca1f-4fbd-a175-38ef12a8eb5e',
+			isWhishlist: false,
 		},
 		{
 			_id: '067c1349-0fc0-47ac-9635-52d99857f775',
@@ -1101,6 +1179,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'the-soul',
 			materialId: '2c8c3759-fdd7-4e76-a092-0feffbec721e',
+			isWhishlist: false,
 		},
 		{
 			_id: '94cd2fe7-9384-42ee-b536-5d89537dfcba',
@@ -1111,6 +1190,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'the-soul',
 			materialId: '9b7d9df2-f455-41d7-bf7f-af60b68adbed',
+			isWhishlist: false,
 		},
 		{
 			_id: 'ae828f2c-747f-4b94-b7c3-be288d5ff1e2',
@@ -1128,6 +1208,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '3253b371-17e8-4403-97bb-944324d7a9a0',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '73f0c2ea-a7bf-40e9-bc46-40e68e425398',
@@ -1138,6 +1219,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'the-soul',
 			materialId: '3253b371-17e8-4403-97bb-944324d7a9a0',
+			isWhishlist: false,
 		},
 		{
 			_id: '11d4de02-d593-4420-8cdc-97bcf960a0a6',
@@ -1149,6 +1231,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'the-soul',
 			materialId: '452e4fbd-250a-4296-b024-cb13c015b417',
+			isWhishlist: false,
 		},
 		{
 			_id: 'eacf5c7b-3dff-48c2-8290-1dda27bcf46d',
@@ -1160,6 +1243,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'the-soul',
 			materialId: '9f6046a6-0be9-4ad5-bd58-eda24cab0089',
+			isWhishlist: false,
 		},
 		{
 			_id: 'a076f156-1938-440d-bc09-08084acd8e2b',
@@ -1170,6 +1254,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'the-soul',
 			materialId: '39bb13ec-666f-404a-991a-be5f38d52b70',
+			isWhishlist: false,
 		},
 		{
 			_id: 'f8e1f6bd-c6f7-44e0-9361-1644df8917cd',
@@ -1180,6 +1265,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'the-soul',
 			materialId: 'cc96870e-6133-4560-ba47-448edc9f0aeb',
+			isWhishlist: false,
 		},
 	],
 	gap: [
@@ -1192,6 +1278,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'gap',
 			materialId: 'acdbb911-77cf-41ac-abb8-18cf687d7055',
+			isWhishlist: false,
 		},
 		{
 			_id: '50f32fa4-8672-4110-bc72-836a2e07a781',
@@ -1202,6 +1289,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'gap',
 			materialId: '756cddfd-c0c6-49ca-8e23-37946dfb3a4e',
+			isWhishlist: false,
 		},
 		{
 			_id: '9e7cda10-db8a-4c6e-b215-9d09207a207f',
@@ -1212,6 +1300,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'gap',
 			materialId: 'f2d14aa8-c659-4893-be96-fafbab30410a',
+			isWhishlist: false,
 		},
 		{
 			_id: '0281ff7c-cc57-46da-840d-434016595c27',
@@ -1222,6 +1311,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'gap',
 			materialId: '8369e063-c72a-449c-8306-3fd233cd3e92',
+			isWhishlist: false,
 		},
 		{
 			_id: '66549056-777c-49f2-9279-a1c4d1ef3465',
@@ -1231,6 +1321,7 @@ export const templates: Record<string, Template[]> = {
 			avatar: 'female',
 			category: 'Top',
 			collection: 'gap',
+			isWhishlist: false,
 			materialId: '26f451e8-c224-43c9-9648-9d0dc0997883',
 		},
 		{
@@ -1242,6 +1333,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'gap',
 			materialId: '3266d2fb-353c-4552-9c79-0ee2dd7b53ac',
+			isWhishlist: false,
 		},
 		{
 			_id: '98c7849c-41b1-4c17-93af-bd9b8e675c3e',
@@ -1252,10 +1344,12 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'gap',
 			materialId: '15936feb-64cd-4d75-bdd8-161de0eb5db8',
+			isWhishlist: false,
 		},
 		{
 			_id: 'e294bec7-8f29-4180-ae37-979c9710649a',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/gap/templates/Hat/Item_1.webp',
+			isWhishlist: false,
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -1272,6 +1366,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Bag',
 			collection: 'gap',
 			materialId: 'bd3bfa21-5f2b-482e-bb03-047c8ddf89c5',
+			isWhishlist: false,
 		},
 		{
 			_id: '06d930c3-6172-4126-9dd1-2ea754a561cc',
@@ -1282,6 +1377,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Bag',
 			collection: 'gap',
 			materialId: 'eb41b4ae-0176-4ef7-a98e-706be23affe1',
+			isWhishlist: false,
 		},
 		{
 			_id: '50d40780-ab3b-4818-aaac-bdcff4722df7',
@@ -1292,6 +1388,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accessories',
 			collection: 'gap',
 			materialId: '15936feb-64cd-4d75-bdd8-161de0eb5db8',
+			isWhishlist: false,
 		},
 		{
 			_id: 'b4b12dc7-a856-47a3-9a39-c071f4292ee0',
@@ -1302,6 +1399,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accessories',
 			collection: 'gap',
 			materialId: '15936feb-64cd-4d75-bdd8-161de0eb5db8',
+			isWhishlist: false,
 		},
 		{
 			_id: '7471ff70-4767-462c-873f-f3603bf7ebfa',
@@ -1312,6 +1410,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accessories',
 			collection: 'gap',
 			materialId: '15936feb-64cd-4d75-bdd8-161de0eb5db8',
+			isWhishlist: false,
 		},
 		{
 			_id: '8f188fa1-f71b-4736-82f5-90840b56635b',
@@ -1322,6 +1421,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accessories',
 			collection: 'gap',
 			materialId: '15936feb-64cd-4d75-bdd8-161de0eb5db8',
+			isWhishlist: false,
 		},
 		{
 			_id: '4da1f985-0322-4aea-bfbc-46924f4eb6d4',
@@ -1332,6 +1432,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accessories',
 			collection: 'gap',
 			materialId: '15936feb-64cd-4d75-bdd8-161de0eb5db8',
+			isWhishlist: false,
 		},
 		{
 			_id: 'c0dd488a-9532-4729-ae55-c9ed2a2f1bbf',
@@ -1342,6 +1443,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'gap',
 			materialId: '6cb9160d-3472-4bf3-aa98-133a5b2b62d4',
+			isWhishlist: false,
 		},
 		{
 			_id: 'ed47d139-257d-4054-8763-bf8e9f547471',
@@ -1352,6 +1454,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'gap',
 			materialId: 'fe95e928-439a-45c4-80a0-e98345017f83',
+			isWhishlist: false,
 		},
 		{
 			_id: '5c645696-f41c-484e-9ddd-8bb127a23663',
@@ -1362,6 +1465,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'gap',
 			materialId: 'c7c135e3-95a1-441a-b0b2-b7b9665de072',
+			isWhishlist: false,
 		},
 		{
 			_id: '480e12a7-0438-4471-9eeb-e6c65a221a57',
@@ -1372,6 +1476,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'gap',
 			materialId: 'fe95e928-439a-45c4-80a0-e98345017f83',
+			isWhishlist: false,
 		},
 	],
 	emwear: [
@@ -1384,6 +1489,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'emwear',
 			materialId: 'e780e24e-fc7f-4c7c-9015-760117010e57',
+			isWhishlist: false,
 		},
 		{
 			_id: '3013ce3f-0b5d-4d77-a77f-7f8d1344df42',
@@ -1394,6 +1500,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'emwear',
 			materialId: '206a59e5-11e1-406e-9e9a-1a0361d7e62d',
+			isWhishlist: false,
 		},
 		{
 			_id: '222d3cea-9d22-41e1-b0f0-a574cfe10dd7',
@@ -1410,6 +1517,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'c9532ff3-e2b9-4947-8be0-3c1a681e2841',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'e07810f4-9d2e-4431-91e6-39a08abe21da',
@@ -1430,6 +1538,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '68a5c0be-58e4-412d-9f32-333b08e083ce',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'e39c7c14-4d1f-4b27-9812-b14dc0efc1ef',
@@ -1440,6 +1549,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'emwear',
 			materialId: 'fd927fed-3f93-4cc2-888c-6f5a6a123b5f',
+			isWhishlist: false,
 		},
 		{
 			_id: '28f978db-f7c2-4d0a-bde8-1b176dd19b69',
@@ -1450,6 +1560,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'emwear',
 			materialId: '61768179-c5ed-4e8e-84ee-9bf14fc7cd42',
+			isWhishlist: false,
 		},
 		{
 			_id: '3b25edc7-5128-43f9-894b-27888eb6a5e2',
@@ -1466,6 +1577,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '0f16f3b1-d943-49d2-b8ef-a2c732a2b92e',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '29c0c659-c8b6-4a6d-8adf-a56cb443284d',
@@ -1476,6 +1588,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'emwear',
 			materialId: '51b0f51e-528a-4190-84d3-60635759db48',
+			isWhishlist: false,
 		},
 		{
 			_id: '62e5a8d6-58d7-4d51-be20-829f7ee1b376',
@@ -1492,6 +1605,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '3f61594c-e3ba-49d3-9870-f6d85e9b677f',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '5fdd8b2f-5a71-44ff-bc91-8fe9e151c5b0',
@@ -1508,6 +1622,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'a0a82c34-0830-44c2-9876-05da7e26afa5',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '40ad5034-0bae-42a2-b865-31db6185ceae',
@@ -1524,6 +1639,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '0f16f3b1-d943-49d2-b8ef-a2c732a2b92e',
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	'fige-dans-le-temps': [
@@ -1536,6 +1652,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'fige-dans-le-temps',
 			materialId: '3ab52932-7e6e-4cda-9b78-4cc2632566cd',
+			isWhishlist: false,
 		},
 		{
 			_id: 'e26e458b-8709-4906-a650-79fa8aaf4643',
@@ -1546,6 +1663,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'fige-dans-le-temps',
 			materialId: '3ab52932-7e6e-4cda-9b78-4cc2632566cd',
+			isWhishlist: false,
 		},
 		{
 			_id: 'bc6639b6-eefd-47ba-92e7-8fa4a9d7d694',
@@ -1556,6 +1674,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Jumpsuit',
 			collection: 'fige-dans-le-temps',
 			materialId: '3ab52932-7e6e-4cda-9b78-4cc2632566cd',
+			isWhishlist: true,
 		},
 		{
 			_id: '95734f0c-858d-408a-b6bc-7bafe511fcdd',
@@ -1572,6 +1691,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '6709be81-ecd6-4c90-a5cd-37f055b7b20e',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '0cc25e78-3ba0-4aaf-a30c-3e76e0deb470',
@@ -1582,6 +1702,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Jumpsuit',
 			collection: 'fige-dans-le-temps',
 			materialId: '67380f70-3788-4695-96f5-fe531b0e307f',
+			isWhishlist: true,
 		},
 		{
 			_id: 'd9828403-7f0b-4909-b3a2-e975bbd12f2c',
@@ -1598,6 +1719,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '6709be81-ecd6-4c90-a5cd-37f055b7b20e',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'b46412c5-3290-4530-ba25-4c58dbd3392f',
@@ -1608,6 +1730,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Jumpsuit',
 			collection: 'fige-dans-le-temps',
 			materialId: 'c9c2319a-bb83-4ab2-a994-2afcde838754',
+			isWhishlist: true,
 		},
 		{
 			_id: '55fe8930-3c28-4bd3-993d-70809894252f',
@@ -1618,6 +1741,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'fige-dans-le-temps',
 			materialId: 'e949b950-1598-4fa4-95a8-e7ffb3539c23',
+			isWhishlist: true,
 		},
 		{
 			_id: '7c059bbf-5d25-4435-8575-d1c63700f08f',
@@ -1628,6 +1752,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'fige-dans-le-temps',
 			materialId: 'f3200d92-2b36-442e-9501-bec4b10d32e2',
+			isWhishlist: true,
 		},
 		{
 			_id: '5d2e812b-2ea5-4463-8ff5-93b3e2412b95',
@@ -1638,6 +1763,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'fige-dans-le-temps',
 			materialId: 'fa684e20-2d7b-43ff-8696-45b798894070',
+			isWhishlist: true,
 		},
 		{
 			_id: '310e4036-d70a-4379-9e4e-694d39556e3b',
@@ -1648,6 +1774,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'fige-dans-le-temps',
 			materialId: 'fa684e20-2d7b-43ff-8696-45b798894070',
+			isWhishlist: true,
 		},
 		{
 			_id: '47049462-1c21-487c-b4ef-2c888acfc795',
@@ -1664,6 +1791,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '0f61ed32-674b-4dd0-a269-bc8ea6ef9783',
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	'one-thousand-poets': [
@@ -1682,6 +1810,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '5d9b7ded-cdf7-4701-8248-64e5849e435e',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '73e38507-5cb5-4892-b3c5-c8df1cd6f47a',
@@ -1692,6 +1821,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'one-thousand-poets',
 			materialId: 'a6a49143-e0fb-4104-a385-5793deb2a090',
+			isWhishlist: false,
 		},
 		{
 			_id: '7d36db40-e539-4e30-9294-6f7e6d9ad310',
@@ -1702,6 +1832,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'one-thousand-poets',
 			materialId: 'a6a49143-e0fb-4104-a385-5793deb2a090',
+			isWhishlist: false,
 		},
 		{
 			_id: '1c1a97a6-30db-499c-9708-ee092ff0c88f',
@@ -1719,6 +1850,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '5d9b7ded-cdf7-4701-8248-64e5849e435e',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'bef46b22-a7ad-4d4f-8d19-e48c825158a0',
@@ -1729,6 +1861,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accessories',
 			collection: 'one-thousand-poets',
 			materialId: '',
+			isWhishlist: true,
 		},
 		{
 			_id: 'd5ef7ca5-4e1c-4170-a204-daef98b9baf8',
@@ -1739,6 +1872,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'one-thousand-poets',
 			materialId: 'c65c7585-ddd4-4ccf-b4c3-160d36ff4c63',
+			isWhishlist: true,
 		},
 		{
 			_id: 'bb54d994-1cb9-4807-903b-eb3567aa0ee1',
@@ -1756,6 +1890,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '53990b73-801d-41a0-b26b-d886dd2cc717',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'fc661821-2ffe-4a8a-b57c-76e6b138c112',
@@ -1766,6 +1901,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'one-thousand-poets',
 			materialId: '1044f5e7-26c7-4c59-8c30-59b70d06cf6c',
+			isWhishlist: true,
 		},
 		{
 			_id: 'aa39bf11-f898-4bbf-adca-6c5dd10411df',
@@ -1783,6 +1919,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '1044f5e7-26c7-4c59-8c30-59b70d06cf6c',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '18dd4b86-12bc-4922-8247-11aea2558a7c',
@@ -1799,6 +1936,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'e15213dd-a331-4da5-8d0b-d22d2e0eed0a',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'bf169cee-5cf4-4586-a390-cd260594ce36',
@@ -1809,6 +1947,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'one-thousand-poets',
 			materialId: '6dc1b437-a65a-4e4e-9f99-ed85f3f5b2a5',
+			isWhishlist: true,
 		},
 		{
 			_id: 'b4bbfaf9-4a97-46a0-a79e-019802fda14f',
@@ -1819,6 +1958,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'one-thousand-poets',
 			materialId: 'a6a49143-e0fb-4104-a385-5793deb2a090',
+			isWhishlist: true,
 		},
 		{
 			_id: 'd54cc0ea-a93f-49e1-8e03-4f780cd74549',
@@ -1829,6 +1969,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'one-thousand-poets',
 			materialId: 'a2e9578f-6001-4905-99d1-77717c58458a',
+			isWhishlist: true,
 		},
 		{
 			_id: 'ba1dcc68-4449-46a8-8945-3bb676d1c660',
@@ -1839,6 +1980,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'one-thousand-poets',
 			materialId: '1044f5e7-26c7-4c59-8c30-59b70d06cf6c',
+			isWhishlist: true,
 		},
 		{
 			_id: '1f477033-0240-40e2-bdd1-9e789e35d6fb',
@@ -1855,6 +1997,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '1044f5e7-26c7-4c59-8c30-59b70d06cf6c',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'fa7dea78-7c40-42f6-b354-763383ccc61a',
@@ -1871,6 +2014,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '1044f5e7-26c7-4c59-8c30-59b70d06cf6c',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'fe1f8121-04c3-4d54-b4c6-d074648be3b7',
@@ -1881,6 +2025,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'one-thousand-poets',
 			materialId: 'afbf3a76-bf47-4111-a74a-dde4ab765340',
+			isWhishlist: true,
 		},
 	],
 	zove: [
@@ -1899,6 +2044,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'f7545c16-884b-49c6-883f-aff4f06ff124',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '8885f732-9af8-4c8f-8139-1ae9517eb194',
@@ -1909,6 +2055,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'zove',
 			materialId: 'dda60eb6-a7cd-4bc6-b2f8-70e459918851',
+			isWhishlist: true,
 		},
 		{
 			_id: 'fa40c7be-5a96-4b7e-99fe-33ab0a71809c',
@@ -1925,6 +2072,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '7055d152-c33b-4a6e-922e-ad8ca1f1709d',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '637648e8-bafb-4512-acb1-53dc040fbcf4',
@@ -1941,6 +2089,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'f7545c16-884b-49c6-883f-aff4f06ff124',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '22f8bb7d-d97e-427d-a3a2-42b5e1974f14',
@@ -1957,6 +2106,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'f7545c16-884b-49c6-883f-aff4f06ff124',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'bd3cc4c6-8755-4c8f-9a5a-8178311d5a88',
@@ -1973,6 +2123,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'f7545c16-884b-49c6-883f-aff4f06ff124',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '3faaaeb1-2923-4208-bfb5-3984c52cb469',
@@ -1993,6 +2144,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '3bbaff9c-8135-4567-8019-6417445b9ff5',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '4c6e7399-cd6b-440d-99bd-45e14237a47f',
@@ -2003,6 +2155,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'zove',
 			materialId: 'c9f37ec3-c780-40a4-bf8c-40804dbf320d',
+			isWhishlist: true,
 		},
 	],
 	'ja-seng-bu': [
@@ -2021,6 +2174,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'fedec53a-e25f-43c2-9d5c-2250e5e70c66',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '9bfd1637-6440-4f57-98b0-870fc160d082',
@@ -2038,6 +2192,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '5c82f93d-d148-486b-9720-a06227dc6ed8',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '9c50b34b-9ef0-4981-9cda-51711d6711c8',
@@ -2054,6 +2209,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'e08d4c4f-92c3-4f4f-af63-d68cb452eb6d',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '5f301ead-7409-4920-af8f-48faafbd94e5',
@@ -2064,6 +2220,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'ja-seng-bu',
 			materialId: '44c166d4-af8c-4a96-9e3c-7c05e5ac2e40',
+			isWhishlist: true,
 		},
 		{
 			_id: '1ac1669c-875f-4ebb-ad03-f4ee22754aba',
@@ -2074,6 +2231,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'ja-seng-bu',
 			materialId: 'fa487c08-d45a-4467-9c1e-e25f108dea3d',
+			isWhishlist: true,
 		},
 		{
 			_id: '4a1f9ee4-3e72-40a6-b7e0-9eed93f96fe8',
@@ -2090,6 +2248,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '44c166d4-af8c-4a96-9e3c-7c05e5ac2e40',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '7054f59c-641f-4af4-9095-01330f117ff7',
@@ -2100,6 +2259,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'ja-seng-bu',
 			materialId: 'adacf613-d885-47c0-bb9f-7af01ca077c5',
+			isWhishlist: true,
 		},
 		{
 			_id: '01b68af8-4366-4913-a6a4-20b7ebafb92d',
@@ -2111,6 +2271,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'ja-seng-bu',
 			materialId: 'a7b52f8e-a066-40a1-b409-d4249e327e84',
+			isWhishlist: true,
 		},
 		{
 			_id: 'd09b610a-9613-4a1b-a09d-eada7a37ef37',
@@ -2121,6 +2282,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'ja-seng-bu',
 			materialId: '88030f4d-1097-48cf-893d-7e3252b03f22',
+			isWhishlist: true,
 		},
 	],
 	'mss-park': [
@@ -2133,6 +2295,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'mss-park',
 			materialId: '61aeb2a7-2c24-46cc-8248-d28eaba4d0f1',
+			isWhishlist: true,
 		},
 		{
 			_id: '515774bf-e5d0-41e1-8eb1-7d75b675fad2',
@@ -2143,6 +2306,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'mss-park',
 			materialId: 'fefecca5-d741-4f8b-966d-e00eb7eb4ce3',
+			isWhishlist: true,
 		},
 		{
 			_id: 'ed965374-e72b-4ba5-b002-fb1250f17672',
@@ -2153,6 +2317,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'mss-park',
 			materialId: '2d40e57e-e96b-4516-9510-916ca701093a',
+			isWhishlist: true,
 		},
 		{
 			_id: 'c50b7830-6cc6-4923-83f6-af9c04e43751',
@@ -2163,6 +2328,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'mss-park',
 			materialId: '61aeb2a7-2c24-46cc-8248-d28eaba4d0f1',
+			isWhishlist: true,
 		},
 		{
 			_id: '3ecf4cc8-6f80-4c1c-a636-c6bdfb43c6ae',
@@ -2179,6 +2345,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '1bf776d9-ee07-4e3c-8b59-f786434d8790',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'bb617e1a-ab34-495d-8d3f-6c6a1eba7fee',
@@ -2189,6 +2356,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'mss-park',
 			materialId: 'a6761450-e852-49a5-bed0-c4a51ef3284e',
+			isWhishlist: false,
 		},
 		{
 			_id: '73c5498e-49d1-4de7-ace5-77349fd2d724',
@@ -2209,6 +2377,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '61aeb2a7-2c24-46cc-8248-d28eaba4d0f1',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '3c76c1b6-8ea9-4b25-a349-2a339e890d40',
@@ -2225,6 +2394,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '1bf776d9-ee07-4e3c-8b59-f786434d8790',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '93d4454e-912a-465a-a7bf-c54dadf00cff',
@@ -2236,6 +2406,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'mss-park',
 			materialId: 'd101e7ce-e521-4792-9621-1e2114cf5881',
+			isWhishlist: false,
 		},
 		{
 			_id: '1ec01e5c-b1e9-4931-a2ea-d2c35d8cd5ce',
@@ -2247,6 +2418,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'mss-park',
 			materialId: 'c20cdc66-ab2c-4d50-a7a2-deaf4f4a570f',
+			isWhishlist: false,
 		},
 		{
 			_id: '9c6c9e35-c241-410b-86e3-0e8682b55100',
@@ -2258,6 +2430,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'mss-park',
 			materialId: 'fefecca5-d741-4f8b-966d-e00eb7eb4ce3',
+			isWhishlist: false,
 		},
 		{
 			_id: 'a8afd7e0-16b3-42c9-81c1-8c13cea9c571',
@@ -2268,6 +2441,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'mss-park',
 			materialId: '3fd73006-3515-4766-b007-2ae192f4518c',
+			isWhishlist: false,
 		},
 		{
 			_id: 'aa93fc37-ddf7-40cf-8dce-f105b3063227',
@@ -2278,6 +2452,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'mss-park',
 			materialId: '34b80083-c7d5-43f1-ba6c-9dd7802f395f',
+			isWhishlist: false,
 		},
 	],
 	'imzad-man': [
@@ -2290,6 +2465,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'imzad-man',
 			materialId: '99d0020e-aa03-47b9-82af-ced9ce05f16d',
+			isWhishlist: true,
 		},
 		{
 			_id: '1a31c0a6-996b-4e85-909e-2e3b4345b02c',
@@ -2300,6 +2476,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'imzad-man',
 			materialId: '49f28b33-7980-4ad8-9a81-4791657a1977',
+			isWhishlist: true,
 		},
 		{
 			_id: '82d49dcd-e86d-4ecc-994d-4b1415d10a41',
@@ -2310,6 +2487,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'imzad-man',
 			materialId: '51f55c62-34e3-4482-aacb-53d18273401f',
+			isWhishlist: true,
 		},
 		{
 			_id: '5ca1cf99-9710-48ec-8c15-f96332503e31',
@@ -2320,6 +2498,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'imzad-man',
 			materialId: '9fc87519-a7f7-41a4-93d8-a8f31cb84cd4',
+			isWhishlist: true,
 		},
 		{
 			_id: '3a96ee30-31d9-477c-9136-79f29161f6da',
@@ -2336,6 +2515,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '733e8ea9-4019-4a10-b179-8f78ad4574d2',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'fd562eb7-9c58-4689-bf41-ad22c3e7c136',
@@ -2356,6 +2536,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '1c200021-4747-47b7-9372-40662a6acae3',
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	'imzad-woman': [
@@ -2374,6 +2555,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '4638d89f-b0da-4f3f-9165-a72a1d9c50a6',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'ec38dceb-65e6-46ad-96f0-5a95a64c1a59',
@@ -2390,6 +2572,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '4638d89f-b0da-4f3f-9165-a72a1d9c50a6',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '3d201a60-9267-450e-8663-96abcb34e9f6',
@@ -2406,6 +2589,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '4638d89f-b0da-4f3f-9165-a72a1d9c50a6',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '794bedc0-644f-4556-a586-6b3bac155ea2',
@@ -2422,6 +2606,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '4638d89f-b0da-4f3f-9165-a72a1d9c50a6',
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	changes: [
@@ -2615,6 +2800,7 @@ export const templates: Record<string, Template[]> = {
 					],
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '8e867129-f65a-4534-8737-6ac3682f00ec',
@@ -2754,6 +2940,7 @@ export const templates: Record<string, Template[]> = {
 					],
 				},
 			],
+			isWhishlist: true,
 		},
 		{
 			_id: 'd7c36caa-665f-4227-8019-e8ec8a9e9717',
@@ -2929,6 +3116,7 @@ export const templates: Record<string, Template[]> = {
 					],
 				},
 			],
+			isWhishlist: true,
 		},
 		{
 			_id: '592df72e-9e9b-4dad-8372-40c777d0359a',
@@ -3115,6 +3303,7 @@ export const templates: Record<string, Template[]> = {
 					],
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'b24b4236-9314-453b-9b77-c84fcbdfea8a',
@@ -3190,12 +3379,14 @@ export const templates: Record<string, Template[]> = {
 					],
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	'animation-test': [
 		{
 			_id: 'cfdfb21e-f343-417a-836e-6a36c822b78c',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/animation-test/templates/Accessories/Ava_-_170_Euro.webp',
+			isWhishlist: false,
 			name: 'Ava',
 			price: '170',
 			avatar: 'female',
@@ -3212,6 +3403,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accessories',
 			collection: 'animation-test',
 			materialId: '',
+			isWhishlist: false,
 		},
 		{
 			_id: '0578f519-ad93-476c-b82e-ba946e7a6365',
@@ -3228,6 +3420,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'df3101d7-4dad-4f49-b58f-c54d334b003e',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'e4244207-66a3-4ba9-abd3-443fcaaabd67',
@@ -3244,6 +3437,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'df3101d7-4dad-4f49-b58f-c54d334b003e',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'eb5e617d-fd6a-4af9-9ffe-87c4bea19e57',
@@ -3254,6 +3448,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'animation-test',
 			materialId: '0cb5b762-85cc-4d44-b5b9-0d29a06d910a',
+			isWhishlist: false,
 		},
 		{
 			_id: '9a4ef96b-f822-49c3-b540-7e30ab352f15',
@@ -3264,6 +3459,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'animation-test',
 			materialId: '0cb5b762-85cc-4d44-b5b9-0d29a06d910a',
+			isWhishlist: false,
 		},
 		{
 			_id: 'b1b84ad1-99b2-45d1-a47d-71c5c344cc84',
@@ -3274,6 +3470,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'animation-test',
 			materialId: '0cb5b762-85cc-4d44-b5b9-0d29a06d910a',
+			isWhishlist: false,
 		},
 		{
 			_id: '30657eb8-2d12-4e40-b459-a3c2521a6176',
@@ -3284,6 +3481,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'animation-test',
 			materialId: '624950bc-565f-4ab0-a876-013ce99da719',
+			isWhishlist: false,
 		},
 	],
 	anyshape: [
@@ -3302,6 +3500,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'caa7ac6b-3a3a-4248-96c5-380b6346b3ee',
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	'baum-und-pferdgarten': [
@@ -3314,6 +3513,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'baum-und-pferdgarten',
 			materialId: '00001331-4898-465f-8c38-387481fba316',
+			isWhishlist: false,
 		},
 	],
 	'bloom.womenswear': [
@@ -3326,6 +3526,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'bloom.womenswear',
 			materialId: '3f547e9f-bc8d-4f4c-8be1-f4018668b4e1',
+			isWhishlist: false,
 		},
 		{
 			_id: '6d6cca26-f2b5-41b3-b34b-0df6531e7279',
@@ -3336,6 +3537,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'bloom.womenswear',
 			materialId: 'd7605612-484a-4789-b0ed-705baa6f8743',
+			isWhishlist: false,
 		},
 		{
 			_id: '43486a85-7ae1-499c-bc46-4ea6e94bc2bd',
@@ -3345,7 +3547,8 @@ export const templates: Record<string, Template[]> = {
 			avatar: 'female',
 			category: 'Skirt',
 			collection: 'bloom.womenswear',
-			materialId: 'd7605612-484a-4789-b0ed-705baa6f8743',
+			materialId: 'e03cfce2-dab5-4506-9f50-93f861caeae8',
+			isWhishlist: false,
 		},
 		{
 			_id: '4bdca5c5-8c49-48c5-b1b6-dc69892c197e',
@@ -3356,6 +3559,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'bloom.womenswear',
 			materialId: '46acd4b0-b600-4b57-a7c8-4de58e67a142',
+			isWhishlist: false,
 		},
 		{
 			_id: 'f9dca09f-24e8-49d0-9102-a4f7ae89e45c',
@@ -3366,6 +3570,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'bloom.womenswear',
 			materialId: '7109e9c5-d3f3-4e22-99b3-75a396e71b47',
+			isWhishlist: false,
 		},
 	],
 	'cecilie-bahnsen': [
@@ -3378,6 +3583,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'cecilie-bahnsen',
 			materialId: '74be169f-bfd2-4953-a688-0283037d6e34',
+			isWhishlist: false,
 		},
 	],
 	crescent: [
@@ -3390,6 +3596,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'crescent',
 			materialId: '27715f17-a155-433f-8f10-da63106904b8',
+			isWhishlist: false,
 		},
 	],
 	'dario-mittmann': [
@@ -3412,6 +3619,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'ba2cb38d-8abb-432e-a526-03e5ddf23de9',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '99581918-12f2-46fd-bdc2-6ced21e29821',
@@ -3422,6 +3630,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'dario-mittmann',
 			materialId: '535c867e-3129-4331-9bf1-443fc4ff4719',
+			isWhishlist: false,
 		},
 	],
 	'david-black': [
@@ -3444,6 +3653,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '132bc3b3-1c7d-4476-b643-c61bb5e02119',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: '178b2d04-ea67-46b9-81eb-0f1c40cd0433',
@@ -3454,6 +3664,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'david-black',
 			materialId: '017d661a-1f75-4055-9d0a-fe8f00b89b9d',
+			isWhishlist: false,
 		},
 	],
 	diane: [
@@ -3476,6 +3687,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'diane',
 			materialId: '0997684b-a4b9-428c-96dd-5c22b3b305da',
+			isWhishlist: false,
 		},
 		{
 			_id: '3fd2148a-140c-41ea-a550-9bd925d9660e',
@@ -3486,6 +3698,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'diane',
 			materialId: '0d67ec3d-c968-4fd6-8ea3-ffd1fdb82bce',
+			isWhishlist: false,
 		},
 	],
 	dico: [
@@ -3498,6 +3711,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'dico',
 			materialId: '37f2b6dd-a212-452a-bcbb-a01b5230529d',
+			isWhishlist: false,
 		},
 		{
 			_id: 'b2a53ad9-1bf1-48d8-936e-3e0d0a42af7c',
@@ -3508,6 +3722,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'dico',
 			materialId: '02c0ca03-ce5b-4412-bc5c-e99988b42926',
+			isWhishlist: false,
 		},
 	],
 	dottie: [
@@ -3520,6 +3735,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'dottie',
 			materialId: '5893e3a8-284a-4a18-b9fd-d5caeb25c839',
+			isWhishlist: false,
 		},
 		{
 			_id: 'b1a7da9f-1545-42a1-bd0c-273da4d86c20',
@@ -3530,6 +3746,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'dottie',
 			materialId: '5893e3a8-284a-4a18-b9fd-d5caeb25c839',
+			isWhishlist: false,
 		},
 	],
 	'erroris.ltd': [
@@ -3564,6 +3781,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'gola',
 			materialId: '45a0bc8f-ff7e-41a8-872d-2ccf0dd4a6ac',
+			isWhishlist: false,
 		},
 	],
 	h2b: [
@@ -3576,6 +3794,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'h2b',
 			materialId: '42f32f46-ed51-4b0b-bc59-f7baff98df6d',
+			isWhishlist: false,
 		},
 		{
 			_id: '8654cb57-5cf5-444f-add7-095306a29775',
@@ -3586,6 +3805,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'h2b',
 			materialId: '42f32f46-ed51-4b0b-bc59-f7baff98df6d',
+			isWhishlist: false,
 		},
 	],
 	'joie-des-roses': [
@@ -3598,6 +3818,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Jacket',
 			collection: 'joie-des-roses',
 			materialId: 'e077e531-437f-4cc9-a404-be2fe7d8cc2d',
+			isWhishlist: false,
 		},
 		{
 			_id: '931fd528-52ef-4ab5-9eb9-465e796eb79a',
@@ -3608,6 +3829,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Dress',
 			collection: 'joie-des-roses',
 			materialId: 'e077e531-437f-4cc9-a404-be2fe7d8cc2d',
+			isWhishlist: false,
 		},
 	],
 	'jubin-studio': [
@@ -3642,6 +3864,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'julian-prohaska',
 			materialId: 'fd8a0837-1d2d-4456-bd4c-6b058da36e23',
+			isWhishlist: true,
 		},
 		{
 			_id: '7c07cc5c-ee19-4efb-b194-8935d4f8ea6a',
@@ -3652,6 +3875,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'julian-prohaska',
 			materialId: '60d7c8b1-814f-4b00-89c1-815bb3b93b75',
+			isWhishlist: true,
 		},
 	],
 	kido: [
@@ -3670,6 +3894,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'a6da3139-ec44-4162-9b74-57d8b1ae7c9f',
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	levents: [
@@ -3766,6 +3991,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: 'a61c2399-6f4e-4a62-8d9a-7cfef3939558',
 				},
 			],
+			isWhishlist: false,
 		},
 		{
 			_id: 'b98293c5-70f2-4f79-b827-8de7ad21647b',
@@ -3782,6 +4008,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '596c4eba-36d8-4401-9280-d9d765938227',
 				},
 			],
+			isWhishlist: false,
 		},
 	],
 	'pindiga-ranjith-kumar': [

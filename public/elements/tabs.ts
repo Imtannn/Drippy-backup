@@ -253,8 +253,18 @@ export class TabsList extends Element {
 			const button = trigger.shadowRoot?.querySelector('button')
 			return button?.getAttribute('aria-label') === this.provider?.activeValue
 		})
-		if (activeTrigger && this.indicatorRef && this.provider.isMounted) {
-			this.positionIndicator(this.indicatorRef, activeTrigger)
+
+		if (activeTrigger && this.indicatorRef) {
+			if (this.provider.isMounted) {
+				this.positionIndicator(this.indicatorRef, activeTrigger)
+			} else {
+				// If not mounted yet, try positioning anyway (element might be rendered but transitioning)
+				this.positionIndicator(this.indicatorRef, activeTrigger)
+				// Also schedule a retry for when it becomes mounted
+				this.updateIndicatorsTimeout = setTimeout(() => {
+					this.updateIndicators()
+				}, 100)
+			}
 		} else {
 			this.updateIndicatorsTimeout = setTimeout(() => {
 				this.updateIndicators()
@@ -456,6 +466,8 @@ export class TabsTrigger extends Element {
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			outline: none;
+			box-shadow: none;
 		}
 
 		.tab.active {
@@ -465,6 +477,7 @@ export class TabsTrigger extends Element {
 
 		.tab:not(.active) {
 			background: #e9e9ea;
+			padding: 8px 17px;
 		}
 
 		.tab.disabled {
