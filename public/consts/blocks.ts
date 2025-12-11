@@ -4284,7 +4284,7 @@ export const blocks: Record<string, Block[]> = {
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/images/animation-test/blocks/Accessories/Item_1_Accessory/accessory_1519.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/animation-test/blocks/Accessories/Item_1_Accessory/accessory_1519.glb',
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/animation-test/blocks/Accessories/Item_1_Accessory/accessory_1519.gltf',
 			blockName: 'accessory 1519',
 			avatar: 'female',
 			category: 'Accessory',
@@ -4298,7 +4298,7 @@ export const blocks: Record<string, Block[]> = {
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/images/animation-test/blocks/Accessories/Item_2_Accessory/accessory_1586.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/animation-test/blocks/Accessories/Item_2_Accessory/accessory_1586.glb',
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/animation-test/blocks/Accessories/Item_2_Accessory/accessory_1586.gltf',
 			blockName: 'accessory 1586',
 			avatar: 'female',
 			category: 'Accessory',
