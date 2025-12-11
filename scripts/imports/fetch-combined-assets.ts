@@ -1,10 +1,16 @@
 import * as AWS from 'aws-sdk'
 import {randomUUID as uuidv4} from 'crypto'
 import * as fs from 'fs'
-import * as https from 'https'
 import * as path from 'path'
 import sharp from 'sharp'
 import * as THREE from 'three'
+import {google} from 'googleapis'
+
+const auth = new google.auth.GoogleAuth({
+	keyFile: path.join(__dirname, '../../service-account.json'), // path to your JSON
+	scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+})
+const drive = google.drive({version: 'v3', auth})
 
 type TODO = any
 
@@ -29,7 +35,7 @@ AWS.config.update({
 const s3 = new AWS.S3()
 
 // collection configurations with Google Drive folder IDs
-const COLLECTION_CONFIGS = [
+const COLLECTION_CONFIGS: {collection: string; rootFolderId: string; gender?: 'male' | 'female'}[] = [
 	// {
 	// 	collection: 'essence-of-her',
 	// 	rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
@@ -103,35 +109,35 @@ const COLLECTION_CONFIGS = [
 	// 	rootFolderId: '1skW21QjedKwrGWVfRlHShth4Zcg4oT4v',
 	// },
 
-	{
-		collection: 'anyshape',
-		rootFolderId: '1k8GM9DJdR4q9emW9pGEPU1o2UYHiRog0',
-	},
-	{
-		collection: 'baum-und-pferdgarten',
-		rootFolderId: '14dd0YvtPvanr8owwpG9RMRl-yo4QT44x',
-	},
+	// {
+	// 	collection: 'anyshape',
+	// 	rootFolderId: '1k8GM9DJdR4q9emW9pGEPU1o2UYHiRog0',
+	// },
+	// {
+	// 	collection: 'baum-und-pferdgarten',
+	// 	rootFolderId: '14dd0YvtPvanr8owwpG9RMRl-yo4QT44x',
+	// },
 	{
 		collection: 'bloom.womenswear',
 		rootFolderId: '1Fsyv0mcFup0raVjvv4gXIW6SWVRlgALR',
 	},
-	{
-		collection: 'cecilie-bahnsen',
-		rootFolderId: '1oLq3zGmjacJx7cA3UNp6cb2py4k9LBx9',
-	},
-	{
-		collection: 'crescent',
-		rootFolderId: '1-_ccZhTYm9pV2fBQjKhjcpjOtGgE2t2f',
-	},
-	{
-		collection: 'dario-mittmann',
-		rootFolderId: '1dgfABw4Pv9hch85BPz4So1OeSuPwAO5w',
-	},
+	// {
+	// 	collection: 'cecilie-bahnsen',
+	// 	rootFolderId: '1oLq3zGmjacJx7cA3UNp6cb2py4k9LBx9',
+	// },
+	// {
+	// 	collection: 'crescent',
+	// 	rootFolderId: '1-_ccZhTYm9pV2fBQjKhjcpjOtGgE2t2f',
+	// },
+	// {
+	// 	collection: 'dario-mittmann',
+	// 	rootFolderId: '1dgfABw4Pv9hch85BPz4So1OeSuPwAO5w',
+	// },
 
-	{
-		collection: 'david-black',
-		rootFolderId: '1p6FtdSkIGIA3JxB_sVhccD-zjnoyPhZw',
-	},
+	// {
+	// 	collection: 'david-black',
+	// 	rootFolderId: '1p6FtdSkIGIA3JxB_sVhccD-zjnoyPhZw',
+	// },
 	{
 		collection: 'diane',
 		rootFolderId: '1wJWNQbh-tmmKtHH0GGrB1AsGHz5nTniJ',
@@ -148,9 +154,14 @@ const COLLECTION_CONFIGS = [
 		collection: 'erroris.ltd',
 		rootFolderId: '1h1Mt2eq3xx8SQzb06t8E2nqEzBKZ4f_R',
 	},
+	// {
+	// 	collection: 'gola',
+	// 	rootFolderId: '1ZBcsModfRLPD1tNn_cTSvV-nS7mUyo21',
+	// },
 	{
-		collection: 'gola',
-		rootFolderId: '1ZBcsModfRLPD1tNn_cTSvV-nS7mUyo21',
+		collection: 'vinaygaia',
+		gender: 'male',
+		rootFolderId: '1NeHJayR6MLvM__3OteVveMPnpUIydF6T',
 	},
 	{
 		collection: 'h2b',
@@ -164,10 +175,10 @@ const COLLECTION_CONFIGS = [
 		collection: 'jubin-studio',
 		rootFolderId: '19faN1x2OpK3d2ftk0YV8WtOTU3sZU6ok',
 	},
-	{
-		collection: 'julian-prohaska',
-		rootFolderId: '1BNbvcSYavMSqXUhff7NG3aHbTSSzhNpv',
-	},
+	// {
+	// 	collection: 'julian-prohaska',
+	// 	rootFolderId: '1BNbvcSYavMSqXUhff7NG3aHbTSSzhNpv',
+	// },
 	{
 		collection: 'kido',
 		rootFolderId: '1ye_JXheFecOOh9Lbb3EobxEEK3aCdpTD',
@@ -178,6 +189,7 @@ const COLLECTION_CONFIGS = [
 	},
 	{
 		collection: 'lider',
+		gender: 'male',
 		rootFolderId: '1nQWCTO2_NloTlB5QR2A5s4j2TP-l1QkZ',
 	},
 	{
@@ -186,6 +198,7 @@ const COLLECTION_CONFIGS = [
 	},
 	{
 		collection: 'paradise-saigon',
+		gender: 'male',
 		rootFolderId: '1O-rlxQgP6s6NIqGhmK-u-QL-SKi9tq0c',
 	},
 	{
@@ -195,6 +208,118 @@ const COLLECTION_CONFIGS = [
 	{
 		collection: 'pradies',
 		rootFolderId: '1JrDxYfDyX5wqupUclec_G-5H1QSQxNnH',
+	},
+	{
+		collection: 'bad-habits',
+		rootFolderId: '1FAKJMS1jOzgj67wkF4AdEbSMbBhXyCS2',
+	},
+	{
+		collection: 'beachclub.official',
+		rootFolderId: '1ytfrGzgnqbUkNdBnlDW5vYlS7i7j7_Ws',
+	},
+	{
+		collection: 'cara-club',
+		rootFolderId: '1hRNAjkt6tZo7uwCpqYpfis2i_pNZ98dg',
+	},
+	{
+		collection: 'demobaza',
+		rootFolderId: '1IkyPU9RC-JifFB85UwIhOpI2IzmuuqDX',
+	},
+	{
+		collection: 'diane',
+		rootFolderId: '1wJWNQbh-tmmKtHH0GGrB1AsGHz5nTniJ',
+	},
+	{
+		collection: 'hani',
+		rootFolderId: '1PxEkZMy9MQFyLaTh8AHtig6FHpRHqY6K',
+	},
+	{
+		collection: 'huelley-rose',
+		rootFolderId: '1WOmwiamcARAb2Ekv9c6lvulOZMovGycg',
+	},
+	{
+		collection: 'hurricane-b',
+		rootFolderId: '195Xq3sSGNpH8OjIhCrElTT75JVSpWyet',
+	},
+	{
+		collection: 'fig.cool-leather',
+		rootFolderId: '17m4VfaxlIDCGc7SoyZSdR9IrhjMncs_l',
+	},
+	{
+		collection: 'libeworkshop',
+		rootFolderId: '1czCRQ8e2ePgt7_8I8Gfr3SZSwZDywniy',
+	},
+	{
+		collection: 'mono-talk',
+		rootFolderId: '1unt9_hNsGPTmP2WHDCfTxAOwg8UM1xFf',
+	},
+	{
+		collection: 'naked',
+		rootFolderId: '15aIsaHcRgYhfyeW9FS6EPI0HLRupQFtd',
+	},
+	{
+		collection: 'push-push',
+		rootFolderId: '1-fau_i6mV_klgqfacZ0i16SQrclIKTmC',
+	},
+	{
+		collection: 'raxada',
+		rootFolderId: '1cMrawDMvRgJizl3Pu0xNNkEfqQjFPTlu',
+	},
+	{
+		collection: 'rechick',
+		rootFolderId: '1LovuBDt4IwTv59d3ArRLTkQmQllxalvM',
+	},
+	{
+		collection: 'ridkid',
+		rootFolderId: '1mxxBri7-XxksDP1q-t-76znSzYMDmqp5',
+	},
+	{
+		collection: 'rotate',
+		rootFolderId: '1Y3fMNntJa0EG5jud2IRPHLwXK_YggwLM',
+	},
+	{
+		collection: 'salteye',
+		rootFolderId: '1N0_WSy5WMAGrPHeDFIByNxmcwxAjmuzu',
+	},
+	{
+		collection: 'skall',
+		rootFolderId: '1pXn8hYMnuAkzlw0V2MUjwv5Lo-XKuNVK',
+	},
+	{
+		collection: 'so-vintage-official',
+		rootFolderId: '1EVxpiETahCKoptqWeatw8au75HW3roJ7',
+	},
+	{
+		collection: 'sora.m_design',
+		rootFolderId: '1WnsQ3NilG9GekJCvOrgz2UeX8wePiC4s',
+	},
+	{
+		collection: 'ssdslsns',
+		rootFolderId: '1G-v--BLmR45yFD3_8jDT3i2C9xrS_lSe',
+	},
+	{
+		collection: 'stevie-crowne',
+		rootFolderId: '1T9fJat8V3WjWWZA5DHRlNVMjI6p_Oxlz',
+	},
+	{
+		collection: 'tsun',
+		rootFolderId: '1yvocRU162iKy-pAxxrTmFPhftUN1RNbX',
+	},
+	{
+		collection: 'tubycatu',
+		rootFolderId: '1feRlmMnv0HNC4Ueo2WxmroEIQK7hRly_',
+	},
+	{
+		collection: 'whiteplan',
+		rootFolderId: '17W6ps3OJpG401byGCdu254araCssbwB-',
+	},
+	{
+		collection: 'zd-eye-of-the-storm',
+		rootFolderId: '1TL9_8zSUQN3NBwVljZq1uwb7ybgLZnc4',
+	},
+	{
+		collection: 'katalog-1811',
+		rootFolderId: '1nmtMpL2qYOx096pPK98Zeo2mOpD_FTqz',
 	},
 ]
 
@@ -222,34 +347,6 @@ async function withRetry<T>(operation: () => Promise<T>, maxRetries: number = 3,
 	}
 
 	throw lastError!
-}
-
-// Helper function to make HTTP requests
-function makeRequest<T = unknown>(url: string): Promise<T> {
-	return withRetry(() => {
-		return new Promise<T>((resolve, reject) => {
-			https
-				.get(url, res => {
-					let data = ''
-					res.on('data', chunk => {
-						data += chunk
-					})
-					res.on('end', () => {
-						try {
-							resolve(JSON.parse(data))
-						} catch (e) {
-							reject(e)
-						}
-					})
-				})
-				.on('error', reject)
-		})
-	})
-}
-
-// Get Google Drive download URL for a file
-function getDriveDownloadUrl(fileId: string): string {
-	return `https://drive.google.com/uc?export=download&id=${fileId}`
 }
 
 // Upload buffer to S3 and return the public URL
@@ -302,49 +399,21 @@ async function uploadToS3(
 	}
 }
 
-// Download file to buffer instead of saving locally
-function downloadToBuffer(url: string): Promise<Buffer> {
-	return withRetry(() => {
-		return new Promise<Buffer>((resolve, reject) => {
-			https
-				.get(url, response => {
-					// Handle redirects
-					if (response.statusCode === 302 || response.statusCode === 301 || response.statusCode === 303) {
-						const location = response.headers.location
-						if (!location) {
-							reject(new Error('Redirect location not provided'))
-							return
-						}
-						return downloadToBuffer(location).then(resolve).catch(reject)
-					}
-
-					if (response.statusCode !== 200) {
-						reject(new Error(`Download failed with status ${response.statusCode}`))
-						return
-					}
-
-					const chunks: Buffer[] = []
-					response.on('data', chunk => {
-						chunks.push(chunk)
-					})
-
-					response.on('end', () => {
-						const buffer = Buffer.concat(chunks)
-						resolve(buffer)
-					})
-
-					response.on('error', reject)
-				})
-				.on('error', reject)
-		})
+// Download file from Google Drive using API
+async function downloadFromDrive(fileId: string): Promise<Buffer> {
+	return withRetry(async () => {
+		const response = await drive.files.get({fileId, alt: 'media'}, {responseType: 'arraybuffer'})
+		return Buffer.from(response.data as ArrayBuffer)
 	})
 }
 
 async function fetchFolderContents(folderId: string): Promise<TODO[]> {
 	try {
-		const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&fields=files(id,name,mimeType,parents)&key=${API_KEY}`
-		const response = await makeRequest<{files: TODO[]}>(url)
-		return response.files || []
+		const response = await drive.files.list({
+			q: `'${folderId}' in parents and trashed=false`,
+			fields: 'files(id,name,mimeType,parents)',
+		})
+		return response.data.files || []
 	} catch (error) {
 		console.error('Error fetching folder contents:', error)
 		return []
@@ -367,6 +436,7 @@ function normalizeBlockCategory(folderName: string): string {
 	if (folderName.toLowerCase().includes('pants')) return 'Pants'
 	if (folderName.toLowerCase().includes('sleeves')) return 'Sleeves'
 	if (folderName.toLowerCase().includes('dress')) return 'Dress'
+	if (folderName.toLowerCase().includes('jacket')) return 'Jacket'
 	if (folderName.toLowerCase().includes('coat')) return 'Coat'
 	if (folderName.toLowerCase().includes('skirt')) return 'Skirt'
 	if (folderName.toLowerCase().includes('fullbody')) return 'Full Body'
@@ -474,8 +544,8 @@ async function processOptionBlocks(
 
 				// Download block files
 				const [pngBuffer, gltfBuffer] = await Promise.all([
-					downloadToBuffer(getDriveDownloadUrl(pngFile.id)),
-					downloadToBuffer(getDriveDownloadUrl(gltfFile.id)),
+					downloadFromDrive(pngFile.id),
+					downloadFromDrive(gltfFile.id),
 				])
 
 				// Upload to S3
@@ -524,6 +594,7 @@ async function processTemplateFolder(
 	templateFolder: TODO,
 	category: string,
 	collection: string,
+	defaultGender: 'male' | 'female' = 'female',
 ): Promise<{template: TODO; blocks: TODO[]; optionBlocks: TODO[]; unsucceeded: TODO[]}> {
 	console.log(`  📂 Processing template: ${templateFolder.name}`)
 
@@ -543,8 +614,8 @@ async function processTemplateFolder(
 	const blockTypeFolders = templateContents.filter(
 		item =>
 			item.mimeType === 'application/vnd.google-apps.folder' &&
-			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory', 'coat'].some(blockType =>
-				item.name.toLowerCase().includes(blockType.toLowerCase()),
+			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory', 'coat', 'jacket'].some(
+				blockType => item.name.toLowerCase().includes(blockType.toLowerCase()),
 			),
 	)
 
@@ -578,8 +649,8 @@ async function processTemplateFolder(
 		item =>
 			item.mimeType === 'application/vnd.google-apps.folder' &&
 			item.name.toLowerCase().startsWith('option ') &&
-			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory', 'coat'].some(blockType =>
-				item.name.toLowerCase().includes(blockType.toLowerCase()),
+			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory', 'coat', 'jacket'].some(
+				blockType => item.name.toLowerCase().includes(blockType.toLowerCase()),
 			),
 	)
 
@@ -607,8 +678,7 @@ async function processTemplateFolder(
 	}
 
 	// Download template thumbnail
-	const templateThumbnailUrl = getDriveDownloadUrl(templateThumbnail.id)
-	const templateThumbnailBuffer = await downloadToBuffer(templateThumbnailUrl)
+	const templateThumbnailBuffer = await downloadFromDrive(templateThumbnail.id)
 	const templateS3Url = await uploadToS3(
 		templateThumbnailBuffer,
 		`images/${collection}/templates/${category}/${templateFolder.name}.png`,
@@ -642,7 +712,7 @@ async function processTemplateFolder(
 	// Parse template name, price, and avatar gender from folder name
 	let templateName = ''
 	let templatePrice = 'N/A'
-	let avatarGender = 'female' // Default gender
+	let avatarGender = defaultGender // Default gender from collection config
 
 	// Check for gender prefix in folder name (handles [Male], _[Male]_, and space variations)
 	const genderMatch = templateFolder.name.match(/^[\s_]*\[(Male|Female)\][\s_]*/i)
@@ -738,8 +808,8 @@ async function processTemplateFolder(
 				try {
 					// Download block files
 					const [pngBuffer, gltfBuffer] = await Promise.all([
-						downloadToBuffer(getDriveDownloadUrl(matchingPng.id)),
-						downloadToBuffer(getDriveDownloadUrl(gltfFile.id)),
+						downloadFromDrive(matchingPng.id),
+						downloadFromDrive(gltfFile.id),
 					])
 
 					// Upload to S3
@@ -1151,7 +1221,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 			try {
 				console.log(`    📸 Processing thumbnail: ${thumbnailFile.name}`)
 
-				const thumbBuffer = await downloadToBuffer(getDriveDownloadUrl(thumbnailFile.id))
+				const thumbBuffer = await downloadFromDrive(thumbnailFile.id)
 				thumbUrl = await uploadToS3(
 					thumbBuffer,
 					`fabrics/${collection}/root/${materialFolder.name}/${thumbnailFile.name}`,
@@ -1171,7 +1241,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 			try {
 				console.log(`    📥 Processing texture: ${file.name}`)
 
-				const fileBuffer = await downloadToBuffer(getDriveDownloadUrl(file.id))
+				const fileBuffer = await downloadFromDrive(file.id)
 				const extension = path.extname(file.name).toLowerCase()
 				let contentType = 'application/octet-stream'
 
@@ -1438,7 +1508,7 @@ async function main(): Promise<void> {
 
 		// Process each collection
 		for (const collectionConfig of COLLECTION_CONFIGS) {
-			const {collection, rootFolderId} = collectionConfig
+			const {collection, rootFolderId, gender = 'female'} = collectionConfig
 			console.log(`\n🏢 Processing collection: ${collection}`)
 			console.log(`🗂️  Root folder ID: ${rootFolderId}`)
 
@@ -1448,6 +1518,7 @@ async function main(): Promise<void> {
 
 			// Get root contents (categories + root Materials folder)
 			const rootContents = await fetchFolderContents(rootFolderId)
+			console.log(`📁 Found ${rootContents} root contents`)
 			const categoryFolders = rootContents.filter(
 				item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) !== 'Materials',
 			)
@@ -1487,7 +1558,7 @@ async function main(): Promise<void> {
 
 				// Step 2b: Process each template in this category
 				for (const templateFolder of templateFolders) {
-					const processedTemplate = await processTemplateFolder(templateFolder, categoryFolder.name, collection)
+					const processedTemplate = await processTemplateFolder(templateFolder, categoryFolder.name, collection, gender)
 					if (processedTemplate.template) {
 						collectionProcessedData.push(processedTemplate)
 					}
