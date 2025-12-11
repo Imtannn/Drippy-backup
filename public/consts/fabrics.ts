@@ -5899,7 +5899,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			materialName: 'Twill',
 			category: 'Wool',
 			collection: 'zd-eye-of-the-storm',
-			templateCategories: ['ZD – ARCHRISE SHORTS_Pants', 'ZD – JACKET_Jacket'],
+			templateCategories: ['Pants', 'Jacket'],
 		},
 	],
 	'katalog-1811': [

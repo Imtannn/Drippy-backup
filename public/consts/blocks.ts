@@ -5996,7 +5996,7 @@ export const blocks: Record<string, Block[]> = {
 			collection: 'zd-eye-of-the-storm',
 			templateId: '807591ba-6937-4ba9-b692-62fc7c1c93b1',
 			templateName: 'ZD – ARCHRISE SHORTS',
-			templateCategory: 'ZD – ARCHRISE SHORTS_Pants',
+			templateCategory: 'Pants',
 		},
 		{
 			_id: '5e20f962-7605-469d-8762-d1688b1d4032',
@@ -6010,7 +6010,7 @@ export const blocks: Record<string, Block[]> = {
 			collection: 'zd-eye-of-the-storm',
 			templateId: '54ab2fc3-fa7d-4a8f-9f24-b6263b1fd333',
 			templateName: 'ZD – JACKET',
-			templateCategory: 'ZD – JACKET_Jacket',
+			templateCategory: 'Jacket',
 		},
 		{
 			_id: '0f328875-cd00-4f49-86e9-16f7b171e497',
@@ -6024,7 +6024,7 @@ export const blocks: Record<string, Block[]> = {
 			collection: 'zd-eye-of-the-storm',
 			templateId: '54ab2fc3-fa7d-4a8f-9f24-b6263b1fd333',
 			templateName: 'ZD – JACKET',
-			templateCategory: 'ZD – JACKET_Jacket',
+			templateCategory: 'Jacket',
 		},
 	],
 	'katalog-1811': [
