@@ -1076,12 +1076,10 @@ export function createFabricTexture(
 		const currentFabric = fabric()
 
 		if (!currentFabric) {
-			console.log('### createFabricTexture - no fabric, calling reset()')
 			reset()
 			return
 		}
 
-		console.log(`### createFabricTexture start loading for fabric ${currentFabric._id}`)
 		let canceled = false
 		let retryCount = 0
 
@@ -1089,21 +1087,11 @@ export function createFabricTexture(
 			setLoading(true)
 			setError(null)
 
-			const urls = [
-				currentFabric.baseColor || '(none)',
-				currentFabric.normal || '(none)',
-				currentFabric.displacement || '(none)',
-				currentFabric.roughness || '(none)',
-				currentFabric.alpha || '(none)',
-			]
-			console.log(`### fabric ${currentFabric._id} urls`, urls)
-
 			try {
 				const textureSet = await textureManager.loadFabricTexturesWithUV(currentFabric, uvArray)
 
 				if (canceled) return
 
-				console.log(`### fabric ${currentFabric._id} loaded textureSet`, textureSet)
 				setTexture(textureSet)
 				setLoading(false)
 			} catch (err) {
