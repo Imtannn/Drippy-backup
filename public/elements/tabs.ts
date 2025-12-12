@@ -157,11 +157,20 @@ export class TabsList extends Element {
 	private provider: TabsProvider | null = null
 	private indicatorRef: HTMLElement | null = null
 	private hoverIndicatorRef: HTMLElement | null = null
-	private listElementRef: HTMLElement | null = null
 	private resizeTimeout: NodeJS.Timeout | null = null
 	private updateIndicatorsTimeout: NodeJS.Timeout | null = null
 	connectedCallback() {
 		super.connectedCallback()
+
+		this.classList.add('tabs-list')
+		this.role = 'tablist'
+
+		this.createEffect(() => {
+			if (this.provider) {
+				this.ariaOrientation = this.provider.tabOrientation || 'horizontal'
+			}
+		})
+
 		this.provider = this.closest('tabs-provider') as TabsProvider
 		this.setupKeyboardNavigation()
 		const frame = requestAnimationFrame(() => this.updateIndicators())
@@ -217,16 +226,12 @@ export class TabsList extends Element {
 
 	#addEventListeners() {
 		window.addEventListener('resize', this.#handleResize)
-		if (this.listElementRef) {
-			this.listElementRef.addEventListener('scroll', this.#handleScroll)
-		}
+		this.addEventListener('scroll', this.#handleScroll)
 	}
 
 	#removeEventListeners() {
 		window.removeEventListener('resize', this.#handleResize)
-		if (this.listElementRef) {
-			this.listElementRef.removeEventListener('scroll', this.#handleScroll)
-		}
+		this.removeEventListener('scroll', this.#handleScroll)
 	}
 
 	#handleResize = () => {
@@ -286,7 +291,7 @@ export class TabsList extends Element {
 			const listRect = this.getBoundingClientRect()
 			const triggerRect = trigger.getBoundingClientRect()
 
-			const left = triggerRect.left - listRect.left + (this.listElementRef?.scrollLeft || 0)
+			const left = triggerRect.left - listRect.left + (this.scrollLeft || 0)
 			const width = triggerRect.width
 
 			indicator.style.transform = `translateX(${left}px)`
@@ -295,25 +300,13 @@ export class TabsList extends Element {
 	}
 
 	template = () => html`
-		<div
-			class="tabs-list"
-			role="tablist"
-			aria-orientation="${this.provider?.tabOrientation || 'horizontal'}"
-			ref="${(el: HTMLElement) => (this.listElementRef = el)}"
-		>
-			<slot></slot>
-			<div class="tab-indicator active-indicator" ref="${(el: HTMLElement) => (this.indicatorRef = el)}"></div>
-			<div class="tab-indicator hover-indicator" ref="${(el: HTMLElement) => (this.hoverIndicatorRef = el)}"></div>
-		</div>
+		<slot></slot>
+		<div class="tab-indicator active-indicator" ref="${(el: HTMLElement) => (this.indicatorRef = el)}"></div>
+		<div class="tab-indicator hover-indicator" ref="${(el: HTMLElement) => (this.hoverIndicatorRef = el)}"></div>
 	`
 
 	css = css`
 		:host {
-			display: block;
-			width: 100%;
-		}
-
-		.tabs-list {
 			position: relative;
 			display: flex;
 			overflow: scroll;

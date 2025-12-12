@@ -84,15 +84,32 @@ export class TemplateView extends Element {
 		this.addEventListener('close', this.#onDetailViewClose)
 
 		this.createEffect(() => {
-			this.spaceCollection = store.getEffectiveCollection() ?? this.defaultCollection
+			const effectiveCollection = store.getEffectiveCollection()
+			// For multi-collection spaces, allow null to show all templates
+			// For single-collection spaces, fallback to defaultCollection
+			if (spaceHasMultipleCollections(store.selectedSpace)) {
+				this.spaceCollection = effectiveCollection
+			} else {
+				this.spaceCollection = effectiveCollection ?? this.defaultCollection
+			}
 		})
 
 		// Update template categories when templates change
 		this.createEffect(() => {
-			if (!this.spaceCollection) return
-
 			const defaultCategories: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants', 'Jumpsuit']
-			let collectionTemplates = templates[this.spaceCollection] ?? []
+			let collectionTemplates: Template[] = []
+
+			// If no collection selected and multi-collection space, aggregate from all collections
+			if (!this.spaceCollection && spaceHasMultipleCollections(store.selectedSpace)) {
+				const spaceCollections = getSpaceCollections(store.selectedSpace)
+				for (const collectionSlug of spaceCollections) {
+					collectionTemplates.push(...(templates[collectionSlug] ?? []))
+				}
+			} else if (this.spaceCollection) {
+				collectionTemplates = templates[this.spaceCollection] ?? []
+			} else {
+				collectionTemplates = templates[this.defaultCollection] ?? []
+			}
 
 			// Filter by wishlist if showWishlistOnly is true
 			if (this.showWishlistOnly) {
@@ -362,7 +379,12 @@ export class TemplateView extends Element {
 
 	#onCollectionSelect = (collection: Collection) => {
 		if (this.hasDragged) return
-		store.setSelectedCollection = collection.slug
+		// Toggle: if already selected, unselect to show all templates
+		if (store.getEffectiveCollection() === collection.slug) {
+			store.setSelectedCollection = null
+		} else {
+			store.setSelectedCollection = collection.slug
+		}
 	}
 
 	#onHeartButtonClick = () => {

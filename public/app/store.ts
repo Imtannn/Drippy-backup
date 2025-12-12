@@ -325,7 +325,9 @@ class Store {
 				if (collectionParam && space.collections.includes(collectionParam)) {
 					this.selectedCollection = collectionParam
 				} else {
-					this.selectedCollection = getSpacePrimaryCollection(space)
+					// For multi-collection spaces, default to null (show all)
+					// For single-collection spaces, use primary
+					this.selectedCollection = spaceHasMultipleCollections(space) ? null : getSpacePrimaryCollection(space)
 				}
 
 				if (sceneParam && space.scenes.includes(sceneParam)) {
@@ -341,8 +343,10 @@ class Store {
 		this.selectedCollection = collection
 		if (collection) {
 			searchParams().set('collection', collection)
-			pushState()
+		} else {
+			searchParams().delete('collection')
 		}
+		pushState()
 	}
 
 	set setSelectedScene(scene: string | null) {
@@ -362,9 +366,9 @@ class Store {
 	getEffectiveCollection(): string | null {
 		if (!this.selectedSpace) return null
 
-		// If multi-collection space, use selectedCollection
+		// If multi-collection space, use selectedCollection (null means show all)
 		if (spaceHasMultipleCollections(this.selectedSpace)) {
-			return this.selectedCollection || getSpacePrimaryCollection(this.selectedSpace)
+			return this.selectedCollection || null
 		}
 
 		// Single collection space, use primary
