@@ -31,6 +31,7 @@ import {backgroundScenes} from '../consts/scenes.js'
 import {spaces} from '../consts/spaces.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
+import '../elements/lume-rect-area-light.js'
 import '../elements/progress-loader.js'
 import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
@@ -104,6 +105,11 @@ export class DrippyScene extends Element {
 	@signal private cameraRigInteractive = true
 	@signal private isVerticalPan = false
 	@signal private cameraRig: CameraRig | null = null
+
+	scene = () => {
+		const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
+		return getSceneBySlug(backgroundScenes, defaultSceneSlug)
+	}
 
 	// Post-processing for outline effect
 	private composer: EffectComposer | null = null
@@ -407,7 +413,9 @@ export class DrippyScene extends Element {
 	}
 
 	connectedCallback() {
-		super.connectedCallback()
+		this.scene = createMemo(this.scene)
+
+		super.connectedCallback() // runs this.template()
 
 		// Memoize default render blocks and visibility to prevent unnecessary re-renders
 		this.defaultRenderBlocks = createMemo(() => this._defaultRenderBlocks)
@@ -572,9 +580,7 @@ export class DrippyScene extends Element {
 				if (!this.selectedSpace) return
 				const space = spaces.find(space => space.slug === this.selectedSpace?.slug)
 				if (space) {
-					const defaultSceneSlug = getSpaceDefaultScene(space)
-					const scene = getSceneBySlug(backgroundScenes, defaultSceneSlug)
-					if (scene) this.sceneUrl = scene.scene
+					if (this.scene()) this.sceneUrl = this.scene()!.scene
 				}
 			})
 
@@ -896,6 +902,11 @@ export class DrippyScene extends Element {
 					this.outlinePass.hiddenEdgeColor.set(0x9b59b6)
 					this.composer.addPass(this.outlinePass)
 
+					// const bloomPass = new BloomPass(1, 25, 4)
+					// bloomPass.setSize(size.x, size.y)
+					// CONTINUE: use threshold to get bright areas only. Use UnrealBloomPass instead if BloomPass has no threshold.
+					// this.composer.addPass(bloomPass)
+
 					const outputPass = new OutputPass()
 					this.composer.addPass(outputPass)
 
@@ -910,7 +921,7 @@ export class DrippyScene extends Element {
 						if (currentSize.x === 0 || currentSize.y === 0) return
 
 						// Only use composer if we have objects to outline AND selectingPiece is set
-						if (true && store.selectingPiece && this.outlinePass && this.outlinePass.selectedObjects.length > 0) {
+						if (this.outlinePass && store.selectingPiece && this.outlinePass.selectedObjects.length > 0) {
 							// Update cameras to current frame's camera
 							const currentCamera = this.lumeScene!.threeCamera!
 							if (renderPass) renderPass.camera = currentCamera
@@ -1062,20 +1073,21 @@ export class DrippyScene extends Element {
 					perspective="800"
 					physically-correct-lights
 					shadow-mode="vsm"
-					environment="/images/envs/brown_photostudio_02.jpg"
+					attr:environment=${() => this.scene()?.env ?? '/images/envs/brown_photostudio_02.jpg'}
+					attr:environment-intensity="0.3"
 					oncapture:pointerdown=${this.#handlePointerDown}
 					oncapture:pointermove=${this.#handlePointerMove}
 					oncapture:pointerup=${this.#handlePointerUp}
 
 				>
 					<lume-element3d align-point="0.5 0.5 0.5">
-						<lume-ambient-light visible="true" intensity="0.7" color="white"></lume-ambient-light>
+						<lume-ambient-light visible="false" intensity="0.7" color="white"></lume-ambient-light>
 
 						<!-- a sphere to debug/visualize the env map -->
-						<lume-sphere visible="${() => store.isAdmin && !store.turnOffSettingsInSpace && false}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
+						<lume-sphere visible="${() => store.isAdmin && !store.turnOffSettingsInSpace}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
 
 						<lume-spot-light
-							visible="true"
+							visible="false"
 							target="#avatar"
 							position="5 -5 1"
 							intensity="3"
@@ -1100,7 +1112,7 @@ export class DrippyScene extends Element {
 						</lume-spot-light>
 
 						<lume-spot-light
-							visible="true"
+							visible="false"
 							target="#avatar"
 							position="-5 -5 1"
 							intensity="3"
@@ -1125,7 +1137,7 @@ export class DrippyScene extends Element {
 						</lume-spot-light>
 
 						<lume-spot-light
-							visible="true"
+							visible="false"
 							target="#avatar"
 							position="0 -5 5"
 							intensity="3"
@@ -1148,6 +1160,25 @@ export class DrippyScene extends Element {
 							></lume-sphere> -->
 
 						</lume-spot-light>
+
+						<lume-element3d position="0 0 -2.38">
+							<lume-rect-area-light debug="true" size="0.1 3.4 0" color="white" intensity="20" position="3.3 -2.1 0" rotation="0 90 0" mount-point="0.5 0.5 0.5">
+								<!-- <lume-plane size-mode="proportional proportional" size="1 1" opacity="0.5" sidedness="back"></lume-plane> -->
+							</lume-rect-area-light>
+
+							<lume-rect-area-light debug="true" size="0.1 3.4 0" color="white" intensity="20" position="-3.3 -2.1 0" rotation="0 -90 0" mount-point="0.5 0.5 0.5">
+								<!-- <lume-plane size-mode="proportional proportional" size="1 1" opacity="0.5" sidedness="back"></lume-plane> -->
+							</lume-rect-area-light>
+						</lume-element3d>
+						<lume-element3d position="0 0 -7.6">
+							<lume-rect-area-light debug="true" size="0.1 3.4 0" color="white" intensity="20" position="2.75 -2.1 0" rotation="0 90 0" mount-point="0.5 0.5 0.5">
+								<!-- <lume-plane size-mode="proportional proportional" size="1 1" opacity="0.5" sidedness="back"></lume-plane> -->
+							</lume-rect-area-light>
+
+							<lume-rect-area-light debug="true" size="0.1 3.4 0" color="white" intensity="20" position="-2.75 -2.1 0" rotation="0 -90 0" mount-point="0.5 0.5 0.5">
+								<!-- <lume-plane size-mode="proportional proportional" size="1 1" opacity="0.5" sidedness="back"></lume-plane> -->
+							</lume-rect-area-light>
+						</lume-element3d>
 
 						<lume-camera-rig
 							ref=${(el: CameraRig) => (this.cameraRig = el)}
@@ -1266,19 +1297,15 @@ export class DrippyScene extends Element {
 						ref=${(el: GltfModel) => (this.backgroundModel = el)}
 						id="scene"
 						attr:src=${() => {
-							const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
-							const scene = getSceneBySlug(backgroundScenes, defaultSceneSlug)
-							console.log('selected background', scene?.scene)
-							return scene?.scene ?? ''
+							console.log('selected background', this.scene()?.scene)
+							return this.scene()?.scene ?? ''
 						}}
 					></lume-gltf-model>
 
 					<!-- Background scene extra objects -->
 					<${Index}
 						each=${() => {
-							const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
-							const scene = getSceneBySlug(backgroundScenes, defaultSceneSlug)
-							return scene?.includedModelFiles ?? []
+							return this.scene()?.includedModelFiles ?? []
 						}}
 					>
 						${(item: Accessor<string>) => html`

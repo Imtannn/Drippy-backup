@@ -407,6 +407,18 @@ export function isMesh(obj: THREE.Object3D): obj is THREE.Mesh {
 	return obj instanceof THREE.Mesh
 }
 
+export function isLine(obj: THREE.Object3D): obj is THREE.Line | THREE.LineSegments {
+	return obj instanceof THREE.Line || obj instanceof THREE.LineSegments
+}
+
+export function isRenderable(obj: THREE.Object3D): obj is THREE.Mesh | THREE.Line | THREE.LineSegments {
+	return isMesh(obj) || isLine(obj)
+}
+
+export function isLight(obj: THREE.Object3D): obj is THREE.Light {
+	return obj instanceof THREE.Light
+}
+
 /**
  * Iterate all Object3Ds in the tree, including the root.
  * @param root The root Object3D to start iterating from.
@@ -450,11 +462,34 @@ export function* meshesInTree(root: THREE.Object3D, ...skip: THREE.Object3D[]): 
 	for (const obj of object3DsInTree(root, ...skip)) if (isMesh(obj)) yield obj
 }
 
+export function* linesInTree(
+	root: THREE.Object3D,
+	...skip: THREE.Object3D[]
+): Generator<THREE.Line | THREE.LineSegments> {
+	for (const obj of object3DsInTree(root, ...skip)) if (isLine(obj)) yield obj
+}
+
+export function* renderablesInTree(
+	root: THREE.Object3D,
+	...skip: THREE.Object3D[]
+): Generator<THREE.Mesh | THREE.Line | THREE.LineSegments> {
+	for (const obj of object3DsInTree(root, ...skip)) if (isRenderable(obj)) yield obj
+}
+
+/**
+ * Iterate all lights in the tree, including the root.
+ * @param root The root Object3D to start iterating from.
+ * @param skip Optional Object3Ds to skip (including their descendants).
+ */
+export function* lightsInTree(root: THREE.Object3D, ...skip: THREE.Object3D[]): Generator<THREE.Light> {
+	for (const obj of object3DsInTree(root, ...skip)) if (isLight(obj)) yield obj
+}
+
 /**
  * Iterate all materials of a mesh.
  * @param mesh The mesh whose materials will be iterated.
  */
-export function* materialsOfMesh(mesh: THREE.Mesh): Generator<THREE.Material> {
+export function* materialsOfRenderable(mesh: THREE.Mesh | THREE.Line | THREE.LineSegments): Generator<THREE.Material> {
 	if (Array.isArray(mesh.material)) yield* mesh.material
 	else yield mesh.material
 }
@@ -465,7 +500,7 @@ export function* materialsOfMesh(mesh: THREE.Mesh): Generator<THREE.Material> {
  * @param skip Optional Object3Ds to skip (including their descendants).
  */
 export function* materialsInTree(root: THREE.Object3D, ...skip: THREE.Object3D[]): Generator<THREE.Material> {
-	for (const mesh of meshesInTree(root, ...skip)) yield* materialsOfMesh(mesh)
+	for (const mesh of renderablesInTree(root, ...skip)) yield* materialsOfRenderable(mesh)
 }
 
 export function findInTree(root: THREE.Object3D, predicate: (obj: THREE.Object3D) => boolean): THREE.Object3D | null {
@@ -543,22 +578,46 @@ export function onModelLoad(model: GltfModel) {
 	return loaded
 }
 
+/**
+ * Run an effect function when the model is loaded. Any dependencies used in the
+ * function trigger re-run. Any onCleanups will be called when the given model
+ * goes back into loading state before running the effect function again after
+ * next load.
+ */
+export function whenModelLoaded(el: GltfModel, effectFn: () => void) {
+	whenTrue(onModelLoad(el), effectFn)
+}
+
+/**
+ * Run an effect function when the given boolean getter is true. Any dependencies
+ * used in the function trigger re-run. Any onCleanups will be called when the
+ * getter goes back to false before running the effect function again after it
+ * goes back to true.
+ */
+export function whenTrue(getter: Accessor<boolean>, effectFn: () => void) {
+	createEffect(() => {
+		if (!getter()) return
+		effectFn()
+	})
+}
+
 export function enableShadows(el: Element3D) {
 	for (const child of meshesInTree(el.three)) {
 		child.castShadow = true
 		child.receiveShadow = true
 	}
 
+	for (const child of lightsInTree(el.three)) {
+		child.castShadow = true
+		child.receiveShadow = true
+		child.shadow!.bias = -0.0001
+	}
+
 	el.needsUpdate()
 }
 
 export function enableShadowOnModelLoad(el: GltfModel) {
-	const loaded = onModelLoad(el)
-
-	createEffect(() => {
-		if (!loaded()) return
-		enableShadows(el)
-	})
+	whenModelLoaded(el, () => enableShadows(el))
 }
 
 export function enableFrontsideRendering(el: Element3D) {
@@ -571,12 +630,7 @@ export function enableFrontsideRendering(el: Element3D) {
 }
 
 export function enableFrontsideOnModelLoad(el: GltfModel) {
-	const loaded = onModelLoad(el)
-
-	createEffect(() => {
-		if (!loaded()) return
-		enableFrontsideRendering(el)
-	})
+	whenModelLoaded(el, () => enableFrontsideRendering(el))
 }
 
 export function setEnvMap(el: Element3D, env: string) {
@@ -608,12 +662,7 @@ export function setEnvMapOnModelLoad(el: GltfModel, env: string) {
 	// this.
 	return
 
-	const loaded = onModelLoad(el)
-
-	createEffect(() => {
-		if (!loaded()) return
-		setEnvMap(el, env)
-	})
+	whenModelLoaded(el, () => setEnvMap(el, env))
 }
 
 /**
@@ -640,20 +689,14 @@ export function setMaterialsVisible(el: Element3D, visible: boolean, ...skip: El
  * @param skip Optional Element3Ds to skip (including their descendants).
  */
 export function setMaterialsVisibleOnModelLoad(el: GltfModel, visible: Accessor<boolean>, ...skip: Element3D[]) {
-	const loaded = onModelLoad(el)
-
-	createEffect(() => {
-		if (!loaded()) return
-		setMaterialsVisible(el, visible(), ...skip)
-	})
+	whenModelLoaded(el, () => setMaterialsVisible(el, visible(), ...skip))
 }
 
 export function showSkeletonHelper(el: GltfModel, show: () => boolean) {
+	// TODO enable via admin UI
 	return
-	const loaded = onModelLoad(el)
 
-	createEffect(() => {
-		if (!loaded()) return
+	whenModelLoaded(el, () => {
 		if (!show()) return
 
 		const helper = new THREE.SkeletonHelper(el.three)

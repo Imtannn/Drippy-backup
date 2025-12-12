@@ -84,7 +84,8 @@ class Store {
 	}
 
 	get turnOffSettingsInSpace() {
-		return turnOffSettingsInSpace()
+		return true
+		// return turnOffSettingsInSpace()
 	}
 
 	// FIXME this is not in sync with the address bar back/forward buttons
