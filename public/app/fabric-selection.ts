@@ -92,7 +92,6 @@ export class FabricSelection extends Element {
 			assignedMesh: piece,
 		}))
 
-		console.log('### fabric data', {...fabricData})
 		store.setSelectedFabrics = fabricData
 	}
 
@@ -208,6 +207,10 @@ export class FabricSelection extends Element {
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
 			gap: var(--uiGap);
+		}
+
+		.item-card-container {
+			position: relative;
 		}
 
 		:host([is-remix]) .items-grid {
