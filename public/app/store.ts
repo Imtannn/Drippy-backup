@@ -84,7 +84,8 @@ class Store {
 	}
 
 	get turnOffSettingsInSpace() {
-		return turnOffSettingsInSpace()
+		return true
+		// return turnOffSettingsInSpace()
 	}
 
 	// FIXME this is not in sync with the address bar back/forward buttons
@@ -101,7 +102,7 @@ class Store {
 	// FIXME initialize other props from URL params as well
 
 	showAnimationSelect = false
-	selectedAnimation = 'none' as 'none' | 'walk' | 'dance'
+	selectedAnimation: 'none' | 'walk' | 'dance' | 'idle' = 'idle'
 	selectedTemplates: TemplateMap = {}
 	selectedGarments: SelectedGarments = {}
 	customMeasurement = null as CustomMeasurement | null

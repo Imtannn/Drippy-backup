@@ -341,31 +341,6 @@ export class RemixOverlay extends Element {
 												`}
 											></for-each>
 										</div>
-
-										<for-each
-											items=${() => this.blocksCategories}
-											content=${() => (blockCategory: BlockCategory) => html`
-												<show-when
-													condition=${() => this.selectedSubTab === blockCategory}
-													content=${() => html`
-														<div class="items-grid">
-															<for-each
-																items=${() => this.#filteredBlocksByCategory(blockCategory)}
-																content=${() => (block: Block) => html`
-																	<item-card
-																		item-active=${() => this.#getIsBlockActive(block)}
-																		item-src=${() => block.thumb}
-																		item-alt=${() => block.blockName}
-																		item-value=${() => block}
-																		oncardselected=${() => this.#onBlockSelect(block)}
-																	></item-card>
-																`}
-															></for-each>
-														</div>
-													`}
-												></show-when>
-											`}
-										></for-each>
 									</tabs-provider>
 								`}
 								fallback=${() => html`<div class="empty-state">No variations available.</div>`}
