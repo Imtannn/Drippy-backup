@@ -29,6 +29,7 @@ import {templates} from '../consts/templates.js'
 import {createMutable} from 'solid-js/store'
 import {backgroundScenes} from '../consts/scenes.js'
 import {spaces} from '../consts/spaces.js'
+import {appAnims} from '../elements/animation-select.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
 import '../elements/lume-rect-area-light.js'
@@ -36,6 +37,7 @@ import '../elements/progress-loader.js'
 import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
+import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import type {SelectedGarments, Space, TemplateMap} from '../types/types.js'
 import {
@@ -56,12 +58,10 @@ import {
 	showSkeletonHelper,
 } from '../utils.js'
 import './app-buttons.js'
+import {AvatarSkeleton} from './avatar-skeleton.js'
 import {store} from './store.js'
 import {templateHelpers} from './template-helpers.js'
 import {textureManager} from './texture-manager.js'
-import {AvatarSkeleton} from './avatar-skeleton.js'
-import type {Fabric} from '../types/fabric.js'
-import {appAnims} from '../elements/animation-select.js'
 
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
@@ -197,8 +197,6 @@ export class DrippyScene extends Element {
 				// Track loading state per fabric ID
 				createEffect(() => {
 					const isLoading = textureState.loading()
-					const hasTexture = !!textureState.texture()
-					console.log(`### [${fabric._id}] isLoading:`, isLoading, 'hasTexture:', hasTexture)
 					if (isLoading) {
 						store.addLoadingFabric(fabric._id)
 					} else {
@@ -212,9 +210,7 @@ export class DrippyScene extends Element {
 			}
 
 			onCleanup(() => {
-				console.log('### CREATE effect CLEANUP - deleting blockFabricSignals keys:', Object.keys(blockFabricSignals))
 				for (const key in blockFabricSignals) delete blockFabricSignals[key]
-				console.log('### CREATE effect CLEANUP - after delete, keys:', Object.keys(blockFabricSignals))
 			})
 		})
 

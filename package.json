@@ -44,6 +44,7 @@
 	"devDependencies": {
 		"@lume/cli": "^0.15.0",
 		"concurrently": "^9.1.2",
+		"googleapis": "^168.0.0",
 		"prettier": "3.5.3",
 		"sharp": "^0.34.4"
 	},
