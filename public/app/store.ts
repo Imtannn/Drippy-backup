@@ -101,7 +101,7 @@ class Store {
 	// FIXME initialize other props from URL params as well
 
 	showAnimationSelect = false
-	selectedAnimation = 'none' as 'none' | 'walk' | 'dance'
+	selectedAnimation: 'none' | 'walk' | 'dance' | 'idle' = 'idle'
 	selectedTemplates: TemplateMap = {}
 	selectedGarments: SelectedGarments = {}
 	customMeasurement = null as CustomMeasurement | null

@@ -16,9 +16,14 @@ export class AnimationSelect extends Element {
 				onchange=${(ev: any) => {
 					store.selectedAnimation = ev.target.value
 				}}
+				value=${() => store.selectedAnimation}
 			>
 				${appAnims.map(
-					anim => html`<option value=${anim.id}>${anim.id.charAt(0).toUpperCase() + anim.id.slice(1)}</option>`,
+					anim => html`
+						<option value=${anim.id} selected=${() => store.selectedAnimation === anim.id}>
+							${anim.id.charAt(0).toUpperCase() + anim.id.slice(1)}
+						</option>
+					`,
 				)}
 			</select>
 		</div>
