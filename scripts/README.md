@@ -152,15 +152,12 @@ Add your space configuration to `public/consts/spaces.ts`:
   slug: 'your-brand-slug',
   description: 'Brand Description',
   logo: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/your-brand-name/logo_optimized.webp',
-  env: '/images/envs/brown_photostudio_02.jpg',
-  sceneThumbnail: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/your-brand-name/scene-thumbnail.webp',
-  scene: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/your-brand-name/scene-model.glb',
-  includedModelFiles: [
-    'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/your-brand-name/extras/shoes.glb',
-  ],
+  thumbnail: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/your-brand-name/scene-thumbnail.webp',
+  defaultScene: 'your-scene-slug',
+  scenes: ['your-scene-slug'],
   gender: 'female', // or 'male'
-  garmentsCount: blocks.yourBrandName?.length ?? 0,
-  collection: 'yourBrandName',
+  garmentsCount: sumGarmentsCount(['your-collection-slug']),
+  collections: ['your-collection-slug'],
   isWholesale: false,
 }
 ```

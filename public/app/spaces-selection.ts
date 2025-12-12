@@ -7,12 +7,11 @@ import {pushState, searchParams} from '../routes.js'
 import type {Space} from '../types/types.js'
 import {currentUser, store} from './store.js'
 
-import {backgroundScenes} from '../consts/scenes.js'
 import '../elements/dialog-element.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
-import {getSpaceSceneThumbnail} from '../utils.js'
+import {getSpaceThumbnail} from '../utils.js'
 
 @element
 export class SpacesSelection extends Element {
@@ -139,7 +138,7 @@ export class SpacesSelection extends Element {
 							<div class="scene-preview">
 								<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
 									<placeholder-image
-										src=${getSpaceSceneThumbnail(space(), backgroundScenes)}
+										src=${getSpaceThumbnail(space())}
 										alt=${space().name}
 										object-fit="cover"
 									/>
