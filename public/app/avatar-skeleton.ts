@@ -184,6 +184,11 @@ export class AvatarSkeleton {
 			const newPosition = new THREE.Vector3()
 			newPosition.copy(boneTarget.initialPosition)
 			newPosition.sub(delta)
+
+			// FIXME Temporary offset for demo, remove:
+			newPosition.x += 0.22
+			newPosition.y += 0.02
+
 			boneTarget.obj.position.copy(newPosition)
 
 			boneTarget.obj.updateMatrixWorld()
