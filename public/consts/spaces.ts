@@ -373,7 +373,7 @@ export const spaces: Space[] = [
 		],
 		isWholesale: false,
 		isWorkInProgress: true,
-		isHidden: false,
+		isHidden: true,
 	},
 	{
 		name: 'PFW 2026 Male',
@@ -387,6 +387,6 @@ export const spaces: Space[] = [
 		collections: ['lider', 'paradise-saigon', 'vinaygaia'],
 		isWholesale: false,
 		isWorkInProgress: true,
-		isHidden: false,
+		isHidden: true,
 	},
 ]
