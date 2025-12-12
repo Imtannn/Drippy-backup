@@ -1018,21 +1018,12 @@ export function getSceneBySlug<T extends {slug: string}>(scenes: T[], slug: stri
 }
 
 /**
- * Get the scene thumbnail for a space (from its default scene).
- * @param space - The space to get the scene thumbnail from.
- * @param scenes - The array of scenes to search in.
- * @returns The scene thumbnail URL or empty string.
+ * Get the thumbnail for a space.
+ * @param space - The space to get the thumbnail from.
+ * @returns The thumbnail URL or empty string.
  */
-export function getSpaceSceneThumbnail(
-	space: {defaultScene: string; spaceThumbnail?: string} | null | undefined,
-	scenes: Array<{slug: string; sceneThumbnail: string}>,
-): string {
-	if (space?.spaceThumbnail) {
-		return space.spaceThumbnail
-	}
-	const defaultScene = getSpaceDefaultScene(space)
-	const scene = getSceneBySlug(scenes, defaultScene)
-	return scene?.sceneThumbnail ?? ''
+export function getSpaceThumbnail(space: {thumbnail?: string} | null | undefined): string {
+	return space?.thumbnail ?? ''
 }
 
 /**

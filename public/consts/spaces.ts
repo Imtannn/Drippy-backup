@@ -1,6 +1,8 @@
 import type {Space} from '../types/types.js'
 import {collections} from './collections.js'
 
+const noImageUrl = new URL('../images/no-image.jpg', import.meta.url).href
+
 const sumGarmentsCount = (spaceCollections: string[]) => {
 	return spaceCollections.reduce(
 		(acc, collectionSlug) => acc + (collections.find(c => c.slug === collectionSlug)?.garmentsCount ?? 0),
@@ -14,6 +16,8 @@ export const spaces: Space[] = [
 		slug: 'GAP',
 		description: 'gap',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/moidien/logo_optimized.webp',
+		thumbnail:
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/moidien/scene-thumbnail_optimized.webp',
 		defaultScene: 'gap',
 		scenes: ['gap'],
 		gender: 'female',
@@ -28,6 +32,7 @@ export const spaces: Space[] = [
 		slug: 'the-soul',
 		description: 'The Soul',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/TS-LOGO-_1_.webp',
+		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/the-soul/The+Soul+-+Scene.webp',
 		defaultScene: 'the-soul',
 		scenes: ['the-soul'],
 		gender: 'female',
@@ -42,6 +47,7 @@ export const spaces: Space[] = [
 		slug: 'emwear',
 		description: 'Emwear',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Logo-1/Emwear.png',
+		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/emwear/scene-thumbnail.webp',
 		defaultScene: 'emwear',
 		scenes: ['emwear'],
 		gender: 'female',
@@ -56,6 +62,7 @@ export const spaces: Space[] = [
 		slug: 'duality-in-radiance',
 		description: 'SHRI',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Logo-1/Shri.png',
+		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/shri/SHRI+-+Scene.webp',
 		defaultScene: 'duality-in-radiance',
 		scenes: ['duality-in-radiance'],
 		gender: 'female',
@@ -70,6 +77,7 @@ export const spaces: Space[] = [
 		slug: 'metamorphosis-ipose',
 		description: 'OOFYA',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Logo-1/Oofya.png',
+		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SCENE.webp',
 		defaultScene: 'metamorphosis',
 		scenes: ['metamorphosis'],
 		gender: 'female',
@@ -84,6 +92,7 @@ export const spaces: Space[] = [
 		slug: 'zove',
 		description: 'Zove',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Logo-1/Zove.png',
+		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/zove/ZOVE+-+SCENE.webp',
 		defaultScene: 'zove',
 		scenes: ['zove'],
 		gender: 'female',
@@ -98,6 +107,7 @@ export const spaces: Space[] = [
 		slug: 'movement',
 		description: 'Haruki',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/HARUKI+ISHIII+(1).webp',
+		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/movement/scene-thumbnail.webp',
 		defaultScene: 'movement',
 		scenes: ['movement'],
 		gender: 'female',
@@ -112,6 +122,8 @@ export const spaces: Space[] = [
 		slug: 'essence-of-her',
 		description: 'Vaishnavi',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/Vaishnavi.webp',
+		thumbnail:
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/naishnavi/scene-thumbnail_optimized.webp',
 		defaultScene: 'essence-of-her',
 		scenes: ['essence-of-her'],
 		gender: 'female',
@@ -126,6 +138,8 @@ export const spaces: Space[] = [
 		slug: 'shadow-grace',
 		description: 'Lost Cause',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/LOST-CAUSE.webp',
+		thumbnail:
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/lost-cause/scene-thumbnail_optimized.webp',
 		defaultScene: 'shadow-grace',
 		scenes: ['shadow-grace'],
 		gender: 'female',
@@ -140,6 +154,8 @@ export const spaces: Space[] = [
 		slug: '9heure19heure',
 		description: 'ELISE.F',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/Elise.webp',
+		thumbnail:
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/eliseF/scene-thumbnail_optimized.webp',
 		defaultScene: '9heure19heure',
 		scenes: ['9heure19heure'],
 		gender: 'male',
@@ -154,6 +170,8 @@ export const spaces: Space[] = [
 		slug: 'fige-dans-le-temps',
 		description: 'Atelier Gourney',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/Atelier+Gourney+(1).webp',
+		thumbnail:
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/atelier-gourney/scene-thumbnail.webp',
 		defaultScene: 'fige-dans-le-temps',
 		scenes: ['fige-dans-le-temps'],
 		gender: 'female',
@@ -168,6 +186,7 @@ export const spaces: Space[] = [
 		slug: 'imzad-man',
 		description: 'Imzad',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/IMZAD.webp',
+		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/imzad-male/scene-thumbnail2.webp',
 		defaultScene: 'imzad-man',
 		scenes: ['imzad-man'],
 		gender: 'male',
@@ -183,6 +202,8 @@ export const spaces: Space[] = [
 		slug: 'imzad-woman',
 		description: 'Imzad',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/IMZAD.webp',
+		thumbnail:
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/imzad-female/scene-thumbnail.webp',
 		defaultScene: 'imzad-woman',
 		scenes: ['imzad-woman'],
 		gender: 'female',
@@ -198,6 +219,8 @@ export const spaces: Space[] = [
 		slug: 'one-thousand-poets',
 		description: 'One Thousand Poets',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/One+thousand+poets.webp',
+		thumbnail:
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/one-thousand-poets/scene-thumbnail.webp',
 		defaultScene: 'one-thousand-poets',
 		scenes: ['one-thousand-poets'],
 		gender: 'female',
@@ -212,6 +235,7 @@ export const spaces: Space[] = [
 		slug: 'ja-seng-bu',
 		description: 'Ja Seng Bu',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/Seng.webp',
+		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/ja-seng-bu/scene-thumbnail.webp',
 		defaultScene: 'ja-seng-bu',
 		scenes: ['ja-seng-bu'],
 		gender: 'female',
@@ -226,6 +250,7 @@ export const spaces: Space[] = [
 		slug: 'mss-park',
 		description: 'Mss Park',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/MISS-PARK-logo_full_-_1_.webp',
+		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/mss-park/scene-thumbnail.webp',
 		defaultScene: 'mss-park',
 		scenes: ['mss-park'],
 		gender: 'female',
@@ -240,6 +265,8 @@ export const spaces: Space[] = [
 		slug: 'changes',
 		description: 'Sapienza University of Rome',
 		logo: '',
+		thumbnail:
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/sapienzaUniversityOfRome/CHANGES+-+3D+SCENE.webp',
 		defaultScene: 'changes',
 		scenes: ['changes'],
 		gender: 'female',
@@ -254,6 +281,7 @@ export const spaces: Space[] = [
 		slug: 'metamorphosis',
 		description: 'OOFYA',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Logo-1/Oofya.png',
+		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SCENE.webp',
 		defaultScene: 'metamorphosis',
 		scenes: ['metamorphosis'],
 		gender: 'female',
@@ -388,5 +416,20 @@ export const spaces: Space[] = [
 		isWholesale: false,
 		isWorkInProgress: true,
 		isHidden: true,
+	},
+	{
+		name: 'H&M',
+		slug: 'h&m',
+		description: 'H&M',
+		logo: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/h%26m/lgo-h%26m.webp',
+		thumbnail: noImageUrl,
+		defaultScene: 'h&m',
+		scenes: ['zove'],
+		gender: 'female',
+		garmentsCount: sumGarmentsCount(['h&m']),
+		collections: ['h&m'],
+		isWholesale: false,
+		isWorkInProgress: false,
+		isHidden: false,
 	},
 ]

@@ -40,7 +40,6 @@ export type BackgroundScene = {
 	description: string
 	/** Image used as an env map for global lighting and reflections. */
 	env: string
-	sceneThumbnail: string
 	scene: string
 	includedModelFiles: string[]
 }
@@ -55,7 +54,8 @@ export type Space = {
 	collections: string[]
 	/** The slugs of the BackgroundScenes in this Space */
 	scenes: string[]
-	spaceThumbnail?: string
+	/** Thumbnail image URL for this Space */
+	thumbnail?: string
 	/** Slug for the default BackgroundScene. */
 	defaultScene: string
 	gender: 'male' | 'female'
