@@ -3859,7 +3859,7 @@ export const fabrics: Record<string, Fabric[]> = {
 	],
 	'animation-test': [
 		{
-			_id: 'c2286c66-41cd-4081-802d-d3a6a2d27ee9',
+			_id: '1687efbe-44aa-4b33-91b5-6cb94c750471',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_RENDER.webp',
 			normal:
@@ -3883,7 +3883,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			coef: 1000,
 		},
 		{
-			_id: 'd1ee4da3-a5db-426c-8983-a5336e5efd33',
+			_id: '53ce0e57-0f4d-4ada-96ef-262ccc5cf4c6',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK/COTTON_-_BLACK_-_RENDER.webp',
 			normal:
@@ -3900,7 +3900,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Dress', 'Pants', 'Top', 'Accessories', 'Skirt'],
 		},
 		{
-			_id: 'b658d9ad-8314-49e4-abee-6e4b55e075b9',
+			_id: 'd3da81b5-57b7-4616-a938-99b6a227849c',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_GRAY/COTTON_-_GRAY_-_RENDER.webp',
 			normal:
@@ -3917,7 +3917,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Dress', 'Pants', 'Top'],
 		},
 		{
-			_id: '8bc6cac6-e1aa-464f-86a8-35c791e80287',
+			_id: '480a3397-02b1-48b4-af6d-97689c1603e1',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_RENDER.webp',
 			normal:
@@ -3934,7 +3934,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Dress', 'Top'],
 		},
 		{
-			_id: '7cad8553-b62e-4416-8bdd-11f04cf3d331',
+			_id: 'c7681ddf-ebbd-4c6e-a60e-2ae85683e74d',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
 			normal:
@@ -3951,7 +3951,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Top', 'Accessories', 'Dress', 'Pants', 'Skirt'],
 		},
 		{
-			_id: 'a072b1a3-da34-4bfe-8d3c-b2dbc0ea3afe',
+			_id: '793db2b9-c929-4047-b2c4-9e79615c1d62',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_RENDER.webp',
 			normal:
@@ -3968,7 +3968,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Accessories', 'Top'],
 		},
 		{
-			_id: '4e0a7c3d-e65d-4bb2-9c21-2ec7feb14eed',
+			_id: '32a6b8d1-8a74-4b8f-b582-ab32c1d402cb',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_RENDER.webp',
 			normal:
@@ -3986,7 +3986,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Accessories', 'Pants', 'Top', 'Skirt'],
 		},
 		{
-			_id: 'ca72ab3d-7302-4748-9392-abe5dd6ed14f',
+			_id: '81d76502-20b1-4cda-a748-6e14db3cfc53',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/animation-test/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_RENDER.webp',
 			normal:
