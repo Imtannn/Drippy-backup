@@ -1,8 +1,7 @@
 import {type GltfModel} from 'lume'
 import {Meteor} from 'meteor/meteor'
-import {batch, createEffect, createMemo, onCleanup, untrack} from 'solid-js'
+import {batch, createEffect, createMemo, createSignal, onCleanup, untrack} from 'solid-js'
 import {createMutable} from 'solid-js/store'
-import {createSignal} from 'solid-js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import {Visits, type Visit} from '../imports/collections/Visits.js'
@@ -154,8 +153,7 @@ class Store {
 	loadingMaterials = new Set<symbol>()
 	loadingScreenshots = new Set<TemplateCategory>()
 	loadingFabricIds = new Set<string>()
-	loadingTemplateId: string | null = null
-	currentAbortController: AbortController | null = null
+	loadingTemplateIds = new Set<string>()
 
 	connectionStatus: ConnectionStatus = 'online'
 	showConnectionWarning = false
@@ -751,23 +749,44 @@ class Store {
 		})
 	}
 
-	setLoadingTemplate(templateId: string) {
-		if (this.currentAbortController) {
-			this.currentAbortController.abort()
+	setLoadingTemplate(templateId: string, category?: TemplateCategory) {
+		if (!templateId) return
+
+		const templateCategory = category ?? templateHelpers.getTemplateCategoryById(templateId)
+		const conflictingCategories = new Set<TemplateCategory>()
+
+		if (templateCategory) {
+			templateHelpers.getOverridingCategories(templateCategory).forEach(c => conflictingCategories.add(c))
+			templateHelpers.getCategoriesThatOverride(templateCategory).forEach(c => conflictingCategories.add(c))
+			conflictingCategories.add(templateCategory)
+			console.log('conflictingCategories', conflictingCategories)
 		}
-		this.currentAbortController = new AbortController()
-		this.loadingTemplateId = templateId
+
+		untrack(() => {
+			if (conflictingCategories.size > 0) {
+				for (const id of this.loadingTemplateIds) {
+					const idCategory = templateHelpers.getTemplateCategoryById(id)
+					if (idCategory && conflictingCategories.has(idCategory)) {
+						this.loadingTemplateIds.delete(id)
+					}
+				}
+			}
+
+			this.loadingTemplateIds.add(templateId)
+			this.loadingTemplateIds = new Set(this.loadingTemplateIds) // trigger reactivity
+		})
 	}
 
 	clearLoadingTemplate(templateId: string) {
-		if (this.loadingTemplateId === templateId) {
-			this.loadingTemplateId = null
-			this.currentAbortController = null
-		}
+		if (!templateId) return
+		untrack(() => {
+			this.loadingTemplateIds.delete(templateId)
+			this.loadingTemplateIds = new Set(this.loadingTemplateIds) // trigger reactivity
+		})
 	}
 
 	isTemplateLoading(templateId: string): boolean {
-		return this.loadingTemplateId === templateId
+		return this.loadingTemplateIds.has(templateId)
 	}
 
 	clearAllLoadingStates() {
@@ -776,11 +795,7 @@ class Store {
 		this.clearLoadingFabrics()
 		this.clearLoadingScreenshots()
 		this.clearIsDrippySceneLoading()
-		this.loadingTemplateId = null
-		if (this.currentAbortController) {
-			this.currentAbortController.abort()
-			this.currentAbortController = null
-		}
+		this.loadingTemplateIds = new Set()
 	}
 
 	trackModelLoading(id: symbol, model: GltfModel) {

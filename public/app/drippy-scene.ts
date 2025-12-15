@@ -230,6 +230,14 @@ export class DrippyScene extends Element {
 			})
 		})
 
+		// Fallback: if nothing is loading, clear template loading state
+		createEffect(() => {
+			if (!templateId) return
+			if (!isAnyFabricLoading()) {
+				store.clearLoadingTemplate(templateId)
+			}
+		})
+
 		// Apply textures reactively as they load
 		createEffect(() => {
 			const currentFabrics = currentSelectedFabrics()

@@ -237,6 +237,18 @@ class TemplateHelpers {
 		return result
 	}
 
+	getOverridingCategories(category: TemplateCategory): TemplateCategory[] {
+		return this.overridingCategoriesMapping[category] ?? []
+	}
+
+	getTemplateCategoryById(templateId: string): TemplateCategory | null {
+		for (const collectionTemplates of Object.values(templates)) {
+			const match = collectionTemplates?.find(template => template?._id === templateId)
+			if (match) return match.category
+		}
+		return null
+	}
+
 	/**
 	 * Convert template to block data used by downstream selection flows.
 	 *

@@ -55,7 +55,7 @@ export class BrandView extends Element {
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
 
-		store.setLoadingTemplate(template._id)
+		store.setLoadingTemplate(template._id, template.category)
 
 		// Brand-view only displays when brand param exists, so we always navigate
 		const brandParam = searchParams().get('brand')

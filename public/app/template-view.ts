@@ -303,7 +303,7 @@ export class TemplateView extends Element {
 			store.selectedTemplates[template.category] && store.selectedTemplates[template.category]._id === template._id
 
 		if (!isAlreadySelected) {
-			store.setLoadingTemplate(template._id)
+			store.setLoadingTemplate(template._id, template.category)
 			this.#selectTemplate(template)
 			setTimeout(() => {
 				this.isOpeningOverlay = false
