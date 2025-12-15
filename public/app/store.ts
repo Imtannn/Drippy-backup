@@ -2,9 +2,11 @@ import {type GltfModel} from 'lume'
 import {Meteor} from 'meteor/meteor'
 import {batch, createEffect, createMemo, onCleanup, untrack} from 'solid-js'
 import {createMutable} from 'solid-js/store'
+import {createSignal} from 'solid-js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import {Visits, type Visit} from '../imports/collections/Visits.js'
+import {Wishlist, type Wishlist as WishlistType} from '../imports/collections/Wishlist.js'
 import {pushState, searchParams, url} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -54,6 +56,39 @@ export const visits = toSolidSignal(() => {
 	else return [] as readonly Visit[]
 })
 export const usersCount = toSolidSignal(() => Counts.get('users'))
+export const wishlist = toSolidSignal(() => {
+	const user = currentUser()
+	if (!user) return [] as readonly WishlistType[]
+	return Wishlist.find({userId: user._id}).fetch() as readonly WishlistType[]
+})
+
+// Pending wishlist item (used when user favorites before login)
+// Persist to localStorage to survive page reloads
+const PENDING_WISHLIST_ID_KEY = 'pendingWishlistId'
+
+const getPendingWishlistIdFromStorage = (): string | null => {
+	if (typeof window === 'undefined') return null
+	const stored = localStorage.getItem(PENDING_WISHLIST_ID_KEY)
+	return stored || null
+}
+
+const setPendingWishlistIdToStorage = (id: string | null) => {
+	if (typeof window === 'undefined') return
+	if (id) {
+		localStorage.setItem(PENDING_WISHLIST_ID_KEY, id)
+	} else {
+		localStorage.removeItem(PENDING_WISHLIST_ID_KEY)
+	}
+}
+
+const [pendingWishlistId, setPendingWishlistIdInternal] = createSignal<string | null>(getPendingWishlistIdFromStorage())
+
+const setPendingWishlistId = (id: string | null) => {
+	setPendingWishlistIdInternal(id)
+	setPendingWishlistIdToStorage(id)
+}
+
+export {pendingWishlistId, setPendingWishlistId}
 
 const spaceFromParam = createMemo<Space | null>(() => {
 	return spaces.find(space => space.slug === searchParams().get('space')) ?? null
@@ -86,6 +121,10 @@ class Store {
 	get turnOffSettingsInSpace() {
 		return true
 		// return turnOffSettingsInSpace()
+	}
+
+	get wishlist() {
+		return wishlist()
 	}
 
 	// FIXME this is not in sync with the address bar back/forward buttons

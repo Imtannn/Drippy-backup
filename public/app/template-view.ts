@@ -1,10 +1,18 @@
 import {batch, css, Element, element, html, onCleanup, signal, type ElementAttributes} from 'lume'
+import {Meteor} from 'meteor/meteor'
 import {templates} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {Collection, TemplateMap} from '../types/types.js'
 import {getCollectionBySlug, getSpaceCollections, spaceHasMultipleCollections} from '../utils.js'
-import {currentUser, store, updateGarmentsSelectionInUrl} from './store.js'
+import {
+	currentUser,
+	store,
+	updateGarmentsSelectionInUrl,
+	wishlist,
+	pendingWishlistId,
+	setPendingWishlistId,
+} from './store.js'
 import {templateHelpers} from './template-helpers.js'
 
 import {collections} from '../consts/collections.js'
@@ -82,6 +90,8 @@ export class TemplateView extends Element {
 		document.addEventListener('click', this.#onDocumentClick)
 
 		this.addEventListener('close', this.#onDetailViewClose)
+		// Listen for show-login event on document to catch events from nested components
+		document.addEventListener('show-login', this.#onShowLogin as EventListener)
 
 		this.createEffect(() => {
 			const effectiveCollection = store.getEffectiveCollection()
@@ -99,8 +109,23 @@ export class TemplateView extends Element {
 			const defaultCategories: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants', 'Jumpsuit']
 			let collectionTemplates: Template[] = []
 
-			// If no collection selected and multi-collection space, aggregate from all collections
-			if (!this.spaceCollection && spaceHasMultipleCollections(store.selectedSpace)) {
+			// When filtering by wishlist, search across all collections in the space (or all collections if no space)
+			// Otherwise, filter by selected collection
+			if (this.showWishlistOnly) {
+				if (store.selectedSpace) {
+					// For wishlist filter, get templates from all collections in the space
+					const spaceCollections = getSpaceCollections(store.selectedSpace)
+					for (const collectionSlug of spaceCollections) {
+						collectionTemplates.push(...(templates[collectionSlug] ?? []))
+					}
+				} else {
+					// If no space selected, search across all collections
+					for (const collectionTemplatesList of Object.values(templates)) {
+						collectionTemplates.push(...(collectionTemplatesList ?? []))
+					}
+				}
+			} else if (!this.spaceCollection && spaceHasMultipleCollections(store.selectedSpace)) {
+				// If no collection selected and multi-collection space, aggregate from all collections
 				const spaceCollections = getSpaceCollections(store.selectedSpace)
 				for (const collectionSlug of spaceCollections) {
 					collectionTemplates.push(...(templates[collectionSlug] ?? []))
@@ -113,7 +138,18 @@ export class TemplateView extends Element {
 
 			// Filter by wishlist if showWishlistOnly is true
 			if (this.showWishlistOnly) {
-				collectionTemplates = collectionTemplates.filter(template => template.isWhishlist === true)
+				const userWishlist = store.wishlist
+				const wishlistTemplateIds = new Set(userWishlist.map(item => item.templateId))
+				// Include pending wishlist ID to show items that were just favorited but not yet synced
+				// Only check pending if user is logged in (consistent with item-card logic)
+				const user = store.user
+				if (user) {
+					const pendingId = pendingWishlistId()
+					if (pendingId) {
+						wishlistTemplateIds.add(pendingId)
+					}
+				}
+				collectionTemplates = collectionTemplates.filter(template => wishlistTemplateIds.has(template._id))
 			}
 
 			const orderedTemplates: Template[] = []
@@ -160,11 +196,49 @@ export class TemplateView extends Element {
 			}
 		})
 
-		// Close login dialog when user successfully logs in
+		// Close login dialog and auto-favorite pending template when user successfully logs in
 		this.createEffect(() => {
 			const user = currentUser()
 			if (user !== null && this.showLoginDialog) {
 				this.showLoginDialog = false
+
+				// Auto-favorite pending template if exists
+				const templateId = pendingWishlistId()
+				if (templateId) {
+					// Add to wishlist (don't clear pending yet - keep it active until wishlist syncs)
+					let checkTimeoutId: ReturnType<typeof setTimeout> | null = null
+					const addTimeoutId = setTimeout(async () => {
+						try {
+							await Meteor.callAsync('wishlist.add', templateId)
+
+							// Wait for wishlist to sync, then clear pending
+							let retryCount = 0
+							const maxRetries = 15
+							const checkWishlist = () => {
+								const currentWishlist = wishlist()
+								const isInWishlist = currentWishlist.some(item => item.templateId === templateId)
+								if (isInWishlist) {
+									setPendingWishlistId(null)
+									if (checkTimeoutId) clearTimeout(checkTimeoutId)
+								} else if (retryCount < maxRetries) {
+									retryCount++
+									checkTimeoutId = setTimeout(checkWishlist, 200)
+								} else {
+									setPendingWishlistId(null)
+								}
+							}
+							checkTimeoutId = setTimeout(checkWishlist, 300)
+						} catch (error: unknown) {
+							console.error('Error adding to wishlist after login:', error)
+							setPendingWishlistId(null)
+						}
+					}, 500) // Wait a bit for subscription to be ready
+
+					onCleanup(() => {
+						clearTimeout(addTimeoutId)
+						if (checkTimeoutId) clearTimeout(checkTimeoutId)
+					})
+				}
 			}
 		})
 		// Update URL when fabrics change
@@ -242,6 +316,69 @@ export class TemplateView extends Element {
 
 	#isTemplateActive = (template: Template) => {
 		return store.selectedTemplates[template.category]?._id === template._id
+	}
+
+	#renderTemplateItem = (template: Template) => {
+		return html`
+			<div
+				class="template-item"
+				classList=${() => ({
+					'item-active':
+						this.showRemixOverlay &&
+						store.remixOverlayTemplate !== null &&
+						store.remixOverlayTemplate._id === template._id,
+				})}
+			>
+				<div
+					class="template-item-container"
+					classList=${() => ({
+						'item-active':
+							this.showRemixOverlay &&
+							store.remixOverlayTemplate !== null &&
+							store.remixOverlayTemplate._id === template._id,
+					})}
+				>
+					<item-card
+						item-active=${() =>
+							this.showRemixOverlay && store.remixOverlayTemplate !== null
+								? store.remixOverlayTemplate._id === template._id
+								: this.#isTemplateActive(template)}
+						item-src=${template.thumb}
+						item-alt=${template.name}
+						item-value=${template}
+						oncardselected=${this.#onItemClick}
+						object-fit="contain"
+						object-position="center"
+						aspect-ratio="0.79"
+						data-show-wishlist="true"
+					></item-card>
+					<show-when
+						condition=${() => this.showTemplateOverlay?._id === template._id && !store.isTemplateLoading(template._id)}
+						content=${() => html`
+							<template-item-overlay
+								selected-template=${() => template}
+								onclose=${this.#onTemplateOverlayClose}
+								onremix=${this.#onTemplateOverlayRemix}
+							></template-item-overlay>
+						`}
+					></show-when>
+					<show-when
+						condition=${() => store.isTemplateLoading(template._id)}
+						content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
+					></show-when>
+				</div>
+				<div class="template-product-name">${template.name}</div>
+				<div class="template-product-price-container" classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}>
+					<div class="template-product-price" classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}>
+						${() => (template.price !== 'N/A' ? 'EU ' + template.price : 'N/A')}
+					</div>
+					<show-when
+						condition=${() => store.selectedSpace?.isWholesale}
+						content=${() => html`<div class="template-product-wholesale">MOQ: 5pcs</div>`}
+					></show-when>
+				</div>
+			</div>
+		`
 	}
 
 	#onPreviewButtonClick = () => {
@@ -377,6 +514,15 @@ export class TemplateView extends Element {
 		this.showDetailView = false
 	}
 
+	#onShowLogin = (e: Event) => {
+		const customEvent = e as CustomEvent<{templateId: string}>
+		if (customEvent.detail?.templateId) {
+			// Store pending template id (persisted to localStorage)
+			setPendingWishlistId(customEvent.detail.templateId)
+		}
+		this.showLoginDialog = true
+	}
+
 	#onCollectionSelect = (collection: Collection) => {
 		if (this.hasDragged) return
 		// Toggle: if already selected, unselect to show all templates
@@ -469,6 +615,7 @@ export class TemplateView extends Element {
 	disconnectedCallback() {
 		super.disconnectedCallback()
 		document.removeEventListener('click', this.#onDocumentClick)
+		document.removeEventListener('show-login', this.#onShowLogin as EventListener)
 	}
 
 	template = () => html`
@@ -693,72 +840,7 @@ export class TemplateView extends Element {
 										<div class="items-grid">
 											<for-each
 												items=${() => this.templateCategories.All ?? []}
-												content=${() => (template: Template) => html`
-													<div
-														class="template-item"
-														classList=${() => ({
-															'item-active':
-																this.showRemixOverlay &&
-																store.remixOverlayTemplate !== null &&
-																this.#isTemplateActive(template),
-														})}
-													>
-														<div
-															class="template-item-container"
-															classList=${() => ({
-																'item-active':
-																	this.showRemixOverlay &&
-																	store.remixOverlayTemplate !== null &&
-																	this.#isTemplateActive(template),
-															})}
-														>
-															<item-card
-																item-active=${() => this.#isTemplateActive(template)}
-																item-src=${template.thumb}
-																item-alt=${template.name}
-																item-value=${template}
-																oncardselected=${this.#onItemClick}
-																object-fit="contain"
-																object-position="center"
-																aspect-ratio="0.79"
-																is-whishlist=${() => template.isWhishlist ?? false}
-																data-show-wishlist="true"
-															></item-card>
-															<show-when
-																condition=${() =>
-																	this.showTemplateOverlay?._id === template._id &&
-																	!store.isTemplateLoading(template._id)}
-																content=${() => html`
-																	<template-item-overlay
-																		selected-template=${() => template}
-																		onclose=${this.#onTemplateOverlayClose}
-																		onremix=${this.#onTemplateOverlayRemix}
-																	></template-item-overlay>
-																`}
-															></show-when>
-															<show-when
-																condition=${() => store.isTemplateLoading(template._id)}
-																content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
-															></show-when>
-														</div>
-														<div class="template-product-name">${template.name}</div>
-														<div
-															class="template-product-price-container"
-															classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}
-														>
-															<div
-																class="template-product-price"
-																classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
-															>
-																${() => (template.price !== 'N/A' ? 'EU ' + template.price : 'N/A')}
-															</div>
-															<show-when
-																condition=${() => store.selectedSpace?.isWholesale}
-																content=${() => html`<div class="template-product-wholesale">MOQ: 5pcs</div>`}
-															></show-when>
-														</div>
-													</div>
-												`}
+												content=${() => (template: Template) => this.#renderTemplateItem(template)}
 											></for-each>
 										</div>
 									</tabs-content>
@@ -778,74 +860,8 @@ export class TemplateView extends Element {
 															category === 'All'
 																? (this.templateCategories.All ?? [])
 																: this.templateCategories[category]}
-														content=${() => (template: Template) => html`
-															<div
-																class="template-item"
-																classList=${() => ({
-																	'item-active':
-																		this.showRemixOverlay &&
-																		store.remixOverlayTemplate !== null &&
-																		this.#isTemplateActive(template),
-																})}
-															>
-																<div
-																	class="template-item-container"
-																	classList=${() => ({
-																		'item-active':
-																			this.showRemixOverlay &&
-																			store.remixOverlayTemplate !== null &&
-																			this.#isTemplateActive(template),
-																	})}
-																>
-																	<item-card
-																		item-active=${() => this.#isTemplateActive(template)}
-																		item-src=${template.thumb}
-																		item-alt=${template.name}
-																		item-value=${template}
-																		oncardselected=${this.#onItemClick}
-																		object-fit="contain"
-																		object-position="center"
-																		aspect-ratio="0.79"
-																		is-whishlist=${() => template.isWhishlist ?? false}
-																		data-show-wishlist="true"
-																	></item-card>
-																	<show-when
-																		condition=${() =>
-																			this.showTemplateOverlay?._id === template._id &&
-																			!store.isTemplateLoading(template._id)}
-																		content=${() => html`
-																			<template-item-overlay
-																				selected-template=${() => template}
-																				onclose=${this.#onTemplateOverlayClose}
-																				onremix=${this.#onTemplateOverlayRemix}
-																			></template-item-overlay>
-																		`}
-																	></show-when>
-																	<show-when
-																		condition=${() => store.isTemplateLoading(template._id)}
-																		content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
-																	></show-when>
-																</div>
-																<div class="template-product-name">${template.name}</div>
-																<div
-																	class="template-product-price-container"
-																	classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}
-																>
-																	<div
-																		class="template-product-price"
-																		classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}
-																	>
-																		${() => (template.price !== 'N/A' ? 'EU ' + template.price : 'N/A')}
-																	</div>
-																	<show-when
-																		condition=${() => store.selectedSpace?.isWholesale}
-																		content=${() => html`<div class="template-product-wholesale">MOQ: 5pcs</div>`}
-																	></show-when>
-																</div>
-															</div>
-														`}
-													>
-													</for-each>
+														content=${() => (template: Template) => this.#renderTemplateItem(template)}
+													></for-each>
 												</div>
 											</tabs-content>
 										`}
