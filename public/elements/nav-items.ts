@@ -33,6 +33,12 @@ export class NavItems extends Element {
 
 	template = () => html`
 		<div class="nav-items-container">
+			<button class="nav-item" classList=${{active: () => this.activeTab === 'avatars'}} disabled>
+				<div class="nav-icon">
+					<img src="/images/top-nav/avatars-inactive.svg" alt="Avatars" />
+				</div>
+				<span class="nav-label">Avatars</span>
+			</button>
 			<button
 				class="nav-item"
 				classList=${{active: () => this.activeTab === 'items'}}
@@ -47,55 +53,21 @@ export class NavItems extends Element {
 				<span class="nav-label">Items</span>
 			</button>
 
-			<button
-				class="nav-item"
-				classList=${{active: () => this.activeTab === 'pose'}}
-				onclick=${() => this.#onTabClick('pose')}
-			>
-				<div class="nav-icon">
-					<img src=${() => (this.activeTab === 'pose' ? '/images/pose.svg' : '/images/pose-inactive.svg')} alt="Pose" />
-				</div>
-				<span class="nav-label">Pose</span>
-			</button>
-
-			<button
-				class="nav-item"
-				classList=${{active: () => this.activeTab === 'wardrobe'}}
-				disabled
-			>
-				<div class="nav-icon">
-					<img src="/images/top-nav/wardrobes.svg" alt="Wardrobe" />
-				</div>
-				<span class="nav-label">Wardrobe</span>
-			</button>
-
-			<button
-				class="nav-item"
-				classList=${{active: () => this.activeTab === 'scenes'}}
-				disabled
-			>
+			<button class="nav-item" classList=${{active: () => this.activeTab === 'scenes'}} disabled>
 				<div class="nav-icon">
 					<img src="/images/top-nav/scenes-icon.svg" alt="Scenes" />
 				</div>
 				<span class="nav-label">Scenes</span>
 			</button>
 
-			<button
-				class="nav-item"
-				classList=${{active: () => this.activeTab === 'studio'}}
-				disabled
-			>
+			<button class="nav-item" classList=${{active: () => this.activeTab === 'wardrobe'}} disabled>
 				<div class="nav-icon">
-					<img src="/images/top-nav/studio-icon.svg" alt="Studio" />
+					<img src="/images/top-nav/wardrobes.svg" alt="Wardrobe" />
 				</div>
-				<span class="nav-label">Studio</span>
+				<span class="nav-label">Wardrobe</span>
 			</button>
 
-			<button
-				class="nav-item"
-				classList=${{active: () => this.activeTab === 'help'}}
-				disabled
-			>
+			<button class="nav-item" classList=${{active: () => this.activeTab === 'help'}} disabled>
 				<div class="nav-icon">
 					<img src="/images/top-nav/help-icon.svg" alt="Help" />
 				</div>
