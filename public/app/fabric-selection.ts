@@ -214,12 +214,11 @@ export class FabricSelection extends Element {
 		}
 
 		:host([is-remix]) .items-grid {
-			/* override default 3-column grid */
+			/* override default 4.5-column grid */
 			grid-template-columns: none;
 			grid-auto-flow: column;
-			/* show 4.5 columns (4 full + half of 5th) to indicate scrollable content */
 			grid-auto-columns: calc((100% - (var(--uiGap) * 4)) / 4.5);
-			gap: var(--uiGap);
+			gap: 8px;
 			overflow-x: auto;
 			overflow-y: hidden;
 			scroll-snap-type: x proximity;
@@ -237,13 +236,6 @@ export class FabricSelection extends Element {
 		@media (min-width: 768px) {
 			.items-grid {
 				grid-template-columns: repeat(4, 1fr);
-			}
-		}
-
-		/* Remix-only mobile horizontal scrolling */
-		@media (max-width: 768px) {
-			.fabric-selection {
-				margin-top: 15px;
 			}
 		}
 	`

@@ -358,8 +358,8 @@ export class RemixOverlay extends Element {
 		<show-on-device device="mobile">
 			<bottom-sheet
 				class="remix-overlay-sheet"
-				default-snap="0.25"
-				snap-points="0.25,0.25,0.25"
+				default-snap=${() => (this.pieceSelections.length > 1 ? '0.25' : '0.20')}
+				snap-points=${() => (this.pieceSelections.length > 1 ? '0.25,0.25,0.25' : '0.20,0.20,0.20')}
 				z-index="2000"
 				collapse-button="false"
 				max-height="100vh"
@@ -438,13 +438,13 @@ export class RemixOverlay extends Element {
 		.items-grid {
 			display: grid;
 			grid-auto-flow: column;
-			grid-auto-columns: calc((100% - (var(--uiGap) * 3)) / 4);
+			grid-auto-columns: calc((100% - (var(--uiGap) * 4)) / 4.5);
 			gap: var(--uiGap);
 			overflow-x: auto;
 			overflow-y: auto;
 			scroll-snap-type: x proximity;
 			-webkit-overflow-scrolling: touch;
-			padding-bottom: var(--uiSpacingSmall);
+			padding-top: var(--uiSpacingSmall);
 		}
 
 		.items-grid::-webkit-scrollbar {
@@ -477,7 +477,7 @@ export class RemixOverlay extends Element {
 			align-items: center;
 			justify-content: space-between;
 			padding: var(--uiSpacing);
-			padding-top: 15px;
+			padding-top: 10px;
 			padding-bottom: 10px;
 		}
 

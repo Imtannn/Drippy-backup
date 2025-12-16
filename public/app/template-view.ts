@@ -40,7 +40,6 @@ import '../elements/show-on-device.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import '../elements/top-navigation.js'
-import {pushState, searchParams} from '../routes.js'
 
 import './app-buttons-preset.js'
 import './app-buttons.js'
@@ -245,27 +244,6 @@ export class TemplateView extends Element {
 		this.createEffect(() => {
 			updateGarmentsSelectionInUrl(store.selectedGarments)
 		})
-
-		// Auto-trigger preview button after 15s if conditions are met
-		this.createEffect(() => {
-			const user = currentUser()
-			// If user is not logged in or is getting user info from server, return
-			if (user !== null) return
-
-			const canShowPreview = !this.showAvatarSelection && !this.showPoseSelection
-			const hasSelectedTemplates = Object.keys(store.selectedTemplates).length > 0
-
-			// Start timer if: button is visible, and has selected templates
-			if (canShowPreview && hasSelectedTemplates) {
-				const timer = window.setTimeout(() => {
-					this.#onPreviewButtonClick()
-				}, 65000) // 65 seconds
-
-				onCleanup(() => {
-					clearTimeout(timer)
-				})
-			}
-		})
 	}
 
 	#onDragStart = (e: MouseEvent) => {
@@ -381,24 +359,24 @@ export class TemplateView extends Element {
 		`
 	}
 
-	#onPreviewButtonClick = () => {
-		batch(() => {
-			const user = currentUser()
+	// #onPreviewButtonClick = () => {
+	// 	batch(() => {
+	// 		const user = currentUser()
 
-			if (user) {
-				searchParams().set('isPreview', 'true')
-				store.isPreview = true
-				this.showAvatarSelection = false
-				this.showPoseSelection = false
-				this.showRemixOverlay = false
-				this.showTemplateOverlay = null
-				store.setSelectingPiece = null
-				pushState()
-			} else {
-				this.showLoginDialog = true
-			}
-		})
-	}
+	// 		if (user) {
+	// 			searchParams().set('isPreview', 'true')
+	// 			store.isPreview = true
+	// 			this.showAvatarSelection = false
+	// 			this.showPoseSelection = false
+	// 			this.showRemixOverlay = false
+	// 			this.showTemplateOverlay = null
+	// 			store.setSelectingPiece = null
+	// 			pushState()
+	// 		} else {
+	// 			this.showLoginDialog = true
+	// 		}
+	// 	})
+	// }
 
 	#onBuyButtonClick = () => {
 		store.view = 'order-items'
