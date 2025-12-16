@@ -3,7 +3,7 @@ import '../elements/connection-warning.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
-import '../elements/video-loading.js'
+import '../elements/image-loading.js'
 import '../routes.js' // track page visits
 import {pushState, searchParams} from '../routes.js'
 import type {BlockCategory} from '../types/block.js'
