@@ -41,6 +41,7 @@ import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import type {SelectedGarments, Space, TemplateMap} from '../types/types.js'
 import {
+	arrayEquals,
 	createFabricTexture,
 	createMutationsSignal,
 	enableFrontsideOnModelLoad,
@@ -226,14 +227,55 @@ export class DrippyScene extends Element {
 
 			onCleanup(() => {
 				store.removeLoadingMaterial(loadingId)
-				if (templateId) store.clearLoadingTemplate(templateId)
+				// NOTE: Don't clear template loading here - the fallback effect below handles it properly
+				// by checking both fabrics AND blocks are loaded
 			})
+		})
+
+		const templateBlocks = createMemo(
+			() => {
+				console.log(
+					'templateBlocks',
+					this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),
+				)
+				return this.renderBlocks.filter(rb => rb.templateCategory === templateCategory)
+			},
+			undefined,
+			{equals: arrayEquals},
+		)
+		const blocksLoaded = createMemo(() => {
+			return templateBlocks().every(rb => !store.isBlockLoading(rb.block._id))
 		})
 
 		// Fallback: if nothing is loading, clear template loading state
 		createEffect(() => {
 			if (!templateId) return
-			if (!isAnyFabricLoading()) {
+
+			// Check if all fabrics are loaded
+			const fabricsLoaded = !isAnyFabricLoading()
+
+			// Check if all blocks for this template category are loaded
+			if (templateBlocks().length === 0) return // No blocks selected yet
+
+			// untrack(() => {
+			// 	// Debug: Show what IDs are being tracked as loading
+			// 	console.log('=== LOADING DEBUG ===')
+			// 	console.log('store.loadingBlocks (IDs being tracked):', Object.keys(store.loadingBlocks))
+			// 	console.log(
+			// 		'templateBlocks IDs we are checking:',
+			// 		templateBlocks.map(rb => rb.id),
+			// 	)
+			// 	console.log('Per-block loading status:')
+			// 	templateBlocks.forEach(rb => {
+			// 		console.log(`  ${rb.block._id}: isLoading=${store.isBlockLoading(rb.block._id)}`)
+			// 	})
+			// 	console.log('blocksLoaded:', blocksLoaded)
+			// 	console.log('===================')
+			// })
+
+			// Only clear loading state when BOTH fabrics and blocks are done
+			if (fabricsLoaded && blocksLoaded()) {
+				console.log('✅ CLEARING loading template:', templateId)
 				store.clearLoadingTemplate(templateId)
 			}
 		})
@@ -333,7 +375,20 @@ export class DrippyScene extends Element {
 	/** Check if a default garment should be visible based on user selections */
 	#isDefaultGarmentVisible(templateCategory: TemplateCategory, selectedTemplates: TemplateMap): boolean {
 		// Has user selected this category?
-		if (selectedTemplates?.[templateCategory]) return false
+		if (selectedTemplates?.[templateCategory]) {
+			const templateBlocks = this.renderBlocks.filter(rb => rb.templateCategory === templateCategory)
+
+			// Keep default visible if no blocks rendered yet OR any block still loading
+			if (templateBlocks.length === 0) return true
+			const anyBlockLoading = templateBlocks.some(rb => store.isBlockLoading(rb.block._id))
+			return anyBlockLoading
+			// // Template selected - keep default visible until all blocks are loaded
+			// const templateBlocks = this.renderBlocks.filter(rb => rb.templateCategory === templateCategory)
+			// // Keep default visible if no blocks rendered yet OR any block still loading
+			// if (templateBlocks.length === 0) return true
+			// const anyBlockLoading = templateBlocks.some(rb => store.isBlockLoading(rb.block._id))
+			// return anyBlockLoading // Visible while loading, hidden when done
+		}
 		// Is this category overridden by another selected category?
 		const overriddenBy = templateHelpers.getCategoriesThatOverride(templateCategory)
 		return !overriddenBy.some(cat => selectedTemplates[cat])
@@ -779,6 +834,12 @@ export class DrippyScene extends Element {
 
 					return renderBlock
 				})
+
+				// Proactively mark all blocks as loading when renderBlocks changes
+				// This ensures fast-loading (cached) blocks are tracked too
+				for (const rb of this.renderBlocks) {
+					store.addLoadingBlock(rb.block._id)
+				}
 			})
 
 			// Stable loading IDs per block
