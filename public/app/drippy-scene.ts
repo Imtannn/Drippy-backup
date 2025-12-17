@@ -529,6 +529,13 @@ export class DrippyScene extends Element {
 
 						// Wait for browser to paint 100% before hiding
 						// Triple RAF + small delay ensures 100% is visible
+						// FIXME Why exactly are there three animation frames
+						// and a timeout? If there is not very specific
+						// documented reason, this needs to be refactored.
+						//
+						// This sort of code implies a race condition as is
+						// (https://en.wikipedia.org/wiki/Race_condition), and
+						// we *must not* accept code like this.
 						requestAnimationFrame(() => {
 							requestAnimationFrame(() => {
 								requestAnimationFrame(() => {
