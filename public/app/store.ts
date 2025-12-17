@@ -30,6 +30,7 @@ import {
 	getSpaceDefaultScene,
 	getSpacePrimaryCollection,
 	onModelLoad,
+	removeItemUnsorted,
 	spaceHasMultipleCollections,
 	syncSignals,
 	toSolidSignal,
@@ -147,10 +148,11 @@ class Store {
 	isShowAvatar = true
 	isShowScene = true
 
-	// Loading states tracked by unique symbols
+	// Loading states tracked by unique values
 	drippySceneLoads: symbol[] = []
 	private loadingBlocks: Record<string, number> = {}
-	private loadingMaterials: symbol[] = []
+	// TODO UNUSED (delete unless needed)
+	// private loadingMaterials: symbol[] = []
 	private loadingScreenshots: TemplateCategory[] = []
 	private loadingFabricIds: string[] = []
 	private loadingTemplateIds: string[] = []
@@ -597,13 +599,10 @@ class Store {
 			this.retailItemSizes = new Map<TemplateCategory, string>()
 			this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 			this.screenshotCache = new Map<TemplateCategory, string>()
-			// TODO only use unique symbols for loading states, and make sure async
-			// processes always clean up!
 			this.loadingScreenshots.length = 0
 			this.remixOverlayTemplate = null
 			this.urlParamsLoaded = false
 
-			// Clear all loading states to prevent orphaned symbols
 			// FIXME clearing loading states should not be necessary. If so, it
 			// means there's a leak. Instead, don't clear loading states, all async
 			// processes must always clean up after themselves, and this will
@@ -641,16 +640,10 @@ class Store {
 		})
 	}
 	removeIsDrippySceneLoading(key: symbol) {
-		untrack(() => {
-			this.drippySceneLoads[this.drippySceneLoads.indexOf(key)] =
-				this.drippySceneLoads[this.drippySceneLoads.length - 1]
-			this.drippySceneLoads.pop()
-		})
+		untrack(() => removeItemUnsorted(this.drippySceneLoads, key))
 	}
 	clearIsDrippySceneLoading() {
-		untrack(() => {
-			this.drippySceneLoads.length = 0
-		})
+		untrack(() => (this.drippySceneLoads.length = 0))
 	}
 	get isDrippySceneLoading(): boolean {
 		return this.drippySceneLoads.length > 0
@@ -660,7 +653,7 @@ class Store {
 		if (!blockId) return
 		untrack(() => {
 			const currentCount = this.loadingBlocks[blockId] ?? 0
-			this.loadingBlocks = {...this.loadingBlocks, [blockId]: currentCount + 1}
+			this.loadingBlocks[blockId] = currentCount + 1
 		})
 	}
 	removeLoadingBlock(blockId: string) {
@@ -668,41 +661,33 @@ class Store {
 		untrack(() => {
 			const currentCount = this.loadingBlocks[blockId]
 			if (!currentCount) return
-			if (currentCount === 1) {
-				const {[blockId]: _, ...rest} = this.loadingBlocks
-				this.loadingBlocks = rest
-			} else {
-				this.loadingBlocks = {...this.loadingBlocks, [blockId]: currentCount - 1}
-			}
+			if (currentCount === 1) delete this.loadingBlocks[blockId]
+			else this.loadingBlocks[blockId] = currentCount - 1
 		})
 	}
 	clearLoadingBlocks() {
 		untrack(() => {
-			this.loadingBlocks = {}
+			for (const key in this.loadingBlocks) delete this.loadingBlocks[key]
 		})
 	}
 
 	isBlockLoading(blockId: string): boolean {
-		return Boolean(blockId && blockId in this.loadingBlocks)
+		const blockTracked = blockId in this.loadingBlocks
+		return Boolean(blockId && blockTracked)
 	}
 
-	addLoadingMaterial(key: symbol) {
-		untrack(() => {
-			if (!this.loadingMaterials.includes(key)) this.loadingMaterials.push(key)
-		})
-	}
-	removeLoadingMaterial(key: symbol) {
-		untrack(() => {
-			this.loadingMaterials[this.loadingMaterials.indexOf(key)] =
-				this.loadingMaterials[this.loadingMaterials.length - 1]
-			this.loadingMaterials.pop()
-		})
-	}
-	clearLoadingMaterials() {
-		untrack(() => {
-			this.loadingMaterials.length = 0
-		})
-	}
+	// TODO UNUSED (delete unless needed)
+	// addLoadingMaterial(key: symbol) {
+	// 	untrack(() => {
+	// 		if (!this.loadingMaterials.includes(key)) this.loadingMaterials.push(key)
+	// 	})
+	// }
+	// removeLoadingMaterial(key: symbol) {
+	// 	untrack(() => removeItemUnsorted(this.loadingMaterials, key))
+	// }
+	// clearLoadingMaterials() {
+	// 	untrack(() => (this.loadingMaterials.length = 0))
+	// }
 
 	addLoadingFabric(fabricId: string) {
 		untrack(() => {
@@ -710,16 +695,10 @@ class Store {
 		})
 	}
 	removeLoadingFabric(fabricId: string) {
-		untrack(() => {
-			this.loadingFabricIds[this.loadingFabricIds.indexOf(fabricId)] =
-				this.loadingFabricIds[this.loadingFabricIds.length - 1]
-			this.loadingFabricIds.pop()
-		})
+		untrack(() => removeItemUnsorted(this.loadingFabricIds, fabricId))
 	}
 	clearLoadingFabrics() {
-		untrack(() => {
-			this.loadingFabricIds.length = 0
-		})
+		untrack(() => (this.loadingFabricIds.length = 0))
 	}
 
 	isFabricLoading(fabricId: string): boolean {
@@ -728,24 +707,14 @@ class Store {
 
 	addLoadingScreenshot(category: TemplateCategory) {
 		untrack(() => {
-			// FIXME only use unique symbols for loading states, and make sure
-			// async processes always clean up!
 			if (!this.loadingScreenshots.includes(category)) this.loadingScreenshots.push(category)
 		})
 	}
 	removeLoadingScreenshot(category: TemplateCategory) {
-		untrack(() => {
-			// FIXME only use unique symbols for loading states, and make sure
-			// async processes always clean up!
-			this.loadingScreenshots[this.loadingScreenshots.indexOf(category)] =
-				this.loadingScreenshots[this.loadingScreenshots.length - 1]
-			this.loadingScreenshots.pop()
-		})
+		untrack(() => removeItemUnsorted(this.loadingScreenshots, category))
 	}
 	clearLoadingScreenshots() {
-		untrack(() => {
-			this.loadingScreenshots.length = 0
-		})
+		untrack(() => (this.loadingScreenshots.length = 0))
 	}
 	get isScreenshotsLoading(): boolean {
 		return this.loadingScreenshots.length > 0
@@ -769,9 +738,7 @@ class Store {
 				for (const id of this.loadingTemplateIds) {
 					const idCategory = templateHelpers.getTemplateCategoryById(id)
 					if (idCategory && conflictingCategories.has(idCategory)) {
-						this.loadingTemplateIds[this.loadingTemplateIds.indexOf(id)] =
-							this.loadingTemplateIds[this.loadingTemplateIds.length - 1]
-						this.loadingTemplateIds.pop()
+						removeItemUnsorted(this.loadingTemplateIds, id)
 					}
 				}
 			}
@@ -782,11 +749,7 @@ class Store {
 
 	clearLoadingTemplate(templateId: string) {
 		if (!templateId) return
-		untrack(() => {
-			this.loadingTemplateIds[this.loadingTemplateIds.indexOf(templateId)] =
-				this.loadingTemplateIds[this.loadingTemplateIds.length - 1]
-			this.loadingTemplateIds.pop()
-		})
+		untrack(() => removeItemUnsorted(this.loadingTemplateIds, templateId))
 	}
 
 	isTemplateLoading(templateId: string): boolean {
@@ -806,13 +769,9 @@ class Store {
 		const modelLoaded = onModelLoad(model)
 
 		createEffect(() => {
-			if (!modelLoaded()) {
-				this.addIsDrippySceneLoading(id)
-			}
-
-			onCleanup(() => {
-				this.removeIsDrippySceneLoading(id)
-			})
+			if (modelLoaded()) return
+			this.addIsDrippySceneLoading(id)
+			onCleanup(() => this.removeIsDrippySceneLoading(id))
 		})
 	}
 
@@ -972,9 +931,7 @@ export function selectedBlocksFromUrl() {
 function selectedFabricsFromUrl() {
 	const fabricsParam = untrack(searchParams).get('fabrics')
 
-	if (!fabricsParam) {
-		return
-	}
+	if (!fabricsParam) return
 
 	const fabricEntries = fabricsParam.split(',').filter(entry => entry.trim())
 
@@ -991,9 +948,7 @@ function selectedFabricsFromUrl() {
 
 		const [keyPart, fabricId] = value.split(':')
 
-		if (!keyPart || !fabricId) {
-			continue
-		}
+		if (!keyPart || !fabricId) continue
 
 		// Split only on first 2 dashes to handle concatenated mesh names
 		// Format: templateCategory-blockCategory-piece (where piece may contain dashes)
@@ -1009,9 +964,7 @@ function selectedFabricsFromUrl() {
 		const blockCategory = remaining.substring(0, dashIndex2)
 		const piece = remaining.substring(dashIndex2 + 1)
 
-		if (!templateCategory || !blockCategory || !piece) {
-			continue
-		}
+		if (!templateCategory || !blockCategory || !piece) continue
 
 		const fabric = templateHelpers.findFabricById(fabricId, collectionSlug)
 		if (fabric) {

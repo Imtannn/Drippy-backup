@@ -1121,3 +1121,14 @@ export function createFabricTexture(
 
 	return {texture, loading, error}
 }
+
+/**
+ * The fast way to remove an item from an array when item order
+ * doesn't matter. Avoids shifting all items after the removed one.
+ */
+export function removeItemUnsorted(array: unknown[], item: unknown) {
+	const index = array.indexOf(item)
+	if (index === -1) return
+	array[index] = array[array.length - 1]
+	array.pop()
+}

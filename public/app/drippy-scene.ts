@@ -57,6 +57,7 @@ import {
 	setEnvMapOnModelLoad,
 	setMaterialsVisibleOnModelLoad,
 	showSkeletonHelper,
+	whenModelLoaded,
 } from '../utils.js'
 import './app-buttons.js'
 import {AvatarSkeleton} from './avatar-skeleton.js'
@@ -369,7 +370,21 @@ export class DrippyScene extends Element {
 			if (!avatarModel || !backgroundModel) return
 
 			disableFrustumCulledOnLoad(backgroundModel)
-			disableFrustumCulledOnLoad(avatarModel)
+			enableFrontsideOnModelLoad(backgroundModel)
+			enableShadowOnModelLoad(backgroundModel)
+			setEnvMapOnModelLoad(backgroundModel, env)
+			setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
+
+			// Track selected avatar loading state
+			const avatarId = Symbol('avatar')
+			store.trackModelLoading(avatarId, avatarModel)
+
+			// Track background scene loading state (only if a scene is given)
+			createEffect(() => {
+				if (!backgroundModel.src) return
+				const sceneId = Symbol('background')
+				store.trackModelLoading(sceneId, backgroundModel)
+			})
 
 			const garmentModels = querySelectorAllSignal(avatarModel, 'lume-gltf-model[data-cloth]') as Accessor<
 				NodeListOf<GltfModel>
@@ -437,22 +452,11 @@ export class DrippyScene extends Element {
 				this.isDark = document.documentElement.dataset.theme === 'dark'
 			})
 
-			// Track selected avatar loading state
-			const avatarId = Symbol('avatar')
-			store.trackModelLoading(avatarId, avatarModel)
-
 			const avatarLoaded = onModelLoad(avatarModel)
 			createEffect(() => {
 				if (!avatarLoaded()) return
 
 				store.showAnimationSelect = !!getArmatureObject(avatarModel.three)
-			})
-
-			// Track background scene loading state (only if a scene is given)
-			const sceneId = Symbol('scene')
-			createEffect(() => {
-				if (!backgroundModel.src) return
-				store.trackModelLoading(sceneId, backgroundModel)
 			})
 
 			let previousCount = -1
@@ -550,31 +554,17 @@ export class DrippyScene extends Element {
 				progressTimeouts.forEach(timeoutId => clearTimeout(timeoutId))
 			})
 
-			// Track block loading state - use WeakSet to track by element, not by ID
-			const trackedElements = new WeakSet<Element>()
-
 			createEffect(() => {
-				for (const [index, el] of garmentModels().entries()) {
-					// Only create effect once per element instance
-					if (!trackedElements.has(el)) {
-						trackedElements.add(el)
-						const blockId = el.getAttribute('data-block-id') || el.getAttribute('id') || `unknown-${index}`
-						const modelLoaded = onModelLoad(el)
+				for (const el of garmentModels()) {
+					const blockId = el.getAttribute('data-block-id')
+					if (!blockId) throw new Error('Garment model missing data-block-id attribute')
 
-						createEffect(() => {
-							if (!modelLoaded()) {
-								store.addLoadingBlock(blockId)
-							} else {
-								store.removeLoadingBlock(blockId)
-							}
-
-							onCleanup(() => {
-								store.removeLoadingBlock(blockId)
-							})
-						})
-					}
-
-					disableFrustumCulledOnLoad(el)
+					const modelLoaded = onModelLoad(el)
+					createEffect(() => {
+						if (modelLoaded()) return
+						store.addLoadingBlock(blockId)
+						onCleanup(() => store.removeLoadingBlock(blockId))
+					})
 				}
 			})
 
@@ -619,14 +609,13 @@ export class DrippyScene extends Element {
 					return renderBlock
 				})
 
-				// Proactively mark all blocks as loading when renderBlocks changes
-				// This ensures fast-loading (cached) blocks are tracked too
-				for (const rb of this.renderBlocks) {
-					store.addLoadingBlock(rb.block._id)
-				}
+				// for (const rb of this.renderBlocks) {
+				// 	store.addLoadingBlock(rb.block._id)
+				// }
 			})
 
 			const modelsInSyncWithRenderBlocks = createMemo(() => {
+				if (this.renderBlocks.length !== garmentModels().length) return false
 				for (const [i, rb] of this.renderBlocks.entries()) {
 					console.log('render block', rb.id)
 					if (rb.id !== garmentModels()[i]?.getAttribute('id')) return false
@@ -659,7 +648,7 @@ export class DrippyScene extends Element {
 				)
 			})
 
-			const blockLoadingIds = new Map<string, symbol>()
+			// const blockLoadingIds = new Map<string, symbol>()
 
 			// Re-apply materials whenever the selected fabrics change or models mount
 			createEffect(() => {
@@ -668,14 +657,13 @@ export class DrippyScene extends Element {
 				if (!garmentModelsInSyncAndLoaded()) return
 
 				// Process each model using its data-blockid to find the correct fabric
-				// for (const el of garmentModels()) {
 				for (const [blockIndex, renderBlock] of this.renderBlocks.entries()) {
 					// Use UV data for proper texture scaling (TODO do we still
-					// need the relic from the old app?).  NOTE! We need to wait
-					// for all garment models to load to ensure UVs are ready.
-					// Unfortunately, this currently means fabrics won't start
-					// loading until all garments are loaded.
-					if (!garmentModelLoads()[blockIndex]()) continue
+					// need the relic from the old app?).
+					// NOTE! We need to wait for all garment models to load to
+					// ensure UVs are ready.  Unfortunately, this currently
+					// means fabrics won't start loading until all garments are
+					// loaded.
 					const uvArray = garmentUvArrays()[blockIndex]
 
 					const blockId = renderBlock.id
@@ -694,103 +682,94 @@ export class DrippyScene extends Element {
 					const templateCategory = parts[1] as TemplateCategory
 					const blockCategory = parts[2] as BlockCategory
 					const template = store.selectedTemplates[templateCategory]
+					const templateId = template?._id
+					if (!templateId) throw new Error('Template ID missing for category:' + templateCategory)
 					const selectedFabrics = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
 
-					// Get or create stable loading ID
-					let loadingId = blockLoadingIds.get(blockId)
-					if (!loadingId) blockLoadingIds.set(blockId, (loadingId = Symbol(`material-${blockId}`)))
+					const fabricLoadingSignals: Record<string, ReturnType<typeof createFabricTexture>> = {}
 
-					const templateId = template?._id
+					// Create signals for new fabrics
+					// TODO (FIXME?) This is loading state for all fabrics of
+					// the template category and block category, but is it the
+					// fabrics for the render block we're iterating?
+					for (const fabric of Object.values(selectedFabrics)) {
+						const textureState = createFabricTexture(() => fabric, uvArray)
+						fabricLoadingSignals[fabric._id] = textureState
 
-					const blockFabricSignals: Record<string, ReturnType<typeof createFabricTexture>> = {}
-
-					// Create texture signals when fabrics change
-					createEffect(() => {
-						console.log('garment fabric effect')
-						//templateId
-
-						// Create signals for new fabrics
-						for (const fabric of Object.values(selectedFabrics)) {
-							const textureState = createFabricTexture(() => fabric, uvArray)
-							blockFabricSignals[fabric._id] = textureState
-
-							// Track loading state per fabric ID
-							createEffect(() => {
-								console.log('fabric loading effect')
-								const isLoading = textureState.loading()
-								if (isLoading) {
-									store.addLoadingFabric(fabric._id)
-								} else {
-									store.removeLoadingFabric(fabric._id)
-								}
-
-								onCleanup(() => {
-									store.removeLoadingFabric(fabric._id)
-								})
-							})
-						}
-
-						onCleanup(() => {
-							for (const key in blockFabricSignals) delete blockFabricSignals[key]
+						// Track loading state per fabric
+						createEffect(() => {
+							console.log('fabric loading effect')
+							if (!textureState.loading()) return
+							store.addLoadingFabric(fabric._id)
+							onCleanup(() => store.removeLoadingFabric(fabric._id))
 						})
-					})
+					}
 
-					const isAnyFabricLoading = createMemo(() => {
-						return Object.values(blockFabricSignals).some(signal => signal.loading())
-					})
+					const fabricsLoaded = createMemo(() =>
+						Object.values(fabricLoadingSignals).every(f => !f.loading() && f.texture()),
+					)
 
-					// Track aggregate loading state reactively
-					createEffect(() => {
-						if (!isAnyFabricLoading()) return
+					// // Get or create stable loading ID
+					// let loadingId = blockLoadingIds.get(blockId)
+					// if (!loadingId) blockLoadingIds.set(blockId, (loadingId = Symbol(`material-${blockId}`)))
 
-						store.addLoadingMaterial(loadingId)
-
-						onCleanup(() => store.removeLoadingMaterial(loadingId))
-					})
+					// // Track aggregate loading state reactively
+					// createEffect(() => {
+					// 	if (fabricsLoaded()) return
+					// 	store.addLoadingMaterial(loadingId)
+					// 	onCleanup(() => store.removeLoadingMaterial(loadingId))
+					// })
 
 					const templateBlocks = createMemo(
 						() => {
-							console.log(
-								'templateBlocks',
-								this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),
-							)
+							// prettier-ignore
+							console.log( 'templateBlocks', this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),)
 							return this.renderBlocks.filter(rb => rb.templateCategory === templateCategory)
 						},
 						undefined,
 						{equals: arrayEquals},
 					)
 					const blocksLoaded = createMemo(() => {
-						return templateBlocks().every(rb => !store.isBlockLoading(rb.block._id))
+						// return templateBlocks().every(rb => !store.isBlockLoading(rb.block._id))
+						return true // This has to be true because all garments are loaded before fabrics start loading (see garmentModelsInSyncAndLoaded above)
 					})
 
-					// Fallback: if nothing is loading, clear template loading state
+					// TODO It doesn't seem to make sense for this effect to be
+					// here because we're iterating *EVERY* render block, and
+					// thus we're clearing loading state based on the fabrics of
+					// a *single* block, not *all blocks* in the template. Is
+					// this right?
 					createEffect(() => {
-						if (!templateId) return
-
-						// Check if all fabrics are loaded
-						const fabricsLoaded = !isAnyFabricLoading()
-
 						// Check if all blocks for this template category are loaded
 						if (templateBlocks().length === 0) return // No blocks selected yet
 
 						// Only clear loading state when BOTH fabrics and blocks are done
-						if (fabricsLoaded && blocksLoaded()) {
+						if (fabricsLoaded() && blocksLoaded()) {
 							console.log('✅ CLEARING loading template:', templateId)
+							// The fabrics for the block loaded, clear the
+							// loading state for the *whole* template (is this
+							// right?)
 							store.clearLoadingTemplate(templateId)
 						}
 					})
 
+					const anyFabricErrors = createMemo(() => Object.values(fabricLoadingSignals).map(f => f.error()))
+
+					createEffect(() => {
+						if (anyFabricErrors().some(error => error !== null))
+							console.error('Error loading one or more fabrics for block:', blockId)
+						for (const error of anyFabricErrors()) if (error) console.error(error)
+					})
+
 					// Apply textures reactively as they load
 					createEffect(() => {
-						if (isAnyFabricLoading()) return
+						if (!fabricsLoaded()) return
 
 						// Create a map for mesh to meshes key
 						const meshToFabricMeshesMap = new Map<string, string>()
 						for (const meshesKey of Object.keys(selectedFabrics)) {
 							const meshArray = meshesKey.split('-')
-							for (const mesh of meshArray) {
-								meshToFabricMeshesMap.set(mesh, meshesKey)
-							}
+							for (const mesh of meshArray) meshToFabricMeshesMap.set(mesh, meshesKey)
 						}
 
 						const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
@@ -805,22 +784,16 @@ export class DrippyScene extends Element {
 							const fabricToUse = selectedFabrics[meshesKey || 'default']
 							if (!fabricToUse) continue
 
-							const textureState = blockFabricSignals[fabricToUse._id]
+							const textureState = fabricLoadingSignals[fabricToUse._id]
 							if (!textureState) continue
 
 							const textureSet = textureState.texture()!
 							const isLoading = textureState.loading()!
-							const error = textureState.error()
 
-							if (error) {
-								console.error('Error loading texture for fabric:', fabricToUse._id, error)
-								continue
-							}
-
+							// These must be true because of fabricsLoaded() check above
 							console.assert(textureSet, 'Texture set should be available here')
 							console.assert(!isLoading, 'Texture should not be loading here')
 
-							// if (textureSet && !isLoading) {
 							// TODO revisit this to ensure materials/textures
 							// are properly disposed.
 							// Maybe we don't need to create a new material
@@ -833,18 +806,9 @@ export class DrippyScene extends Element {
 								this.#resetMaterialProperties(el, mesh)
 								el.needsUpdate()
 							})
-							// }
 						}
 
 						el.needsUpdate()
-					})
-
-					onCleanup(() => {
-						store.removeLoadingMaterial(loadingId)
-						// if (!el.isConnected) {
-						// this.#resetMaterialProperties(el)
-						// TODO dispose materials/textures
-						// }
 					})
 				}
 			})
@@ -863,11 +827,6 @@ export class DrippyScene extends Element {
 				if (!this.lumeScene) return
 				this.lumeScene.glRenderer!.toneMapping = THREE.ACESFilmicToneMapping
 			})
-
-			enableFrontsideOnModelLoad(backgroundModel)
-			enableShadowOnModelLoad(backgroundModel)
-			setEnvMapOnModelLoad(backgroundModel, env)
-			setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
 
 			// Set up post-processing for outline effect
 			let renderPass: RenderPass | null = null
@@ -1198,7 +1157,14 @@ export class DrippyScene extends Element {
 
 						<lume-gltf-model
 							id="avatar"
-							ref=${(el: GltfModel) => ((this.avatarModel = el), this.avatarSkeleton.setAvatar(el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env), showSkeletonHelper(el, () => true))}
+							ref=${(el: GltfModel) => {
+								this.avatarModel = el
+								this.avatarSkeleton.setAvatar(el)
+								enableShadowOnModelLoad(el)
+								setEnvMapOnModelLoad(el, env)
+								showSkeletonHelper(el, () => true)
+								disableFrustumCulledOnLoad(el)
+							}}
 							attr:src=${() => avatars.find(avatar => avatar.name === this.selectedAvatar)?.src ?? ''}
 							scale="1 1 1"
 							data-avatar
@@ -1211,6 +1177,7 @@ export class DrippyScene extends Element {
 											ref=${(el: GltfModel) => {
 												enableShadowOnModelLoad(el)
 												setEnvMapOnModelLoad(el, env)
+												disableFrustumCulledOnLoad(el)
 
 												setTimeout(() => {
 													const modelLoaded = onModelLoad(el)
@@ -1388,9 +1355,5 @@ export class DrippyScene extends Element {
 }
 
 function disableFrustumCulledOnLoad(model: GltfModel) {
-	const modelLoaded = onModelLoad(model)
-
-	createEffect(() => {
-		if (modelLoaded()) model.three.traverse(child => (child.frustumCulled = false))
-	})
+	whenModelLoaded(model, () => model.three.traverse(child => (child.frustumCulled = false)))
 }
