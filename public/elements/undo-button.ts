@@ -5,7 +5,7 @@ type UndoButtonAttributes = 'disabled' | 'group'
 
 @element
 export class UndoButton extends Element {
-	static readonly elementName = 'undo-button'
+	static override readonly elementName = 'undo-button'
 
 	@booleanAttribute disabled = false
 	@attribute group: string | null = null
@@ -20,8 +20,7 @@ export class UndoButton extends Element {
 			/>
 		</svg>
 	`
-
-	template = () => html`<icon-button disabled=${() => this.disabled} group=${() => this.group}>${() => this.icon()}</icon-button>`
+	override template = () => html`<icon-button disabled=${() => this.disabled} group=${() => this.group}>${() => this.icon()}</icon-button>`
 }
 
 declare module 'solid-js' {

@@ -12,7 +12,7 @@ export type ForEachAttributes = 'items' | 'content'
  */
 @element
 export class ForEach extends Element {
-	static readonly elementName = 'for-each'
+	static override readonly elementName = 'for-each'
 
 	/** An array of items to iterate over. */
 	@attribute items: unknown[] = []
@@ -40,10 +40,8 @@ export class ForEach extends Element {
 	 * arguments.
 	 */
 	@attribute content = (_item: unknown, _index: () => number) => html``
-
-	hasShadow = false
-
-	template = () => html`
+	override hasShadow = false
+	override template = () => html`
 		<${For} each=${() => this.items}>
 			${(item: unknown, index: () => number) => {
 				if (typeof this.content !== 'function')
@@ -54,8 +52,7 @@ export class ForEach extends Element {
 			}}
 		</>
 	`
-
-	css = `:host {display: contents}`
+	override css = `:host {display: contents}`
 }
 
 declare module 'solid-js' {

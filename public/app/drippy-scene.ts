@@ -72,7 +72,7 @@ type DefaultRenderBlock = RenderBlock & {fabrics: Record<string, Fabric>}
 
 @element
 export class DrippyScene extends Element {
-	static elementName = 'drippy-scene'
+	static override elementName = 'drippy-scene'
 
 	@attribute selectedSpace: Space | null = null
 	@attribute selectedAvatar: string | null = null
@@ -255,7 +255,7 @@ export class DrippyScene extends Element {
 		this.isVerticalPan = false
 	}
 
-	connectedCallback() {
+	override connectedCallback() {
 		this.scene = createMemo(this.scene)
 
 		super.connectedCallback() // runs this.template()
@@ -647,10 +647,7 @@ export class DrippyScene extends Element {
 
 					// Extract UV data for proper texture scaling
 					const meshes = [...meshesInTree(root)]
-					const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
-						? Array.from(meshes[0].geometry.attributes.uv.array)
-						: []
-					return uvArray
+					return Array.from(meshes[0]?.geometry?.attributes?.uv?.array ?? [])
 				})
 			})
 
@@ -1022,7 +1019,7 @@ export class DrippyScene extends Element {
 		})
 	}
 
-	template = () => {
+	override template = () => {
 		const shadowBias = -0.0005
 		const shadowNormalBias = /*0.005*/ 0
 		const shadowCameraSize = 5
@@ -1325,7 +1322,7 @@ export class DrippyScene extends Element {
 		`
 	}
 
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			--sceneDesktopOffset: 15rem;
 			--sceneTranslateX: translateX(0);

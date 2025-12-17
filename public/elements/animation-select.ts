@@ -9,7 +9,7 @@ export const appAnims = [
 ]
 @element
 export class AnimationSelect extends Element {
-	template = () => html`
+	override template = () => html`
 		<div>
 			<select
 				id="animation-select"

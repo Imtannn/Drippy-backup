@@ -13,9 +13,9 @@ type OrderViewAttributes = 'onclick'
 
 @element
 export class OrderView extends Element {
-	static readonly elementName = 'order-view'
+	static override readonly elementName = 'order-view'
 
-	@eventAttribute onclick = null
+	@eventAttribute override onclick = null
 
 	// Helper function to collect all order data
 	#collectOrderData = (): OrderData => {
@@ -241,8 +241,7 @@ export class OrderView extends Element {
 			store.order.shippingAddress.phone = target.value
 		}
 	}
-
-	template = () => html`
+	override template = () => html`
 		<app-buttons-preset preset="order-flow"></app-buttons-preset>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-snap="0.88">
@@ -375,8 +374,7 @@ export class OrderView extends Element {
 			</div>
 		</bottom-sheet>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		${appStyles}
 
 		.order-container {

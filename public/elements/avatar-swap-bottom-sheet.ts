@@ -12,13 +12,12 @@ type AvatarSwapBottomSheetAttributes = 'open' | 'selectedTemplate'
 
 @element
 export class AvatarSwapBottomSheet extends Element {
-	static readonly elementName = 'avatar-swap-bottom-sheet'
+	static override readonly elementName = 'avatar-swap-bottom-sheet'
 
 	@booleanAttribute open = false
 	@attribute selectedTemplate: Template | null = null
 	@attribute selectedGender: 'male' | 'female' = 'male'
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// Set the selected gender based on the template when it changes
@@ -88,8 +87,7 @@ export class AvatarSwapBottomSheet extends Element {
 	#onModalClick = (e: Event) => {
 		e.stopPropagation()
 	}
-
-	template = () => html`
+	override template = () => html`
 		<show-when
 			condition=${() => this.open && !!this.selectedTemplate}
 			content=${() => html`
@@ -114,8 +112,7 @@ export class AvatarSwapBottomSheet extends Element {
 			`}
 		></show-when>
 	`
-
-	css = css`
+	override css = css`
 		:host {
 			position: fixed;
 			top: 0;

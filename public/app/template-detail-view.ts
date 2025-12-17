@@ -9,12 +9,12 @@ type TemplateDetailViewAttributes = 'selectedTemplate' | 'onclose'
 
 @element
 export class TemplateDetailView extends Element {
-	static readonly elementName = 'template-detail-view'
+	static override readonly elementName = 'template-detail-view'
 
 	@signal selectedTemplate: Template | null = null
 	@signal activeTab: string = 'details'
 
-	@eventAttribute onclose: () => void = () => {}
+	@eventAttribute override onclose: () => void = () => {}
 
 	// Sample detail images
 	private detailImages = ['/images/img-detail-1.jpg', '/images/img-detail-2.jpg', '/images/img-detail-3.jpg']
@@ -35,8 +35,7 @@ export class TemplateDetailView extends Element {
 
 		return fabric?.materialName || 'N/A'
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="detail-view">
 			<div class="images-container">
 				<div class="images-scroll">
@@ -124,8 +123,7 @@ export class TemplateDetailView extends Element {
 			</button>
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: block;
 			height: 100%;

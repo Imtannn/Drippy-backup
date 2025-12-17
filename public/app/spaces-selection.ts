@@ -15,12 +15,11 @@ import {getSpaceThumbnail} from '../utils.js'
 
 @element
 export class SpacesSelection extends Element {
-	static elementName = 'spaces-selection'
+	static override elementName = 'spaces-selection'
 
 	@signal filteredSpace: Space[] = []
 	@signal showLoginDialog = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => {
@@ -92,8 +91,7 @@ export class SpacesSelection extends Element {
 		params.set('brand', brand)
 		pushState()
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="spaces-container">
 			<!-- Navigation -->
 			<show-when
@@ -186,8 +184,7 @@ export class SpacesSelection extends Element {
 			</style>
 		</dialog-element>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			position: absolute;
 			top: 0;

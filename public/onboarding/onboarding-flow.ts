@@ -17,7 +17,7 @@ type OnboardingFlowAttributes = keyof {}
 
 @element
 export class OnboardingFlow extends Element {
-	static readonly elementName = 'onboarding-flow'
+	static override readonly elementName = 'onboarding-flow'
 
 	@signal email = ''
 	@signal username = ''
@@ -26,8 +26,7 @@ export class OnboardingFlow extends Element {
 	@signal errorMessage = ''
 	@signal isUserLoggedIn = false
 	@signal previousStep: OnboardingStep | null = null
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// Listen for back-button clicks
@@ -177,8 +176,7 @@ export class OnboardingFlow extends Element {
 	#goToHome = () => {
 		history.pushState(null, '', '/')
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="onboarding-flow">
 			<show-when
 				condition=${() => this.currentStep === 'step1'}
@@ -282,8 +280,7 @@ export class OnboardingFlow extends Element {
 			></show-when>
 		</div>
 	`
-
-	css = css`
+	override css = css`
 		${onboardingStyles}
 	`
 }

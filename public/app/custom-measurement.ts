@@ -7,7 +7,7 @@ import {store} from './store.js'
 
 @element
 export class CustomMeasurement extends Element {
-	static elementName = 'custom-measurement'
+	static override elementName = 'custom-measurement'
 
 	@signal bust = 0
 	@signal waist = 0
@@ -16,7 +16,7 @@ export class CustomMeasurement extends Element {
 	@signal shoulderToKnee = 0
 
 	// Load existing measurements from store when component connects
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// Check if we're in retail mode with a specific category
@@ -96,8 +96,7 @@ export class CustomMeasurement extends Element {
 	#onBackClick = () => {
 		store.view = 'order-size'
 	}
-
-	template = () => html`
+	override template = () => html`
 		<app-buttons-preset preset="order-flow"></app-buttons-preset>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
@@ -184,8 +183,7 @@ export class CustomMeasurement extends Element {
 			</div>
 		</bottom-sheet>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		${appStyles}
 
 		/* Measurement page specific styles */

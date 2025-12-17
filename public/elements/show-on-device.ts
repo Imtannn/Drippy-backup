@@ -5,11 +5,10 @@ type ShowOnDeviceAttributes = 'device'
 
 @element
 export class ShowOnDevice extends Element {
-	static readonly elementName = 'show-on-device'
+	static override readonly elementName = 'show-on-device'
 
 	@attribute device: 'mobile' | 'desktop' = 'mobile'
-
-	template = () => html`
+	override template = () => html`
 		<div
 			classList=${() => ({
 				'show-on-mobile': this.device === 'mobile',
@@ -19,8 +18,7 @@ export class ShowOnDevice extends Element {
 			<slot></slot>
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: contents;
 		}

@@ -39,12 +39,12 @@ const hasBrandParam = createMemo(() => !!searchParams().get('brand'))
 
 @element
 export class DrippyApp extends Element {
-	static elementName = 'drippy-app'
+	static override elementName = 'drippy-app'
 
 	@signal appLoaded = false
 	@signal showLoadingCover = false
 
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// FIXME this needs re-work, currently can cause an infinite loop (the
@@ -89,7 +89,7 @@ export class DrippyApp extends Element {
 				store.view !== 'space' &&
 				store.selectedAvatar &&
 				store.selectedSpace &&
-				store.drippySceneLoads.size > 0
+				store.isDrippySceneLoading
 			) {
 				this.showLoadingCover = true
 			} else {
@@ -294,8 +294,7 @@ export class DrippyApp extends Element {
 			store.selectedTemplates = aggregatedTemplates
 		})
 	}
-
-	template = () => html`
+	override template = () => html`
 		<show-when
 			condition=${() => this.appLoaded}
 			fallback=${() => html`<div class="loading">Loading...</div>`}
@@ -369,8 +368,7 @@ export class DrippyApp extends Element {
 			`}
 		></show-when>
 	`
-
-	css = css`
+	override css = css`
 		* {
 			box-sizing: border-box;
 			user-select: none;

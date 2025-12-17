@@ -12,17 +12,15 @@ export type IndexEachAttributes = 'items' | 'content'
  */
 @element
 export class IndexEach extends Element {
-	static readonly elementName = 'index-each'
+	static override readonly elementName = 'index-each'
 
 	/** An array of items to iterate over. */
 	@attribute items: unknown[] = []
 
 	/** A function that returns a template for each item. */
 	@attribute content = (_item: () => unknown, _index: number) => html``
-
-	hasShadow = false
-
-	template = () => html`
+	override hasShadow = false
+	override template = () => html`
 		<${Index} each=${() => this.items}>
 			${(item: () => unknown, index: number) => {
 				if (typeof this.content !== 'function')
@@ -33,8 +31,7 @@ export class IndexEach extends Element {
 			}}
 		</>
 	`
-
-	css = `:host {display: contents}`
+	override css = `:host {display: contents}`
 }
 
 declare module 'solid-js' {

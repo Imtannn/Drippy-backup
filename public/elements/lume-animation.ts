@@ -25,7 +25,7 @@ const gltfLoader = new GLTFLoader()
  */
 @element
 export class LumeAnimation extends Element {
-	static elementName = 'lume-animation'
+	static override elementName = 'lume-animation'
 
 	/**
 	 * Optional file to load animation from. If not set, the parent Lume element's animations will
@@ -71,8 +71,7 @@ export class LumeAnimation extends Element {
 
 		return this.additive ? mixer.clipAction(THREE.AnimationUtils.makeClipAdditive(clip)) : mixer.clipAction(clip)
 	}
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => {
@@ -162,8 +161,7 @@ export class LumeAnimation extends Element {
 			})
 		})
 	}
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 		}
 	`

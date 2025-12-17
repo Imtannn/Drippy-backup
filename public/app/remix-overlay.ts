@@ -34,7 +34,7 @@ type RemixOverlayAttributes = 'selectedTemplate' | 'onclose' | 'disabledScroll'
 
 @element
 export class RemixOverlay extends Element {
-	static readonly elementName = 'remix-overlay'
+	static override readonly elementName = 'remix-overlay'
 
 	@attribute selectedTemplate: Template | null = null
 	@booleanAttribute disabledScroll = false
@@ -48,7 +48,7 @@ export class RemixOverlay extends Element {
 	@signal selectedSubTab: string | null = null
 	@signal isOpen: boolean = false
 
-	@eventAttribute onclose: () => void = () => {}
+	@eventAttribute override onclose: () => void = () => {}
 
 	#scheduleUrlSync = () => {
 		queueMicrotask(() => {
@@ -66,8 +66,7 @@ export class RemixOverlay extends Element {
 			this.#scheduleUrlSync()
 		}
 	}
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		this.addEventListener('cardselected', this.#onFabricCardSelected)
 
@@ -220,8 +219,7 @@ export class RemixOverlay extends Element {
 			})
 		})
 	}
-
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 		this.removeEventListener('cardselected', this.#onFabricCardSelected)
 	}
@@ -352,8 +350,7 @@ export class RemixOverlay extends Element {
 			</show-when>
 		</div>
 	`
-
-	template = () => html`
+	override template = () => html`
 		<!-- Mobile: wrap in bottom-sheet -->
 		<show-on-device device="mobile">
 			<bottom-sheet
@@ -376,8 +373,7 @@ export class RemixOverlay extends Element {
 			</div>
 		</show-on-device>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: block;
 		}

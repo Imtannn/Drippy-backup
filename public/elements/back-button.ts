@@ -5,11 +5,11 @@ type BackButtonAttributes = 'disabled' | 'onclick'
 
 @element
 export class BackButton extends Element {
-	static readonly elementName = 'back-button'
+	static override readonly elementName = 'back-button'
 
 	@booleanAttribute disabled = false
 
-	@eventAttribute onclick = null
+	@eventAttribute override onclick = null
 
 	arrow = () => html`
 		<svg fill="none" height="8" viewBox="0 0 16 8" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -23,8 +23,7 @@ export class BackButton extends Element {
 	#onClick = () => {
 		this.dispatchEvent(new CustomEvent('click', {bubbles: true}))
 	}
-
-	template = () =>
+	override template = () =>
 		html`<icon-button disabled=${() => this.disabled} onclick=${this.#onClick}>${() => this.arrow()}</icon-button>`
 }
 

@@ -5,11 +5,11 @@ type HomeButtonAttributes = 'disabled' | 'onclick'
 
 @element
 export class HomeButton extends Element {
-	static readonly elementName = 'home-button'
+	static override readonly elementName = 'home-button'
 
 	@booleanAttribute disabled = false
 
-	@eventAttribute onclick = null
+	@eventAttribute override onclick = null
 
 	home = () => html`
 		<svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -33,8 +33,7 @@ export class HomeButton extends Element {
 	#onClick = () => {
 		this.dispatchEvent(new CustomEvent('click', {bubbles: true}))
 	}
-
-	template = () =>
+	override template = () =>
 		html`<icon-button disabled=${() => this.disabled} onclick=${this.#onClick}>${() => this.home()}</icon-button>`
 }
 

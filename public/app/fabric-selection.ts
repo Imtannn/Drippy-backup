@@ -10,14 +10,13 @@ type FabricSelectionAttributes = 'pieceSelections' | 'availableFabrics' | 'selec
 
 @element
 export class FabricSelection extends Element {
-	static readonly elementName = 'fabric-selection'
+	static override readonly elementName = 'fabric-selection'
 
 	@attribute pieceSelections: string[] = []
 	@attribute availableFabrics: Record<string, Fabric[]> = {}
 	@attribute selectedTemplateCategory: TemplateCategory | null = null
 	@booleanAttribute isRemix = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => {
@@ -27,8 +26,7 @@ export class FabricSelection extends Element {
 			}
 		})
 	}
-
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 		store.setSelectingPiece = null
 	}
@@ -107,8 +105,7 @@ export class FabricSelection extends Element {
 
 		return Object.values(templateSelection).some(selection => selection?.fabrics?.[piece]?._id === fabric._id)
 	}
-
-	template = () => html`
+	override template = () => html`
 
 			<show-when
 				condition=${() => this.#getPiecesFabrics(this.pieceSelections).length > 1}
@@ -161,8 +158,7 @@ export class FabricSelection extends Element {
 		`}></for-each>
 	</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: contents;
 			display: flex;

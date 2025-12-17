@@ -6,7 +6,7 @@ type CubeButtonAttributes = 'disabled'
 
 @element
 export class CubeButton extends Element {
-	static readonly elementName = 'cube-button'
+	static override readonly elementName = 'cube-button'
 
 	@booleanAttribute disabled = false
 
@@ -31,8 +31,7 @@ export class CubeButton extends Element {
 			<path d="M6 12.5775V6.97754" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
 		</svg>
 	`
-
-	template = () =>
+	override template = () =>
 		html`<icon-button onclick=${this.#onToggleSceneClick} disabled=${() => this.disabled}
 			>${() => this.icon()}</icon-button
 		>`

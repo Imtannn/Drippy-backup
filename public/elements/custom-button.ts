@@ -9,15 +9,14 @@ export type CustomButtonAttributes = 'variant' | 'size' | 'disabled' | 'loading'
  */
 @element
 export class CustomButton extends Element {
-	static readonly elementName = 'custom-button'
+	static override readonly elementName = 'custom-button'
 
 	@attribute variant = 'primary' // primary, secondary, outline, ghost
 	@attribute size = 'medium' // small, medium, large
 	@attribute href = '' // URL to redirect to when clicked
 	@booleanAttribute disabled = false
 	@booleanAttribute loading = false
-
-	template = () => html`
+	override template = () => html`
 		<button
 			class="custom-button"
 			classList=${() => ({
@@ -71,8 +70,7 @@ export class CustomButton extends Element {
 						`}
 		</button>
 	`
-
-	css = css`
+	override css = css`
 		:host {
 			display: inline-block;
 		}

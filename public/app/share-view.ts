@@ -5,7 +5,7 @@ type ShareViewAttributes = keyof {}
 
 @element
 export class ShareView extends Element {
-	static elementName = 'share-view'
+	static override elementName = 'share-view'
 
 	@signal shareUrl = window.location.href
 	@signal isCopied = false
@@ -64,8 +64,7 @@ export class ShareView extends Element {
 			window.open(shareUrl, '_blank', 'width=600,height=400')
 		}
 	}
-
-	template = () => html`
+	override template = () => html`
 		<app-buttons-preset preset="simple-flow"></app-buttons-preset>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
@@ -164,8 +163,7 @@ export class ShareView extends Element {
 			</div>
 		</bottom-sheet>
 	`
-
-	css = css`
+	override css = css`
 		.share-container {
 			padding: var(--uiSpacing);
 			padding-top: 0;

@@ -5,7 +5,7 @@ type RefreshButtonAttributes = 'disabled'
 
 @element
 export class RefreshButton extends Element {
-	static readonly elementName = 'refresh-button'
+	static override readonly elementName = 'refresh-button'
 
 	@booleanAttribute disabled = false
 
@@ -19,8 +19,7 @@ export class RefreshButton extends Element {
 			/>
 		</svg>
 	`
-
-	template = () => html`<icon-button disabled=${() => this.disabled}>${() => this.icon()}</icon-button>`
+	override template = () => html`<icon-button disabled=${() => this.disabled}>${() => this.icon()}</icon-button>`
 }
 
 declare module 'solid-js' {

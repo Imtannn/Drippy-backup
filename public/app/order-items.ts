@@ -10,10 +10,10 @@ import {store} from './store.js'
 
 @element
 export class OrderItems extends Element {
-	static elementName = 'order-items'
+	static override elementName = 'order-items'
 
 	// Load existing selections when component connects
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// Initialize all selected templates as checked
@@ -51,8 +51,7 @@ export class OrderItems extends Element {
 	#onItemToggle = (category: TemplateCategory) => {
 		store.toggleOrderItem(category)
 	}
-
-	template = () => html`
+	override template = () => html`
 		<app-buttons-preset preset="order-flow"></app-buttons-preset>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)">
@@ -117,8 +116,7 @@ export class OrderItems extends Element {
 			</div>
 		</bottom-sheet>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		${appStyles}
 
 		.order-container {

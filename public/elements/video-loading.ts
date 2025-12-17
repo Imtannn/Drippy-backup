@@ -4,11 +4,10 @@ const loadingVideoUrl = new URL('../videos/landing.mp4', import.meta.url).href
 
 @element
 export class VideoLoading extends Element {
-	static elementName = 'video-loading'
+	static override elementName = 'video-loading'
 
 	@signal private videoError = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// Prevent body scroll when video is showing
@@ -102,16 +101,14 @@ export class VideoLoading extends Element {
 			}
 		}, 0)
 	}
-
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 
 		// Restore body scroll when component is removed
 		document.body.style.overflow = ''
 		document.documentElement.style.overflow = ''
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="video-loading">
 			<video class="loading-video" autoplay muted loop playsinline>
 				<source src=${loadingVideoUrl} type="video/mp4" />
@@ -122,8 +119,7 @@ export class VideoLoading extends Element {
 			</div>
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: block;
 			width: 100vw;

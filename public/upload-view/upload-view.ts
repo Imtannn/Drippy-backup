@@ -72,7 +72,7 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
 
 @element
 export class UploadView extends Element {
-	static elementName = 'upload-view'
+	static override elementName = 'upload-view'
 
 	// Reactive properties
 	@signal selectedTab: string = BLOCK_CATEGORIES[0]
@@ -149,8 +149,7 @@ export class UploadView extends Element {
 
 		return selection
 	}
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		this.#createFileInput()
 	}
@@ -1020,8 +1019,7 @@ export class UploadView extends Element {
 		document.addEventListener('touchmove', handleDragMove as EventListener)
 		document.addEventListener('touchend', handleDragEnd)
 	}
-
-	template = () => html`
+	override template = () => html`
 		<drippy-scene
 			selected-space=${() => this.selectedSpace}
 			selected-avatar=${() => this.selectedAvatar}
@@ -1290,8 +1288,7 @@ export class UploadView extends Element {
 			></show-when>
 		</bottom-sheet>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		* {
 			box-sizing: border-box;
 			user-select: none;

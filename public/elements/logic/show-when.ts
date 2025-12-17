@@ -25,7 +25,7 @@ export type ShowWhenAttributes = 'condition' | 'content' | 'fallback'
  */
 @element
 export class ShowWhen extends Element {
-	static readonly elementName = 'show-when'
+	static override readonly elementName = 'show-when'
 
 	/** The condition to show content. If falsy, fallback content is shown instead. */
 	@booleanAttribute condition = false
@@ -35,16 +35,13 @@ export class ShowWhen extends Element {
 
 	/** A function that returns a template for fallback content when condition is falsy. */
 	@attribute fallback: TemplateFunction = () => []
-
-	hasShadow = false
-
-	template = () => html`
+	override hasShadow = false
+	override template = () => html`
 		<${Show} when=${() => this.condition} fallback=${() => this.fallback}>
 			${() => this.content}
 		</>
 	`
-
-	css = `:host {display: contents}`
+	override css = `:host {display: contents}`
 }
 
 declare module 'solid-js' {

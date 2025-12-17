@@ -2,7 +2,7 @@ import {css, Element, element, html} from 'lume'
 
 @element
 export class BuyButton extends Element {
-	static readonly elementName = 'buy-button'
+	static override readonly elementName = 'buy-button'
 
 	buyIcon = () =>
 		html` <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -22,9 +22,9 @@ export class BuyButton extends Element {
 			/>
 		</svg>`
 
-	template = () => html` <button class="buy-button">${this.buyIcon()} Shop it</button> `
+	override template = () => html` <button class="buy-button">${this.buyIcon()} Shop it</button> `
 
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		.buy-button {
 			display: flex;
 			align-items: center;

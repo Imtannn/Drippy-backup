@@ -8,7 +8,7 @@ type HomePageAttributes = keyof {} // no attributes yet
 
 @element
 export class HomePage extends Element {
-	static readonly elementName = 'home-page'
+	static override readonly elementName = 'home-page'
 
 	@numberAttribute count = 0
 
@@ -17,8 +17,7 @@ export class HomePage extends Element {
 		event.preventDefault()
 		event.stopPropagation()
 	}
-
-	template = () => html`
+	override template = () => html`
 		<drippy-app on:pointercancel=${this.onPointerCancel}></drippy-app>
 		<style>
 			drippy-app {
@@ -27,8 +26,7 @@ export class HomePage extends Element {
 			}
 		</style>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			width: 100%;
 			height: 100%;

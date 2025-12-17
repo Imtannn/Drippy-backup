@@ -10,9 +10,8 @@ type LandingPageAttributes = keyof {} // no attributes yet
 
 @element
 export class LandingPage extends Element {
-	static readonly elementName = 'landing-page'
-
-	connectedCallback() {
+	static override readonly elementName = 'landing-page'
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// Add scroll event listener for navbar effect
@@ -35,8 +34,7 @@ export class LandingPage extends Element {
 			window.removeEventListener('scroll', handleScroll)
 		})
 	}
-
-	template = () => html`
+	override template = () => html`
 		<nav class="navbar">
 			<div class="container">
 				<div class="nav-container">
@@ -131,8 +129,7 @@ export class LandingPage extends Element {
 			</div>
 		</footer>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			--font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 			--color-primary: #121316;

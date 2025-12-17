@@ -21,7 +21,7 @@ type BlazeComponentAttributes = 'tmpl' | 'data' | 'disabled'
 
 @element
 export class BlazeComponent extends Element {
-	static readonly elementName = 'blaze-component'
+	static override readonly elementName = 'blaze-component'
 
 	/** The name of the Blaze template, or a Blaze template reference, to render. */
 	@stringAttribute tmpl: string | Blaze.Template = ''
@@ -37,8 +37,7 @@ export class BlazeComponent extends Element {
 	 * (or will be removed and cleaned up if it was already created).
 	 */
 	@booleanAttribute disabled = false
-
-	hasShadow = false
+	override hasShadow = false
 
 	#container!: HTMLDivElement
 
@@ -88,8 +87,7 @@ export class BlazeComponent extends Element {
 			onCleanup(() => (cleaned = true))
 		})
 	}
-
-	connectedCallback() {
+	override connectedCallback() {
 		this.#memoize()
 		super.connectedCallback()
 
@@ -112,12 +110,10 @@ export class BlazeComponent extends Element {
 			onCleanup(() => Blaze.remove(view))
 		})
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div id="container" part="container" ref=${(e: HTMLDivElement) => (this.#container = e)}></div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: contents;
 		}

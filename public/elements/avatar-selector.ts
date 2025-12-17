@@ -108,7 +108,7 @@ const femaleAvatar = new URL(
  */
 @element
 export class AvatarSelector extends Element {
-	static readonly elementName = 'avatar-selector'
+	static override readonly elementName = 'avatar-selector'
 
 	@attribute targetModel = ''
 	@attribute fabricsSelection = []
@@ -136,8 +136,7 @@ export class AvatarSelector extends Element {
 			gender: 'female',
 		},
 	]
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		document.addEventListener('click', this.handleOutsideClick)
 
@@ -445,8 +444,7 @@ export class AvatarSelector extends Element {
 			}
 		}, 50)
 	}
-
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 		document.removeEventListener('click', this.handleOutsideClick)
 
@@ -517,8 +515,7 @@ export class AvatarSelector extends Element {
 			}
 		})
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="avatar-selector__wrapper" onclick=${this.handleToggle}>
 			<div class="avatar-image-wrapper">
 				<img class="avatar-image" src=${() => this.selectedOption.image} alt=${() => this.selectedOption.label} />
@@ -548,8 +545,7 @@ export class AvatarSelector extends Element {
 			)}
 		</div>
 	`
-
-	css = css`
+	override css = css`
 		:host {
 			height: 43px;
 			padding: 0;

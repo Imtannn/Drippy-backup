@@ -34,7 +34,7 @@ type BottomSheetAttributes =
 	| 'disabledScroll'
 @element
 export class BottomSheet extends Element {
-	static readonly elementName = 'bottom-sheet'
+	static override readonly elementName = 'bottom-sheet'
 
 	// Properties
 	@attribute defaultSnap: string = ''
@@ -70,8 +70,7 @@ export class BottomSheet extends Element {
 			document.documentElement.style.removeProperty('--bottom-sheet-height')
 		}
 	}
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		this.checkDesktop()
 		this.addEventListeners()
@@ -131,8 +130,7 @@ export class BottomSheet extends Element {
 			}
 		})
 	}
-
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 		this.removeEventListeners()
 	}
@@ -444,8 +442,7 @@ export class BottomSheet extends Element {
 	// 	// Emit event so parent component can handle the done action
 	// 	this.dispatchEvent(new CustomEvent('done', {bubbles: true, composed: true}))
 	// }
-
-	template = () => {
+	override template = () => {
 		return html`
 			<div
 				class="bottom-sheet"
@@ -475,8 +472,7 @@ export class BottomSheet extends Element {
 			</div>
 		`
 	}
-
-	css = css`
+	override css = css`
 		:host {
 			--bottom-sheet-float-direction: flex-start;
 			--bottom-sheet-panel-width: 32rem;
@@ -699,17 +695,15 @@ type BottomSheetHeaderAttributes = keyof {}
 // Bottom sheet header
 @element
 export class BottomSheetHeader extends Element {
-	static readonly elementName = 'bottom-sheet-header'
-
-	template = () => {
+	static override readonly elementName = 'bottom-sheet-header'
+	override template = () => {
 		return html`
 			<div class="bottom-sheet-header">
 				<slot></slot>
 			</div>
 		`
 	}
-
-	css = css`
+	override css = css`
 		:host {
 			position: sticky;
 			top: 20px;

@@ -20,7 +20,7 @@ type TabsProviderAttributes = 'defaultValue' | 'selectedValue' | 'tabOrientation
 
 @element
 export class TabsProvider extends Element {
-	static readonly elementName = 'tabs-provider'
+	static override readonly elementName = 'tabs-provider'
 
 	@attribute defaultValue = ''
 	@attribute selectedValue = ''
@@ -37,8 +37,7 @@ export class TabsProvider extends Element {
 	get activeValue() {
 		return this.selectedValue || this._activeValue || this.defaultValue
 	}
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		this._activeValue = this.defaultValue
 
@@ -84,8 +83,7 @@ export class TabsProvider extends Element {
 		observer.observe(this)
 		onCleanup(() => observer.disconnect())
 	}
-
-	attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null) {
+	override attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null) {
 		if (name === 'selectedValue') {
 			this._activeValue = newValue || ''
 			this.updateActiveTab()
@@ -134,10 +132,8 @@ export class TabsProvider extends Element {
 			}),
 		)
 	}
-
-	template = () => html`<slot></slot>`
-
-	css = css`
+	override template = () => html`<slot></slot>`
+	override css = css`
 		:host {
 			display: block;
 		}
@@ -152,14 +148,14 @@ type TabsListAttributes = never
 
 @element
 export class TabsList extends Element {
-	static readonly elementName = 'tabs-list'
+	static override readonly elementName = 'tabs-list'
 
 	private provider: TabsProvider | null = null
 	private indicatorRef: HTMLElement | null = null
 	private hoverIndicatorRef: HTMLElement | null = null
 	private resizeTimeout: NodeJS.Timeout | null = null
 	private updateIndicatorsTimeout: NodeJS.Timeout | null = null
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		this.classList.add('tabs-list')
@@ -178,8 +174,7 @@ export class TabsList extends Element {
 
 		onCleanup(() => cancelAnimationFrame(frame))
 	}
-
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 		this.#removeEventListeners()
 	}
@@ -298,14 +293,12 @@ export class TabsList extends Element {
 			indicator.style.width = `${width}px`
 		})
 	}
-
-	template = () => html`
+	override template = () => html`
 		<slot></slot>
 		<div class="tab-indicator active-indicator" ref="${(el: HTMLElement) => (this.indicatorRef = el)}"></div>
 		<div class="tab-indicator hover-indicator" ref="${(el: HTMLElement) => (this.hoverIndicatorRef = el)}"></div>
 	`
-
-	css = css`
+	override css = css`
 		:host {
 			position: relative;
 			display: flex;
@@ -352,7 +345,7 @@ type TabsTriggerAttributes = 'selectedValue' | 'isDisabled'
 
 @element
 export class TabsTrigger extends Element {
-	static readonly elementName = 'tabs-trigger'
+	static override readonly elementName = 'tabs-trigger'
 
 	@attribute selectedValue = ''
 	@booleanAttribute isDisabled = false
@@ -360,8 +353,7 @@ export class TabsTrigger extends Element {
 	private provider: TabsProvider | null = null
 	private tabsList: TabsList | null = null
 	@booleanAttribute isActive = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		this.provider = this.closest('tabs-provider') as TabsProvider
 		this.tabsList = this.closest('tabs-list') as TabsList
@@ -377,8 +369,7 @@ export class TabsTrigger extends Element {
 			this.updateActive(this.provider?.activeValue === this.selectedValue)
 		}, 0)
 	}
-
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 		if (this.provider) {
 			this.provider.unregisterTrigger(this)
@@ -416,8 +407,7 @@ export class TabsTrigger extends Element {
 			})
 		}
 	}
-
-	template = () => html`
+	override template = () => html`
 		<button
 			class="tab"
 			classList=${() => ({active: this.isActive, disabled: this.isDisabled})}
@@ -433,8 +423,7 @@ export class TabsTrigger extends Element {
 			<slot></slot>
 		</button>
 	`
-
-	css = css`
+	override css = css`
 		:host {
 			flex: 0 0 auto;
 		}
@@ -499,14 +488,13 @@ type TabsContentAttributes = 'selectedValue'
 
 @element
 export class TabsContent extends Element {
-	static readonly elementName = 'tabs-content'
+	static override readonly elementName = 'tabs-content'
 
 	@attribute selectedValue = ''
 
 	private provider: TabsProvider | null = null
 	private isActive = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		this.provider = this.closest('tabs-provider') as TabsProvider
 
@@ -519,8 +507,7 @@ export class TabsContent extends Element {
 			}, 0)
 		}
 	}
-
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 		if (this.provider) {
 			this.provider.unregisterContent(this)
@@ -532,8 +519,7 @@ export class TabsContent extends Element {
 		this.setAttribute('aria-hidden', (!active).toString())
 		this.style.display = active ? 'block' : 'none'
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div
 			class="tab-panel"
 			classList=${() => ({active: this.isActive})}
@@ -546,8 +532,7 @@ export class TabsContent extends Element {
 			<slot></slot>
 		</div>
 	`
-
-	css = css`
+	override css = css`
 		:host {
 			display: block;
 		}

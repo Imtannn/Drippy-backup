@@ -4,16 +4,14 @@ type SearchButtonAttributes = keyof {}
 
 @element
 export class SearchButton extends Element {
-	static readonly elementName = 'search-button'
+	static override readonly elementName = 'search-button'
 
 	#onClick = () => {}
-
-	template = () =>
+	override template = () =>
 		html`<button class="search-button" onclick=${this.#onClick}>
 			<img src="/images/action-buttons/search-button.svg" alt="Search" />
 		</button>`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		.search-button {
 			background: none;
 			border: none;

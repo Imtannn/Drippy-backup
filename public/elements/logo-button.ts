@@ -19,11 +19,10 @@ const BRANDS = [
 
 @element
 export class LogoButton extends Element {
-	static readonly elementName = 'logo-button'
+	static override readonly elementName = 'logo-button'
 
 	@attribute brandName = 'Drippy'
-
-	template = () =>
+	override template = () =>
 		html`<button
 			class="logo-button"
 			style=${() =>
@@ -31,8 +30,7 @@ export class LogoButton extends Element {
 		>
 			LOGO
 		</button>`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		.logo-button {
 			background-color: #121316;
 			color: #ffffff;
