@@ -1090,7 +1090,6 @@ export function createFabricTexture(
 
 				const error = err instanceof Error ? err : new Error(String(err))
 
-				console.warn(`### fabric ${currentFabric._id} failed to load textures`, error)
 				if (retryCount < maxRetries) {
 					retryCount++
 					setTimeout(() => {

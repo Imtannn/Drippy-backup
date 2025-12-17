@@ -85,9 +85,8 @@ export class OrderItems extends Element {
 										<div class="item-image">
 											${() => {
 												const cached = store.screenshotCache.get(category)
-												const isLoading = store.loadingScreenshots.has(category)
 
-												if (isLoading) {
+												if (store.isScreenshotsLoading) {
 													return html`<div class="screenshot-loader">
 														<div class="spinner"></div>
 													</div>`

@@ -148,12 +148,12 @@ class Store {
 	isShowScene = true
 
 	// Loading states tracked by unique symbols
-	drippySceneLoads = new Set<symbol>()
-	loadingBlocks: Record<string, number> = {}
-	loadingMaterials = new Set<symbol>()
-	loadingScreenshots = new Set<TemplateCategory>()
-	loadingFabricIds = new Set<string>()
-	loadingTemplateIds = new Set<string>()
+	drippySceneLoads: symbol[] = []
+	private loadingBlocks: Record<string, number> = {}
+	private loadingMaterials: symbol[] = []
+	private loadingScreenshots: TemplateCategory[] = []
+	private loadingFabricIds: string[] = []
+	private loadingTemplateIds: string[] = []
 
 	connectionStatus: ConnectionStatus = 'online'
 	showConnectionWarning = false
@@ -599,7 +599,7 @@ class Store {
 			this.screenshotCache = new Map<TemplateCategory, string>()
 			// TODO only use unique symbols for loading states, and make sure async
 			// processes always clean up!
-			this.loadingScreenshots = new Set<TemplateCategory>()
+			this.loadingScreenshots.length = 0
 			this.remixOverlayTemplate = null
 			this.urlParamsLoaded = false
 
@@ -637,21 +637,23 @@ class Store {
 
 	addIsDrippySceneLoading(key: symbol) {
 		untrack(() => {
-			this.drippySceneLoads.add(key)
-			this.drippySceneLoads = new Set(this.drippySceneLoads) // trigger reactivity
+			if (!this.drippySceneLoads.includes(key)) this.drippySceneLoads.push(key)
 		})
 	}
 	removeIsDrippySceneLoading(key: symbol) {
 		untrack(() => {
-			this.drippySceneLoads.delete(key)
-			this.drippySceneLoads = new Set(this.drippySceneLoads) // trigger reactivity
+			this.drippySceneLoads[this.drippySceneLoads.indexOf(key)] =
+				this.drippySceneLoads[this.drippySceneLoads.length - 1]
+			this.drippySceneLoads.pop()
 		})
 	}
 	clearIsDrippySceneLoading() {
 		untrack(() => {
-			this.drippySceneLoads.clear()
-			this.drippySceneLoads = new Set(this.drippySceneLoads) // trigger reactivity
+			this.drippySceneLoads.length = 0
 		})
+	}
+	get isDrippySceneLoading(): boolean {
+		return this.drippySceneLoads.length > 0
 	}
 
 	addLoadingBlock(blockId: string) {
@@ -686,67 +688,67 @@ class Store {
 
 	addLoadingMaterial(key: symbol) {
 		untrack(() => {
-			this.loadingMaterials.add(key)
-			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+			if (!this.loadingMaterials.includes(key)) this.loadingMaterials.push(key)
 		})
 	}
 	removeLoadingMaterial(key: symbol) {
 		untrack(() => {
-			this.loadingMaterials.delete(key)
-			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+			this.loadingMaterials[this.loadingMaterials.indexOf(key)] =
+				this.loadingMaterials[this.loadingMaterials.length - 1]
+			this.loadingMaterials.pop()
 		})
 	}
 	clearLoadingMaterials() {
 		untrack(() => {
-			this.loadingMaterials.clear()
-			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
+			this.loadingMaterials.length = 0
 		})
 	}
 
 	addLoadingFabric(fabricId: string) {
 		untrack(() => {
-			this.loadingFabricIds.add(fabricId)
-			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
+			if (!this.loadingFabricIds.includes(fabricId)) this.loadingFabricIds.push(fabricId)
 		})
 	}
 	removeLoadingFabric(fabricId: string) {
 		untrack(() => {
-			this.loadingFabricIds.delete(fabricId)
-			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
+			this.loadingFabricIds[this.loadingFabricIds.indexOf(fabricId)] =
+				this.loadingFabricIds[this.loadingFabricIds.length - 1]
+			this.loadingFabricIds.pop()
 		})
 	}
 	clearLoadingFabrics() {
 		untrack(() => {
-			this.loadingFabricIds.clear()
-			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
+			this.loadingFabricIds.length = 0
 		})
 	}
 
 	isFabricLoading(fabricId: string): boolean {
-		return this.loadingFabricIds.has(fabricId)
+		return this.loadingFabricIds.includes(fabricId)
 	}
 
 	addLoadingScreenshot(category: TemplateCategory) {
 		untrack(() => {
 			// FIXME only use unique symbols for loading states, and make sure
 			// async processes always clean up!
-			this.loadingScreenshots.add(category)
-			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
+			if (!this.loadingScreenshots.includes(category)) this.loadingScreenshots.push(category)
 		})
 	}
 	removeLoadingScreenshot(category: TemplateCategory) {
 		untrack(() => {
 			// FIXME only use unique symbols for loading states, and make sure
 			// async processes always clean up!
-			this.loadingScreenshots.delete(category)
-			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
+			this.loadingScreenshots[this.loadingScreenshots.indexOf(category)] =
+				this.loadingScreenshots[this.loadingScreenshots.length - 1]
+			this.loadingScreenshots.pop()
 		})
 	}
 	clearLoadingScreenshots() {
 		untrack(() => {
-			this.loadingScreenshots.clear()
-			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
+			this.loadingScreenshots.length = 0
 		})
+	}
+	get isScreenshotsLoading(): boolean {
+		return this.loadingScreenshots.length > 0
 	}
 
 	setLoadingTemplate(templateId: string, category?: TemplateCategory) {
@@ -767,26 +769,28 @@ class Store {
 				for (const id of this.loadingTemplateIds) {
 					const idCategory = templateHelpers.getTemplateCategoryById(id)
 					if (idCategory && conflictingCategories.has(idCategory)) {
-						this.loadingTemplateIds.delete(id)
+						this.loadingTemplateIds[this.loadingTemplateIds.indexOf(id)] =
+							this.loadingTemplateIds[this.loadingTemplateIds.length - 1]
+						this.loadingTemplateIds.pop()
 					}
 				}
 			}
 
-			this.loadingTemplateIds.add(templateId)
-			this.loadingTemplateIds = new Set(this.loadingTemplateIds) // trigger reactivity
+			this.loadingTemplateIds.push(templateId)
 		})
 	}
 
 	clearLoadingTemplate(templateId: string) {
 		if (!templateId) return
 		untrack(() => {
-			this.loadingTemplateIds.delete(templateId)
-			this.loadingTemplateIds = new Set(this.loadingTemplateIds) // trigger reactivity
+			this.loadingTemplateIds[this.loadingTemplateIds.indexOf(templateId)] =
+				this.loadingTemplateIds[this.loadingTemplateIds.length - 1]
+			this.loadingTemplateIds.pop()
 		})
 	}
 
 	isTemplateLoading(templateId: string): boolean {
-		return this.loadingTemplateIds.has(templateId)
+		return this.loadingTemplateIds.includes(templateId)
 	}
 
 	clearAllLoadingStates() {
@@ -795,7 +799,7 @@ class Store {
 		this.clearLoadingFabrics()
 		this.clearLoadingScreenshots()
 		this.clearIsDrippySceneLoading()
-		this.loadingTemplateIds = new Set()
+		this.loadingTemplateIds.length = 0
 	}
 
 	trackModelLoading(id: symbol, model: GltfModel) {

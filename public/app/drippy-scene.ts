@@ -4,6 +4,7 @@ import {
 	clamp,
 	createEffect,
 	css,
+	disposeMaterial,
 	Element,
 	element,
 	Element3D,
@@ -16,7 +17,7 @@ import {
 	signal,
 } from 'lume'
 import type {Accessor} from 'solid-js'
-import {createMemo, createRoot, untrack} from 'solid-js'
+import {createMemo} from 'solid-js'
 import * as THREE from 'three'
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
@@ -26,7 +27,6 @@ import {avatars} from '../consts/avatars.js'
 import {defaultGarmentsConfig} from '../consts/default-garments-config.js'
 import {templates} from '../consts/templates.js'
 
-import {createMutable} from 'solid-js/store'
 import {backgroundScenes} from '../consts/scenes.js'
 import {spaces} from '../consts/spaces.js'
 import {appAnims} from '../elements/animation-select.js'
@@ -116,230 +116,14 @@ export class DrippyScene extends Element {
 	private composer: EffectComposer | null = null
 	private outlinePass: OutlinePass | null = null
 
-	/**
-	 * Stores fabric texture signals in a two-level Map structure to keep them stable across effect reruns.
-	 *
-	 * Structure:
-	 *   Map<blockId, Map<fabricId, {texture, loading, error}>>
-	 *
-	 * Example:
-	 *   fabricTextureSignals
-	 *   ├─ "drippy_Shirt_Bodice_123" (blockId)
-	 *   │  ├─ "fabric_456" → {
-	 *   │  │     texture: Accessor<TextureSet | null>,  // Contains ALL texture maps for this fabric
-	 *   │  │     loading: Accessor<boolean>,
-	 *   │  │     error: Accessor<Error | null>
-	 *   │  │   }
-	 *   │  │   // texture() returns TextureSet with: baseColor, normal, displacement, roughness, alpha
-	 *   │  └─ "fabric_789" → {texture, loading, error}
-	 *   └─ "drippy_Pants_Bottom_456" (blockId)
-	 *      └─ "fabric_101" → {texture, loading, error}
-	 *
-	 * TextureSet (returned by texture()):
-	 *   - baseColor?: THREE.Texture      // Main color texture
-	 *   - normal?: THREE.Texture         // Normal map for surface detail
-	 *   - displacement?: THREE.Texture   // Displacement map for height
-	 *   - roughness?: THREE.Texture      // Roughness map for material properties
-	 *   - alpha?: THREE.Texture          // Alpha/transparency map
-	 *
-	 * Why this structure:
-	 * - Outer Map (blockId): Isolates signals per garment block for easy cleanup
-	 * - Inner Map (fabricId): Tracks each fabric's loading state independently
-	 * - ReturnType<typeof createFabricTexture>: The signal object returned by createFabricTexture()
-	 *   containing reactive texture, loading, and error states
-	 *
-	 * Benefits:
-	 * - Signals persist across effect reruns (no recreation)
-	 * - Enables proper reactive tracking of async texture loading
-	 * - All texture maps per fabric are bundled in TextureSet (accessed via texture())
-	 * - Easy cleanup when blocks or fabrics are removed
-	 */
-	private fabricTextureSignals: Record<string, Record<string, ReturnType<typeof createFabricTexture>>> = createMutable(
-		{},
-	)
-
-	#applyFabricsWithSignals(
-		el: Element3D,
-		loadingId: symbol,
-		templateId: string | undefined,
-		templateCategory: TemplateCategory,
-		blockCategory: BlockCategory,
-	) {
-		const root = el.three
-		const blockId = el.getAttribute('id') || 'unknown'
-
-		// Extract UV data for proper texture scaling
-		const meshes = [...meshesInTree(root)]
-		const uvArray = meshes[0]?.geometry?.attributes?.uv?.array ? Array.from(meshes[0].geometry.attributes.uv.array) : []
-
-		// Get or create signal storage for this block
-		const blockFabricSignals = untrack(() =>
-			this.fabricTextureSignals[blockId]
-				? this.fabricTextureSignals[blockId]
-				: ((this.fabricTextureSignals[blockId] = {}), this.fabricTextureSignals[blockId]),
-		)
-
-		const currentSelectedFabrics = createMemo(() => {
-			const fabricsRecord = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
-
-			return fabricsRecord
-		})
-
-		// Create texture signals when fabrics change
-		createEffect(() => {
-			//templateId
-			const currentFabrics = currentSelectedFabrics()
-
-			// Create signals for new fabrics
-			for (const fabric of Object.values(currentFabrics)) {
-				const textureState = createFabricTexture(() => fabric, uvArray)
-				blockFabricSignals[fabric._id] = textureState
-
-				// Track loading state per fabric ID
-				createEffect(() => {
-					const isLoading = textureState.loading()
-					if (isLoading) {
-						store.addLoadingFabric(fabric._id)
-					} else {
-						store.removeLoadingFabric(fabric._id)
-					}
-
-					onCleanup(() => {
-						store.removeLoadingFabric(fabric._id)
-					})
-				})
-			}
-
-			onCleanup(() => {
-				for (const key in blockFabricSignals) delete blockFabricSignals[key]
-			})
-		})
-
-		const isAnyFabricLoading = createMemo(() => {
-			return Object.values(blockFabricSignals).some(signal => signal.loading())
-		})
-
-		// Track aggregate loading state reactively
-		createEffect(() => {
-			if (!isAnyFabricLoading()) return
-
-			store.addLoadingMaterial(loadingId)
-
-			onCleanup(() => {
-				store.removeLoadingMaterial(loadingId)
-				// NOTE: Don't clear template loading here - the fallback effect below handles it properly
-				// by checking both fabrics AND blocks are loaded
-			})
-		})
-
-		const templateBlocks = createMemo(
-			() => {
-				console.log(
-					'templateBlocks',
-					this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),
-				)
-				return this.renderBlocks.filter(rb => rb.templateCategory === templateCategory)
-			},
-			undefined,
-			{equals: arrayEquals},
-		)
-		const blocksLoaded = createMemo(() => {
-			return templateBlocks().every(rb => !store.isBlockLoading(rb.block._id))
-		})
-
-		// Fallback: if nothing is loading, clear template loading state
-		createEffect(() => {
-			if (!templateId) return
-
-			// Check if all fabrics are loaded
-			const fabricsLoaded = !isAnyFabricLoading()
-
-			// Check if all blocks for this template category are loaded
-			if (templateBlocks().length === 0) return // No blocks selected yet
-
-			// untrack(() => {
-			// 	// Debug: Show what IDs are being tracked as loading
-			// 	console.log('=== LOADING DEBUG ===')
-			// 	console.log('store.loadingBlocks (IDs being tracked):', Object.keys(store.loadingBlocks))
-			// 	console.log(
-			// 		'templateBlocks IDs we are checking:',
-			// 		templateBlocks.map(rb => rb.id),
-			// 	)
-			// 	console.log('Per-block loading status:')
-			// 	templateBlocks.forEach(rb => {
-			// 		console.log(`  ${rb.block._id}: isLoading=${store.isBlockLoading(rb.block._id)}`)
-			// 	})
-			// 	console.log('blocksLoaded:', blocksLoaded)
-			// 	console.log('===================')
-			// })
-
-			// Only clear loading state when BOTH fabrics and blocks are done
-			if (fabricsLoaded && blocksLoaded()) {
-				console.log('✅ CLEARING loading template:', templateId)
-				store.clearLoadingTemplate(templateId)
-			}
-		})
-
-		// Apply textures reactively as they load
-		createEffect(() => {
-			const currentFabrics = currentSelectedFabrics()
-
-			// Create a map for mesh to meshes key
-			const meshToFabricMeshesMap = new Map<string, string>()
-			for (const meshesKey of Object.keys(currentFabrics)) {
-				const meshArray = meshesKey.split('-')
-				for (const mesh of meshArray) {
-					meshToFabricMeshesMap.set(mesh, meshesKey)
-				}
-			}
-
-			const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
-
-			for (const mesh of meshes) {
-				// Check if there's a specific fabric assigned to this mesh
-				const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
-				const meshesKey = meshToFabricMeshesMap.get(meshKey)
-				const fabricToUse = currentFabrics[meshesKey || 'default']
-
-				if (fabricToUse) {
-					const textureState = blockFabricSignals[fabricToUse._id]
-					if (textureState) {
-						const textureSet = textureState.texture()
-						const isLoading = textureState.loading()
-						const error = textureState.error()
-
-						if (textureSet && !isLoading && !error) {
-							mesh.material = new THREE.MeshPhysicalMaterial()
-							textureManager.applyTexturesToMaterial(mesh.material, textureSet)
-						}
-					}
-				}
-			}
-
-			el.needsUpdate()
-		})
-
-		const cleanup = () => {
-			store.removeLoadingMaterial(loadingId)
-			if (!el.isConnected) {
-				delete this.fabricTextureSignals[blockId]
-				this.#resetMaterialsToDefault(el)
-			}
-		}
-
-		onCleanup(cleanup)
-	}
-
 	// Reset materials to default state (no textures)
-	#resetMaterialsToDefault(el: Element3D) {
-		for (const mesh of meshesInTree(el.three)) {
-			const material = mesh.material as THREE.MeshPhysicalMaterial
-			material.map = null
-			material.normalMap = null
-			material.roughnessMap = null
-			// material.displacementMap = null
-			material.needsUpdate = true
-		}
+	#resetMaterialProperties(el: Element3D, mesh: THREE.Mesh) {
+		const material = mesh.material as THREE.MeshPhysicalMaterial
+		material.map = null
+		material.normalMap = null
+		material.roughnessMap = null
+		// material.displacementMap = null
+		material.needsUpdate = true
 
 		el.needsUpdate()
 	}
@@ -493,7 +277,7 @@ export class DrippyScene extends Element {
 			const defaultGarments = defaultGarmentsConfig[gender]
 			if (!defaultGarments || defaultGarments.length === 0) {
 				this._defaultRenderBlocks = []
-				return
+				throw new Error(`No default garments configured for gender, ${gender}`)
 			}
 
 			const blocks: DefaultRenderBlock[] = []
@@ -676,13 +460,13 @@ export class DrippyScene extends Element {
 			let progressTimeouts: number[] = []
 
 			createEffect(() => {
-				const loadingCount = store.drippySceneLoads.size
+				const loadingCount = store.drippySceneLoads.length
 
 				if (loadingCount > 0) {
 					// Delay showing loader for 500ms - skip for fast loads
 					if (!this.isLoading && loaderTimeout === undefined) {
 						loaderTimeout = window.setTimeout(() => {
-							if (store.drippySceneLoads.size > 0) {
+							if (store.isDrippySceneLoading) {
 								this.isLoading = true
 								this.loadingProgress = 10
 							}
@@ -714,7 +498,7 @@ export class DrippyScene extends Element {
 
 								progressStages.forEach(({progress, delay}) => {
 									const timeoutId = window.setTimeout(() => {
-										if (store.drippySceneLoads.size === 1) {
+										if (store.drippySceneLoads.length === 1) {
 											this.loadingProgress = progress
 										}
 									}, delay)
@@ -842,33 +626,62 @@ export class DrippyScene extends Element {
 				}
 			})
 
-			// Stable loading IDs per block
+			const modelsInSyncWithRenderBlocks = createMemo(() => {
+				for (const [i, rb] of this.renderBlocks.entries()) {
+					console.log('render block', rb.id)
+					if (rb.id !== garmentModels()[i]?.getAttribute('id')) return false
+				}
+				return true
+			})
+
+			const garmentModelLoads = createMemo(() => [...garmentModels()].map(el => onModelLoad(el)))
+
+			const garmentModelsInSyncAndLoaded = createMemo(() => {
+				if (!modelsInSyncWithRenderBlocks()) return false
+				return garmentModelLoads().every(loaded => loaded())
+			})
+
+			const garmentUvArrays = createMemo(() => {
+				return [...garmentModels()].map(el => {
+					const root = el.three
+
+					// Extract UV data for proper texture scaling
+					const meshes = [...meshesInTree(root)]
+					const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
+						? Array.from(meshes[0].geometry.attributes.uv.array)
+						: []
+					return uvArray
+				})
+			})
+
+			createEffect(() => {
+				console.log(
+					modelsInSyncWithRenderBlocks()
+						? '✅ Models in sync with render blocks'
+						: '❌ Models NOT in sync with render blocks',
+				)
+			})
+
 			const blockLoadingIds = new Map<string, symbol>()
-			const fabricsBindingRoots = new Map<Element, () => void>()
 
 			// Re-apply materials whenever the selected fabrics change or models mount
 			createEffect(() => {
-				// Cause reactive re-run when the number of blocks changes
-				if (this.renderBlocks.length === 0) {
-					for (const disposeRoot of fabricsBindingRoots.values()) {
-						disposeRoot()
-					}
-					fabricsBindingRoots.clear()
-					return
-				}
+				console.log('garments effect')
 
-				const activeElements = new Set<Element>()
+				if (!garmentModelsInSyncAndLoaded()) return
 
 				// Process each model using its data-blockid to find the correct fabric
-				for (const el of garmentModels()) {
-					activeElements.add(el)
+				// for (const el of garmentModels()) {
+				for (const [blockIndex, renderBlock] of this.renderBlocks.entries()) {
+					// Use UV data for proper texture scaling (TODO do we still
+					// need the relic from the old app?).  NOTE! We need to wait
+					// for all garment models to load to ensure UVs are ready.
+					// Unfortunately, this currently means fabrics won't start
+					// loading until all garments are loaded.
+					if (!garmentModelLoads()[blockIndex]()) continue
+					const uvArray = garmentUvArrays()[blockIndex]
 
-					if (fabricsBindingRoots.has(el)) {
-						continue
-					}
-
-					const blockId = el.getAttribute('id')
-					if (!blockId) continue
+					const blockId = renderBlock.id
 
 					// Parse blockId to extract template category, block category, and block ID
 					// Format: "TemplateCategory-BlockCategory-BlockId" or "TemplateCategory-BlockCategory-BlockId-mirror"
@@ -876,41 +689,166 @@ export class DrippyScene extends Element {
 					const baseBlockId = isMirror ? blockId.slice(0, -7) : blockId // Remove "-mirror" if present
 					const parts = baseBlockId.split('-')
 
-					if (parts.length < 3) continue
+					if (parts.length < 3) {
+						console.error('Invalid block ID format:', blockId)
+						continue
+					}
 
 					const templateCategory = parts[1] as TemplateCategory
 					const blockCategory = parts[2] as BlockCategory
+					const template = store.selectedTemplates[templateCategory]
+					const selectedFabrics = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
 
-					const disposeRoot = createRoot(dispose => {
-						// Get or create stable loading ID
-						let loadingId = blockLoadingIds.get(blockId)
-						if (!loadingId) {
-							loadingId = Symbol(`material-${blockId}`)
-							blockLoadingIds.set(blockId, loadingId)
+					// Get or create stable loading ID
+					let loadingId = blockLoadingIds.get(blockId)
+					if (!loadingId) blockLoadingIds.set(blockId, (loadingId = Symbol(`material-${blockId}`)))
+
+					const templateId = template?._id
+
+					const blockFabricSignals: Record<string, ReturnType<typeof createFabricTexture>> = {}
+
+					// Create texture signals when fabrics change
+					createEffect(() => {
+						console.log('garment fabric effect')
+						//templateId
+
+						// Create signals for new fabrics
+						for (const fabric of Object.values(selectedFabrics)) {
+							const textureState = createFabricTexture(() => fabric, uvArray)
+							blockFabricSignals[fabric._id] = textureState
+
+							// Track loading state per fabric ID
+							createEffect(() => {
+								console.log('fabric loading effect')
+								const isLoading = textureState.loading()
+								if (isLoading) {
+									store.addLoadingFabric(fabric._id)
+								} else {
+									store.removeLoadingFabric(fabric._id)
+								}
+
+								onCleanup(() => {
+									store.removeLoadingFabric(fabric._id)
+								})
+							})
 						}
 
-						const modelLoaded = onModelLoad(el)
-
-						createEffect(() => {
-							if (!modelLoaded()) return
-
-							const template = store.selectedTemplates[templateCategory]
-
-							this.#applyFabricsWithSignals(el, loadingId!, template?._id, templateCategory, blockCategory)
+						onCleanup(() => {
+							for (const key in blockFabricSignals) delete blockFabricSignals[key]
 						})
-
-						return dispose
 					})
 
-					fabricsBindingRoots.set(el, disposeRoot)
-				}
+					const isAnyFabricLoading = createMemo(() => {
+						return Object.values(blockFabricSignals).some(signal => signal.loading())
+					})
 
-				// Dispose of roots whose elements are no longer in the scene
-				for (const [el, disposeRoot] of fabricsBindingRoots.entries()) {
-					if (!activeElements.has(el)) {
-						disposeRoot()
-						fabricsBindingRoots.delete(el)
-					}
+					// Track aggregate loading state reactively
+					createEffect(() => {
+						if (!isAnyFabricLoading()) return
+
+						store.addLoadingMaterial(loadingId)
+
+						onCleanup(() => store.removeLoadingMaterial(loadingId))
+					})
+
+					const templateBlocks = createMemo(
+						() => {
+							console.log(
+								'templateBlocks',
+								this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),
+							)
+							return this.renderBlocks.filter(rb => rb.templateCategory === templateCategory)
+						},
+						undefined,
+						{equals: arrayEquals},
+					)
+					const blocksLoaded = createMemo(() => {
+						return templateBlocks().every(rb => !store.isBlockLoading(rb.block._id))
+					})
+
+					// Fallback: if nothing is loading, clear template loading state
+					createEffect(() => {
+						if (!templateId) return
+
+						// Check if all fabrics are loaded
+						const fabricsLoaded = !isAnyFabricLoading()
+
+						// Check if all blocks for this template category are loaded
+						if (templateBlocks().length === 0) return // No blocks selected yet
+
+						// Only clear loading state when BOTH fabrics and blocks are done
+						if (fabricsLoaded && blocksLoaded()) {
+							console.log('✅ CLEARING loading template:', templateId)
+							store.clearLoadingTemplate(templateId)
+						}
+					})
+
+					// Apply textures reactively as they load
+					createEffect(() => {
+						if (isAnyFabricLoading()) return
+
+						// Create a map for mesh to meshes key
+						const meshToFabricMeshesMap = new Map<string, string>()
+						for (const meshesKey of Object.keys(selectedFabrics)) {
+							const meshArray = meshesKey.split('-')
+							for (const mesh of meshArray) {
+								meshToFabricMeshesMap.set(mesh, meshesKey)
+							}
+						}
+
+						const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
+						const el = garmentModels()[blockIndex]
+						const meshes = [...meshesInTree(el.three)]
+
+						for (const mesh of meshes) {
+							// Check if there's a specific fabric assigned to this mesh
+							const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
+							const meshesKey = meshToFabricMeshesMap.get(meshKey)
+
+							const fabricToUse = selectedFabrics[meshesKey || 'default']
+							if (!fabricToUse) continue
+
+							const textureState = blockFabricSignals[fabricToUse._id]
+							if (!textureState) continue
+
+							const textureSet = textureState.texture()!
+							const isLoading = textureState.loading()!
+							const error = textureState.error()
+
+							if (error) {
+								console.error('Error loading texture for fabric:', fabricToUse._id, error)
+								continue
+							}
+
+							console.assert(textureSet, 'Texture set should be available here')
+							console.assert(!isLoading, 'Texture should not be loading here')
+
+							// if (textureSet && !isLoading) {
+							// TODO revisit this to ensure materials/textures
+							// are properly disposed.
+							// Maybe we don't need to create a new material
+							// every time.
+							disposeMaterial(mesh)
+							mesh.material = new THREE.MeshPhysicalMaterial()
+							textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+							onCleanup(() => {
+								disposeMaterial(mesh)
+								this.#resetMaterialProperties(el, mesh)
+								el.needsUpdate()
+							})
+							// }
+						}
+
+						el.needsUpdate()
+					})
+
+					onCleanup(() => {
+						store.removeLoadingMaterial(loadingId)
+						// if (!el.isConnected) {
+						// this.#resetMaterialProperties(el)
+						// TODO dispose materials/textures
+						// }
+					})
 				}
 			})
 

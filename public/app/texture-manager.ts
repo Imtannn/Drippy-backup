@@ -248,6 +248,7 @@ class TextureManager {
 		if (uvArray.length === 0) return 1
 		const absValues = uvArray.map((u: number) => Math.abs(u))
 		const max = Math.max(...absValues)
+		console.warn('UV magnitude larger than 1:', max)
 		return max > 1 ? 1000 : 1
 	}
 
