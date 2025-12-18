@@ -32,6 +32,7 @@ type BottomSheetAttributes =
 	| 'panelWidth'
 	| 'onsnap'
 	| 'disabledScroll'
+	| 'scaleScene'
 @element
 export class BottomSheet extends Element {
 	static readonly elementName = 'bottom-sheet'
@@ -51,6 +52,7 @@ export class BottomSheet extends Element {
 	@attribute panelWidth: string | null = null
 	@eventAttribute onsnap: () => void = () => {}
 	@booleanAttribute disabledScroll = false
+	@booleanAttribute scaleScene = false
 
 	private sheetHeight: number | null = null
 	private dragState = {
@@ -65,9 +67,29 @@ export class BottomSheet extends Element {
 	private updateBottomSheetHeightVar() {
 		if (!this.isDesktop && this.sheetHeight) {
 			document.documentElement.style.setProperty('--bottom-sheet-height', `${this.sheetHeight}px`)
+
+			if (this.scaleScene) {
+				// Calculate scene scale: smaller sheet = larger scale
+				// Sheet height ranges from ~41% to ~88% of viewport
+				// Map to scale range: 1.0 (at max) to 1.25 (at min)
+				const viewportHeight = window.innerHeight
+				const snapPoints = this.#getSnapPoints()
+				const minHeightRatio = snapPoints[0]
+				const maxHeightRatio = snapPoints[snapPoints.length - 1]
+				const currentRatio = this.sheetHeight / viewportHeight
+
+				// Normalize: 0 at max height, 1 at min height
+				const normalized = (maxHeightRatio - currentRatio) / (maxHeightRatio - minHeightRatio)
+				const clampedNormalized = Math.max(0, Math.min(1, normalized))
+
+				// Scale: 1.0 at max height (normalized=0), 1.25 at min height (normalized=1)
+				const scale = 1 + clampedNormalized * 0.5
+				document.documentElement.style.setProperty('--scene-scale', scale.toString())
+			}
 		} else {
 			// On desktop, remove the custom property to use the default fallback
 			document.documentElement.style.removeProperty('--bottom-sheet-height')
+			document.documentElement.style.removeProperty('--scene-scale')
 		}
 	}
 

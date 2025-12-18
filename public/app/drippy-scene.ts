@@ -1375,8 +1375,9 @@ export class DrippyScene extends Element {
 				-webkit-transform: unset !important;
 			}
 			#lume-scene-container {
-				transform: var(--overrideSceneTranslateY, var(--sceneTranslateY));
-				-webkit-transform: var(--overrideSceneTranslateY, var(--sceneTranslateY));
+				transform: var(--overrideSceneTranslateY, var(--sceneTranslateY)) scale(var(--scene-scale, 1));
+				-webkit-transform: var(--overrideSceneTranslateY, var(--sceneTranslateY)) scale(var(--scene-scale, 1));
+				transform-origin: center center;
 			}
 
 			lume-scene {
