@@ -980,14 +980,26 @@ export class DrippyScene extends Element {
 					const models = garmentModels()
 					if (models.length === 0) return
 
-					// "default" means all meshes in the garment
+					// "default" means all meshes in the garment for the currently selected template only
 					const isDefault = selectingPiece === 'default'
 					const pieceNames = isDefault ? [] : selectingPiece.split('-')
 					const selectedMeshes: THREE.Object3D[] = []
 
+					// Get the template category being edited (from remix overlay)
+					const editingTemplateCategory = store.remixOverlayTemplate?.category
+
 					// Process models in chunks to avoid long blocking
 					for (const garmentModel of models) {
 						if (!garmentModel.three) continue
+
+						// For "default", only outline models belonging to the selected template
+						if (isDefault && editingTemplateCategory) {
+							const modelId = garmentModel.getAttribute('id') || ''
+							// ID format: collection-templateCategory-blockCategory-blockId
+							const parts = modelId.split('-')
+							const modelTemplateCategory = parts[1] as TemplateCategory | undefined
+							if (modelTemplateCategory !== editingTemplateCategory) continue
+						}
 
 						garmentModel.three.traverse((obj: THREE.Object3D) => {
 							if (!(obj as THREE.Mesh).isMesh) return
