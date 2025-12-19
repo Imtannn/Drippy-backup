@@ -623,6 +623,7 @@ export class TemplateView extends Element {
 			show-remix-overlay=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
 			disabled-scroll=${() => this.disabledScroll}
 			float-direction="right"
+			scale-scene
 			default-snap=${() => (this.showDetailView ? '0.88' : '0.41')}
 			snap-points="0.02,0.2,0.41,0.6,0.88"
 			max-height="100vh"

@@ -108,6 +108,7 @@ export class RemixOverlay extends Element {
 		})
 
 		// Set activeTab immediately when selectedTemplate is set
+		// FIX Maximum call stack size exceeded
 		this.createEffect(() => {
 			const template = this.selectedTemplate
 			if (template) {
@@ -164,24 +165,31 @@ export class RemixOverlay extends Element {
 					})
 					.filter(fabric => fabric !== undefined) as Fabric[]
 
-				const defaultFabrics = fabrics['default']
+				// Get categories from option fabrics
+				const optionCategories = new Set(optionFabrics.map(f => f.category).filter(Boolean))
+
+				// Filter default fabrics to only include those with matching categories (and not already in options)
+				const filteredDefaultFabrics = fabrics['default'].filter(
+					fabric => fabric.category && optionCategories.has(fabric.category),
+				)
+
 				if (optionFabrics.length > 0) {
-					availableFabrics['default'] = [...optionFabrics, ...defaultFabrics]
+					availableFabrics['default'] = [...optionFabrics, ...filteredDefaultFabrics]
 				}
 
 				// Handle extraMaterials if they exist - use optionFabrics directly
 				if (this.selectedTemplate.extraMaterials && this.selectedTemplate.extraMaterials.length > 0) {
 					for (const extraMaterial of this.selectedTemplate.extraMaterials) {
-						availableFabrics[extraMaterial.mesh] = [...optionFabrics, ...defaultFabrics]
+						availableFabrics[extraMaterial.mesh] = [...optionFabrics, ...filteredDefaultFabrics]
 					}
 				}
 
 				this.availableFabrics = availableFabrics
 			} else {
-				const defaultFabrics = fabrics['default']
 				this.availableFabrics =
 					templateHelpers.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
-				this.availableFabrics['default'] = [...this.availableFabrics['default'], ...defaultFabrics]
+
+				this.availableFabrics['default'] = this.availableFabrics['default']
 			}
 
 			// Make sure the overlay is scrolled to the top on opening
