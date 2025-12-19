@@ -1,7 +1,8 @@
-import {attribute, booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
+import {attribute, booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import '../elements/logic/show-when.js'
+import '../elements/tabs.js'
 import type {BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
+import type {Fabric, FabricCategory} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import './loading-spinner-overlay.js'
 import {store} from './store.js'
@@ -17,6 +18,8 @@ export class FabricSelection extends Element {
 	@attribute selectedTemplateCategory: TemplateCategory | null = null
 	@booleanAttribute isRemix = false
 
+	@signal selectedCategoryTab: FabricCategory | 'All' = 'All'
+
 	connectedCallback() {
 		super.connectedCallback()
 
@@ -24,6 +27,14 @@ export class FabricSelection extends Element {
 			void this.selectedTemplateCategory
 			if (!store.selectingPiece && this.pieceSelections.length > 0) {
 				store.setSelectingPiece = this.pieceSelections[0]
+			}
+		})
+
+		// Reset category tab when piece or fabrics change
+		this.createEffect(() => {
+			const categories = this.#getFabricCategories()
+			if (categories.length > 0 && !categories.includes(this.selectedCategoryTab)) {
+				this.selectedCategoryTab = 'All'
 			}
 		})
 	}
@@ -109,58 +120,101 @@ export class FabricSelection extends Element {
 		return Object.values(templateSelection).some(selection => selection?.fabrics?.[piece]?._id === fabric._id)
 	}
 
+	#getFabricCategories = (): (FabricCategory | 'All')[] => {
+		const fabrics = this.availableFabrics[store.selectingPiece || 'default'] || []
+		const categoriesSet = new Set<FabricCategory>()
+		for (const fabric of fabrics) {
+			if (fabric.category) {
+				categoriesSet.add(fabric.category)
+			}
+		}
+		const categories = Array.from(categoriesSet).sort()
+		return categories.length > 1 ? ['All', ...categories] : ['All']
+	}
+
+	#getFilteredFabrics = (): Fabric[] => {
+		const fabrics = this.availableFabrics[store.selectingPiece || 'default'] || []
+		if (this.selectedCategoryTab === 'All') {
+			return fabrics
+		}
+		return fabrics.filter(fabric => fabric.category === this.selectedCategoryTab)
+	}
+
+	#onCategoryTabChange = (e: CustomEvent) => {
+		this.selectedCategoryTab = e.detail.value
+	}
+
 	template = () => html`
+		<show-when
+			condition=${() => this.#getPiecesFabrics(this.pieceSelections).length > 1}
+			content=${() => html`
+				<div class="fabric-selection">
+					<for-each
+						items=${() => this.#getPiecesFabrics(this.pieceSelections)}
+						content=${() => (pieceFabric: Fabric & {assignedMesh: string}) => html`
+							<button
+								class="piece-select-button"
+								onclick=${() => this.#onPieceSelect(pieceFabric.assignedMesh)}
+								data-piece=${() => pieceFabric.assignedMesh}
+								classList=${() => ({active: pieceFabric.assignedMesh === store.selectingPiece})}
+							>
+								<img src=${() => pieceFabric.thumb} alt=${() => pieceFabric.materialName} />
+							</button>
+						`}
+					></for-each>
+				</div>
+			`}
+		></show-when>
 
-			<show-when
-				condition=${() => this.#getPiecesFabrics(this.pieceSelections).length > 1}
-				content=${() => html`
-					<div class="fabric-selection">
-						<for-each
-							items=${() => this.#getPiecesFabrics(this.pieceSelections)}
-							content=${() => (pieceFabric: Fabric & {assignedMesh: string}) => html`
-								<button
-									class="piece-select-button"
-									onclick=${() => this.#onPieceSelect(pieceFabric.assignedMesh)}
-									data-piece=${() => pieceFabric.assignedMesh}
-									classList=${() => ({active: pieceFabric.assignedMesh === store.selectingPiece})}
-								>
-									<img src=${() => pieceFabric.thumb} alt=${() => pieceFabric.materialName} />
-								</button>
-							`}
-						></for-each>
-					</div>
-				`}
-			></show-when>
+		<for-each
+			items=${() => this.pieceSelections}
+			content=${() => (piece: string) => html`
+				<show-when
+					condition=${() => piece === store.selectingPiece}
+					content=${() => html`
+						<tabs-provider default-value="All" ontabchange=${this.#onCategoryTabChange}>
+							<show-when
+								condition=${() => this.#getFabricCategories().length > 1}
+								content=${() => html`
+									<div class="category-tabs-container">
+										<tabs-list>
+											<for-each
+												items=${() => this.#getFabricCategories()}
+												content=${() => (category: FabricCategory | 'All') => html`
+													<tabs-trigger selected-value=${() => category}>${() => category}</tabs-trigger>
+												`}
+											></for-each>
+										</tabs-list>
+									</div>
+								`}
+							></show-when>
 
-		<for-each items=${() => this.pieceSelections} content=${() => (piece: string) => html`
-			<show-when
-				condition=${() => piece === store.selectingPiece}
-				content=${() => html`
-					<div class="items-grid">
-						<for-each
-							items=${() => this.availableFabrics[store.selectingPiece || 'default']}
-							content=${() => (fabric: Fabric) => html`
-								<div class="item-card-container">
-									<item-card
-										item-active=${() => this.#isFabricActive(fabric, piece)}
-										item-src=${() => fabric.thumb}
-										item-alt=${() => fabric.materialName}
-										item-value=${() => fabric}
-										oncardselected=${(e: CustomEvent) => this.#onFabricSelect(e, piece)}
-									></item-card>
-									<show-when
-										condition=${() => store.isFabricLoading(fabric._id)}
-										content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
-									></show-when>
-								</div>
-							`}
-						></for-each>
-					</div>
-				`}
-			>
-			</show-when>
-		`}></for-each>
-	</div>
+							<div class="items-grid">
+								<for-each
+									items=${() => this.#getFilteredFabrics()}
+									content=${() => (fabric: Fabric) => html`
+										<div class="item-card-container">
+											<item-card
+												item-active=${() => this.#isFabricActive(fabric, piece)}
+												item-src=${() => fabric.thumb}
+												item-alt=${() => fabric.materialName}
+												item-value=${() => fabric}
+												oncardselected=${(e: CustomEvent) => this.#onFabricSelect(e, piece)}
+											></item-card>
+											<show-when
+												condition=${() => store.isFabricLoading(fabric._id)}
+												content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
+											></show-when>
+										</div>
+									`}
+								></for-each>
+							</div>
+						</tabs-provider>
+					`}
+				>
+				</show-when>
+			`}
+		></for-each>
 	`
 
 	css = css/*css*/ `
@@ -202,6 +256,10 @@ export class FabricSelection extends Element {
 
 		.piece-select-button.active {
 			border: 2px solid var(--uiColorAccentViolet);
+		}
+
+		.category-tabs-container {
+			margin-bottom: var(--uiSpacingSmall);
 		}
 
 		.items-grid {
