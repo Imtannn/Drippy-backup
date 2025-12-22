@@ -68,7 +68,6 @@ class TemplateHelpers {
 
 		// Include default fabrics with the same category (not already in the collection)
 		const defaultFabrics = fabrics['default'].filter(fabric => fabric.category === fabricCategory)
-		// const defaultFabrics = fabrics['default']
 
 		return [...fabricsInCategory, ...defaultFabrics]
 	}
