@@ -179,7 +179,7 @@ export class DrippyScene extends Element {
 		)
 
 		const currentSelectedFabrics = createMemo(() => {
-			const fabricsRecord = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
+			const fabricsRecord = this.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
 
 			return fabricsRecord
 		})
