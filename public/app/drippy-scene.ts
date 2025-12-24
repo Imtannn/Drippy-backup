@@ -558,6 +558,7 @@ export class DrippyScene extends Element {
 						store.view === 'order-items' ||
 						store.view === 'order-size' ||
 						store.view === 'custom-measurement' ||
+						store.view === 'iframe-popup' ||
 						store.view === 'success' ||
 						store.view === 'share' ||
 						store.view === 'template'

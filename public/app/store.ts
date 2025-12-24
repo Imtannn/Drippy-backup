@@ -178,6 +178,8 @@ class Store {
 	// Screenshot cache for garment images
 	screenshotCache = new Map<TemplateCategory, string>()
 	remixOverlayTemplate = null as Template | null
+	// URL for iframe popup
+	iframePopupUrl: string | null = null
 	// Currently selected piece for fabric selection (used for outline highlighting)
 	selectingPiece: string | null = null
 	order = {
