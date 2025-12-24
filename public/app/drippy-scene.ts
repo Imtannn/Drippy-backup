@@ -179,7 +179,7 @@ export class DrippyScene extends Element {
 		)
 
 		const currentSelectedFabrics = createMemo(() => {
-			const fabricsRecord = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
+			const fabricsRecord = this.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
 
 			return fabricsRecord
 		})
@@ -895,7 +895,6 @@ export class DrippyScene extends Element {
 					this.outlinePass.edgeGlow = 0
 					this.outlinePass.edgeThickness = 4
 					this.outlinePass.visibleEdgeColor.set(0x9b59b6) // purple accent
-					this.outlinePass.hiddenEdgeColor.set(0x9b59b6)
 					this.composer.addPass(this.outlinePass)
 
 					// const bloomPass = new BloomPass(1, 25, 4)

@@ -6149,7 +6149,7 @@ export const blocks: Record<string, Block[]> = {
 	],
 	'h&m': [
 		{
-			_id: 'a2088f5a-6556-4639-a6ad-b355a86f3c5c',
+			_id: 'dca6e38c-ac96-4531-8153-0c67b8fd7d24',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Skirt/Silk_satin_maxi_skirt_Skirt/skirt_1919.webp',
 			modelFile:
@@ -6158,37 +6158,68 @@ export const blocks: Record<string, Block[]> = {
 			avatar: 'female',
 			category: 'Skirt',
 			collection: 'h&m',
-			templateId: 'b36b8b56-b667-42cf-b6e8-906799556881',
+			templateId: '8dce15bb-3253-45c4-b7f8-23dec57462cc',
 			templateName: 'Silk satin maxi skirt',
 			templateCategory: 'Skirt',
 		},
 		{
-			_id: 'a82fd6a4-7026-47bd-a915-983c7842373a',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Skirt/Flared_Skirt_Skirt/skirt_1920.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Skirt/Flared_Skirt_Skirt/skirt_1920.glb',
-			blockName: 'skirt 1920',
+			_id: 'b3784f1a-b7bc-4363-98ab-0ec08ff962e1',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Skirt/Flared_Skirt_Skirt/skirt_1920-a_pose.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Skirt/Flared_Skirt_Skirt/skirt_1920-a_pose.glb',
+			blockName: 'skirt 1920-a pose',
 			avatar: 'female',
 			category: 'Skirt',
 			collection: 'h&m',
-			templateId: '60690b2a-60aa-473a-a703-9be22aef6ae2',
+			templateId: '566f2284-17e0-43d5-965f-493bf9d8f943',
 			templateName: 'Flared Skirt',
 			templateCategory: 'Skirt',
 		},
 		{
-			_id: 'ee06f7fd-3508-4049-b8df-ff9ec08c25ea',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Skirt/Frilled_mini_skort_Skirt/skirt_1917.webp',
+			_id: '28434b56-e290-40fe-9302-9329a8ba51e5',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Skirt/Frilled_mini_skort_Skirt/skirt_1917-a_pose.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Skirt/Frilled_mini_skort_Skirt/skirt_1917.glb',
-			blockName: 'skirt 1917',
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Skirt/Frilled_mini_skort_Skirt/skirt_1917-a_pose.glb',
+			blockName: 'skirt 1917-a pose',
 			avatar: 'female',
 			category: 'Skirt',
 			collection: 'h&m',
-			templateId: '594491aa-9b86-4857-8e35-cdfd0dbf5de9',
+			templateId: '41249d32-4671-4e9a-99cd-6f6f269d435c',
 			templateName: 'Frilled mini skort',
 			templateCategory: 'Skirt',
 		},
 		{
-			_id: '2441acd0-8c06-4007-aa40-e03984b0d136',
+			_id: '8017d9f0-4ed1-4cb8-99d2-a676e0987ea8',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Dress/Draped_One_Shoulder_Dress_Fullbody/full_body_1922-_a_pose.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Dress/Draped_One_Shoulder_Dress_Fullbody/full_body_1922-_a_pose.glb',
+			blockName: 'full body 1922- a pose',
+			avatar: 'female',
+			category: 'Dress',
+			collection: 'h&m',
+			templateId: '65c0d862-9bfe-4a01-83b4-dc2521d9edf0',
+			templateName: 'Draped One Shoulder Dress',
+			templateCategory: 'Dress',
+		},
+		{
+			_id: 'c76f11bc-018f-4ef3-923b-a84fb099599c',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Dress/Bow_Detail_One_Shoulder_Dress_Fullbody/fullbody_1915-a_pose.webp',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Dress/Bow_Detail_One_Shoulder_Dress_Fullbody/fullbody_1915-a_pose.glb',
+			blockName: 'fullbody 1915-a pose',
+			avatar: 'female',
+			category: 'Dress',
+			collection: 'h&m',
+			templateId: 'f1fdb73e-7ff2-44d7-8451-a76d24d92bc6',
+			templateName: 'Bow Detail One Shoulder Dress',
+			templateCategory: 'Dress',
+		},
+		{
+			_id: '349e3b15-fb76-45af-80cd-4b75dff234f1',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Dress/Black_Bow_Fullbody/full_body_1921.webp',
 			modelFile:
 				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Dress/Black_Bow_Fullbody/full_body_1921.glb',
@@ -6196,54 +6227,26 @@ export const blocks: Record<string, Block[]> = {
 			avatar: 'female',
 			category: 'Full Body',
 			collection: 'h&m',
-			templateId: 'c5872246-bdd3-405c-936c-dd2ada70ea61',
+			templateId: '31d2352c-8b33-4954-883f-23190e707091',
 			templateName: 'Black Bow',
 			templateCategory: 'Dress',
 		},
 		{
-			_id: '9347eb68-0dce-449b-bf20-172153b666c6',
+			_id: '1c0ae633-a69b-4791-9965-105f827d7471',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Dress/Bow-detail_One-shoulder_Dress_Fullbody/fullbody_1915-a_pose_.webp',
+				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Dress/Draped_Halterneck_Dress_Fullbody/fullbody_1914-a_pose.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Dress/Bow-detail_One-shoulder_Dress_Fullbody/fullbody_1915-a_pose_.glb',
-			blockName: 'fullbody 1915-a pose',
+				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Dress/Draped_Halterneck_Dress_Fullbody/fullbody_1914-a_pose.glb',
+			blockName: 'fullbody 1914-a pose',
 			avatar: 'female',
 			category: 'Dress',
 			collection: 'h&m',
-			templateId: 'a49796b7-320e-4f8a-88fa-798a9a60843d',
-			templateName: 'Bow',
-			templateCategory: 'Dress',
-		},
-		{
-			_id: '284446d7-d286-4cea-8191-f368b0f75732',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Dress/Draped_Halterneck_Dress_Fullbody/fullbody_1914.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Dress/Draped_Halterneck_Dress_Fullbody/fullbody_1914.glb',
-			blockName: 'fullbody 1914',
-			avatar: 'female',
-			category: 'Dress',
-			collection: 'h&m',
-			templateId: '978518cd-9aa6-4a3d-a710-863864c51b65',
+			templateId: 'aed52e0d-93b2-4717-9997-70f772632e68',
 			templateName: 'Draped Halterneck Dress',
 			templateCategory: 'Dress',
 		},
 		{
-			_id: '318a200d-5c85-466b-a550-5ee97c5b8fcc',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Dress/Draped_One-shoulder_Dress_Fullbody/full_body_1922.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Dress/Draped_One-shoulder_Dress_Fullbody/full_body_1922.glb',
-			blockName: 'full body 1922',
-			avatar: 'female',
-			category: 'Dress',
-			collection: 'h&m',
-			templateId: '9f1c6b07-a319-4440-835a-70834d6e2924',
-			templateName: 'Draped One',
-			templateCategory: 'Dress',
-		},
-		{
-			_id: '4917cce5-d3ad-4376-a979-11fed875c4da',
+			_id: '785a648b-9ebc-432b-8aaf-06d7f37a9407',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Pants/Jeans_Short_Pants/pants_1912-a_pose_.webp',
 			modelFile:
@@ -6252,12 +6255,12 @@ export const blocks: Record<string, Block[]> = {
 			avatar: 'female',
 			category: 'Pants',
 			collection: 'h&m',
-			templateId: 'b941926e-8998-4a85-8cc0-0f098964e347',
+			templateId: 'f5c58a1a-5dd2-4a3a-b44b-b612e0447831',
 			templateName: 'Jeans Short',
 			templateCategory: 'Pants',
 		},
 		{
-			_id: '981395ab-b012-4c88-a527-d49bd1c7d856',
+			_id: 'f56fcb44-4341-42b5-94e6-b1fc6c3f11f2',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Pants/Jersey_Pants_pants/pants_1909-a_pose_.webp',
 			modelFile:
@@ -6266,12 +6269,12 @@ export const blocks: Record<string, Block[]> = {
 			avatar: 'female',
 			category: 'Pants',
 			collection: 'h&m',
-			templateId: '0fb8029c-2e28-4281-956a-df9b1d4a6a0e',
+			templateId: 'a485f271-470f-428b-a731-e22cdd83d87c',
 			templateName: 'Jersey Pants',
 			templateCategory: 'Pants',
 		},
 		{
-			_id: 'f3d200e9-48be-4bf0-ba71-f24f517650a5',
+			_id: '7c8c7ca9-a7e6-4e54-941b-f17a90ec1a7d',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Top/Frilled_mini_skort_Bodice/bodice_1916.webp',
 			modelFile:
 				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Top/Frilled_mini_skort_Bodice/bodice_1916.glb',
@@ -6279,12 +6282,12 @@ export const blocks: Record<string, Block[]> = {
 			avatar: 'female',
 			category: 'Bodice',
 			collection: 'h&m',
-			templateId: '20b84520-e44d-423b-af29-d29548bc0302',
+			templateId: '0afcddc1-d760-44ba-9aee-c40f82b593b8',
 			templateName: 'Frilled mini skort',
 			templateCategory: 'Top',
 		},
 		{
-			_id: 'f62bb22d-5a74-4316-9b8c-b090e62a0719',
+			_id: 'abf83635-df49-4176-88bf-853a5ba3785f',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Top/Cotton_seersucker_top_Bodice/bodice_1911-a_pose.webp',
 			modelFile:
@@ -6293,12 +6296,12 @@ export const blocks: Record<string, Block[]> = {
 			avatar: 'female',
 			category: 'Bodice',
 			collection: 'h&m',
-			templateId: '60c86bed-c539-4e8d-9d58-4937bdafe08a',
+			templateId: 'ab8ad2d5-3644-40c3-9255-816432bb178c',
 			templateName: 'Cotton seersucker top',
 			templateCategory: 'Top',
 		},
 		{
-			_id: 'dbf08749-3774-4053-b5cc-5bea5694887f',
+			_id: '8e35a041-99af-4c60-8b8a-cd32e994c865',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Top/Cap-sleeved_top_Sleeves/sleeves_1910-a_pose_.webp',
 			modelFile:
@@ -6307,12 +6310,12 @@ export const blocks: Record<string, Block[]> = {
 			avatar: 'female',
 			category: 'Sleeves',
 			collection: 'h&m',
-			templateId: '3cd3c1c4-cc1c-4fd9-8b01-5c2bc70ea11f',
+			templateId: '0f6a7769-9c72-4b74-83a7-b61d546f3851',
 			templateName: 'Cap',
 			templateCategory: 'Top',
 		},
 		{
-			_id: 'c5f7c654-95e5-49aa-81e3-899a6e644b2b',
+			_id: 'abfd9fe9-5a49-4ddc-82b2-6b7f7268c9c6',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Top/Cap-sleeved_top_Bodice/bodice_1908-a_pose.webp',
 			modelFile:
@@ -6321,7 +6324,7 @@ export const blocks: Record<string, Block[]> = {
 			avatar: 'female',
 			category: 'Bodice',
 			collection: 'h&m',
-			templateId: '3cd3c1c4-cc1c-4fd9-8b01-5c2bc70ea11f',
+			templateId: '0f6a7769-9c72-4b74-83a7-b61d546f3851',
 			templateName: 'Cap',
 			templateCategory: 'Top',
 		},
