@@ -151,8 +151,6 @@ class Store {
 	// Loading states tracked by unique values
 	drippySceneLoads: symbol[] = []
 	private loadingBlocks: Record<string, number> = {}
-	// TODO UNUSED (delete unless needed)
-	// private loadingMaterials: symbol[] = []
 	private loadingScreenshots: TemplateCategory[] = []
 	private loadingFabricIds: string[] = []
 	private loadingTemplateIds: string[] = []
@@ -676,19 +674,6 @@ class Store {
 		return Boolean(blockId && blockTracked)
 	}
 
-	// TODO UNUSED (delete unless needed)
-	// addLoadingMaterial(key: symbol) {
-	// 	untrack(() => {
-	// 		if (!this.loadingMaterials.includes(key)) this.loadingMaterials.push(key)
-	// 	})
-	// }
-	// removeLoadingMaterial(key: symbol) {
-	// 	untrack(() => removeItemUnsorted(this.loadingMaterials, key))
-	// }
-	// clearLoadingMaterials() {
-	// 	untrack(() => (this.loadingMaterials.length = 0))
-	// }
-
 	addLoadingFabric(fabricId: string) {
 		untrack(() => {
 			if (!this.loadingFabricIds.includes(fabricId)) this.loadingFabricIds.push(fabricId)
@@ -758,7 +743,6 @@ class Store {
 
 	clearAllLoadingStates() {
 		this.clearLoadingBlocks()
-		this.clearLoadingMaterials()
 		this.clearLoadingFabrics()
 		this.clearLoadingScreenshots()
 		this.clearIsDrippySceneLoading()

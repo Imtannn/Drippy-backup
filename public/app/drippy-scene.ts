@@ -374,6 +374,12 @@ export class DrippyScene extends Element {
 			enableShadowOnModelLoad(backgroundModel)
 			setEnvMapOnModelLoad(backgroundModel, env)
 			setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
+			whenModelLoaded(backgroundModel, () => {
+				backgroundModel.three.traverse(obj => {
+					// if ((obj as any).isLight)
+					obj.castShadow = false
+				})
+			})
 
 			// Track selected avatar loading state
 			const avatarId = Symbol('avatar')
@@ -655,8 +661,6 @@ export class DrippyScene extends Element {
 				)
 			})
 
-			// const blockLoadingIds = new Map<string, symbol>()
-
 			// Re-apply materials whenever the selected fabrics change or models mount
 			createEffect(() => {
 				console.log('garments effect')
@@ -671,6 +675,10 @@ export class DrippyScene extends Element {
 					// ensure UVs are ready.  Unfortunately, this currently
 					// means fabrics won't start loading until all garments are
 					// loaded.
+					// TODO get rid of this need for checking uv arrays, have
+					// designers set expected texture scale on their end in the
+					// upload page, then we can load fabrics in parallel without
+					// waiting for garments to load.
 					const uvArray = garmentUvArrays()[blockIndex]
 
 					const blockId = renderBlock.id
@@ -691,7 +699,8 @@ export class DrippyScene extends Element {
 					const template = store.selectedTemplates[templateCategory]
 					const templateId = template?._id
 					if (!templateId) throw new Error('Template ID missing for category:' + templateCategory)
-					const selectedFabrics = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
+					const fabricsForBlockCategory = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
+					console.log('selectedGarments', store.selectedGarments)
 
 					const fabricLoadingSignals: Record<string, ReturnType<typeof createFabricTexture>> = {}
 
@@ -699,7 +708,7 @@ export class DrippyScene extends Element {
 					// TODO (FIXME?) This is loading state for all fabrics of
 					// the template category and block category, but is it the
 					// fabrics for the render block we're iterating?
-					for (const fabric of Object.values(selectedFabrics)) {
+					for (const fabric of Object.values(fabricsForBlockCategory)) {
 						const textureState = createFabricTexture(() => fabric, uvArray)
 						fabricLoadingSignals[fabric._id] = textureState
 
@@ -716,17 +725,6 @@ export class DrippyScene extends Element {
 						Object.values(fabricLoadingSignals).every(f => !f.loading() && f.texture()),
 					)
 
-					// // Get or create stable loading ID
-					// let loadingId = blockLoadingIds.get(blockId)
-					// if (!loadingId) blockLoadingIds.set(blockId, (loadingId = Symbol(`material-${blockId}`)))
-
-					// // Track aggregate loading state reactively
-					// createEffect(() => {
-					// 	if (fabricsLoaded()) return
-					// 	store.addLoadingMaterial(loadingId)
-					// 	onCleanup(() => store.removeLoadingMaterial(loadingId))
-					// })
-
 					const templateBlocks = createMemo(
 						() => {
 							// prettier-ignore
@@ -736,26 +734,32 @@ export class DrippyScene extends Element {
 						undefined,
 						{equals: arrayEquals},
 					)
-					const blocksLoaded = createMemo(() => {
-						// return templateBlocks().every(rb => !store.isBlockLoading(rb.block._id))
-						return true // This has to be true because all garments are loaded before fabrics start loading (see garmentModelsInSyncAndLoaded above)
-					})
 
-					// TODO It doesn't seem to make sense for this effect to be
+					// CONTINUE remove
+					// const blocksLoaded = createMemo(() => {
+					// 	// return templateBlocks().every(rb => !store.isBlockLoading(rb.block._id))
+					// 	return true // This has to be true because all garments are loaded before fabrics start loading (see garmentModelsInSyncAndLoaded above)
+					// })
+
+					// CONTINUE It doesn't seem to make sense for this effect to be
 					// here because we're iterating *EVERY* render block, and
 					// thus we're clearing loading state based on the fabrics of
 					// a *single* block, not *all blocks* in the template. Is
 					// this right?
 					createEffect(() => {
 						// Check if all blocks for this template category are loaded
-						if (templateBlocks().length === 0) return // No blocks selected yet
+						if (templateBlocks().length === 0)
+							throw new Error('No blocks found for template category: ' + templateCategory)
 
 						// Only clear loading state when BOTH fabrics and blocks are done
-						if (fabricsLoaded() && blocksLoaded()) {
+						if (fabricsLoaded() /*&& blocksLoaded()*/) {
 							console.log('✅ CLEARING loading template:', templateId)
 							// The fabrics for the block loaded, clear the
-							// loading state for the *whole* template (is this
-							// right?)
+							// loading state for the *whole* template
+							// CONTINUE Is this right? Template should be done
+							// "loading" after all fabrics for all categories
+							// are loaded, not only for category of current
+							// block.
 							store.clearLoadingTemplate(templateId)
 						}
 					})
@@ -774,7 +778,8 @@ export class DrippyScene extends Element {
 
 						// Create a map for mesh to meshes key
 						const meshToFabricMeshesMap = new Map<string, string>()
-						for (const meshesKey of Object.keys(selectedFabrics)) {
+						for (const meshesKey of Object.keys(fabricsForBlockCategory)) {
+							// CONTINUE ensure correct comment: e.g. "Sleeve_Left-Sleeve_Right" -> ["Sleeve_Left", "Sleeve_Right"]
 							const meshArray = meshesKey.split('-')
 							for (const mesh of meshArray) meshToFabricMeshesMap.set(mesh, meshesKey)
 						}
@@ -788,7 +793,7 @@ export class DrippyScene extends Element {
 							const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
 							const meshesKey = meshToFabricMeshesMap.get(meshKey)
 
-							const fabricToUse = selectedFabrics[meshesKey || 'default']
+							const fabricToUse = fabricsForBlockCategory[meshesKey || 'default']
 							if (!fabricToUse) continue
 
 							const textureState = fabricLoadingSignals[fabricToUse._id]
@@ -801,15 +806,15 @@ export class DrippyScene extends Element {
 							console.assert(textureSet, 'Texture set should be available here')
 							console.assert(!isLoading, 'Texture should not be loading here')
 
-							// TODO revisit this to ensure materials/textures
+							// CONTINUE revisit this to ensure materials/textures
 							// are properly disposed.
 							// Maybe we don't need to create a new material
 							// every time.
-							disposeMaterial(mesh)
-							mesh.material = new THREE.MeshPhysicalMaterial()
+							// disposeMaterial(mesh)
+							// mesh.material = new THREE.MeshPhysicalMaterial()
 							textureManager.applyTexturesToMaterial(mesh.material, textureSet)
 							onCleanup(() => {
-								disposeMaterial(mesh)
+								// disposeMaterial(mesh)
 								this.#resetMaterialProperties(el, mesh)
 								el.needsUpdate()
 							})
@@ -1203,7 +1208,7 @@ export class DrippyScene extends Element {
 												})
 											}}
 											id=${item.id}
-											attr:data-block-id=${() => item.block._id}
+											attr:data-block-id=${() => (console.log('block id:', item.block._id), item.block._id)}
 											data-index=${index()}
 											data-cloth
 											attr:src=${item.block.modelFile}
@@ -1248,7 +1253,7 @@ export class DrippyScene extends Element {
 											}}
 											id=${item.id}
 											data-index=${index()}
-											data-cloth
+											xdata-cloth
 											data-default-garment
 											visible=${() => this.defaultGarmentVisibility().get(item.templateCategory) ?? true}
 											attr:src=${item.block.modelFile}

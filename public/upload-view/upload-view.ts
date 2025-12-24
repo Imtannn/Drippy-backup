@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import '../app/app-buttons.js'
 import '../app/drippy-scene.js'
 import '../app/item-card.js'
-import {store} from '../app/store.js'
+// import {store} from '../app/store.js'
 import {DEFAULT_TEXTURE_CONFIG, textureManager} from '../app/texture-manager.js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
@@ -844,15 +844,16 @@ export class UploadView extends Element {
 			console.log('fabricsToPreload', fabricsToPreload)
 
 			if (fabricsToPreload.length > 0) {
-				const loadingId = Symbol(`fabric-${templateFabric?._id || 'uploaded'}`)
-				store.addLoadingMaterial(loadingId)
+				// CONTINUE: handle loading? The store.loadingMaterialIds was unused (now deleted)
+				// const loadingId = Symbol(`fabric-${templateFabric?._id || 'uploaded'}`)
+				// store.addLoadingMaterial(loadingId)
 				try {
 					// Preload fabric textures (blocks are already uploaded and ready)
 					await Promise.all(fabricsToPreload.map(fabric => textureManager.preloadFabricBaseTextures(fabric)))
 				} catch (error) {
 					console.warn('Failed to preload fabric textures:', error)
 				} finally {
-					store.removeLoadingMaterial(loadingId)
+					// store.removeLoadingMaterial(loadingId)
 				}
 			}
 		}
