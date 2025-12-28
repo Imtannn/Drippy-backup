@@ -165,4 +165,12 @@ export const backgroundScenes: BackgroundScene[] = [
 			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/sapienzaUniversityOfRome/CHANGES+-+3D+SHOES.glb',
 		],
 	},
+	{
+		name: 'H&M',
+		slug: 'h&m',
+		description: 'H&M',
+		env: '/images/envs/brown_photostudio_02.jpg',
+		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/h%26m/H%26M+Scene.glb',
+		includedModelFiles: [],
+	},
 ]
