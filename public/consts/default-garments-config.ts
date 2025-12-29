@@ -24,13 +24,18 @@ export const defaultGarmentsConfig: DefaultGarmentsConfig = {
 	male: [
 		{
 			category: 'Top',
-			templateId: 'fc42c169-9c12-47d6-ba5d-06dec5bdbd0d',
-			collection: '9heure19heure',
+			templateId: 'default-male-top',
+			collection: 'default',
 		},
 		{
 			category: 'Pants',
-			templateId: 'd6d33246-4cb4-413d-ab35-b125ad74ef89',
-			collection: '9heure19heure',
+			templateId: 'default-male-pants',
+			collection: 'default',
+		},
+		{
+			category: 'Shoes',
+			templateId: 'default-male-shoes',
+			collection: 'default',
 		},
 	],
 }

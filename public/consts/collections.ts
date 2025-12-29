@@ -490,7 +490,7 @@ export const collections: Collection[] = [
 	{
 		name: 'H&M',
 		slug: 'h&m',
-		logo: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/h%26m/lgo-h%26m.webp',
+		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/h%26m/lgo-h%26m.webp',
 		gender: 'female',
 		garmentsCount: blocks['h&m']?.length ?? 0,
 	},
