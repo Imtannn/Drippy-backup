@@ -145,7 +145,7 @@ export class SpacesSelection extends Element {
 						<p class="description">Step into the space of each curated collection.</p>
 						<p class="description">Remix, customize, and shop the drip.</p>
 					</div>
-					<show-on-device device="mobile">
+					<div class="mobile">
 						<div class="search-container">
 							<div class="search-bar">
 								<img src="/images/action-buttons/search-button.svg" alt="Search" class="search-icon" />
@@ -180,14 +180,14 @@ export class SpacesSelection extends Element {
 								`}
 							></for-each>
 						</tabs-provider>
-					</show-on-device>
+					</div>
 				`}
 			></show-when>
 
 			<!-- Space Cards -->
-			<show-on-device device="mobile">
+			<div class="mobile">
 				<p class="featured-collections-title">Featured collections</p>
-			</show-on-device>
+			</div>
 			<div class="cards-container">
 				<index-each
 					items=${() => this.filteredSpace}
@@ -224,7 +224,7 @@ export class SpacesSelection extends Element {
 				></show-when>
 			</div>
 
-			<show-on-device device="mobile">
+			<div class="mobile">
 				<div class="title-container">
 					<div class="title-container_left">
 						<p class="left_title">Collect now</p>
@@ -322,7 +322,7 @@ export class SpacesSelection extends Element {
 						`}
 					></index-each>
 				</div>
-			</show-on-device>
+			</div>
 		</div>
 
 		<dialog-element
@@ -358,6 +358,16 @@ export class SpacesSelection extends Element {
 
 		:host(.has-brand) {
 			position: unset;
+		}
+
+		.mobile {
+			display: none;
+		}
+
+		@media (max-width: 768px) {
+			.mobile {
+				display: block;
+			}
 		}
 
 		@keyframes fadeIn {
@@ -704,11 +714,11 @@ export class SpacesSelection extends Element {
 		.card-title {
 			font-size: var(--fontSizeTextXsTablet);
 			font-weight: var(--fontWeightSemiBold);
-			color: var(--uiColorPrimaryWhite);
+			color: var(--uiColorPrimaryBlack);
 			margin: 0;
 
 			:host-context([data-theme='dark']) & {
-				color: var(--uiColorPrimaryWhite);
+				color: var(--uiColorPrimaryBlack);
 			}
 		}
 		.card-title_block {
@@ -725,14 +735,14 @@ export class SpacesSelection extends Element {
 		.card-subtitle {
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightNormal);
-			color: #fff;
+			color: #666;
 			text-decoration: underline;
 			margin: 0;
 			display: block;
 			cursor: pointer;
 
 			:host-context([data-theme='dark']) & {
-				color: #fff;
+				color: #666;
 			}
 		}
 
@@ -835,6 +845,12 @@ export class SpacesSelection extends Element {
 
 			.text-content {
 				margin-right: 0;
+			}
+			.card-title {
+				color: var(--uiColorPrimaryWhite);
+			}
+			.card-subtitle {
+				color: var(--uiColorPrimaryWhite);
 			}
 		}
 
