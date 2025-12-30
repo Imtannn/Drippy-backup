@@ -3202,6 +3202,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accessories',
 			collection: 'animation-test',
 			materialId: '6260fb96-b5d2-4fb1-8ad1-0c86d91f59b7',
+			productUrl: 'https://moidien.com/collections/t-shirts/products/x%E1%BA%BFp',
 		},
 		{
 			_id: '97a2555c-4cf6-47e4-9e8e-455169c22289',
@@ -3212,6 +3213,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Accessories',
 			collection: 'animation-test',
 			materialId: '799af3b4-21bb-44c3-8197-65906d5a8be4',
+			productUrl: 'https://moidien.com/collections/t-shirts/products/x%E1%BA%BFp',
 		},
 		{
 			_id: '93116bf0-8709-488e-8255-b1272249407d',
@@ -3228,6 +3230,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '9b662544-ef38-4114-8670-8d5a4eaf8634',
 				},
 			],
+			productUrl: 'https://moidien.com/collections/t-shirts/products/x%E1%BA%BFp',
 		},
 		{
 			_id: 'de38737d-52dc-460a-8811-b3458e993d0e',
@@ -3244,6 +3247,7 @@ export const templates: Record<string, Template[]> = {
 					materialId: '9b662544-ef38-4114-8670-8d5a4eaf8634',
 				},
 			],
+			productUrl: 'https://www2.hm.com/vi_vn/productpage.1317755002.html',
 		},
 		{
 			_id: 'e9747e1c-fc68-4ff9-8dab-49fe04e34cc3',
@@ -3254,6 +3258,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'animation-test',
 			materialId: '6f1c21b7-b4e7-4563-b689-e6ca6a0bc4ca',
+			productUrl: 'https://moidien.com/collections/t-shirts/products/x%E1%BA%BFp',
 		},
 		{
 			_id: 'bda0051e-9555-4ace-bc05-86c4f67812fd',
@@ -3284,6 +3289,7 @@ export const templates: Record<string, Template[]> = {
 			category: 'Top',
 			collection: 'animation-test',
 			materialId: '6f1c21b7-b4e7-4563-b689-e6ca6a0bc4ca',
+			productUrl: 'https://moidien.com/collections/t-shirts/products/x%E1%BA%BFp',
 		},
 		{
 			_id: '09f8878c-fd3c-432b-a40e-f8f5057a29e2',

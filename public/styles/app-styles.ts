@@ -144,6 +144,31 @@ export const appStyles = css`
 		gap: 10px;
 	}
 
+	.save-button {
+		width: 100%;
+		background: #b28aff;
+		color: white;
+		border: none;
+		border-radius: 25px;
+		padding: 15px 20px;
+		font-size: 14px;
+		font-weight: 600;
+		height: var(--buttonHeight);
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		:host-context([data-theme='dark']) & {
+			background: #b28aff;
+			color: #fff;
+		}
+	}
+
+	.save-button {
+		gap: 10px;
+	}
+
 	/* Section Styles */
 	.section-title {
 		font-size: 14px;
