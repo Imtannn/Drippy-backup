@@ -8,9 +8,12 @@ import type {Space} from '../types/types.js'
 import {currentUser, store} from './store.js'
 
 import '../elements/dialog-element.js'
+import '../elements/heart-button.js'
+import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
+import '../elements/tabs.js'
 import {getSpaceThumbnail} from '../utils.js'
 
 @element
@@ -19,6 +22,7 @@ export class SpacesSelection extends Element {
 
 	@signal filteredSpace: Space[] = []
 	@signal showLoginDialog = false
+	@signal selectedTab: string = 'All'
 
 	connectedCallback() {
 		super.connectedCallback()
@@ -52,6 +56,22 @@ export class SpacesSelection extends Element {
 			const user = currentUser()
 			if (user !== null && this.showLoginDialog) {
 				this.showLoginDialog = false
+			}
+		})
+
+		// Ensure selectedTab is always set to a valid value
+		this.createEffect(() => {
+			const tabs = ['All', 'Space', 'Items']
+			if (!this.selectedTab || !tabs.includes(this.selectedTab)) {
+				this.selectedTab = 'All'
+			}
+		})
+
+		// Sync selectedTab with tabs-provider on mount
+		this.createEffect(() => {
+			// Ensure selectedTab is set before tabs-provider initializes
+			if (!this.selectedTab) {
+				this.selectedTab = 'All'
 			}
 		})
 	}
@@ -125,10 +145,49 @@ export class SpacesSelection extends Element {
 						<p class="description">Step into the space of each curated collection.</p>
 						<p class="description">Remix, customize, and shop the drip.</p>
 					</div>
+					<show-on-device device="mobile">
+						<div class="search-container">
+							<div class="search-bar">
+								<img src="/images/action-buttons/search-button.svg" alt="Search" class="search-icon" />
+								<input type="text" placeholder="Search all" class="search-input" />
+							</div>
+						</div>
+						<tabs-provider
+							selected-value=${() => this.selectedTab || 'All'}
+							default-value=${() => this.selectedTab || 'All'}
+							ontabchange=${(e: CustomEvent) => {
+								this.selectedTab = e.detail.value
+								console.log('selectedTab changed to:', this.selectedTab)
+							}}
+						>
+							<div class="tabs-container">
+								<tabs-list>
+									<for-each
+										items=${() => ['All', 'Space', 'Items']}
+										content=${() => (tab: string) => html` <tabs-trigger selected-value=${tab}>${tab}</tabs-trigger> `}
+									></for-each>
+								</tabs-list>
+								<div class="tabs-action-buttons">
+									<img src="/images/icons/heart.svg" alt="Heart" />
+								</div>
+							</div>
+
+							<!-- Hidden until content is ready -->
+							<for-each
+								items=${() => ['All', 'Space', 'Items']}
+								content=${() => (tab: string) => html`
+									<tabs-content selected-value=${tab} style="display: none; visibility: hidden;"></tabs-content>
+								`}
+							></for-each>
+						</tabs-provider>
+					</show-on-device>
 				`}
 			></show-when>
 
 			<!-- Space Cards -->
+			<show-on-device device="mobile">
+				<p class="featured-collections-title">Featured collections</p>
+			</show-on-device>
 			<div class="cards-container">
 				<index-each
 					items=${() => this.filteredSpace}
@@ -137,11 +196,7 @@ export class SpacesSelection extends Element {
 						<div class="space-card">
 							<div class="scene-preview">
 								<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
-									<placeholder-image
-										src=${getSpaceThumbnail(space())}
-										alt=${space().name}
-										object-fit="cover"
-									/>
+									<placeholder-image src=${getSpaceThumbnail(space())} alt=${space().name} object-fit="cover" />
 								</div>
 								<div class="garments-count">${space().garmentsCount} garments</div>
 							</div>
@@ -152,7 +207,7 @@ export class SpacesSelection extends Element {
 										${space().description}
 									</p>
 								</div>
-								<button class="explore-button" onclick=${() => this.#onSpaceSelected(space())}>Explore space →</button>
+								<button class="explore-button" onclick=${() => this.#onSpaceSelected(space())}>Explore →</button>
 							</div>
 						</div>
 					`}
@@ -168,6 +223,106 @@ export class SpacesSelection extends Element {
 					`}
 				></show-when>
 			</div>
+
+			<show-on-device device="mobile">
+				<div class="title-container">
+					<div class="title-container_left">
+						<p class="left_title">Collect now</p>
+						<p class="left_subtitle">Check out these hot items</p>
+					</div>
+					<div class="title-container_right">
+						<a>See all</a>
+					</div>
+				</div>
+
+				<div class="trending-section">
+					<div class="trending-header">
+						<div class="trending-header-left">
+							<p class="trending-title">🔥 Trending now</p>
+						</div>
+						<div class="trending-tabs">
+							<button class="trending-tab">Newest drop</button>
+							<button class="trending-tab active">For you</button>
+						</div>
+					</div>
+					<div class="trending-cards-container">
+						<index-each
+							items=${() => this.filteredSpace}
+							content=${() => (space: Accessor<Space>) => html`
+								<div class="trending-card">
+									<div class="trending-card-header">
+										<div class="trending-logo-circle">
+											<span>Logo</span>
+										</div>
+										<a class="trending-logo-text">Logo</a>
+									</div>
+									<div class="trending-card-image" onclick=${() => this.#onSpaceSelected(space())}>
+										<placeholder-image src=${getSpaceThumbnail(space())} alt=${space().name} object-fit="cover" />
+									</div>
+									<div class="trending-card-footer">
+										<svg
+											width="16"
+											height="16"
+											viewBox="0 0 16 16"
+											fill="none"
+											xmlns="http://www.w3.org/2000/svg"
+											class="eye-icon"
+										>
+											<path
+												d="M8 3C4.67 3 2.07 5.13 1 8C2.07 10.87 4.67 13 8 13C11.33 13 13.93 10.87 15 8C13.93 5.13 11.33 3 8 3ZM8 11.33C6.16 11.33 4.67 9.84 4.67 8C4.67 6.16 6.16 4.67 8 4.67C9.84 4.67 11.33 6.16 11.33 8C11.33 9.84 9.84 11.33 8 11.33ZM8 6C7.08 6 6.33 6.75 6.33 7.67C6.33 8.58 7.08 9.33 8 9.33C8.92 9.33 9.67 8.58 9.67 7.67C9.67 6.75 8.92 6 8 6Z"
+												fill="#BBBBBB"
+											/>
+										</svg>
+										<span class="trending-view-count">11.4K viewing</span>
+									</div>
+								</div>
+							`}
+						></index-each>
+					</div>
+				</div>
+
+				<div class="title-container">
+					<div class="title-container_left">
+						<p class="left_title">New space</p>
+						<p class="left_subtitle">This week</p>
+					</div>
+					<div class="title-container_right">
+						<a>See all</a>
+					</div>
+				</div>
+
+				<div class="cards-container">
+					<index-each
+						items=${() => this.filteredSpace}
+						content=${() => (space: Accessor<Space>) => html`
+							<!-- Bloom Realm Card -->
+							<div class="space-card">
+								<div class="scene-preview">
+									<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
+										<placeholder-image src=${getSpaceThumbnail(space())} alt=${space().name} object-fit="cover" />
+									</div>
+									<div class="garments-count">${space().garmentsCount} garments</div>
+								</div>
+								<div class="card-content_block">
+									<div class="text-content">
+										<h3 class="card-title_block">${space().name}</h3>
+										<div class="content-icons">
+											<div class="item">
+												<img src="/images/icons/heart.svg" alt="Item" />
+												135
+											</div>
+											<div class="item">
+												<img src="/images/icons/user.svg" alt="Item" />
+												13K
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						`}
+					></index-each>
+				</div>
+			</show-on-device>
 		</div>
 
 		<dialog-element
@@ -369,6 +524,73 @@ export class SpacesSelection extends Element {
 			}
 		}
 
+		.search-container {
+			padding: 0 20px 15px 20px;
+		}
+
+		.search-bar {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			padding: 5px 20px;
+			background: var(--uiColorPrimaryLightGrey);
+			border-radius: 100px;
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.search-icon {
+			width: 25px;
+			height: 25px;
+			flex-shrink: 0;
+		}
+
+		.search-input {
+			flex: 1;
+			border: none;
+			background: transparent;
+			outline: none;
+			font-size: var(--fontSizeTextXs);
+			color: var(--uiColorPrimaryBlack);
+			font-weight: var(--fontWeightNormal);
+		}
+
+		.search-input::placeholder {
+			color: #666;
+		}
+
+		:host-context([data-theme='dark']) .search-bar {
+			background: #333;
+		}
+
+		:host-context([data-theme='dark']) .search-input {
+			color: var(--uiColorPrimaryWhite);
+		}
+
+		:host-context([data-theme='dark']) .search-input::placeholder {
+			color: #999;
+		}
+
+		.tabs-container {
+			display: flex;
+			align-items: center;
+			gap: var(--uiSpacingSmall);
+			padding: 0 20px var(--uiSpacingSmall) 20px;
+			background: var(--uiColorPrimaryWhite);
+			position: relative;
+			justify-content: space-between;
+
+			:host-context([data-theme='dark']) & {
+				background: #1a1a1a;
+			}
+		}
+
+		.tabs-action-buttons {
+			display: flex;
+			gap: var(--uiSpacingSmall);
+			height: 13px;
+		}
+
 		.cards-container {
 			display: grid;
 			grid-template-columns: 1fr;
@@ -391,6 +613,13 @@ export class SpacesSelection extends Element {
 				grid-template-columns: repeat(2, 1fr);
 				gap: var(--gridGapTablet);
 			}
+		}
+
+		.featured-collections-title {
+			font-size: var(--fontSizeTextMdDesktop);
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
+			margin-bottom: 1rem;
 		}
 
 		.space-card {
@@ -458,6 +687,14 @@ export class SpacesSelection extends Element {
 			justify-content: space-between;
 			align-items: center;
 		}
+		.card-content_block {
+			padding-top: 15px;
+			padding-left: 0;
+			padding-right: 0;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
 
 		.text-content {
 			flex: 1;
@@ -465,27 +702,37 @@ export class SpacesSelection extends Element {
 		}
 
 		.card-title {
-			font-size: var(--fontSizeTextXs);
+			font-size: var(--fontSizeTextXsTablet);
 			font-weight: var(--fontWeightSemiBold);
-			color: var(--uiColorPrimaryBlack);
+			color: var(--uiColorPrimaryWhite);
 			margin: 0;
 
 			:host-context([data-theme='dark']) & {
 				color: var(--uiColorPrimaryWhite);
 			}
 		}
+		.card-title_block {
+			font-size: var(--fontSizeTextXsTablet);
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
+			margin: 0;
+
+			:host-context([data-theme='dark']) & {
+				color: var(--uiColorPrimaryBlack);
+			}
+		}
 
 		.card-subtitle {
 			font-size: var(--fontSizeTextXs);
 			font-weight: var(--fontWeightNormal);
-			color: #666;
+			color: #fff;
 			text-decoration: underline;
 			margin: 0;
 			display: block;
 			cursor: pointer;
 
 			:host-context([data-theme='dark']) & {
-				color: #ccc;
+				color: #fff;
 			}
 		}
 
@@ -507,6 +754,18 @@ export class SpacesSelection extends Element {
 			}
 		}
 
+		.content-icons {
+			display: flex;
+			gap: 11px;
+		}
+		.content-icons .item {
+			font-size: var(--fontSizeTextXs);
+			color: #bbbbbb;
+		}
+		.content-icons .item img {
+			margin-right: 5px;
+		}
+
 		/* Large screen scaling */
 		@media (min-width: 1200px) {
 			.scene-preview {
@@ -521,7 +780,7 @@ export class SpacesSelection extends Element {
 				margin-bottom: 1.5rem;
 			}
 			.spaces-container {
-				padding: var(--uiSpacing, 0);
+				padding: 10px;
 			}
 
 			.nav-links {
@@ -533,15 +792,40 @@ export class SpacesSelection extends Element {
 			}
 
 			.cards-container {
-				padding: 0 1rem;
+				display: flex;
+				flex-direction: row;
+				overflow-x: auto;
+				overflow-y: hidden;
+				gap: 15px;
+				padding: 0;
+				margin: 0;
+				scroll-snap-type: x mandatory;
+				-webkit-overflow-scrolling: touch;
+				scrollbar-width: none; /* Firefox */
+				-ms-overflow-style: none; /* IE and Edge */
+			}
+
+			.cards-container::-webkit-scrollbar {
+				display: none; /* Chrome, Safari, Opera */
 			}
 
 			.space-card {
-				max-width: 100%;
-				width: 100%;
+				position: relative;
+				flex: 0 0 90vw;
+				max-width: 90vw;
+				width: 90vw;
+				scroll-snap-align: center;
 			}
 
 			.card-content {
+				gap: 1rem;
+				position: absolute;
+				bottom: 5%;
+				width: 95%;
+				left: 50%;
+				transform: translate(-50%, 0%);
+			}
+			.card-content_block {
 				gap: 1rem;
 			}
 
@@ -552,6 +836,201 @@ export class SpacesSelection extends Element {
 			.text-content {
 				margin-right: 0;
 			}
+		}
+
+		.title-container {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 1rem;
+			margin-top: 27px;
+		}
+
+		.title-container .left_title {
+			font-size: var(--fontSizeTextXsTablet);
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
+			padding: 0;
+			margin: 0;
+		}
+		.title-container .left_subtitle {
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightNormal);
+			color: #bbbbbb;
+
+			padding: 0;
+			margin: 0;
+		}
+		.title-container_right a {
+			color: #787880;
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightNormal);
+			text-decoration: none;
+		}
+
+		.trending-section {
+			margin-bottom: 2rem;
+		}
+
+		.trending-header {
+			display: flex;
+			align-items: center;
+			margin-bottom: 1rem;
+		}
+
+		.trending-header-left {
+			display: flex;
+			align-items: center;
+		}
+
+		.trending-title {
+			font-size: var(--fontSizeTextMd);
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
+			margin: 0;
+
+			:host-context([data-theme='dark']) & {
+				color: var(--uiColorPrimaryWhite);
+			}
+		}
+
+		.trending-tabs {
+			display: flex;
+		}
+
+		.trending-tab {
+			background: none;
+			border: none;
+			font-size: var(--fontSizeTextMd);
+			font-weight: var(--fontWeightSemiBold);
+			color: #e0e1e4;
+			cursor: pointer;
+			padding: 0 10px;
+
+			:host-context([data-theme='dark']) & {
+				color: #e0e1e4;
+			}
+		}
+
+		.trending-tab.active {
+			color: var(--uiColorPrimaryBlack);
+			font-weight: var(--fontWeightSemiBold);
+
+			:host-context([data-theme='dark']) & {
+				color: var(--uiColorPrimaryWhite);
+			}
+		}
+
+		.trending-cards-container {
+			display: flex;
+			flex-direction: row;
+			overflow-x: auto;
+			overflow-y: hidden;
+			gap: 15px;
+			padding: 0;
+			scroll-snap-type: x mandatory;
+			-webkit-overflow-scrolling: touch;
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+		}
+
+		.trending-cards-container::-webkit-scrollbar {
+			display: none;
+		}
+
+		.trending-card {
+			flex: 0 0 170px;
+			max-width: 170px;
+			width: 170px;
+			background: var(--uiColorPrimaryWhite);
+			overflow: hidden;
+			scroll-snap-align: start;
+			position: relative;
+
+			:host-context([data-theme='dark']) & {
+				background: #333;
+			}
+		}
+
+		.trending-card:first-child {
+			margin-left: 0;
+		}
+
+		.trending-card:last-child {
+			margin-right: 0;
+		}
+
+		.trending-card-header {
+			position: absolute;
+			top: 12px;
+			left: 12px;
+			right: 12px;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			z-index: 2;
+		}
+
+		.trending-logo-circle {
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			background: var(--uiColorPrimaryBlack);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+		}
+
+		.trending-logo-circle span {
+			font-size: 10px;
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryWhite);
+		}
+
+		.trending-logo-text {
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightSemiBold);
+			color: var(--uiColorPrimaryBlack);
+			text-decoration: underline;
+			cursor: pointer;
+
+			:host-context([data-theme='dark']) & {
+				color: var(--uiColorPrimaryWhite);
+			}
+		}
+
+		.trending-card-image {
+			width: 100%;
+			aspect-ratio: 0.75;
+			overflow: hidden;
+			cursor: pointer;
+			border-radius: 10px;
+		}
+
+		.trending-card-image img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		.trending-card-footer {
+			padding: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+		}
+
+		.eye-icon {
+			width: 16px;
+			height: 16px;
+			flex-shrink: 0;
+		}
+
+		.trending-view-count {
+			font-size: var(--fontSizeTextXs);
+			font-weight: var(--fontWeightNormal);
+			color: #bbbbbb;
 		}
 	`
 }
