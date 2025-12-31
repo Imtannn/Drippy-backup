@@ -56,6 +56,7 @@ export class PlaceholderImage extends Element {
 			position: relative;
 			inline-size: 100%;
 			block-size: 100%;
+			display: flex;
 		}
 
 		img {
