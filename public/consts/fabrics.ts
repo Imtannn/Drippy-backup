@@ -1004,7 +1004,7 @@ export const fabrics: Record<string, Fabric[]> = {
 	],
 	metamorphosis: [
 		{
-			_id: 'ff5f275f-b0b3-4adc-9266-1199037ef85a',
+			_id: 'bd7bcc28-960b-4fa3-9a38-d32c214ff2e9',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_RENDER.webp',
 			normal:
@@ -1019,7 +1019,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			materialName: 'Square',
 			category: '3d',
 			collection: 'metamorphosis',
-			templateCategories: ['Accessory', 'Skirt'],
+			templateCategories: ['Accessories', 'Skirt'],
 			scaleX: 11,
 			scaleY: 10,
 			offsetX: 0,
@@ -1028,25 +1028,109 @@ export const fabrics: Record<string, Fabric[]> = {
 			coef: 1000,
 		},
 		{
-			_id: 'a9615d94-e9a9-44d5-b8a6-129f638b09e1',
+			_id: 'a3a718d7-1bf3-4173-bdf9-97f6195561e0',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_BASE.jpg',
+			displacement: '',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Black',
+			category: 'Cotton',
+			collection: 'metamorphosis',
+			templateCategories: ['Dress', 'Pants', 'Top', 'Accessories', 'Skirt'],
+		},
+		{
+			_id: 'e15d046f-488e-48f3-a9f0-62d84ece5a64',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_GRAY/COTTON_-_GRAY_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_GRAY/COTTON_-_GRAY_-_NORMAL.jpg',
+			normal: '',
 			baseColor:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_GRAY/COTTON_-_GRAY_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_GRAY/COTTON_-_GRAY_-_DISPLACE.jpg',
+			displacement: '',
 			roughness:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_GRAY/COTTON_-_GRAY_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Gray',
 			category: 'Cotton',
 			collection: 'metamorphosis',
-			templateCategories: ['Top', 'Dress', 'Pants'],
+			templateCategories: ['Dress', 'Pants', 'Top'],
 		},
 		{
-			_id: '4db4c4c2-920b-4831-a84d-7f57ee5221f4',
+			_id: 'ea9c93b7-a532-4412-bd59-a47db592434e',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_BASE.jpg',
+			displacement: '',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_ALPHA.jpg',
+			alpha: '',
+			materialName: 'Black Seethrough',
+			category: 'Cotton',
+			collection: 'metamorphosis',
+			templateCategories: ['Dress', 'Top'],
+		},
+		{
+			_id: '7412ab2d-48d1-4541-aa48-6c7221118db5',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
+			displacement: '',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'White',
+			category: 'Cotton',
+			collection: 'metamorphosis',
+			templateCategories: ['Top', 'Accessories', 'Dress', 'Pants', 'Skirt'],
+		},
+		{
+			_id: '5a141c3b-6a04-40a7-962c-e8437010abe0',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_BASE.jpg',
+			displacement: '',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Black',
+			category: 'Taffeta',
+			collection: 'metamorphosis',
+			templateCategories: ['Accessories', 'Top'],
+		},
+		{
+			_id: '2f7fc871-259a-47aa-897d-50260b19fe2c',
+			thumb:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_RENDER.webp',
+			normal:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_NORMAL.jpg',
+			baseColor:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_BASE.jpg',
+			displacement:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_DISPLACE.jpg',
+			roughness:
+				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_ROUGH.jpg',
+			alpha: '',
+			materialName: 'Golden Brown Grid',
+			category: 'Corduroy',
+			collection: 'metamorphosis',
+			templateCategories: ['Accessories', 'Pants', 'Top', 'Skirt'],
+		},
+		{
+			_id: '50f63835-39c5-49f9-a0e0-8d1685fed4f8',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_RENDER.webp',
 			normal:
@@ -1062,96 +1146,6 @@ export const fabrics: Record<string, Fabric[]> = {
 			category: 'Corduroy',
 			collection: 'metamorphosis',
 			templateCategories: ['Skirt', 'Dress', 'Pants'],
-		},
-		{
-			_id: '41f75aae-38a2-417e-8db7-7087484a154d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_ROUGH.jpg',
-			alpha: '',
-			materialName: 'Black',
-			category: 'Taffeta',
-			collection: 'metamorphosis',
-			templateCategories: ['Accessory', 'Top'],
-		},
-		{
-			_id: '3ab0bf3c-5002-4565-98ae-e60859286390',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_ROUGH.jpg',
-			alpha: '',
-			materialName: 'Golden Brown Grid',
-			category: 'Corduroy',
-			collection: 'metamorphosis',
-			templateCategories: ['Top', 'Skirt', 'Accessory', 'Pants'],
-		},
-		{
-			_id: '5a154f6c-6c08-43de-84cb-30ee373d13ff',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_ROUGH.jpg',
-			alpha: '',
-			materialName: 'Black Seethrough',
-			category: 'Cotton',
-			collection: 'metamorphosis',
-			templateCategories: ['Top', 'Dress'],
-		},
-		{
-			_id: 'a4ed94cd-815e-4443-a96c-17c935b85719',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
-			alpha: '',
-			materialName: 'White',
-			category: 'Cotton',
-			collection: 'metamorphosis',
-			templateCategories: ['Top', 'Skirt', 'Dress', 'Accessory', 'Pants'],
-		},
-		{
-			_id: '9e61c430-2107-489c-9081-d4c998e65991',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_ROUGH.jpg',
-			alpha: '',
-			materialName: 'Black',
-			category: 'Cotton',
-			collection: 'metamorphosis',
-			templateCategories: ['Top', 'Dress', 'Pants', 'Skirt', 'Accessory'],
 		},
 	],
 	'the-soul': [
