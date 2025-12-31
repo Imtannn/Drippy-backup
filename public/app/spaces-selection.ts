@@ -345,7 +345,7 @@ export class SpacesSelection extends Element {
 								</div>
 								<div class="trending-tabs">
 									<button class="trending-tab">Newest drop</button>
-									<button class="trending-tab active">For you</button>
+									<button class="trending-tab">For you</button>
 								</div>
 							</div>
 							<div class="trending-cards-container">
