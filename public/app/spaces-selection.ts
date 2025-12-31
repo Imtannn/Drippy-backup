@@ -345,7 +345,7 @@ export class SpacesSelection extends Element {
 								</div>
 								<div class="trending-tabs">
 									<button class="trending-tab">Newest drop</button>
-									<button class="trending-tab">For you</button>
+									<button class="trending-tab active">For you</button>
 								</div>
 							</div>
 							<div class="trending-cards-container">
@@ -403,10 +403,16 @@ export class SpacesSelection extends Element {
 								></index-each>
 							</div>
 						</div>
-					</div>
 
-				</div>
-
+						<div class="title-container">
+							<div class="title-container_left">
+								<p class="left_title">Collect now</p>
+								<p class="left_subtitle">Check out these hot items</p>
+							</div>
+							<div class="title-container_right">
+								<a>See all</a>
+							</div>
+						</div>
 						<div class="cards-container">
 							<index-each
 								items=${() => this.filteredSpace}
@@ -439,6 +445,10 @@ export class SpacesSelection extends Element {
 							></index-each>
 						</div>
 					</div>
+				</div>
+
+
+
 				`}
 			></show-when>
 		</div>
