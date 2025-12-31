@@ -6735,7 +6735,7 @@ export const fabrics: Record<string, Fabric[]> = {
 	],
 	'h&m': [
 		{
-			_id: '40b487c8-0dcf-43a7-84e4-968e79995379',
+			_id: 'd5376013-2f43-4a14-8b98-f1091abe1b94',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_PALE_BEIGE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_PALE_BEIGE_-_RENDER.webp',
 			normal:
@@ -6759,7 +6759,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			coef: 500,
 		},
 		{
-			_id: '0bc25eee-70c1-4ca2-8778-86ba8a2ec553',
+			_id: '3b24c639-36ec-4a08-831c-5a0e995c53b1',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_MISTY_ROSE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_MISTY_ROSE_-_RENDER.webp',
 			normal:
@@ -6783,7 +6783,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			coef: 500,
 		},
 		{
-			_id: '01cccff0-63b6-4434-aa97-4b09abd41d53',
+			_id: '06becc3a-192f-4f4f-aa85-6daf8e616bb0',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_CREAM_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_CREAM_-_RENDER.webp',
 			normal:
@@ -6807,7 +6807,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			coef: 500,
 		},
 		{
-			_id: '41bbf274-6cb3-4720-a72e-fe63a8587534',
+			_id: '1e92e301-310e-4fcf-b6d0-c5f2a8d35703',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SEERSUCKER_-_WHITE_%3C5%2C_5%2C_0%2C_0%2C_900%2C_0%3E/SEERSUCKER_-_WHITE_-_RENDER.webp',
 			normal:
@@ -6831,7 +6831,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			coef: 900,
 		},
 		{
-			_id: '093c8fae-07fb-4487-bc50-488d28f6bedf',
+			_id: 'c3f44e95-fd3a-4be8-8eda-364701616173',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/CREPE_COTTON_-_FLORAL_%3C4%2C_4%2C_0%2C_0%2C_850%2C_0%3E/CREPE_COTTON_-_FLORAL_-_RENDER.webp',
 			normal:
@@ -6855,7 +6855,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			coef: 850,
 		},
 		{
-			_id: 'f33e815c-41fd-4a4f-8920-e98ab0593cb6',
+			_id: 'bdecde1a-38f5-4388-84d4-90fcd1babd2a',
 			thumb:
 				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_SHEPHERD_%3C3%2C_3%2C_0%2C_0%2C_200%2C_0%3E/COTTON_-_SHEPHERD_-_RENDER.webp',
 			normal:
@@ -6879,7 +6879,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			coef: 200,
 		},
 		{
-			_id: '31868a79-183b-455e-99ba-07fcad4d0749',
+			_id: '3f9cb78d-2446-4717-9c25-a6840ddebd25',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_BASE.jpg',
@@ -6889,10 +6889,10 @@ export const fabrics: Record<string, Fabric[]> = {
 			materialName: 'Black',
 			category: 'Knit',
 			collection: 'h&m',
-			templateCategories: ['Dress', 'Top'],
+			templateCategories: ['Top', 'Dress'],
 		},
 		{
-			_id: 'ac8622ea-4030-4953-82e6-bc415cd4b6aa',
+			_id: '4c60efc2-9dd9-46d2-9037-ba1eb55f4908',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_BASE.jpg',
@@ -6906,7 +6906,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Dress'],
 		},
 		{
-			_id: 'baaf15f5-3c74-4ae6-9f5b-91c6d6ac584c',
+			_id: '33081dcb-0550-4c6c-9e4b-ce7d270d5e2a',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_BASE.jpg',
@@ -6920,7 +6920,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Pants'],
 		},
 		{
-			_id: '82e382c6-dea1-4c5f-bc86-eb0039db849d',
+			_id: 'c4f16b16-d1ca-4381-ad72-da7acbbe8c2a',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_BROWN/COTTON_-_BROWN_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_BROWN/COTTON_-_BROWN_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_BROWN/COTTON_-_BROWN_-_BASE.jpg',
@@ -6934,7 +6934,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: ['Skirt'],
 		},
 		{
-			_id: '6da466c6-66b0-4143-807b-d9c26713b7ef',
+			_id: '68090d48-7649-41ed-915a-26cd3d0b3415',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
@@ -6948,7 +6948,7 @@ export const fabrics: Record<string, Fabric[]> = {
 			templateCategories: [],
 		},
 		{
-			_id: 'd86d89d4-663a-470b-8950-77cd2f116ae9',
+			_id: '3cd4e2b9-6468-409d-96e2-7f0c350fb65c',
 			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
 			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
 			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
