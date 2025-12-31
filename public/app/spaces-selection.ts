@@ -185,9 +185,15 @@ export class SpacesSelection extends Element {
 			></show-when>
 
 			<!-- Space Cards -->
-			<div class="mobile">
-				<p class="featured-collections-title">Featured collections</p>
-			</div>
+			<show-when
+				condition=${() => !searchParams().has('brand')}
+				content=${() => html`
+					<div class="mobile">
+						<p class="featured-collections-title">Featured collections</p>
+					</div>
+				`}
+			></show-when>
+
 			<div class="cards-container">
 				<index-each
 					items=${() => this.filteredSpace}
@@ -224,105 +230,110 @@ export class SpacesSelection extends Element {
 				></show-when>
 			</div>
 
-			<div class="mobile">
-				<div class="title-container">
-					<div class="title-container_left">
-						<p class="left_title">Collect now</p>
-						<p class="left_subtitle">Check out these hot items</p>
-					</div>
-					<div class="title-container_right">
-						<a>See all</a>
-					</div>
-				</div>
-
-				<div class="trending-section">
-					<div class="trending-header">
-						<div class="trending-header-left">
-							<p class="trending-title">🔥 Trending now</p>
+			<show-when
+				condition=${() => !searchParams().has('brand')}
+				content=${() => html`
+					<div class="mobile">
+						<div class="title-container">
+							<div class="title-container_left">
+								<p class="left_title">Collect now</p>
+								<p class="left_subtitle">Check out these hot items</p>
+							</div>
+							<div class="title-container_right">
+								<a>See all</a>
+							</div>
 						</div>
-						<div class="trending-tabs">
-							<button class="trending-tab">Newest drop</button>
-							<button class="trending-tab active">For you</button>
-						</div>
-					</div>
-					<div class="trending-cards-container">
-						<index-each
-							items=${() => this.filteredSpace}
-							content=${() => (space: Accessor<Space>) => html`
-								<div class="trending-card">
-									<div class="trending-card-header">
-										<div class="trending-logo-circle">
-											<span>Logo</span>
-										</div>
-										<a class="trending-logo-text">Logo</a>
-									</div>
-									<div class="trending-card-image" onclick=${() => this.#onSpaceSelected(space())}>
-										<placeholder-image src=${getSpaceThumbnail(space())} alt=${space().name} object-fit="cover" />
-									</div>
-									<div class="trending-card-footer">
-										<svg
-											width="16"
-											height="16"
-											viewBox="0 0 16 16"
-											fill="none"
-											xmlns="http://www.w3.org/2000/svg"
-											class="eye-icon"
-										>
-											<path
-												d="M8 3C4.67 3 2.07 5.13 1 8C2.07 10.87 4.67 13 8 13C11.33 13 13.93 10.87 15 8C13.93 5.13 11.33 3 8 3ZM8 11.33C6.16 11.33 4.67 9.84 4.67 8C4.67 6.16 6.16 4.67 8 4.67C9.84 4.67 11.33 6.16 11.33 8C11.33 9.84 9.84 11.33 8 11.33ZM8 6C7.08 6 6.33 6.75 6.33 7.67C6.33 8.58 7.08 9.33 8 9.33C8.92 9.33 9.67 8.58 9.67 7.67C9.67 6.75 8.92 6 8 6Z"
-												fill="#BBBBBB"
-											/>
-										</svg>
-										<span class="trending-view-count">11.4K viewing</span>
-									</div>
-								</div>
-							`}
-						></index-each>
-					</div>
-				</div>
 
-				<div class="title-container">
-					<div class="title-container_left">
-						<p class="left_title">New space</p>
-						<p class="left_subtitle">This week</p>
-					</div>
-					<div class="title-container_right">
-						<a>See all</a>
-					</div>
-				</div>
-
-				<div class="cards-container">
-					<index-each
-						items=${() => this.filteredSpace}
-						content=${() => (space: Accessor<Space>) => html`
-							<!-- Bloom Realm Card -->
-							<div class="space-card">
-								<div class="scene-preview">
-									<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
-										<placeholder-image src=${getSpaceThumbnail(space())} alt=${space().name} object-fit="cover" />
-									</div>
-									<div class="garments-count">${space().garmentsCount} garments</div>
+						<div class="trending-section">
+							<div class="trending-header">
+								<div class="trending-header-left">
+									<p class="trending-title">🔥 Trending now</p>
 								</div>
-								<div class="card-content_block">
-									<div class="text-content">
-										<h3 class="card-title_block">${space().name}</h3>
-										<div class="content-icons">
-											<div class="item">
-												<img src="/images/icons/heart.svg" alt="Item" />
-												135
-											</div>
-											<div class="item">
-												<img src="/images/icons/user.svg" alt="Item" />
-												13K
-											</div>
-										</div>
-									</div>
+								<div class="trending-tabs">
+									<button class="trending-tab">Newest drop</button>
+									<button class="trending-tab active">For you</button>
 								</div>
 							</div>
-						`}
-					></index-each>
-				</div>
-			</div>
+							<div class="trending-cards-container">
+								<index-each
+									items=${() => this.filteredSpace}
+									content=${() => (space: Accessor<Space>) => html`
+										<div class="trending-card">
+											<div class="trending-card-header">
+												<div class="trending-logo-circle">
+													<span>Logo</span>
+												</div>
+												<a class="trending-logo-text">Logo</a>
+											</div>
+											<div class="trending-card-image" onclick=${() => this.#onSpaceSelected(space())}>
+												<placeholder-image src=${getSpaceThumbnail(space())} alt=${space().name} object-fit="cover" />
+											</div>
+											<div class="trending-card-footer">
+												<svg
+													width="16"
+													height="16"
+													viewBox="0 0 16 16"
+													fill="none"
+													xmlns="http://www.w3.org/2000/svg"
+													class="eye-icon"
+												>
+													<path
+														d="M8 3C4.67 3 2.07 5.13 1 8C2.07 10.87 4.67 13 8 13C11.33 13 13.93 10.87 15 8C13.93 5.13 11.33 3 8 3ZM8 11.33C6.16 11.33 4.67 9.84 4.67 8C4.67 6.16 6.16 4.67 8 4.67C9.84 4.67 11.33 6.16 11.33 8C11.33 9.84 9.84 11.33 8 11.33ZM8 6C7.08 6 6.33 6.75 6.33 7.67C6.33 8.58 7.08 9.33 8 9.33C8.92 9.33 9.67 8.58 9.67 7.67C9.67 6.75 8.92 6 8 6Z"
+														fill="#BBBBBB"
+													/>
+												</svg>
+												<span class="trending-view-count">11.4K viewing</span>
+											</div>
+										</div>
+									`}
+								></index-each>
+							</div>
+						</div>
+
+						<div class="title-container">
+							<div class="title-container_left">
+								<p class="left_title">New space</p>
+								<p class="left_subtitle">This week</p>
+							</div>
+							<div class="title-container_right">
+								<a>See all</a>
+							</div>
+						</div>
+
+						<div class="cards-container">
+							<index-each
+								items=${() => this.filteredSpace}
+								content=${() => (space: Accessor<Space>) => html`
+									<!-- Bloom Realm Card -->
+									<div class="space-card">
+										<div class="scene-preview">
+											<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
+												<placeholder-image src=${getSpaceThumbnail(space())} alt=${space().name} object-fit="cover" />
+											</div>
+											<div class="garments-count">${space().garmentsCount} garments</div>
+										</div>
+										<div class="card-content_block">
+											<div class="text-content">
+												<h3 class="card-title_block">${space().name}</h3>
+												<div class="content-icons">
+													<div class="item">
+														<img src="/images/icons/heart.svg" alt="Item" />
+														135
+													</div>
+													<div class="item">
+														<img src="/images/icons/user.svg" alt="Item" />
+														13K
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								`}
+							></index-each>
+						</div>
+					</div>
+				`}
+			></show-when>
 		</div>
 
 		<dialog-element
