@@ -4,7 +4,7 @@ import {
 	clamp,
 	createEffect,
 	css,
-	// disposeMaterial,
+	disposeMaterial,
 	Element,
 	element,
 	Element3D,
@@ -779,7 +779,8 @@ export class DrippyScene extends Element {
 						// Create a map for mesh to meshes key
 						const meshToFabricMeshesMap = new Map<string, string>()
 						for (const meshesKey of Object.keys(fabricsForBlockCategory)) {
-							// CONTINUE ensure correct comment: e.g. "Sleeve_Left-Sleeve_Right" -> ["Sleeve_Left", "Sleeve_Right"]
+							// CONTINUE ensure correct comment here:
+							// e.g. "Sleeve_Left-Sleeve_Right" -> ["Sleeve_Left", "Sleeve_Right"]
 							const meshArray = meshesKey.split('-')
 							for (const mesh of meshArray) meshToFabricMeshesMap.set(mesh, meshesKey)
 						}
@@ -810,14 +811,21 @@ export class DrippyScene extends Element {
 							// are properly disposed.
 							// Maybe we don't need to create a new material
 							// every time.
-							// disposeMaterial(mesh)
-							// mesh.material = new THREE.MeshPhysicalMaterial()
+							// OLD:
+							disposeMaterial(mesh)
+							mesh.material = new THREE.MeshPhysicalMaterial()
 							textureManager.applyTexturesToMaterial(mesh.material, textureSet)
 							onCleanup(() => {
-								// disposeMaterial(mesh)
+								disposeMaterial(mesh)
 								this.#resetMaterialProperties(el, mesh)
 								el.needsUpdate()
 							})
+							// NEW:
+							// textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+							// onCleanup(() => {
+							// 	this.#resetMaterialProperties(el, mesh)
+							// 	el.needsUpdate()
+							// })
 						}
 
 						el.needsUpdate()
