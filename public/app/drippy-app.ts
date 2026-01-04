@@ -43,7 +43,6 @@ export class DrippyApp extends Element {
 	static override elementName = 'drippy-app'
 
 	@signal appLoaded = false
-	@signal showLoadingCover = false
 
 	// FIXME this needs re-work, currently can cause an infinite loop (the
 	// console.logs in loadFromUrlParameters will log repeatedly)
@@ -78,22 +77,6 @@ export class DrippyApp extends Element {
 			// Brand exists but there are other params → remove brand
 			params.delete('brand')
 			pushState()
-		}
-	}
-
-	@effect loadingCoverEffect() {
-		if (
-			store.view !== 'avatar' &&
-			store.view !== 'space' &&
-			store.selectedAvatar &&
-			store.selectedSpace &&
-			store.isDrippySceneLoading
-		) {
-			console.log(' ------------- show loading cover')
-			this.showLoadingCover = true
-		} else {
-			console.log(' ------------- hide loading cover')
-			this.showLoadingCover = false
 		}
 	}
 
