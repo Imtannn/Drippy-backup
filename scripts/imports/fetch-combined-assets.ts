@@ -57,10 +57,6 @@ const COLLECTION_CONFIGS: {collection: string; rootFolderId: string; gender?: 'm
 	// 	rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
 	// },
 	// {
-	// 	collection: 'metamorphosis',
-	// 	rootFolderId: '1ymJMcl0S3Em6fteG_qsUMiDXn9lH2Isd',
-	// },
-	// {
 	// 	collection: 'the-soul',
 	// 	rootFolderId: '19Oq6abu1SnMTLSJHS0VY_GT1pAvpdU0T',
 	// },
@@ -105,10 +101,9 @@ const COLLECTION_CONFIGS: {collection: string; rootFolderId: string; gender?: 'm
 	// 	rootFolderId: '1yficP672jh2jmHwfmHqKN5f3ca1Hd5rm',
 	// },
 	// {
-	// 	collection: 'animation-test',
+	// 	collection: 'metamorphosis',
 	// 	rootFolderId: '1skW21QjedKwrGWVfRlHShth4Zcg4oT4v',
 	// },
-
 	// {
 	// 	collection: 'anyshape',
 	// 	rootFolderId: '1k8GM9DJdR4q9emW9pGEPU1o2UYHiRog0',
@@ -117,10 +112,10 @@ const COLLECTION_CONFIGS: {collection: string; rootFolderId: string; gender?: 'm
 	// 	collection: 'baum-und-pferdgarten',
 	// 	rootFolderId: '14dd0YvtPvanr8owwpG9RMRl-yo4QT44x',
 	// },
-	{
-		collection: 'bloom.womenswear',
-		rootFolderId: '1Fsyv0mcFup0raVjvv4gXIW6SWVRlgALR',
-	},
+	// {
+	// 	collection: 'bloom.womenswear',
+	// 	rootFolderId: '1Fsyv0mcFup0raVjvv4gXIW6SWVRlgALR',
+	// },
 	// {
 	// 	collection: 'cecilie-bahnsen',
 	// 	rootFolderId: '1oLq3zGmjacJx7cA3UNp6cb2py4k9LBx9',
@@ -133,193 +128,196 @@ const COLLECTION_CONFIGS: {collection: string; rootFolderId: string; gender?: 'm
 	// 	collection: 'dario-mittmann',
 	// 	rootFolderId: '1dgfABw4Pv9hch85BPz4So1OeSuPwAO5w',
 	// },
-
 	// {
 	// 	collection: 'david-black',
 	// 	rootFolderId: '1p6FtdSkIGIA3JxB_sVhccD-zjnoyPhZw',
 	// },
-	{
-		collection: 'diane',
-		rootFolderId: '1wJWNQbh-tmmKtHH0GGrB1AsGHz5nTniJ',
-	},
-	{
-		collection: 'dico',
-		rootFolderId: '1C76QlH0zqGBYLvRXi6AYoLyB6y2uJAiR',
-	},
-	{
-		collection: 'dottie',
-		rootFolderId: '1W-68fRdrKAUOKwBDAxc0WaofwqQo6nMJ',
-	},
-	{
-		collection: 'erroris.ltd',
-		rootFolderId: '1h1Mt2eq3xx8SQzb06t8E2nqEzBKZ4f_R',
-	},
+	// {
+	// 	collection: 'diane',
+	// 	rootFolderId: '1wJWNQbh-tmmKtHH0GGrB1AsGHz5nTniJ',
+	// },
+	// {
+	// 	collection: 'dico',
+	// 	rootFolderId: '1C76QlH0zqGBYLvRXi6AYoLyB6y2uJAiR',
+	// },
+	// {
+	// 	collection: 'dottie',
+	// 	rootFolderId: '1W-68fRdrKAUOKwBDAxc0WaofwqQo6nMJ',
+	// },
+	// {
+	// 	collection: 'erroris.ltd',
+	// 	rootFolderId: '1h1Mt2eq3xx8SQzb06t8E2nqEzBKZ4f_R',
+	// },
 	// {
 	// 	collection: 'gola',
 	// 	rootFolderId: '1ZBcsModfRLPD1tNn_cTSvV-nS7mUyo21',
 	// },
-	{
-		collection: 'vinaygaia',
-		gender: 'male',
-		rootFolderId: '1NeHJayR6MLvM__3OteVveMPnpUIydF6T',
-	},
-	{
-		collection: 'h2b',
-		rootFolderId: '1JCfZOMtSp4EfYLuH4HcBzRItb8_GFLLR',
-	},
-	{
-		collection: 'joie-des-roses',
-		rootFolderId: '1zP_KfpEqRx3az3_03DSGWEGRXn6oc3Cm',
-	},
-	{
-		collection: 'jubin-studio',
-		rootFolderId: '19faN1x2OpK3d2ftk0YV8WtOTU3sZU6ok',
-	},
+	// {
+	// 	collection: 'vinaygaia',
+	// 	gender: 'male',
+	// 	rootFolderId: '1NeHJayR6MLvM__3OteVveMPnpUIydF6T',
+	// },
+	// {
+	// 	collection: 'h2b',
+	// 	rootFolderId: '1JCfZOMtSp4EfYLuH4HcBzRItb8_GFLLR',
+	// },
+	// {
+	// 	collection: 'joie-des-roses',
+	// 	rootFolderId: '1zP_KfpEqRx3az3_03DSGWEGRXn6oc3Cm',
+	// },
+	// {
+	// 	collection: 'jubin-studio',
+	// 	rootFolderId: '19faN1x2OpK3d2ftk0YV8WtOTU3sZU6ok',
+	// },
 	// {
 	// 	collection: 'julian-prohaska',
 	// 	rootFolderId: '1BNbvcSYavMSqXUhff7NG3aHbTSSzhNpv',
 	// },
+	// {
+	// 	collection: 'kido',
+	// 	rootFolderId: '1ye_JXheFecOOh9Lbb3EobxEEK3aCdpTD',
+	// },
+	// {
+	// 	collection: 'levents',
+	// 	rootFolderId: '1ML--cFFm0RB3FYjqGcSy5XM3FwZPL16q',
+	// },
+	// {
+	// 	collection: 'lider',
+	// 	gender: 'male',
+	// 	rootFolderId: '1nQWCTO2_NloTlB5QR2A5s4j2TP-l1QkZ',
+	// },
+	// {
+	// 	collection: 'ononmm',
+	// 	rootFolderId: '1kzK8olqVK3iRg84DaA4Juf3YQ_zVns61',
+	// },
+	// {
+	// 	collection: 'paradise-saigon',
+	// 	gender: 'male',
+	// 	rootFolderId: '1O-rlxQgP6s6NIqGhmK-u-QL-SKi9tq0c',
+	// },
+	// {
+	// 	collection: 'pindiga-ranjith-kumar',
+	// 	rootFolderId: '1TXY8y2y98IcqHSDgfNq_MZWkDJZ3rZau',
+	// },
+	// {
+	// 	collection: 'pradies',
+	// 	rootFolderId: '1JrDxYfDyX5wqupUclec_G-5H1QSQxNnH',
+	// },
+	// {
+	// 	collection: 'bad-habits',
+	// 	rootFolderId: '1FAKJMS1jOzgj67wkF4AdEbSMbBhXyCS2',
+	// },
+	// {
+	// 	collection: 'beachclub.official',
+	// 	rootFolderId: '1ytfrGzgnqbUkNdBnlDW5vYlS7i7j7_Ws',
+	// },
+	// {
+	// 	collection: 'cara-club',
+	// 	rootFolderId: '1hRNAjkt6tZo7uwCpqYpfis2i_pNZ98dg',
+	// },
+	// {
+	// 	collection: 'demobaza',
+	// 	rootFolderId: '1IkyPU9RC-JifFB85UwIhOpI2IzmuuqDX',
+	// },
+	// {
+	// 	collection: 'diane',
+	// 	rootFolderId: '1wJWNQbh-tmmKtHH0GGrB1AsGHz5nTniJ',
+	// },
+	// {
+	// 	collection: 'hani',
+	// 	rootFolderId: '1PxEkZMy9MQFyLaTh8AHtig6FHpRHqY6K',
+	// },
+	// {
+	// 	collection: 'huelley-rose',
+	// 	rootFolderId: '1WOmwiamcARAb2Ekv9c6lvulOZMovGycg',
+	// },
+	// {
+	// 	collection: 'hurricane-b',
+	// 	rootFolderId: '195Xq3sSGNpH8OjIhCrElTT75JVSpWyet',
+	// },
+	// {
+	// 	collection: 'fig.cool-leather',
+	// 	rootFolderId: '17m4VfaxlIDCGc7SoyZSdR9IrhjMncs_l',
+	// },
+	// {
+	// 	collection: 'libeworkshop',
+	// 	rootFolderId: '1czCRQ8e2ePgt7_8I8Gfr3SZSwZDywniy',
+	// },
+	// {
+	// 	collection: 'mono-talk',
+	// 	rootFolderId: '1unt9_hNsGPTmP2WHDCfTxAOwg8UM1xFf',
+	// },
+	// {
+	// 	collection: 'naked',
+	// 	rootFolderId: '15aIsaHcRgYhfyeW9FS6EPI0HLRupQFtd',
+	// },
+	// {
+	// 	collection: 'push-push',
+	// 	rootFolderId: '1-fau_i6mV_klgqfacZ0i16SQrclIKTmC',
+	// },
+	// {
+	// 	collection: 'raxada',
+	// 	rootFolderId: '1cMrawDMvRgJizl3Pu0xNNkEfqQjFPTlu',
+	// },
+	// {
+	// 	collection: 'rechick',
+	// 	rootFolderId: '1LovuBDt4IwTv59d3ArRLTkQmQllxalvM',
+	// },
+	// {
+	// 	collection: 'ridkid',
+	// 	rootFolderId: '1mxxBri7-XxksDP1q-t-76znSzYMDmqp5',
+	// },
+	// {
+	// 	collection: 'rotate',
+	// 	rootFolderId: '1Y3fMNntJa0EG5jud2IRPHLwXK_YggwLM',
+	// },
+	// {
+	// 	collection: 'salteye',
+	// 	rootFolderId: '1N0_WSy5WMAGrPHeDFIByNxmcwxAjmuzu',
+	// },
+	// {
+	// 	collection: 'skall',
+	// 	rootFolderId: '1pXn8hYMnuAkzlw0V2MUjwv5Lo-XKuNVK',
+	// },
+	// {
+	// 	collection: 'so-vintage-official',
+	// 	rootFolderId: '1EVxpiETahCKoptqWeatw8au75HW3roJ7',
+	// },
+	// {
+	// 	collection: 'sora.m_design',
+	// 	rootFolderId: '1WnsQ3NilG9GekJCvOrgz2UeX8wePiC4s',
+	// },
+	// {
+	// 	collection: 'ssdslsns',
+	// 	rootFolderId: '1G-v--BLmR45yFD3_8jDT3i2C9xrS_lSe',
+	// },
+	// {
+	// 	collection: 'stevie-crowne',
+	// 	rootFolderId: '1T9fJat8V3WjWWZA5DHRlNVMjI6p_Oxlz',
+	// },
+	// {
+	// 	collection: 'tsun',
+	// 	rootFolderId: '1yvocRU162iKy-pAxxrTmFPhftUN1RNbX',
+	// },
+	// {
+	// 	collection: 'tubycatu',
+	// 	rootFolderId: '1feRlmMnv0HNC4Ueo2WxmroEIQK7hRly_',
+	// },
+	// {
+	// 	collection: 'whiteplan',
+	// 	rootFolderId: '17W6ps3OJpG401byGCdu254araCssbwB-',
+	// },
+	// {
+	// 	collection: 'zd-eye-of-the-storm',
+	// 	rootFolderId: '1TL9_8zSUQN3NBwVljZq1uwb7ybgLZnc4',
+	// },
+	// {
+	// 	collection: 'katalog-1811',
+	// 	rootFolderId: '1nmtMpL2qYOx096pPK98Zeo2mOpD_FTqz',
+	// },
 	{
-		collection: 'kido',
-		rootFolderId: '1ye_JXheFecOOh9Lbb3EobxEEK3aCdpTD',
-	},
-	{
-		collection: 'levents',
-		rootFolderId: '1ML--cFFm0RB3FYjqGcSy5XM3FwZPL16q',
-	},
-	{
-		collection: 'lider',
-		gender: 'male',
-		rootFolderId: '1nQWCTO2_NloTlB5QR2A5s4j2TP-l1QkZ',
-	},
-	{
-		collection: 'ononmm',
-		rootFolderId: '1kzK8olqVK3iRg84DaA4Juf3YQ_zVns61',
-	},
-	{
-		collection: 'paradise-saigon',
-		gender: 'male',
-		rootFolderId: '1O-rlxQgP6s6NIqGhmK-u-QL-SKi9tq0c',
-	},
-	{
-		collection: 'pindiga-ranjith-kumar',
-		rootFolderId: '1TXY8y2y98IcqHSDgfNq_MZWkDJZ3rZau',
-	},
-	{
-		collection: 'pradies',
-		rootFolderId: '1JrDxYfDyX5wqupUclec_G-5H1QSQxNnH',
-	},
-	{
-		collection: 'bad-habits',
-		rootFolderId: '1FAKJMS1jOzgj67wkF4AdEbSMbBhXyCS2',
-	},
-	{
-		collection: 'beachclub.official',
-		rootFolderId: '1ytfrGzgnqbUkNdBnlDW5vYlS7i7j7_Ws',
-	},
-	{
-		collection: 'cara-club',
-		rootFolderId: '1hRNAjkt6tZo7uwCpqYpfis2i_pNZ98dg',
-	},
-	{
-		collection: 'demobaza',
-		rootFolderId: '1IkyPU9RC-JifFB85UwIhOpI2IzmuuqDX',
-	},
-	{
-		collection: 'diane',
-		rootFolderId: '1wJWNQbh-tmmKtHH0GGrB1AsGHz5nTniJ',
-	},
-	{
-		collection: 'hani',
-		rootFolderId: '1PxEkZMy9MQFyLaTh8AHtig6FHpRHqY6K',
-	},
-	{
-		collection: 'huelley-rose',
-		rootFolderId: '1WOmwiamcARAb2Ekv9c6lvulOZMovGycg',
-	},
-	{
-		collection: 'hurricane-b',
-		rootFolderId: '195Xq3sSGNpH8OjIhCrElTT75JVSpWyet',
-	},
-	{
-		collection: 'fig.cool-leather',
-		rootFolderId: '17m4VfaxlIDCGc7SoyZSdR9IrhjMncs_l',
-	},
-	{
-		collection: 'libeworkshop',
-		rootFolderId: '1czCRQ8e2ePgt7_8I8Gfr3SZSwZDywniy',
-	},
-	{
-		collection: 'mono-talk',
-		rootFolderId: '1unt9_hNsGPTmP2WHDCfTxAOwg8UM1xFf',
-	},
-	{
-		collection: 'naked',
-		rootFolderId: '15aIsaHcRgYhfyeW9FS6EPI0HLRupQFtd',
-	},
-	{
-		collection: 'push-push',
-		rootFolderId: '1-fau_i6mV_klgqfacZ0i16SQrclIKTmC',
-	},
-	{
-		collection: 'raxada',
-		rootFolderId: '1cMrawDMvRgJizl3Pu0xNNkEfqQjFPTlu',
-	},
-	{
-		collection: 'rechick',
-		rootFolderId: '1LovuBDt4IwTv59d3ArRLTkQmQllxalvM',
-	},
-	{
-		collection: 'ridkid',
-		rootFolderId: '1mxxBri7-XxksDP1q-t-76znSzYMDmqp5',
-	},
-	{
-		collection: 'rotate',
-		rootFolderId: '1Y3fMNntJa0EG5jud2IRPHLwXK_YggwLM',
-	},
-	{
-		collection: 'salteye',
-		rootFolderId: '1N0_WSy5WMAGrPHeDFIByNxmcwxAjmuzu',
-	},
-	{
-		collection: 'skall',
-		rootFolderId: '1pXn8hYMnuAkzlw0V2MUjwv5Lo-XKuNVK',
-	},
-	{
-		collection: 'so-vintage-official',
-		rootFolderId: '1EVxpiETahCKoptqWeatw8au75HW3roJ7',
-	},
-	{
-		collection: 'sora.m_design',
-		rootFolderId: '1WnsQ3NilG9GekJCvOrgz2UeX8wePiC4s',
-	},
-	{
-		collection: 'ssdslsns',
-		rootFolderId: '1G-v--BLmR45yFD3_8jDT3i2C9xrS_lSe',
-	},
-	{
-		collection: 'stevie-crowne',
-		rootFolderId: '1T9fJat8V3WjWWZA5DHRlNVMjI6p_Oxlz',
-	},
-	{
-		collection: 'tsun',
-		rootFolderId: '1yvocRU162iKy-pAxxrTmFPhftUN1RNbX',
-	},
-	{
-		collection: 'tubycatu',
-		rootFolderId: '1feRlmMnv0HNC4Ueo2WxmroEIQK7hRly_',
-	},
-	{
-		collection: 'whiteplan',
-		rootFolderId: '17W6ps3OJpG401byGCdu254araCssbwB-',
-	},
-	{
-		collection: 'zd-eye-of-the-storm',
-		rootFolderId: '1TL9_8zSUQN3NBwVljZq1uwb7ybgLZnc4',
-	},
-	{
-		collection: 'katalog-1811',
-		rootFolderId: '1nmtMpL2qYOx096pPK98Zeo2mOpD_FTqz',
+		collection: 'h&m',
+		rootFolderId: '1nnIx4ArdruYT5XPsqZ8uihFETv_n15pa',
 	},
 ]
 
