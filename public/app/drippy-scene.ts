@@ -4,7 +4,7 @@ import {
 	clamp,
 	createEffect,
 	css,
-	disposeMaterial,
+	// disposeMaterial,
 	Element,
 	element,
 	Element3D,
@@ -15,6 +15,7 @@ import {
 	onCleanup,
 	Scene,
 	signal,
+	memo,
 } from 'lume'
 import type {Accessor} from 'solid-js'
 import {createMemo} from 'solid-js'
@@ -108,7 +109,7 @@ export class DrippyScene extends Element {
 	@signal private isVerticalPan = false
 	@signal private cameraRig: CameraRig | null = null
 
-	scene = () => {
+	@memo get scene() {
 		const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
 		return getSceneBySlug(backgroundScenes, defaultSceneSlug)
 	}
@@ -257,8 +258,6 @@ export class DrippyScene extends Element {
 	}
 
 	override connectedCallback() {
-		this.scene = createMemo(this.scene)
-
 		super.connectedCallback() // runs this.template()
 
 		// Memoize default render blocks and visibility to prevent unnecessary re-renders
@@ -444,7 +443,7 @@ export class DrippyScene extends Element {
 				if (!this.selectedSpace) return
 				const space = spaces.find(space => space.slug === this.selectedSpace?.slug)
 				if (space) {
-					if (this.scene()) this.sceneUrl = this.scene()!.scene
+					if (this.scene) this.sceneUrl = this.scene.scene
 				}
 			})
 
@@ -1044,7 +1043,7 @@ export class DrippyScene extends Element {
 					perspective="800"
 					physically-correct-lights
 					shadow-mode="vsm"
-					attr:environment=${() => this.scene()?.env ?? '/images/envs/brown_photostudio_02.jpg'}
+					attr:environment=${() => this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg'}
 					attr:environment-intensity="0.3"
 					oncapture:pointerdown=${this.#handlePointerDown}
 					oncapture:pointermove=${this.#handlePointerMove}
@@ -1276,15 +1275,15 @@ export class DrippyScene extends Element {
 						ref=${(el: GltfModel) => (this.backgroundModel = el)}
 						id="scene"
 						attr:src=${() => {
-							console.log('selected background', this.scene()?.scene)
-							return this.scene()?.scene ?? ''
+							console.log('selected background', this.scene?.scene)
+							return this.scene?.scene ?? ''
 						}}
 					></lume-gltf-model>
 
 					<!-- Background scene extra objects -->
 					<${Index}
 						each=${() => {
-							return this.scene()?.includedModelFiles ?? []
+							return this.scene?.includedModelFiles ?? []
 						}}
 					>
 						${(item: Accessor<string>) => html`

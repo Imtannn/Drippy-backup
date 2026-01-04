@@ -1,4 +1,4 @@
-import {batch, createMemo, css, Element, element, html, signal} from 'lume'
+import {batch, createMemo, css, Element, element, html, signal, effect} from 'lume'
 import '../elements/connection-warning.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
@@ -44,58 +44,56 @@ export class DrippyApp extends Element {
 	@signal appLoaded = false
 	@signal showLoadingCover = false
 
-	override connectedCallback() {
-		super.connectedCallback()
-
-		// FIXME this needs re-work, currently can cause an infinite loop (the
-		// console.logs in loadFromUrlParameters will log repeatedly)
-		this.createEffect(() => {
-			try {
-				// Load garments and fabrics from URL parameters if present
-				if (store.selectedSpace) {
-					this.#loadFromUrlParameters(store.selectedSpace)
-				}
-
-				if (store.isPreview || isPreview() === 'true') {
-					store.view = 'preview'
-					return
-				}
-			} catch (error) {
-				console.error('Error loading app', error)
-			} finally {
-				this.appLoaded = true
-				// Mark URL params as loaded so default garments can apply after user interactions
-				store.urlParamsLoaded = true
+	// FIXME this needs re-work, currently can cause an infinite loop (the
+	// console.logs in loadFromUrlParameters will log repeatedly)
+	@effect loadParamsEffect() {
+		try {
+			// Load garments and fabrics from URL parameters if present
+			if (store.selectedSpace) {
+				this.#loadFromUrlParameters(store.selectedSpace)
 			}
-		})
 
-		// Monitor URL params: if brand exists with other params, remove brand
-		this.createEffect(() => {
-			const params = searchParams()
-			const hasBrand = params.has('brand')
-			const paramKeys = Array.from(params.keys())
-			const otherParams = paramKeys.filter(k => k !== 'brand')
-
-			if (hasBrand && otherParams.length > 0) {
-				// Brand exists but there are other params → remove brand
-				params.delete('brand')
-				pushState()
+			if (store.isPreview || isPreview() === 'true') {
+				store.view = 'preview'
+				return
 			}
-		})
+		} catch (error) {
+			console.error('Error loading app', error)
+		} finally {
+			this.appLoaded = true
+			// Mark URL params as loaded so default garments can apply after user interactions
+			store.urlParamsLoaded = true
+		}
+	}
 
-		this.createEffect(() => {
-			if (
-				store.view !== 'avatar' &&
-				store.view !== 'space' &&
-				store.selectedAvatar &&
-				store.selectedSpace &&
-				store.isDrippySceneLoading
-			) {
-				this.showLoadingCover = true
-			} else {
-				this.showLoadingCover = false
-			}
-		})
+	// Monitor URL params: if brand exists with other params, remove brand
+	@effect urlBrandEffect() {
+		const params = searchParams()
+		const hasBrand = params.has('brand')
+		const paramKeys = Array.from(params.keys())
+		const otherParams = paramKeys.filter(k => k !== 'brand')
+
+		if (hasBrand && otherParams.length > 0) {
+			// Brand exists but there are other params → remove brand
+			params.delete('brand')
+			pushState()
+		}
+	}
+
+	@effect loadingCoverEffect() {
+		if (
+			store.view !== 'avatar' &&
+			store.view !== 'space' &&
+			store.selectedAvatar &&
+			store.selectedSpace &&
+			store.isDrippySceneLoading
+		) {
+			console.log(' ------------- show loading cover')
+			this.showLoadingCover = true
+		} else {
+			console.log(' ------------- hide loading cover')
+			this.showLoadingCover = false
+		}
 	}
 
 	/**
