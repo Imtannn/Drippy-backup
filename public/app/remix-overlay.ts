@@ -107,6 +107,7 @@ export class RemixOverlay extends Element {
 		})
 
 		// Set activeTab immediately when selectedTemplate is set
+		// FIX Maximum call stack size exceeded
 		this.createEffect(() => {
 			const template = this.selectedTemplate
 			if (template) {
@@ -163,24 +164,31 @@ export class RemixOverlay extends Element {
 					})
 					.filter(fabric => fabric !== undefined) as Fabric[]
 
-				const defaultFabrics = fabrics['default']
+				// Get categories from option fabrics
+				const optionCategories = new Set(optionFabrics.map(f => f.category).filter(Boolean))
+
+				// Filter default fabrics to only include those with matching categories (and not already in options)
+				const filteredDefaultFabrics = fabrics['default'].filter(
+					fabric => fabric.category && optionCategories.has(fabric.category),
+				)
+
 				if (optionFabrics.length > 0) {
-					availableFabrics['default'] = [...optionFabrics, ...defaultFabrics]
+					availableFabrics['default'] = [...optionFabrics, ...filteredDefaultFabrics]
 				}
 
 				// Handle extraMaterials if they exist - use optionFabrics directly
 				if (this.selectedTemplate.extraMaterials && this.selectedTemplate.extraMaterials.length > 0) {
 					for (const extraMaterial of this.selectedTemplate.extraMaterials) {
-						availableFabrics[extraMaterial.mesh] = [...optionFabrics, ...defaultFabrics]
+						availableFabrics[extraMaterial.mesh] = [...optionFabrics, ...filteredDefaultFabrics]
 					}
 				}
 
 				this.availableFabrics = availableFabrics
 			} else {
-				const defaultFabrics = fabrics['default']
 				this.availableFabrics =
 					templateHelpers.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
-				this.availableFabrics['default'] = [...this.availableFabrics['default'], ...defaultFabrics]
+
+				this.availableFabrics['default'] = this.availableFabrics['default']
 			}
 
 			// Make sure the overlay is scrolled to the top on opening
@@ -355,8 +363,8 @@ export class RemixOverlay extends Element {
 		<show-on-device device="mobile">
 			<bottom-sheet
 				class="remix-overlay-sheet"
-				default-snap="0.25"
-				snap-points="0.25,0.25,0.25"
+				default-snap=${() => (this.pieceSelections.length > 1 ? '0.25' : '0.20')}
+				snap-points=${() => (this.pieceSelections.length > 1 ? '0.25,0.25,0.25' : '0.20,0.20,0.20')}
 				z-index="2000"
 				collapse-button="false"
 				max-height="100vh"
@@ -434,13 +442,13 @@ export class RemixOverlay extends Element {
 		.items-grid {
 			display: grid;
 			grid-auto-flow: column;
-			grid-auto-columns: calc((100% - (var(--uiGap) * 3)) / 4);
+			grid-auto-columns: calc((100% - (var(--uiGap) * 4)) / 4.5);
 			gap: var(--uiGap);
 			overflow-x: auto;
 			overflow-y: auto;
 			scroll-snap-type: x proximity;
 			-webkit-overflow-scrolling: touch;
-			padding-bottom: var(--uiSpacingSmall);
+			padding-top: var(--uiSpacingSmall);
 		}
 
 		.items-grid::-webkit-scrollbar {
@@ -473,7 +481,7 @@ export class RemixOverlay extends Element {
 			align-items: center;
 			justify-content: space-between;
 			padding: var(--uiSpacing);
-			padding-top: 15px;
+			padding-top: 10px;
 			padding-bottom: 10px;
 		}
 

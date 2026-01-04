@@ -1,8 +1,6 @@
 import type {Space} from '../types/types.js'
 import {collections} from './collections.js'
 
-const noImageUrl = new URL('../images/no-image.jpg', import.meta.url).href
-
 const sumGarmentsCount = (spaceCollections: string[]) => {
 	return spaceCollections.reduce(
 		(acc, collectionSlug) => acc + (collections.find(c => c.slug === collectionSlug)?.garmentsCount ?? 0),
@@ -401,7 +399,7 @@ export const spaces: Space[] = [
 		],
 		isWholesale: false,
 		isWorkInProgress: true,
-		isHidden: true,
+		isHidden: false,
 	},
 	{
 		name: 'PFW 2026 Male',
@@ -421,10 +419,10 @@ export const spaces: Space[] = [
 		name: 'H&M',
 		slug: 'h&m',
 		description: 'H&M',
-		logo: 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com/drippy-app/drippy-app-3D/brands/h%26m/lgo-h%26m.webp',
-		thumbnail: noImageUrl,
+		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/h%26m/lgo-h%26m.webp',
+		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/h%26m/H%26M+Scene.png',
 		defaultScene: 'h&m',
-		scenes: ['zove'],
+		scenes: ['h&m'],
 		gender: 'female',
 		garmentsCount: sumGarmentsCount(['h&m']),
 		collections: ['h&m'],

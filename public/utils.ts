@@ -525,7 +525,7 @@ export function getArmatureObject(avatarRoot: THREE.Object3D) {
 	// If there's an issue because of an avatar not having a skinned mesh named "body_", just
 	// do the above method instead.
 	return findInTree(avatarRoot, (obj: any) => {
-		return obj.skeleton && obj.name.includes('body_')
+		return obj.skeleton && obj.name.indexOf('body_') == 0
 	}) as THREE.SkinnedMesh | null
 }
 

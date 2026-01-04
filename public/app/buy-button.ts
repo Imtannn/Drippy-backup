@@ -30,7 +30,7 @@ export class BuyButton extends Element {
 			align-items: center;
 			justify-content: center;
 			gap: var(--uiGapSmall);
-			padding: 8.5px 20.5px;
+			padding: 8px 12.5px;
 			border-radius: var(--borderRadiusPill);
 			color: var(--uiColorPrimaryWhite);
 			background-color: var(--uiColorPrimaryBlack);

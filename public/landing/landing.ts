@@ -6,7 +6,7 @@ import '../elements/avatar-selector.js'
 import '../elements/custom-button.js'
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
-import '../elements/video-loading.js'
+import '../elements/image-loading.js'
 import '../routes.js' // track page visits
 
 import type {BlockCategory} from '../types/block.js'
@@ -59,29 +59,29 @@ const materials: Fabric[] = [
 		templateCategories: ['Top'],
 	},
 ]
-// Show video loading initially
-// function showVideoLoading() {
-// 	console.log('Showing video loading screen')
-// 	const videoLoadingElement = html`<video-loading></video-loading>`
-// 	document.body.appendChild(videoLoadingElement as any)
-// 	return videoLoadingElement
-// }
+// Show image loading initially
+function showVideoLoading() {
+	console.log('Showing image loading screen')
+	const videoLoadingElement = html`<image-loading></image-loading>`
+	document.body.appendChild(videoLoadingElement as any)
+	return videoLoadingElement
+}
 
 // Hide video loading when content is ready
-// function hideVideoLoading(videoLoadingElement: any) {
-// 	if (videoLoadingElement && videoLoadingElement.parentNode) {
-// 		console.log('Hiding video loading screen')
-// 		videoLoadingElement.remove()
-// 		// Restore body scroll
-// 		document.body.style.overflow = ''
-// 		document.documentElement.style.overflow = ''
-// 	} else {
-// 		console.log('Video loading element not found or already removed')
-// 		// Restore scroll anyway just in case
-// 		document.body.style.overflow = ''
-// 		document.documentElement.style.overflow = ''
-// 	}
-// }
+function hideVideoLoading(videoLoadingElement: any) {
+	if (videoLoadingElement && videoLoadingElement.parentNode) {
+		console.log('Hiding video loading screen')
+		videoLoadingElement.remove()
+		// Restore body scroll
+		document.body.style.overflow = ''
+		document.documentElement.style.overflow = ''
+	} else {
+		console.log('Video loading element not found or already removed')
+		// Restore scroll anyway just in case
+		document.body.style.overflow = ''
+		document.documentElement.style.overflow = ''
+	}
+}
 const [isYearlyActive, setIsYearlyActive] = createSignal(true)
 
 const currentMaterials = materials
@@ -713,14 +713,14 @@ const mainContent = html`
 // No need to set default - let the reactive function handle it
 
 // Show video loading immediately when landing page starts loading
-// const videoLoadingElement = showVideoLoading()
+const videoLoadingElement = showVideoLoading()
 
 // Fallback timeout to ensure loading screen is hidden after maximum 5 seconds
-// const maxLoadingTime = 5000
-// setTimeout(() => {
-// 	console.log('Fallback timeout: hiding video loading screen')
-// 	hideVideoLoading(videoLoadingElement)
-// }, maxLoadingTime)
+const maxLoadingTime = 5000
+setTimeout(() => {
+	console.log('Fallback timeout: hiding video loading screen')
+	hideVideoLoading(videoLoadingElement)
+}, maxLoadingTime)
 
 // First, append the content to DOM so we can track image loading
 // Try to use #root if it exists, otherwise append to body
@@ -730,38 +730,38 @@ container.append(...(Array.isArray(navbar) ? navbar : [navbar]))
 container.append(...(Array.isArray(mainContent) ? mainContent : [mainContent]))
 
 // Wait for all images and content to be fully loaded
-// function waitForContentReady() {
-// Check if all images are loaded
-// const images = document.querySelectorAll('img')
-// const imagePromises = Array.from(images).map(img => {
-// 	if (img.complete) {
-// 		return Promise.resolve()
-// 	}
-// 	return new Promise(resolve => {
-// 		img.addEventListener('load', resolve)
-// 		img.addEventListener('error', resolve) // Still resolve on error to not block
-// 	})
-// })
-// Wait for images + a minimum delay to ensure loading screen shows
-// Promise.all(imagePromises).then(() => {
-// 	const minLoadingTime = 3000
-// 	const startTime = Date.now()
-// 	const hideLoading = () => {
-// 		const elapsed = Date.now() - startTime
-// 		const remainingTime = Math.max(0, minLoadingTime - elapsed)
-// 		setTimeout(() => {
-// 			// Use requestAnimationFrame to ensure DOM has updated
-// 			requestAnimationFrame(() => {
-// 				hideVideoLoading(videoLoadingElement)
-// 			})
-// 		}, remainingTime)
-// 	}
-// 	hideLoading()
-// })
-// }
+function waitForContentReady() {
+	// Check if all images are loaded
+	const images = document.querySelectorAll('img')
+	const imagePromises = Array.from(images).map(img => {
+		if (img.complete) {
+			return Promise.resolve()
+		}
+		return new Promise(resolve => {
+			img.addEventListener('load', resolve)
+			img.addEventListener('error', resolve) // Still resolve on error to not block
+		})
+	})
+	// Wait for images + a minimum delay to ensure loading screen shows
+	Promise.all(imagePromises).then(() => {
+		const minLoadingTime = 3000
+		const startTime = Date.now()
+		const hideLoading = () => {
+			const elapsed = Date.now() - startTime
+			const remainingTime = Math.max(0, minLoadingTime - elapsed)
+			setTimeout(() => {
+				// Use requestAnimationFrame to ensure DOM has updated
+				requestAnimationFrame(() => {
+					hideVideoLoading(videoLoadingElement)
+				})
+			}, remainingTime)
+		}
+		hideLoading()
+	})
+}
 
 // Start waiting for content to be ready
-// waitForContentReady()
+waitForContentReady()
 
 // Force enable scroll after page load (iOS specific fix)
 setTimeout(() => {

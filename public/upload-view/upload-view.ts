@@ -1059,34 +1059,15 @@ export class UploadView extends Element {
 						`}
 					></for-each>
 				</select>
-			</app-buttons-group>
-		</app-buttons-right>
-
-		<app-buttons-left class="show-on-desktop">
-			<app-buttons-group>
 				<button class="upload-button" onclick=${this.#handleUploadClick} disabled=${() => this.isUploading}>
 					${() => (this.isUploading ? 'Uploading...' : '📁 Upload Template Folder')}
 				</button>
 				<show-when
 					condition=${() => this.convertedTemplate}
 					content=${() => html`
-						<button class="config-button left" onclick=${this.#toggleConfigPanel}>⚙️ Configure Fabric</button>
+						<button class="config-button" onclick=${this.#toggleConfigPanel}>⚙️ Configure Fabric</button>
 					`}
 				></show-when>
-			</app-buttons-group>
-		</app-buttons-left>
-
-		<app-buttons-right class="show-on-mobile" layout="bottom">
-			<app-buttons-group>
-				<show-when
-					condition=${() => this.convertedTemplate}
-					content=${() => html`
-						<button class="config-button" onclick=${this.#toggleConfigPanel}>⚙️ Configure</button>
-					`}
-				></show-when>
-				<button class="upload-button" onclick=${this.#handleUploadClick} disabled=${() => this.isUploading}>
-					${() => (this.isUploading ? 'Uploading...' : '📁 Upload Template Folder')}
-				</button>
 			</app-buttons-group>
 		</app-buttons-right>
 
@@ -1296,8 +1277,7 @@ export class UploadView extends Element {
 		}
 
 		:host {
-			width: 100%;
-			height: 100%;
+			display: contents;
 		}
 
 		drippy-scene {
@@ -1305,6 +1285,10 @@ export class UploadView extends Element {
 			height: 100%;
 			overflow: hidden;
 			box-sizing: border-box;
+		}
+
+		app-buttons-left {
+			z-index: 100;
 		}
 
 		.upload-button {

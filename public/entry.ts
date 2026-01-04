@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor'
-import './elements/video-loading.js'
+import './elements/image-loading.js'
 
 // For now import all collections. In the future we can import only the ones
 // needed per page.

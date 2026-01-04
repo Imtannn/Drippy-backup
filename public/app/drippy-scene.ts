@@ -425,6 +425,7 @@ export class DrippyScene extends Element {
 						store.view === 'order-items' ||
 						store.view === 'order-size' ||
 						store.view === 'custom-measurement' ||
+						store.view === 'iframe-popup' ||
 						store.view === 'success' ||
 						store.view === 'share' ||
 						store.view === 'template'
@@ -869,7 +870,6 @@ export class DrippyScene extends Element {
 					this.outlinePass.edgeGlow = 0
 					this.outlinePass.edgeThickness = 4
 					this.outlinePass.visibleEdgeColor.set(0x9b59b6) // purple accent
-					this.outlinePass.hiddenEdgeColor.set(0x9b59b6)
 					this.composer.addPass(this.outlinePass)
 
 					// const bloomPass = new BloomPass(1, 25, 4)
@@ -950,14 +950,26 @@ export class DrippyScene extends Element {
 					const models = garmentModels()
 					if (models.length === 0) return
 
-					// "default" means all meshes in the garment
+					// "default" means all meshes in the garment for the currently selected template only
 					const isDefault = selectingPiece === 'default'
 					const pieceNames = isDefault ? [] : selectingPiece.split('-')
 					const selectedMeshes: THREE.Object3D[] = []
 
+					// Get the template category being edited (from remix overlay)
+					const editingTemplateCategory = store.remixOverlayTemplate?.category
+
 					// Process models in chunks to avoid long blocking
 					for (const garmentModel of models) {
 						if (!garmentModel.three) continue
+
+						// For "default", only outline models belonging to the selected template
+						if (isDefault && editingTemplateCategory) {
+							const modelId = garmentModel.getAttribute('id') || ''
+							// ID format: collection-templateCategory-blockCategory-blockId
+							const parts = modelId.split('-')
+							const modelTemplateCategory = parts[1] as TemplateCategory | undefined
+							if (modelTemplateCategory !== editingTemplateCategory) continue
+						}
 
 						garmentModel.three.traverse((obj: THREE.Object3D) => {
 							if (!(obj as THREE.Mesh).isMesh) return
@@ -1353,8 +1365,9 @@ export class DrippyScene extends Element {
 				-webkit-transform: unset !important;
 			}
 			#lume-scene-container {
-				transform: var(--overrideSceneTranslateY, var(--sceneTranslateY));
-				-webkit-transform: var(--overrideSceneTranslateY, var(--sceneTranslateY));
+				transform: var(--overrideSceneTranslateY, var(--sceneTranslateY)) scale(var(--scene-scale, 1));
+				-webkit-transform: var(--overrideSceneTranslateY, var(--sceneTranslateY)) scale(var(--scene-scale, 1));
+				transform-origin: center center;
 			}
 
 			lume-scene {

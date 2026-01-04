@@ -66,7 +66,10 @@ class TemplateHelpers {
 
 		const fabricsInCategory = (fabrics[collection] ?? []).filter(fabric => fabric.category === fabricCategory)
 
-		return fabricsInCategory
+		// Include default fabrics with the same category (not already in the collection)
+		const defaultFabrics = fabrics['default'].filter(fabric => fabric.category === fabricCategory)
+
+		return [...fabricsInCategory, ...defaultFabrics]
 	}
 
 	/**
@@ -464,19 +467,12 @@ class TemplateHelpers {
 		const availableFabrics: Record<string, Fabric[]> = {}
 
 		const defaultFabric = fabrics[collection]?.find(fabric => fabric._id === template.materialId)
-		const defaultFabrics = fabrics['default']
-		availableFabrics['default'] = [
-			...this.#getFabricsByFabricCategory(defaultFabric?.category, collection),
-			...defaultFabrics,
-		]
+		availableFabrics['default'] = this.#getFabricsByFabricCategory(defaultFabric?.category, collection)
 
 		if (template.extraMaterials && template.extraMaterials.length > 0) {
 			for (const extraMaterial of template.extraMaterials) {
 				const extraFabric = fabrics[collection]?.find(fabric => fabric._id === extraMaterial.materialId)
-				availableFabrics[extraMaterial.mesh] = [
-					...this.#getFabricsByFabricCategory(extraFabric?.category, collection),
-					...defaultFabrics,
-				]
+				availableFabrics[extraMaterial.mesh] = this.#getFabricsByFabricCategory(extraFabric?.category, collection)
 			}
 		}
 

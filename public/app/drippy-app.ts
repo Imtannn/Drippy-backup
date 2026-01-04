@@ -3,7 +3,7 @@ import '../elements/connection-warning.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
-import '../elements/video-loading.js'
+import '../elements/image-loading.js'
 import '../routes.js' // track page visits
 import {pushState, searchParams} from '../routes.js'
 import type {BlockCategory} from '../types/block.js'
@@ -26,6 +26,7 @@ import './drippy-scene.js'
 import './order-items.js'
 import './order-size.js'
 import './order-view.js'
+import '../elements/iframe-popup.js'
 import './outfit-preview.js'
 import './share-view.js'
 import './spaces-selection.js'
@@ -352,6 +353,11 @@ export class DrippyApp extends Element {
 							<show-when
 								condition=${() => store.view === 'custom-measurement'}
 								content=${() => html`<custom-measurement></custom-measurement>`}
+							></show-when>
+
+							<show-when
+								condition=${() => store.view === 'iframe-popup'}
+								content=${() => html`<iframe-popup url=${() => store.iframePopupUrl || ''}></iframe-popup>`}
 							></show-when>
 
 							<show-when
