@@ -174,24 +174,17 @@ export class DrippyScene extends Element {
 	}
 
 	/** Check if a default garment should be visible based on user selections */
-	#isDefaultGarmentVisible(templateCategory: TemplateCategory, selectedTemplates: TemplateMap): boolean {
-		// Has user selected this category?
-		if (selectedTemplates?.[templateCategory]) {
-			const templateBlocks = this.renderBlocks.filter(rb => rb.templateCategory === templateCategory)
+	#isGarmentVisible(item: RenderBlock, selectedTemplates: TemplateMap): boolean {
+		if (!item.id.startsWith('default-')) return true
 
-			// Keep default visible if no blocks rendered yet OR any block still loading
-			if (templateBlocks.length === 0) return true
-			const anyBlockLoading = templateBlocks.some(rb => store.isBlockLoading(rb.block._id))
-			return anyBlockLoading
-			// // Template selected - keep default visible until all blocks are loaded
-			// const templateBlocks = this.renderBlocks.filter(rb => rb.templateCategory === templateCategory)
-			// // Keep default visible if no blocks rendered yet OR any block still loading
-			// if (templateBlocks.length === 0) return true
-			// const anyBlockLoading = templateBlocks.some(rb => store.isBlockLoading(rb.block._id))
-			// return anyBlockLoading // Visible while loading, hidden when done
-		}
+		const overriddenBy = templateHelpers.getCategoriesThatOverride(item.templateCategory)
+
+		// If any block is loading in this template category, keep default visible while loading
+		if (anyBlockIsLoadingInTemplateCategory(this.renderBlocks, item.templateCategory)) return true
+		if (overriddenBy.some(category => anyBlockIsLoadingInTemplateCategory(this.renderBlocks, category))) return true
+
 		// Is this category overridden by another selected category?
-		const overriddenBy = templateHelpers.getCategoriesThatOverride(templateCategory)
+		if (selectedTemplates[item.templateCategory]) return false
 		return !overriddenBy.some(cat => selectedTemplates[cat])
 	}
 
@@ -1086,15 +1079,11 @@ export class DrippyScene extends Element {
 											}}
 											id=${item.id}
 											attr:data-block-id=${() => item.block._id}
-											attr:data-block
+											data-block
 											attr:data-default=${() => item.id.startsWith('default-')}
 											attr:src=${item.block.modelFile}
 											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
-											visible=${() =>
-												!item.id.startsWith('default-') ||
-												// Default garments always loaded, visibility toggled
-												(item.id.startsWith('default-') &&
-													this.#isDefaultGarmentVisible(item.templateCategory, store.selectedTemplates))}
+											visible=${() => this.#isGarmentVisible(item, store.selectedTemplates)}
 										></lume-gltf-model>
 									`}
 								</>
@@ -1217,4 +1206,12 @@ function getRenderBlock(id: RenderBlockId, block: Block, templateCategory: Templ
 	let renderBlock = renderBlockCache.get(id)
 	if (!renderBlock) renderBlockCache.set(id, (renderBlock = {block, templateCategory, id}))
 	return renderBlock
+}
+
+function anyBlockIsLoadingInTemplateCategory(renderBlocks: RenderBlock[], templateCategory: TemplateCategory) {
+	for (const rb of renderBlocks) {
+		if (rb.templateCategory !== templateCategory) continue
+		if (store.isBlockLoading(rb.block._id)) return true
+	}
+	return false
 }
