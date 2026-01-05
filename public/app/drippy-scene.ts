@@ -25,8 +25,6 @@ import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js'
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
 import {avatars} from '../consts/avatars.js'
-import {defaultGarmentsConfig} from '../consts/default-garments-config.js'
-import {templates} from '../consts/templates.js'
 
 import {backgroundScenes} from '../consts/scenes.js'
 import {spaces} from '../consts/spaces.js'
@@ -38,9 +36,8 @@ import '../elements/progress-loader.js'
 import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
-import type {SelectedGarments, Space, TemplateMap} from '../types/types.js'
+import type {Gender, SelectedGarments, Space, TemplateMap} from '../types/types.js'
 import {
 	arrayEquals,
 	createFabricTexture,
@@ -65,12 +62,35 @@ import {AvatarSkeleton} from './avatar-skeleton.js'
 import {store} from './store.js'
 import {templateHelpers} from './template-helpers.js'
 import {textureManager} from './texture-manager.js'
+import {blocks} from '../consts/blocks.js'
 
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
 
-type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
-type DefaultRenderBlock = RenderBlock & {fabrics: Record<string, Fabric>}
+type Collection = string
+type BlockId = string
+type MaybeMirror = '' | '-mirror'
+type RenderBlockId = `${Collection}-${TemplateCategory}-${BlockCategory}-${BlockId}${MaybeMirror}`
+
+interface RenderBlock {
+	block: Block
+	templateCategory: TemplateCategory
+	id: RenderBlockId
+}
+
+const defaultRenderBlocks: RenderBlock[] = blocks.default.map(block => {
+	if ((block.category as BlockCategory) === 'Sleeves')
+		throw new Error('Separate sleeves not currently supported for default garments.')
+
+	return {
+		block,
+		templateCategory: block.templateCategory,
+		id: `${block.collection}-${block.templateCategory}-${block.category}-${block._id}`,
+	} satisfies RenderBlock
+})
+
+const defaultFemaleBlocks = defaultRenderBlocks.filter(b => b.block.avatar === 'female')
+const defaultMaleBlocks = defaultRenderBlocks.filter(b => b.block.avatar === 'male')
 
 @element
 export class DrippyScene extends Element {
@@ -83,11 +103,6 @@ export class DrippyScene extends Element {
 
 	@signal isDark = false
 	@signal sceneUrl = ''
-	@signal renderBlocks: RenderBlock[] = []
-	@signal private _defaultRenderBlocks: DefaultRenderBlock[] = []
-	@signal private _defaultGarmentVisibility: Map<TemplateCategory, boolean> = new Map()
-	defaultRenderBlocks: () => DefaultRenderBlock[] = () => this._defaultRenderBlocks
-	defaultGarmentVisibility: () => Map<TemplateCategory, boolean> = () => this._defaultGarmentVisibility
 
 	@signal private backgroundModel: GltfModel | null = null
 	@signal private avatarModel: GltfModel | null = null
@@ -212,99 +227,49 @@ export class DrippyScene extends Element {
 		this.isVerticalPan = false
 	}
 
+	@memo private get avatar() {
+		return avatars.find(a => a.name === this.selectedAvatar)
+	}
+
+	@memo private get avatarGender(): Gender {
+		return this.avatar?.gender ?? 'female'
+	}
+
+	// Select default garments based on avatar gender
+	// These are always rendered (preloaded) but visibility is toggled
+	@memo private get _defaultRenderBlocks(): RenderBlock[] {
+		const gender = this.avatarGender
+		return gender === 'female' ? defaultFemaleBlocks : defaultMaleBlocks
+	}
+
+	@memo private get renderBlocks(): RenderBlock[] {
+		const garmentSelections = this.selectedGarments ?? {}
+		const blocks: Block[] = []
+
+		for (const templateSelection of Object.values(garmentSelections)) {
+			if (!templateSelection) continue
+			for (const selection of Object.values(templateSelection)) if (selection?.block) blocks.push(selection.block)
+		}
+
+		return [
+			...this._defaultRenderBlocks,
+			...blocks.flatMap(block => {
+				const id: RenderBlockId = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
+				let renderBlock = getRenderBlock(id, block, block.templateCategory)
+
+				if (block.category === 'Sleeves') {
+					const idMirror: RenderBlockId = `${id}-mirror`
+					let renderBlockMirror = getRenderBlock(idMirror, block, block.templateCategory)
+					return [renderBlock, renderBlockMirror]
+				}
+
+				return renderBlock
+			}),
+		]
+	}
+
 	override connectedCallback() {
 		super.connectedCallback() // runs this.template()
-
-		// Memoize default render blocks and visibility to prevent unnecessary re-renders
-		this.defaultRenderBlocks = createMemo(() => this._defaultRenderBlocks)
-		this.defaultGarmentVisibility = createMemo(() => this._defaultGarmentVisibility)
-
-		// Compute default garments based on avatar gender
-		// These are always rendered (preloaded) but visibility is toggled
-		this.createEffect(() => {
-			const currentAvatar = avatars.find(a => a.name === this.selectedAvatar)
-			const gender = currentAvatar?.gender
-			if (!gender) {
-				this._defaultRenderBlocks = []
-				return
-			}
-
-			const defaultGarments = defaultGarmentsConfig[gender]
-			if (!defaultGarments || defaultGarments.length === 0) {
-				this._defaultRenderBlocks = []
-				throw new Error(`No default garments configured for gender, ${gender}`)
-			}
-
-			const blocks: DefaultRenderBlock[] = []
-			const blockCache = new Map<string, DefaultRenderBlock>()
-
-			for (const config of defaultGarments) {
-				const template = templates[config.collection]?.find(t => t._id === config.templateId)
-				if (!template) {
-					console.warn(`Default garment template not found: ${config.templateId} in collection ${config.collection}`)
-					continue
-				}
-
-				const templateBlockData = templateHelpers.convertTemplateToBlockData(template, config.collection)
-				const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
-					templateBlockData,
-					config.collection,
-				)
-
-				for (const [blockCategory, block] of newBlocksMap.entries()) {
-					const id = `default-${config.collection?.replace(/-/g, '_')}-${config.category}-${blockCategory}-${block._id}`
-
-					// Get fabrics for this block
-					const fabricsMap = newFabricsMap.get(blockCategory)
-					const fabrics: Record<string, Fabric> = {}
-					if (fabricsMap) {
-						for (const [mesh, fabric] of fabricsMap.entries()) {
-							fabrics[mesh] = fabric
-						}
-					}
-
-					let renderBlock = blockCache.get(id)
-					if (!renderBlock) {
-						renderBlock = {block, templateCategory: config.category, id, fabrics}
-						blockCache.set(id, renderBlock)
-					}
-
-					// Handle mirrored sleeves
-					if (block.category === 'Sleeves') {
-						blocks.push(renderBlock)
-						const idMirror = `${id}-mirror`
-						let mirrorBlock = blockCache.get(idMirror)
-						if (!mirrorBlock) {
-							mirrorBlock = {block, templateCategory: config.category, id: idMirror, fabrics}
-							blockCache.set(idMirror, mirrorBlock)
-						}
-						blocks.push(mirrorBlock)
-					} else {
-						blocks.push(renderBlock)
-					}
-				}
-			}
-
-			this._defaultRenderBlocks = blocks
-		})
-
-		// Update default garments visibility based on user selections
-		this.createEffect(() => {
-			const selectedTemplates = store.selectedTemplates
-			const newVisibility = new Map<TemplateCategory, boolean>()
-
-			// Check visibility for each template category in default garments
-			for (const block of this.defaultRenderBlocks()) {
-				if (!newVisibility.has(block.templateCategory)) {
-					newVisibility.set(
-						block.templateCategory,
-						this.#isDefaultGarmentVisible(block.templateCategory, selectedTemplates),
-					)
-				}
-			}
-
-			this._defaultGarmentVisibility = newVisibility
-		})
 
 		// Reset camera to default when space changes
 		this.createEffect(() => {
@@ -346,7 +311,7 @@ export class DrippyScene extends Element {
 				store.trackModelLoading(sceneId, backgroundModel)
 			})
 
-			const garmentModels = querySelectorAllSignal(avatarModel, 'lume-gltf-model[data-cloth]') as Accessor<
+			const garmentModels = querySelectorAllSignal(avatarModel, 'lume-gltf-model[data-block]') as Accessor<
 				NodeListOf<GltfModel>
 			>
 
@@ -506,7 +471,7 @@ export class DrippyScene extends Element {
 
 			createEffect(() => {
 				for (const el of garmentModels()) {
-					const blockId = el.getAttribute('data-block-id')
+					const blockId = el.dataset.blockId
 					if (!blockId) throw new Error('Garment model missing data-block-id attribute')
 
 					const modelLoaded = onModelLoad(el)
@@ -516,52 +481,6 @@ export class DrippyScene extends Element {
 						onCleanup(() => store.removeLoadingBlock(blockId))
 					})
 				}
-			})
-
-			// This will cache render blocks by ID. This is a quick fix to make the
-			// <For> re-use the same objects to avoid reloading GLTF models.
-			const renderBlockCache = new Map<string, RenderBlock>()
-
-			function getRenderBlock(id: string, block: Block, templateCategory: TemplateCategory) {
-				let renderBlock = renderBlockCache.get(id)
-				if (!renderBlock) renderBlockCache.set(id, (renderBlock = {block, templateCategory, id}))
-				return renderBlock
-			}
-
-			createEffect(() => {
-				const garmentSelections = this.selectedGarments ?? {}
-				const blocks: Block[] = []
-
-				for (const templateSelection of Object.values(garmentSelections)) {
-					if (!templateSelection) continue
-
-					for (const selection of Object.values(templateSelection)) {
-						if (selection?.block) {
-							blocks.push(selection.block)
-						}
-					}
-				}
-
-				this.renderBlocks = blocks.flatMap(block => {
-					if (block.category === 'Sleeves') {
-						const id = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
-						let renderBlock = getRenderBlock(id, block, block.templateCategory)
-
-						const idMirror = `${id}-mirror`
-						let renderBlockMirror = getRenderBlock(idMirror, block, block.templateCategory)
-
-						return [renderBlock, renderBlockMirror]
-					}
-
-					const id = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
-					let renderBlock = getRenderBlock(id, block, block.templateCategory)
-
-					return renderBlock
-				})
-
-				// for (const rb of this.renderBlocks) {
-				// 	store.addLoadingBlock(rb.block._id)
-				// }
 			})
 
 			const modelsInSyncWithRenderBlocks = createMemo(() => {
@@ -630,6 +549,8 @@ export class DrippyScene extends Element {
 						console.error('Invalid block ID format:', blockId)
 						continue
 					}
+
+					if (blockId.startsWith('default-')) continue // Skip default garments, they have built-in fabrics for now
 
 					const templateCategory = parts[1] as TemplateCategory
 					const blockCategory = parts[2] as BlockCategory
@@ -939,6 +860,25 @@ export class DrippyScene extends Element {
 		})
 	}
 
+	#handleRigging(el: GltfModel, block: RenderBlock) {
+		const modelLoaded = onModelLoad(el)
+
+		// FIXME remove setTimeout hack, coordinate (and fix?) proper load order
+		setTimeout(() => {
+		createEffect(() => {
+			if (!this.avatarModel) return
+			const avatarLoaded = onModelLoad(this.avatarModel!)
+
+			createEffect(() => {
+				if (!avatarLoaded() || !modelLoaded()) return
+
+				this.#checkRiggedMesh(el)
+				this.#checkAccessory(block, el.three)
+				})
+			})
+		})
+	}
+
 	override template = () => {
 		const shadowBias = -0.0005
 		const shadowNormalBias = /*0.005*/ 0
@@ -1133,76 +1073,32 @@ export class DrippyScene extends Element {
 							<lume-element3d ref=${(el: Element3D) => setMaterialsVisibleOnModelLoad(el.parentElement as GltfModel, () => store.isShowAvatar, el)}>
 								<!-- User-selected garments -->
 								<${For} each=${() => this.renderBlocks}>
-									${(item: RenderBlock, index: Accessor<number>) => html`
+									${(item: RenderBlock) => html`
 										<lume-gltf-model
 											ref=${(el: GltfModel) => {
 												enableShadowOnModelLoad(el)
 												setEnvMapOnModelLoad(el, env)
 												disableFrustumCulledOnLoad(el)
-
-												setTimeout(() => {
-													const modelLoaded = onModelLoad(el)
-													createEffect(() => {
-														if (!this.avatarModel) return
-
-														const avatarLoaded = onModelLoad(this.avatarModel!)
-														createEffect(() => {
-															if (!avatarLoaded() || !modelLoaded()) return
-
-															this.#checkRiggedMesh(el)
-
-															this.#checkAccessory(item, el.three)
-														})
-													})
-												})
-											}}
-											id=${item.id}
-											attr:data-block-id=${() => (console.log('block id:', item.block._id), item.block._id)}
-											data-index=${index()}
-											data-cloth
-											attr:src=${item.block.modelFile}
-											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
-										>
-										</lume-gltf-model>
-									`}
-								</>
-
-								<!-- Default garments (always loaded, visibility toggled) -->
-								<${For} each=${this.defaultRenderBlocks}>
-									${(item: DefaultRenderBlock, index: Accessor<number>) => html`
-										<lume-gltf-model
-											ref=${(el: GltfModel) => {
-												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env)
+												this.#handleRigging(el, item)
 
 												// Track default garment loading
+												if (item.id.startsWith('default-')) {
 												const defaultGarmentId = Symbol(`default-garment-${item.id}`)
 												store.trackModelLoading(defaultGarmentId, el)
-
-												const modelLoaded = onModelLoad(el)
-
-												setTimeout(() => {
-													createEffect(() => {
-														if (!this.avatarModel) return
-
-														const avatarLoaded = onModelLoad(this.avatarModel!)
-														createEffect(() => {
-															if (!avatarLoaded() || !modelLoaded()) return
-
-															this.#checkRiggedMesh(el)
-														})
-													})
-												})
+												}
 											}}
 											id=${item.id}
-											data-index=${index()}
-											xdata-cloth
-											data-default-garment
-											visible=${() => this.defaultGarmentVisibility().get(item.templateCategory) ?? true}
+											attr:data-block-id=${() => item.block._id}
+											attr:data-block
+											attr:data-default=${() => item.id.startsWith('default-')}
 											attr:src=${item.block.modelFile}
 											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
-										>
-										</lume-gltf-model>
+											visible=${() =>
+												!item.id.startsWith('default-') ||
+												// Default garments always loaded, visibility toggled
+												(item.id.startsWith('default-') &&
+													this.#isDefaultGarmentVisible(item.templateCategory, store.selectedTemplates))}
+										></lume-gltf-model>
 									`}
 								</>
 							</lume-element3d>
@@ -1296,6 +1192,7 @@ export class DrippyScene extends Element {
 				transform: unset !important;
 				-webkit-transform: unset !important;
 			}
+
 			#lume-scene-container {
 				transform: var(--overrideSceneTranslateY, var(--sceneTranslateY)) scale(var(--scene-scale, 1));
 				-webkit-transform: var(--overrideSceneTranslateY, var(--sceneTranslateY)) scale(var(--scene-scale, 1));
@@ -1312,4 +1209,15 @@ export class DrippyScene extends Element {
 
 function disableFrustumCulledOnLoad(model: GltfModel) {
 	whenModelLoaded(model, () => model.three.traverse(child => (child.frustumCulled = false)))
+}
+
+// This will cache render blocks by ID. This is a quick fix to make the
+// <For> re-use the same objects to avoid reloading GLTF models.
+// FIXME this grows and never shrinks.
+const renderBlockCache = new Map<string, RenderBlock>()
+
+function getRenderBlock(id: RenderBlockId, block: Block, templateCategory: TemplateCategory) {
+	let renderBlock = renderBlockCache.get(id)
+	if (!renderBlock) renderBlockCache.set(id, (renderBlock = {block, templateCategory, id}))
+	return renderBlock
 }
