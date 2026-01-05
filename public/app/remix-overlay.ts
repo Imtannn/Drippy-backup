@@ -70,11 +70,6 @@ export class RemixOverlay extends Element {
 		super.connectedCallback()
 		this.addEventListener('cardselected', this.#onFabricCardSelected)
 
-		// Set activeTab if selectedTemplate is already set
-		if (this.selectedTemplate) {
-			this.activeTab = FABRICS_TAB
-		}
-
 		this.createEffect(() => {
 			this.spaceCollection = store.getEffectiveCollection() ?? 'gap'
 
@@ -107,12 +102,9 @@ export class RemixOverlay extends Element {
 		})
 
 		// Set activeTab immediately when selectedTemplate is set
-		// FIX Maximum call stack size exceeded
 		this.createEffect(() => {
-			const template = this.selectedTemplate
-			if (template) {
-				// Always ensure activeTab is set when template exists
-				this.activeTab = this.activeTab || FABRICS_TAB
+			if (this.selectedTemplate && !this.activeTab) {
+				this.activeTab = FABRICS_TAB
 			}
 		})
 
