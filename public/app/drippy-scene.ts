@@ -101,7 +101,14 @@ export class DrippyScene extends Element {
 	@attribute selectedGarments: SelectedGarments = {}
 	@attribute landing: boolean = false
 
-	@signal isDark = false
+	#docMutations = createMutationsSignal(document.documentElement, {attributes: true, attributeFilter: ['data-theme']})
+
+	// @ts-expect-error TODO use this to implement dark mode
+	@memo private get isDark() {
+		this.#docMutations()
+		return document.documentElement.dataset.theme === 'dark'
+	}
+
 	@signal sceneUrl = ''
 
 	@signal private backgroundModel: GltfModel | null = null
@@ -150,11 +157,11 @@ export class DrippyScene extends Element {
 	 * Checks if the model is rigged, if so, sets the skeleton to the avatar's.
 	 * @param model
 	 */
-	#checkRiggedMesh(model: GltfModel) {
-		if (!this.avatarModel) return
+	#adoptAvatarSkeleton(model: GltfModel) {
+		if (!this.avatarModel) throw new Error('Avatar model required for rigging.')
 
 		const sourceSkeleton = getArmatureObject(this.avatarModel.three)?.skeleton
-		if (!sourceSkeleton) return
+		if (!sourceSkeleton) throw new Error('Avatar model has no skeleton for rigging.')
 
 		model.three.traverse((obj: any) => {
 			if (obj.skeleton) obj.skeleton = sourceSkeleton
@@ -262,7 +269,7 @@ export class DrippyScene extends Element {
 	}
 
 	override connectedCallback() {
-		super.connectedCallback() // runs this.template()
+		super.connectedCallback()
 
 		// Reset camera to default when space changes
 		this.createEffect(() => {
@@ -359,16 +366,6 @@ export class DrippyScene extends Element {
 				if (space) {
 					if (this.scene) this.sceneUrl = this.scene.scene
 				}
-			})
-
-			const mutations = createMutationsSignal(document.documentElement, {
-				attributes: true,
-				attributeFilter: ['data-theme'],
-			})
-
-			createEffect(() => {
-				mutations()
-				this.isDark = document.documentElement.dataset.theme === 'dark'
 			})
 
 			const avatarLoaded = onModelLoad(avatarModel)
@@ -492,16 +489,6 @@ export class DrippyScene extends Element {
 				return garmentModelLoads().every(loaded => loaded())
 			})
 
-			const garmentUvArrays = createMemo(() => {
-				return [...garmentModels()].map(el => {
-					const root = el.three
-
-					// Extract UV data for proper texture scaling
-					const meshes = [...meshesInTree(root)]
-					return Array.from(meshes[0]?.geometry?.attributes?.uv?.array ?? [])
-				})
-			})
-
 			createEffect(() => {
 				console.log(
 					modelsInSyncWithRenderBlocks()
@@ -516,19 +503,9 @@ export class DrippyScene extends Element {
 
 				if (!garmentModelsInSyncAndLoaded()) return
 
-				// Process each model using its data-blockid to find the correct fabric
+				// Process each model using its data-block-id to find the correct fabric
 				for (const [blockIndex, renderBlock] of this.renderBlocks.entries()) {
-					// Use UV data for proper texture scaling (TODO do we still
-					// need the relic from the old app?).
-					// NOTE! We need to wait for all garment models to load to
-					// ensure UVs are ready.  Unfortunately, this currently
-					// means fabrics won't start loading until all garments are
-					// loaded.
-					// TODO get rid of this need for checking uv arrays, have
-					// designers set expected texture scale on their end in the
-					// upload page, then we can load fabrics in parallel without
-					// waiting for garments to load.
-					const uvArray = garmentUvArrays()[blockIndex]
+					// CONTINUE we deleted uvArray, so we can freely load fabrics in parallel to garment models
 
 					const blockId = renderBlock.id
 
@@ -560,7 +537,7 @@ export class DrippyScene extends Element {
 					// the template category and block category, but is it the
 					// fabrics for the render block we're iterating?
 					for (const fabric of Object.values(fabricsForBlockCategory)) {
-						const textureState = createFabricTexture(() => fabric, uvArray)
+						const textureState = createFabricTexture(() => fabric)
 						fabricLoadingSignals[fabric._id] = textureState
 
 						// Track loading state per fabric
@@ -863,7 +840,7 @@ export class DrippyScene extends Element {
 			createEffect(() => {
 				if (!avatarLoaded() || !modelLoaded()) return
 
-				this.#checkRiggedMesh(el)
+				this.#adoptAvatarSkeleton(el)
 				this.#checkAccessory(block, el.three)
 			})
 		})
@@ -1073,8 +1050,8 @@ export class DrippyScene extends Element {
 
 												// Track default garment loading
 												if (item.id.startsWith('default-')) {
-												const defaultGarmentId = Symbol(`default-garment-${item.id}`)
-												store.trackModelLoading(defaultGarmentId, el)
+													const defaultGarmentId = Symbol(`default-garment-${item.id}`)
+													store.trackModelLoading(defaultGarmentId, el)
 												}
 											}}
 											id=${item.id}

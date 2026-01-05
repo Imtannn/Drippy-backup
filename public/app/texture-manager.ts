@@ -199,11 +199,10 @@ class TextureManager {
 	/**
 	 * Load fabric textures with UV-aware configuration
 	 */
-	async loadFabricTexturesWithUV(fabric: Fabric, uvArray: number[]): Promise<TextureSet> {
-		const defaultCoef = this.calculateCoef(uvArray)
+	async loadFabricTexturesWithUV(fabric: Fabric): Promise<TextureSet> {
 		const config: TextureConfig = {
 			repeat: [...this.defaultConfig.repeat],
-			coef: fabric.coef || defaultCoef,
+			coef: fabric.coef || 1,
 			offset: [...this.defaultConfig.offset],
 			rotate: this.defaultConfig.rotate,
 		}
@@ -239,17 +238,6 @@ class TextureManager {
 			roughness: roughness || undefined,
 			alpha: alpha || undefined,
 		}
-	}
-
-	/**
-	 * Calculate coefficient from UV array
-	 */
-	private calculateCoef(uvArray: number[]): number {
-		if (uvArray.length === 0) return 1
-		const absValues = uvArray.map((u: number) => Math.abs(u))
-		const max = Math.max(...absValues)
-		console.warn('UV magnitude larger than 1:', max)
-		return max > 1 ? 1000 : 1
 	}
 
 	/**

@@ -1045,7 +1045,6 @@ export interface FabricTextureRetryConfig {
  */
 export function createFabricTexture(
 	fabric: Accessor<Fabric | undefined>,
-	uvArray: number[],
 	retryConfig: FabricTextureRetryConfig = {},
 ): FabricTextureState {
 	const {maxRetries = 3, retryDelay = 1000} = retryConfig
@@ -1076,7 +1075,7 @@ export function createFabricTexture(
 			setError(null)
 
 			try {
-				const textureSet = await textureManager.loadFabricTexturesWithUV(currentFabric, uvArray)
+				const textureSet = await textureManager.loadFabricTexturesWithUV(currentFabric)
 
 				if (canceled) return
 

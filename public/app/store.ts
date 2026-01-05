@@ -670,10 +670,12 @@ class Store {
 			for (const key in this.loadingBlocks) delete this.loadingBlocks[key]
 		})
 	}
-
 	isBlockLoading(blockId: string): boolean {
 		const blockTracked = blockId in this.loadingBlocks
 		return Boolean(blockId && blockTracked)
+	}
+	get anyBlockIsLoading(): boolean {
+		return Object.keys(this.loadingBlocks).length > 0
 	}
 
 	addLoadingFabric(fabricId: string) {
