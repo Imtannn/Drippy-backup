@@ -863,8 +863,6 @@ export class DrippyScene extends Element {
 	#handleRigging(el: GltfModel, block: RenderBlock) {
 		const modelLoaded = onModelLoad(el)
 
-		// FIXME remove setTimeout hack, coordinate (and fix?) proper load order
-		setTimeout(() => {
 		createEffect(() => {
 			if (!this.avatarModel) return
 			const avatarLoaded = onModelLoad(this.avatarModel!)
@@ -874,7 +872,6 @@ export class DrippyScene extends Element {
 
 				this.#checkRiggedMesh(el)
 				this.#checkAccessory(block, el.three)
-				})
 			})
 		})
 	}
