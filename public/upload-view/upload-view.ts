@@ -844,16 +844,10 @@ export class UploadView extends Element {
 			console.log('fabricsToPreload', fabricsToPreload)
 
 			if (fabricsToPreload.length > 0) {
-				// CONTINUE: handle loading? The store.loadingMaterialIds was unused (now deleted)
-				// const loadingId = Symbol(`fabric-${templateFabric?._id || 'uploaded'}`)
-				// store.addLoadingMaterial(loadingId)
 				try {
-					// Preload fabric textures (blocks are already uploaded and ready)
 					await Promise.all(fabricsToPreload.map(fabric => textureManager.preloadFabricBaseTextures(fabric)))
 				} catch (error) {
 					console.warn('Failed to preload fabric textures:', error)
-				} finally {
-					// store.removeLoadingMaterial(loadingId)
 				}
 			}
 		}

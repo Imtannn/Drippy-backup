@@ -180,51 +180,6 @@ export class DrippyScene extends Element {
 		return !overriddenBy.some(cat => selectedTemplates[cat])
 	}
 
-	/** Apply fabrics to default garment models */
-	#applyDefaultFabrics(el: GltfModel, item: DefaultRenderBlock) {
-		const root = el.three
-		const meshes = [...meshesInTree(root)]
-		const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
-			? Array.from(meshes[0].geometry.attributes.uv.array)
-					.slice(0, 5)
-					.map((el: any) => Math.abs(el))
-			: []
-
-		// Create a map for mesh to fabrics key
-		const meshToFabricMeshesMap = new Map<string, string>()
-		for (const meshesKey of Object.keys(item.fabrics)) {
-			const meshArray = meshesKey.split('-')
-			for (const mesh of meshArray) {
-				meshToFabricMeshesMap.set(mesh, meshesKey)
-			}
-		}
-
-		const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
-
-		for (const mesh of meshes) {
-			// Check if there's a specific fabric assigned to this mesh
-			const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
-			const meshesKey = meshToFabricMeshesMap.get(meshKey)
-			const fabricToUse = item.fabrics[meshesKey || 'default']
-
-			if (fabricToUse) {
-				const textureState = createFabricTexture(() => fabricToUse, uvArray)
-				// Wait for texture to load then apply
-				createEffect(() => {
-					const textureSet = textureState.texture()
-					const isLoading = textureState.loading()
-					const error = textureState.error()
-
-					if (textureSet && !isLoading && !error) {
-						mesh.material = new THREE.MeshPhysicalMaterial()
-						textureManager.applyTexturesToMaterial(mesh.material, textureSet)
-						el.needsUpdate()
-					}
-				})
-			}
-		}
-	}
-
 	#handlePointerDown = (e: PointerEvent) => {
 		const isMobile = !isDesktop()
 
@@ -532,26 +487,8 @@ export class DrippyScene extends Element {
 
 					if (this.isLoading) {
 						this.loadingProgress = 100
-
-						// Wait for browser to paint 100% before hiding
-						// Triple RAF + small delay ensures 100% is visible
-						// FIXME Why exactly are there three animation frames
-						// and a timeout? If there is not very specific
-						// documented reason, this needs to be refactored.
-						//
-						// This sort of code implies a race condition as is
-						// (https://en.wikipedia.org/wiki/Race_condition), and
-						// we *must not* accept code like this.
-						requestAnimationFrame(() => {
-							requestAnimationFrame(() => {
-								requestAnimationFrame(() => {
-									setTimeout(() => {
-										this.isLoading = false
-										previousCount = -1
-									}, 100)
-								})
-							})
-						})
+						this.isLoading = false
+						previousCount = -1
 					} else {
 						// Reset state even if loader was never shown
 						previousCount = -1
@@ -735,12 +672,6 @@ export class DrippyScene extends Element {
 						{equals: arrayEquals},
 					)
 
-					// CONTINUE remove
-					// const blocksLoaded = createMemo(() => {
-					// 	// return templateBlocks().every(rb => !store.isBlockLoading(rb.block._id))
-					// 	return true // This has to be true because all garments are loaded before fabrics start loading (see garmentModelsInSyncAndLoaded above)
-					// })
-
 					// CONTINUE It doesn't seem to make sense for this effect to be
 					// here because we're iterating *EVERY* render block, and
 					// thus we're clearing loading state based on the fabrics of
@@ -751,8 +682,7 @@ export class DrippyScene extends Element {
 						if (templateBlocks().length === 0)
 							throw new Error('No blocks found for template category: ' + templateCategory)
 
-						// Only clear loading state when BOTH fabrics and blocks are done
-						if (fabricsLoaded() /*&& blocksLoaded()*/) {
+						if (fabricsLoaded()) {
 							console.log('✅ CLEARING loading template:', templateId)
 							// The fabrics for the block loaded, clear the
 							// loading state for the *whole* template
@@ -1262,12 +1192,6 @@ export class DrippyScene extends Element {
 															this.#checkRiggedMesh(el)
 														})
 													})
-												})
-
-												// Apply default fabrics directly on load
-												createEffect(() => {
-													if (!modelLoaded()) return
-													this.#applyDefaultFabrics(el, item)
 												})
 											}}
 											id=${item.id}
