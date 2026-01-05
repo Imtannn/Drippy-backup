@@ -85,7 +85,7 @@ export class BlocksSelection extends Element {
 
 			const selectedTemplate = store.selectedTemplates[this.selectedTemplateCategory]
 			if (selectedTemplate) {
-				this.availableBlocks = blocks[this.spaceCollection].filter(block => {
+				this.availableBlocks = blocks[this.spaceCollection as keyof typeof blocks].filter(block => {
 					if (block.templateCategory === 'Pants' || block.templateCategory === 'Accessories') {
 						return true
 					} else {

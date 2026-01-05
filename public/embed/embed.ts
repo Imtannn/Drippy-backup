@@ -89,7 +89,7 @@ if (garmentsParam && selectedCollection) {
 	const garmentIds = garmentsParam.split(',').map(id => id.trim())
 
 	// Get blocks for the selected collection
-	const collectionBlocks = allBlocks[selectedCollection] ?? []
+	const collectionBlocks = allBlocks[selectedCollection as keyof typeof allBlocks] ?? []
 
 	for (const garmentId of garmentIds) {
 		const block = collectionBlocks.find(b => b._id === garmentId)
