@@ -110,8 +110,6 @@ export class DrippyScene extends Element {
 		return document.documentElement.dataset.theme === 'dark'
 	}
 
-	@signal sceneUrl = ''
-
 	@signal private backgroundModel: GltfModel | null = null
 	@signal private avatarModel: GltfModel | null = null
 	private avatarSkeleton = new AvatarSkeleton()
@@ -355,14 +353,6 @@ export class DrippyScene extends Element {
 				} else {
 					this.style.setProperty('--sceneTranslateX', 'translateX(var(--sceneDesktopOffset))')
 				}
-			}
-		})
-
-		createEffect(() => {
-			if (!this.selectedSpace) return
-			const space = spaces.find(space => space.slug === this.selectedSpace?.slug)
-			if (space) {
-				if (this.scene) this.sceneUrl = this.scene.scene
 			}
 		})
 
