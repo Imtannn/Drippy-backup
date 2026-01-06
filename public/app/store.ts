@@ -253,7 +253,6 @@ class Store {
 	 * When a Sleeves block is added, it inherits the fabrics from the Bodice block if available.
 	 */
 	private applySleevesFabricInheritance(block: Block, templateCategory: TemplateCategory) {
-		console.log('applying sleeves fabric inheritance for', block.category)
 		if (block.category !== 'Sleeves') return
 
 		const templateSelection = this.selectedGarments[templateCategory]
@@ -266,7 +265,6 @@ class Store {
 		if (!bodiceFabrics || Object.keys(bodiceFabrics).length === 0) return
 
 		const sleevesSelection = this.getGarmentSelection(templateCategory, 'Sleeves')
-		console.log('inheriting fabrics to sleeves', templateCategory, bodiceFabrics)
 
 		for (const [meshKey, fabric] of Object.entries(bodiceFabrics)) {
 			sleevesSelection.fabrics[meshKey] = fabric
@@ -284,17 +282,13 @@ class Store {
 			}
 
 			for (const {block, templateCategory} of blockData) {
-				console.log('block template category', templateCategory, block.category)
-
 				const garmentSelection = this.getGarmentSelection(templateCategory, block.category)
 
 				if (garmentSelection.block?._id === block._id) {
-					console.log('unselecting block', block.category)
 					garmentSelection.block = null
 					garmentSelection.fabrics = {}
 					this.cleanupGarmentSelection(templateCategory, block.category)
 				} else {
-					console.log(garmentSelection.block ? 'replacing block' : 'adding block', block.category)
 					garmentSelection.block = block
 					this.applySleevesFabricInheritance(block, templateCategory)
 				}
@@ -817,8 +811,6 @@ createEffect(() => {
 			pushState()
 		}
 	})
-
-	console.log('sync selectedAvatar with URL param')
 
 	// And keep both selectedAvatar and avatar URL parameter in sync
 	syncSignals(

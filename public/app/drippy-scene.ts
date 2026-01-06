@@ -465,10 +465,8 @@ export class DrippyScene extends Element {
 	@memo get modelsInSyncWithRenderBlocks() {
 		if (this.renderBlocks.length === 0 || this.garmentModels.length === 0) return false
 		if (this.renderBlocks.length !== this.garmentModels.length) return false
-		for (const [i, rb] of this.renderBlocks.entries()) {
-			console.log('render block', rb.id)
+		for (const [i, rb] of this.renderBlocks.entries())
 			if (rb.id !== this.garmentModels[i]?.getAttribute('id')) return false
-		}
 		return true
 	}
 
@@ -483,8 +481,6 @@ export class DrippyScene extends Element {
 
 	// Re-apply materials whenever the selected fabrics change or models mount
 	@effect fabricsLoadingEffect() {
-		console.log('fabrics effect')
-
 		if (!this.garmentModelsInSyncAndLoaded) return
 
 		// Process each model using its data-block-id to find the correct fabric
@@ -512,7 +508,6 @@ export class DrippyScene extends Element {
 			const templateId = template?._id
 			if (!templateId) throw new Error('Template ID missing for category:' + templateCategory)
 			const fabricsForBlockCategory = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
-			console.log('selectedGarments', store.selectedGarments)
 
 			const fabricLoadingSignals: Record<string, ReturnType<typeof createFabricTexture>> = {}
 
@@ -526,7 +521,6 @@ export class DrippyScene extends Element {
 
 				// Track loading state per fabric
 				createEffect(() => {
-					console.log('fabric loading effect')
 					if (!textureState.loading()) return
 					store.addLoadingFabric(fabric._id)
 					onCleanup(() => store.removeLoadingFabric(fabric._id))
@@ -538,11 +532,7 @@ export class DrippyScene extends Element {
 			)
 
 			const templateBlocks = createMemo(
-				() => {
-					// prettier-ignore
-					console.log( 'templateBlocks', this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),)
-					return this.renderBlocks.filter(rb => rb.templateCategory === templateCategory)
-				},
+				() => this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),
 				undefined,
 				{equals: arrayEquals},
 			)
@@ -557,7 +547,6 @@ export class DrippyScene extends Element {
 				if (templateBlocks().length === 0) throw new Error('No blocks found for template category: ' + templateCategory)
 
 				if (fabricsLoaded()) {
-					console.log('✅ CLEARING loading template:', templateId)
 					// The fabrics for the block loaded, clear the
 					// loading state for the *whole* template
 					// CONTINUE Is this right? Template should be done
@@ -1066,10 +1055,7 @@ export class DrippyScene extends Element {
 					<lume-gltf-model
 						ref=${(el: GltfModel) => (this.backgroundModel = el)}
 						id="scene"
-						attr:src=${() => {
-							console.log('selected background', this.scene?.scene)
-							return this.scene?.scene ?? ''
-						}}
+						attr:src=${() => this.scene?.scene ?? ''}
 					></lume-gltf-model>
 
 					<!-- Background scene extra objects -->
