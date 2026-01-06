@@ -4,11 +4,11 @@ const loadingImageUrl = new URL('../images/loading.png', import.meta.url).href
 
 @element
 export class ImageLoading extends Element {
-	static elementName = 'image-loading'
+	static override elementName = 'image-loading'
 
 	@signal private imageError = false
 
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// Prevent body scroll when loading is showing
@@ -49,7 +49,7 @@ export class ImageLoading extends Element {
 		}, 0)
 	}
 
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 
 		// Restore body scroll when component is removed
@@ -57,7 +57,7 @@ export class ImageLoading extends Element {
 		document.documentElement.style.overflow = ''
 	}
 
-	template = () => html`
+	override template = () => html`
 		<div class="image-loading">
 			<img class="loading-image" src=${loadingImageUrl} alt="Loading" />
 			<!-- Fallback spinner shown when image fails to load -->
@@ -67,7 +67,7 @@ export class ImageLoading extends Element {
 		</div>
 	`
 
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: block;
 			width: 100vw;

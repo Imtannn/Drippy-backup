@@ -2,7 +2,7 @@ import {Element, html, css, element} from 'lume'
 
 @element
 export class ShareButton extends Element {
-	static readonly elementName = 'share-button'
+	static override readonly elementName = 'share-button'
 
 	shareIcon = () =>
 		html` <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -14,9 +14,9 @@ export class ShareButton extends Element {
 			/>
 		</svg>`
 
-	template = () => html` <button class="share-button">${this.shareIcon()}</button> `
+	override template = () => html` <button class="share-button">${this.shareIcon()}</button> `
 
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		.share-button {
 			border-radius: 999px;
 			cursor: pointer;

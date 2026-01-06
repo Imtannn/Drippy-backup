@@ -240,6 +240,18 @@ class TemplateHelpers {
 		return result
 	}
 
+	getOverridingCategories(category: TemplateCategory): TemplateCategory[] {
+		return this.overridingCategoriesMapping[category] ?? []
+	}
+
+	getTemplateCategoryById(templateId: string): TemplateCategory | null {
+		for (const collectionTemplates of Object.values(templates)) {
+			const match = collectionTemplates?.find(template => template?._id === templateId)
+			if (match) return match.category
+		}
+		return null
+	}
+
 	/**
 	 * Convert template to block data used by downstream selection flows.
 	 *
@@ -268,7 +280,9 @@ class TemplateHelpers {
 		}
 
 		for (const slug of lookupOrder) {
-			const matches = (collectionBlocks[slug] ?? []).filter(block => block.templateId === template._id)
+			const matches = (collectionBlocks[slug as keyof typeof collectionBlocks] ?? []).filter(
+				block => block.templateId === template._id,
+			)
 			if (matches.length > 0) {
 				return matches
 			}
@@ -377,11 +391,6 @@ class TemplateHelpers {
 
 				// Add all fabrics for this block category
 				for (const [assignedMesh, fabric] of Object.entries(blockFabrics)) {
-					// CONTINUE confusion is happening here in downstream code
-					// because this, for example, assigns a fabric for sweater
-					// laces (name "pattern_35-pattern_36") but the block
-					// category is "Sleeves", which is not the category for
-					// laces.
 					newFabrics.push({
 						fabric: fabric,
 						blockCategory: block.category,
@@ -476,7 +485,9 @@ class TemplateHelpers {
 	 */
 	getBlocksForTemplateCategory(templateCategory: TemplateCategory, collection: string | null | undefined) {
 		const resolvedCollection = collection ?? 'gap'
-		return (collectionBlocks[resolvedCollection] ?? []).filter(block => block.templateCategory === templateCategory)
+		return (collectionBlocks[resolvedCollection as keyof typeof collectionBlocks] ?? []).filter(
+			block => block.templateCategory === templateCategory,
+		)
 	}
 
 	/**
@@ -518,7 +529,7 @@ class TemplateHelpers {
 	 */
 	findBlockById(blockId: string, collectionSlug: string | null): Block | null {
 		if (collectionSlug) {
-			const collectionBlocks = blocks[collectionSlug]
+			const collectionBlocks = blocks[collectionSlug as keyof typeof blocks]
 			const found = collectionBlocks?.find?.(b => b._id === blockId) ?? null
 			if (found) return found
 		}

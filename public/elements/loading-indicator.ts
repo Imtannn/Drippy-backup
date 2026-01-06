@@ -4,24 +4,21 @@ type LoadingIndicatorAttributes = 'isVisible'
 
 @element
 export class LoadingIndicator extends Element {
-	static elementName = 'loading-indicator'
+	static override elementName = 'loading-indicator'
 
 	@booleanAttribute isVisible = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		this.createEffect(() => {
 			this.style.setProperty('--opacity', this.isVisible ? '1' : '0')
 		})
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="loading-indicator">
 			<div class="loader"></div>
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			--opacity: 0;
 			opacity: var(--opacity);

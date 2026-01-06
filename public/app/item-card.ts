@@ -28,7 +28,7 @@ type ItemCardAttributes =
 
 @element
 export class ItemCard extends Element {
-	static readonly elementName = 'item-card'
+	static override readonly elementName = 'item-card'
 
 	@booleanAttribute itemActive = false
 	@stringAttribute itemSrc = ''
@@ -60,8 +60,7 @@ export class ItemCard extends Element {
 		const isPending = user ? pendingWishlistId() === template._id : false
 		return inWishlist || isPending
 	}
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => {
@@ -158,8 +157,7 @@ export class ItemCard extends Element {
 	get #shouldShowWishlist() {
 		return this.hasAttribute('data-show-wishlist')
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="item-card" onclick=${this.#onClick} classList=${() => ({active: this.itemActive})}>
 			<div class="item-preview">
 				${() =>
@@ -184,8 +182,7 @@ export class ItemCard extends Element {
 			</div>
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: contents;
 			--aspect-ratio: 1;

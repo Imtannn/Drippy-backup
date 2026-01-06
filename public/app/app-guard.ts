@@ -4,10 +4,10 @@ import '../elements/logic/show-when.js'
 
 @element
 export class AppGuard extends Element {
-	static readonly elementName = 'app-guard'
+	static override readonly elementName = 'app-guard'
 	@signal isUserLoggedIn = false
 
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => {
@@ -27,7 +27,7 @@ export class AppGuard extends Element {
 		})
 	}
 
-	template = () => html`
+	override template = () => html`
 		<show-when condition=${() => this.isUserLoggedIn} content=${() => html` <slot></slot> `}></show-when>
 	`
 }

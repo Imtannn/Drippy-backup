@@ -7,18 +7,21 @@
 	const importmap = {
 		imports: {
 			'@tweenjs/tween.js': 'https://cdn.jsdelivr.net/npm/@tweenjs/tween.js@25.0.0/dist/tween.esm.js',
-			'classy-solid': 'https://cdn.jsdelivr.net/npm/classy-solid@0.4.3/dist/index.js',
+			'classy-solid': 'https://cdn.jsdelivr.net/npm/classy-solid@0.5.2/dist/index.js',
 			lume: `https://cdn.jsdelivr.net/npm/lume@${lumeVersion}/dist/index.js`,
 			'lume/': `https://cdn.jsdelivr.net/npm/lume@${lumeVersion}/`,
 			'solid-js': 'https://cdn.jsdelivr.net/npm/solid-js@1.9.5/dist/solid.js',
 			'solid-js/html': 'https://cdn.jsdelivr.net/npm/solid-js@1.9.5/html/dist/html.js',
 			'solid-js/store': 'https://cdn.jsdelivr.net/npm/solid-js@1.9.5/store/dist/store.js',
 			'solid-js/web': 'https://cdn.jsdelivr.net/npm/solid-js@1.9.5/web/dist/web.js',
-
+			'@solid-primitives/memo': 'https://cdn.jsdelivr.net/npm/@solid-primitives/memo@1.4.3/dist/index.js',
+			'@solid-primitives/scheduled': 'https://cdn.jsdelivr.net/npm/@solid-primitives/scheduled@1.5.2/dist/index.js',
+			'@solid-primitives/utils': 'https://cdn.jsdelivr.net/npm/@solid-primitives/utils@6.3.2/dist/index.js',
 			'@lume/autolayout': 'https://cdn.jsdelivr.net/npm/@lume/autolayout@0.10.2/dist/AutoLayout.js',
 			'@lume/custom-attributes/dist/index.js':
 				'https://cdn.jsdelivr.net/npm/@lume/custom-attributes@0.2.4/dist/index.js',
-			'@lume/element': 'https://cdn.jsdelivr.net/npm/@lume/element@0.16.1/dist/index.js',
+			'@lume/element':
+				'https://cdn.jsdelivr.net/gh/lume/element@5dfb8283eb3a9bcd7509088eb62e4f49d2b58b0c/dist/index.js',
 			'@lume/eventful': 'https://cdn.jsdelivr.net/npm/@lume/eventful@0.3.3/dist/index.js',
 			'@lume/kiwi': 'https://cdn.jsdelivr.net/npm/@lume/kiwi@0.4.4/dist/kiwi.js',
 			'@lume/three-projected-material/dist/ProjectedMaterial.js':

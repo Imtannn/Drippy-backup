@@ -16,15 +16,13 @@ type ControlButtonGroupAttributes = keyof {}
  */
 @element
 export class ControlButtonGroup extends Element {
-	static readonly elementName = 'control-button-group'
-
-	template = () => html`
+	static override readonly elementName = 'control-button-group'
+	override template = () => html`
 		<div class="control-button-group">
 			<slot></slot>
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: inline-block;
 		}

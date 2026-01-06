@@ -8,7 +8,7 @@ import {store} from './store.js'
 
 @element
 export class OrderSize extends Element {
-	static elementName = 'order-size'
+	static override elementName = 'order-size'
 
 	#onNextClick = () => {
 		store.view = 'order'
@@ -55,8 +55,7 @@ export class OrderSize extends Element {
 			store.setRetailItemQuantity(category, currentQty - 1)
 		}
 	}
-
-	template = () => html`
+	override template = () => html`
 		<app-buttons-preset preset="order-flow"></app-buttons-preset>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-snap="0.88">
@@ -323,8 +322,7 @@ export class OrderSize extends Element {
 			</div>
 		</bottom-sheet>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		${appStyles}
 
 		.order-container {

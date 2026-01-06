@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import '../app/app-buttons.js'
 import '../app/drippy-scene.js'
 import '../app/item-card.js'
-import {store} from '../app/store.js'
+// import {store} from '../app/store.js'
 import {DEFAULT_TEXTURE_CONFIG, textureManager} from '../app/texture-manager.js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
@@ -72,7 +72,7 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
 
 @element
 export class UploadView extends Element {
-	static elementName = 'upload-view'
+	static override elementName = 'upload-view'
 
 	// Reactive properties
 	@signal selectedTab: string = BLOCK_CATEGORIES[0]
@@ -149,8 +149,7 @@ export class UploadView extends Element {
 
 		return selection
 	}
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		this.#createFileInput()
 	}
@@ -845,15 +844,10 @@ export class UploadView extends Element {
 			console.log('fabricsToPreload', fabricsToPreload)
 
 			if (fabricsToPreload.length > 0) {
-				const loadingId = Symbol(`fabric-${templateFabric?._id || 'uploaded'}`)
-				store.addLoadingMaterial(loadingId)
 				try {
-					// Preload fabric textures (blocks are already uploaded and ready)
 					await Promise.all(fabricsToPreload.map(fabric => textureManager.preloadFabricBaseTextures(fabric)))
 				} catch (error) {
 					console.warn('Failed to preload fabric textures:', error)
-				} finally {
-					store.removeLoadingMaterial(loadingId)
 				}
 			}
 		}
@@ -1020,8 +1014,7 @@ export class UploadView extends Element {
 		document.addEventListener('touchmove', handleDragMove as EventListener)
 		document.addEventListener('touchend', handleDragEnd)
 	}
-
-	template = () => html`
+	override template = () => html`
 		<drippy-scene
 			selected-space=${() => this.selectedSpace}
 			selected-avatar=${() => this.selectedAvatar}
@@ -1271,8 +1264,7 @@ export class UploadView extends Element {
 			></show-when>
 		</bottom-sheet>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		* {
 			box-sizing: border-box;
 			user-select: none;

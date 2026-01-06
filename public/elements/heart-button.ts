@@ -4,12 +4,11 @@ type HeartButtonAttributes = 'onclick' | 'active'
 
 @element
 export class HeartButton extends Element {
-	static readonly elementName = 'heart-button'
+	static override readonly elementName = 'heart-button'
 
-	@eventAttribute onclick: ((e: MouseEvent) => void) | null = null
+	@eventAttribute override onclick: ((e: MouseEvent) => void) | null = null
 	@signal active = false
-
-	template = () =>
+	override template = () =>
 		html`<button
 			class="heart-button"
 			classList=${() => ({active: this.active})}
@@ -33,8 +32,7 @@ export class HeartButton extends Element {
 							/>
 						</svg>`}
 		</button>`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		.heart-button {
 			background: #f6f6f6;
 			border: none;

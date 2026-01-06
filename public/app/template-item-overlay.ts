@@ -7,13 +7,12 @@ type TemplateItemOverlayAttributes = 'selectedTemplate'
 
 @element
 export class TemplateItemOverlay extends Element {
-	static readonly elementName = 'template-item-overlay'
+	static override readonly elementName = 'template-item-overlay'
 
 	@attribute selectedTemplate: Template | null = null
 
 	@signal isRemixAvailable = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// Check if remix is available for this template
@@ -59,8 +58,7 @@ export class TemplateItemOverlay extends Element {
 			}),
 		)
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="overlay-container">
 			<button class="overlay-button unselect-button" onclick=${this.#onUnselectClick}>Unselect</button>
 			${() =>
@@ -96,8 +94,7 @@ export class TemplateItemOverlay extends Element {
 					: null}
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			position: absolute;
 			top: 0;

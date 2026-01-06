@@ -4,15 +4,13 @@ type BottomNavigationAttributes = keyof {}
 
 @element
 export class BottomNavigation extends Element {
-	static readonly elementName = 'bottom-navigation'
-
-	template = () => html`
+	static override readonly elementName = 'bottom-navigation'
+	override template = () => html`
 		<nav class="bottom-nav">
 			<slot></slot>
 		</nav>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: block;
 		}

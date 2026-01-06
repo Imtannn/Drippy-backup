@@ -6,7 +6,7 @@ type PersonButtonAttributes = 'disabled'
 
 @element
 export class PersonButton extends Element {
-	static readonly elementName = 'person-button'
+	static override readonly elementName = 'person-button'
 
 	@booleanAttribute disabled = false
 
@@ -56,8 +56,7 @@ export class PersonButton extends Element {
 			</g>
 		</svg>
 	`
-
-	template = () =>
+	override template = () =>
 		html`<icon-button onclick=${this.#onToggleAvatarClick} disabled=${() => this.disabled}
 			>${() => this.icon()}</icon-button
 		>`

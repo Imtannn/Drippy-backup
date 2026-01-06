@@ -4,22 +4,20 @@ type DripItButtonAttributes = 'onclick' | 'buttonDisabled'
 
 @element
 export class DripItButton extends Element {
-	static readonly elementName = 'drip-it-button'
+	static override readonly elementName = 'drip-it-button'
 
 	@booleanAttribute buttonDisabled = false
 
-	@eventAttribute onclick = null
+	@eventAttribute override onclick = null
 
 	#onClick = () => {
 		if (this.buttonDisabled) return
 		this.dispatchEvent(new CustomEvent('click', {bubbles: true}))
 	}
-
-	template = () => html`
+	override template = () => html`
 		<button class="drip-it-button" onclick=${this.#onClick} disabled=${() => this.buttonDisabled}>Drip it!</button>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		.drip-it-button {
 			display: flex;
 			align-items: center;

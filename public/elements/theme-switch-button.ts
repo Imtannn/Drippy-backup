@@ -4,14 +4,13 @@ type ThemeSwitchButtonAttributes = keyof {}
 
 @element
 export class ThemeSwitchButton extends Element {
-	static readonly elementName = 'theme-switch-button'
-
-	template = () => html`
+	static override readonly elementName = 'theme-switch-button'
+	override template = () => html`
 		<div class="theme-switch-container">
 			<theme-switch></theme-switch>
 		</div>
 	`
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		.theme-switch-container {
 			width: 2rem;
 			height: 2rem;

@@ -4,11 +4,11 @@ type PreviewButtonAttributes = 'onclick' | 'buttonDisabled'
 
 @element
 export class PreviewButton extends Element {
-	static readonly elementName = 'preview-button'
+	static override readonly elementName = 'preview-button'
 
 	@booleanAttribute buttonDisabled = false
 
-	@eventAttribute onclick = null
+	@eventAttribute override onclick = null
 
 	#onClick = () => {
 		this.dispatchEvent(new CustomEvent('click', {bubbles: true}))
@@ -53,12 +53,10 @@ export class PreviewButton extends Element {
 				/>
 			</g>
 		</svg>`
-
-	template = () => html`
+	override template = () => html`
 		<button class="preview-button" onclick=${this.#onClick} disabled=${() => this.buttonDisabled}>Preview & buy</button>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		.preview-button {
 			display: flex;
 			align-items: center;

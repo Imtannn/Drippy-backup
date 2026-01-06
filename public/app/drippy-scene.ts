@@ -4,6 +4,7 @@ import {
 	clamp,
 	createEffect,
 	css,
+	disposeMaterial,
 	Element,
 	element,
 	Element3D,
@@ -14,21 +15,19 @@ import {
 	onCleanup,
 	Scene,
 	signal,
+	memo,
+	effect,
 } from 'lume'
 import type {Accessor} from 'solid-js'
-import {createMemo, createRoot, untrack} from 'solid-js'
+import {createMemo} from 'solid-js'
 import * as THREE from 'three'
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js'
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
 import {avatars} from '../consts/avatars.js'
-import {defaultGarmentsConfig} from '../consts/default-garments-config.js'
-import {templates} from '../consts/templates.js'
 
-import {createMutable} from 'solid-js/store'
 import {backgroundScenes} from '../consts/scenes.js'
-import {spaces} from '../consts/spaces.js'
 import {appAnims} from '../elements/animation-select.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
@@ -37,10 +36,10 @@ import '../elements/progress-loader.js'
 import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
-import type {SelectedGarments, Space, TemplateMap} from '../types/types.js'
+import type {Gender, SelectedGarments, Space, TemplateMap} from '../types/types.js'
 import {
+	arrayEquals,
 	createFabricTexture,
 	createMutationsSignal,
 	enableFrontsideOnModelLoad,
@@ -56,35 +55,59 @@ import {
 	setEnvMapOnModelLoad,
 	setMaterialsVisibleOnModelLoad,
 	showSkeletonHelper,
+	whenModelLoaded,
 } from '../utils.js'
 import './app-buttons.js'
 import {AvatarSkeleton} from './avatar-skeleton.js'
 import {store} from './store.js'
 import {templateHelpers} from './template-helpers.js'
 import {textureManager} from './texture-manager.js'
+import {blocks} from '../consts/blocks.js'
 
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
 
-type RenderBlock = {block: Block; templateCategory: TemplateCategory; id: string}
-type DefaultRenderBlock = RenderBlock & {fabrics: Record<string, Fabric>}
+type Collection = string
+type BlockId = string
+type MaybeMirror = '' | '-mirror'
+type RenderBlockId = `${Collection}-${TemplateCategory}-${BlockCategory}-${BlockId}${MaybeMirror}`
+
+interface RenderBlock {
+	block: Block
+	templateCategory: TemplateCategory
+	id: RenderBlockId
+}
+
+const defaultRenderBlocks: RenderBlock[] = blocks.default.map(block => {
+	if ((block.category as BlockCategory) === 'Sleeves')
+		throw new Error('Separate sleeves not currently supported for default garments.')
+
+	return {
+		block,
+		templateCategory: block.templateCategory,
+		id: `${block.collection}-${block.templateCategory}-${block.category}-${block._id}`,
+	} satisfies RenderBlock
+})
+
+const defaultFemaleBlocks = defaultRenderBlocks.filter(b => b.block.avatar === 'female')
+const defaultMaleBlocks = defaultRenderBlocks.filter(b => b.block.avatar === 'male')
 
 @element
 export class DrippyScene extends Element {
-	static elementName = 'drippy-scene'
+	static override elementName = 'drippy-scene'
 
 	@attribute selectedSpace: Space | null = null
 	@attribute selectedAvatar: string | null = null
 	@attribute selectedGarments: SelectedGarments = {}
 	@attribute landing: boolean = false
 
-	@signal isDark = false
-	@signal sceneUrl = ''
-	@signal renderBlocks: RenderBlock[] = []
-	@signal private _defaultRenderBlocks: DefaultRenderBlock[] = []
-	@signal private _defaultGarmentVisibility: Map<TemplateCategory, boolean> = new Map()
-	defaultRenderBlocks: () => DefaultRenderBlock[] = () => this._defaultRenderBlocks
-	defaultGarmentVisibility: () => Map<TemplateCategory, boolean> = () => this._defaultGarmentVisibility
+	#docMutations = createMutationsSignal(document.documentElement, {attributes: true, attributeFilter: ['data-theme']})
+
+	// @ts-expect-error TODO use this to implement dark mode
+	@memo private get isDark() {
+		this.#docMutations()
+		return document.documentElement.dataset.theme === 'dark'
+	}
 
 	@signal private backgroundModel: GltfModel | null = null
 	@signal private avatarModel: GltfModel | null = null
@@ -92,7 +115,9 @@ export class DrippyScene extends Element {
 	@signal private lumeScene: Scene | null = null
 
 	// When `false`, disable animations and rigging.
-	@signal private animsEnabled = false
+	@memo private get animsEnabled() {
+		return store.selectedAnimation !== 'none'
+	}
 
 	@signal private animName: string | null = null
 	@signal private animSrc: string | null = null
@@ -106,7 +131,7 @@ export class DrippyScene extends Element {
 	@signal private isVerticalPan = false
 	@signal private cameraRig: CameraRig | null = null
 
-	scene = () => {
+	@memo get scene() {
 		const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
 		return getSceneBySlug(backgroundScenes, defaultSceneSlug)
 	}
@@ -115,181 +140,14 @@ export class DrippyScene extends Element {
 	private composer: EffectComposer | null = null
 	private outlinePass: OutlinePass | null = null
 
-	/**
-	 * Stores fabric texture signals in a two-level Map structure to keep them stable across effect reruns.
-	 *
-	 * Structure:
-	 *   Map<blockId, Map<fabricId, {texture, loading, error}>>
-	 *
-	 * Example:
-	 *   fabricTextureSignals
-	 *   ├─ "drippy_Shirt_Bodice_123" (blockId)
-	 *   │  ├─ "fabric_456" → {
-	 *   │  │     texture: Accessor<TextureSet | null>,  // Contains ALL texture maps for this fabric
-	 *   │  │     loading: Accessor<boolean>,
-	 *   │  │     error: Accessor<Error | null>
-	 *   │  │   }
-	 *   │  │   // texture() returns TextureSet with: baseColor, normal, displacement, roughness, alpha
-	 *   │  └─ "fabric_789" → {texture, loading, error}
-	 *   └─ "drippy_Pants_Bottom_456" (blockId)
-	 *      └─ "fabric_101" → {texture, loading, error}
-	 *
-	 * TextureSet (returned by texture()):
-	 *   - baseColor?: THREE.Texture      // Main color texture
-	 *   - normal?: THREE.Texture         // Normal map for surface detail
-	 *   - displacement?: THREE.Texture   // Displacement map for height
-	 *   - roughness?: THREE.Texture      // Roughness map for material properties
-	 *   - alpha?: THREE.Texture          // Alpha/transparency map
-	 *
-	 * Why this structure:
-	 * - Outer Map (blockId): Isolates signals per garment block for easy cleanup
-	 * - Inner Map (fabricId): Tracks each fabric's loading state independently
-	 * - ReturnType<typeof createFabricTexture>: The signal object returned by createFabricTexture()
-	 *   containing reactive texture, loading, and error states
-	 *
-	 * Benefits:
-	 * - Signals persist across effect reruns (no recreation)
-	 * - Enables proper reactive tracking of async texture loading
-	 * - All texture maps per fabric are bundled in TextureSet (accessed via texture())
-	 * - Easy cleanup when blocks or fabrics are removed
-	 */
-	private fabricTextureSignals: Record<string, Record<string, ReturnType<typeof createFabricTexture>>> = createMutable(
-		{},
-	)
-
-	#applyFabricsWithSignals(
-		el: Element3D,
-		loadingId: symbol,
-		templateId: string | undefined,
-		templateCategory: TemplateCategory,
-		blockCategory: BlockCategory,
-	) {
-		const root = el.three
-		const blockId = el.getAttribute('id') || 'unknown'
-
-		// Extract UV data for proper texture scaling
-		const meshes = [...meshesInTree(root)]
-		const uvArray = meshes[0]?.geometry?.attributes?.uv?.array ? Array.from(meshes[0].geometry.attributes.uv.array) : []
-
-		// Get or create signal storage for this block
-		const blockFabricSignals = untrack(() =>
-			this.fabricTextureSignals[blockId]
-				? this.fabricTextureSignals[blockId]
-				: ((this.fabricTextureSignals[blockId] = {}), this.fabricTextureSignals[blockId]),
-		)
-
-		const currentSelectedFabrics = createMemo(() => {
-			const fabricsRecord = this.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
-
-			return fabricsRecord
-		})
-
-		// Create texture signals when fabrics change
-		createEffect(() => {
-			//templateId
-			const currentFabrics = currentSelectedFabrics()
-
-			// Create signals for new fabrics
-			for (const fabric of Object.values(currentFabrics)) {
-				const textureState = createFabricTexture(() => fabric, uvArray)
-				blockFabricSignals[fabric._id] = textureState
-
-				// Track loading state per fabric ID
-				createEffect(() => {
-					const isLoading = textureState.loading()
-					if (isLoading) {
-						store.addLoadingFabric(fabric._id)
-					} else {
-						store.removeLoadingFabric(fabric._id)
-					}
-
-					onCleanup(() => {
-						store.removeLoadingFabric(fabric._id)
-					})
-				})
-			}
-
-			onCleanup(() => {
-				for (const key in blockFabricSignals) delete blockFabricSignals[key]
-			})
-		})
-
-		const isAnyFabricLoading = createMemo(() => {
-			return Object.values(blockFabricSignals).some(signal => signal.loading())
-		})
-
-		// Track aggregate loading state reactively
-		createEffect(() => {
-			if (!isAnyFabricLoading()) return
-
-			store.addLoadingMaterial(loadingId)
-
-			onCleanup(() => {
-				store.removeLoadingMaterial(loadingId)
-				if (templateId) store.clearLoadingTemplate(templateId)
-			})
-		})
-
-		// Apply textures reactively as they load
-		createEffect(() => {
-			const currentFabrics = currentSelectedFabrics()
-
-			// Create a map for mesh to meshes key
-			const meshToFabricMeshesMap = new Map<string, string>()
-			for (const meshesKey of Object.keys(currentFabrics)) {
-				const meshArray = meshesKey.split('-')
-				for (const mesh of meshArray) {
-					meshToFabricMeshesMap.set(mesh, meshesKey)
-				}
-			}
-
-			const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
-
-			for (const mesh of meshes) {
-				// Check if there's a specific fabric assigned to this mesh
-				const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
-				const meshesKey = meshToFabricMeshesMap.get(meshKey)
-				const fabricToUse = currentFabrics[meshesKey || 'default']
-
-				if (fabricToUse) {
-					const textureState = blockFabricSignals[fabricToUse._id]
-					if (textureState) {
-						const textureSet = textureState.texture()
-						const isLoading = textureState.loading()
-						const error = textureState.error()
-
-						if (textureSet && !isLoading && !error) {
-							mesh.material = new THREE.MeshPhysicalMaterial()
-							textureManager.applyTexturesToMaterial(mesh.material, textureSet)
-						}
-					}
-				}
-			}
-
-			el.needsUpdate()
-		})
-
-		const cleanup = () => {
-			store.removeLoadingMaterial(loadingId)
-			if (!el.isConnected) {
-				delete this.fabricTextureSignals[blockId]
-				this.#resetMaterialsToDefault(el)
-			}
-		}
-
-		onCleanup(cleanup)
-	}
-
 	// Reset materials to default state (no textures)
-	#resetMaterialsToDefault(el: Element3D) {
-		for (const mesh of meshesInTree(el.three)) {
-			const material = mesh.material as THREE.MeshPhysicalMaterial
-			material.map = null
-			material.normalMap = null
-			material.roughnessMap = null
-			// material.displacementMap = null
-			material.needsUpdate = true
-		}
+	#resetMaterialProperties(el: Element3D, mesh: THREE.Mesh) {
+		const material = mesh.material as THREE.MeshPhysicalMaterial
+		material.map = null
+		material.normalMap = null
+		material.roughnessMap = null
+		// material.displacementMap = null
+		material.needsUpdate = true
 
 		el.needsUpdate()
 	}
@@ -299,11 +157,11 @@ export class DrippyScene extends Element {
 	 * Checks if the model is rigged, if so, sets the skeleton to the avatar's.
 	 * @param model
 	 */
-	#checkRiggedMesh(model: GltfModel) {
-		if (!this.avatarModel) return
+	#adoptAvatarSkeleton(model: GltfModel) {
+		if (!this.avatarModel) throw new Error('Avatar model required for rigging.')
 
 		const sourceSkeleton = getArmatureObject(this.avatarModel.three)?.skeleton
-		if (!sourceSkeleton) return
+		if (!sourceSkeleton) throw new Error('Avatar model has no skeleton for rigging.')
 
 		model.three.traverse((obj: any) => {
 			if (obj.skeleton) obj.skeleton = sourceSkeleton
@@ -323,57 +181,18 @@ export class DrippyScene extends Element {
 	}
 
 	/** Check if a default garment should be visible based on user selections */
-	#isDefaultGarmentVisible(templateCategory: TemplateCategory, selectedTemplates: TemplateMap): boolean {
-		// Has user selected this category?
-		if (selectedTemplates?.[templateCategory]) return false
+	#isGarmentVisible(item: RenderBlock, selectedTemplates: TemplateMap): boolean {
+		if (!item.id.startsWith('default-')) return true
+
+		const overriddenBy = templateHelpers.getCategoriesThatOverride(item.templateCategory)
+
+		// If any block is loading in this template category, keep default visible while loading
+		if (anyBlockIsLoadingInTemplateCategory(this.renderBlocks, item.templateCategory)) return true
+		if (overriddenBy.some(category => anyBlockIsLoadingInTemplateCategory(this.renderBlocks, category))) return true
+
 		// Is this category overridden by another selected category?
-		const overriddenBy = templateHelpers.getCategoriesThatOverride(templateCategory)
+		if (selectedTemplates[item.templateCategory]) return false
 		return !overriddenBy.some(cat => selectedTemplates[cat])
-	}
-
-	/** Apply fabrics to default garment models */
-	#applyDefaultFabrics(el: GltfModel, item: DefaultRenderBlock) {
-		const root = el.three
-		const meshes = [...meshesInTree(root)]
-		const uvArray = meshes[0]?.geometry?.attributes?.uv?.array
-			? Array.from(meshes[0].geometry.attributes.uv.array)
-					.slice(0, 5)
-					.map((el: any) => Math.abs(el))
-			: []
-
-		// Create a map for mesh to fabrics key
-		const meshToFabricMeshesMap = new Map<string, string>()
-		for (const meshesKey of Object.keys(item.fabrics)) {
-			const meshArray = meshesKey.split('-')
-			for (const mesh of meshArray) {
-				meshToFabricMeshesMap.set(mesh, meshesKey)
-			}
-		}
-
-		const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
-
-		for (const mesh of meshes) {
-			// Check if there's a specific fabric assigned to this mesh
-			const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
-			const meshesKey = meshToFabricMeshesMap.get(meshKey)
-			const fabricToUse = item.fabrics[meshesKey || 'default']
-
-			if (fabricToUse) {
-				const textureState = createFabricTexture(() => fabricToUse, uvArray)
-				// Wait for texture to load then apply
-				createEffect(() => {
-					const textureSet = textureState.texture()
-					const isLoading = textureState.loading()
-					const error = textureState.error()
-
-					if (textureSet && !isLoading && !error) {
-						mesh.material = new THREE.MeshPhysicalMaterial()
-						textureManager.applyTexturesToMaterial(mesh.material, textureSet)
-						el.needsUpdate()
-					}
-				})
-			}
-		}
 	}
 
 	#handlePointerDown = (e: PointerEvent) => {
@@ -408,626 +227,604 @@ export class DrippyScene extends Element {
 		this.isVerticalPan = false
 	}
 
-	connectedCallback() {
-		this.scene = createMemo(this.scene)
+	@memo private get avatar() {
+		return avatars.find(a => a.name === this.selectedAvatar)
+	}
 
-		super.connectedCallback() // runs this.template()
+	@memo private get avatarGender(): Gender {
+		return this.avatar?.gender ?? 'female'
+	}
 
-		// Memoize default render blocks and visibility to prevent unnecessary re-renders
-		this.defaultRenderBlocks = createMemo(() => this._defaultRenderBlocks)
-		this.defaultGarmentVisibility = createMemo(() => this._defaultGarmentVisibility)
+	// Select default garments based on avatar gender
+	// These are always rendered (preloaded) but visibility is toggled
+	@memo private get _defaultRenderBlocks(): RenderBlock[] {
+		const gender = this.avatarGender
+		return gender === 'female' ? defaultFemaleBlocks : defaultMaleBlocks
+	}
 
-		// Compute default garments based on avatar gender
-		// These are always rendered (preloaded) but visibility is toggled
-		this.createEffect(() => {
-			const currentAvatar = avatars.find(a => a.name === this.selectedAvatar)
-			const gender = currentAvatar?.gender
-			if (!gender) {
-				this._defaultRenderBlocks = []
-				return
-			}
+	@memo private get renderBlocks(): RenderBlock[] {
+		const garmentSelections = this.selectedGarments ?? {}
+		const blocks: Block[] = []
 
-			const defaultGarments = defaultGarmentsConfig[gender]
-			if (!defaultGarments || defaultGarments.length === 0) {
-				this._defaultRenderBlocks = []
-				return
-			}
+		for (const templateSelection of Object.values(garmentSelections)) {
+			if (!templateSelection) continue
+			for (const selection of Object.values(templateSelection)) if (selection?.block) blocks.push(selection.block)
+		}
 
-			const blocks: DefaultRenderBlock[] = []
-			const blockCache = new Map<string, DefaultRenderBlock>()
+		return [
+			...this._defaultRenderBlocks,
+			...blocks.flatMap(block => {
+				const id: RenderBlockId = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
+				let renderBlock = getRenderBlock(id, block, block.templateCategory)
 
-			for (const config of defaultGarments) {
-				const template = templates[config.collection]?.find(t => t._id === config.templateId)
-				if (!template) {
-					console.warn(`Default garment template not found: ${config.templateId} in collection ${config.collection}`)
-					continue
+				if (block.category === 'Sleeves') {
+					const idMirror: RenderBlockId = `${id}-mirror`
+					let renderBlockMirror = getRenderBlock(idMirror, block, block.templateCategory)
+					return [renderBlock, renderBlockMirror]
 				}
 
-				const templateBlockData = templateHelpers.convertTemplateToBlockData(template, config.collection)
-				const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
-					templateBlockData,
-					config.collection,
-				)
+				return renderBlock
+			}),
+		]
+	}
 
-				for (const [blockCategory, block] of newBlocksMap.entries()) {
-					const id = `default-${config.collection?.replace(/-/g, '_')}-${config.category}-${blockCategory}-${block._id}`
+	@memo private get garmentModelsSignal() {
+		if (!this.avatarModel) return null
+		return querySelectorAllSignal(this.avatarModel, 'lume-gltf-model[data-block]') as Accessor<NodeListOf<GltfModel>>
+	}
 
-					// Get fabrics for this block
-					const fabricsMap = newFabricsMap.get(blockCategory)
-					const fabrics: Record<string, Fabric> = {}
-					if (fabricsMap) {
-						for (const [mesh, fabric] of fabricsMap.entries()) {
-							fabrics[mesh] = fabric
-						}
-					}
+	@memo private get garmentModels() {
+		return this.garmentModelsSignal ? this.garmentModelsSignal() : emptyNodeList<GltfModel>()
+	}
 
-					let renderBlock = blockCache.get(id)
-					if (!renderBlock) {
-						renderBlock = {block, templateCategory: config.category, id, fabrics}
-						blockCache.set(id, renderBlock)
-					}
+	@memo private get extraObjectSignal() {
+		if (!this.avatarModel) return null
+		return querySelectorAllSignal(this.avatarModel, 'lume-gltf-model.extraObject') as Accessor<NodeListOf<GltfModel>>
+	}
 
-					// Handle mirrored sleeves
-					if (block.category === 'Sleeves') {
-						blocks.push(renderBlock)
-						const idMirror = `${id}-mirror`
-						let mirrorBlock = blockCache.get(idMirror)
-						if (!mirrorBlock) {
-							mirrorBlock = {block, templateCategory: config.category, id: idMirror, fabrics}
-							blockCache.set(idMirror, mirrorBlock)
-						}
-						blocks.push(mirrorBlock)
-					} else {
-						blocks.push(renderBlock)
-					}
-				}
-			}
+	@memo private get extraObjects() {
+		return this.extraObjectSignal ? this.extraObjectSignal() : emptyNodeList<GltfModel>()
+	}
 
-			this._defaultRenderBlocks = blocks
+	// Reset camera to default when space changes
+	@effect cameraEffect() {
+		const space = this.selectedSpace
+		if (!space || !this.cameraRig) return
+
+		this.cameraRig.distance = isDesktop() ? 2.5 : 4
+		this.cameraRig.verticalAngle = 0
+		this.cameraRig.horizontalAngle = 0
+		this.cameraY = -1
+
+		this.cameraRig.needsUpdate()
+	}
+
+	@effect backgroundModelEffect() {
+		const {backgroundModel} = this
+		if (!backgroundModel) return
+
+		disableFrustumCulledOnLoad(backgroundModel)
+		enableFrontsideOnModelLoad(backgroundModel)
+		enableShadowOnModelLoad(backgroundModel)
+		setEnvMapOnModelLoad(backgroundModel, env)
+		setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
+		whenModelLoaded(backgroundModel, () => {
+			backgroundModel.three.traverse(obj => {
+				// if ((obj as any).isLight)
+				obj.castShadow = false
+			})
 		})
 
-		// Update default garments visibility based on user selections
-		this.createEffect(() => {
-			const selectedTemplates = store.selectedTemplates
-			const newVisibility = new Map<TemplateCategory, boolean>()
+		const sceneId = Symbol('background')
+		store.trackModelLoading(sceneId, backgroundModel)
+	}
 
-			// Check visibility for each template category in default garments
-			for (const block of this.defaultRenderBlocks()) {
-				if (!newVisibility.has(block.templateCategory)) {
-					newVisibility.set(
-						block.templateCategory,
-						this.#isDefaultGarmentVisible(block.templateCategory, selectedTemplates),
-					)
-				}
+	@signal private documentElementMutations = (() => {
+		return createMutationsSignal(document.documentElement, {
+			attributes: true,
+			attributeFilter: ['class'],
+		})
+	})()
+
+	// Watch for panel collapse state changes
+	@effect panelCollapseEffect() {
+		// Trigger reactive update when panel collapse state changes
+		this.documentElementMutations()
+		const isPanelCollapsed = document.documentElement.classList.contains('panel-collapsed')
+
+		if (store.view === 'preview') {
+			this.style.setProperty('--sceneTranslateX', 'translateX(0)')
+			this.style.setProperty('--sceneTranslateY', 'translateY(0)')
+		} else {
+			this.style.setProperty('--sceneTranslateY', 'translateY(-100px)')
+
+			const shouldShiftLeft =
+				store.view === 'order' ||
+				store.view === 'order-items' ||
+				store.view === 'order-size' ||
+				store.view === 'custom-measurement' ||
+				store.view === 'iframe-popup' ||
+				store.view === 'success' ||
+				store.view === 'share' ||
+				store.view === 'template'
+
+			if (isPanelCollapsed) {
+				this.style.setProperty('--sceneTranslateX', 'translateX(0)')
+			} else if (shouldShiftLeft) {
+				this.style.setProperty('--sceneTranslateX', 'translateX(calc(-1 * var(--sceneDesktopOffset)))')
+			} else {
+				this.style.setProperty('--sceneTranslateX', 'translateX(var(--sceneDesktopOffset))')
 			}
+		}
+	}
 
-			this._defaultGarmentVisibility = newVisibility
-		})
+	@effect extraObjectEffect() {
+		for (const el of this.extraObjects) disableFrustumCulledOnLoad(el)
+	}
 
-		// Reset camera to default when space changes
-		this.createEffect(() => {
-			const space = this.selectedSpace
-			if (!space || !this.cameraRig) return
+	@effect loadingProgressEffect() {
+		let previousCount = -1
+		let loaderTimeout: number | undefined = undefined
+		let progressTimeouts: number[] = []
 
-			this.cameraRig.distance = isDesktop() ? 2.5 : 4
-			this.cameraRig.verticalAngle = 0
-			this.cameraRig.horizontalAngle = 0
-			this.cameraY = -1
+		createEffect(() => {
+			const loadingCount = store.drippySceneLoads.length
 
-			this.cameraRig.needsUpdate()
-		})
-
-		this.createEffect(() => {
-			const {avatarModel, backgroundModel} = this
-			if (!avatarModel || !backgroundModel) return
-
-			disableFrustumCulledOnLoad(backgroundModel)
-			disableFrustumCulledOnLoad(avatarModel)
-
-			const garmentModels = querySelectorAllSignal(avatarModel, 'lume-gltf-model[data-cloth]') as Accessor<
-				NodeListOf<GltfModel>
-			>
-
-			const extraObjects = querySelectorAllSignal(avatarModel, 'lume-gltf-model.extraObjects') as Accessor<
-				NodeListOf<GltfModel>
-			>
-
-			createEffect(() => {
-				for (const el of extraObjects()) disableFrustumCulledOnLoad(el)
-			})
-
-			// Watch for panel collapse state changes
-			const panelCollapseMutations = createMutationsSignal(document.documentElement, {
-				attributes: true,
-				attributeFilter: ['class'],
-			})
-
-			createEffect(() => {
-				// Trigger reactive update when panel collapse state changes
-				panelCollapseMutations()
-				const isPanelCollapsed = document.documentElement.classList.contains('panel-collapsed')
-
-				if (store.view === 'preview') {
-					this.style.setProperty('--sceneTranslateX', 'translateX(0)')
-					this.style.setProperty('--sceneTranslateY', 'translateY(0)')
-				} else {
-					this.style.setProperty('--sceneTranslateY', 'translateY(-100px)')
-
-					const shouldShiftLeft =
-						store.view === 'order' ||
-						store.view === 'order-items' ||
-						store.view === 'order-size' ||
-						store.view === 'custom-measurement' ||
-						store.view === 'iframe-popup' ||
-						store.view === 'success' ||
-						store.view === 'share' ||
-						store.view === 'template'
-
-					if (isPanelCollapsed) {
-						this.style.setProperty('--sceneTranslateX', 'translateX(0)')
-					} else if (shouldShiftLeft) {
-						this.style.setProperty('--sceneTranslateX', 'translateX(calc(-1 * var(--sceneDesktopOffset)))')
-					} else {
-						this.style.setProperty('--sceneTranslateX', 'translateX(var(--sceneDesktopOffset))')
-					}
-				}
-			})
-
-			createEffect(() => {
-				if (!this.selectedSpace) return
-				const space = spaces.find(space => space.slug === this.selectedSpace?.slug)
-				if (space) {
-					if (this.scene()) this.sceneUrl = this.scene()!.scene
-				}
-			})
-
-			const mutations = createMutationsSignal(document.documentElement, {
-				attributes: true,
-				attributeFilter: ['data-theme'],
-			})
-
-			createEffect(() => {
-				mutations()
-				this.isDark = document.documentElement.dataset.theme === 'dark'
-			})
-
-			// Track selected avatar loading state
-			const avatarId = Symbol('avatar')
-			store.trackModelLoading(avatarId, avatarModel)
-
-			const avatarLoaded = onModelLoad(avatarModel)
-			createEffect(() => {
-				if (!avatarLoaded()) return
-
-				store.showAnimationSelect = !!getArmatureObject(avatarModel.three)
-			})
-
-			// Track background scene loading state (only if a scene is given)
-			const sceneId = Symbol('scene')
-			createEffect(() => {
-				if (!backgroundModel.src) return
-				store.trackModelLoading(sceneId, backgroundModel)
-			})
-
-			let previousCount = -1
-			let loaderTimeout: number | undefined = undefined
-			let progressTimeouts: number[] = []
-
-			createEffect(() => {
-				const loadingCount = store.drippySceneLoads.size
-
-				if (loadingCount > 0) {
-					// Delay showing loader for 500ms - skip for fast loads
-					if (!this.isLoading && loaderTimeout === undefined) {
-						loaderTimeout = window.setTimeout(() => {
-							if (store.drippySceneLoads.size > 0) {
-								this.isLoading = true
-								this.loadingProgress = 10
-							}
-							loaderTimeout = undefined
-						}, 500)
-					}
-
-					if (this.isLoading) {
-						if (loadingCount === 2) {
+			if (loadingCount > 0) {
+				// Delay showing loader for 500ms - skip for fast loads
+				if (!this.isLoading && loaderTimeout === undefined) {
+					loaderTimeout = window.setTimeout(() => {
+						if (store.isDrippySceneLoading) {
+							this.isLoading = true
 							this.loadingProgress = 10
-						} else if (loadingCount === 1) {
-							if (previousCount === 2 || previousCount === -1) {
-								// animate smoothly through multiple steps
-								const progressStages = [
-									{progress: 15, delay: 0},
-									{progress: 30, delay: 150},
-									{progress: 50, delay: 300},
-									{progress: 60, delay: 1000},
-									{progress: 65, delay: 3000},
-									{progress: 70, delay: 5000},
-									{progress: 75, delay: 7000},
-									{progress: 78, delay: 10000},
-									{progress: 80, delay: 14000},
-									{progress: 82, delay: 18000},
-									{progress: 84, delay: 23000},
-									{progress: 88, delay: 30000},
-									{progress: 92, delay: 40000},
-								]
-
-								progressStages.forEach(({progress, delay}) => {
-									const timeoutId = window.setTimeout(() => {
-										if (store.drippySceneLoads.size === 1) {
-											this.loadingProgress = progress
-										}
-									}, delay)
-									progressTimeouts.push(timeoutId)
-								})
-							}
 						}
-
-						previousCount = loadingCount
-					}
-				} else if (loadingCount === 0 && (previousCount > 0 || this.isLoading || loaderTimeout !== undefined)) {
-					// Clear pending loader timeout if loading finished fast
-					if (loaderTimeout !== undefined) {
-						clearTimeout(loaderTimeout)
 						loaderTimeout = undefined
-					}
-
-					// Clear all progress stage timeouts
-					progressTimeouts.forEach(timeoutId => clearTimeout(timeoutId))
-					progressTimeouts = []
-
-					if (this.isLoading) {
-						this.loadingProgress = 100
-
-						// Wait for browser to paint 100% before hiding
-						// Triple RAF + small delay ensures 100% is visible
-						requestAnimationFrame(() => {
-							requestAnimationFrame(() => {
-								requestAnimationFrame(() => {
-									setTimeout(() => {
-										this.isLoading = false
-										previousCount = -1
-									}, 100)
-								})
-							})
-						})
-					} else {
-						// Reset state even if loader was never shown
-						previousCount = -1
-					}
+					}, 500)
 				}
-			})
 
-			// Cleanup timeouts on component unmount
-			onCleanup(() => {
+				if (this.isLoading) {
+					if (loadingCount === 2) {
+						this.loadingProgress = 10
+					} else if (loadingCount === 1) {
+						if (previousCount === 2 || previousCount === -1) {
+							// animate smoothly through multiple steps
+							const progressStages = [
+								{progress: 15, delay: 0},
+								{progress: 30, delay: 150},
+								{progress: 50, delay: 300},
+								{progress: 60, delay: 1000},
+								{progress: 65, delay: 3000},
+								{progress: 70, delay: 5000},
+								{progress: 75, delay: 7000},
+								{progress: 78, delay: 10000},
+								{progress: 80, delay: 14000},
+								{progress: 82, delay: 18000},
+								{progress: 84, delay: 23000},
+								{progress: 88, delay: 30000},
+								{progress: 92, delay: 40000},
+							]
+
+							progressStages.forEach(({progress, delay}) => {
+								const timeoutId = window.setTimeout(() => {
+									if (store.drippySceneLoads.length === 1) {
+										this.loadingProgress = progress
+									}
+								}, delay)
+								progressTimeouts.push(timeoutId)
+							})
+						}
+					}
+
+					previousCount = loadingCount
+				}
+			} else if (loadingCount === 0 && (previousCount > 0 || this.isLoading || loaderTimeout !== undefined)) {
+				// Clear pending loader timeout if loading finished fast
 				if (loaderTimeout !== undefined) {
 					clearTimeout(loaderTimeout)
+					loaderTimeout = undefined
 				}
+
+				// Clear all progress stage timeouts
 				progressTimeouts.forEach(timeoutId => clearTimeout(timeoutId))
-			})
+				progressTimeouts = []
 
-			// Track block loading state - use WeakSet to track by element, not by ID
-			const trackedElements = new WeakSet<Element>()
-
-			createEffect(() => {
-				for (const [index, el] of garmentModels().entries()) {
-					// Only create effect once per element instance
-					if (!trackedElements.has(el)) {
-						trackedElements.add(el)
-						const blockId = el.getAttribute('data-block-id') || el.getAttribute('id') || `unknown-${index}`
-						const modelLoaded = onModelLoad(el)
-
-						createEffect(() => {
-							if (!modelLoaded()) {
-								store.addLoadingBlock(blockId)
-							} else {
-								store.removeLoadingBlock(blockId)
-							}
-
-							onCleanup(() => {
-								store.removeLoadingBlock(blockId)
-							})
-						})
-					}
-
-					disableFrustumCulledOnLoad(el)
+				if (this.isLoading) {
+					this.loadingProgress = 100
+					this.isLoading = false
+					previousCount = -1
+				} else {
+					// Reset state even if loader was never shown
+					previousCount = -1
 				}
+			}
+		})
+
+		// Cleanup timeouts on component unmount
+		onCleanup(() => {
+			if (loaderTimeout !== undefined) {
+				clearTimeout(loaderTimeout)
+			}
+			progressTimeouts.forEach(timeoutId => clearTimeout(timeoutId))
+		})
+	}
+
+	@effect garmentLoadingEffect() {
+		for (const el of this.garmentModels) {
+			const blockId = el.dataset.blockId
+			if (!blockId) throw new Error('Garment model missing data-block-id attribute')
+
+			const modelLoaded = onModelLoad(el)
+			createEffect(() => {
+				if (modelLoaded()) return
+				store.addLoadingBlock(blockId)
+				onCleanup(() => store.removeLoadingBlock(blockId))
 			})
+		}
+	}
 
-			// This will cache render blocks by ID. This is a quick fix to make the
-			// <For> re-use the same objects to avoid reloading GLTF models.
-			const renderBlockCache = new Map<string, RenderBlock>()
+	@memo get modelsInSyncWithRenderBlocks() {
+		if (this.renderBlocks.length === 0 || this.garmentModels.length === 0) return false
+		if (this.renderBlocks.length !== this.garmentModels.length) return false
+		for (const [i, rb] of this.renderBlocks.entries())
+			if (rb.id !== this.garmentModels[i]?.getAttribute('id')) return false
+		return true
+	}
 
-			function getRenderBlock(id: string, block: Block, templateCategory: TemplateCategory) {
-				let renderBlock = renderBlockCache.get(id)
-				if (!renderBlock) renderBlockCache.set(id, (renderBlock = {block, templateCategory, id}))
-				return renderBlock
+	@memo get garmentModelLoads() {
+		return [...this.garmentModels].map(el => onModelLoad(el))
+	}
+
+	@memo get garmentModelsInSyncAndLoaded() {
+		if (!this.modelsInSyncWithRenderBlocks) return false
+		return this.garmentModelLoads.every(loaded => loaded())
+	}
+
+	// Re-apply materials whenever the selected fabrics change or models mount
+	@effect fabricsLoadingEffect() {
+		if (!this.garmentModelsInSyncAndLoaded) return
+
+		// Process each model using its data-block-id to find the correct fabric
+		for (const [blockIndex, renderBlock] of this.renderBlocks.entries()) {
+			// CONTINUE we deleted uvArray, so we can freely load fabrics in parallel to garment models
+
+			const blockId = renderBlock.id
+
+			// Parse blockId to extract template category, block category, and block ID
+			// Format: "TemplateCategory-BlockCategory-BlockId" or "TemplateCategory-BlockCategory-BlockId-mirror"
+			const isMirror = blockId.endsWith('-mirror')
+			const baseBlockId = isMirror ? blockId.slice(0, -7) : blockId // Remove "-mirror" if present
+			const parts = baseBlockId.split('-')
+
+			if (parts.length < 3) {
+				console.error('Invalid block ID format:', blockId)
+				continue
 			}
 
-			createEffect(() => {
-				const garmentSelections = this.selectedGarments ?? {}
-				const blocks: Block[] = []
+			if (blockId.startsWith('default-')) continue // Skip default garments, they have built-in fabrics for now
 
-				for (const templateSelection of Object.values(garmentSelections)) {
-					if (!templateSelection) continue
+			const templateCategory = parts[1] as TemplateCategory
+			const blockCategory = parts[2] as BlockCategory
+			const template = store.selectedTemplates[templateCategory]
+			const templateId = template?._id
+			if (!templateId) throw new Error('Template ID missing for category:' + templateCategory)
+			const fabricsForBlockCategory = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
 
-					for (const selection of Object.values(templateSelection)) {
-						if (selection?.block) {
-							blocks.push(selection.block)
-						}
-					}
-				}
+			const fabricLoadingSignals: Record<string, ReturnType<typeof createFabricTexture>> = {}
 
-				this.renderBlocks = blocks.flatMap(block => {
-					if (block.category === 'Sleeves') {
-						const id = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
-						let renderBlock = getRenderBlock(id, block, block.templateCategory)
+			// Create signals for new fabrics
+			// TODO (FIXME?) This is loading state for all fabrics of
+			// the template category and block category, but is it the
+			// fabrics for the render block we're iterating?
+			for (const fabric of Object.values(fabricsForBlockCategory)) {
+				const textureState = createFabricTexture(() => fabric)
+				fabricLoadingSignals[fabric._id] = textureState
 
-						const idMirror = `${id}-mirror`
-						let renderBlockMirror = getRenderBlock(idMirror, block, block.templateCategory)
-
-						return [renderBlock, renderBlockMirror]
-					}
-
-					const id = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
-					let renderBlock = getRenderBlock(id, block, block.templateCategory)
-
-					return renderBlock
+				// Track loading state per fabric
+				createEffect(() => {
+					if (!textureState.loading()) return
+					store.addLoadingFabric(fabric._id)
+					onCleanup(() => store.removeLoadingFabric(fabric._id))
 				})
+			}
+
+			const fabricsLoaded = createMemo(() =>
+				Object.values(fabricLoadingSignals).every(f => !f.loading() && f.texture()),
+			)
+
+			const templateBlocks = createMemo(
+				() => this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),
+				undefined,
+				{equals: arrayEquals},
+			)
+
+			// CONTINUE It doesn't seem to make sense for this effect to be
+			// here because we're iterating *EVERY* render block, and
+			// thus we're clearing loading state based on the fabrics of
+			// a *single* block, not *all blocks* in the template. Is
+			// this right?
+			createEffect(() => {
+				// Check if all blocks for this template category are loaded
+				if (templateBlocks().length === 0) throw new Error('No blocks found for template category: ' + templateCategory)
+
+				if (fabricsLoaded()) {
+					// The fabrics for the block loaded, clear the
+					// loading state for the *whole* template
+					// CONTINUE Is this right? Template should be done
+					// "loading" after all fabrics for all categories
+					// are loaded, not only for category of current
+					// block.
+					store.clearLoadingTemplate(templateId)
+				}
 			})
 
-			// Stable loading IDs per block
-			const blockLoadingIds = new Map<string, symbol>()
-			const fabricsBindingRoots = new Map<Element, () => void>()
+			const anyFabricErrors = createMemo(() => Object.values(fabricLoadingSignals).map(f => f.error()))
 
-			// Re-apply materials whenever the selected fabrics change or models mount
 			createEffect(() => {
-				// Cause reactive re-run when the number of blocks changes
-				if (this.renderBlocks.length === 0) {
-					for (const disposeRoot of fabricsBindingRoots.values()) {
-						disposeRoot()
-					}
-					fabricsBindingRoots.clear()
-					return
+				if (anyFabricErrors().some(error => error !== null))
+					console.error('Error loading one or more fabrics for block:', blockId)
+				for (const error of anyFabricErrors()) if (error) console.error(error)
+			})
+
+			// Apply textures reactively as they load
+			createEffect(() => {
+				if (!fabricsLoaded()) return
+
+				// Create a map for mesh to meshes key
+				const meshToFabricMeshesMap = new Map<string, string>()
+				for (const meshesKey of Object.keys(fabricsForBlockCategory)) {
+					// CONTINUE ensure correct comment here:
+					// e.g. "Sleeve_Left-Sleeve_Right" -> ["Sleeve_Left", "Sleeve_Right"]
+					const meshArray = meshesKey.split('-')
+					for (const mesh of meshArray) meshToFabricMeshesMap.set(mesh, meshesKey)
 				}
 
-				const activeElements = new Set<Element>()
+				const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
+				const el = this.garmentModels[blockIndex]
+				const meshes = [...meshesInTree(el.three)]
 
-				// Process each model using its data-blockid to find the correct fabric
-				for (const el of garmentModels()) {
-					activeElements.add(el)
+				for (const mesh of meshes) {
+					// Check if there's a specific fabric assigned to this mesh
+					const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
+					const meshesKey = meshToFabricMeshesMap.get(meshKey)
 
-					if (fabricsBindingRoots.has(el)) {
-						continue
-					}
+					const fabricToUse = fabricsForBlockCategory[meshesKey || 'default']
+					if (!fabricToUse) continue
 
-					const blockId = el.getAttribute('id')
-					if (!blockId) continue
+					const textureState = fabricLoadingSignals[fabricToUse._id]
+					if (!textureState) continue
 
-					// Parse blockId to extract template category, block category, and block ID
-					// Format: "TemplateCategory-BlockCategory-BlockId" or "TemplateCategory-BlockCategory-BlockId-mirror"
-					const isMirror = blockId.endsWith('-mirror')
-					const baseBlockId = isMirror ? blockId.slice(0, -7) : blockId // Remove "-mirror" if present
-					const parts = baseBlockId.split('-')
+					const textureSet = textureState.texture()!
+					const isLoading = textureState.loading()!
 
-					if (parts.length < 3) continue
+					// These must be true because of fabricsLoaded() check above
+					console.assert(textureSet, 'Texture set should be available here')
+					console.assert(!isLoading, 'Texture should not be loading here')
 
-					const templateCategory = parts[1] as TemplateCategory
-					const blockCategory = parts[2] as BlockCategory
-
-					const disposeRoot = createRoot(dispose => {
-						// Get or create stable loading ID
-						let loadingId = blockLoadingIds.get(blockId)
-						if (!loadingId) {
-							loadingId = Symbol(`material-${blockId}`)
-							blockLoadingIds.set(blockId, loadingId)
-						}
-
-						const modelLoaded = onModelLoad(el)
-
-						createEffect(() => {
-							if (!modelLoaded()) return
-
-							const template = store.selectedTemplates[templateCategory]
-
-							this.#applyFabricsWithSignals(el, loadingId!, template?._id, templateCategory, blockCategory)
-						})
-
-						return dispose
+					// CONTINUE revisit this to ensure materials/textures
+					// are properly disposed.
+					// Maybe we don't need to create a new material
+					// every time.
+					// OLD:
+					disposeMaterial(mesh)
+					mesh.material = new THREE.MeshPhysicalMaterial()
+					textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+					onCleanup(() => {
+						disposeMaterial(mesh)
+						this.#resetMaterialProperties(el, mesh)
+						el.needsUpdate()
 					})
-
-					fabricsBindingRoots.set(el, disposeRoot)
+					// NEW:
+					// textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+					// onCleanup(() => {
+					// 	this.#resetMaterialProperties(el, mesh)
+					// 	el.needsUpdate()
+					// })
 				}
 
-				// Dispose of roots whose elements are no longer in the scene
-				for (const [el, disposeRoot] of fabricsBindingRoots.entries()) {
-					if (!activeElements.has(el)) {
-						disposeRoot()
-						fabricsBindingRoots.delete(el)
+				el.needsUpdate()
+			})
+		}
+	}
+
+	@effect animationEffect() {
+		const anim = appAnims.find(val => val.id === store.selectedAnimation)
+		if (!anim || !anim.src) return
+
+		this.animName = anim.name
+		this.animSrc = new URL(anim.src, import.meta.url).href
+	}
+
+	@effect sceneEffects() {
+		const lumeScene = this.lumeScene
+		if (!lumeScene) return
+
+		createEffect(() => {
+			const renderer = lumeScene.glRenderer
+			if (!renderer) return
+
+			renderer.toneMapping = THREE.ACESFilmicToneMapping
+
+			const threeScene = lumeScene.three
+			const camera = lumeScene.threeCamera
+
+			// Wait for valid size before initializing composer
+			const size = new THREE.Vector2()
+			renderer.getSize(size)
+			if (size.x === 0 || size.y === 0) return
+
+			// Create composer if not exists
+			if (!this.composer) {
+				this.composer = new EffectComposer(renderer)
+
+				// Set up post-processing for outline effect
+				const renderPass = new RenderPass(threeScene, camera)
+				this.composer.addPass(renderPass)
+
+				this.outlinePass = new OutlinePass(size, threeScene, camera)
+				this.outlinePass.edgeStrength = 10
+				this.outlinePass.edgeGlow = 0
+				this.outlinePass.edgeThickness = 4
+				this.outlinePass.visibleEdgeColor.set(0x9b59b6) // purple accent
+				this.composer.addPass(this.outlinePass)
+
+				// const bloomPass = new BloomPass(1, 25, 4)
+				// bloomPass.setSize(size.x, size.y)
+				// CONTINUE: use threshold to get bright areas only. Use UnrealBloomPass instead if BloomPass has no threshold.
+				// this.composer.addPass(bloomPass)
+
+				const outputPass = new OutputPass()
+				this.composer.addPass(outputPass)
+
+				// Store original drawScene
+				const originalDrawScene = lumeScene.drawScene.bind(lumeScene)
+
+				// Override the render loop to use composer
+				lumeScene.drawScene = () => {
+					// Skip if size is invalid
+					const currentSize = new THREE.Vector2()
+					renderer.getSize(currentSize)
+					if (currentSize.x === 0 || currentSize.y === 0) return
+
+					// Only use composer if we have objects to outline AND selectingPiece is set
+					if (this.outlinePass && store.selectingPiece && this.outlinePass.selectedObjects.length > 0) {
+						// Update cameras to current frame's camera
+						const currentCamera = lumeScene.threeCamera!
+						if (renderPass) renderPass.camera = currentCamera
+						this.outlinePass.renderCamera = currentCamera
+						this.composer!.render()
+					} else {
+						// Fall back to original rendering when no outline needed
+						originalDrawScene()
 					}
 				}
-			})
 
-			createEffect(() => {
-				this.animsEnabled = store.selectedAnimation !== 'none'
+				// Handle resize
+				const resizeObserver = new ResizeObserver(() => {
+					if (!lumeScene || !this.composer) return
+					const newSize = new THREE.Vector2()
+					renderer.getSize(newSize)
+					if (newSize.x > 0 && newSize.y > 0) {
+						this.composer.setSize(newSize.x, newSize.y)
+					}
+				})
+				resizeObserver.observe(lumeScene)
+				onCleanup(() => resizeObserver.disconnect())
+			}
+		})
 
-				const anim = appAnims.find(val => val.id === store.selectedAnimation)
-				if (!anim || !anim.src) return
+		// Update outline selection based on store.selectingPiece
+		// Use debounce and async processing to avoid blocking render
+		let outlineUpdateTimeout: number | null = null
+		let lastSelectingPiece: string | null = null
 
-				this.animName = anim.name
-				this.animSrc = new URL(anim.src, import.meta.url).href
-			})
+		createEffect(() => {
+			if (!this.outlinePass) return
 
-			createEffect(() => {
-				if (!this.lumeScene) return
-				this.lumeScene.glRenderer!.toneMapping = THREE.ACESFilmicToneMapping
-			})
+			const selectingPiece = store.selectingPiece
 
-			enableFrontsideOnModelLoad(backgroundModel)
-			enableShadowOnModelLoad(backgroundModel)
-			setEnvMapOnModelLoad(backgroundModel, env)
-			setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
+			// Skip if same piece (avoid redundant work)
+			if (selectingPiece === lastSelectingPiece) return
+			lastSelectingPiece = selectingPiece
 
-			// Set up post-processing for outline effect
-			let renderPass: RenderPass | null = null
+			// Clear previous timeout
+			if (outlineUpdateTimeout) {
+				cancelAnimationFrame(outlineUpdateTimeout)
+				outlineUpdateTimeout = null
+			}
 
-			createEffect(() => {
-				if (!this.lumeScene) return
-				const renderer = this.lumeScene.glRenderer
-				if (!renderer) return
+			if (!selectingPiece) {
+				this.outlinePass.selectedObjects = []
+				this.lumeScene?.needsUpdate()
+				return
+			}
 
-				const threeScene = this.lumeScene.three
-				const camera = this.lumeScene.threeCamera
+			// Defer heavy work to next frame to avoid blocking
+			outlineUpdateTimeout = requestAnimationFrame(() => {
+				if (!this.outlinePass || store.selectingPiece !== selectingPiece) return
 
-				if (!threeScene || !camera) return
+				const models = this.garmentModels
+				if (models.length === 0) return
 
-				// Wait for valid size before initializing composer
-				const size = new THREE.Vector2()
-				renderer.getSize(size)
-				if (size.x === 0 || size.y === 0) return
+				// "default" means all meshes in the garment for the currently selected template only
+				const isDefault = selectingPiece === 'default'
+				const pieceNames = isDefault ? [] : selectingPiece.split('-')
+				const selectedMeshes: THREE.Object3D[] = []
 
-				// Create composer if not exists
-				if (!this.composer) {
-					this.composer = new EffectComposer(renderer)
+				// Get the template category being edited (from remix overlay)
+				const editingTemplateCategory = store.remixOverlayTemplate?.category
 
-					renderPass = new RenderPass(threeScene, camera)
-					this.composer.addPass(renderPass)
+				// Process models in chunks to avoid long blocking
+				for (const garmentModel of models) {
+					if (!garmentModel.three) continue
 
-					this.outlinePass = new OutlinePass(size, threeScene, camera)
-					this.outlinePass.edgeStrength = 10
-					this.outlinePass.edgeGlow = 0
-					this.outlinePass.edgeThickness = 4
-					this.outlinePass.visibleEdgeColor.set(0x9b59b6) // purple accent
-					this.composer.addPass(this.outlinePass)
+					// For "default", only outline models belonging to the selected template
+					if (isDefault && editingTemplateCategory) {
+						const modelId = garmentModel.getAttribute('id') || ''
+						// ID format: collection-templateCategory-blockCategory-blockId
+						const parts = modelId.split('-')
+						const modelTemplateCategory = parts[1] as TemplateCategory | undefined
+						if (modelTemplateCategory !== editingTemplateCategory) continue
+					}
 
-					// const bloomPass = new BloomPass(1, 25, 4)
-					// bloomPass.setSize(size.x, size.y)
-					// CONTINUE: use threshold to get bright areas only. Use UnrealBloomPass instead if BloomPass has no threshold.
-					// this.composer.addPass(bloomPass)
+					garmentModel.three.traverse((obj: THREE.Object3D) => {
+						if (!(obj as THREE.Mesh).isMesh) return
 
-					const outputPass = new OutputPass()
-					this.composer.addPass(outputPass)
-
-					// Store original drawScene
-					const originalDrawScene = this.lumeScene.drawScene.bind(this.lumeScene)
-
-					// Override the render loop to use composer
-					this.lumeScene.drawScene = () => {
-						// Skip if size is invalid
-						const currentSize = new THREE.Vector2()
-						renderer.getSize(currentSize)
-						if (currentSize.x === 0 || currentSize.y === 0) return
-
-						// Only use composer if we have objects to outline AND selectingPiece is set
-						if (this.outlinePass && store.selectingPiece && this.outlinePass.selectedObjects.length > 0) {
-							// Update cameras to current frame's camera
-							const currentCamera = this.lumeScene!.threeCamera!
-							if (renderPass) renderPass.camera = currentCamera
-							this.outlinePass.renderCamera = currentCamera
-							this.composer!.render()
+						if (isDefault) {
+							selectedMeshes.push(obj)
 						} else {
-							// Fall back to original rendering when no outline needed
-							originalDrawScene()
-						}
-					}
-
-					// Handle resize
-					const resizeObserver = new ResizeObserver(() => {
-						if (!this.lumeScene || !this.composer) return
-						const newSize = new THREE.Vector2()
-						renderer.getSize(newSize)
-						if (newSize.x > 0 && newSize.y > 0) {
-							this.composer.setSize(newSize.x, newSize.y)
-						}
-					})
-					resizeObserver.observe(this.lumeScene)
-					onCleanup(() => resizeObserver.disconnect())
-				}
-			})
-
-			// Update outline selection based on store.selectingPiece
-			// Use debounce and async processing to avoid blocking render
-			let outlineUpdateTimeout: number | null = null
-			let lastSelectingPiece: string | null = null
-
-			createEffect(() => {
-				if (!this.outlinePass) return
-
-				const selectingPiece = store.selectingPiece
-
-				// Skip if same piece (avoid redundant work)
-				if (selectingPiece === lastSelectingPiece) return
-				lastSelectingPiece = selectingPiece
-
-				// Clear previous timeout
-				if (outlineUpdateTimeout) {
-					cancelAnimationFrame(outlineUpdateTimeout)
-					outlineUpdateTimeout = null
-				}
-
-				if (!selectingPiece) {
-					this.outlinePass.selectedObjects = []
-					this.lumeScene?.needsUpdate()
-					return
-				}
-
-				// Defer heavy work to next frame to avoid blocking
-				outlineUpdateTimeout = requestAnimationFrame(() => {
-					if (!this.outlinePass || store.selectingPiece !== selectingPiece) return
-
-					const models = garmentModels()
-					if (models.length === 0) return
-
-					// "default" means all meshes in the garment for the currently selected template only
-					const isDefault = selectingPiece === 'default'
-					const pieceNames = isDefault ? [] : selectingPiece.split('-')
-					const selectedMeshes: THREE.Object3D[] = []
-
-					// Get the template category being edited (from remix overlay)
-					const editingTemplateCategory = store.remixOverlayTemplate?.category
-
-					// Process models in chunks to avoid long blocking
-					for (const garmentModel of models) {
-						if (!garmentModel.three) continue
-
-						// For "default", only outline models belonging to the selected template
-						if (isDefault && editingTemplateCategory) {
-							const modelId = garmentModel.getAttribute('id') || ''
-							// ID format: collection-templateCategory-blockCategory-blockId
-							const parts = modelId.split('-')
-							const modelTemplateCategory = parts[1] as TemplateCategory | undefined
-							if (modelTemplateCategory !== editingTemplateCategory) continue
-						}
-
-						garmentModel.three.traverse((obj: THREE.Object3D) => {
-							if (!(obj as THREE.Mesh).isMesh) return
-
-							if (isDefault) {
-								selectedMeshes.push(obj)
-							} else {
-								for (const pieceName of pieceNames) {
-									if (hasAncestorWithName(obj, pieceName)) {
-										selectedMeshes.push(obj)
-										break
-									}
+							for (const pieceName of pieceNames) {
+								if (hasAncestorWithName(obj, pieceName)) {
+									selectedMeshes.push(obj)
+									break
 								}
 							}
-						})
-					}
+						}
+					})
+				}
 
-					if (this.outlinePass && store.selectingPiece === selectingPiece) {
-						this.outlinePass.selectedObjects = selectedMeshes
-						// Trigger re-render after updating outline selection
-						this.lumeScene?.needsUpdate()
-					}
-				})
+				if (this.outlinePass && store.selectingPiece === selectingPiece) {
+					this.outlinePass.selectedObjects = selectedMeshes
+					// Trigger re-render after updating outline selection
+					this.lumeScene?.needsUpdate()
+				}
 			})
+		})
 
-			onCleanup(() => {
-				if (outlineUpdateTimeout) cancelAnimationFrame(outlineUpdateTimeout)
+		onCleanup(() => {
+			if (outlineUpdateTimeout) cancelAnimationFrame(outlineUpdateTimeout)
+		})
+	}
+
+	@effect avatarModelEffect() {
+		const {avatarModel} = this
+		if (!avatarModel) return
+
+		// Track selected avatar loading state
+		const avatarId = Symbol('avatar')
+		store.trackModelLoading(avatarId, avatarModel)
+
+		whenModelLoaded(avatarModel, () => {
+			store.showAnimationSelect = !!getArmatureObject(avatarModel.three)
+		})
+	}
+
+	#handleRigging(el: GltfModel, block: RenderBlock) {
+		const modelLoaded = onModelLoad(el)
+
+		createEffect(() => {
+			if (!this.avatarModel) return
+			const avatarLoaded = onModelLoad(this.avatarModel!)
+
+			createEffect(() => {
+				if (!avatarLoaded() || !modelLoaded()) return
+
+				this.#adoptAvatarSkeleton(el)
+				this.#checkAccessory(block, el.three)
 			})
 		})
 	}
 
-	template = () => {
+	override template = () => {
 		const shadowBias = -0.0005
 		const shadowNormalBias = /*0.005*/ 0
 		const shadowCameraSize = 5
@@ -1081,7 +878,7 @@ export class DrippyScene extends Element {
 					perspective="800"
 					physically-correct-lights
 					shadow-mode="vsm"
-					attr:environment=${() => this.scene()?.env ?? '/images/envs/brown_photostudio_02.jpg'}
+					attr:environment=${() => this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg'}
 					attr:environment-intensity="0.3"
 					oncapture:pointerdown=${this.#handlePointerDown}
 					oncapture:pointermove=${this.#handlePointerMove}
@@ -1206,7 +1003,14 @@ export class DrippyScene extends Element {
 
 						<lume-gltf-model
 							id="avatar"
-							ref=${(el: GltfModel) => ((this.avatarModel = el), this.avatarSkeleton.setAvatar(el), enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env), showSkeletonHelper(el, () => true))}
+							ref=${(el: GltfModel) => {
+								this.avatarModel = el
+								this.avatarSkeleton.setAvatar(el)
+								enableShadowOnModelLoad(el)
+								setEnvMapOnModelLoad(el, env)
+								showSkeletonHelper(el, () => true)
+								disableFrustumCulledOnLoad(el)
+							}}
 							attr:src=${() => avatars.find(avatar => avatar.name === this.selectedAvatar)?.src ?? ''}
 							scale="1 1 1"
 							data-avatar
@@ -1214,81 +1018,28 @@ export class DrippyScene extends Element {
 							<lume-element3d ref=${(el: Element3D) => setMaterialsVisibleOnModelLoad(el.parentElement as GltfModel, () => store.isShowAvatar, el)}>
 								<!-- User-selected garments -->
 								<${For} each=${() => this.renderBlocks}>
-									${(item: RenderBlock, index: Accessor<number>) => html`
+									${(item: RenderBlock) => html`
 										<lume-gltf-model
 											ref=${(el: GltfModel) => {
 												enableShadowOnModelLoad(el)
 												setEnvMapOnModelLoad(el, env)
+												disableFrustumCulledOnLoad(el)
+												this.#handleRigging(el, item)
 
-												setTimeout(() => {
-													const modelLoaded = onModelLoad(el)
-													createEffect(() => {
-														if (!this.avatarModel) return
-
-														const avatarLoaded = onModelLoad(this.avatarModel!)
-														createEffect(() => {
-															if (!avatarLoaded() || !modelLoaded()) return
-
-															this.#checkRiggedMesh(el)
-
-															this.#checkAccessory(item, el.three)
-														})
-													})
-												})
+												// Track default garment loading
+												if (item.id.startsWith('default-')) {
+													const defaultGarmentId = Symbol(`default-garment-${item.id}`)
+													store.trackModelLoading(defaultGarmentId, el)
+												}
 											}}
 											id=${item.id}
 											attr:data-block-id=${() => item.block._id}
-											data-index=${index()}
-											data-cloth
+											data-block
+											attr:data-default=${() => item.id.startsWith('default-')}
 											attr:src=${item.block.modelFile}
 											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
-										>
-										</lume-gltf-model>
-									`}
-								</>
-
-								<!-- Default garments (always loaded, visibility toggled) -->
-								<${For} each=${this.defaultRenderBlocks}>
-									${(item: DefaultRenderBlock, index: Accessor<number>) => html`
-										<lume-gltf-model
-											ref=${(el: GltfModel) => {
-												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env)
-
-												// Track default garment loading
-												const defaultGarmentId = Symbol(`default-garment-${item.id}`)
-												store.trackModelLoading(defaultGarmentId, el)
-
-												const modelLoaded = onModelLoad(el)
-
-												setTimeout(() => {
-													createEffect(() => {
-														if (!this.avatarModel) return
-
-														const avatarLoaded = onModelLoad(this.avatarModel!)
-														createEffect(() => {
-															if (!avatarLoaded() || !modelLoaded()) return
-
-															this.#checkRiggedMesh(el)
-														})
-													})
-												})
-
-												// Apply default fabrics directly on load
-												createEffect(() => {
-													if (!modelLoaded()) return
-													this.#applyDefaultFabrics(el, item)
-												})
-											}}
-											id=${item.id}
-											data-index=${index()}
-											data-cloth
-											data-default-garment
-											visible=${() => this.defaultGarmentVisibility().get(item.templateCategory) ?? true}
-											attr:src=${item.block.modelFile}
-											scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
-										>
-										</lume-gltf-model>
+											visible=${() => this.#isGarmentVisible(item, store.selectedTemplates)}
+										></lume-gltf-model>
 									`}
 								</>
 							</lume-element3d>
@@ -1304,16 +1055,13 @@ export class DrippyScene extends Element {
 					<lume-gltf-model
 						ref=${(el: GltfModel) => (this.backgroundModel = el)}
 						id="scene"
-						attr:src=${() => {
-							console.log('selected background', this.scene()?.scene)
-							return this.scene()?.scene ?? ''
-						}}
+						attr:src=${() => this.scene?.scene ?? ''}
 					></lume-gltf-model>
 
 					<!-- Background scene extra objects -->
 					<${Index}
 						each=${() => {
-							return this.scene()?.includedModelFiles ?? []
+							return this.scene?.includedModelFiles ?? []
 						}}
 					>
 						${(item: Accessor<string>) => html`
@@ -1330,7 +1078,7 @@ export class DrippyScene extends Element {
 		`
 	}
 
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			--sceneDesktopOffset: 15rem;
 			--sceneTranslateX: translateX(0);
@@ -1382,6 +1130,7 @@ export class DrippyScene extends Element {
 				transform: unset !important;
 				-webkit-transform: unset !important;
 			}
+
 			#lume-scene-container {
 				transform: var(--overrideSceneTranslateY, var(--sceneTranslateY)) scale(var(--scene-scale, 1));
 				-webkit-transform: var(--overrideSceneTranslateY, var(--sceneTranslateY)) scale(var(--scene-scale, 1));
@@ -1397,9 +1146,31 @@ export class DrippyScene extends Element {
 }
 
 function disableFrustumCulledOnLoad(model: GltfModel) {
-	const modelLoaded = onModelLoad(model)
+	whenModelLoaded(model, () => model.three.traverse(child => (child.frustumCulled = false)))
+}
 
-	createEffect(() => {
-		if (modelLoaded()) model.three.traverse(child => (child.frustumCulled = false))
-	})
+// This will cache render blocks by ID. This is a quick fix to make the
+// <For> re-use the same objects to avoid reloading GLTF models.
+// FIXME this grows and never shrinks.
+const renderBlockCache = new Map<string, RenderBlock>()
+
+function getRenderBlock(id: RenderBlockId, block: Block, templateCategory: TemplateCategory) {
+	let renderBlock = renderBlockCache.get(id)
+	if (!renderBlock) renderBlockCache.set(id, (renderBlock = {block, templateCategory, id}))
+	return renderBlock
+}
+
+function anyBlockIsLoadingInTemplateCategory(renderBlocks: RenderBlock[], templateCategory: TemplateCategory) {
+	for (const rb of renderBlocks) {
+		if (rb.templateCategory !== templateCategory) continue
+		if (store.isBlockLoading(rb.block._id)) return true
+	}
+	return false
+}
+
+/** Returns an empty NodeList (`new NodeList` is not possible). */
+function emptyNodeList<T extends Element>() {
+	// select nothing with random selector
+	const emptySelector = '.__empty__' + Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
+	return document.querySelectorAll(emptySelector) as NodeListOf<T>
 }

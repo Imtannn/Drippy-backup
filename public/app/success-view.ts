@@ -5,13 +5,12 @@ import {store} from './store.js'
 
 @element
 export class SuccessView extends Element {
-	static elementName = 'success-view'
+	static override elementName = 'success-view'
 
 	#onDripAnotherDesignClick = () => {
 		store.goBackHomeAndResetState()
 	}
-
-	template = () => html`
+	override template = () => html`
 		<app-buttons-preset preset="simple-flow"></app-buttons-preset>
 
 		<bottom-sheet float-direction="right" max-height="calc(100vh - 20rem)" default-sheet-height="270px">
@@ -45,8 +44,7 @@ export class SuccessView extends Element {
 			</div>
 		</bottom-sheet>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		${appStyles}
 
 		.success-container {

@@ -4,7 +4,7 @@ type PlaceholderImageAttributes = 'src' | 'alt' | 'objectFit' | 'objectPosition'
 
 @element
 export class PlaceholderImage extends Element {
-	static readonly elementName = 'placeholder-image'
+	static override readonly elementName = 'placeholder-image'
 
 	@stringAttribute src = ''
 	@stringAttribute alt = ''
@@ -26,8 +26,7 @@ export class PlaceholderImage extends Element {
 		if (this.imageStyle) styles.push(this.imageStyle)
 		return styles.join('; ')
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="image-wrapper">
 			<div
 				alt=""
@@ -44,8 +43,7 @@ export class PlaceholderImage extends Element {
 			/>
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: block;
 			width: 100%;

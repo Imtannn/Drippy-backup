@@ -16,7 +16,7 @@ const elName = 'user-profile'
  */
 @element
 export class UserProfile extends Element {
-	static readonly elementName = elName
+	static override readonly elementName = elName
 
 	@signal editing = false
 
@@ -25,8 +25,7 @@ export class UserProfile extends Element {
 	@signal turnOffSettingsInSpace = false
 
 	@signal hideAnimationSelection = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => (this.username = username()))
@@ -60,8 +59,7 @@ export class UserProfile extends Element {
 		this.hideAnimationSelection = hideAnimationSelection()
 		this.editing = false
 	}
-
-	template = () => html`
+	override template = () => html`
 		<link rel="stylesheet" href="../entry.css" />
 
 		<header>
@@ -138,8 +136,7 @@ export class UserProfile extends Element {
 			></show-when>
 		</main>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			width: 400px;
 			height: 300px;

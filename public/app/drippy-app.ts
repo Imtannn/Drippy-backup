@@ -1,4 +1,4 @@
-import {batch, createMemo, css, Element, element, html, signal} from 'lume'
+import {batch, createMemo, css, Element, element, html, signal, effect} from 'lume'
 import '../elements/connection-warning.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
@@ -40,63 +40,44 @@ const hasBrandParam = createMemo(() => !!searchParams().get('brand'))
 
 @element
 export class DrippyApp extends Element {
-	static elementName = 'drippy-app'
+	static override elementName = 'drippy-app'
 
 	@signal appLoaded = false
-	@signal showLoadingCover = false
 
-	connectedCallback() {
-		super.connectedCallback()
-
-		// FIXME this needs re-work, currently can cause an infinite loop (the
-		// console.logs in loadFromUrlParameters will log repeatedly)
-		this.createEffect(() => {
-			try {
-				// Load garments and fabrics from URL parameters if present
-				if (store.selectedSpace) {
-					this.#loadFromUrlParameters(store.selectedSpace)
-				}
-
-				if (store.isPreview || isPreview() === 'true') {
-					store.view = 'preview'
-					return
-				}
-			} catch (error) {
-				console.error('Error loading app', error)
-			} finally {
-				this.appLoaded = true
-				// Mark URL params as loaded so default garments can apply after user interactions
-				store.urlParamsLoaded = true
+	// FIXME this needs re-work, currently can cause an infinite loop (the
+	// console.logs in loadFromUrlParameters will log repeatedly)
+	@effect loadParamsEffect() {
+		try {
+			// Load garments and fabrics from URL parameters if present
+			if (store.selectedSpace) {
+				this.#loadFromUrlParameters(store.selectedSpace)
 			}
-		})
 
-		// Monitor URL params: if brand exists with other params, remove brand
-		this.createEffect(() => {
-			const params = searchParams()
-			const hasBrand = params.has('brand')
-			const paramKeys = Array.from(params.keys())
-			const otherParams = paramKeys.filter(k => k !== 'brand')
-
-			if (hasBrand && otherParams.length > 0) {
-				// Brand exists but there are other params → remove brand
-				params.delete('brand')
-				pushState()
+			if (store.isPreview || isPreview() === 'true') {
+				store.view = 'preview'
+				return
 			}
-		})
+		} catch (error) {
+			console.error('Error loading app', error)
+		} finally {
+			this.appLoaded = true
+			// Mark URL params as loaded so default garments can apply after user interactions
+			store.urlParamsLoaded = true
+		}
+	}
 
-		this.createEffect(() => {
-			if (
-				store.view !== 'avatar' &&
-				store.view !== 'space' &&
-				store.selectedAvatar &&
-				store.selectedSpace &&
-				store.drippySceneLoads.size > 0
-			) {
-				this.showLoadingCover = true
-			} else {
-				this.showLoadingCover = false
-			}
-		})
+	// Monitor URL params: if brand exists with other params, remove brand
+	@effect urlBrandEffect() {
+		const params = searchParams()
+		const hasBrand = params.has('brand')
+		const paramKeys = Array.from(params.keys())
+		const otherParams = paramKeys.filter(k => k !== 'brand')
+
+		if (hasBrand && otherParams.length > 0) {
+			// Brand exists but there are other params → remove brand
+			params.delete('brand')
+			pushState()
+		}
 	}
 
 	/**
@@ -295,8 +276,7 @@ export class DrippyApp extends Element {
 			store.selectedTemplates = aggregatedTemplates
 		})
 	}
-
-	template = () => html`
+	override template = () => html`
 		<show-when
 			condition=${() => this.appLoaded}
 			fallback=${() => html`<div class="loading">Loading...</div>`}
@@ -308,7 +288,7 @@ export class DrippyApp extends Element {
 						content=${() => html`
 							<drippy-scene
 								id="drippy-scene"
-								selected-space=${() => (console.log('selected space', store.selectedSpace), store.selectedSpace)}
+								selected-space=${() => store.selectedSpace}
 								selected-avatar=${() => store.selectedAvatar}
 								selected-garments=${() => store.selectedGarments}
 							></drippy-scene>
@@ -375,8 +355,7 @@ export class DrippyApp extends Element {
 			`}
 		></show-when>
 	`
-
-	css = css`
+	override css = css`
 		* {
 			box-sizing: border-box;
 			user-select: none;

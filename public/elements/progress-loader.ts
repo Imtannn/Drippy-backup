@@ -4,20 +4,18 @@ type ProgressLoaderAttributes = 'isVisible' | 'progress'
 
 @element
 export class ProgressLoader extends Element {
-	static elementName = 'progress-loader'
+	static override elementName = 'progress-loader'
 
 	@booleanAttribute isVisible = false
 	@attribute progress = 0
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => {
 			this.style.setProperty('--display', this.isVisible ? 'flex' : 'none')
 		})
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="loading-overlay">
 			<div class="loading-content">
 				<img src="/images/D.webp" alt="Drippy Logo" class="loading-logo" />
@@ -32,8 +30,7 @@ export class ProgressLoader extends Element {
 			</div>
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			--display: none;
 			display: var(--display);

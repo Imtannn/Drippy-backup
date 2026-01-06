@@ -10,11 +10,11 @@ type AppButtonsLeftLayout = 'top' | 'bottom'
 
 @element
 export class AppButtonsLeft extends Element {
-	static readonly elementName = 'app-buttons-left'
+	static override readonly elementName = 'app-buttons-left'
 
 	@attribute layout: AppButtonsLeftLayout = 'top'
 
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		this.createEffect(() => {
 			if (
@@ -34,7 +34,7 @@ export class AppButtonsLeft extends Element {
 		})
 	}
 
-	template = () => html`
+	override template = () => html`
 		<div
 			id="app-buttons-left"
 			class="app-buttons-left"
@@ -47,7 +47,7 @@ export class AppButtonsLeft extends Element {
 		</div>
 	`
 
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			--app-buttons-left-transform: translateX(394px);
 		}
@@ -96,11 +96,11 @@ type AppButtonsRightLayout = 'top' | 'bottom'
 
 @element
 export class AppButtonsRight extends Element {
-	static readonly elementName = 'app-buttons-right'
+	static override readonly elementName = 'app-buttons-right'
 
 	@attribute layout: AppButtonsRightLayout = 'top'
 
-	template = () => html`
+	override template = () => html`
 		<div
 			class="app-buttons-right"
 			classList=${() => ({
@@ -112,7 +112,7 @@ export class AppButtonsRight extends Element {
 		</div>
 	`
 
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		.app-buttons-right {
 			position: absolute;
 			z-index: 1;
@@ -156,14 +156,14 @@ type AppButtonsGroupAttributes = 'groupDirection' | 'customStyle' | 'customClass
 
 @element
 export class AppButtonsGroup extends Element {
-	static readonly elementName = 'app-buttons-group'
+	static override readonly elementName = 'app-buttons-group'
 
 	@attribute groupDirection: 'column' | 'row' = 'column'
 	@attribute customClass: string = ''
 	@attribute customStyle: string = ''
 	#divRef?: HTMLElement
 
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		this.createEffect(() => {
 			if (this.groupDirection === 'row') {
@@ -185,7 +185,7 @@ export class AppButtonsGroup extends Element {
 		})
 	}
 
-	template = () => html`
+	override template = () => html`
 		<div
 			class="app-buttons-group"
 			ref="${(el: HTMLElement) => (this.#divRef = el)}"
@@ -196,7 +196,7 @@ export class AppButtonsGroup extends Element {
 		</div>
 	`
 
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			--app-buttons-group-direction: column;
 		}

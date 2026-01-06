@@ -6,15 +6,14 @@ type AvatarDropdownAttributes = 'open' | 'hideChevron' | 'showPopup'
 
 @element
 export class AvatarDropdown extends Element {
-	static readonly elementName = 'avatar-dropdown'
+	static override readonly elementName = 'avatar-dropdown'
 
 	@booleanAttribute open = false
 	@booleanAttribute hideChevron = false
 	@booleanAttribute showPopup = false
 	@signal currentAvatarThumbnail = ''
 	@signal private shouldShowPopup = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		// Check if user has previously dismissed the popup
 		const popupDismissed = localStorage.getItem('avatar-popup-dismissed')
@@ -51,8 +50,7 @@ export class AvatarDropdown extends Element {
 			}),
 		)
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="avatar-wrapper">
 			<!-- Popup notification -->
 			<div class="popup-notification" style=${() => (this.shouldShowPopup ? 'display: flex' : 'display: none')}>
@@ -91,8 +89,7 @@ export class AvatarDropdown extends Element {
 			</div>
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: flex;
 			align-items: center;

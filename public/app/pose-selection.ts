@@ -34,12 +34,11 @@ const poses = {
 
 @element
 export class PoseSelection extends Element {
-	static readonly elementName = 'pose-selection'
+	static override readonly elementName = 'pose-selection'
 
 	@signal selectedTab: PoseCategory = 'Poses'
 	@booleanAttribute contentOnly = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		if (!store.selectedAnimation) {
@@ -106,16 +105,14 @@ export class PoseSelection extends Element {
 			</div>
 		</tabs-provider>
 	`
-
-	template = () => {
+	override template = () => {
 		if (this.contentOnly) {
 			return this.#renderPoseContent()
 		}
 
 		return html` <bottom-sheet> ${this.#renderPoseContent()} </bottom-sheet> `
 	}
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: contents;
 		}

@@ -1,6 +1,6 @@
 import type {Block} from '../types/block'
 
-export const blocks: Record<string, Block[]> = {
+export const blocks = {
 	'essence-of-her': [
 		{
 			_id: '8b0e5d79-a698-420e-ac4a-e6b2df8a337b',
@@ -6106,19 +6106,7 @@ export const blocks: Record<string, Block[]> = {
 		},
 	],
 	default: [
-		{
-			_id: 'default-shorts',
-			thumb: '',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar-1/Default+Garments/Default+Shorts.glb',
-			blockName: 'Default Shorts',
-			avatar: 'female',
-			category: 'Pants',
-			collection: 'default',
-			templateId: 'default-shorts',
-			templateName: 'Default Shorts',
-			templateCategory: 'Pants',
-		},
+		// Female
 		{
 			_id: 'default-top',
 			thumb: '',
@@ -6133,6 +6121,19 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 		{
+			_id: 'default-shorts',
+			thumb: '',
+			modelFile:
+				'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar-1/Default+Garments/Default+Shorts.glb',
+			blockName: 'Default Shorts',
+			avatar: 'female',
+			category: 'Pants',
+			collection: 'default',
+			templateId: 'default-shorts',
+			templateName: 'Default Shorts',
+			templateCategory: 'Pants',
+		},
+		{
 			_id: 'default-shoes',
 			thumb: '',
 			modelFile:
@@ -6145,6 +6146,7 @@ export const blocks: Record<string, Block[]> = {
 			templateName: 'Default Shoes',
 			templateCategory: 'Shoes',
 		},
+		// Male
 		{
 			_id: 'default-male-top',
 			thumb: '',
@@ -6418,4 +6420,4 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Top',
 		},
 	],
-}
+} satisfies Record<string, Block[]>

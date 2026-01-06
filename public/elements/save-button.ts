@@ -4,17 +4,15 @@ type SaveButtonAttributes = 'onclick'
 
 @element
 export class SaveButton extends Element {
-	static readonly elementName = 'save-button'
+	static override readonly elementName = 'save-button'
 
-	@eventAttribute onclick = null
+	@eventAttribute override onclick = null
 
 	#onClick = () => {
 		this.dispatchEvent(new CustomEvent('click', {bubbles: true}))
 	}
-
-	template = () => html` <button class="save-button" onclick=${this.#onClick}>Save</button> `
-
-	css = css/*css*/ `
+	override template = () => html` <button class="save-button" onclick=${this.#onClick}>Save</button> `
+	override css = css/*css*/ `
 		.save-button {
 			display: flex;
 			align-items: center;

@@ -64,7 +64,7 @@ type AppButtonsPresetAttributes =
 
 @element
 export class AppButtonsPreset extends Element {
-	static readonly elementName = 'app-buttons-preset'
+	static override readonly elementName = 'app-buttons-preset'
 
 	@attribute preset: LayoutPreset = 'custom'
 	@attribute brandName = 'MoiDien'
@@ -275,12 +275,12 @@ export class AppButtonsPreset extends Element {
 		`
 	}
 
-	template = () => html`
+	override template = () => html`
 		${() => this.#presetConfig().left && this.#renderLeft()} ${() => this.#presetConfig().right && this.#renderRight()}
 		<slot></slot>
 	`
 
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: contents;
 		}

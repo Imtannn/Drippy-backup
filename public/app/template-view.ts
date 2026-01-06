@@ -56,7 +56,7 @@ type TemplateViewAttributes = keyof {}
 
 @element
 export class TemplateView extends Element {
-	static readonly elementName = 'template-view'
+	static override readonly elementName = 'template-view'
 
 	@signal selectedTab: TemplateCategory | null = null
 	@signal templateCategories: Record<TemplateCategory, Template[]> = {} as Record<TemplateCategory, Template[]>
@@ -74,15 +74,14 @@ export class TemplateView extends Element {
 	// Drag scroll state
 	@signal isDragging = false
 	@signal startX = 0
-	@signal scrollLeft = 0
+	@signal override scrollLeft = 0
 	private hasDragged = false
 
 	@signal disabledScroll = false
 	@signal showWishlistOnly = false
 	private isOpeningOverlay = false
 	private defaultCollection = 'gap'
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// Add click handler to close overlay when clicking outside
@@ -281,7 +280,7 @@ export class TemplateView extends Element {
 			store.selectedTemplates[template.category] && store.selectedTemplates[template.category]._id === template._id
 
 		if (!isAlreadySelected) {
-			store.setLoadingTemplate(template._id)
+			store.setLoadingTemplate(template._id, template.category)
 			this.#selectTemplate(template)
 			setTimeout(() => {
 				this.isOpeningOverlay = false
@@ -589,14 +588,12 @@ export class TemplateView extends Element {
 			this.showBottomNavigation = true
 		}
 	}
-
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 		document.removeEventListener('click', this.#onDocumentClick)
 		document.removeEventListener('show-login', this.#onShowLogin as EventListener)
 	}
-
-	template = () => html`
+	override template = () => html`
 		<app-buttons-preset
 			preset="template-flow"
 			brand-name="MoiDien"
@@ -946,8 +943,7 @@ export class TemplateView extends Element {
 			onclose=${this.#onAvatarSwapCancel}
 		></avatar-swap-bottom-sheet>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		${onboardingStyles}
 		:host {
 			display: contents;

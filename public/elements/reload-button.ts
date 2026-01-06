@@ -5,13 +5,12 @@ type ReloadButtonAttributes = 'group'
 
 @element
 export class ReloadButton extends Element {
-	static readonly elementName = 'reload-button'
+	static override readonly elementName = 'reload-button'
 
 	@attribute group: string | null = null
 
 	#onClick = () => {}
-
-	template = () =>
+	override template = () =>
 		html`<icon-button onclick=${this.#onClick} group=${() => this.group}>
 			<img src="/images/controls-buttons/reload-icon.svg" alt="Reload" />
 		</icon-button>`

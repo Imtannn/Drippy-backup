@@ -1,16 +1,16 @@
 import type {Block, BlockCategory} from './block'
 
 export type TemplateCategory =
-	| 'All'
-	| 'Skirt'
-	| 'Jacket'
-	| 'Shirt'
-	| 'Pants'
 	| 'Accessories'
+	| 'All'
 	| 'Dress'
-	| 'Top'
+	| 'Jacket'
 	| 'Jumpsuit'
+	| 'Pants'
+	| 'Shirt'
 	| 'Shoes'
+	| 'Skirt'
+	| 'Top'
 	| string // For custom categories
 
 export type ExtraMaterial = {

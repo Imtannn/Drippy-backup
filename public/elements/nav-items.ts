@@ -4,11 +4,10 @@ type NavItemsAttributes = 'activeTab'
 
 @element
 export class NavItems extends Element {
-	static readonly elementName = 'nav-items'
+	static override readonly elementName = 'nav-items'
 
 	@signal activeTab = 'items'
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		document.addEventListener('avatar-dropdown-click', (event: Event) => {
@@ -30,8 +29,7 @@ export class NavItems extends Element {
 			}),
 		)
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="nav-items-container">
 			<button class="nav-item" classList=${{active: () => this.activeTab === 'avatars'}} disabled>
 				<div class="nav-icon">
@@ -75,8 +73,7 @@ export class NavItems extends Element {
 			</button>
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: flex;
 			align-items: center;

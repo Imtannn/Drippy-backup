@@ -32,7 +32,7 @@ type BlocksSelectionAttributes = keyof {}
 
 @element
 export class BlocksSelection extends Element {
-	static readonly elementName = 'blocks-selection'
+	static override readonly elementName = 'blocks-selection'
 
 	@signal selectedTemplateCategory: TemplateCategory | null = null
 	@signal selectedSubTab: string | null = null // block category or "fabric"
@@ -58,8 +58,7 @@ export class BlocksSelection extends Element {
 		Skirt: [],
 		Top: [],
 	}
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => {
@@ -86,7 +85,7 @@ export class BlocksSelection extends Element {
 
 			const selectedTemplate = store.selectedTemplates[this.selectedTemplateCategory]
 			if (selectedTemplate) {
-				this.availableBlocks = blocks[this.spaceCollection].filter(block => {
+				this.availableBlocks = blocks[this.spaceCollection as keyof typeof blocks].filter(block => {
 					if (block.templateCategory === 'Pants' || block.templateCategory === 'Accessories') {
 						return true
 					} else {
@@ -208,8 +207,7 @@ export class BlocksSelection extends Element {
 			this.pieceSelections = Object.keys(firstFabrics).sort()
 		})
 	}
-
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 		this.selectedTemplateCategory = null
 		this.selectedSubTab = null
@@ -230,8 +228,7 @@ export class BlocksSelection extends Element {
 			store.isPreview = true
 		})
 	}
-
-	template = () => html`
+	override template = () => html`
 		<app-buttons-left>
 			<app-buttons-group>
 				<back-button onclick=${this.#onBackButtonClick}></back-button>
@@ -398,8 +395,7 @@ export class BlocksSelection extends Element {
 			></show-when>
 		</bottom-sheet>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: contents;
 		}

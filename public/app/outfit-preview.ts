@@ -7,7 +7,7 @@ type OutfitPreviewAttributes = keyof {}
 
 @element
 export class OutfitPreview extends Element {
-	static readonly elementName = 'outfit-preview'
+	static override readonly elementName = 'outfit-preview'
 
 	#onBuyItClick = () => {
 		store.view = 'order-items'
@@ -42,8 +42,7 @@ export class OutfitPreview extends Element {
 			/>
 		</svg>
 	`
-
-	template = () => html`
+	override template = () => html`
 		<app-buttons-preset preset="preview-flow"></app-buttons-preset>
 
 		<show-on-device device="mobile">
@@ -52,8 +51,7 @@ export class OutfitPreview extends Element {
 			</div>
 		</show-on-device>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: contents;
 		}

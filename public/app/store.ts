@@ -1,8 +1,7 @@
 import {type GltfModel} from 'lume'
 import {Meteor} from 'meteor/meteor'
-import {batch, createEffect, createMemo, onCleanup, untrack} from 'solid-js'
+import {batch, createEffect, createMemo, createSignal, onCleanup, untrack} from 'solid-js'
 import {createMutable} from 'solid-js/store'
-import {createSignal} from 'solid-js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import {Visits, type Visit} from '../imports/collections/Visits.js'
@@ -31,6 +30,7 @@ import {
 	getSpaceDefaultScene,
 	getSpacePrimaryCollection,
 	onModelLoad,
+	removeItemUnsorted,
 	spaceHasMultipleCollections,
 	syncSignals,
 	toSolidSignal,
@@ -148,14 +148,12 @@ class Store {
 	isShowAvatar = true
 	isShowScene = true
 
-	// Loading states tracked by unique symbols
-	drippySceneLoads = new Set<symbol>()
-	loadingBlocks: Record<string, number> = {}
-	loadingMaterials = new Set<symbol>()
-	loadingScreenshots = new Set<TemplateCategory>()
-	loadingFabricIds = new Set<string>()
-	loadingTemplateId: string | null = null
-	currentAbortController: AbortController | null = null
+	// Loading states tracked by unique values
+	drippySceneLoads: symbol[] = []
+	private loadingBlocks: Record<string, number> = {}
+	private loadingScreenshots: TemplateCategory[] = []
+	private loadingFabricIds: string[] = []
+	private loadingTemplateIds: string[] = []
 
 	connectionStatus: ConnectionStatus = 'online'
 	showConnectionWarning = false
@@ -255,7 +253,6 @@ class Store {
 	 * When a Sleeves block is added, it inherits the fabrics from the Bodice block if available.
 	 */
 	private applySleevesFabricInheritance(block: Block, templateCategory: TemplateCategory) {
-		console.log('applying sleeves fabric inheritance for', block.category)
 		if (block.category !== 'Sleeves') return
 
 		const templateSelection = this.selectedGarments[templateCategory]
@@ -268,7 +265,6 @@ class Store {
 		if (!bodiceFabrics || Object.keys(bodiceFabrics).length === 0) return
 
 		const sleevesSelection = this.getGarmentSelection(templateCategory, 'Sleeves')
-		console.log('inheriting fabrics to sleeves', templateCategory, bodiceFabrics)
 
 		for (const [meshKey, fabric] of Object.entries(bodiceFabrics)) {
 			sleevesSelection.fabrics[meshKey] = fabric
@@ -286,17 +282,13 @@ class Store {
 			}
 
 			for (const {block, templateCategory} of blockData) {
-				console.log('block template category', templateCategory, block.category)
-
 				const garmentSelection = this.getGarmentSelection(templateCategory, block.category)
 
 				if (garmentSelection.block?._id === block._id) {
-					console.log('unselecting block', block.category)
 					garmentSelection.block = null
 					garmentSelection.fabrics = {}
 					this.cleanupGarmentSelection(templateCategory, block.category)
 				} else {
-					console.log(garmentSelection.block ? 'replacing block' : 'adding block', block.category)
 					garmentSelection.block = block
 					this.applySleevesFabricInheritance(block, templateCategory)
 				}
@@ -601,13 +593,10 @@ class Store {
 			this.retailItemSizes = new Map<TemplateCategory, string>()
 			this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 			this.screenshotCache = new Map<TemplateCategory, string>()
-			// TODO only use unique symbols for loading states, and make sure async
-			// processes always clean up!
-			this.loadingScreenshots = new Set<TemplateCategory>()
+			this.loadingScreenshots.length = 0
 			this.remixOverlayTemplate = null
 			this.urlParamsLoaded = false
 
-			// Clear all loading states to prevent orphaned symbols
 			// FIXME clearing loading states should not be necessary. If so, it
 			// means there's a leak. Instead, don't clear loading states, all async
 			// processes must always clean up after themselves, and this will
@@ -641,28 +630,24 @@ class Store {
 
 	addIsDrippySceneLoading(key: symbol) {
 		untrack(() => {
-			this.drippySceneLoads.add(key)
-			this.drippySceneLoads = new Set(this.drippySceneLoads) // trigger reactivity
+			if (!this.drippySceneLoads.includes(key)) this.drippySceneLoads.push(key)
 		})
 	}
 	removeIsDrippySceneLoading(key: symbol) {
-		untrack(() => {
-			this.drippySceneLoads.delete(key)
-			this.drippySceneLoads = new Set(this.drippySceneLoads) // trigger reactivity
-		})
+		untrack(() => removeItemUnsorted(this.drippySceneLoads, key))
 	}
 	clearIsDrippySceneLoading() {
-		untrack(() => {
-			this.drippySceneLoads.clear()
-			this.drippySceneLoads = new Set(this.drippySceneLoads) // trigger reactivity
-		})
+		untrack(() => (this.drippySceneLoads.length = 0))
+	}
+	get isDrippySceneLoading(): boolean {
+		return this.drippySceneLoads.length > 0
 	}
 
 	addLoadingBlock(blockId: string) {
 		if (!blockId) return
 		untrack(() => {
 			const currentCount = this.loadingBlocks[blockId] ?? 0
-			this.loadingBlocks = {...this.loadingBlocks, [blockId]: currentCount + 1}
+			this.loadingBlocks[blockId] = currentCount + 1
 		})
 	}
 	removeLoadingBlock(blockId: string) {
@@ -670,132 +655,105 @@ class Store {
 		untrack(() => {
 			const currentCount = this.loadingBlocks[blockId]
 			if (!currentCount) return
-			if (currentCount === 1) {
-				const {[blockId]: _, ...rest} = this.loadingBlocks
-				this.loadingBlocks = rest
-			} else {
-				this.loadingBlocks = {...this.loadingBlocks, [blockId]: currentCount - 1}
-			}
+			if (currentCount === 1) delete this.loadingBlocks[blockId]
+			else this.loadingBlocks[blockId] = currentCount - 1
 		})
 	}
 	clearLoadingBlocks() {
 		untrack(() => {
-			this.loadingBlocks = {}
+			for (const key in this.loadingBlocks) delete this.loadingBlocks[key]
 		})
 	}
-
 	isBlockLoading(blockId: string): boolean {
-		return Boolean(blockId && blockId in this.loadingBlocks)
+		const blockTracked = blockId in this.loadingBlocks
+		return Boolean(blockId && blockTracked)
 	}
-
-	addLoadingMaterial(key: symbol) {
-		untrack(() => {
-			this.loadingMaterials.add(key)
-			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
-		})
-	}
-	removeLoadingMaterial(key: symbol) {
-		untrack(() => {
-			this.loadingMaterials.delete(key)
-			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
-		})
-	}
-	clearLoadingMaterials() {
-		untrack(() => {
-			this.loadingMaterials.clear()
-			this.loadingMaterials = new Set(this.loadingMaterials) // trigger reactivity
-		})
+	get anyBlockIsLoading(): boolean {
+		return Object.keys(this.loadingBlocks).length > 0
 	}
 
 	addLoadingFabric(fabricId: string) {
 		untrack(() => {
-			this.loadingFabricIds.add(fabricId)
-			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
+			if (!this.loadingFabricIds.includes(fabricId)) this.loadingFabricIds.push(fabricId)
 		})
 	}
 	removeLoadingFabric(fabricId: string) {
-		untrack(() => {
-			this.loadingFabricIds.delete(fabricId)
-			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
-		})
+		untrack(() => removeItemUnsorted(this.loadingFabricIds, fabricId))
 	}
 	clearLoadingFabrics() {
-		untrack(() => {
-			this.loadingFabricIds.clear()
-			this.loadingFabricIds = new Set(this.loadingFabricIds) // trigger reactivity
-		})
+		untrack(() => (this.loadingFabricIds.length = 0))
 	}
 
 	isFabricLoading(fabricId: string): boolean {
-		return this.loadingFabricIds.has(fabricId)
+		return this.loadingFabricIds.includes(fabricId)
 	}
 
 	addLoadingScreenshot(category: TemplateCategory) {
 		untrack(() => {
-			// FIXME only use unique symbols for loading states, and make sure
-			// async processes always clean up!
-			this.loadingScreenshots.add(category)
-			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
+			if (!this.loadingScreenshots.includes(category)) this.loadingScreenshots.push(category)
 		})
 	}
 	removeLoadingScreenshot(category: TemplateCategory) {
-		untrack(() => {
-			// FIXME only use unique symbols for loading states, and make sure
-			// async processes always clean up!
-			this.loadingScreenshots.delete(category)
-			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
-		})
+		untrack(() => removeItemUnsorted(this.loadingScreenshots, category))
 	}
 	clearLoadingScreenshots() {
-		untrack(() => {
-			this.loadingScreenshots.clear()
-			this.loadingScreenshots = new Set(this.loadingScreenshots) // trigger reactivity
-		})
+		untrack(() => (this.loadingScreenshots.length = 0))
+	}
+	get isScreenshotsLoading(): boolean {
+		return this.loadingScreenshots.length > 0
 	}
 
-	setLoadingTemplate(templateId: string) {
-		if (this.currentAbortController) {
-			this.currentAbortController.abort()
+	setLoadingTemplate(templateId: string, category?: TemplateCategory) {
+		if (!templateId) return
+
+		const templateCategory = category ?? templateHelpers.getTemplateCategoryById(templateId)
+		const conflictingCategories = new Set<TemplateCategory>()
+
+		if (templateCategory) {
+			templateHelpers.getOverridingCategories(templateCategory).forEach(c => conflictingCategories.add(c))
+			templateHelpers.getCategoriesThatOverride(templateCategory).forEach(c => conflictingCategories.add(c))
+			conflictingCategories.add(templateCategory)
+			console.log('conflictingCategories', conflictingCategories)
 		}
-		this.currentAbortController = new AbortController()
-		this.loadingTemplateId = templateId
+
+		untrack(() => {
+			if (conflictingCategories.size > 0) {
+				for (const id of this.loadingTemplateIds) {
+					const idCategory = templateHelpers.getTemplateCategoryById(id)
+					if (idCategory && conflictingCategories.has(idCategory)) {
+						removeItemUnsorted(this.loadingTemplateIds, id)
+					}
+				}
+			}
+
+			this.loadingTemplateIds.push(templateId)
+		})
 	}
 
 	clearLoadingTemplate(templateId: string) {
-		if (this.loadingTemplateId === templateId) {
-			this.loadingTemplateId = null
-			this.currentAbortController = null
-		}
+		if (!templateId) return
+		untrack(() => removeItemUnsorted(this.loadingTemplateIds, templateId))
 	}
 
 	isTemplateLoading(templateId: string): boolean {
-		return this.loadingTemplateId === templateId
+		return this.loadingTemplateIds.includes(templateId)
 	}
 
 	clearAllLoadingStates() {
 		this.clearLoadingBlocks()
-		this.clearLoadingMaterials()
 		this.clearLoadingFabrics()
 		this.clearLoadingScreenshots()
 		this.clearIsDrippySceneLoading()
-		this.loadingTemplateId = null
-		if (this.currentAbortController) {
-			this.currentAbortController.abort()
-			this.currentAbortController = null
-		}
+		this.loadingTemplateIds.length = 0
 	}
 
 	trackModelLoading(id: symbol, model: GltfModel) {
 		const modelLoaded = onModelLoad(model)
 
 		createEffect(() => {
-			if (!modelLoaded()) {
-				this.addIsDrippySceneLoading(id)
-			}
-
-			onCleanup(() => {
-				this.removeIsDrippySceneLoading(id)
-			})
+			if (modelLoaded()) return
+			this.addIsDrippySceneLoading(id)
+			onCleanup(() => this.removeIsDrippySceneLoading(id))
 		})
 	}
 
@@ -853,8 +811,6 @@ createEffect(() => {
 			pushState()
 		}
 	})
-
-	console.log('sync selectedAvatar with URL param')
 
 	// And keep both selectedAvatar and avatar URL parameter in sync
 	syncSignals(
@@ -955,9 +911,7 @@ export function selectedBlocksFromUrl() {
 function selectedFabricsFromUrl() {
 	const fabricsParam = untrack(searchParams).get('fabrics')
 
-	if (!fabricsParam) {
-		return
-	}
+	if (!fabricsParam) return
 
 	const fabricEntries = fabricsParam.split(',').filter(entry => entry.trim())
 
@@ -974,9 +928,7 @@ function selectedFabricsFromUrl() {
 
 		const [keyPart, fabricId] = value.split(':')
 
-		if (!keyPart || !fabricId) {
-			continue
-		}
+		if (!keyPart || !fabricId) continue
 
 		// Split only on first 2 dashes to handle concatenated mesh names
 		// Format: templateCategory-blockCategory-piece (where piece may contain dashes)
@@ -992,9 +944,7 @@ function selectedFabricsFromUrl() {
 		const blockCategory = remaining.substring(0, dashIndex2)
 		const piece = remaining.substring(dashIndex2 + 1)
 
-		if (!templateCategory || !blockCategory || !piece) {
-			continue
-		}
+		if (!templateCategory || !blockCategory || !piece) continue
 
 		const fabric = templateHelpers.findFabricById(fabricId, collectionSlug)
 		if (fabric) {

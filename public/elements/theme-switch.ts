@@ -23,8 +23,7 @@ const ICON_INITIAL_STATE_FOR_LIGHT = [5, 1, 33, 1] as const
 
 class ThemeSwitch extends HTMLElement {
 	static readonly elementName = 'theme-switch'
-
-	shadowRoot
+	override shadowRoot
 	static counter = 0
 	identifier = ThemeSwitch.counter++
 

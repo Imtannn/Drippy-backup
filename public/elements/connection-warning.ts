@@ -4,13 +4,12 @@ import './logic/show-when.js'
 
 @element
 export class ConnectionWarning extends Element {
-	static readonly elementName = 'connection-warning'
+	static override readonly elementName = 'connection-warning'
 
 	private handleClose = () => {
 		store.setShowConnectionWarning = false
 	}
-
-	template = () => {
+	override template = () => {
 		return html`
 			<show-when
 				condition=${() => store.showConnectionWarning}
@@ -54,8 +53,7 @@ export class ConnectionWarning extends Element {
 			/>
 		`
 	}
-
-	css = css`
+	override css = css`
 		:host {
 			display: block;
 			position: fixed;

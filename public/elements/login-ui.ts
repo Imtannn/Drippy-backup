@@ -143,8 +143,7 @@ export class LoginUI extends LumeElement {
 		// patch, but super unlikely.
 		el.addEventListener('click', () => (document.getElementById = original), {capture: false})
 	}
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// When clicking anywhere not inside of the login-ui popup, close the popup.
@@ -247,8 +246,7 @@ export class LoginUI extends LumeElement {
 			onCleanup(() => observers.forEach(observer => observer.disconnect()))
 		})
 	}
-
-	template = () => html`
+	override template = () => html`
 		<blaze-component
 			tmpl="loginButtons"
 			id="loginButtons"
@@ -260,8 +258,7 @@ export class LoginUI extends LumeElement {
 
 		<style prop:textContent=${() => this.customStyle}></style>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: contents;
 		}

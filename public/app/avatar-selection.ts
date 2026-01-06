@@ -14,12 +14,11 @@ type AvatarSelectionAttributes = 'contentOnly'
 
 @element
 export class AvatarSelection extends Element {
-	static readonly elementName = 'avatar-selection'
+	static override readonly elementName = 'avatar-selection'
 
 	@signal selectedTab = 'female'
 	@booleanAttribute contentOnly = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		const currentAvatar = avatars.find(avatar => avatar.name === store.selectedAvatar)
@@ -107,8 +106,7 @@ export class AvatarSelection extends Element {
 			</div>
 		</tabs-provider>
 	`
-
-	template = () => {
+	override template = () => {
 		return html`
 			<show-when condition=${() => this.contentOnly} content=${this.#renderAvatarContent}></show-when>
 
@@ -126,8 +124,7 @@ export class AvatarSelection extends Element {
 			></show-when>
 		`
 	}
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: contents;
 		}

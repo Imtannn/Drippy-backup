@@ -2,15 +2,15 @@ import {css, Element, element, html, type ElementAttributes} from 'lume'
 
 @element
 export class LoadingSpinnerOverlay extends Element {
-	static readonly elementName = 'loading-spinner-overlay'
+	static override readonly elementName = 'loading-spinner-overlay'
 
-	template = () => html`
+	override template = () => html`
 		<div class="loading-overlay">
 			<div class="spinner"></div>
 		</div>
 	`
 
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: block;
 			position: absolute;

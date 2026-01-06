@@ -4,15 +4,13 @@ type TopNavigationAttributes = keyof {}
 
 @element
 export class TopNavigation extends Element {
-	static readonly elementName = 'top-navigation'
-
-	template = () => html`
+	static override readonly elementName = 'top-navigation'
+	override template = () => html`
 		<nav class="top-nav">
 			<slot></slot>
 		</nav>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: block;
 		}

@@ -4,18 +4,17 @@ type IconButtonAttributes = 'disabled' | 'onclick' | 'group'
 
 @element
 export class IconButton extends Element {
-	static readonly elementName = 'icon-button'
+	static override readonly elementName = 'icon-button'
 
 	@booleanAttribute disabled = false
 	@attribute group: string | null = null
 
-	@eventAttribute onclick = null
+	@eventAttribute override onclick = null
 
 	#onClick = () => {
 		this.dispatchEvent(new CustomEvent('click', {bubbles: true}))
 	}
-
-	template = () => html`
+	override template = () => html`
 		<button
 			class="icon-button"
 			disabled=${() => this.disabled}
@@ -25,8 +24,7 @@ export class IconButton extends Element {
 			<div class="icon-button-icon"><slot></slot></div>
 		</button>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		.icon-button {
 			border-radius: 9999px;
 			background-color: rgba(18, 19, 22, 0.75);

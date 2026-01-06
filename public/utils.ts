@@ -546,31 +546,28 @@ export function onModelLoad(model: GltfModel) {
 		const gltfModelBehavior = model.behaviors.get('gltf-model') // signal
 		if (!gltfModelBehavior) return
 
+		const src = createMemo(() => gltfModelBehavior.src)
+
+		let skipFirstRun = true
 		createEffect(() => {
 			// Any time the src changes, we are no longer loaded (the MODEL_LOAD
-			// event will set it back to true).
-			gltfModelBehavior.src
-			if (model.id === 'scene') console.log('src changes, set loaded false')
+			// event will set it back to true). Use a memo because if it's the same value as before,
+			// we don't want to set loaded to false again (the model will not reload, also uses a memo).
+			src()
+			if (skipFirstRun) return (skipFirstRun = false)
 			setLoaded(false)
 		})
 
 		// Set initially true if the model is already loaded.
 		const threeModel = gltfModelBehavior.model
-		if (threeModel) {
-			setLoaded(true)
-			if (model.id === 'scene') console.log('model already loaded, set loaded true')
-		}
+		if (threeModel) setLoaded(true)
 
 		// Set loaded any time a new model is loaded.
-		const modelLoad = () => {
-			if (model.id === 'scene') console.log('model loaded, set loaded true')
-			setLoaded(true)
-		}
+		const modelLoad = () => setLoaded(true)
 		model.on('MODEL_LOAD', modelLoad)
 
 		onCleanup(() => {
 			model.off('MODEL_LOAD', modelLoad)
-			if (model.id === 'scene') console.log('model cleanup, set loaded false')
 			setLoaded(false)
 		})
 	})
@@ -1048,7 +1045,6 @@ export interface FabricTextureRetryConfig {
  */
 export function createFabricTexture(
 	fabric: Accessor<Fabric | undefined>,
-	uvArray: number[],
 	retryConfig: FabricTextureRetryConfig = {},
 ): FabricTextureState {
 	const {maxRetries = 3, retryDelay = 1000} = retryConfig
@@ -1079,7 +1075,7 @@ export function createFabricTexture(
 			setError(null)
 
 			try {
-				const textureSet = await textureManager.loadFabricTexturesWithUV(currentFabric, uvArray)
+				const textureSet = await textureManager.loadFabricTexturesWithUV(currentFabric)
 
 				if (canceled) return
 
@@ -1090,7 +1086,6 @@ export function createFabricTexture(
 
 				const error = err instanceof Error ? err : new Error(String(err))
 
-				console.warn(`### fabric ${currentFabric._id} failed to load textures`, error)
 				if (retryCount < maxRetries) {
 					retryCount++
 					setTimeout(() => {
@@ -1121,4 +1116,15 @@ export function createFabricTexture(
 	})
 
 	return {texture, loading, error}
+}
+
+/**
+ * The fast way to remove an item from an array when item order
+ * doesn't matter. Avoids shifting all items after the removed one.
+ */
+export function removeItemUnsorted(array: unknown[], item: unknown) {
+	const index = array.indexOf(item)
+	if (index === -1) return
+	array[index] = array[array.length - 1]
+	array.pop()
 }

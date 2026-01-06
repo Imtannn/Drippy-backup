@@ -21,7 +21,7 @@ type LumeAutoRiggerAttributes = keyof {}
  */
 @element
 export class LumeAutoRigger extends Element {
-	static elementName = 'lume-auto-rigger'
+	static override elementName = 'lume-auto-rigger'
 
 	/**
 	 * Array of bone names to exclude from rigging. All children of the bones are excluded as well.
@@ -31,8 +31,7 @@ export class LumeAutoRigger extends Element {
 	@booleanAttribute disabled = false
 
 	@eventAttribute onrig = () => {}
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// Get the nearest lume-gltf-model ancestor for the rigged model.
@@ -76,8 +75,7 @@ export class LumeAutoRigger extends Element {
 			})
 		})
 	}
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: none;
 		}

@@ -8,7 +8,7 @@
 		"build": "npm run _link && tsc",
 		"build:watch": "npm run _link && tsc --watch",
 		"build:clean": "npm run clean && npm run build",
-		"dev": "npm run build:clean && concurrently --kill-others --prefix-colors=auto --names=typescript,meteor 'tsc --watch' 'npm run _meteor'",
+		"dev": "npm run build:clean && concurrently --kill-others --prefix-colors=auto --names=typescript,meteor 'tsc --watch --preserveWatchOutput' 'npm run _meteor'",
 		"dev:mobile": "./start-mobile.sh",
 		"_link": "symlink-dir imports public/imports",
 		"_meteor": "meteor --exclude-archs web.browser.legacy --no-lint",
@@ -24,31 +24,33 @@
 		"fetch-combined-assets": "chmod +x scripts/run-combined-assets.sh && ./scripts/run-combined-assets.sh"
 	},
 	"overrides": {
-		"@lume/element": "$@lume/element"
+		"@lume/element": "$@lume/element",
+		"classy-solid": "$classy-solid"
 	},
 	"dependencies": {
 		"@babel/runtime": "^7.15.4",
-		"@lume/element": "^0.16.1",
 		"@sendgrid/mail": "^8.1.5",
+		"aws-sdk": "^2.1692.0",
+		"handlebars": "^4.7.8",
+		"meteor-node-stubs": "^1.0.0"
+	},
+	"devDependencies": {
+		"@lume/cli": "^0.15.0",
+		"@lume/element": "lume/element#5dfb8283eb3a9bcd7509088eb62e4f49d2b58b0c",
 		"@tweenjs/tween.js": "^18.6.4",
 		"@types/meteor": "^2.9.8",
 		"@types/three": "^0.174.0",
-		"aws-sdk": "^2.1692.0",
-		"handlebars": "^4.7.8",
+		"classy-solid": "^0.5.2",
+		"concurrently": "^9.1.2",
+		"googleapis": "^168.0.0",
 		"jquery": "^3.7.1",
 		"lume": "^0.3.0-alpha.46",
-		"meteor-node-stubs": "^1.0.0",
+		"prettier": "3.5.3",
+		"sharp": "^0.34.4",
 		"solid-js": "^1.9.0",
 		"symlink-dir": "^6.0.5",
 		"three": "^0.174.0",
 		"typescript": "^5.0.0"
-	},
-	"devDependencies": {
-		"@lume/cli": "^0.15.0",
-		"concurrently": "^9.1.2",
-		"googleapis": "^168.0.0",
-		"prettier": "3.5.3",
-		"sharp": "^0.34.4"
 	},
 	"meteor": {
 		"mainModule": {

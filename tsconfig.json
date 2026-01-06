@@ -13,8 +13,12 @@
 		"lib": ["DOM", "DOM.Iterable", "ES2023"],
 		"verbatimModuleSyntax": true,
 		"skipLibCheck": true,
+		"skipDefaultLibCheck": true,
 
 		"strict": true,
+		// "noUncheckedIndexedAccess": true, // TODO enable this, fix type errors.
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 

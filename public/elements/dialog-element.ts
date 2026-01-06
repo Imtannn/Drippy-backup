@@ -4,15 +4,14 @@ type DialogElementAttributes = 'open' | 'closeable'
 
 @element
 export class DialogElement extends Element {
-	static readonly elementName = 'dialog-element'
+	static override readonly elementName = 'dialog-element'
 
 	@signal open = false
 	@booleanAttribute closeable = true
 
 	#dialogRef: HTMLDialogElement | null = null
 	#styleRef: HTMLStyleElement | null = null
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		this.createEffect(() => {
@@ -100,10 +99,8 @@ export class DialogElement extends Element {
 	show = () => {
 		this.open = true
 	}
-
-	template = () => html`<slot></slot>`
-
-	css = css/*css*/ `
+	override template = () => html`<slot></slot>`
+	override css = css/*css*/ `
 		:host {
 			display: none;
 		}

@@ -24,15 +24,14 @@ type BrandViewAttributes = keyof {}
 
 @element
 export class BrandView extends Element {
-	static readonly elementName = 'brand-view'
+	static override readonly elementName = 'brand-view'
 
 	@signal selectedTab: TemplateCategory | null = null
 	@signal showLoginDialog = false
 	@signal showTemplateOverlay: Template | null = null
 
 	private isOpeningOverlay = false
-
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 		document.addEventListener('click', this.#onDocumentClick)
 
@@ -41,8 +40,7 @@ export class BrandView extends Element {
 			updateGarmentsSelectionInUrl(store.selectedGarments)
 		})
 	}
-
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 		document.removeEventListener('click', this.#onDocumentClick)
 		// Clear brand param from URL and reset view when component is unmounted
@@ -55,7 +53,7 @@ export class BrandView extends Element {
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
 
-		store.setLoadingTemplate(template._id)
+		store.setLoadingTemplate(template._id, template.category)
 
 		// Brand-view only displays when brand param exists, so we always navigate
 		const brandParam = searchParams().get('brand')
@@ -172,8 +170,7 @@ export class BrandView extends Element {
 	#isTemplateActive = (template: Template) => {
 		return store.selectedTemplates[template.category]?._id === template._id
 	}
-
-	template = () => html`
+	override template = () => html`
 		<div class="brand-container">
 			<!-- Navigation -->
 
@@ -342,8 +339,7 @@ export class BrandView extends Element {
 			</dialog-element>
 		</div>
 	`
-
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			position: absolute;
 			top: 0;

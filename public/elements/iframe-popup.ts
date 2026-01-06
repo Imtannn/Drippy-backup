@@ -9,7 +9,7 @@ type IframePopupAttributes = 'url'
 
 @element
 export class IframePopup extends Element {
-	static readonly elementName = 'iframe-popup'
+	static override readonly elementName = 'iframe-popup'
 
 	@signal url = ''
 	@signal isLoading = true
@@ -24,7 +24,7 @@ export class IframePopup extends Element {
 	#cspHandler: ((e: SecurityPolicyViolationEvent) => void) | null = null
 	#cspViolationDetected = false
 
-	connectedCallback() {
+	override connectedCallback() {
 		super.connectedCallback()
 
 		// Setup CSP violation listener
@@ -55,7 +55,7 @@ export class IframePopup extends Element {
 		// The template binding will handle src updates when this.url changes
 	}
 
-	disconnectedCallback() {
+	override disconnectedCallback() {
 		super.disconnectedCallback()
 		this.#cleanupCSPHandler()
 	}
@@ -120,7 +120,7 @@ export class IframePopup extends Element {
 		this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}))
 	}
 
-	template = () => html`
+	override template = () => html`
 		<!-- Overlay backdrop to close on click outside -->
 		<show-when
 			condition=${() => store.view === 'iframe-popup' && !!this.url}
@@ -219,7 +219,7 @@ export class IframePopup extends Element {
 		></show-when>
 	`
 
-	css = css/*css*/ `
+	override css = css/*css*/ `
 		:host {
 			display: block;
 		}
