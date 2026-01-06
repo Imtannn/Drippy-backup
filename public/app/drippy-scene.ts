@@ -28,7 +28,6 @@ import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
 import {avatars} from '../consts/avatars.js'
 
 import {backgroundScenes} from '../consts/scenes.js'
-import {spaces} from '../consts/spaces.js'
 import {appAnims} from '../elements/animation-select.js'
 import '../elements/logic/show-when.js'
 import '../elements/lume-animation.js'
@@ -116,7 +115,9 @@ export class DrippyScene extends Element {
 	@signal private lumeScene: Scene | null = null
 
 	// When `false`, disable animations and rigging.
-	@signal private animsEnabled = false
+	@memo private get animsEnabled() {
+		return store.selectedAnimation !== 'none'
+	}
 
 	@signal private animName: string | null = null
 	@signal private animSrc: string | null = null
@@ -267,6 +268,24 @@ export class DrippyScene extends Element {
 		]
 	}
 
+	@memo private get garmentModelsSignal() {
+		if (!this.avatarModel) return null
+		return querySelectorAllSignal(this.avatarModel, 'lume-gltf-model[data-block]') as Accessor<NodeListOf<GltfModel>>
+	}
+
+	@memo private get garmentModels() {
+		return this.garmentModelsSignal ? this.garmentModelsSignal() : emptyNodeList<GltfModel>()
+	}
+
+	@memo private get extraObjectSignal() {
+		if (!this.avatarModel) return null
+		return querySelectorAllSignal(this.avatarModel, 'lume-gltf-model.extraObject') as Accessor<NodeListOf<GltfModel>>
+	}
+
+	@memo private get extraObjects() {
+		return this.extraObjectSignal ? this.extraObjectSignal() : emptyNodeList<GltfModel>()
+	}
+
 	// Reset camera to default when space changes
 	@effect cameraEffect() {
 		const space = this.selectedSpace
@@ -280,9 +299,9 @@ export class DrippyScene extends Element {
 		this.cameraRig.needsUpdate()
 	}
 
-	@effect avatarAndBackgroundEffect() {
-		const {avatarModel, backgroundModel} = this
-		if (!avatarModel || !backgroundModel) return
+	@effect backgroundModelEffect() {
+		const {backgroundModel} = this
+		if (!backgroundModel) return
 
 		disableFrustumCulledOnLoad(backgroundModel)
 		enableFrontsideOnModelLoad(backgroundModel)
@@ -296,73 +315,54 @@ export class DrippyScene extends Element {
 			})
 		})
 
-		// Track selected avatar loading state
-		const avatarId = Symbol('avatar')
-		store.trackModelLoading(avatarId, avatarModel)
+		const sceneId = Symbol('background')
+		store.trackModelLoading(sceneId, backgroundModel)
+	}
 
-		// Track background scene loading state (only if a scene is given)
-		createEffect(() => {
-			if (!backgroundModel.src) return
-			const sceneId = Symbol('background')
-			store.trackModelLoading(sceneId, backgroundModel)
-		})
-
-		const garmentModels = querySelectorAllSignal(avatarModel, 'lume-gltf-model[data-block]') as Accessor<
-			NodeListOf<GltfModel>
-		>
-
-		const extraObjects = querySelectorAllSignal(avatarModel, 'lume-gltf-model.extraObjects') as Accessor<
-			NodeListOf<GltfModel>
-		>
-
-		createEffect(() => {
-			for (const el of extraObjects()) disableFrustumCulledOnLoad(el)
-		})
-
-		// Watch for panel collapse state changes
-		const panelCollapseMutations = createMutationsSignal(document.documentElement, {
+	@signal private documentElementMutations = (() => {
+		return createMutationsSignal(document.documentElement, {
 			attributes: true,
 			attributeFilter: ['class'],
 		})
+	})()
 
-		createEffect(() => {
-			// Trigger reactive update when panel collapse state changes
-			panelCollapseMutations()
-			const isPanelCollapsed = document.documentElement.classList.contains('panel-collapsed')
+	// Watch for panel collapse state changes
+	@effect panelCollapseEffect() {
+		// Trigger reactive update when panel collapse state changes
+		this.documentElementMutations()
+		const isPanelCollapsed = document.documentElement.classList.contains('panel-collapsed')
 
-			if (store.view === 'preview') {
+		if (store.view === 'preview') {
+			this.style.setProperty('--sceneTranslateX', 'translateX(0)')
+			this.style.setProperty('--sceneTranslateY', 'translateY(0)')
+		} else {
+			this.style.setProperty('--sceneTranslateY', 'translateY(-100px)')
+
+			const shouldShiftLeft =
+				store.view === 'order' ||
+				store.view === 'order-items' ||
+				store.view === 'order-size' ||
+				store.view === 'custom-measurement' ||
+				store.view === 'iframe-popup' ||
+				store.view === 'success' ||
+				store.view === 'share' ||
+				store.view === 'template'
+
+			if (isPanelCollapsed) {
 				this.style.setProperty('--sceneTranslateX', 'translateX(0)')
-				this.style.setProperty('--sceneTranslateY', 'translateY(0)')
+			} else if (shouldShiftLeft) {
+				this.style.setProperty('--sceneTranslateX', 'translateX(calc(-1 * var(--sceneDesktopOffset)))')
 			} else {
-				this.style.setProperty('--sceneTranslateY', 'translateY(-100px)')
-
-				const shouldShiftLeft =
-					store.view === 'order' ||
-					store.view === 'order-items' ||
-					store.view === 'order-size' ||
-					store.view === 'custom-measurement' ||
-					store.view === 'iframe-popup' ||
-					store.view === 'success' ||
-					store.view === 'share' ||
-					store.view === 'template'
-
-				if (isPanelCollapsed) {
-					this.style.setProperty('--sceneTranslateX', 'translateX(0)')
-				} else if (shouldShiftLeft) {
-					this.style.setProperty('--sceneTranslateX', 'translateX(calc(-1 * var(--sceneDesktopOffset)))')
-				} else {
-					this.style.setProperty('--sceneTranslateX', 'translateX(var(--sceneDesktopOffset))')
-				}
+				this.style.setProperty('--sceneTranslateX', 'translateX(var(--sceneDesktopOffset))')
 			}
-		})
+		}
+	}
 
-		const avatarLoaded = onModelLoad(avatarModel)
-		createEffect(() => {
-			if (!avatarLoaded()) return
+	@effect extraObjectEffect() {
+		for (const el of this.extraObjects) disableFrustumCulledOnLoad(el)
+	}
 
-			store.showAnimationSelect = !!getArmatureObject(avatarModel.three)
-		})
-
+	@effect loadingProgressEffect() {
 		let previousCount = -1
 		let loaderTimeout: number | undefined = undefined
 		let progressTimeouts: number[] = []
@@ -446,229 +446,217 @@ export class DrippyScene extends Element {
 			}
 			progressTimeouts.forEach(timeoutId => clearTimeout(timeoutId))
 		})
+	}
 
-		createEffect(() => {
-			for (const el of garmentModels()) {
-				const blockId = el.dataset.blockId
-				if (!blockId) throw new Error('Garment model missing data-block-id attribute')
+	@effect garmentLoadingEffect() {
+		for (const el of this.garmentModels) {
+			const blockId = el.dataset.blockId
+			if (!blockId) throw new Error('Garment model missing data-block-id attribute')
 
-				const modelLoaded = onModelLoad(el)
+			const modelLoaded = onModelLoad(el)
+			createEffect(() => {
+				if (modelLoaded()) return
+				store.addLoadingBlock(blockId)
+				onCleanup(() => store.removeLoadingBlock(blockId))
+			})
+		}
+	}
+
+	@memo get modelsInSyncWithRenderBlocks() {
+		if (this.renderBlocks.length === 0 || this.garmentModels.length === 0) return false
+		if (this.renderBlocks.length !== this.garmentModels.length) return false
+		for (const [i, rb] of this.renderBlocks.entries()) {
+			console.log('render block', rb.id)
+			if (rb.id !== this.garmentModels[i]?.getAttribute('id')) return false
+		}
+		return true
+	}
+
+	@memo get garmentModelLoads() {
+		return [...this.garmentModels].map(el => onModelLoad(el))
+	}
+
+	@memo get garmentModelsInSyncAndLoaded() {
+		if (!this.modelsInSyncWithRenderBlocks) return false
+		return this.garmentModelLoads.every(loaded => loaded())
+	}
+
+	// Re-apply materials whenever the selected fabrics change or models mount
+	@effect fabricsLoadingEffect() {
+		console.log('fabrics effect')
+
+		if (!this.garmentModelsInSyncAndLoaded) return
+
+		// Process each model using its data-block-id to find the correct fabric
+		for (const [blockIndex, renderBlock] of this.renderBlocks.entries()) {
+			// CONTINUE we deleted uvArray, so we can freely load fabrics in parallel to garment models
+
+			const blockId = renderBlock.id
+
+			// Parse blockId to extract template category, block category, and block ID
+			// Format: "TemplateCategory-BlockCategory-BlockId" or "TemplateCategory-BlockCategory-BlockId-mirror"
+			const isMirror = blockId.endsWith('-mirror')
+			const baseBlockId = isMirror ? blockId.slice(0, -7) : blockId // Remove "-mirror" if present
+			const parts = baseBlockId.split('-')
+
+			if (parts.length < 3) {
+				console.error('Invalid block ID format:', blockId)
+				continue
+			}
+
+			if (blockId.startsWith('default-')) continue // Skip default garments, they have built-in fabrics for now
+
+			const templateCategory = parts[1] as TemplateCategory
+			const blockCategory = parts[2] as BlockCategory
+			const template = store.selectedTemplates[templateCategory]
+			const templateId = template?._id
+			if (!templateId) throw new Error('Template ID missing for category:' + templateCategory)
+			const fabricsForBlockCategory = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
+			console.log('selectedGarments', store.selectedGarments)
+
+			const fabricLoadingSignals: Record<string, ReturnType<typeof createFabricTexture>> = {}
+
+			// Create signals for new fabrics
+			// TODO (FIXME?) This is loading state for all fabrics of
+			// the template category and block category, but is it the
+			// fabrics for the render block we're iterating?
+			for (const fabric of Object.values(fabricsForBlockCategory)) {
+				const textureState = createFabricTexture(() => fabric)
+				fabricLoadingSignals[fabric._id] = textureState
+
+				// Track loading state per fabric
 				createEffect(() => {
-					if (modelLoaded()) return
-					store.addLoadingBlock(blockId)
-					onCleanup(() => store.removeLoadingBlock(blockId))
+					console.log('fabric loading effect')
+					if (!textureState.loading()) return
+					store.addLoadingFabric(fabric._id)
+					onCleanup(() => store.removeLoadingFabric(fabric._id))
 				})
 			}
-		})
 
-		const modelsInSyncWithRenderBlocks = createMemo(() => {
-			if (this.renderBlocks.length !== garmentModels().length) return false
-			for (const [i, rb] of this.renderBlocks.entries()) {
-				console.log('render block', rb.id)
-				if (rb.id !== garmentModels()[i]?.getAttribute('id')) return false
-			}
-			return true
-		})
-
-		const garmentModelLoads = createMemo(() => [...garmentModels()].map(el => onModelLoad(el)))
-
-		const garmentModelsInSyncAndLoaded = createMemo(() => {
-			if (!modelsInSyncWithRenderBlocks()) return false
-			return garmentModelLoads().every(loaded => loaded())
-		})
-
-		createEffect(() => {
-			console.log(
-				modelsInSyncWithRenderBlocks()
-					? '✅ Models in sync with render blocks'
-					: '❌ Models NOT in sync with render blocks',
+			const fabricsLoaded = createMemo(() =>
+				Object.values(fabricLoadingSignals).every(f => !f.loading() && f.texture()),
 			)
-		})
 
-		// Re-apply materials whenever the selected fabrics change or models mount
-		createEffect(() => {
-			console.log('garments effect')
+			const templateBlocks = createMemo(
+				() => {
+					// prettier-ignore
+					console.log( 'templateBlocks', this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),)
+					return this.renderBlocks.filter(rb => rb.templateCategory === templateCategory)
+				},
+				undefined,
+				{equals: arrayEquals},
+			)
 
-			if (!garmentModelsInSyncAndLoaded()) return
+			// CONTINUE It doesn't seem to make sense for this effect to be
+			// here because we're iterating *EVERY* render block, and
+			// thus we're clearing loading state based on the fabrics of
+			// a *single* block, not *all blocks* in the template. Is
+			// this right?
+			createEffect(() => {
+				// Check if all blocks for this template category are loaded
+				if (templateBlocks().length === 0) throw new Error('No blocks found for template category: ' + templateCategory)
 
-			// Process each model using its data-block-id to find the correct fabric
-			for (const [blockIndex, renderBlock] of this.renderBlocks.entries()) {
-				// CONTINUE we deleted uvArray, so we can freely load fabrics in parallel to garment models
+				if (fabricsLoaded()) {
+					console.log('✅ CLEARING loading template:', templateId)
+					// The fabrics for the block loaded, clear the
+					// loading state for the *whole* template
+					// CONTINUE Is this right? Template should be done
+					// "loading" after all fabrics for all categories
+					// are loaded, not only for category of current
+					// block.
+					store.clearLoadingTemplate(templateId)
+				}
+			})
 
-				const blockId = renderBlock.id
+			const anyFabricErrors = createMemo(() => Object.values(fabricLoadingSignals).map(f => f.error()))
 
-				// Parse blockId to extract template category, block category, and block ID
-				// Format: "TemplateCategory-BlockCategory-BlockId" or "TemplateCategory-BlockCategory-BlockId-mirror"
-				const isMirror = blockId.endsWith('-mirror')
-				const baseBlockId = isMirror ? blockId.slice(0, -7) : blockId // Remove "-mirror" if present
-				const parts = baseBlockId.split('-')
+			createEffect(() => {
+				if (anyFabricErrors().some(error => error !== null))
+					console.error('Error loading one or more fabrics for block:', blockId)
+				for (const error of anyFabricErrors()) if (error) console.error(error)
+			})
 
-				if (parts.length < 3) {
-					console.error('Invalid block ID format:', blockId)
-					continue
+			// Apply textures reactively as they load
+			createEffect(() => {
+				if (!fabricsLoaded()) return
+
+				// Create a map for mesh to meshes key
+				const meshToFabricMeshesMap = new Map<string, string>()
+				for (const meshesKey of Object.keys(fabricsForBlockCategory)) {
+					// CONTINUE ensure correct comment here:
+					// e.g. "Sleeve_Left-Sleeve_Right" -> ["Sleeve_Left", "Sleeve_Right"]
+					const meshArray = meshesKey.split('-')
+					for (const mesh of meshArray) meshToFabricMeshesMap.set(mesh, meshesKey)
 				}
 
-				if (blockId.startsWith('default-')) continue // Skip default garments, they have built-in fabrics for now
+				const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
+				const el = this.garmentModels[blockIndex]
+				const meshes = [...meshesInTree(el.three)]
 
-				const templateCategory = parts[1] as TemplateCategory
-				const blockCategory = parts[2] as BlockCategory
-				const template = store.selectedTemplates[templateCategory]
-				const templateId = template?._id
-				if (!templateId) throw new Error('Template ID missing for category:' + templateCategory)
-				const fabricsForBlockCategory = store.selectedGarments[templateCategory]?.[blockCategory]?.fabrics ?? {}
-				console.log('selectedGarments', store.selectedGarments)
+				for (const mesh of meshes) {
+					// Check if there's a specific fabric assigned to this mesh
+					const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
+					const meshesKey = meshToFabricMeshesMap.get(meshKey)
 
-				const fabricLoadingSignals: Record<string, ReturnType<typeof createFabricTexture>> = {}
+					const fabricToUse = fabricsForBlockCategory[meshesKey || 'default']
+					if (!fabricToUse) continue
 
-				// Create signals for new fabrics
-				// TODO (FIXME?) This is loading state for all fabrics of
-				// the template category and block category, but is it the
-				// fabrics for the render block we're iterating?
-				for (const fabric of Object.values(fabricsForBlockCategory)) {
-					const textureState = createFabricTexture(() => fabric)
-					fabricLoadingSignals[fabric._id] = textureState
+					const textureState = fabricLoadingSignals[fabricToUse._id]
+					if (!textureState) continue
 
-					// Track loading state per fabric
-					createEffect(() => {
-						console.log('fabric loading effect')
-						if (!textureState.loading()) return
-						store.addLoadingFabric(fabric._id)
-						onCleanup(() => store.removeLoadingFabric(fabric._id))
-					})
-				}
+					const textureSet = textureState.texture()!
+					const isLoading = textureState.loading()!
 
-				const fabricsLoaded = createMemo(() =>
-					Object.values(fabricLoadingSignals).every(f => !f.loading() && f.texture()),
-				)
+					// These must be true because of fabricsLoaded() check above
+					console.assert(textureSet, 'Texture set should be available here')
+					console.assert(!isLoading, 'Texture should not be loading here')
 
-				const templateBlocks = createMemo(
-					() => {
-						// prettier-ignore
-						console.log( 'templateBlocks', this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),)
-						return this.renderBlocks.filter(rb => rb.templateCategory === templateCategory)
-					},
-					undefined,
-					{equals: arrayEquals},
-				)
-
-				// CONTINUE It doesn't seem to make sense for this effect to be
-				// here because we're iterating *EVERY* render block, and
-				// thus we're clearing loading state based on the fabrics of
-				// a *single* block, not *all blocks* in the template. Is
-				// this right?
-				createEffect(() => {
-					// Check if all blocks for this template category are loaded
-					if (templateBlocks().length === 0)
-						throw new Error('No blocks found for template category: ' + templateCategory)
-
-					if (fabricsLoaded()) {
-						console.log('✅ CLEARING loading template:', templateId)
-						// The fabrics for the block loaded, clear the
-						// loading state for the *whole* template
-						// CONTINUE Is this right? Template should be done
-						// "loading" after all fabrics for all categories
-						// are loaded, not only for category of current
-						// block.
-						store.clearLoadingTemplate(templateId)
-					}
-				})
-
-				const anyFabricErrors = createMemo(() => Object.values(fabricLoadingSignals).map(f => f.error()))
-
-				createEffect(() => {
-					if (anyFabricErrors().some(error => error !== null))
-						console.error('Error loading one or more fabrics for block:', blockId)
-					for (const error of anyFabricErrors()) if (error) console.error(error)
-				})
-
-				// Apply textures reactively as they load
-				createEffect(() => {
-					if (!fabricsLoaded()) return
-
-					// Create a map for mesh to meshes key
-					const meshToFabricMeshesMap = new Map<string, string>()
-					for (const meshesKey of Object.keys(fabricsForBlockCategory)) {
-						// CONTINUE ensure correct comment here:
-						// e.g. "Sleeve_Left-Sleeve_Right" -> ["Sleeve_Left", "Sleeve_Right"]
-						const meshArray = meshesKey.split('-')
-						for (const mesh of meshArray) meshToFabricMeshesMap.set(mesh, meshesKey)
-					}
-
-					const allFabricMeshes = [...meshToFabricMeshesMap.keys()]
-					const el = garmentModels()[blockIndex]
-					const meshes = [...meshesInTree(el.three)]
-
-					for (const mesh of meshes) {
-						// Check if there's a specific fabric assigned to this mesh
-						const meshKey = allFabricMeshes.filter(fabricMesh => hasAncestorWithName(mesh, fabricMesh))[0]
-						const meshesKey = meshToFabricMeshesMap.get(meshKey)
-
-						const fabricToUse = fabricsForBlockCategory[meshesKey || 'default']
-						if (!fabricToUse) continue
-
-						const textureState = fabricLoadingSignals[fabricToUse._id]
-						if (!textureState) continue
-
-						const textureSet = textureState.texture()!
-						const isLoading = textureState.loading()!
-
-						// These must be true because of fabricsLoaded() check above
-						console.assert(textureSet, 'Texture set should be available here')
-						console.assert(!isLoading, 'Texture should not be loading here')
-
-						// CONTINUE revisit this to ensure materials/textures
-						// are properly disposed.
-						// Maybe we don't need to create a new material
-						// every time.
-						// OLD:
+					// CONTINUE revisit this to ensure materials/textures
+					// are properly disposed.
+					// Maybe we don't need to create a new material
+					// every time.
+					// OLD:
+					disposeMaterial(mesh)
+					mesh.material = new THREE.MeshPhysicalMaterial()
+					textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+					onCleanup(() => {
 						disposeMaterial(mesh)
-						mesh.material = new THREE.MeshPhysicalMaterial()
-						textureManager.applyTexturesToMaterial(mesh.material, textureSet)
-						onCleanup(() => {
-							disposeMaterial(mesh)
-							this.#resetMaterialProperties(el, mesh)
-							el.needsUpdate()
-						})
-						// NEW:
-						// textureManager.applyTexturesToMaterial(mesh.material, textureSet)
-						// onCleanup(() => {
-						// 	this.#resetMaterialProperties(el, mesh)
-						// 	el.needsUpdate()
-						// })
-					}
+						this.#resetMaterialProperties(el, mesh)
+						el.needsUpdate()
+					})
+					// NEW:
+					// textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+					// onCleanup(() => {
+					// 	this.#resetMaterialProperties(el, mesh)
+					// 	el.needsUpdate()
+					// })
+				}
 
-					el.needsUpdate()
-				})
-			}
-		})
+				el.needsUpdate()
+			})
+		}
+	}
 
-		createEffect(() => {
-			this.animsEnabled = store.selectedAnimation !== 'none'
+	@effect animationEffect() {
+		const anim = appAnims.find(val => val.id === store.selectedAnimation)
+		if (!anim || !anim.src) return
 
-			const anim = appAnims.find(val => val.id === store.selectedAnimation)
-			if (!anim || !anim.src) return
+		this.animName = anim.name
+		this.animSrc = new URL(anim.src, import.meta.url).href
+	}
 
-			this.animName = anim.name
-			this.animSrc = new URL(anim.src, import.meta.url).href
-		})
+	@effect sceneEffects() {
+		const lumeScene = this.lumeScene
+		if (!lumeScene) return
 
 		createEffect(() => {
-			if (!this.lumeScene) return
-			this.lumeScene.glRenderer!.toneMapping = THREE.ACESFilmicToneMapping
-		})
-
-		// Set up post-processing for outline effect
-		let renderPass: RenderPass | null = null
-
-		createEffect(() => {
-			if (!this.lumeScene) return
-			const renderer = this.lumeScene.glRenderer
+			const renderer = lumeScene.glRenderer
 			if (!renderer) return
 
-			const threeScene = this.lumeScene.three
-			const camera = this.lumeScene.threeCamera
+			renderer.toneMapping = THREE.ACESFilmicToneMapping
 
-			if (!threeScene || !camera) return
+			const threeScene = lumeScene.three
+			const camera = lumeScene.threeCamera
 
 			// Wait for valid size before initializing composer
 			const size = new THREE.Vector2()
@@ -679,7 +667,8 @@ export class DrippyScene extends Element {
 			if (!this.composer) {
 				this.composer = new EffectComposer(renderer)
 
-				renderPass = new RenderPass(threeScene, camera)
+				// Set up post-processing for outline effect
+				const renderPass = new RenderPass(threeScene, camera)
 				this.composer.addPass(renderPass)
 
 				this.outlinePass = new OutlinePass(size, threeScene, camera)
@@ -698,10 +687,10 @@ export class DrippyScene extends Element {
 				this.composer.addPass(outputPass)
 
 				// Store original drawScene
-				const originalDrawScene = this.lumeScene.drawScene.bind(this.lumeScene)
+				const originalDrawScene = lumeScene.drawScene.bind(lumeScene)
 
 				// Override the render loop to use composer
-				this.lumeScene.drawScene = () => {
+				lumeScene.drawScene = () => {
 					// Skip if size is invalid
 					const currentSize = new THREE.Vector2()
 					renderer.getSize(currentSize)
@@ -710,7 +699,7 @@ export class DrippyScene extends Element {
 					// Only use composer if we have objects to outline AND selectingPiece is set
 					if (this.outlinePass && store.selectingPiece && this.outlinePass.selectedObjects.length > 0) {
 						// Update cameras to current frame's camera
-						const currentCamera = this.lumeScene!.threeCamera!
+						const currentCamera = lumeScene.threeCamera!
 						if (renderPass) renderPass.camera = currentCamera
 						this.outlinePass.renderCamera = currentCamera
 						this.composer!.render()
@@ -722,14 +711,14 @@ export class DrippyScene extends Element {
 
 				// Handle resize
 				const resizeObserver = new ResizeObserver(() => {
-					if (!this.lumeScene || !this.composer) return
+					if (!lumeScene || !this.composer) return
 					const newSize = new THREE.Vector2()
 					renderer.getSize(newSize)
 					if (newSize.x > 0 && newSize.y > 0) {
 						this.composer.setSize(newSize.x, newSize.y)
 					}
 				})
-				resizeObserver.observe(this.lumeScene)
+				resizeObserver.observe(lumeScene)
 				onCleanup(() => resizeObserver.disconnect())
 			}
 		})
@@ -764,7 +753,7 @@ export class DrippyScene extends Element {
 			outlineUpdateTimeout = requestAnimationFrame(() => {
 				if (!this.outlinePass || store.selectingPiece !== selectingPiece) return
 
-				const models = garmentModels()
+				const models = this.garmentModels
 				if (models.length === 0) return
 
 				// "default" means all meshes in the garment for the currently selected template only
@@ -814,6 +803,19 @@ export class DrippyScene extends Element {
 
 		onCleanup(() => {
 			if (outlineUpdateTimeout) cancelAnimationFrame(outlineUpdateTimeout)
+		})
+	}
+
+	@effect avatarModelEffect() {
+		const {avatarModel} = this
+		if (!avatarModel) return
+
+		// Track selected avatar loading state
+		const avatarId = Symbol('avatar')
+		store.trackModelLoading(avatarId, avatarModel)
+
+		whenModelLoaded(avatarModel, () => {
+			store.showAnimationSelect = !!getArmatureObject(avatarModel.three)
 		})
 	}
 
@@ -1178,4 +1180,11 @@ function anyBlockIsLoadingInTemplateCategory(renderBlocks: RenderBlock[], templa
 		if (store.isBlockLoading(rb.block._id)) return true
 	}
 	return false
+}
+
+/** Returns an empty NodeList (`new NodeList` is not possible). */
+function emptyNodeList<T extends Element>() {
+	// select nothing with random selector
+	const emptySelector = '.__empty__' + Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
+	return document.querySelectorAll(emptySelector) as NodeListOf<T>
 }
