@@ -83,12 +83,6 @@ export class TabsProvider extends Element {
 		observer.observe(this)
 		onCleanup(() => observer.disconnect())
 	}
-	override attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null) {
-		if (name === 'selectedValue') {
-			this._activeValue = newValue || ''
-			this.updateActiveTab()
-		}
-	}
 
 	registerTrigger(trigger: TabsTrigger) {
 		this.triggers.push(trigger)
@@ -121,7 +115,7 @@ export class TabsProvider extends Element {
 	selectTab(value: string) {
 		if (value === this.activeValue) return
 
-		this._activeValue = value
+		this.selectedValue = value
 		this.setAttribute('selectedValue', value)
 		this.updateActiveTab()
 
