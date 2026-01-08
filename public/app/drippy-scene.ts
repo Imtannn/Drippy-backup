@@ -892,7 +892,7 @@ export class DrippyScene extends Element {
 						<lume-sphere visible="${() => store.isAdmin && !store.turnOffSettingsInSpace}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
 
 						<lume-spot-light
-							visible="false"
+							visible="true"
 							target="#avatar"
 							position="5 -5 1"
 							intensity="3"
@@ -915,25 +915,6 @@ export class DrippyScene extends Element {
 							></lume-sphere> -->
 
 						</lume-spot-light>
-
-						<lume-element3d position="0 0 -2.38">
-							<lume-rect-area-light debug="true" size="0.1 3.4 0" color="white" intensity="20" position="3.3 -2.1 0" rotation="0 90 0" mount-point="0.5 0.5 0.5">
-								<!-- <lume-plane size-mode="proportional proportional" size="1 1" opacity="0.5" sidedness="back"></lume-plane> -->
-							</lume-rect-area-light>
-
-							<lume-rect-area-light debug="true" size="0.1 3.4 0" color="white" intensity="20" position="-3.3 -2.1 0" rotation="0 -90 0" mount-point="0.5 0.5 0.5">
-								<!-- <lume-plane size-mode="proportional proportional" size="1 1" opacity="0.5" sidedness="back"></lume-plane> -->
-							</lume-rect-area-light>
-						</lume-element3d>
-						<lume-element3d position="0 0 -7.6">
-							<lume-rect-area-light debug="true" size="0.1 3.4 0" color="white" intensity="20" position="2.75 -2.1 0" rotation="0 90 0" mount-point="0.5 0.5 0.5">
-								<!-- <lume-plane size-mode="proportional proportional" size="1 1" opacity="0.5" sidedness="back"></lume-plane> -->
-							</lume-rect-area-light>
-
-							<lume-rect-area-light debug="true" size="0.1 3.4 0" color="white" intensity="20" position="-2.75 -2.1 0" rotation="0 -90 0" mount-point="0.5 0.5 0.5">
-								<!-- <lume-plane size-mode="proportional proportional" size="1 1" opacity="0.5" sidedness="back"></lume-plane> -->
-							</lume-rect-area-light>
-						</lume-element3d>
 
 						<lume-camera-rig
 							ref=${(el: CameraRig) => (this.cameraRig = el)}
