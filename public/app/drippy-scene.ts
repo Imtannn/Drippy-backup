@@ -916,56 +916,6 @@ export class DrippyScene extends Element {
 
 						</lume-spot-light>
 
-						<lume-spot-light
-							visible="false"
-							target="#avatar"
-							position="-5 -5 1"
-							intensity="3"
-							shadow-camera-top="${-shadowCameraSize}"
-							shadow-camera-bottom="${shadowCameraSize}"
-							shadow-camera-left="${-shadowCameraSize}"
-							shadow-camera-right="${shadowCameraSize}"
-							shadow-map-width="${shadowMapSize}"
-							shadow-map-height="${shadowMapSize}"
-							shadow-bias="${shadowBias}"
-							shadow-normal-bias="${shadowNormalBias}"
-							penumbra="${penumbra}"
-							angle="${spotAngle}"
-							shadow-radius="${shadowRadius}"
-						>
-
-							<!-- <lume-sphere size="1 1 1" color="deeppink" has="basic-material"
-								mount-point="0.5 0.5 0.5"
-								cast-shadow="false"
-							></lume-sphere> -->
-
-						</lume-spot-light>
-
-						<lume-spot-light
-							visible="false"
-							target="#avatar"
-							position="0 -5 5"
-							intensity="3"
-							shadow-camera-top="${-shadowCameraSize}"
-							shadow-camera-bottom="${shadowCameraSize}"
-							shadow-camera-left="${-shadowCameraSize}"
-							shadow-camera-right="${shadowCameraSize}"
-							shadow-map-width="${shadowMapSize}"
-							shadow-map-height="${shadowMapSize}"
-							shadow-bias="${shadowBias}"
-							shadow-normal-bias="${shadowNormalBias}"
-							penumbra="${penumbra}"
-							angle="${spotAngle}"
-							shadow-radius="${shadowRadius}"
-						>
-
-							<!-- <lume-sphere size="1 1 1" color="deeppink" has="basic-material"
-								mount-point="0.5 0.5 0.5"
-								cast-shadow="false"
-							></lume-sphere> -->
-
-						</lume-spot-light>
-
 						<lume-element3d position="0 0 -2.38">
 							<lume-rect-area-light debug="true" size="0.1 3.4 0" color="white" intensity="20" position="3.3 -2.1 0" rotation="0 90 0" mount-point="0.5 0.5 0.5">
 								<!-- <lume-plane size-mode="proportional proportional" size="1 1" opacity="0.5" sidedness="back"></lume-plane> -->
