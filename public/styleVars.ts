@@ -136,7 +136,7 @@ window.styleVars = styleVars
 
 	document.head.append(style)
 
-	// @ts-expect-error FIXME we're converting string values to number, so types not working well here yet.
 	for (const [key, val] of Object.entries(styleVars))
+		// @ts-expect-error FIXME we're converting string values to number, so types not working well here yet.
 		styleVars[key] = typeof val === 'string' && val.endsWith('%') ? Number(val.replace('%', '')) / 100 : val
 }
