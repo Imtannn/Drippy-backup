@@ -64,44 +64,24 @@ function rewriteHtmlContent(html: string, baseUrl: string, proxyPath: string): s
 	const origin = url.origin
 	const hostname = url.hostname
 
+	const rewriteAttribute = (content: string, attrName: string): string => {
+		const pattern = new RegExp(`(${attrName}=["'])(https?:\\/\\/[^"']+)(["'])`, 'gi')
+		return content.replace(pattern, (match, prefix, urlStr, suffix) => {
+			try {
+				const parsedUrl = new URL(urlStr)
+				if (parsedUrl.hostname === hostname || urlStr.startsWith(origin))
+					return `${prefix}${proxyPath}?url=${encodeURIComponent(urlStr)}${suffix}`
+			} finally {
+				// Invalid URL, skip
+			}
+			return match
+		})
+	}
+
 	// Rewrite src, href, action attributes
-	let rewritten = html
-
-	// Rewrite absolute URLs in src attributes (including protocol-relative URLs)
-	rewritten = rewritten.replace(/(src=["'])(https?:\/\/[^"']+)(["'])/gi, (match, prefix, urlStr, suffix) => {
-		try {
-			const parsedUrl = new URL(urlStr)
-			if (parsedUrl.hostname === hostname || urlStr.startsWith(origin))
-				return `${prefix}${proxyPath}?url=${encodeURIComponent(urlStr)}${suffix}`
-		} catch (e) {
-			// Invalid URL, skip
-		}
-		return match
-	})
-
-	// Rewrite absolute URLs in href attributes
-	rewritten = rewritten.replace(/(href=["'])(https?:\/\/[^"']+)(["'])/gi, (match, prefix, urlStr, suffix) => {
-		try {
-			const parsedUrl = new URL(urlStr)
-			if (parsedUrl.hostname === hostname || urlStr.startsWith(origin))
-				return `${prefix}${proxyPath}?url=${encodeURIComponent(urlStr)}${suffix}`
-		} catch (e) {
-			// Invalid URL, skip
-		}
-		return match
-	})
-
-	// Rewrite absolute URLs in action attributes
-	rewritten = rewritten.replace(/(action=["'])(https?:\/\/[^"']+)(["'])/gi, (match, prefix, urlStr, suffix) => {
-		try {
-			const parsedUrl = new URL(urlStr)
-			if (parsedUrl.hostname === hostname || urlStr.startsWith(origin))
-				return `${prefix}${proxyPath}?url=${encodeURIComponent(urlStr)}${suffix}`
-		} catch (e) {
-			// Invalid URL, skip
-		}
-		return match
-	})
+	let rewritten = rewriteAttribute(html, 'src')
+	rewritten = rewriteAttribute(rewritten, 'href')
+	rewritten = rewriteAttribute(rewritten, 'action')
 
 	// Remove CSP headers from meta tags
 	rewritten = rewritten.replace(/<meta[^>]*http-equiv=["']Content-Security-Policy["'][^>]*>/gi, '')
