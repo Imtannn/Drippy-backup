@@ -161,15 +161,22 @@ WebApp.rawHandlers.use(
 	},
 )
 
-/** Returns true if the file was found and sent, false otherwise. */
+/**
+ * Returns true if the file was found and and an attempt to send was made, false
+ * otherwise. If an attempt to send fails, it still returns true, to end the
+ * search for files.
+ */
 async function sendFile(res: ServerResponse, filePath: string): Promise<boolean> {
 	let exists = false
 
 	try {
 		exists = (await fs.promises.stat(filePath)).isFile()
 	} catch (e) {
-		failure(res, 'Failed to stat file: ', filePath, e)
-		return false
+		if (typeof e === 'object' && e && (e as {code: string}).code === 'ENOENT') exists = false
+		else {
+			console.error('Failed to stat file: ', filePath, e)
+			return true // return true to stop searching for other files
+		}
 	}
 
 	if (!exists) return false
@@ -179,7 +186,7 @@ async function sendFile(res: ServerResponse, filePath: string): Promise<boolean>
 		return true
 	} catch (e) {
 		failure(res, 'Failed to read and serve file: ', filePath, e)
-		return false
+		return true // return true to stop searching for other files
 	}
 }
 
