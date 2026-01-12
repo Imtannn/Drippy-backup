@@ -22,7 +22,9 @@
 		"typecheck": "lume typecheck",
 		"typecheck:watch": "lume typecheckWatch",
 		"prettier": "prettier --write .",
+		"prettier:check": "prettier --check .",
 		"lint": "eslint",
+		"test": "echo 'TODO write tests!'",
 		"fetch-combined-assets": "chmod +x scripts/run-combined-assets.sh && ./scripts/run-combined-assets.sh"
 	},
 	"overrides": {
