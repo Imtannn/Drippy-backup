@@ -2,6 +2,7 @@ import {Meteor} from 'meteor/meteor'
 import {Mongo} from 'meteor/mongo'
 
 export interface Visit {
+	_id: string
 	origin: string
 	route: string // The route is the path of the URL, e.g. '/foo/bar'
 	visits: number

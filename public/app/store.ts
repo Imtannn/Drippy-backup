@@ -115,14 +115,11 @@ class Store {
 		return usersCount()
 	}
 
-	get turnOffSettingsInSpace() {
-		return true
-		// return turnOffSettingsInSpace()
-	}
-
 	get wishlist() {
 		return wishlist()
 	}
+
+	showAdminContent = false
 
 	// FIXME this is not in sync with the address bar back/forward buttons
 	view = searchParams().get('space') && searchParams().get('avatar') ? ('template' as AppRoute) : ('scene' as AppRoute)
@@ -730,9 +727,6 @@ class Store {
 }
 
 export const store = new Store()
-
-// For debuggering
-;(window as any).drippyStore = store
 
 createNetworkEffect((status: ConnectionStatus) => {
 	store.setConnectionStatus = status

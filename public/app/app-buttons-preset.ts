@@ -243,6 +243,8 @@ export class AppButtonsPreset extends Element {
 										<person-button disabled=${() => this.disablePersonButton}></person-button>
 										<cube-button disabled=${() => this.disableCubeButton}></cube-button>
 									`}
+								<admin-button></admin-button>
+								${() => config.animation && html`<animation-select></animation-select>`}
 							</app-buttons-group>
 						</show-on-device>
 					`}
@@ -266,6 +268,7 @@ export class AppButtonsPreset extends Element {
 										<person-button disabled=${() => this.disablePersonButton}></person-button>
 										<cube-button disabled=${() => this.disableCubeButton}></cube-button>
 									`}
+								<admin-button></admin-button>
 								${() => config.animation && html`<animation-select></animation-select>`}
 							</app-buttons-group>
 						</div>
