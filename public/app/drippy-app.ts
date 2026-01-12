@@ -12,7 +12,6 @@ import type {
 	BlockFabricsMap,
 	CategoryBlocksMap,
 	PieceFabricsMap,
-	Space,
 	TemplateBlocksMap,
 	TemplateFabricsMap,
 	TemplateMap,
@@ -49,7 +48,7 @@ export class DrippyApp extends Element {
 	@effect loadParamsEffect() {
 		try {
 			// Load garments and fabrics from URL parameters if present
-			if (store.selectedSpace) this.#loadFromUrlParameters(store.selectedSpace)
+			if (store.selectedSpace) this.#loadFromUrlParameters()
 
 			if (store.isPreview || isPreview() === 'true') {
 				store.view = 'preview'
@@ -82,7 +81,7 @@ export class DrippyApp extends Element {
 	 * Load garments and fabrics from URL parameters
 	 * @param space - Selected space
 	 */
-	#loadFromUrlParameters(_space: Space) {
+	#loadFromUrlParameters() {
 		const garmentsParam = searchParams().get('garments')
 		const blocksParam = searchParams().get('blocks')
 		const fabricsParam = searchParams().get('fabrics')

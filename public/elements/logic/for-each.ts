@@ -39,8 +39,10 @@ export class ForEach extends Element {
 	 * and cause a failure when Solid tries to call it as a function with
 	 * arguments.
 	 */
-	@attribute content = (_item: unknown, _index: () => number) => html``
+	@attribute content = (_item: unknown, _index: () => number) => html`` // eslint-disable-line -- unused params for default value
+
 	override hasShadow = false
+
 	override template = () => html`
 		<${For} each=${() => this.items}>
 			${(item: unknown, index: () => number) => {
@@ -53,7 +55,8 @@ export class ForEach extends Element {
 			}}
 		</>
 	`
-	override css = `:host {display: contents}`
+
+	override css = /*css*/ `:host {display: contents}`
 }
 
 declare module 'solid-js' {

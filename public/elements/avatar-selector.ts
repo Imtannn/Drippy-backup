@@ -190,7 +190,7 @@ export class AvatarSelector extends Element {
 				store.setIsShowScene = false
 			}
 		} catch (error) {
-			// Error setting space
+			console.error(`Error setting space for gender ${gender}:`, error)
 		}
 	}
 
@@ -275,7 +275,7 @@ export class AvatarSelector extends Element {
 				if (fabricData.length > 0) store.setSelectedFabrics = fabricData
 			}
 		} catch (error) {
-			// Error setting blocks
+			console.error(`Error setting blocks for gender ${gender}:`, error)
 		}
 	}
 

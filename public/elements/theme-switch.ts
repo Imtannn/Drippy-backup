@@ -348,6 +348,7 @@ function createEvent(oldTheme = getUserThemeSelection(), newTheme = oldTheme, id
 	})
 }
 
+// eslint-disable-next-line -- global type def
 interface GlobalEventHandlersEventMap {
 	[CUSTOM_EVENT_NAME]: CustomEvent<{
 		originId: number
@@ -368,6 +369,7 @@ interface GlobalEventHandlersEventMap {
 // 	}
 // }
 
+// eslint-disable-next-line -- global type def
 interface HTMLElementTagNameMap {
 	[ThemeSwitch.elementName]: ThemeSwitch
 }

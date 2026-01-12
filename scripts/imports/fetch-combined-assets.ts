@@ -321,7 +321,6 @@ const COLLECTION_CONFIGS: {collection: string; rootFolderId: string; gender?: 'm
 	},
 ]
 
-const allFabrics: TODO[] = []
 const rootMaterials: Map<string, TODO> = new Map() // materialName -> material data
 const categoryMaterialAssignments: Map<string, Set<string>> = new Map() // categoryName -> Set of materialNames
 

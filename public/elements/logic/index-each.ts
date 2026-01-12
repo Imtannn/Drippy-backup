@@ -18,8 +18,10 @@ export class IndexEach extends Element {
 	@attribute items: unknown[] = []
 
 	/** A function that returns a template for each item. */
-	@attribute content = (_item: () => unknown, _index: number) => html``
+	@attribute content = (_item: () => unknown, _index: number) => html`` // eslint-disable-line -- unused params for default value
+
 	override hasShadow = false
+
 	override template = () => html`
 		<${Index} each=${() => this.items}>
 			${(item: () => unknown, index: number) => {
@@ -32,7 +34,8 @@ export class IndexEach extends Element {
 			}}
 		</>
 	`
-	override css = `:host {display: contents}`
+
+	override css = /*css*/ `:host {display: contents}`
 }
 
 declare module 'solid-js' {

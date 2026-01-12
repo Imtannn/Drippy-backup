@@ -18,7 +18,6 @@ export default defineConfig(
 			'@typescript-eslint/no-namespace': ['error', {allowDeclarations: true}],
 
 			// FIXME Re-enable these and fix errors. Too many errors means we write too much sloppy. :(
-			'@typescript-eslint/no-unused-vars': 'off',
 			'@typescript-eslint/no-explicit-any': 'off',
 		},
 	},

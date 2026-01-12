@@ -162,21 +162,24 @@ WebApp.rawHandlers.use(
 )
 
 /** Returns true if the file was found and sent, false otherwise. */
-async function sendFile(res: ServerResponse, filePath: string) {
+async function sendFile(res: ServerResponse, filePath: string): Promise<boolean> {
 	let exists = false
 
 	try {
 		exists = (await fs.promises.stat(filePath)).isFile()
-	} catch (e) {} // eslint-disable-line no-empty
+	} catch (e) {
+		failure(res, 'Failed to stat file: ', filePath, e)
+		return false
+	}
 
-	if (!exists) return
+	if (!exists) return false
 
 	try {
 		sendOk(res, await fs.promises.readFile(filePath))
 		return true
 	} catch (e) {
-		failure(res, 'Failed to read and serve file: ', filePath)
-		return true
+		failure(res, 'Failed to read and serve file: ', filePath, e)
+		return false
 	}
 }
 
