@@ -868,16 +868,9 @@ export class DrippyScene extends Element {
 				<lume-scene
 					ref=${(el: Scene) => {
 						this.lumeScene = el
-						el.three.environmentIntensity = 0.3
-						console.log('gl renderer?', el.glRenderer)
+						el.three.environmentIntensity = 0.6
 						setTimeout(() => {
-							if (el.glRenderer) {
-								el.glRenderer.shadowMap.type = THREE.VSMShadowMap
-								console.log('VSM shadow map enabled')
-								setTimeout(() => {
-									console.log('VSM shadow map (delayed)', el.glRenderer?.shadowMap.type)
-								}, 2000)
-							}
+							if (el.glRenderer) el.glRenderer.shadowMap.type = THREE.VSMShadowMap
 						})
 					}}
 					id="drippy-scene"
@@ -901,7 +894,7 @@ export class DrippyScene extends Element {
 						<lume-spot-light
 							visible="true"
 							target="#avatar"
-							position="2 -5 1"
+							position="2 -4.3 2"
 							intensity="3"
 							ref=${(el: SpotLight) => {
 								el.three.shadow.focus = 1
