@@ -32,7 +32,7 @@ export class HeartButton extends Element {
 							/>
 						</svg>`}
 		</button>`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		.heart-button {
 			background: #f6f6f6;
 			border: none;

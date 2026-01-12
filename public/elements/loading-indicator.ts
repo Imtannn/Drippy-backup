@@ -18,7 +18,7 @@ export class LoadingIndicator extends Element {
 			<div class="loader"></div>
 		</div>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			--opacity: 0;
 			opacity: var(--opacity);

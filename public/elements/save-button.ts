@@ -12,7 +12,7 @@ export class SaveButton extends Element {
 		this.dispatchEvent(new CustomEvent('click', {bubbles: true}))
 	}
 	override template = () => html` <button class="save-button" onclick=${this.#onClick}>Save</button> `
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		.save-button {
 			display: flex;
 			align-items: center;

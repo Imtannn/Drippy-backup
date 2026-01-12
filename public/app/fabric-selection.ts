@@ -206,7 +206,7 @@ export class FabricSelection extends Element {
 			`}
 		></for-each>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: contents;
 			display: flex;

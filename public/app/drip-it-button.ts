@@ -17,7 +17,7 @@ export class DripItButton extends Element {
 	override template = () => html`
 		<button class="drip-it-button" onclick=${this.#onClick} disabled=${() => this.buttonDisabled}>Drip it!</button>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		.drip-it-button {
 			display: flex;
 			align-items: center;

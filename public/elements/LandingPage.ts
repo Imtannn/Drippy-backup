@@ -126,7 +126,7 @@ export class LandingPage extends Element {
 			</div>
 		</footer>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			--font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 			--color-primary: #121316;

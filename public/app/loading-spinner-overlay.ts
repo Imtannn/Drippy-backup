@@ -10,7 +10,7 @@ export class LoadingSpinnerOverlay extends Element {
 		</div>
 	`
 
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: block;
 			position: absolute;

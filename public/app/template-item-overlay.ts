@@ -94,7 +94,7 @@ export class TemplateItemOverlay extends Element {
 					: null}
 		</div>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			position: absolute;
 			top: 0;

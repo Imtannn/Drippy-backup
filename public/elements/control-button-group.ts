@@ -22,7 +22,7 @@ export class ControlButtonGroup extends Element {
 			<slot></slot>
 		</div>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: inline-block;
 		}

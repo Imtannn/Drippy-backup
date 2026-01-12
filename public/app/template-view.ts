@@ -911,7 +911,7 @@ export class TemplateView extends Element {
 			onclose=${this.#onAvatarSwapCancel}
 		></avatar-swap-bottom-sheet>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		${onboardingStyles}
 		:host {
 			display: contents;

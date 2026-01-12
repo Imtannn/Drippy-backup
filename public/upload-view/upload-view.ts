@@ -1231,7 +1231,7 @@ export class UploadView extends Element {
 			></show-when>
 		</bottom-sheet>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		* {
 			box-sizing: border-box;
 			user-select: none;

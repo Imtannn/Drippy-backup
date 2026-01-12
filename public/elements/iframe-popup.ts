@@ -213,7 +213,7 @@ export class IframePopup extends Element {
 		></show-when>
 	`
 
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: block;
 		}

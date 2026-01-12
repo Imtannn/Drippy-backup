@@ -10,7 +10,7 @@ export class TopNavigation extends Element {
 			<slot></slot>
 		</nav>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: block;
 		}

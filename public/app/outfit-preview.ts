@@ -51,7 +51,7 @@ export class OutfitPreview extends Element {
 			</div>
 		</show-on-device>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: contents;
 		}

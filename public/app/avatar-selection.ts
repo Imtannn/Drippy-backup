@@ -122,7 +122,7 @@ export class AvatarSelection extends Element {
 			></show-when>
 		`
 	}
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: contents;
 		}

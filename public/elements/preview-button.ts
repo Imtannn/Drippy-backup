@@ -56,7 +56,7 @@ export class PreviewButton extends Element {
 	override template = () => html`
 		<button class="preview-button" onclick=${this.#onClick} disabled=${() => this.buttonDisabled}>Preview & buy</button>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		.preview-button {
 			display: flex;
 			align-items: center;

@@ -113,7 +113,7 @@ export class BlazeComponent extends Element {
 	override template = () => html`
 		<div id="container" part="container" ref=${(e: HTMLDivElement) => (this.#container = e)}></div>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: contents;
 		}

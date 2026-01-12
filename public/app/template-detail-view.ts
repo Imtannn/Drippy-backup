@@ -123,7 +123,7 @@ export class TemplateDetailView extends Element {
 			</button>
 		</div>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: block;
 			height: 100%;

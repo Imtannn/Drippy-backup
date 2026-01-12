@@ -439,7 +439,7 @@ export class SpacesSelection extends Element {
 			</style>
 		</dialog-element>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			position: absolute;
 			top: 0;

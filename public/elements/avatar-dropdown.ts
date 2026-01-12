@@ -89,7 +89,7 @@ export class AvatarDropdown extends Element {
 			</div>
 		</div>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: flex;
 			align-items: center;

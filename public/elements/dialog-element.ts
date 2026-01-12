@@ -91,7 +91,7 @@ export class DialogElement extends Element {
 		this.open = true
 	}
 	override template = () => html`<slot></slot>`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: none;
 		}

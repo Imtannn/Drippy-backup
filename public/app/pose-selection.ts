@@ -108,7 +108,7 @@ export class PoseSelection extends Element {
 
 		return html` <bottom-sheet> ${this.#renderPoseContent()} </bottom-sheet> `
 	}
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: contents;
 		}

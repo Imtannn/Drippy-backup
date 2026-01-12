@@ -249,7 +249,7 @@ export class LoginUI extends LumeElement {
 
 		<style prop:textContent=${() => this.customStyle}></style>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: contents;
 		}

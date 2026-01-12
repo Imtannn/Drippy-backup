@@ -216,12 +216,10 @@ Add your avatar configuration to `public/consts/avatars.ts`:
 ### Common Issues
 
 1. **Google Drive API Errors**
-
    - Verify API key is correct and has Drive API enabled
    - Check folder permissions (should be publicly accessible)
 
 2. **S3 Upload Failures**
-
    - Verify AWS credentials have proper permissions
    - Check bucket name and region configuration
    - Ensure files don't exceed size limits

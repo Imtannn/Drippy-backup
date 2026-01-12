@@ -24,7 +24,7 @@ export class BuyButton extends Element {
 
 	override template = () => html` <button class="buy-button">${this.buyIcon()} Shop it</button> `
 
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		.buy-button {
 			display: flex;
 			align-items: center;
