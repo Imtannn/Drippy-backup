@@ -117,7 +117,8 @@ export function setupProxyService() {
 				res.end('Invalid URL protocol')
 				return
 			}
-		} catch (e) {
+			// eslint-disable-next-line -- unused error
+		} catch (_e) {
 			res.writeHead(400, {'Content-Type': 'text/plain'})
 			res.end('Invalid URL')
 			return

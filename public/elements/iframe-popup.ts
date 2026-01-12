@@ -183,6 +183,7 @@ export class IframePopup extends Element {
 														this.close()
 													}
 												} catch (e) {
+													console.error('Error accessing iframe content, may be cross-origin:', e)
 													// Cross-origin, can't check - assume it's OK
 													this.isLoading = false
 												}
