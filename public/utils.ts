@@ -308,9 +308,7 @@ export function querySelectorAllDeep(root: Document | ShadowRoot, selector: stri
 
 	for (const el of elementsDeep(root)) {
 		const nodeList = roots.get(el)?.querySelectorAll(selector)
-		if (nodeList) {
-			results.push(...Array.from(nodeList))
-		}
+		if (nodeList) results.push(...Array.from(nodeList))
 	}
 
 	return results
@@ -635,7 +633,7 @@ export function setEnvMap(el: Element3D, env: string) {
 
 	if (!env) return
 
-	for (let material of materialsInTree(el.three)) {
+	for (const material of materialsInTree(el.three)) {
 		const mat = material as THREE.MeshPhysicalMaterial
 
 		mat.envMap = new THREE.TextureLoader().load(env, () => {
@@ -751,9 +749,8 @@ function calculateGarmentBoundingBox(category: string, lumeScene: any): THREE.Bo
 	})
 
 	// If no models found, return a default bounding box
-	if (boundingBox.isEmpty()) {
+	if (boundingBox.isEmpty())
 		boundingBox.setFromCenterAndSize(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.5, 1, 0.5))
-	}
 
 	return boundingBox
 }
@@ -805,9 +802,7 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 		const modelId = model.getAttribute('id') || ''
 		const shouldKeep = modelId.includes(category + '-')
 
-		if (!shouldKeep && model.three) {
-			visibilityStates.push({obj: model.three, originalVisible: model.three.visible})
-		}
+		if (!shouldKeep && model.three) visibilityStates.push({obj: model.three, originalVisible: model.three.visible})
 	})
 
 	// Use drippy-scene's avatarModel property to collect avatar parts
@@ -816,25 +811,20 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 			const childName = child.name || ''
 			const isGarment = childName.includes('LUME-ELEMENT3D')
 
-			if (!isGarment) {
-				visibilityStates.push({obj: child, originalVisible: child.visible})
-			}
+			if (!isGarment) visibilityStates.push({obj: child, originalVisible: child.visible})
 		})
 	}
 
 	// Collect scene/background
 	const sceneModel = lumeScene.querySelector('#scene')
-	if (sceneModel?.three) {
-		visibilityStates.push({obj: sceneModel.three, originalVisible: sceneModel.three.visible})
-	}
+	if (sceneModel?.three) visibilityStates.push({obj: sceneModel.three, originalVisible: sceneModel.three.visible})
 
 	// Collect shoes and any other non-cloth models
 	const allOtherModels = lumeScene.querySelectorAll('lume-gltf-model:not([data-cloth])')
 	allOtherModels.forEach((model: any) => {
 		const modelId = model.getAttribute('id') || 'unnamed'
-		if (model.three && modelId !== 'avatar' && modelId !== 'scene') {
+		if (model.three && modelId !== 'avatar' && modelId !== 'scene')
 			visibilityStates.push({obj: model.three, originalVisible: model.three.visible})
-		}
 	})
 
 	// Calculate camera position for the garment (without modifying the live scene)
@@ -911,9 +901,9 @@ export function hasAncestorWithName(object: THREE.Object3D, targetName: string):
 		if (
 			current.name.toLowerCase() === targetName.toLowerCase() ||
 			current.userData?.name?.toLowerCase() === targetName.toLowerCase()
-		) {
+		)
 			return true
-		}
+
 		current = current.parent as THREE.Object3D
 	}
 	return false

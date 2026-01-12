@@ -52,7 +52,7 @@ import './remix-overlay.js'
 import './template-detail-view.js'
 import './template-item-overlay.js'
 
-type TemplateViewAttributes = keyof {}
+type TemplateViewAttributes = keyof object // no attributes yet
 
 @element
 export class TemplateView extends Element {
@@ -95,11 +95,8 @@ export class TemplateView extends Element {
 			const effectiveCollection = store.getEffectiveCollection()
 			// For multi-collection spaces, allow null to show all templates
 			// For single-collection spaces, fallback to defaultCollection
-			if (spaceHasMultipleCollections(store.selectedSpace)) {
-				this.spaceCollection = effectiveCollection
-			} else {
-				this.spaceCollection = effectiveCollection ?? this.defaultCollection
-			}
+			if (spaceHasMultipleCollections(store.selectedSpace)) this.spaceCollection = effectiveCollection
+			else this.spaceCollection = effectiveCollection ?? this.defaultCollection
 		})
 
 		// Update template categories when templates change
@@ -113,26 +110,19 @@ export class TemplateView extends Element {
 				if (store.selectedSpace) {
 					// For wishlist filter, get templates from all collections in the space
 					const spaceCollections = getSpaceCollections(store.selectedSpace)
-					for (const collectionSlug of spaceCollections) {
-						collectionTemplates.push(...(templates[collectionSlug] ?? []))
-					}
-				} else {
-					// If no space selected, search across all collections
-					for (const collectionTemplatesList of Object.values(templates)) {
+					for (const collectionSlug of spaceCollections) collectionTemplates.push(...(templates[collectionSlug] ?? []))
+				}
+				// If no space selected, search across all collections
+				else {
+					for (const collectionTemplatesList of Object.values(templates))
 						collectionTemplates.push(...(collectionTemplatesList ?? []))
-					}
 				}
 			} else if (!this.spaceCollection && spaceHasMultipleCollections(store.selectedSpace)) {
 				// If no collection selected and multi-collection space, aggregate from all collections
 				const spaceCollections = getSpaceCollections(store.selectedSpace)
-				for (const collectionSlug of spaceCollections) {
-					collectionTemplates.push(...(templates[collectionSlug] ?? []))
-				}
-			} else if (this.spaceCollection) {
-				collectionTemplates = templates[this.spaceCollection] ?? []
-			} else {
-				collectionTemplates = templates[this.defaultCollection] ?? []
-			}
+				for (const collectionSlug of spaceCollections) collectionTemplates.push(...(templates[collectionSlug] ?? []))
+			} else if (this.spaceCollection) collectionTemplates = templates[this.spaceCollection] ?? []
+			else collectionTemplates = templates[this.defaultCollection] ?? []
 
 			// Filter by wishlist if showWishlistOnly is true
 			if (this.showWishlistOnly) {
@@ -143,9 +133,7 @@ export class TemplateView extends Element {
 				const user = store.user
 				if (user) {
 					const pendingId = pendingWishlistId()
-					if (pendingId) {
-						wishlistTemplateIds.add(pendingId)
-					}
+					if (pendingId) wishlistTemplateIds.add(pendingId)
 				}
 				collectionTemplates = collectionTemplates.filter(template => wishlistTemplateIds.has(template._id))
 			}
@@ -181,17 +169,11 @@ export class TemplateView extends Element {
 			if (!this.showWishlistOnly) {
 				const categories = Object.keys(this.templateCategories)
 				// Reset to first category if currently on wishlist
-				if (this.selectedTab === 'wishlist' || !this.selectedTab) {
-					if (categories.length > 0) {
-						this.selectedTab = categories[0] as TemplateCategory
-					}
-				}
-			} else {
+				if (this.selectedTab === 'wishlist' || !this.selectedTab)
+					if (categories.length > 0) this.selectedTab = categories[0] as TemplateCategory
+			} else if (this.selectedTab !== 'wishlist')
 				// When wishlist is activated, ensure selectedTab is set to 'wishlist'
-				if (this.selectedTab !== 'wishlist') {
-					this.selectedTab = 'wishlist' as TemplateCategory
-				}
-			}
+				this.selectedTab = 'wishlist' as TemplateCategory
 		})
 
 		// Close login dialog and auto-favorite pending template when user successfully logs in
@@ -221,9 +203,7 @@ export class TemplateView extends Element {
 								} else if (retryCount < maxRetries) {
 									retryCount++
 									checkTimeoutId = setTimeout(checkWishlist, 200)
-								} else {
-									setPendingWishlistId(null)
-								}
+								} else setPendingWishlistId(null)
 							}
 							checkTimeoutId = setTimeout(checkWishlist, 300)
 						} catch (error: unknown) {
@@ -493,21 +473,18 @@ export class TemplateView extends Element {
 
 	#onShowLogin = (e: Event) => {
 		const customEvent = e as CustomEvent<{templateId: string}>
-		if (customEvent.detail?.templateId) {
+		if (customEvent.detail?.templateId)
 			// Store pending template id (persisted to localStorage)
 			setPendingWishlistId(customEvent.detail.templateId)
-		}
+
 		this.showLoginDialog = true
 	}
 
 	#onCollectionSelect = (collection: Collection) => {
 		if (this.hasDragged) return
 		// Toggle: if already selected, unselect to show all templates
-		if (store.getEffectiveCollection() === collection.slug) {
-			store.setSelectedCollection = null
-		} else {
-			store.setSelectedCollection = collection.slug
-		}
+		if (store.getEffectiveCollection() === collection.slug) store.setSelectedCollection = null
+		else store.setSelectedCollection = collection.slug
 	}
 
 	#onHeartButtonClick = () => {
@@ -515,14 +492,11 @@ export class TemplateView extends Element {
 		this.showWishlistOnly = newWishlistState
 
 		// Set tab to "wishlist" when wishlist filter is activated, so tabs-content can display
-		if (newWishlistState) {
-			this.selectedTab = 'wishlist' as TemplateCategory
-		} else {
+		if (newWishlistState) this.selectedTab = 'wishlist' as TemplateCategory
+		else {
 			// Reset to first category when wishlist is deactivated
 			const categories = Object.keys(this.templateCategories)
-			if (categories.length > 0) {
-				this.selectedTab = categories[0] as TemplateCategory
-			}
+			if (categories.length > 0) this.selectedTab = categories[0] as TemplateCategory
 		}
 	}
 
@@ -541,11 +515,7 @@ export class TemplateView extends Element {
 
 		if (overridingCategories.length > 0) {
 			nextSelection = templateHelpers.omitTemplateCategories(nextSelection, overridingCategories)
-			for (const category of overridingCategories) {
-				if (store.selectedTemplates[category]) {
-					delete newTemplates[category]
-				}
-			}
+			for (const category of overridingCategories) if (store.selectedTemplates[category]) delete newTemplates[category]
 		}
 
 		newTemplates[template.category] = template
@@ -572,9 +542,8 @@ export class TemplateView extends Element {
 		if (
 			this.showTemplateOverlay &&
 			!e.composedPath().some(el => el instanceof Element && el.tagName === 'TEMPLATE-ITEM-OVERLAY')
-		) {
+		)
 			this.showTemplateOverlay = null
-		}
 	}
 
 	#onBottomSheetSnapChange = (e: CustomEvent) => {
@@ -738,9 +707,8 @@ export class TemplateView extends Element {
 						default-value=${() => this.selectedTab || ''}
 						ontabchange=${(e: CustomEvent) => {
 							// Disable wishlist filter when a tab is selected (not wishlist)
-							if (e.detail.value !== 'wishlist') {
-								this.showWishlistOnly = false
-							}
+							if (e.detail.value !== 'wishlist') this.showWishlistOnly = false
+
 							this.selectedTab = e.detail.value as TemplateCategory
 						}}
 					>
@@ -1315,8 +1283,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'template-view': ElementAttributes<TemplateView, TemplateViewAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'template-view': ElementAttributes<TemplateView, TemplateViewAttributes>
+		}
 	}
 }

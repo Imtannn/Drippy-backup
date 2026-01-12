@@ -159,11 +159,8 @@ export class AvatarSelector extends Element {
 	private findAvatarByGender(gender: 'male' | 'female'): string | null {
 		let avatar
 
-		if (gender === 'male') {
-			avatar = avatars.find(avatar => avatar.gender === gender && avatar.name === 'luka')
-		} else {
-			avatar = avatars.find(avatar => avatar.gender === gender && avatar.name === 'moidien')
-		}
+		if (gender === 'male') avatar = avatars.find(avatar => avatar.gender === gender && avatar.name === 'luka')
+		else avatar = avatars.find(avatar => avatar.gender === gender && avatar.name === 'moidien')
 
 		return avatar ? avatar.name : null
 	}
@@ -205,9 +202,7 @@ export class AvatarSelector extends Element {
 			const genderBlocks = block3DLanding[gender]
 			const collection = gender === 'male' ? '9heure19heure' : 'gap'
 
-			if (!genderBlocks || genderBlocks.length === 0) {
-				return
-			}
+			if (!genderBlocks || genderBlocks.length === 0) return
 
 			const sleevesBlock = genderBlocks.find(block => block.templateCategory === 'Top' && block.category === 'Sleeves')
 			const topBlock = genderBlocks.find(block => block.templateCategory === 'Top' && block.category === 'Bodice')
@@ -219,31 +214,23 @@ export class AvatarSelector extends Element {
 				// Find template by templateId from block
 				const templateId = sleevesBlock?.templateId || topBlock?.templateId
 				const topTemplate = templates[collection]?.find(t => t._id === String(templateId))
-				if (topTemplate) {
-					templateData.push(topTemplate)
-				}
+				if (topTemplate) templateData.push(topTemplate)
 			}
 			if (shirtBlock) {
 				// Find template by templateId from block
 				const templateId = shirtBlock.templateId
 				const shirtTemplate = templates[collection]?.find(t => t._id === String(templateId))
-				if (shirtTemplate) {
-					templateData.push(shirtTemplate)
-				}
+				if (shirtTemplate) templateData.push(shirtTemplate)
 			}
 			if (pantsBlock) {
 				// Find template by templateId from block
 				const templateId = pantsBlock.templateId
 				const pantsTemplate = templates[collection]?.find(t => t._id === String(templateId))
-				if (pantsTemplate) {
-					templateData.push(pantsTemplate)
-				}
+				if (pantsTemplate) templateData.push(pantsTemplate)
 			}
 
 			// Set templates to store
-			if (templateData.length > 0) {
-				store.selectedTemplates = Object.fromEntries(templateData.map(t => [t.category, t]))
-			}
+			if (templateData.length > 0) store.selectedTemplates = Object.fromEntries(templateData.map(t => [t.category, t]))
 
 			const blockData: Array<{block: Block; templateCategory: TemplateCategory}> = []
 			const fabricData: Array<{
@@ -285,9 +272,7 @@ export class AvatarSelector extends Element {
 			if (blockData.length > 0) {
 				store.setSelectedBlocks(blockData)
 
-				if (fabricData.length > 0) {
-					store.setSelectedFabrics = fabricData
-				}
+				if (fabricData.length > 0) store.setSelectedFabrics = fabricData
 			}
 		} catch (error) {
 			// Error setting blocks
@@ -334,9 +319,7 @@ export class AvatarSelector extends Element {
 		this.options.forEach(option => {
 			const optionEl = document.createElement('div')
 			optionEl.className = 'avatar-selector__option'
-			if (option.value === this.selectedOption.value) {
-				optionEl.classList.add('selected')
-			}
+			if (option.value === this.selectedOption.value) optionEl.classList.add('selected')
 
 			optionEl.style.display = 'flex'
 			optionEl.style.alignItems = 'center'
@@ -399,9 +382,7 @@ export class AvatarSelector extends Element {
 	}
 
 	private handleOutsideClick = (e: Event) => {
-		if (!this.contains(e.target as Node)) {
-			this.isOpen = false
-		}
+		if (!this.contains(e.target as Node)) this.isOpen = false
 	}
 
 	private handleToggle = (e: Event) => {
@@ -449,9 +430,8 @@ export class AvatarSelector extends Element {
 		document.removeEventListener('click', this.handleOutsideClick)
 
 		// Remove dropdown from body
-		if (this.dropdownElement && this.dropdownElement.parentNode) {
+		if (this.dropdownElement && this.dropdownElement.parentNode)
 			this.dropdownElement.parentNode.removeChild(this.dropdownElement)
-		}
 	}
 
 	private handleSelect = (option: AvatarOption) => {
@@ -461,12 +441,9 @@ export class AvatarSelector extends Element {
 		// Hide dropdown
 		const dropdown = this.dropdownElement || (this.querySelector('.avatar-selector__dropdown') as HTMLElement)
 		const icon = this.querySelector('.avatar-selector__icon') as HTMLElement
-		if (dropdown) {
-			dropdown.style.display = 'none'
-		}
-		if (icon) {
-			icon.classList.remove('rotated')
-		}
+		if (dropdown) dropdown.style.display = 'none'
+
+		if (icon) icon.classList.remove('rotated')
 
 		// Update checkmarks in dropdown
 		this.updateCheckmarks()
@@ -510,9 +487,7 @@ export class AvatarSelector extends Element {
 			const checkmark = optionEl.querySelector('.checkmark') as HTMLElement
 			const option = this.options[index]
 
-			if (checkmark && option) {
-				checkmark.style.display = option.value === this.selectedOption.value ? 'inline' : 'none'
-			}
+			if (checkmark && option) checkmark.style.display = option.value === this.selectedOption.value ? 'inline' : 'none'
 		})
 	}
 	override template = () => html`
@@ -711,16 +686,12 @@ export class AvatarSelector extends Element {
 
 	public selectByValue(value: string) {
 		const option = this.options.find(opt => opt.value === value)
-		if (option) {
-			this.handleSelect(option)
-		}
+		if (option) this.handleSelect(option)
 	}
 
 	public selectByGender(gender: 'male' | 'female') {
 		const option = this.options.find(opt => opt.gender === gender)
-		if (option) {
-			this.handleSelect(option)
-		}
+		if (option) this.handleSelect(option)
 	}
 
 	/**

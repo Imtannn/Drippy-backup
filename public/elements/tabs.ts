@@ -58,9 +58,7 @@ export class TabsProvider extends Element {
 		})
 
 		this.createEffect(() => {
-			if (this.isMounted === false) {
-				this.intersectedCallback()
-			}
+			if (this.isMounted === false) this.intersectedCallback()
 		})
 	}
 
@@ -156,9 +154,7 @@ export class TabsList extends Element {
 		this.role = 'tablist'
 
 		this.createEffect(() => {
-			if (this.provider) {
-				this.ariaOrientation = this.provider.tabOrientation || 'horizontal'
-			}
+			if (this.provider) this.ariaOrientation = this.provider.tabOrientation || 'horizontal'
 		})
 
 		this.provider = this.closest('tabs-provider') as TabsProvider
@@ -182,19 +178,21 @@ export class TabsList extends Element {
 
 			switch (e.key) {
 				case 'ArrowLeft':
-				case 'ArrowUp':
+				case 'ArrowUp': {
 					e.preventDefault()
 					const prevIndex = currentIndex > 0 ? currentIndex - 1 : triggers.length - 1
 					this.provider.selectTab(triggers[prevIndex].selectedValue)
 					triggers[prevIndex].focus()
 					break
+				}
 				case 'ArrowRight':
-				case 'ArrowDown':
+				case 'ArrowDown': {
 					e.preventDefault()
 					const nextIndex = currentIndex < triggers.length - 1 ? currentIndex + 1 : 0
 					this.provider.selectTab(triggers[nextIndex].selectedValue)
 					triggers[nextIndex].focus()
 					break
+				}
 				case 'Home':
 					e.preventDefault()
 					this.provider.selectTab(triggers[0].selectedValue)
@@ -224,9 +222,8 @@ export class TabsList extends Element {
 	}
 
 	#handleResize = () => {
-		if (this.resizeTimeout) {
-			clearTimeout(this.resizeTimeout)
-		}
+		if (this.resizeTimeout) clearTimeout(this.resizeTimeout)
+
 		this.resizeTimeout = setTimeout(() => {
 			this.updateIndicators()
 		}, 100)
@@ -238,9 +235,7 @@ export class TabsList extends Element {
 
 	updateIndicators() {
 		if (!this.provider) return
-		if (this.updateIndicatorsTimeout) {
-			clearTimeout(this.updateIndicatorsTimeout)
-		}
+		if (this.updateIndicatorsTimeout) clearTimeout(this.updateIndicatorsTimeout)
 
 		const triggers = this.querySelectorAll('tabs-trigger') as NodeListOf<TabsTrigger>
 		const activeTrigger = Array.from(triggers).find(trigger => {
@@ -249,9 +244,8 @@ export class TabsList extends Element {
 		})
 
 		if (activeTrigger && this.indicatorRef) {
-			if (this.provider.isMounted) {
-				this.positionIndicator(this.indicatorRef, activeTrigger)
-			} else {
+			if (this.provider.isMounted) this.positionIndicator(this.indicatorRef, activeTrigger)
+			else {
 				// If not mounted yet, try positioning anyway (element might be rendered but transitioning)
 				this.positionIndicator(this.indicatorRef, activeTrigger)
 				// Also schedule a retry for when it becomes mounted
@@ -270,9 +264,7 @@ export class TabsList extends Element {
 		if (trigger && this.hoverIndicatorRef) {
 			this.positionIndicator(this.hoverIndicatorRef, trigger)
 			this.hoverIndicatorRef.style.opacity = '1'
-		} else if (this.hoverIndicatorRef) {
-			this.hoverIndicatorRef.style.opacity = '0'
-		}
+		} else if (this.hoverIndicatorRef) this.hoverIndicatorRef.style.opacity = '0'
 	}
 
 	private positionIndicator(indicator: HTMLElement, trigger: TabsTrigger) {
@@ -352,9 +344,7 @@ export class TabsTrigger extends Element {
 		this.provider = this.closest('tabs-provider') as TabsProvider
 		this.tabsList = this.closest('tabs-list') as TabsList
 
-		if (this.provider) {
-			this.provider.registerTrigger(this)
-		}
+		if (this.provider) this.provider.registerTrigger(this)
 
 		this.#setupEventListeners()
 
@@ -365,29 +355,21 @@ export class TabsTrigger extends Element {
 	}
 	override disconnectedCallback() {
 		super.disconnectedCallback()
-		if (this.provider) {
-			this.provider.unregisterTrigger(this)
-		}
+		if (this.provider) this.provider.unregisterTrigger(this)
 	}
 
 	#setupEventListeners() {
 		this.addEventListener('mouseenter', () => {
-			if (this.tabsList && !this.isDisabled) {
-				this.tabsList.updateHoverIndicator(this)
-			}
+			if (this.tabsList && !this.isDisabled) this.tabsList.updateHoverIndicator(this)
 		})
 
 		this.addEventListener('focus', () => {
-			if (this.tabsList) {
-				this.tabsList.updateIndicators()
-			}
+			if (this.tabsList) this.tabsList.updateIndicators()
 		})
 	}
 
 	#handleClick = () => {
-		if (!this.isDisabled && this.provider) {
-			this.provider.selectTab(this.selectedValue)
-		}
+		if (!this.isDisabled && this.provider) this.provider.selectTab(this.selectedValue)
 	}
 
 	updateActive(active: boolean) {
@@ -503,9 +485,7 @@ export class TabsContent extends Element {
 	}
 	override disconnectedCallback() {
 		super.disconnectedCallback()
-		if (this.provider) {
-			this.provider.unregisterContent(this)
-		}
+		if (this.provider) this.provider.unregisterContent(this)
 	}
 
 	updateActive(active: boolean) {

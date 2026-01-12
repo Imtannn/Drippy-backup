@@ -25,17 +25,13 @@ export class FabricSelection extends Element {
 
 		this.createEffect(() => {
 			void this.selectedTemplateCategory
-			if (!store.selectingPiece && this.pieceSelections.length > 0) {
-				store.setSelectingPiece = this.pieceSelections[0]
-			}
+			if (!store.selectingPiece && this.pieceSelections.length > 0) store.setSelectingPiece = this.pieceSelections[0]
 		})
 
 		// Reset category tab when piece or fabrics change
 		this.createEffect(() => {
 			const categories = this.#getFabricCategories()
-			if (categories.length > 0 && !categories.includes(this.selectedCategoryTab)) {
-				this.selectedCategoryTab = 'All'
-			}
+			if (categories.length > 0 && !categories.includes(this.selectedCategoryTab)) this.selectedCategoryTab = 'All'
 		})
 	}
 	override disconnectedCallback() {
@@ -121,20 +117,16 @@ export class FabricSelection extends Element {
 	#getFabricCategories = (): (FabricCategory | 'All')[] => {
 		const fabrics = this.availableFabrics[store.selectingPiece || 'default'] || []
 		const categoriesSet = new Set<FabricCategory>()
-		for (const fabric of fabrics) {
-			if (fabric.category) {
-				categoriesSet.add(fabric.category)
-			}
-		}
+		for (const fabric of fabrics) if (fabric.category) categoriesSet.add(fabric.category)
+
 		const categories = Array.from(categoriesSet).sort()
 		return categories.length > 1 ? ['All', ...categories] : ['All']
 	}
 
 	#getFilteredFabrics = (): Fabric[] => {
 		const fabrics = this.availableFabrics[store.selectingPiece || 'default'] || []
-		if (this.selectedCategoryTab === 'All') {
-			return fabrics
-		}
+		if (this.selectedCategoryTab === 'All') return fabrics
+
 		return fabrics.filter(fabric => fabric.category === this.selectedCategoryTab)
 	}
 
@@ -297,10 +289,16 @@ export class FabricSelection extends Element {
 	`
 }
 
-export interface HTMLElementTagNameMap {
-	'fabric-selection': FabricSelection
+declare global {
+	interface HTMLElementTagNameMap {
+		'fabric-selection': FabricSelection
+	}
 }
 
-export interface IntrinsicElements {
-	'fabric-selection': ElementAttributes<FabricSelection, FabricSelectionAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'fabric-selection': ElementAttributes<FabricSelection, FabricSelectionAttributes>
+		}
+	}
 }

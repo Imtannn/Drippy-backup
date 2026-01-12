@@ -26,6 +26,4 @@ if (Meteor.isServer) {
 			await Visits.upsertAsync({origin, route: hrefMinusOrigin}, {$inc: {visits: 1}})
 		},
 	})
-} else {
-	Meteor.subscribe('Visits')
-}
+} else Meteor.subscribe('Visits')

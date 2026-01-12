@@ -201,9 +201,7 @@ export class DrippyScene extends Element {
 		// Mobile: always enable vertical drag, Desktop: only with shift key
 		if (isMobile || e.shiftKey) {
 			this.isVerticalPan = true
-			if (!isMobile) {
-				e.stopImmediatePropagation()
-			}
+			if (!isMobile) e.stopImmediatePropagation()
 		}
 	}
 
@@ -213,16 +211,12 @@ export class DrippyScene extends Element {
 		// Scale the movement - dragging down increases Y (looks up), dragging up decreases Y (looks down)
 		this.cameraY -= e.movementY / 1000
 		this.cameraY = clamp(this.cameraY, -2, 0)
-		if (!isMobile) {
-			e.stopImmediatePropagation()
-		}
+		if (!isMobile) e.stopImmediatePropagation()
 	}
 
 	#handlePointerUp = (e: PointerEvent) => {
 		const isMobile = !isDesktop()
-		if (this.isVerticalPan && !isMobile) {
-			e.stopImmediatePropagation()
-		}
+		if (this.isVerticalPan && !isMobile) e.stopImmediatePropagation()
 
 		this.isVerticalPan = false
 	}
@@ -255,11 +249,11 @@ export class DrippyScene extends Element {
 			...this._defaultRenderBlocks,
 			...blocks.flatMap(block => {
 				const id: RenderBlockId = `${block.collection?.replace(/-/g, '_')}-${block.templateCategory}-${block.category}-${block._id}`
-				let renderBlock = getRenderBlock(id, block, block.templateCategory)
+				const renderBlock = getRenderBlock(id, block, block.templateCategory)
 
 				if (block.category === 'Sleeves') {
 					const idMirror: RenderBlockId = `${id}-mirror`
-					let renderBlockMirror = getRenderBlock(idMirror, block, block.templateCategory)
+					const renderBlockMirror = getRenderBlock(idMirror, block, block.templateCategory)
 					return [renderBlock, renderBlockMirror]
 				}
 
@@ -348,13 +342,10 @@ export class DrippyScene extends Element {
 				store.view === 'share' ||
 				store.view === 'template'
 
-			if (isPanelCollapsed) {
-				this.style.setProperty('--sceneTranslateX', 'translateX(0)')
-			} else if (shouldShiftLeft) {
+			if (isPanelCollapsed) this.style.setProperty('--sceneTranslateX', 'translateX(0)')
+			else if (shouldShiftLeft)
 				this.style.setProperty('--sceneTranslateX', 'translateX(calc(-1 * var(--sceneDesktopOffset)))')
-			} else {
-				this.style.setProperty('--sceneTranslateX', 'translateX(var(--sceneDesktopOffset))')
-			}
+			else this.style.setProperty('--sceneTranslateX', 'translateX(var(--sceneDesktopOffset))')
 		}
 	}
 
@@ -383,9 +374,8 @@ export class DrippyScene extends Element {
 				}
 
 				if (this.isLoading) {
-					if (loadingCount === 2) {
-						this.loadingProgress = 10
-					} else if (loadingCount === 1) {
+					if (loadingCount === 2) this.loadingProgress = 10
+					else if (loadingCount === 1) {
 						if (previousCount === 2 || previousCount === -1) {
 							// animate smoothly through multiple steps
 							const progressStages = [
@@ -406,9 +396,7 @@ export class DrippyScene extends Element {
 
 							progressStages.forEach(({progress, delay}) => {
 								const timeoutId = window.setTimeout(() => {
-									if (store.drippySceneLoads.length === 1) {
-										this.loadingProgress = progress
-									}
+									if (store.drippySceneLoads.length === 1) this.loadingProgress = progress
 								}, delay)
 								progressTimeouts.push(timeoutId)
 							})
@@ -432,18 +420,16 @@ export class DrippyScene extends Element {
 					this.loadingProgress = 100
 					this.isLoading = false
 					previousCount = -1
-				} else {
+				} else
 					// Reset state even if loader was never shown
 					previousCount = -1
-				}
 			}
 		})
 
 		// Cleanup timeouts on component unmount
 		onCleanup(() => {
-			if (loaderTimeout !== undefined) {
-				clearTimeout(loaderTimeout)
-			}
+			if (loaderTimeout !== undefined) clearTimeout(loaderTimeout)
+
 			progressTimeouts.forEach(timeoutId => clearTimeout(timeoutId))
 		})
 	}
@@ -546,7 +532,7 @@ export class DrippyScene extends Element {
 				// Check if all blocks for this template category are loaded
 				if (templateBlocks().length === 0) throw new Error('No blocks found for template category: ' + templateCategory)
 
-				if (fabricsLoaded()) {
+				if (fabricsLoaded())
 					// The fabrics for the block loaded, clear the
 					// loading state for the *whole* template
 					// CONTINUE Is this right? Template should be done
@@ -554,7 +540,6 @@ export class DrippyScene extends Element {
 					// are loaded, not only for category of current
 					// block.
 					store.clearLoadingTemplate(templateId)
-				}
 			})
 
 			const anyFabricErrors = createMemo(() => Object.values(fabricLoadingSignals).map(f => f.error()))
@@ -692,10 +677,9 @@ export class DrippyScene extends Element {
 						if (renderPass) renderPass.camera = currentCamera
 						this.outlinePass.renderCamera = currentCamera
 						this.composer!.render()
-					} else {
+					} else
 						// Fall back to original rendering when no outline needed
 						originalDrawScene()
-					}
 				}
 
 				// Handle resize
@@ -703,9 +687,7 @@ export class DrippyScene extends Element {
 					if (!lumeScene || !this.composer) return
 					const newSize = new THREE.Vector2()
 					renderer.getSize(newSize)
-					if (newSize.x > 0 && newSize.y > 0) {
-						this.composer.setSize(newSize.x, newSize.y)
-					}
+					if (newSize.x > 0 && newSize.y > 0) this.composer.setSize(newSize.x, newSize.y)
 				})
 				resizeObserver.observe(lumeScene)
 				onCleanup(() => resizeObserver.disconnect())
@@ -769,9 +751,8 @@ export class DrippyScene extends Element {
 					garmentModel.three.traverse((obj: THREE.Object3D) => {
 						if (!(obj as THREE.Mesh).isMesh) return
 
-						if (isDefault) {
-							selectedMeshes.push(obj)
-						} else {
+						if (isDefault) selectedMeshes.push(obj)
+						else {
 							for (const pieceName of pieceNames) {
 								if (hasAncestorWithName(obj, pieceName)) {
 									selectedMeshes.push(obj)

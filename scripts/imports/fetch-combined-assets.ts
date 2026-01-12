@@ -369,6 +369,7 @@ async function uploadToS3(
 					withoutEnlargement: true,
 				})
 			}
+
 			if (toWebp) {
 				uploadBuffer = await sharpInstance.webp({lossless: lossless, quality: lossless ? 100 : 75}).toBuffer()
 				uploadContentType = 'image/webp'
@@ -474,9 +475,8 @@ async function processOptionMaterials(optionMaterialsFolder: TODO): Promise<stri
 
 		if (rootMaterials.has(materialLabel)) {
 			const rootMaterial = rootMaterials.get(materialLabel)!
-			if (!rootMaterial._id) {
-				rootMaterial._id = uuidv4()
-			}
+			if (!rootMaterial._id) rootMaterial._id = uuidv4()
+
 			console.log(
 				`      🔧 Adding option material: "${materialRef.name}" -> "${materialLabel}" (fabricId: ${rootMaterial._id})`,
 			)
@@ -621,12 +621,9 @@ async function processTemplateFolder(
 		item => item.mimeType === 'application/vnd.google-apps.folder' && normalizeName(item.name) === 'Materials',
 	)
 
-	let materialFolder = materialFolders?.[0] as TODO
-	if (!materialFolder) {
-		console.warn(`  ⚠️  No material folders found for ${templateFolder.name}`)
-	} else {
-		console.log(`    Found ${materialFolder.name} material folder`)
-	}
+	const materialFolder = materialFolders?.[0] as TODO
+	if (!materialFolder) console.warn(`  ⚠️  No material folders found for ${templateFolder.name}`)
+	else console.log(`    Found ${materialFolder.name} material folder`)
 
 	// Find Extra Materials folder in template
 	const extraMaterialsFolders = templateContents.filter(
@@ -634,9 +631,7 @@ async function processTemplateFolder(
 	)
 
 	let extraMaterials: {mesh: string; materialId: string}[] = []
-	if (extraMaterialsFolders.length > 0) {
-		extraMaterials = await processExtraMaterialsFolder(extraMaterialsFolders[0])
-	}
+	if (extraMaterialsFolders.length > 0) extraMaterials = await processExtraMaterialsFolder(extraMaterialsFolders[0])
 
 	// Find Option folders for exclusive options
 	const optionMaterialsFolders = templateContents.filter(
@@ -656,9 +651,7 @@ async function processTemplateFolder(
 	console.log(`    Found ${optionBlockFolders.length} option block folders`)
 
 	let materialContents: TODO[] = []
-	if (materialFolder) {
-		materialContents = await fetchFolderContents(materialFolder.id)
-	}
+	if (materialFolder) materialContents = await fetchFolderContents(materialFolder.id)
 
 	// Find material reference folders in template
 	const materialReferenceFolders = materialContents.filter(
@@ -671,9 +664,8 @@ async function processTemplateFolder(
 	}
 
 	console.log(`    Found ${blockTypeFolders.length} block type folders`)
-	if (materialReferenceFolders.length > 0) {
+	if (materialReferenceFolders.length > 0)
 		console.log(`    Found ${materialReferenceFolders.length} material reference folders`)
-	}
 
 	// Download template thumbnail
 	const templateThumbnailBuffer = await downloadFromDrive(templateThumbnail.id)
@@ -725,9 +717,7 @@ async function processTemplateFolder(
 			// Extract only numeric part from price (including decimals)
 			const priceMatch = namePartsWithoutGender[1].trim().match(/\d+(\.\d+)?/)
 			templatePrice = priceMatch ? priceMatch[0] : 'N/A'
-		} else {
-			templateName = normalizeName(nameWithoutGender)
-		}
+		} else templateName = normalizeName(nameWithoutGender)
 	} else {
 		// No gender prefix, parse normally
 		const folderNameParts = templateFolder.name.split('-')
@@ -736,9 +726,7 @@ async function processTemplateFolder(
 			// Extract only numeric part from price (including decimals)
 			const priceMatch = folderNameParts[1].trim().match(/\d+(\.\d+)?/)
 			templatePrice = priceMatch ? priceMatch[0] : 'N/A'
-		} else {
-			templateName = normalizeName(templateFolder.name)
-		}
+		} else templateName = normalizeName(templateFolder.name)
 	}
 
 	// Process option materials for fabricOptions
@@ -948,9 +936,7 @@ function generateFabricData(collection: string): TODO {
 		console.log(`   📏 Template categories size: ${material.templateCategories.size}`)
 
 		const fabricId = material._id || uuidv4()
-		if (!material._id) {
-			material._id = fabricId
-		}
+		if (!material._id) material._id = fabricId
 
 		fabrics[collection] = fabrics[collection] || []
 		fabrics[collection].push({
@@ -1159,8 +1145,6 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 		let thumbUrl = ''
 
 		// Parse material name and texture settings from folder name: "${materialCategory} - ${materialName} <scaleX, scaleY, offsetX, offsetY, coef, rotate>"
-		let materialCategory: string
-		let materialName: string
 		let textureSettings: {
 			scaleX: number
 			scaleY: number
@@ -1190,9 +1174,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 				// Remove texture settings from name for parsing
 				nameWithoutSettings = materialFolder.name.replace(/\s*<[^>]+>\s*$/, '')
 				console.log(`    🎛️ Found texture settings: ${JSON.stringify(textureSettings)}`)
-			} else {
-				console.warn(`    ⚠️ Invalid texture settings format: ${settingsStr}. Expected 6 numeric values.`)
-			}
+			} else console.warn(`    ⚠️ Invalid texture settings format: ${settingsStr}. Expected 6 numeric values.`)
 		}
 
 		const folderNameParts = nameWithoutSettings.split('-')
@@ -1201,8 +1183,8 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 			continue
 		}
 
-		materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
-		materialName = capitalize(normalizeName(folderNameParts[1].trim()))
+		const materialCategory = capitalize(normalizeName(folderNameParts[0].trim()))
+		const materialName = capitalize(normalizeName(folderNameParts[1].trim()))
 		const materialLabel = `${materialCategory} - ${materialName}`
 
 		// Check if already processed
@@ -1257,17 +1239,11 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 
 				// Map files based on name
 				const fileName = path.basename(file.name, path.extname(file.name)).toLowerCase()
-				if (fileName.includes('normal')) {
-					textureUrls.normal = fileS3Url
-				} else if (fileName.includes('base')) {
-					textureUrls.baseColor = fileS3Url
-				} else if (fileName.includes('displace')) {
-					textureUrls.displacement = fileS3Url
-				} else if (fileName.includes('rough')) {
-					textureUrls.roughness = fileS3Url
-				} else if (fileName.includes('alpha')) {
-					textureUrls.alpha = fileS3Url
-				}
+				if (fileName.includes('normal')) textureUrls.normal = fileS3Url
+				else if (fileName.includes('base')) textureUrls.baseColor = fileS3Url
+				else if (fileName.includes('displace')) textureUrls.displacement = fileS3Url
+				else if (fileName.includes('rough')) textureUrls.roughness = fileS3Url
+				else if (fileName.includes('alpha')) textureUrls.alpha = fileS3Url
 
 				console.log(`     ✅ Uploaded texture ${file.name}`)
 			} catch (error) {
@@ -1327,9 +1303,8 @@ async function scanCategoryMaterials(categoryMaterialsFolder: TODO, categoryName
 
 		console.log(`    🔧 Normalizing material reference: "${materialRef.name}" -> "${materialLabel}"`)
 
-		if (!categoryMaterialAssignments.has(categoryName)) {
-			categoryMaterialAssignments.set(categoryName, new Set())
-		}
+		if (!categoryMaterialAssignments.has(categoryName)) categoryMaterialAssignments.set(categoryName, new Set())
+
 		categoryMaterialAssignments.get(categoryName)!.add(materialLabel)
 		console.log(`    ✅ Assigned material ${materialLabel} to category ${categoryName}`)
 	}
@@ -1407,9 +1382,8 @@ async function processExtraMaterialsFolder(extraMaterialsFolder: TODO): Promise<
 		}
 
 		const rootMaterial = rootMaterials.get(materialLabel)!
-		if (!rootMaterial._id) {
-			rootMaterial._id = uuidv4()
-		}
+		if (!rootMaterial._id) rootMaterial._id = uuidv4()
+
 		const fabricId = rootMaterial._id
 
 		console.log(`      ✅ Mesh "${meshName}" -> Material "${materialLabel}" (fabricId: ${fabricId})`)
@@ -1417,9 +1391,8 @@ async function processExtraMaterialsFolder(extraMaterialsFolder: TODO): Promise<
 		const sanitizedMeshName = THREE.PropertyBinding.sanitizeNodeName(meshName)
 
 		// Group meshes by materialId
-		if (!materialToMeshes.has(fabricId)) {
-			materialToMeshes.set(fabricId, {meshes: [], materialLabel})
-		}
+		if (!materialToMeshes.has(fabricId)) materialToMeshes.set(fabricId, {meshes: [], materialLabel})
+
 		materialToMeshes.get(fabricId)!.meshes.push(sanitizedMeshName)
 	}
 
@@ -1439,9 +1412,7 @@ async function processExtraMaterialsFolder(extraMaterialsFolder: TODO): Promise<
 
 async function processCategoryMaterialsFolder(materialsFolder: TODO, categoryName: string): Promise<void> {
 	// Process category Materials folder for material assignments if it exists
-	if (materialsFolder) {
-		await scanCategoryMaterials(materialsFolder, categoryName)
-	}
+	if (materialsFolder) await scanCategoryMaterials(materialsFolder, categoryName)
 }
 
 // Apply category material assignments to populate templateCategories
@@ -1527,11 +1498,8 @@ async function main(): Promise<void> {
 			console.log(`📁 Found ${categoryFolders.length} category folders`)
 
 			// Step 1: Process root Materials folder
-			if (rootMaterialsFolder) {
-				await processRootMaterials(rootMaterialsFolder, collection)
-			} else {
-				console.warn(`⚠️  No root Materials folder found for collection ${collection}`)
-			}
+			if (rootMaterialsFolder) await processRootMaterials(rootMaterialsFolder, collection)
+			else console.warn(`⚠️  No root Materials folder found for collection ${collection}`)
 
 			const collectionProcessedData: TODO[] = []
 
@@ -1550,16 +1518,13 @@ async function main(): Promise<void> {
 				console.log(`  Found ${templateFolders.length} template folders`)
 
 				// Step 2a: Scan category Materials folder for material assignments
-				if (categoryMaterialsFolder) {
-					await processCategoryMaterialsFolder(categoryMaterialsFolder, categoryFolder.name)
-				}
+				if (categoryMaterialsFolder) await processCategoryMaterialsFolder(categoryMaterialsFolder, categoryFolder.name)
 
 				// Step 2b: Process each template in this category
 				for (const templateFolder of templateFolders) {
 					const processedTemplate = await processTemplateFolder(templateFolder, categoryFolder.name, collection, gender)
-					if (processedTemplate.template) {
-						collectionProcessedData.push(processedTemplate)
-					}
+					if (processedTemplate.template) collectionProcessedData.push(processedTemplate)
+
 					allUnsucceeded.push(...processedTemplate.unsucceeded)
 					// Option blocks will be handled separately in block generation
 				}

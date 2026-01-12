@@ -111,14 +111,10 @@ class TextureManager {
 		const cacheKey = `${url}`
 
 		// Return cached texture if available
-		if (this.textureCache.has(cacheKey)) {
-			return this.textureCache.get(cacheKey)!
-		}
+		if (this.textureCache.has(cacheKey)) return this.textureCache.get(cacheKey)!
 
 		// Return existing loading promise if in progress
-		if (this.loadingPromises.has(cacheKey)) {
-			return this.loadingPromises.get(cacheKey)!
-		}
+		if (this.loadingPromises.has(cacheKey)) return this.loadingPromises.get(cacheKey)!
 
 		// Start loading and cache the promise
 		const loadingPromise = this.createBaseTexture(url)
@@ -126,9 +122,8 @@ class TextureManager {
 
 		try {
 			const cachedTexture = await loadingPromise
-			if (cachedTexture) {
-				this.textureCache.set(cacheKey, cachedTexture)
-			}
+			if (cachedTexture) this.textureCache.set(cacheKey, cachedTexture)
+
 			return cachedTexture
 		} finally {
 			this.loadingPromises.delete(cacheKey)
@@ -144,13 +139,9 @@ class TextureManager {
 		texture.needsUpdate = true
 
 		// Apply offset and rotation
-		if (config.offset) {
-			texture.offset.set(config.offset[0], config.offset[1])
-		}
+		if (config.offset) texture.offset.set(config.offset[0], config.offset[1])
 
-		if (config.rotate) {
-			texture.rotation = config.rotate
-		}
+		if (config.rotate) texture.rotation = config.rotate
 
 		// Calculate repeat based on texture aspect ratio and coef
 		let repeatX = config.repeat[0]
@@ -162,11 +153,8 @@ class TextureManager {
 		}
 
 		// Adjust for aspect ratio
-		if (cachedTexture.aspectRatio > 1) {
-			repeatY /= cachedTexture.aspectRatio
-		} else {
-			repeatX *= cachedTexture.aspectRatio
-		}
+		if (cachedTexture.aspectRatio > 1) repeatY /= cachedTexture.aspectRatio
+		else repeatX *= cachedTexture.aspectRatio
 
 		texture.repeat.set(repeatX, repeatY)
 
@@ -207,21 +195,15 @@ class TextureManager {
 			rotate: this.defaultConfig.rotate,
 		}
 
-		if (fabric.scaleX) {
-			config.repeat[0] = 60 / fabric.scaleX
-		}
-		if (fabric.scaleY) {
-			config.repeat[1] = 60 / fabric.scaleY
-		}
-		if (fabric.offsetX) {
-			config.offset[0] = fabric.offsetX
-		}
-		if (fabric.offsetY) {
-			config.offset[1] = fabric.offsetY
-		}
-		if (fabric.rotate) {
-			config.rotate = fabric.rotate
-		}
+		if (fabric.scaleX) config.repeat[0] = 60 / fabric.scaleX
+
+		if (fabric.scaleY) config.repeat[1] = 60 / fabric.scaleY
+
+		if (fabric.offsetX) config.offset[0] = fabric.offsetX
+
+		if (fabric.offsetY) config.offset[1] = fabric.offsetY
+
+		if (fabric.rotate) config.rotate = fabric.rotate
 
 		const [baseColor, normal, displacement, roughness, alpha] = await Promise.all([
 			this.getTexture(fabric.baseColor || '', config),
@@ -252,9 +234,7 @@ class TextureManager {
 		material.alphaMap = textureSet.alpha || null
 
 		// Configure material properties
-		if (textureSet.baseColor) {
-			textureSet.baseColor.colorSpace = THREE.SRGBColorSpace
-		}
+		if (textureSet.baseColor) textureSet.baseColor.colorSpace = THREE.SRGBColorSpace
 
 		material.roughnessIntensity = 1
 		material.transparent = true
@@ -279,9 +259,8 @@ class TextureManager {
 	 */
 	clearCache() {
 		// Dispose of textures
-		for (const cachedTexture of this.textureCache.values()) {
-			cachedTexture.texture.dispose()
-		}
+		for (const cachedTexture of this.textureCache.values()) cachedTexture.texture.dispose()
+
 		this.textureCache.clear()
 		this.loadingPromises.clear()
 	}

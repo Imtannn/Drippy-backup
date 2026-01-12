@@ -40,8 +40,10 @@ declare global {
 	}
 }
 
-declare global {
-	interface IntrinsicElements {
-		'save-button': ElementAttributes<SaveButton, SaveButtonAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'save-button': ElementAttributes<SaveButton, SaveButtonAttributes>
+		}
 	}
 }

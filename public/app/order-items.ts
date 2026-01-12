@@ -55,9 +55,8 @@ export class OrderItems extends Element {
 
 	#onItemRowClick = async (template: Template, e: MouseEvent) => {
 		// Prevent click if clicking on checkbox
-		if ((e.target as HTMLElement).closest('.checkbox-icon')) {
-			return
-		}
+		if ((e.target as HTMLElement).closest('.checkbox-icon')) return
+
 		if (template.productUrl) {
 			try {
 				const proxyUrl = `/api/proxy?url=${encodeURIComponent(template.productUrl)}`

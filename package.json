@@ -21,6 +21,8 @@
 		"publish": "...TODO...",
 		"typecheck": "lume typecheck",
 		"typecheck:watch": "lume typecheckWatch",
+		"prettier": "prettier --write .",
+		"lint": "eslint",
 		"fetch-combined-assets": "chmod +x scripts/run-combined-assets.sh && ./scripts/run-combined-assets.sh"
 	},
 	"overrides": {
@@ -35,6 +37,7 @@
 		"meteor-node-stubs": "^1.0.0"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.39.2",
 		"@lume/cli": "^0.15.0",
 		"@lume/element": "lume/element#5dfb8283eb3a9bcd7509088eb62e4f49d2b58b0c",
 		"@tweenjs/tween.js": "^18.6.4",
@@ -42,6 +45,8 @@
 		"@types/three": "^0.174.0",
 		"classy-solid": "^0.5.2",
 		"concurrently": "^9.1.2",
+		"eslint": "^9.39.2",
+		"eslint-config-prettier": "^10.1.8",
 		"googleapis": "^168.0.0",
 		"jquery": "^3.7.1",
 		"lume": "^0.3.0-alpha.46",
@@ -50,7 +55,8 @@
 		"solid-js": "^1.9.0",
 		"symlink-dir": "^6.0.5",
 		"three": "^0.174.0",
-		"typescript": "^5.0.0"
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.52.0"
 	},
 	"meteor": {
 		"mainModule": {

@@ -146,9 +146,7 @@ export class _AutoRigger {
 		// is updated.
 		const bones: {pos: THREE.Vector3; index: number}[] = []
 		this.#skeleton!.bones.forEach((bone, index) => {
-			if (this.#excludedBones.includes(bone.name)) {
-				return
-			}
+			if (this.#excludedBones.includes(bone.name)) return
 
 			const pos = new THREE.Vector3()
 			bone.getWorldPosition(pos)
@@ -176,9 +174,7 @@ export class _AutoRigger {
 			// Get the 4 closest bones.
 			const closest = boneDistances.slice(0, 4)
 			const invWeights = closest.map(b => {
-				if (this.#maxBoneDist > 0 && b.dist > this.#maxBoneDist) {
-					return 0
-				}
+				if (this.#maxBoneDist > 0 && b.dist > this.#maxBoneDist) return 0
 
 				return 1 / (b.dist + 1e-4) // Avoid div by 0
 			})

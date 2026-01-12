@@ -26,11 +26,9 @@ export class AppButtonsLeft extends Element {
 				store.view === 'custom-measurement' ||
 				store.view === 'success' ||
 				store.view === 'share'
-			) {
+			)
 				this.style.setProperty('--app-buttons-left-transform', 'translateX(0)')
-			} else {
-				this.style.setProperty('--app-buttons-left-transform', 'translateX(394px)')
-			}
+			else this.style.setProperty('--app-buttons-left-transform', 'translateX(394px)')
 		})
 	}
 
@@ -166,11 +164,8 @@ export class AppButtonsGroup extends Element {
 	override connectedCallback() {
 		super.connectedCallback()
 		this.createEffect(() => {
-			if (this.groupDirection === 'row') {
-				this.style.setProperty('--app-buttons-group-direction', 'row')
-			} else {
-				this.style.setProperty('--app-buttons-group-direction', 'column')
-			}
+			if (this.groupDirection === 'row') this.style.setProperty('--app-buttons-group-direction', 'row')
+			else this.style.setProperty('--app-buttons-group-direction', 'column')
 		})
 
 		this.createEffect(() => {
@@ -178,9 +173,7 @@ export class AppButtonsGroup extends Element {
 				// Remove all previous custom classes
 				this.#divRef.className = 'app-buttons-group'
 				// Add custom class if provided
-				if (this.customClass) {
-					this.#divRef.classList.add(this.customClass)
-				}
+				if (this.customClass) this.#divRef.classList.add(this.customClass)
 			}
 		})
 	}
@@ -227,10 +220,12 @@ declare global {
 	}
 }
 
-declare global {
-	interface IntrinsicElements {
-		'app-buttons-left': ElementAttributes<AppButtonsLeft, AppButtonsLeftAttributes>
-		'app-buttons-right': ElementAttributes<AppButtonsRight, AppButtonsRightAttributes>
-		'app-buttons-group': ElementAttributes<AppButtonsGroup, AppButtonsGroupAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'app-buttons-left': ElementAttributes<AppButtonsLeft, AppButtonsLeftAttributes>
+			'app-buttons-right': ElementAttributes<AppButtonsRight, AppButtonsRightAttributes>
+			'app-buttons-group': ElementAttributes<AppButtonsGroup, AppButtonsGroupAttributes>
+		}
 	}
 }

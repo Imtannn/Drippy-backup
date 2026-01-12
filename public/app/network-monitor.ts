@@ -55,9 +55,7 @@ export function reportImageLoadFailure(url: string, error?: any) {
  */
 export function reportImageLoadSuccess() {
 	// Clear old failures on success to recover faster
-	if (imageLoadFailures.length > 0) {
-		imageLoadFailures = []
-	}
+	if (imageLoadFailures.length > 0) imageLoadFailures = []
 }
 
 export function getNetworkStatus(): NetworkStatus {
@@ -76,9 +74,7 @@ export async function getConnectionQuality(status: NetworkStatus): Promise<Conne
 	if (!status.isOnline) return 'offline'
 
 	// Check if AWS image loading has been failing
-	if (hasRecentFailures()) {
-		return 'slow'
-	}
+	if (hasRecentFailures()) return 'slow'
 
 	// Try Network Information API (Chrome, Android only)
 	const hasNetworkAPI = status.effectiveType !== null || status.downlink !== null || status.rtt !== null
@@ -124,16 +120,12 @@ export function createNetworkMonitor(callback: (status: ConnectionStatus) => voi
 	window.addEventListener('online', handleOnline)
 	window.addEventListener('offline', handleOffline)
 
-	if (connection) {
-		connection.addEventListener('change', handleConnectionChange)
-	}
+	if (connection) connection.addEventListener('change', handleConnectionChange)
 
 	return () => {
 		window.removeEventListener('online', handleOnline)
 		window.removeEventListener('offline', handleOffline)
-		if (connection) {
-			connection.removeEventListener('change', handleConnectionChange)
-		}
+		if (connection) connection.removeEventListener('change', handleConnectionChange)
 	}
 }
 

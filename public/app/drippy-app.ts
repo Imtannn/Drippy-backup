@@ -49,9 +49,7 @@ export class DrippyApp extends Element {
 	@effect loadParamsEffect() {
 		try {
 			// Load garments and fabrics from URL parameters if present
-			if (store.selectedSpace) {
-				this.#loadFromUrlParameters(store.selectedSpace)
-			}
+			if (store.selectedSpace) this.#loadFromUrlParameters(store.selectedSpace)
 
 			if (store.isPreview || isPreview() === 'true') {
 				store.view = 'preview'
@@ -89,9 +87,7 @@ export class DrippyApp extends Element {
 		const blocksParam = searchParams().get('blocks')
 		const fabricsParam = searchParams().get('fabrics')
 
-		if (Object.keys(store.selectedTemplates).length > 0) {
-			return
-		}
+		if (Object.keys(store.selectedTemplates).length > 0) return
 
 		const aggregatedTemplates: TemplateMap = {}
 		const aggregatedBlocks: TemplateBlocksMap = new Map()
@@ -101,18 +97,16 @@ export class DrippyApp extends Element {
 
 		const rememberTemplate = (template: Template, collectionHint: string | null) => {
 			aggregatedTemplates[template.category] = template
-			if (!templateCollectionHints.has(template.category)) {
+			if (!templateCollectionHints.has(template.category))
 				templateCollectionHints.set(template.category, collectionHint)
-			}
 		}
 
 		const mergeBlockFabrics = (existing: BlockFabricsMap | undefined, defaults: BlockFabricsMap): BlockFabricsMap => {
 			const merged = new Map() as BlockFabricsMap
 
 			if (existing) {
-				for (const [blockCategory, fabricsMap] of existing.entries()) {
+				for (const [blockCategory, fabricsMap] of existing.entries())
 					merged.set(blockCategory, new Map(fabricsMap) as PieceFabricsMap)
-				}
 			}
 
 			for (const [blockCategory, fabricsMap] of defaults.entries()) {
@@ -122,11 +116,8 @@ export class DrippyApp extends Element {
 					continue
 				}
 
-				for (const [pieceKey, fabric] of fabricsMap.entries()) {
-					if (!existingPieces.has(pieceKey)) {
-						existingPieces.set(pieceKey, fabric)
-					}
-				}
+				for (const [pieceKey, fabric] of fabricsMap.entries())
+					if (!existingPieces.has(pieceKey)) existingPieces.set(pieceKey, fabric)
 			}
 
 			return merged
@@ -170,9 +161,7 @@ export class DrippyApp extends Element {
 				// Always update template from block's templateId to ensure UI selection matches rendered blocks
 				if (block.templateId) {
 					const templateForBlock = templateHelpers.findTemplateById(block.templateId, hintFromBlock)
-					if (templateForBlock) {
-						rememberTemplate(templateForBlock, hintFromBlock ?? templateForBlock.collection ?? null)
-					}
+					if (templateForBlock) rememberTemplate(templateForBlock, hintFromBlock ?? templateForBlock.collection ?? null)
 				}
 
 				// Ensure the template referenced by this block is present in the aggregated templates,
@@ -255,19 +244,13 @@ export class DrippyApp extends Element {
 					if (newBlocksMap.size > 0) {
 						aggregatedBlocks.set(templateCategory, newBlocksMap)
 						templateBlocks = newBlocksMap
-					} else if (!templateBlocks) {
-						aggregatedBlocks.set(templateCategory, new Map() as CategoryBlocksMap)
-					}
+					} else if (!templateBlocks) aggregatedBlocks.set(templateCategory, new Map() as CategoryBlocksMap)
 
 					if (newFabricsMap.size > 0) {
 						const merged = mergeBlockFabrics(aggregatedFabrics.get(templateCategory), newFabricsMap)
-						if (merged.size > 0) {
-							aggregatedFabrics.set(templateCategory, merged)
-						}
+						if (merged.size > 0) aggregatedFabrics.set(templateCategory, merged)
 					}
-				} else if (!templateBlocks) {
-					aggregatedBlocks.set(templateCategory, new Map() as CategoryBlocksMap)
-				}
+				} else if (!templateBlocks) aggregatedBlocks.set(templateCategory, new Map() as CategoryBlocksMap)
 			}
 		}
 

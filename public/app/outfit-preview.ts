@@ -3,7 +3,7 @@ import '../elements/theme-switch-button.js'
 import './app-buttons-preset.js'
 import {store} from './store.js'
 
-type OutfitPreviewAttributes = keyof {}
+type OutfitPreviewAttributes = keyof object // no attributes yet
 
 @element
 export class OutfitPreview extends Element {
@@ -106,8 +106,10 @@ declare global {
 	}
 }
 
-declare global {
-	interface IntrinsicElements {
-		'outfit-preview': ElementAttributes<OutfitPreview, OutfitPreviewAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'outfit-preview': ElementAttributes<OutfitPreview, OutfitPreviewAttributes>
+		}
 	}
 }

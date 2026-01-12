@@ -107,9 +107,7 @@ function handleMaterialClick(material: Fabric) {
 		assignedMesh: '42-44-31-23-6-9-41-27', // Use the same mesh key as existing fabric
 	})
 
-	if (fabricData.length > 0) {
-		store.setSelectedFabrics = fabricData
-	}
+	if (fabricData.length > 0) store.setSelectedFabrics = fabricData
 }
 
 // Hide the loading cover
@@ -734,9 +732,8 @@ function waitForContentReady() {
 	// Check if all images are loaded
 	const images = document.querySelectorAll('img')
 	const imagePromises = Array.from(images).map(img => {
-		if (img.complete) {
-			return Promise.resolve()
-		}
+		if (img.complete) return Promise.resolve()
+
 		return new Promise(resolve => {
 			img.addEventListener('load', resolve)
 			img.addEventListener('error', resolve) // Still resolve on error to not block
@@ -866,7 +863,11 @@ function initGenericCarousel(config: {
 	let startX = 0
 	let isDragging = false
 	let isActive = false
-	let eventListeners: Array<{element: HTMLElement | Window; event: string; handler: Function}> = []
+	let eventListeners: Array<{
+		element: HTMLElement | Window
+		event: string
+		handler: ((e: TouchEvent) => void) | ((e: MouseEvent) => void)
+	}> = []
 	let resizeTimeout: ReturnType<typeof setTimeout>
 	let progressContainer: HTMLElement | null = null
 	let progressDots: HTMLElement[] = []
@@ -878,9 +879,7 @@ function initGenericCarousel(config: {
 	// Calculate offset for carousel positioning
 	const calculateOffset = (index: number) => {
 		// On mobile (< 480px), don't apply transform - items stay centered
-		if (window.innerWidth < 480) {
-			return 0
-		}
+		if (window.innerWidth < 480) return 0
 
 		const containerWidth = container.offsetWidth
 		const itemWidth = config.itemWidth + 32 // item width + gap
@@ -896,9 +895,7 @@ function initGenericCarousel(config: {
 		if (window.innerWidth >= 480) return
 
 		// Remove existing progress indicator
-		if (progressContainer) {
-			progressContainer.remove()
-		}
+		if (progressContainer) progressContainer.remove()
 
 		// Only show progress if there are multiple items
 		if (items.length <= 1) return
@@ -942,9 +939,8 @@ function initGenericCarousel(config: {
 		const offset = calculateOffset(index)
 
 		// Debug logs for mobile
-		if (window.innerWidth < 480) {
+		if (window.innerWidth < 480)
 			console.log(`Mobile carousel update - Index: ${index}, Offset: ${offset}, Active: ${isActive}`)
-		}
 
 		track.style.transform = `translateX(${offset}px)`
 		items.forEach((item, i) => item.classList.toggle('active', i === index))
@@ -956,9 +952,8 @@ function initGenericCarousel(config: {
 	// Reset carousel to default state
 	const resetCarousel = () => {
 		activeIndex = 0
-		if (isCarouselActive()) {
-			updateCarousel()
-		} else {
+		if (isCarouselActive()) updateCarousel()
+		else {
 			track.style.transform = 'translateX(0)'
 			items.forEach(item => item.classList.remove('active'))
 			// Remove progress indicator when carousel is inactive
@@ -1008,6 +1003,7 @@ function initGenericCarousel(config: {
 		removeEventListeners()
 		if (!container.classList.contains('carousel')) return
 
+		// FIXME do not use legacy touch or mouse handlers. Use Pointer Events instead.
 		const events = [
 			{event: 'touchstart', handler: touchStartHandler, options: {passive: true}},
 			{event: 'touchend', handler: touchEndHandler, options: {passive: true}},
@@ -1016,6 +1012,7 @@ function initGenericCarousel(config: {
 		]
 
 		eventListeners = events.map(({event, handler, options}) => {
+			// FIXME after converting to pointer events we don't need to cast here
 			container.addEventListener(event, handler as EventListener, options)
 			return {element: container, event, handler}
 		})
@@ -1057,12 +1054,10 @@ function initGenericCarousel(config: {
 			const currentWidth = window.innerWidth
 			isActive = currentWidth >= config.minWidth && currentWidth <= config.maxWidth
 
-			if (wasActive !== isActive) {
-				toggleCarousel(isActive)
-			} else if (isActive && currentWidth < 480) {
+			if (wasActive !== isActive) toggleCarousel(isActive)
+			else if (isActive && currentWidth < 480)
 				// Update progress indicator when resizing on mobile
 				createProgressIndicator()
-			}
 		}, 100)
 	}
 
@@ -1103,17 +1098,13 @@ function handleResponsiveBreaks() {
 
 				if (isMobile) {
 					// Store original content if not already stored
-					if (!originalContent.has(elementId)) {
-						originalContent.set(elementId, element.innerHTML)
-					}
+					if (!originalContent.has(elementId)) originalContent.set(elementId, element.innerHTML)
+
 					// Remove <br> tags on mobile
 					element.innerHTML = element.innerHTML.replace(/<br\s*\/?>/gi, ' ')
-				} else {
+				} else if (originalContent.has(elementId))
 					// Restore original content on desktop
-					if (originalContent.has(elementId)) {
-						element.innerHTML = originalContent.get(elementId)
-					}
-				}
+					element.innerHTML = originalContent.get(elementId)
 			})
 		})
 	}

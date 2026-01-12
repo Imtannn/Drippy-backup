@@ -6,7 +6,7 @@ import '../elements/login-ui.js'
 import '../routes.js' // track page visits
 import {dateOfBirth, username, turnOffSettingsInSpace, isAdmin, hideAnimationSelection} from '../app/store.js'
 
-export type UserProfileAttributes = keyof {} // no attributes yet
+export type UserProfileAttributes = keyof object // no attributes yet
 
 const elName = 'user-profile'
 

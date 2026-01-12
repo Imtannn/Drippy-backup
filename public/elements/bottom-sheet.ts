@@ -101,9 +101,8 @@ export class BottomSheet extends Element {
 			const frame = requestAnimationFrame(() => {
 				requestAnimationFrame(() => {
 					this.handleResize()
-					if (this.animateOnEnter) {
-						this.animateIn()
-					} else {
+					if (this.animateOnEnter) this.animateIn()
+					else {
 						this.isVisible = true
 						// Update document state to notify the scene
 						document.documentElement.classList.remove('panel-collapsed')
@@ -116,40 +115,32 @@ export class BottomSheet extends Element {
 		})
 
 		this.createEffect(() => {
-			if (this.floatDirection === 'right') {
-				this.style.setProperty('--bottom-sheet-float-direction', 'flex-end')
-			} else {
-				this.style.setProperty('--bottom-sheet-float-direction', 'flex-start')
-			}
+			if (this.floatDirection === 'right') this.style.setProperty('--bottom-sheet-float-direction', 'flex-end')
+			else this.style.setProperty('--bottom-sheet-float-direction', 'flex-start')
 		})
 
 		// Watch for defaultSnap changes and recalculate height
 		this.createEffect(() => {
-			this.defaultSnap
+			this.defaultSnap // eslint-disable-line -- dependency
 			this.handleResize()
 		})
 
 		this.createEffect(() => {
-			this.snapPoints
+			this.snapPoints // eslint-disable-line -- dependency
 			this.handleResize()
 		})
 
 		this.createEffect(() => {
 			const zIndex = this.zIndex
-			if (zIndex === null || zIndex === undefined || zIndex === '') {
-				this.style.removeProperty('--bottom-sheet-z-index')
-			} else {
-				this.style.setProperty('--bottom-sheet-z-index', zIndex.toString())
-			}
+			if (zIndex === null || zIndex === undefined || zIndex === '') this.style.removeProperty('--bottom-sheet-z-index')
+			else this.style.setProperty('--bottom-sheet-z-index', zIndex.toString())
 		})
 
 		this.createEffect(() => {
 			const panelWidth = this.panelWidth
-			if (panelWidth === null || panelWidth === undefined || panelWidth === '') {
+			if (panelWidth === null || panelWidth === undefined || panelWidth === '')
 				this.style.removeProperty('--bottom-sheet-panel-width')
-			} else {
-				this.style.setProperty('--bottom-sheet-panel-width', panelWidth)
-			}
+			else this.style.setProperty('--bottom-sheet-panel-width', panelWidth)
 		})
 	}
 	override disconnectedCallback() {
@@ -160,14 +151,8 @@ export class BottomSheet extends Element {
 	private checkDesktop = () => {
 		const wasDesktop = this.isDesktop
 		if (window.innerWidth >= 768) {
-			if (!this.isDesktop) {
-				this.isDesktop = true
-			}
-		} else {
-			if (this.isDesktop) {
-				this.isDesktop = false
-			}
-		}
+			if (!this.isDesktop) this.isDesktop = true
+		} else if (this.isDesktop) this.isDesktop = false
 
 		// When switching to mobile, ensure panel is always open
 		if (wasDesktop && !this.isDesktop) {
@@ -188,9 +173,8 @@ export class BottomSheet extends Element {
 		if (!this.isDesktop) {
 			const viewportHeight = window.innerHeight
 			const defaultHeight = this.#resolveDefaultSheetHeight()
-			if (defaultHeight) {
-				this.sheetHeight = defaultHeight
-			} else {
+			if (defaultHeight) this.sheetHeight = defaultHeight
+			else {
 				const snapFraction = this.#resolveDefaultSnapFraction()
 				this.sheetHeight = snapFraction * viewportHeight
 			}
@@ -216,14 +200,11 @@ export class BottomSheet extends Element {
 
 		// Support percent or decimal (e.g., "55%" or "0.55")
 		let fraction = NaN
-		if (raw.endsWith('%')) {
-			fraction = parseFloat(raw) / 100
-		} else {
-			fraction = parseFloat(raw)
-		}
-		if (!isNaN(fraction)) {
-			return Math.max(0, Math.min(1, fraction))
-		}
+		if (raw.endsWith('%')) fraction = parseFloat(raw) / 100
+		else fraction = parseFloat(raw)
+
+		if (!isNaN(fraction)) return Math.max(0, Math.min(1, fraction))
+
 		return snapPoints[0]
 	}
 
@@ -233,21 +214,15 @@ export class BottomSheet extends Element {
 
 		// Support pixel values (e.g., "400px" or "400")
 		const pxMatch = raw.match(/^(\d+)(?:px)?$/)
-		if (pxMatch) {
-			return parseInt(pxMatch[1], 10)
-		}
+		if (pxMatch) return parseInt(pxMatch[1], 10)
 
 		// Support viewport height (e.g., "50vh")
 		const vhMatch = raw.match(/^(\d+(?:\.\d+)?)vh$/)
-		if (vhMatch) {
-			return (parseFloat(vhMatch[1]) / 100) * window.innerHeight
-		}
+		if (vhMatch) return (parseFloat(vhMatch[1]) / 100) * window.innerHeight
 
 		// Support percent (e.g., "50%")
 		const percentMatch = raw.match(/^(\d+(?:\.\d+)?)%$/)
-		if (percentMatch) {
-			return (parseFloat(percentMatch[1]) / 100) * window.innerHeight
-		}
+		if (percentMatch) return (parseFloat(percentMatch[1]) / 100) * window.innerHeight
 
 		return null
 	}
@@ -271,11 +246,9 @@ export class BottomSheet extends Element {
 			.filter(Boolean)
 			.map(part => {
 				let value = NaN
-				if (part.endsWith('%')) {
-					value = parseFloat(part) / 100
-				} else {
-					value = parseFloat(part)
-				}
+				if (part.endsWith('%')) value = parseFloat(part) / 100
+				else value = parseFloat(part)
+
 				if (isNaN(value)) return null
 				return Math.max(0, Math.min(1, value))
 			})
@@ -329,9 +302,8 @@ export class BottomSheet extends Element {
 		const viewportHeight = window.innerHeight
 		this.sheetHeight = snapPoint * viewportHeight
 
-		if (!this.isDesktop) {
-			this.sheetRef.style.height = `${this.sheetHeight}px`
-		}
+		if (!this.isDesktop) this.sheetRef.style.height = `${this.sheetHeight}px`
+
 		this.updateBottomSheetHeightVar()
 
 		// Fire onSnap callback
@@ -366,8 +338,7 @@ export class BottomSheet extends Element {
 		document.documentElement.classList.add('panel-collapsed')
 		document.documentElement.style.setProperty('--bottom-sheet-panel-width', '0px')
 
-		// Force a reflow to ensure the transform is applied
-		this.sheetRef.offsetHeight
+		this.sheetRef.offsetHeight // eslint-disable-line -- Force a reflow to ensure the transform is applied
 
 		requestAnimationFrame(() => {
 			this.isVisible = true
@@ -399,9 +370,8 @@ export class BottomSheet extends Element {
 	}
 
 	public show() {
-		if (this.animateOnEnter) {
-			this.animateIn()
-		} else {
+		if (this.animateOnEnter) this.animateIn()
+		else {
 			this.isVisible = true
 			if (this.sheetRef) {
 				this.sheetRef.classList.add('is-open')
@@ -438,9 +408,7 @@ export class BottomSheet extends Element {
 
 			// Update button title based on parent state
 			const button = this.sheetRef.querySelector('.collapse-button')
-			if (button) {
-				button.setAttribute('title', this.isVisible ? 'Collapse panel' : 'Expand panel')
-			}
+			if (button) button.setAttribute('title', this.isVisible ? 'Collapse panel' : 'Expand panel')
 		}
 	}
 
@@ -713,7 +681,7 @@ export class BottomSheet extends Element {
 	`
 }
 
-type BottomSheetHeaderAttributes = keyof {}
+type BottomSheetHeaderAttributes = keyof object // no attributes yet
 // Bottom sheet header
 @element
 export class BottomSheetHeader extends Element {

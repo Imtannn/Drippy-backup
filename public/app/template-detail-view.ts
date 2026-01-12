@@ -274,8 +274,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'template-detail-view': ElementAttributes<TemplateDetailView, TemplateDetailViewAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'template-detail-view': ElementAttributes<TemplateDetailView, TemplateDetailViewAttributes>
+		}
 	}
 }

@@ -103,8 +103,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'placeholder-image': ElementAttributes<PlaceholderImage, PlaceholderImageAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'placeholder-image': ElementAttributes<PlaceholderImage, PlaceholderImageAttributes>
+		}
 	}
 }

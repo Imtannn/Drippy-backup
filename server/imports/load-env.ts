@@ -27,9 +27,7 @@ Meteor.startup(async () => {
 		Object.keys(config).forEach(key => {
 			if (key.startsWith('_')) return // Skip comments
 
-			if (!process.env[key]) {
-				process.env[key] = config[key]
-			}
+			if (!process.env[key]) process.env[key] = config[key]
 		})
 	} catch (error) {
 		console.error('Failed to load environment configuration:', error)
@@ -46,9 +44,7 @@ Meteor.startup(() => {
 	const requiredVars = ['SENDGRID_API_KEY', 'SENDGRID_FROM_EMAIL', 'MAIL_URL']
 	const missingVars = requiredVars.filter(varName => !process.env[varName])
 
-	if (missingVars.length > 0) {
-		console.warn('Missing required environment variables:', missingVars)
-	}
+	if (missingVars.length > 0) console.warn('Missing required environment variables:', missingVars)
 
 	// Validate S3 configuration (optional but recommended)
 	const s3Vars = ['S3_BUCKET', 'S3_REGION', 'AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY']
@@ -57,7 +53,5 @@ Meteor.startup(() => {
 	if (missingS3Vars.length > 0) {
 		console.warn('S3 upload functionality will be disabled - missing environment variables:', missingS3Vars)
 		console.warn('To enable S3 uploads, configure:', missingS3Vars.join(', '))
-	} else {
-		console.log('✅ S3 upload service configured successfully')
-	}
+	} else console.log('✅ S3 upload service configured successfully')
 })

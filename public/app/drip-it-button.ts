@@ -49,8 +49,10 @@ declare global {
 	}
 }
 
-declare global {
-	interface IntrinsicElements {
-		'drip-it-button': ElementAttributes<DripItButton, DripItButtonAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'drip-it-button': ElementAttributes<DripItButton, DripItButtonAttributes>
+		}
 	}
 }

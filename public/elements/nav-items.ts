@@ -12,11 +12,8 @@ export class NavItems extends Element {
 
 		document.addEventListener('avatar-dropdown-click', (event: Event) => {
 			const customEvent = event as CustomEvent
-			if (customEvent.detail?.isOpening) {
-				this.activeTab = 'avatar'
-			} else {
-				this.activeTab = 'items'
-			}
+			if (customEvent.detail?.isOpening) this.activeTab = 'avatar'
+			else this.activeTab = 'items'
 		})
 	}
 
@@ -132,8 +129,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'nav-items': ElementAttributes<NavItems, NavItemsAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'nav-items': ElementAttributes<NavItems, NavItemsAttributes>
+		}
 	}
 }

@@ -30,9 +30,7 @@ if (Meteor.isServer) {
 
 			// Check if already in wishlist
 			const existing = await Wishlist.findOneAsync({userId: this.userId, templateId})
-			if (existing) {
-				return {success: true, message: 'Template already in wishlist'}
-			}
+			if (existing) return {success: true, message: 'Template already in wishlist'}
 
 			await Wishlist.insertAsync({
 				userId: this.userId,
@@ -79,8 +77,6 @@ if (Meteor.isServer) {
 			}
 		},
 	})
-} else {
+} else
 	// Client-side: subscribe to wishlist
 	Meteor.subscribe('wishlist')
-}
-

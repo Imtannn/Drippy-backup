@@ -34,11 +34,8 @@ export class SpacesSelection extends Element {
 
 		this.createEffect(() => {
 			const brandParam = searchParams().get('brand')
-			if (brandParam) {
-				this.classList.add('has-brand')
-			} else {
-				this.classList.remove('has-brand')
-			}
+			if (brandParam) this.classList.add('has-brand')
+			else this.classList.remove('has-brand')
 		})
 
 		// Show all spaces regardless of gender
@@ -49,9 +46,7 @@ export class SpacesSelection extends Element {
 
 			// Filter by brand if brand query parameter exists
 			const brandParam = searchParams().get('brand')
-			if (brandParam) {
-				filteredSpaces = filteredSpaces.filter((space: Space) => space.collections.includes(brandParam))
-			}
+			if (brandParam) filteredSpaces = filteredSpaces.filter((space: Space) => space.collections.includes(brandParam))
 
 			this.filteredSpace = filteredSpaces
 		})
@@ -59,25 +54,19 @@ export class SpacesSelection extends Element {
 		// Close login dialog when user successfully logs in
 		this.createEffect(() => {
 			const user = currentUser()
-			if (user !== null && this.showLoginDialog) {
-				this.showLoginDialog = false
-			}
+			if (user !== null && this.showLoginDialog) this.showLoginDialog = false
 		})
 
 		// Ensure selectedTab is always set to a valid value
 		this.createEffect(() => {
 			const tabs = ['All', 'Space', 'Items']
-			if (!this.selectedTab || !tabs.includes(this.selectedTab)) {
-				this.selectedTab = 'All'
-			}
+			if (!this.selectedTab || !tabs.includes(this.selectedTab)) this.selectedTab = 'All'
 		})
 
 		// Sync selectedTab with tabs-provider on mount
 		this.createEffect(() => {
 			// Ensure selectedTab is set before tabs-provider initializes
-			if (!this.selectedTab) {
-				this.selectedTab = 'All'
-			}
+			if (!this.selectedTab) this.selectedTab = 'All'
 		})
 	}
 
@@ -162,14 +151,10 @@ export class SpacesSelection extends Element {
 		)
 
 		// Aggregate blocks
-		if (newBlocksMap.size > 0) {
-			aggregatedBlocks.set(templateCategory, newBlocksMap)
-		}
+		if (newBlocksMap.size > 0) aggregatedBlocks.set(templateCategory, newBlocksMap)
 
 		// Aggregate fabrics
-		if (newFabricsMap.size > 0) {
-			aggregatedFabrics.set(templateCategory, newFabricsMap)
-		}
+		if (newFabricsMap.size > 0) aggregatedFabrics.set(templateCategory, newFabricsMap)
 
 		// Build selected garments from maps
 		const selectedGarments = templateHelpers.buildSelectedGarmentsFromMaps(aggregatedBlocks, aggregatedFabrics)
@@ -190,11 +175,8 @@ export class SpacesSelection extends Element {
 
 		if (!searchParams().get('avatar') || !avatarMatchesGender) {
 			const defaultAvatar = avatars.find(a => a.gender === space.gender && a.default)
-			if (defaultAvatar) {
-				searchParams().set('avatar', defaultAvatar.name)
-			} else if (avatarMatchesGender && store.selectedAvatar) {
-				searchParams().set('avatar', store.selectedAvatar)
-			}
+			if (defaultAvatar) searchParams().set('avatar', defaultAvatar.name)
+			else if (avatarMatchesGender && store.selectedAvatar) searchParams().set('avatar', store.selectedAvatar)
 		}
 
 		// Update URL with blocks and fabrics from selected garments
@@ -349,9 +331,7 @@ export class SpacesSelection extends Element {
 									const allTemplates: Array<{template: Template; space: Space}> = []
 									for (const space of this.filteredSpace) {
 										const spaceTemplates = this.#getSpaceTemplates(space)
-										for (const template of spaceTemplates) {
-											allTemplates.push({template, space})
-										}
+										for (const template of spaceTemplates) allTemplates.push({template, space})
 									}
 									return allTemplates
 								}}

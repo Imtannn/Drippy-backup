@@ -28,11 +28,8 @@ if (spaceParam) {
 
 	// Determine the collection to use
 	if (selectedSpace) {
-		if (collectionParam && selectedSpace.collections.includes(collectionParam)) {
-			selectedCollection = collectionParam
-		} else {
-			selectedCollection = getSpacePrimaryCollection(selectedSpace)
-		}
+		if (collectionParam && selectedSpace.collections.includes(collectionParam)) selectedCollection = collectionParam
+		else selectedCollection = getSpacePrimaryCollection(selectedSpace)
 	}
 }
 
@@ -40,18 +37,15 @@ if (spaceParam) {
 let selectedAvatar: string | null = null
 if (avatarParam) {
 	const avatar = avatars.find(a => a.name === avatarParam)
-	if (avatar) {
-		selectedAvatar = avatarParam
-	}
+	if (avatar) selectedAvatar = avatarParam
 }
 
 // Parse fabrics and blocks into unified selection object
 const selectedGarments: SelectedGarments = {}
 
 const ensureSelection = (templateCategory: TemplateCategory, blockCategory: BlockCategory) => {
-	if (!selectedGarments[templateCategory]) {
-		selectedGarments[templateCategory] = {} as TemplateCategorySelection
-	}
+	if (!selectedGarments[templateCategory]) selectedGarments[templateCategory] = {} as TemplateCategorySelection
+
 	const templateSelection = selectedGarments[templateCategory]!
 
 	if (!templateSelection[blockCategory]) {

@@ -1,7 +1,7 @@
 import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import './app-buttons-preset.js'
 
-type ShareViewAttributes = keyof {}
+type ShareViewAttributes = keyof object // no attributes yet
 
 @element
 export class ShareView extends Element {
@@ -29,7 +29,7 @@ export class ShareView extends Element {
 		let shareUrl = ''
 
 		switch (platform) {
-			case 'instagram':
+			case 'instagram': {
 				// Instagram doesn't have a direct share URL, just copy the content to clipboard for manual sharing
 				const instagramText = `${text}\n\n${this.shareUrl}`
 				navigator.clipboard.writeText(instagramText)
@@ -37,6 +37,7 @@ export class ShareView extends Element {
 				// Open Instagram app/site
 				window.open('https://instagram.com/', '_blank')
 				break
+			}
 
 			case 'twitter':
 				shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`
@@ -46,7 +47,7 @@ export class ShareView extends Element {
 				shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`
 				break
 
-			case 'discord':
+			case 'discord': {
 				// Discord doesn't have a direct share URL, just copy content
 				const discordText = `${text}\n${this.shareUrl}`
 				navigator.clipboard.writeText(discordText)
@@ -54,15 +55,14 @@ export class ShareView extends Element {
 				// Open Discord
 				window.open('https://discord.com/', '_blank')
 				break
+			}
 
 			default:
 				console.warn(`Unknown platform: ${platform}`)
 				return
 		}
 
-		if (shareUrl) {
-			window.open(shareUrl, '_blank', 'width=600,height=400')
-		}
+		if (shareUrl) window.open(shareUrl, '_blank', 'width=600,height=400')
 	}
 	override template = () => html`
 		<app-buttons-preset preset="simple-flow"></app-buttons-preset>
@@ -349,8 +349,10 @@ declare global {
 	}
 }
 
-declare global {
-	interface IntrinsicElements {
-		'share-view': ElementAttributes<ShareView, ShareViewAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'share-view': ElementAttributes<ShareView, ShareViewAttributes>
+		}
 	}
 }

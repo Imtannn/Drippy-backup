@@ -1,6 +1,6 @@
 import {css, element, Element, html, type ElementAttributes} from 'lume'
 
-type ControlButtonGroupAttributes = keyof {}
+type ControlButtonGroupAttributes = keyof object // no attributes yet
 
 /**
  * Groups control buttons (undo, redo, reload) together with a shared background.

@@ -4,7 +4,7 @@ import {createMemo, createSignal, untrack} from 'solid-js'
 import {effect} from './meteor-signals.js'
 
 // We'll keep the title up to date once we add routing. For now it is constant.
-let appName = 'Drippy'
+const appName = 'Drippy'
 const [_appTitle] = createSignal(appName)
 export const appTitle = () => _appTitle()
 

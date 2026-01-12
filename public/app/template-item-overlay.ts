@@ -154,8 +154,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'template-item-overlay': ElementAttributes<TemplateItemOverlay, TemplateItemOverlayAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'template-item-overlay': ElementAttributes<TemplateItemOverlay, TemplateItemOverlayAttributes>
+		}
 	}
 }

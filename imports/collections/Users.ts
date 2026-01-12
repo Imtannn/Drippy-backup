@@ -40,7 +40,7 @@ if (Meteor.isServer) {
 
 			// username validation
 			// Alphanumeric, underscores, and dashes allowed, and must start with a letter.
-			if (!/^[a-zA-Z][a-zA-Z0-9_\-]*$/.test(username)) {
+			if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(username)) {
 				throw new Meteor.Error(
 					'invalid-username',
 					'Username can only contain letters, numbers, underscores, and dashes, and must start with a letter.',
@@ -71,10 +71,9 @@ if (Meteor.isServer) {
 
 			const {username, ...profile} = profileData
 
-			if ('isAdmin' in profile) {
+			if ('isAdmin' in profile)
 				// Prevent users from setting isAdmin field, for now.
 				throw new Meteor.Error('invalid-profile', 'Cannot set isAdmin field')
-			}
 
 			await Meteor.callAsync('users.updateUsername', username)
 			const user = (await Meteor.userAsync())! // user exists because this.userId exists
@@ -90,6 +89,4 @@ if (Meteor.isServer) {
 
 		Counts.publish(this, 'users', Meteor.users.find())
 	})
-} else {
-	Meteor.subscribe('usersCount')
-}
+} else Meteor.subscribe('usersCount')

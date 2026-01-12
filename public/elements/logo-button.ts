@@ -65,8 +65,10 @@ declare global {
 	}
 }
 
-declare global {
-	interface IntrinsicElements {
-		'logo-button': ElementAttributes<LogoButton, LogoButtonAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'logo-button': ElementAttributes<LogoButton, LogoButtonAttributes>
+		}
 	}
 }

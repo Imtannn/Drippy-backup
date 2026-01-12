@@ -2,9 +2,7 @@
 
 export {}
 
-// @ts-ignore
 if (!Promise.withResolvers) {
-	// @ts-ignore
 	Promise.withResolvers = function <T>() {
 		let resolve!: (value: T) => void
 		let reject!: (reason?: any) => void

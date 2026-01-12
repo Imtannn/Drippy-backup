@@ -14,7 +14,7 @@ import {GltfModel, type Element3D} from 'lume'
 import {_AutoRigger} from './AutoRigger.js'
 import {onModelLoad} from '../../utils.js'
 
-type LumeAutoRiggerAttributes = keyof {}
+type LumeAutoRiggerAttributes = keyof object // no attributes yet
 
 /**
  *

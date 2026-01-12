@@ -11,9 +11,7 @@ export function createDatePicker(options: {
 	const years: number[] = []
 	const maxYear = new Date(max).getFullYear()
 	const minYear = new Date(min).getFullYear()
-	for (let year = maxYear; year >= minYear; year--) {
-		years.push(year)
-	}
+	for (let year = maxYear; year >= minYear; year--) years.push(year)
 
 	const months = [
 		'January',
@@ -31,9 +29,7 @@ export function createDatePicker(options: {
 	]
 
 	const days = []
-	for (let day = 1; day <= 31; day++) {
-		days.push(day)
-	}
+	for (let day = 1; day <= 31; day++) days.push(day)
 
 	// State
 	let selectedDay = 27

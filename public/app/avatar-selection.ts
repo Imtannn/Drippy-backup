@@ -22,9 +22,7 @@ export class AvatarSelection extends Element {
 		super.connectedCallback()
 
 		const currentAvatar = avatars.find(avatar => avatar.name === store.selectedAvatar)
-		if (currentAvatar?.gender) {
-			this.selectedTab = currentAvatar.gender
-		}
+		if (currentAvatar?.gender) this.selectedTab = currentAvatar.gender
 	}
 
 	#onAvatarThumbClick = (e: CustomEvent) => {
@@ -163,8 +161,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'avatar-selection': ElementAttributes<AvatarSelection, AvatarSelectionAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'avatar-selection': ElementAttributes<AvatarSelection, AvatarSelectionAttributes>
+		}
 	}
 }

@@ -41,17 +41,13 @@ interface UploadResult {
 async function uploadFileToS3(fileData: UploadFileData): Promise<UploadResult> {
 	try {
 		// Validate required fields with specific error messages
-		if (!fileData.fileName || fileData.fileName.trim() === '') {
-			throw new Error('Missing or empty fileName')
-		}
+		if (!fileData.fileName || fileData.fileName.trim() === '') throw new Error('Missing or empty fileName')
 
-		if (!fileData.fileData || fileData.fileData.trim() === '') {
+		if (!fileData.fileData || fileData.fileData.trim() === '')
 			throw new Error('Missing or empty fileData (base64 content)')
-		}
 
-		if (!fileData.contentType || fileData.contentType.trim() === '') {
+		if (!fileData.contentType || fileData.contentType.trim() === '')
 			throw new Error('Missing or empty contentType (MIME type)')
-		}
 
 		// Validate base64 data format
 		try {
@@ -59,9 +55,7 @@ async function uploadFileToS3(fileData: UploadFileData): Promise<UploadResult> {
 			const buffer = Buffer.from(fileData.fileData, 'base64')
 
 			// Check if buffer has reasonable size (not empty)
-			if (buffer.length === 0) {
-				throw new Error('Base64 data decoded to empty buffer')
-			}
+			if (buffer.length === 0) throw new Error('Base64 data decoded to empty buffer')
 		} catch (error) {
 			throw new Error(`Invalid base64 data: ${error instanceof Error ? error.message : 'Unknown error'}`)
 		}
@@ -109,15 +103,11 @@ Meteor.methods({
 		try {
 			const result = await uploadFileToS3(fileData)
 
-			if (!result.success) {
-				throw new Meteor.Error('upload-failed', result.error || 'Failed to upload file')
-			}
+			if (!result.success) throw new Meteor.Error('upload-failed', result.error || 'Failed to upload file')
 
 			return result
 		} catch (error) {
-			if (error instanceof Meteor.Error) {
-				throw error
-			}
+			if (error instanceof Meteor.Error) throw error
 
 			console.error('Unexpected error in files.upload:', error)
 			throw new Meteor.Error('upload-error', 'An unexpected error occurred during upload')
@@ -129,14 +119,11 @@ Meteor.methods({
 	 */
 	async 'files.uploadMultiple'(filesData: UploadFileData[]): Promise<UploadResult[]> {
 		// Validate input
-		if (!Array.isArray(filesData) || filesData.length === 0) {
+		if (!Array.isArray(filesData) || filesData.length === 0)
 			throw new Meteor.Error('validation-error', 'Files data must be a non-empty array')
-		}
 
 		// Limit number of files to prevent abuse
-		if (filesData.length > 10) {
-			throw new Meteor.Error('validation-error', 'Cannot upload more than 10 files at once')
-		}
+		if (filesData.length > 10) throw new Meteor.Error('validation-error', 'Cannot upload more than 10 files at once')
 
 		try {
 			// Upload all files in parallel
@@ -155,22 +142,18 @@ Meteor.methods({
 	 */
 	async 'files.delete'(fileUrl: string): Promise<boolean> {
 		// Validate AWS configuration
-		if (!S3_ACCESS_KEY || !S3_SECRET_KEY) {
+		if (!S3_ACCESS_KEY || !S3_SECRET_KEY)
 			throw new Meteor.Error('aws-config-error', 'AWS credentials are not configured')
-		}
 
-		if (!fileUrl || typeof fileUrl !== 'string') {
-			throw new Meteor.Error('validation-error', 'File URL is required')
-		}
+		if (!fileUrl || typeof fileUrl !== 'string') throw new Meteor.Error('validation-error', 'File URL is required')
 
 		try {
 			// Extract the S3 key from the URL
 			const urlParts = fileUrl.split('/')
 			const bucketIndex = urlParts.findIndex(part => part === S3_BUCKET)
 
-			if (bucketIndex === -1 || bucketIndex === urlParts.length - 1) {
+			if (bucketIndex === -1 || bucketIndex === urlParts.length - 1)
 				throw new Meteor.Error('validation-error', 'Invalid S3 URL format')
-			}
 
 			const key = urlParts.slice(bucketIndex + 1).join('/')
 
@@ -183,9 +166,8 @@ Meteor.methods({
 			return true
 		} catch (error) {
 			console.error('Error deleting file from S3:', error)
-			if (error instanceof Meteor.Error) {
-				throw error
-			}
+			if (error instanceof Meteor.Error) throw error
+
 			throw new Meteor.Error('delete-error', 'Failed to delete file from S3')
 		}
 	},

@@ -6,7 +6,7 @@ import './theme-switch.js'
 const logoUrl = new URL('../images/logo.svg', import.meta.url)
 const logoUrlDark = new URL('../images/logo-dark.svg', import.meta.url)
 
-type LandingPageAttributes = keyof {} // no attributes yet
+type LandingPageAttributes = keyof object // no attributes yet
 
 @element
 export class LandingPage extends Element {
@@ -18,11 +18,8 @@ export class LandingPage extends Element {
 		const handleScroll = () => {
 			const navbar = this.querySelector('.navbar')
 			if (navbar) {
-				if (window.scrollY > 50) {
-					navbar.classList.add('scrolled')
-				} else {
-					navbar.classList.remove('scrolled')
-				}
+				if (window.scrollY > 50) navbar.classList.add('scrolled')
+				else navbar.classList.remove('scrolled')
 			}
 		}
 

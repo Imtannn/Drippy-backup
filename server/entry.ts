@@ -91,16 +91,14 @@ WebApp.rawHandlers.use(
 			res.setHeader('Vary', 'Origin')
 
 			// Allow OAuth popup communication only for OAuth endpoints
-			if (req.url?.includes('/_oauth/') || req.url === '/') {
+			if (req.url?.includes('/_oauth/') || req.url === '/')
 				res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups')
-			}
 
 			// TODO maybe we only need to set this for documents (not scripts,
 			// images, etc).
 			// Allow /embed to be embedded from any domain (for Shopify, etc.)
-			if (req.url?.startsWith('/embed')) {
-				res.setHeader('Content-Security-Policy', `frame-ancestors *`)
-			} else {
+			if (req.url?.startsWith('/embed')) res.setHeader('Content-Security-Policy', `frame-ancestors *`)
+			else {
 				res.setHeader(
 					'Content-Security-Policy',
 					`frame-ancestors 'self' ${Meteor.isDevelopment ? localhostOrigins.join(' ') : remoteOrigins.join(' ')}`,
@@ -169,7 +167,7 @@ async function sendFile(res: ServerResponse, filePath: string) {
 
 	try {
 		exists = (await fs.promises.stat(filePath)).isFile()
-	} catch (e) {}
+	} catch (e) {} // eslint-disable-line no-empty
 
 	if (!exists) return
 
@@ -219,7 +217,6 @@ const admins = [
 	'ruby@drippy3d.com',
 	'dinhthinh.ng@gmail.com',
 	'ngu.nguyen4616@gmail.com',
-	'thidieuanhle@gmail.com',
 	'kylebruceofficial@gmail.com',
 	'ntthuyen03@gmail.com',
 	'ngoc.huynhtieu1999@gmail.com',

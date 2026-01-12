@@ -54,8 +54,10 @@ declare global {
 	}
 }
 
-declare global {
-	interface IntrinsicElements {
-		'show-on-device': ElementAttributes<ShowOnDevice, ShowOnDeviceAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'show-on-device': ElementAttributes<ShowOnDevice, ShowOnDeviceAttributes>
+		}
 	}
 }

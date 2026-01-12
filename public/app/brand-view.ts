@@ -20,7 +20,7 @@ import './spaces-selection.js'
 import './template-item-overlay.js'
 import {formatNumber} from '../utils.js'
 
-type BrandViewAttributes = keyof {}
+type BrandViewAttributes = keyof object // no attributes yet
 
 @element
 export class BrandView extends Element {
@@ -65,14 +65,10 @@ export class BrandView extends Element {
 				searchParams().set('space', space.slug)
 
 				// Ensure avatar parameter is set
-				if (!searchParams().get('avatar')) {
-					searchParams().set('avatar', store.selectedAvatar)
-				}
+				if (!searchParams().get('avatar')) searchParams().set('avatar', store.selectedAvatar)
 
 				// Set space in store if not already set
-				if (!store.selectedSpace) {
-					store.selectSpace = space
-				}
+				if (!store.selectedSpace) store.selectSpace = space
 
 				// Navigate to template view
 				store.view = 'template'
@@ -98,11 +94,8 @@ export class BrandView extends Element {
 
 		if (overridingCategories.length > 0) {
 			nextSelection = templateHelpers.omitTemplateCategories(nextSelection, overridingCategories)
-			for (const category of overridingCategories) {
-				if (category in store.selectedTemplates) {
-					delete newTemplates[category]
-				}
-			}
+			for (const category of overridingCategories)
+				if (category in store.selectedTemplates) delete newTemplates[category]
 		}
 
 		newTemplates[template.category] = template
@@ -162,9 +155,8 @@ export class BrandView extends Element {
 		if (
 			this.showTemplateOverlay &&
 			!e.composedPath().some(el => el instanceof Element && el.tagName === 'TEMPLATE-ITEM-OVERLAY')
-		) {
+		)
 			this.showTemplateOverlay = null
-		}
 	}
 
 	#isTemplateActive = (template: Template) => {
@@ -180,13 +172,9 @@ export class BrandView extends Element {
 				const brandParam = searchParams().get('brand')
 				const space = spaces.find(space => space.collections.includes(brandParam || ''))
 
-				if (!brandParam) {
-					return null
-				}
+				if (!brandParam) return null
 
-				if (!space) {
-					return null
-				}
+				if (!space) return null
 
 				return html`
 					<div class="header">
@@ -242,18 +230,14 @@ export class BrandView extends Element {
 							const templatesForCategory = collectionTemplates.filter(
 								(template: Template) => template.category === category,
 							)
-							if (templatesForCategory.length > 0) {
-								orderedTemplates.push(...templatesForCategory)
-							}
+							if (templatesForCategory.length > 0) orderedTemplates.push(...templatesForCategory)
 						}
 
 						const accessoryTemplates = collectionTemplates.filter(
 							(template: Template) => !defaultCategories.includes(template.category as TemplateCategory),
 						)
 
-						if (accessoryTemplates.length > 0) {
-							orderedTemplates.push(...accessoryTemplates)
-						}
+						if (accessoryTemplates.length > 0) orderedTemplates.push(...accessoryTemplates)
 
 						return html`
 							<div class="items-grid">
@@ -300,9 +284,7 @@ export class BrandView extends Element {
 												>
 													${() => {
 														const price = template().price
-														if (!price || price === 'N/A') {
-															return 'N/A'
-														}
+														if (!price || price === 'N/A') return 'N/A'
 
 														const numericPrice = Number(price)
 														return Number.isFinite(numericPrice) ? formatNumber(numericPrice) : price

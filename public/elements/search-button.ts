@@ -1,6 +1,6 @@
 import {css, element, Element, html, type ElementAttributes} from 'lume'
 
-type SearchButtonAttributes = keyof {}
+type SearchButtonAttributes = keyof object // no attributes yet
 
 @element
 export class SearchButton extends Element {

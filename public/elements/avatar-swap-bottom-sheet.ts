@@ -22,9 +22,7 @@ export class AvatarSwapBottomSheet extends Element {
 
 		// Set the selected gender based on the template when it changes
 		this.createEffect(() => {
-			if (this.selectedTemplate) {
-				this.selectedGender = this.selectedTemplate.avatar
-			}
+			if (this.selectedTemplate) this.selectedGender = this.selectedTemplate.avatar
 		})
 	}
 
@@ -47,9 +45,7 @@ export class AvatarSwapBottomSheet extends Element {
 
 	#selectFirstAvatar = () => {
 		const firstAvatar = this.#getTargetAvatars()[0]
-		if (firstAvatar) {
-			this.#onAvatarSelect({detail: {itemValue: firstAvatar.name}} as CustomEvent)
-		}
+		if (firstAvatar) this.#onAvatarSelect({detail: {itemValue: firstAvatar.name}} as CustomEvent)
 	}
 
 	#onClose = () => {
@@ -215,8 +211,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'avatar-swap-bottom-sheet': ElementAttributes<AvatarSwapBottomSheet, AvatarSwapBottomSheetAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'avatar-swap-bottom-sheet': ElementAttributes<AvatarSwapBottomSheet, AvatarSwapBottomSheetAttributes>
+		}
 	}
 }

@@ -39,9 +39,7 @@ export class IframePopup extends Element {
 				this.#cspViolationDetected = false
 
 				// Sync url from store
-				if (store.iframePopupUrl) {
-					this.url = store.iframePopupUrl
-				}
+				if (store.iframePopupUrl) this.url = store.iframePopupUrl
 			} else {
 				// Clear state when leaving iframe-popup view
 				this.url = ''
@@ -66,9 +64,8 @@ export class IframePopup extends Element {
 			if (e.violatedDirective === 'frame-ancestors' || e.violatedDirective.includes('frame')) {
 				this.#cspViolationDetected = true
 				// Automatically open in new tab when CSP violation is detected
-				if (this.url) {
-					window.open(this.url, '_blank')
-				}
+				if (this.url) window.open(this.url, '_blank')
+
 				// Close bottom sheet
 				this.close()
 			}
@@ -85,9 +82,7 @@ export class IframePopup extends Element {
 
 	#onIframeLoad = () => {
 		console.log('onIframeLoad called, cspViolationDetected:', this.#cspViolationDetected)
-		if (this.#cspViolationDetected) {
-			return
-		}
+		if (this.#cspViolationDetected) return
 
 		// For cross-origin iframes, we can't check content, so just hide loading after a short delay
 		setTimeout(() => {
@@ -101,9 +96,8 @@ export class IframePopup extends Element {
 	#onIframeError = () => {
 		console.error('Iframe error event fired for URL:', this.url)
 		// Automatically open in new tab when iframe error occurs
-		if (this.url) {
-			window.open(this.url, '_blank')
-		}
+		if (this.url) window.open(this.url, '_blank')
+
 		// Close popup and go back
 		this.close()
 	}
@@ -368,8 +362,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'iframe-popup': ElementAttributes<IframePopup, IframePopupAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'iframe-popup': ElementAttributes<IframePopup, IframePopupAttributes>
+		}
 	}
 }

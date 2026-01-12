@@ -16,30 +16,24 @@ export class OrderSize extends Element {
 
 	#onSizeButtonClick = (size: string, category?: TemplateCategory) => {
 		if (size === 'Custom') {
-			if (store.selectedSpace?.isWholesale) {
+			if (store.selectedSpace?.isWholesale)
 				// Wholesale: use existing global custom measurement
 				store.view = 'custom-measurement'
-			} else {
+			else {
 				// Retail: set current category and navigate to custom measurement
-				if (category) {
-					store.currentCustomMeasurementCategory = category
-				}
+				if (category) store.currentCustomMeasurementCategory = category
+
 				store.view = 'custom-measurement'
 			}
-		} else {
-			if (store.selectedSpace?.isWholesale) {
-				// Wholesale: use existing logic
-				store.setOrderSelectedSize(size)
-			} else {
-				// Retail: set size for specific category
-				if (category) {
-					store.setRetailItemSize(category, size)
-				} else {
-					// Fallback to global if no category provided
-					store.setOrderSelectedSize(size)
-				}
-			}
-		}
+		} else if (store.selectedSpace?.isWholesale)
+			// Wholesale: use existing logic
+			store.setOrderSelectedSize(size)
+		else if (category)
+			// Retail: set size for specific category
+			store.setRetailItemSize(category, size)
+		else
+			// Fallback to global if no category provided
+			store.setOrderSelectedSize(size)
 	}
 
 	// For retail mode: increase item quantity (not per size)
@@ -51,9 +45,7 @@ export class OrderSize extends Element {
 	// For retail mode: decrease item quantity (not per size)
 	#onDecreaseItemQuantity = (category: TemplateCategory) => {
 		const currentQty = store.getRetailItemQuantity(category)
-		if (currentQty > 0) {
-			store.setRetailItemQuantity(category, currentQty - 1)
-		}
+		if (currentQty > 0) store.setRetailItemQuantity(category, currentQty - 1)
 	}
 	override template = () => html`
 		<app-buttons-preset preset="order-flow"></app-buttons-preset>

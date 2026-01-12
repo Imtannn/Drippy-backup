@@ -1,6 +1,6 @@
 import {css, Element, element, html, type ElementAttributes} from 'lume'
 
-type BottomNavigationAttributes = keyof {}
+type BottomNavigationAttributes = keyof object // no attributes yet
 
 @element
 export class BottomNavigation extends Element {
@@ -61,8 +61,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'bottom-navigation': ElementAttributes<BottomNavigation, BottomNavigationAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'bottom-navigation': ElementAttributes<BottomNavigation, BottomNavigationAttributes>
+		}
 	}
 }

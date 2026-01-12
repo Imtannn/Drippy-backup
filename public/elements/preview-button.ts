@@ -88,8 +88,10 @@ declare global {
 	}
 }
 
-declare global {
-	interface IntrinsicElements {
-		'preview-button': ElementAttributes<PreviewButton, PreviewButtonAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'preview-button': ElementAttributes<PreviewButton, PreviewButtonAttributes>
+		}
 	}
 }

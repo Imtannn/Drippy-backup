@@ -20,7 +20,8 @@ export class RedoButton extends Element {
 			/>
 		</svg>
 	`
-	override template = () => html`<icon-button disabled=${() => this.disabled} group=${() => this.group}>${() => this.icon()}</icon-button>`
+	override template = () =>
+		html`<icon-button disabled=${() => this.disabled} group=${() => this.group}>${() => this.icon()}</icon-button>`
 }
 
 declare module 'solid-js' {

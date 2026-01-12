@@ -36,8 +36,8 @@ export class OrderView extends Element {
 		const orderItems = []
 		const retailOrderItems = []
 
+		// Only include items that are selected in the order
 		for (const [category, template] of Object.entries(store.selectedTemplates)) {
-			// Only include items that are selected in the order
 			if (store.selectedOrderItems.get(category)) {
 				if (isWholesale) {
 					// Wholesale order processing (existing logic)
@@ -101,8 +101,7 @@ export class OrderView extends Element {
 		const orderData: OrderData = {
 			// Customer information
 			email: store.order.email || '',
-			customerEmail:
-				store.order.customerEmail || 'thidieuanhle@gmail.com' || shippingAddress.firstName + '@example.com', // Placeholder
+			customerEmail: store.order.customerEmail || shippingAddress.firstName + '@example.com', // Placeholder
 			firstName: shippingAddress.firstName,
 			lastName: shippingAddress.lastName,
 			phone: shippingAddress.phone,
@@ -137,33 +136,24 @@ export class OrderView extends Element {
 			const orderData = this.#collectOrderData()
 
 			// Validate required fields
-			if (!orderData.firstName || !orderData.lastName) {
-				throw new Error('Please fill in your name')
-			}
+			if (!orderData.firstName || !orderData.lastName) throw new Error('Please fill in your name')
 
-			if (!orderData.email) {
-				throw new Error('Please fill in your email address')
-			}
+			if (!orderData.email) throw new Error('Please fill in your email address')
 
-			if (!orderData.shippingAddress.address || !orderData.shippingAddress.city) {
+			if (!orderData.shippingAddress.address || !orderData.shippingAddress.city)
 				throw new Error('Please fill in your shipping address')
-			}
 
 			// Validate order items based on order type
 			if (orderData.orderType === 'wholesale') {
-				if (!orderData.orderItems || orderData.orderItems.length === 0) {
+				if (!orderData.orderItems || orderData.orderItems.length === 0)
 					throw new Error('Please select at least one item to order')
-				}
 			} else if (orderData.orderType === 'retail') {
-				if (!orderData.retailOrderItems || orderData.retailOrderItems.length === 0) {
+				if (!orderData.retailOrderItems || orderData.retailOrderItems.length === 0)
 					throw new Error('Please select at least one item to order')
-				}
+
 				// Validate that retail items have selected sizes
-				for (const item of orderData.retailOrderItems) {
-					if (!item.selectedSize) {
-						throw new Error(`Please select a size for ${item.templateName}`)
-					}
-				}
+				for (const item of orderData.retailOrderItems)
+					if (!item.selectedSize) throw new Error(`Please select a size for ${item.templateName}`)
 			}
 
 			console.log('📦 Submitting order:', orderData)
@@ -427,8 +417,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'order-view': ElementAttributes<OrderView, OrderViewAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'order-view': ElementAttributes<OrderView, OrderViewAttributes>
+		}
 	}
 }

@@ -50,9 +50,7 @@ export class ItemCard extends Element {
 		if (!template?._id) return false
 
 		// If template is being unfavorited, return false immediately (optimistic update)
-		if (ItemCard.unfavoritingTemplates.has(template._id)) {
-			return false
-		}
+		if (ItemCard.unfavoritingTemplates.has(template._id)) return false
 
 		const userWishlist = wishlist()
 		const inWishlist = userWishlist.some(item => item.templateId === template._id)
@@ -112,15 +110,10 @@ export class ItemCard extends Element {
 			const wasFavorited = isInDatabase || isPending
 
 			// Clear pendingWishlistId if it matches
-			if (isPending) {
-				setPendingWishlistId(null)
-			}
+			if (isPending) setPendingWishlistId(null)
 
-			if (wasFavorited) {
-				ItemCard.unfavoritingTemplates.add(template._id)
-			} else {
-				ItemCard.unfavoritingTemplates.delete(template._id)
-			}
+			if (wasFavorited) ItemCard.unfavoritingTemplates.add(template._id)
+			else ItemCard.unfavoritingTemplates.delete(template._id)
 
 			await Meteor.callAsync('wishlist.toggle', template._id)
 			let retryCount = 0
@@ -130,19 +123,17 @@ export class ItemCard extends Element {
 				const isStillInWishlist = currentWishlist.some(item => item.templateId === template._id)
 
 				// If subscription has synced (item removed from wishlist), remove from unfavoriting set
-				if (wasFavorited && !isStillInWishlist) {
-					ItemCard.unfavoritingTemplates.delete(template._id)
-				} else if (!wasFavorited && isStillInWishlist) {
+				if (wasFavorited && !isStillInWishlist) ItemCard.unfavoritingTemplates.delete(template._id)
+				else if (!wasFavorited && isStillInWishlist)
 					// If we favorited and it's now in wishlist, also remove (in case it was there before)
 					ItemCard.unfavoritingTemplates.delete(template._id)
-				} else if (retryCount < maxRetries) {
+				else if (retryCount < maxRetries) {
 					// Retry after a short delay if subscription hasn't synced yet
 					retryCount++
 					setTimeout(checkSync, 100)
-				} else {
+				} else
 					// Max retries reached, remove from set anyway to prevent memory leak
 					ItemCard.unfavoritingTemplates.delete(template._id)
-				}
 			}
 
 			// Start checking after a short delay to allow subscription to sync
@@ -282,8 +273,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'item-card': ElementAttributes<ItemCard, ItemCardAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'item-card': ElementAttributes<ItemCard, ItemCardAttributes>
+		}
 	}
 }

@@ -58,20 +58,15 @@ export class LoginUI extends LumeElement {
 			const emailInput = querySelectorDeep(document, 'input[type="email"]') as HTMLInputElement | null
 			const passwordInputs = querySelectorAllDeep(document, 'input[type="password"]') as HTMLInputElement[]
 
-			if (emailInput && !emailInput.placeholder) {
-				emailInput.placeholder = 'Email'
-			}
+			if (emailInput && !emailInput.placeholder) emailInput.placeholder = 'Email'
 
 			passwordInputs.forEach(passwordInput => {
 				if (!passwordInput.placeholder) {
 					// Set different placeholders based on the input's purpose
-					if (passwordInput.id.includes('old') || passwordInput.autocomplete === 'current-password') {
+					if (passwordInput.id.includes('old') || passwordInput.autocomplete === 'current-password')
 						passwordInput.placeholder = 'Current Password'
-					} else if (passwordInput.autocomplete === 'new-password') {
-						passwordInput.placeholder = 'New Password'
-					} else {
-						passwordInput.placeholder = 'Password'
-					}
+					else if (passwordInput.autocomplete === 'new-password') passwordInput.placeholder = 'New Password'
+					else passwordInput.placeholder = 'Password'
 				}
 			})
 		}
@@ -118,7 +113,7 @@ export class LoginUI extends LumeElement {
 					// handler) so that Meteor's call to document.getElementById
 					// will work while the login UI is inside of a ShadowRoot.
 					document.getElementById = function (this: Document, id: string) {
-						let result = original.call(this, id)
+						const result = original.call(this, id)
 						if (result) return result
 						return querySelectorDeep(document, '#' + id)
 					} as (typeof document)['getElementById']
@@ -204,9 +199,7 @@ export class LoginUI extends LumeElement {
 					setTimeout(() => {
 						for (const root of roots) {
 							const loginForm = root.querySelector('.accounts-dialog') as HTMLElement | null
-							if (loginForm && loginForm.style.display !== 'none') {
-								observers.forEach(observer => observer.disconnect())
-							}
+							if (loginForm && loginForm.style.display !== 'none') observers.forEach(observer => observer.disconnect())
 						}
 					}, 50)
 
@@ -236,9 +229,7 @@ export class LoginUI extends LumeElement {
 				}
 
 				attempts++
-				if (attempts < maxAttempts) {
-					setTimeout(tryClickWithRetry, retryDelays[attempts])
-				}
+				if (attempts < maxAttempts) setTimeout(tryClickWithRetry, retryDelays[attempts])
 			}
 
 			setTimeout(tryClickWithRetry, 50)

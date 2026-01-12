@@ -42,9 +42,8 @@ async function fetchWithProxy(
 
 		if (!response.ok) {
 			console.error(`Proxy fetch error: HTTP ${response.status} for ${url}`)
-			if (response.status === 403) {
-				console.error('403 Forbidden - Website may have bot protection (Cloudflare, etc.)')
-			}
+			if (response.status === 403) console.error('403 Forbidden - Website may have bot protection (Cloudflare, etc.)')
+
 			throw new Error(`HTTP error! status: ${response.status}`)
 		}
 
@@ -72,9 +71,8 @@ function rewriteHtmlContent(html: string, baseUrl: string, proxyPath: string): s
 	rewritten = rewritten.replace(/(src=["'])(https?:\/\/[^"']+)(["'])/gi, (match, prefix, urlStr, suffix) => {
 		try {
 			const parsedUrl = new URL(urlStr)
-			if (parsedUrl.hostname === hostname || urlStr.startsWith(origin)) {
+			if (parsedUrl.hostname === hostname || urlStr.startsWith(origin))
 				return `${prefix}${proxyPath}?url=${encodeURIComponent(urlStr)}${suffix}`
-			}
 		} catch (e) {
 			// Invalid URL, skip
 		}
@@ -85,9 +83,8 @@ function rewriteHtmlContent(html: string, baseUrl: string, proxyPath: string): s
 	rewritten = rewritten.replace(/(href=["'])(https?:\/\/[^"']+)(["'])/gi, (match, prefix, urlStr, suffix) => {
 		try {
 			const parsedUrl = new URL(urlStr)
-			if (parsedUrl.hostname === hostname || urlStr.startsWith(origin)) {
+			if (parsedUrl.hostname === hostname || urlStr.startsWith(origin))
 				return `${prefix}${proxyPath}?url=${encodeURIComponent(urlStr)}${suffix}`
-			}
 		} catch (e) {
 			// Invalid URL, skip
 		}
@@ -98,9 +95,8 @@ function rewriteHtmlContent(html: string, baseUrl: string, proxyPath: string): s
 	rewritten = rewritten.replace(/(action=["'])(https?:\/\/[^"']+)(["'])/gi, (match, prefix, urlStr, suffix) => {
 		try {
 			const parsedUrl = new URL(urlStr)
-			if (parsedUrl.hostname === hostname || urlStr.startsWith(origin)) {
+			if (parsedUrl.hostname === hostname || urlStr.startsWith(origin))
 				return `${prefix}${proxyPath}?url=${encodeURIComponent(urlStr)}${suffix}`
-			}
 		} catch (e) {
 			// Invalid URL, skip
 		}

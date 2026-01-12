@@ -59,6 +59,7 @@ AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
 ### Running the Combined Assets Script
 
 The main deployment script handles:
+
 - Fetching garment blocks from Google Drive
 - Processing and optimizing assets
 - Uploading to S3
@@ -84,12 +85,14 @@ const COLLECTION_CONFIGS = [
 ```
 
 The script will automatically:
+
 1. Fetch all template, block, and material files from the Google Drive folder
 2. Process and optimize them
 3. Upload assets to the S3 bucket using the normalized collection slug
 4. Update the generated `templates_copy.ts`, `blocks_copy.ts`, and `fabrics_copy.ts` files
 
 #### Material References
+
 - Root fabric folders must be named `Category - Material Name` (optionally with `<scaleX, scaleY, offsetX, offsetY, coef, rotate>` suffix).
 - `Option Materials` and `Extra Materials` folders inside templates should reference those same folder names; the script resolves them to the fabric UUIDs automatically, so you no longer need to track `Category - Name` strings manually.
 
@@ -130,6 +133,7 @@ drippy-app/drippy-app-3D/
 #### 1. Prepare Space Assets
 
 Ensure you have:
+
 - `scene-model.glb` - The main 3D scene model
 - `scene-thumbnail.webp` - Preview thumbnail (optimized)
 - `logo_optimized.webp` - Brand logo (optional)
@@ -167,6 +171,7 @@ Add your space configuration to `public/consts/spaces.ts`:
 #### 1. Prepare Avatar Assets
 
 Ensure you have:
+
 - `model.glb` - The avatar 3D model
 - `thumbnail.webp` - Avatar preview thumbnail (optimized)
 
@@ -194,11 +199,13 @@ Add your avatar configuration to `public/consts/avatars.ts`:
 ## File Optimization Guidelines
 
 ### Image Optimization
+
 - Use WebP format for all images
 - Compress thumbnails to reasonable file sizes (< 100KB)
 - Optimize scene thumbnails for web display
 
 ### 3D Model Optimization
+
 - Use GLB format for all 3D models
 - Optimize polygon count for web performance
 - Ensure proper UV mapping for textures
@@ -209,10 +216,12 @@ Add your avatar configuration to `public/consts/avatars.ts`:
 ### Common Issues
 
 1. **Google Drive API Errors**
+
    - Verify API key is correct and has Drive API enabled
    - Check folder permissions (should be publicly accessible)
 
 2. **S3 Upload Failures**
+
    - Verify AWS credentials have proper permissions
    - Check bucket name and region configuration
    - Ensure files don't exceed size limits
@@ -225,6 +234,7 @@ Add your avatar configuration to `public/consts/avatars.ts`:
 ### Support
 
 For deployment issues:
+
 1. Check the console logs for specific error messages
 2. Verify all environment variables are set correctly
 3. Test individual steps (Google Drive access, S3 upload, etc.)

@@ -107,9 +107,8 @@ export class UploadView extends Element {
 		const selection: SelectedGarments = {}
 
 		for (const [templateCategory, blocksMap] of this.selectedBlocks.entries()) {
-			if (!selection[templateCategory]) {
-				selection[templateCategory] = {} as TemplateCategorySelection
-			}
+			if (!selection[templateCategory]) selection[templateCategory] = {} as TemplateCategorySelection
+
 			const templateSelection = selection[templateCategory] as TemplateCategorySelection
 
 			for (const [blockCategory, block] of blocksMap.entries()) {
@@ -118,16 +117,13 @@ export class UploadView extends Element {
 						block,
 						fabrics: {},
 					}
-				} else {
-					templateSelection[blockCategory]!.block = block
-				}
+				} else templateSelection[blockCategory]!.block = block
 			}
 		}
 
 		for (const [templateCategory, blockMap] of this.selectedFabrics.entries()) {
-			if (!selection[templateCategory]) {
-				selection[templateCategory] = {} as TemplateCategorySelection
-			}
+			if (!selection[templateCategory]) selection[templateCategory] = {} as TemplateCategorySelection
+
 			const templateSelection = selection[templateCategory] as TemplateCategorySelection
 
 			for (const [blockCategory, fabricMap] of blockMap.entries()) {
@@ -139,9 +135,7 @@ export class UploadView extends Element {
 				}
 
 				const fabricsObject: Record<string, Fabric> = {}
-				for (const [piece, fabric] of fabricMap.entries()) {
-					fabricsObject[piece] = fabric
-				}
+				for (const [piece, fabric] of fabricMap.entries()) fabricsObject[piece] = fabric
 
 				templateSelection[blockCategory]!.fabrics = fabricsObject
 			}
@@ -166,9 +160,7 @@ export class UploadView extends Element {
 	}
 
 	#handleUploadClick = () => {
-		if (this.fileInput) {
-			this.fileInput.files = null
-		}
+		if (this.fileInput) this.fileInput.files = null
 
 		this.fileInput?.click()
 	}
@@ -249,9 +241,8 @@ export class UploadView extends Element {
 				// Expected structure: TemplateName/...
 				const templateName = pathParts[0]
 
-				if (!templateGroups.has(templateName)) {
-					templateGroups.set(templateName, [])
-				}
+				if (!templateGroups.has(templateName)) templateGroups.set(templateName, [])
+
 				templateGroups.get(templateName)?.push(file)
 			})
 		} else {
@@ -266,9 +257,7 @@ export class UploadView extends Element {
 		for (const [templateName, templateFiles] of templateGroups) {
 			const processedTemplate = await this.#processTemplateFolder(templateFiles, templateName)
 
-			if (processedTemplate) {
-				parsedTemplates.push(processedTemplate)
-			}
+			if (processedTemplate) parsedTemplates.push(processedTemplate)
 		}
 
 		this.uploadedTemplates = parsedTemplates
@@ -403,9 +392,8 @@ export class UploadView extends Element {
 				// TemplateName/Materials/MaterialFolderName/file
 				const materialFolderName = pathParts[2] // The material folder name
 
-				if (!materialGroups.has(materialFolderName)) {
-					materialGroups.set(materialFolderName, [])
-				}
+				if (!materialGroups.has(materialFolderName)) materialGroups.set(materialFolderName, [])
+
 				materialGroups.get(materialFolderName)?.push(file)
 			}
 		})
@@ -415,9 +403,7 @@ export class UploadView extends Element {
 		// Process each material group
 		for (const [materialFolderName, materialFiles] of materialGroups) {
 			const material = await this.#processMaterialFiles(materialFiles, materialFolderName, templateName)
-			if (material) {
-				materials.push(material)
-			}
+			if (material) materials.push(material)
 		}
 
 		return materials
@@ -447,19 +433,12 @@ export class UploadView extends Element {
 					const fileName = file.name.toLowerCase()
 
 					// Categorize file by name patterns
-					if (fileName.includes('render') || fileName.includes('thumb')) {
-						uploadedFiles.set('thumb', blobUrl)
-					} else if (fileName.includes('normal')) {
-						uploadedFiles.set('normal', blobUrl)
-					} else if (fileName.includes('base')) {
-						uploadedFiles.set('baseColor', blobUrl)
-					} else if (fileName.includes('displace')) {
-						uploadedFiles.set('displacement', blobUrl)
-					} else if (fileName.includes('rough')) {
-						uploadedFiles.set('roughness', blobUrl)
-					} else if (fileName.includes('alpha')) {
-						uploadedFiles.set('alpha', blobUrl)
-					}
+					if (fileName.includes('render') || fileName.includes('thumb')) uploadedFiles.set('thumb', blobUrl)
+					else if (fileName.includes('normal')) uploadedFiles.set('normal', blobUrl)
+					else if (fileName.includes('base')) uploadedFiles.set('baseColor', blobUrl)
+					else if (fileName.includes('displace')) uploadedFiles.set('displacement', blobUrl)
+					else if (fileName.includes('rough')) uploadedFiles.set('roughness', blobUrl)
+					else if (fileName.includes('alpha')) uploadedFiles.set('alpha', blobUrl)
 
 					console.log(`Created blob URL for ${file.name}: ${blobUrl}`)
 				} catch (error) {
@@ -505,9 +484,8 @@ export class UploadView extends Element {
 				// TemplateName/BlockTypeFolder/file
 				const blockTypeFolder = pathParts[1] // The block type folder name
 
-				if (!blockTypeGroups.has(blockTypeFolder)) {
-					blockTypeGroups.set(blockTypeFolder, [])
-				}
+				if (!blockTypeGroups.has(blockTypeFolder)) blockTypeGroups.set(blockTypeFolder, [])
+
 				blockTypeGroups.get(blockTypeFolder)?.push(file)
 			}
 		})
@@ -545,9 +523,7 @@ export class UploadView extends Element {
 
 			// Find matching PNG (use first one if no exact match)
 			let matchingPng = pngFiles.find(png => this.#getFileBaseName(png.name) === baseName)
-			if (!matchingPng && pngFiles.length > 0) {
-				matchingPng = pngFiles[0] // Use first PNG as fallback
-			}
+			if (!matchingPng && pngFiles.length > 0) matchingPng = pngFiles[0] // Use first PNG as fallback
 
 			if (matchingPng) {
 				console.log(`    📥 Processing block: ${baseName}`)
@@ -572,9 +548,7 @@ export class UploadView extends Element {
 				} catch (error) {
 					console.error(`    ❌ Failed to process block ${baseName}:`, error)
 				}
-			} else {
-				console.warn(`    ⚠️ No matching PNG file found for ${baseName}`)
-			}
+			} else console.warn(`    ⚠️ No matching PNG file found for ${baseName}`)
 		}
 
 		return blocks
@@ -603,9 +577,7 @@ export class UploadView extends Element {
 		files: File[],
 		templateName: string,
 	): Promise<{extraMaterials: {mesh: string; materialId: string}[]; processedMaterials: UploadedMaterial[]}> => {
-		if (files.length === 0) {
-			return {extraMaterials: [], processedMaterials: []}
-		}
+		if (files.length === 0) return {extraMaterials: [], processedMaterials: []}
 
 		console.log(`📁 Processing Extra Materials for template: ${templateName}`)
 
@@ -622,9 +594,8 @@ export class UploadView extends Element {
 				// TemplateName/Extra Materials/MeshName/file or deeper
 				const meshName = pathParts[2] // The mesh folder name
 
-				if (!meshFolderGroups.has(meshName)) {
-					meshFolderGroups.set(meshName, [])
-				}
+				if (!meshFolderGroups.has(meshName)) meshFolderGroups.set(meshName, [])
+
 				meshFolderGroups.get(meshName)?.push(file)
 			}
 		})
@@ -645,9 +616,8 @@ export class UploadView extends Element {
 					// TemplateName/Extra Materials/MeshName/MaterialFolder/file
 					const materialFolderName = pathParts[3]
 
-					if (!materialGroups.has(materialFolderName)) {
-						materialGroups.set(materialFolderName, [])
-					}
+					if (!materialGroups.has(materialFolderName)) materialGroups.set(materialFolderName, [])
+
 					materialGroups.get(materialFolderName)?.push(file)
 				}
 			})
@@ -802,9 +772,7 @@ export class UploadView extends Element {
 		if (template) {
 			// Create a temporary fabric for the template using the first converted fabric
 			let templateFabric: Fabric | undefined
-			if (this.convertedFabrics.length > 0) {
-				templateFabric = this.convertedFabrics[0]
-			}
+			if (this.convertedFabrics.length > 0) templateFabric = this.convertedFabrics[0]
 
 			// Get extra fabrics if they exist
 			const extraFabrics: Fabric[] = []
@@ -836,9 +804,8 @@ export class UploadView extends Element {
 
 			// Collect all fabrics to preload (main + extras)
 			const fabricsToPreload = []
-			if (templateFabric) {
-				fabricsToPreload.push(templateFabric)
-			}
+			if (templateFabric) fabricsToPreload.push(templateFabric)
+
 			fabricsToPreload.push(...extraFabrics)
 
 			console.log('fabricsToPreload', fabricsToPreload)
@@ -864,9 +831,8 @@ export class UploadView extends Element {
 		for (const block of this.convertedBlocks) {
 			blockMap?.set(block.category, block)
 			const blockFabrics: PieceFabricsMap = new Map()
-			for (const fabric of this.convertedFabrics) {
-				blockFabrics.set(fabric.assignedMesh || 'default', fabric)
-			}
+			for (const fabric of this.convertedFabrics) blockFabrics.set(fabric.assignedMesh || 'default', fabric)
+
 			fabricMap?.set(block.category as BlockCategory, blockFabrics)
 		}
 
@@ -922,6 +888,7 @@ export class UploadView extends Element {
 				}
 			}
 		}
+
 		this.selectedFabrics = updatedSelectedFabrics
 
 		console.log('Updated fabric properties:', {

@@ -41,9 +41,7 @@ export class PoseSelection extends Element {
 	override connectedCallback() {
 		super.connectedCallback()
 
-		if (!store.selectedAnimation) {
-			store.selectedAnimation = poses.poses[0].value as 'none' | 'walk' | 'dance'
-		}
+		if (!store.selectedAnimation) store.selectedAnimation = poses.poses[0].value as 'none' | 'walk' | 'dance'
 
 		this.createEffect(() => {
 			this.selectedTab = 'Poses'
@@ -106,9 +104,7 @@ export class PoseSelection extends Element {
 		</tabs-provider>
 	`
 	override template = () => {
-		if (this.contentOnly) {
-			return this.#renderPoseContent()
-		}
+		if (this.contentOnly) return this.#renderPoseContent()
 
 		return html` <bottom-sheet> ${this.#renderPoseContent()} </bottom-sheet> `
 	}
@@ -151,8 +147,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'pose-selection': ElementAttributes<PoseSelection, PoseSelectionAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'pose-selection': ElementAttributes<PoseSelection, PoseSelectionAttributes>
+		}
 	}
 }

@@ -36,9 +36,7 @@ class ThemeSwitch extends HTMLElement {
 		this.shadowRoot.host.addEventListener('click', this.onClick)
 		// If another theme switch in page toggled, update my icon too
 		document.addEventListener(CUSTOM_EVENT_NAME, event => {
-			if (event.detail.originId !== this.identifier) {
-				this.adaptToTheme()
-			}
+			if (event.detail.originId !== this.identifier) this.adaptToTheme()
 		})
 
 		let oldThemeValue = getUserThemeSelection()
@@ -93,13 +91,9 @@ class ThemeSwitch extends HTMLElement {
 
 	adaptToTheme() {
 		const theme = getUserThemeSelection()
-		if (theme === THEME_AUTO) {
-			this.animateThemeButtonIconToAuto()
-		} else if (theme === THEME_DARK) {
-			this.animateThemeButtonIconToDark()
-		} /* if (theme === THEME_LIGHT) */ else {
-			this.animateThemeButtonIconToLight()
-		}
+		if (theme === THEME_AUTO) this.animateThemeButtonIconToAuto()
+		else if (theme === THEME_DARK) this.animateThemeButtonIconToDark()
+		/* if (theme === THEME_LIGHT) */ else this.animateThemeButtonIconToLight()
 	}
 
 	getEl(selector: string) {
@@ -336,13 +330,9 @@ function getSystemTheme() {
 
 function getInitialStateForIcon() {
 	const theme = getUserThemeSelection()
-	if (theme === THEME_AUTO) {
-		return ICON_INITIAL_STATE_FOR_AUTO
-	} else if (theme === THEME_DARK) {
-		return ICON_INITIAL_STATE_FOR_DARK
-	} /* if (theme === THEME_LIGHT) */ else {
-		return ICON_INITIAL_STATE_FOR_LIGHT
-	}
+	if (theme === THEME_AUTO) return ICON_INITIAL_STATE_FOR_AUTO
+	else if (theme === THEME_DARK) return ICON_INITIAL_STATE_FOR_DARK
+	/* if (theme === THEME_LIGHT) */ else return ICON_INITIAL_STATE_FOR_LIGHT
 }
 
 function createEvent(oldTheme = getUserThemeSelection(), newTheme = oldTheme, identifier = -1) {

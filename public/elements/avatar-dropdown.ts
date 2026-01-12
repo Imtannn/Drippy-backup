@@ -235,8 +235,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'avatar-dropdown': ElementAttributes<AvatarDropdown, AvatarDropdownAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'avatar-dropdown': ElementAttributes<AvatarDropdown, AvatarDropdownAttributes>
+		}
 	}
 }

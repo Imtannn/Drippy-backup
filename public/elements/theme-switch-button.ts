@@ -1,6 +1,6 @@
 import {html, css, element, Element, type ElementAttributes} from 'lume'
 
-type ThemeSwitchButtonAttributes = keyof {}
+type ThemeSwitchButtonAttributes = keyof object // no attributes yet
 
 @element
 export class ThemeSwitchButton extends Element {
@@ -31,14 +31,16 @@ export class ThemeSwitchButton extends Element {
 	`
 }
 
-declare global {
-	interface HTMLElementTagNameMap {
-		'theme-switch-button': ThemeSwitchButton
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'theme-switch-button': ElementAttributes<ThemeSwitchButton, ThemeSwitchButtonAttributes>
+		}
 	}
 }
 
 declare global {
-	interface IntrinsicElements {
-		'theme-switch-button': ElementAttributes<ThemeSwitchButton, ThemeSwitchButtonAttributes>
+	interface HTMLElementTagNameMap {
+		'theme-switch-button': ThemeSwitchButton
 	}
 }

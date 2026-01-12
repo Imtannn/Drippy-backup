@@ -28,7 +28,7 @@ import './fabric-selection.js'
 import './item-card.js'
 import {store} from './store.js'
 
-type BlocksSelectionAttributes = keyof {}
+type BlocksSelectionAttributes = keyof object // no attributes yet
 
 @element
 export class BlocksSelection extends Element {
@@ -74,9 +74,8 @@ export class BlocksSelection extends Element {
 				.sort((a, b) => templateCategoriesOrder.indexOf(a) - templateCategoriesOrder.indexOf(b))
 
 			// Auto-select first template category if none selected
-			if (this.availableTemplateCategories.length > 0 && !this.selectedTemplateCategory) {
+			if (this.availableTemplateCategories.length > 0 && !this.selectedTemplateCategory)
 				this.selectedTemplateCategory = this.availableTemplateCategories[0]
-			}
 		})
 
 		// Update available blocks when template category changes
@@ -86,15 +85,10 @@ export class BlocksSelection extends Element {
 			const selectedTemplate = store.selectedTemplates[this.selectedTemplateCategory]
 			if (selectedTemplate) {
 				this.availableBlocks = blocks[this.spaceCollection as keyof typeof blocks].filter(block => {
-					if (block.templateCategory === 'Pants' || block.templateCategory === 'Accessories') {
-						return true
-					} else {
-						return block.templateCategory === selectedTemplate.category
-					}
+					if (block.templateCategory === 'Pants' || block.templateCategory === 'Accessories') return true
+					else return block.templateCategory === selectedTemplate.category
 				})
-			} else {
-				this.availableBlocks = []
-			}
+			} else this.availableBlocks = []
 		})
 
 		// Update available fabrics when template category changes
@@ -106,9 +100,7 @@ export class BlocksSelection extends Element {
 				this.availableFabrics = fabrics[this.spaceCollection]?.filter(fabric =>
 					fabric.templateCategories?.includes(selectedTemplate.category),
 				)
-			} else {
-				this.availableFabrics = []
-			}
+			} else this.availableFabrics = []
 		})
 
 		// Update block categories when template category changes
@@ -120,7 +112,7 @@ export class BlocksSelection extends Element {
 
 			// Sort by Bodice, then Sleeves, then Pants, then Skirt, then rest...
 			const categoryOrder: BlockCategory[] = ['Bodice', 'Sleeves', 'Pants']
-			let availableCategories = [
+			const availableCategories = [
 				...new Set(this.availableBlocksMapping[this.selectedTemplateCategory] || []),
 			] as BlockCategory[]
 
@@ -151,9 +143,8 @@ export class BlocksSelection extends Element {
 			// } else if (this.availableFabrics.length > 0) {
 			// 	this.selectedSubTab = 'fabric'
 			// }
-			if (this.availableFabrics.length > 0) {
-				this.selectedSubTab = 'fabric'
-			} else if (newCategories.length > 0) {
+			if (this.availableFabrics.length > 0) this.selectedSubTab = 'fabric'
+			else if (newCategories.length > 0) {
 				this.selectedBlockCategory = newCategories[0]
 				this.selectedSubTab = newCategories[0]
 			}
@@ -161,11 +152,9 @@ export class BlocksSelection extends Element {
 
 		// Update sub-tab when block categories or fabrics change
 		this.createEffect(() => {
-			if (this.blocksCategories.length > 0 && !this.selectedSubTab) {
-				this.selectedSubTab = this.blocksCategories[0]
-			} else if (this.blocksCategories.length === 0 && this.availableFabrics.length > 0 && !this.selectedSubTab) {
+			if (this.blocksCategories.length > 0 && !this.selectedSubTab) this.selectedSubTab = this.blocksCategories[0]
+			else if (this.blocksCategories.length === 0 && this.availableFabrics.length > 0 && !this.selectedSubTab)
 				this.selectedSubTab = 'fabric'
-			}
 		})
 
 		// Update fabric categories when available fabrics change
@@ -176,9 +165,7 @@ export class BlocksSelection extends Element {
 			this.fabricCategories = newCategories
 
 			// Auto-select first category
-			if (newCategories.length > 0) {
-				this.selectedFabricCategory = newCategories[0] as any
-			}
+			if (newCategories.length > 0) this.selectedFabricCategory = newCategories[0] as any
 		})
 
 		// Update piece selections when selected fabrics change
@@ -642,8 +629,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'blocks-selection': ElementAttributes<BlocksSelection, BlocksSelectionAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'blocks-selection': ElementAttributes<BlocksSelection, BlocksSelectionAttributes>
+		}
 	}
 }

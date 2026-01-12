@@ -55,8 +55,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'loading-spinner-overlay': ElementAttributes<LoadingSpinnerOverlay>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'loading-spinner-overlay': ElementAttributes<LoadingSpinnerOverlay>
+		}
 	}
 }

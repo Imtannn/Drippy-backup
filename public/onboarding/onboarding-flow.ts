@@ -13,7 +13,7 @@ const logoLight = '/images/logo-light-fullsize.webp'
 
 type OnboardingStep = 'step1' | 'step2' | 'step3' | 'step4'
 
-type OnboardingFlowAttributes = keyof {}
+type OnboardingFlowAttributes = keyof object // no attributes yet
 
 @element
 export class OnboardingFlow extends Element {
@@ -36,11 +36,8 @@ export class OnboardingFlow extends Element {
 			const hasBackButton = path.some(el => el instanceof HTMLElement && el.tagName?.toLowerCase() === 'back-button')
 
 			if (hasBackButton) {
-				if (this.currentStep === 'step1') {
-					this.#goToHome()
-				} else {
-					this.#previousStep()
-				}
+				if (this.currentStep === 'step1') this.#goToHome()
+				else this.#previousStep()
 			}
 		})
 
@@ -48,11 +45,8 @@ export class OnboardingFlow extends Element {
 			const searchParams = new URLSearchParams(window.location.search)
 			const stepFromUrl = searchParams.get('step') as OnboardingStep
 
-			if (stepFromUrl && ['step1', 'step2', 'step3', 'step4'].includes(stepFromUrl)) {
-				this.currentStep = stepFromUrl
-			} else {
-				this.#updateUrl('step1')
-			}
+			if (stepFromUrl && ['step1', 'step2', 'step3', 'step4'].includes(stepFromUrl)) this.currentStep = stepFromUrl
+			else this.#updateUrl('step1')
 		})
 
 		// Track login state and handle step visibility
@@ -123,13 +117,12 @@ export class OnboardingFlow extends Element {
 	}
 
 	#handleStep2Submit = async () => {
-		if (this.isUserLoggedIn) {
+		if (this.isUserLoggedIn)
 			// If user is logged in, step2 goes directly to app
 			this.#goToApp()
-		} else {
+		else
 			// If user is not logged in, proceed to step3 (login)
 			this.#nextStep()
-		}
 	}
 
 	#handleStep4Submit = async () => {
@@ -148,17 +141,13 @@ export class OnboardingFlow extends Element {
 			} catch (error: any) {
 				console.error('Error saving profile:', error)
 
-				if (error.error === 'username-taken') {
+				if (error.error === 'username-taken')
 					this.errorMessage = 'This username is already taken. Please choose a different one.'
-				} else if (error.error === 'invalid-username') {
-					this.errorMessage = error.reason || 'Invalid username format.'
-				} else {
-					this.errorMessage = 'Failed to save profile. Please try again.'
-				}
+				else if (error.error === 'invalid-username') this.errorMessage = error.reason || 'Invalid username format.'
+				else this.errorMessage = 'Failed to save profile. Please try again.'
 			}
-		} else {
-			this.errorMessage = 'Please enter both username and date of birth.'
-		}
+		} else this.errorMessage = 'Please enter both username and date of birth.'
+
 		this.#goToApp()
 	}
 

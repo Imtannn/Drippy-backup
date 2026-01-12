@@ -4,7 +4,7 @@ import '../app/drippy-app.js'
 import '../imports/collections/Users.js'
 import './login-ui.js'
 
-type HomePageAttributes = keyof {} // no attributes yet
+type HomePageAttributes = keyof object // no attributes yet
 
 @element
 export class HomePage extends Element {

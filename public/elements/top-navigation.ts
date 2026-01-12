@@ -1,6 +1,6 @@
 import {css, Element, element, html, type ElementAttributes} from 'lume'
 
-type TopNavigationAttributes = keyof {}
+type TopNavigationAttributes = keyof object // no attributes yet
 
 @element
 export class TopNavigation extends Element {
@@ -53,8 +53,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'top-navigation': ElementAttributes<TopNavigation, TopNavigationAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'top-navigation': ElementAttributes<TopNavigation, TopNavigationAttributes>
+		}
 	}
 }

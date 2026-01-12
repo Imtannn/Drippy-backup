@@ -15,11 +15,8 @@ export class DialogElement extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
-			if (this.open && !this.#dialogRef) {
-				this.#createDialog()
-			} else if (!this.open && this.#dialogRef) {
-				this.#destroyDialog()
-			}
+			if (this.open && !this.#dialogRef) this.#createDialog()
+			else if (!this.open && this.#dialogRef) this.#destroyDialog()
 		})
 	}
 
@@ -57,15 +54,11 @@ export class DialogElement extends Element {
 		this.#styleRef = style
 
 		// Move all child elements to the dialog
-		while (this.firstChild) {
-			dialog.appendChild(this.firstChild)
-		}
+		while (this.firstChild) dialog.appendChild(this.firstChild)
 
 		// Close dialog when clicking backdrop (only if closeable)
 		dialog.addEventListener('click', e => {
-			if (e.target === dialog && this.closeable) {
-				this.close()
-			}
+			if (e.target === dialog && this.closeable) this.close()
 		})
 
 		document.body.appendChild(dialog)
@@ -76,9 +69,7 @@ export class DialogElement extends Element {
 	#destroyDialog = () => {
 		if (this.#dialogRef) {
 			// Move all child elements back to this element
-			while (this.#dialogRef.firstChild) {
-				this.appendChild(this.#dialogRef.firstChild)
-			}
+			while (this.#dialogRef.firstChild) this.appendChild(this.#dialogRef.firstChild)
 
 			this.#dialogRef.close()
 			document.body.removeChild(this.#dialogRef)
@@ -113,8 +104,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'dialog-element': ElementAttributes<DialogElement, DialogElementAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'dialog-element': ElementAttributes<DialogElement, DialogElementAttributes>
+		}
 	}
 }

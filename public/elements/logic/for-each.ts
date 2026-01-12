@@ -44,10 +44,11 @@ export class ForEach extends Element {
 	override template = () => html`
 		<${For} each=${() => this.items}>
 			${(item: unknown, index: () => number) => {
-				if (typeof this.content !== 'function')
+				if (typeof this.content !== 'function') {
 					throw new Error(
 						'<for-each>: content must be a function value. Make sure you assing it with a wrapper function: content=${() => (item, index) => html`...`}.',
 					)
+				}
 				return this.content(item, index)
 			}}
 		</>

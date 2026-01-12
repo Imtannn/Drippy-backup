@@ -74,11 +74,8 @@ const getPendingWishlistIdFromStorage = (): string | null => {
 
 const setPendingWishlistIdToStorage = (id: string | null) => {
 	if (typeof window === 'undefined') return
-	if (id) {
-		localStorage.setItem(PENDING_WISHLIST_ID_KEY, id)
-	} else {
-		localStorage.removeItem(PENDING_WISHLIST_ID_KEY)
-	}
+	if (id) localStorage.setItem(PENDING_WISHLIST_ID_KEY, id)
+	else localStorage.removeItem(PENDING_WISHLIST_ID_KEY)
 }
 
 const [pendingWishlistId, setPendingWishlistIdInternal] = createSignal<string | null>(getPendingWishlistIdFromStorage())
@@ -202,9 +199,8 @@ class Store {
 
 	/** Returns the garment selection for a given template category and block category. If the garment selection is not found, it is created and initialized with default values. */
 	private getGarmentSelection(templateCategory: TemplateCategory, blockCategory: BlockCategory): SelectedGarment {
-		if (!this.selectedGarments[templateCategory]) {
+		if (!this.selectedGarments[templateCategory])
 			this.selectedGarments[templateCategory] = {} as TemplateCategorySelection
-		}
 
 		const templateSelection = this.selectedGarments[templateCategory] as TemplateCategorySelection
 
@@ -223,13 +219,10 @@ class Store {
 		if (!templateSelection) return
 
 		const garmentSelection = templateSelection[blockCategory]
-		if (garmentSelection && garmentSelection.block === null && Object.keys(garmentSelection.fabrics).length === 0) {
+		if (garmentSelection && garmentSelection.block === null && Object.keys(garmentSelection.fabrics).length === 0)
 			delete templateSelection[blockCategory]
-		}
 
-		if (Object.keys(templateSelection).length === 0) {
-			delete this.selectedGarments[templateCategory]
-		}
+		if (Object.keys(templateSelection).length === 0) delete this.selectedGarments[templateCategory]
 	}
 
 	getTemplateSelection(templateCategory: TemplateCategory): TemplateCategorySelection | undefined {
@@ -266,9 +259,7 @@ class Store {
 
 		const sleevesSelection = this.getGarmentSelection(templateCategory, 'Sleeves')
 
-		for (const [meshKey, fabric] of Object.entries(bodiceFabrics)) {
-			sleevesSelection.fabrics[meshKey] = fabric
-		}
+		for (const [meshKey, fabric] of Object.entries(bodiceFabrics)) sleevesSelection.fabrics[meshKey] = fabric
 	}
 
 	// FIXME we should avoid having different ways of setting the same thing
@@ -277,9 +268,7 @@ class Store {
 	// prone/buggy.
 	setSelectedBlocks(blockData: BlockSelection | BlockSelection[]) {
 		batch(() => {
-			if (!Array.isArray(blockData)) {
-				blockData = [blockData]
-			}
+			if (!Array.isArray(blockData)) blockData = [blockData]
 
 			for (const {block, templateCategory} of blockData) {
 				const garmentSelection = this.getGarmentSelection(templateCategory, block.category)
@@ -297,14 +286,14 @@ class Store {
 	}
 
 	set setSelectedFabrics(fabricData: FabricSelection | FabricSelection[]) {
-		if (!Array.isArray(fabricData)) {
-			fabricData = [fabricData]
-		}
+		if (!Array.isArray(fabricData)) fabricData = [fabricData]
 
-		for (let {fabric, blockCategory, templateCategory, assignedMesh} of fabricData) {
-			if (!assignedMesh) {
-				assignedMesh = 'default'
-			}
+		// FIXME STOP DUPLICATING CODE IN RANDOM PLACES OR YOU WILL BE IN TROUBLE! (see parseFabricDataToMap in template-helpers.ts)
+		for (const data of fabricData) {
+			const {fabric, blockCategory, templateCategory} = data
+			let {assignedMesh} = data
+
+			if (!assignedMesh) assignedMesh = 'default'
 
 			const garmentSelection = this.getGarmentSelection(templateCategory, blockCategory)
 
@@ -355,30 +344,23 @@ class Store {
 				const collectionParam = searchParams().get('collection')
 				const sceneParam = searchParams().get('scene')
 
-				if (collectionParam && space.collections.includes(collectionParam)) {
-					this.selectedCollection = collectionParam
-				} else {
+				if (collectionParam && space.collections.includes(collectionParam)) this.selectedCollection = collectionParam
+				else
 					// For multi-collection spaces, default to null (show all)
 					// For single-collection spaces, use primary
 					this.selectedCollection = spaceHasMultipleCollections(space) ? null : getSpacePrimaryCollection(space)
-				}
 
-				if (sceneParam && space.scenes.includes(sceneParam)) {
-					this.selectedScene = sceneParam
-				} else {
-					this.selectedScene = getSpaceDefaultScene(space)
-				}
+				if (sceneParam && space.scenes.includes(sceneParam)) this.selectedScene = sceneParam
+				else this.selectedScene = getSpaceDefaultScene(space)
 			}
 		})
 	}
 
 	set setSelectedCollection(collection: string | null) {
 		this.selectedCollection = collection
-		if (collection) {
-			searchParams().set('collection', collection)
-		} else {
-			searchParams().delete('collection')
-		}
+		if (collection) searchParams().set('collection', collection)
+		else searchParams().delete('collection')
+
 		pushState()
 	}
 
@@ -400,9 +382,7 @@ class Store {
 		if (!this.selectedSpace) return null
 
 		// If multi-collection space, use selectedCollection (null means show all)
-		if (spaceHasMultipleCollections(this.selectedSpace)) {
-			return this.selectedCollection || null
-		}
+		if (spaceHasMultipleCollections(this.selectedSpace)) return this.selectedCollection || null
 
 		// Single collection space, use primary
 		return getSpacePrimaryCollection(this.selectedSpace)
@@ -448,11 +428,8 @@ class Store {
 
 	set setConnectionStatus(status: ConnectionStatus) {
 		this.connectionStatus = status
-		if (status === 'slow' || status === 'offline') {
-			this.showConnectionWarning = true
-		} else if (status === 'online') {
-			this.showConnectionWarning = false
-		}
+		if (status === 'slow' || status === 'offline') this.showConnectionWarning = true
+		else if (status === 'online') this.showConnectionWarning = false
 	}
 
 	set setShowConnectionWarning(show: boolean) {
@@ -467,9 +444,7 @@ class Store {
 		// Create a new Map to trigger reactivity
 		const newQuantities = new Map(this.orderSizeQuantities)
 
-		if (!newQuantities.has(category)) {
-			newQuantities.set(category, new Map<string, number>())
-		}
+		if (!newQuantities.has(category)) newQuantities.set(category, new Map<string, number>())
 
 		// Create new inner Map to trigger reactivity
 		const categoryMap = new Map(newQuantities.get(category)!)
@@ -491,11 +466,9 @@ class Store {
 
 	getOrderTotalQuantity(): number {
 		let total = 0
-		for (const [category] of this.selectedOrderItems.entries()) {
-			if (this.selectedOrderItems.get(category)) {
-				total += this.getItemTotalQuantity(category)
-			}
-		}
+		for (const [category] of this.selectedOrderItems.entries())
+			if (this.selectedOrderItems.get(category)) total += this.getItemTotalQuantity(category)
+
 		return total
 	}
 
@@ -546,11 +519,9 @@ class Store {
 
 	getRetailOrderTotalCost(): number {
 		let total = 0
-		for (const [category] of this.selectedOrderItems.entries()) {
-			if (this.selectedOrderItems.get(category)) {
-				total += this.getRetailItemQuantity(category) * 125
-			}
-		}
+		for (const [category] of this.selectedOrderItems.entries())
+			if (this.selectedOrderItems.get(category)) total += this.getRetailItemQuantity(category) * 125
+
 		return total
 	}
 
@@ -560,10 +531,9 @@ class Store {
 
 		// Check if this would leave no items selected
 		const selectedCount = Array.from(newSelectedItems.values()).filter(Boolean).length
-		if (currentlySelected && selectedCount <= 1) {
+		if (currentlySelected && selectedCount <= 1)
 			// Don't allow unchecking if it's the last selected item
 			return
-		}
 
 		newSelectedItems.set(category, !currentlySelected)
 		this.selectedOrderItems = newSelectedItems
@@ -572,9 +542,8 @@ class Store {
 	initializeOrderItems() {
 		// Initialize all selected templates as checked
 		const newSelectedItems = new Map<TemplateCategory, boolean>()
-		for (const [category] of Object.entries(this.selectedTemplates)) {
-			newSelectedItems.set(category, true)
-		}
+		for (const [category] of Object.entries(this.selectedTemplates)) newSelectedItems.set(category, true)
+
 		this.selectedOrderItems = newSelectedItems
 	}
 
@@ -720,9 +689,7 @@ class Store {
 			if (conflictingCategories.size > 0) {
 				for (const id of this.loadingTemplateIds) {
 					const idCategory = templateHelpers.getTemplateCategoryById(id)
-					if (idCategory && conflictingCategories.has(idCategory)) {
-						removeItemUnsorted(this.loadingTemplateIds, id)
-					}
+					if (idCategory && conflictingCategories.has(idCategory)) removeItemUnsorted(this.loadingTemplateIds, id)
 				}
 			}
 
@@ -834,9 +801,7 @@ createEffect(() => {
 	// If space gender doesn't match avatar gender, switch to default avatar for that gender
 	if (space.gender && currentAvatar && space.gender !== currentAvatar.gender) {
 		const defaultAvatar = avatars.find(a => a.gender === space.gender && a.default)
-		if (defaultAvatar) {
-			store.selectedAvatar = defaultAvatar.name
-		}
+		if (defaultAvatar) store.selectedAvatar = defaultAvatar.name
 	}
 })
 
@@ -866,17 +831,11 @@ export function updateGarmentsSelectionInUrl(selectedGarments: SelectedGarments)
 		}
 	}
 
-	if (blockEntries.length > 0) {
-		untrack(searchParams).set('blocks', blockEntries.join(','))
-	} else {
-		untrack(searchParams).delete('blocks')
-	}
+	if (blockEntries.length > 0) untrack(searchParams).set('blocks', blockEntries.join(','))
+	else untrack(searchParams).delete('blocks')
 
-	if (fabricEntries.length > 0) {
-		untrack(searchParams).set('fabrics', fabricEntries.join(','))
-	} else {
-		untrack(searchParams).delete('fabrics')
-	}
+	if (fabricEntries.length > 0) untrack(searchParams).set('fabrics', fabricEntries.join(','))
+	else untrack(searchParams).delete('fabrics')
 
 	pushState()
 }

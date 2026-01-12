@@ -15,9 +15,7 @@ const SENDGRID_FROM_EMAIL = process.env.SENDGRID_FROM_EMAIL || 'noreply@drippy3d
 // Admin email for order notifications
 const ADMIN_EMAIL = 'tan@drippy3d.com'
 
-if (SENDGRID_API_KEY) {
-	sgMail.setApiKey(SENDGRID_API_KEY)
-}
+if (SENDGRID_API_KEY) sgMail.setApiKey(SENDGRID_API_KEY)
 
 export interface HandlebarsTemplateOptions {
 	to: string | string[]
@@ -42,9 +40,7 @@ export class EmailService {
 	 */
 	private static async loadTemplate(templateName: string): Promise<HandlebarsTemplateDelegate<any>> {
 		// Check cache first
-		if (this.templateCache.has(templateName)) {
-			return this.templateCache.get(templateName)!
-		}
+		if (this.templateCache.has(templateName)) return this.templateCache.get(templateName)!
 
 		try {
 			const templatePath = this.getTemplatePath(templateName)

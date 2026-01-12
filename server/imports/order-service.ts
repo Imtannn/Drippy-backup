@@ -13,11 +13,9 @@ function generateOrderId(): string {
 function calculateOrderTotal(orderData: OrderData): string {
 	let total = 0
 
-	if (orderData.orderType === 'wholesale') {
-		total = orderData.orderItems.reduce((sum, item) => sum + item.totalPrice, 0)
-	} else if (orderData.orderType === 'retail' && orderData.retailOrderItems) {
+	if (orderData.orderType === 'wholesale') total = orderData.orderItems.reduce((sum, item) => sum + item.totalPrice, 0)
+	else if (orderData.orderType === 'retail' && orderData.retailOrderItems)
 		total = orderData.retailOrderItems.reduce((sum, item) => sum + item.totalPrice, 0)
-	}
 
 	return total.toFixed(2)
 }
@@ -87,43 +85,35 @@ function processOrderForEmail(orderData: OrderData) {
 Meteor.methods({
 	async 'order.submit'(orderData: OrderData) {
 		// Validate required fields
-		if (!orderData.customerEmail || !orderData.firstName || !orderData.lastName) {
+		if (!orderData.customerEmail || !orderData.firstName || !orderData.lastName)
 			throw new Meteor.Error('validation-error', 'Customer information is required')
-		}
 
-		if (!orderData.shippingAddress.address || !orderData.shippingAddress.city) {
+		if (!orderData.shippingAddress.address || !orderData.shippingAddress.city)
 			throw new Meteor.Error('validation-error', 'Shipping address is required')
-		}
 
 		// Validate order items based on order type
 		if (orderData.orderType === 'wholesale') {
-			if (!orderData.orderItems || orderData.orderItems.length === 0) {
+			if (!orderData.orderItems || orderData.orderItems.length === 0)
 				throw new Meteor.Error('validation-error', 'At least one order item is required')
-			}
 
 			// Validate wholesale order items have quantities
 			for (const item of orderData.orderItems) {
-				if (item.totalQuantity <= 0) {
+				if (item.totalQuantity <= 0)
 					throw new Meteor.Error('validation-error', `Item "${item.templateName}" must have at least 1 quantity`)
-				}
 			}
 		} else if (orderData.orderType === 'retail') {
-			if (!orderData.retailOrderItems || orderData.retailOrderItems.length === 0) {
+			if (!orderData.retailOrderItems || orderData.retailOrderItems.length === 0)
 				throw new Meteor.Error('validation-error', 'At least one retail order item is required')
-			}
 
 			// Validate retail order items have quantities and sizes
 			for (const item of orderData.retailOrderItems) {
-				if (item.quantity <= 0) {
+				if (item.quantity <= 0)
 					throw new Meteor.Error('validation-error', `Item "${item.templateName}" must have at least 1 quantity`)
-				}
-				if (!item.selectedSize) {
+
+				if (!item.selectedSize)
 					throw new Meteor.Error('validation-error', `Item "${item.templateName}" must have a selected size`)
-				}
 			}
-		} else {
-			throw new Meteor.Error('validation-error', 'Order type must be either wholesale or retail')
-		}
+		} else throw new Meteor.Error('validation-error', 'Order type must be either wholesale or retail')
 
 		try {
 			// Process the order

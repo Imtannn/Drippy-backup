@@ -94,9 +94,7 @@ class TemplateHelpers {
 				}
 			}
 
-			if (Object.keys(clonedTemplate).length > 0) {
-				cloned[templateCategory as TemplateCategory] = clonedTemplate
-			}
+			if (Object.keys(clonedTemplate).length > 0) cloned[templateCategory as TemplateCategory] = clonedTemplate
 		}
 
 		return cloned
@@ -154,9 +152,7 @@ class TemplateHelpers {
 			const templateFabrics = fabricsMap.get(templateCategory)
 			const templateSelection = this.buildTemplateSelectionFromMaps(templateBlocks, templateFabrics)
 
-			if (Object.keys(templateSelection).length > 0) {
-				result[templateCategory] = templateSelection
-			}
+			if (Object.keys(templateSelection).length > 0) result[templateCategory] = templateSelection
 		}
 
 		return result
@@ -175,11 +171,7 @@ class TemplateHelpers {
 	): SelectedGarments {
 		const cloned = this.cloneSelectedGarments(selection)
 
-		for (const templateCategory of templateCategories) {
-			if (templateCategory in cloned) {
-				delete cloned[templateCategory]
-			}
-		}
+		for (const templateCategory of templateCategories) if (templateCategory in cloned) delete cloned[templateCategory]
 
 		return cloned
 	}
@@ -199,11 +191,8 @@ class TemplateHelpers {
 	): SelectedGarments {
 		const cloned = this.cloneSelectedGarments(selection)
 
-		if (Object.keys(templateSelection).length === 0) {
-			delete cloned[templateCategory]
-		} else {
-			cloned[templateCategory] = templateSelection
-		}
+		if (Object.keys(templateSelection).length === 0) delete cloned[templateCategory]
+		else cloned[templateCategory] = templateSelection
 
 		return cloned
 	}
@@ -231,11 +220,8 @@ class TemplateHelpers {
 	getCategoriesThatOverride(category: TemplateCategory): TemplateCategory[] {
 		const result: TemplateCategory[] = []
 
-		for (const [overrider, overridden] of Object.entries(this.overridingCategoriesMapping)) {
-			if (overridden.includes(category)) {
-				result.push(overrider as TemplateCategory)
-			}
-		}
+		for (const [overrider, overridden] of Object.entries(this.overridingCategoriesMapping))
+			if (overridden.includes(category)) result.push(overrider as TemplateCategory)
 
 		return result
 	}
@@ -271,28 +257,20 @@ class TemplateHelpers {
 	#resolveBlocksForTemplate(template: Template, collection: string | null | undefined): Block[] {
 		const lookupOrder: string[] = []
 
-		if (collection) {
-			lookupOrder.push(collection)
-		}
+		if (collection) lookupOrder.push(collection)
 
-		if (template.collection && !lookupOrder.includes(template.collection)) {
-			lookupOrder.push(template.collection)
-		}
+		if (template.collection && !lookupOrder.includes(template.collection)) lookupOrder.push(template.collection)
 
 		for (const slug of lookupOrder) {
 			const matches = (collectionBlocks[slug as keyof typeof collectionBlocks] ?? []).filter(
 				block => block.templateId === template._id,
 			)
-			if (matches.length > 0) {
-				return matches
-			}
+			if (matches.length > 0) return matches
 		}
 
 		for (const blocksList of Object.values(collectionBlocks)) {
 			const matches = blocksList.filter(block => block.templateId === template._id)
-			if (matches.length > 0) {
-				return matches
-			}
+			if (matches.length > 0) return matches
 		}
 
 		return []
@@ -309,15 +287,16 @@ class TemplateHelpers {
 			| {fabric: Fabric; blockCategory: BlockCategory; assignedMesh?: string}
 			| {fabric: Fabric; blockCategory: BlockCategory; assignedMesh?: string}[],
 	): BlockFabricsMap {
-		if (!Array.isArray(fabricData)) {
-			fabricData = [fabricData]
-		}
+		if (!Array.isArray(fabricData)) fabricData = [fabricData]
+
 		const newFabrics: BlockFabricsMap = new Map()
 
-		for (let {fabric, blockCategory, assignedMesh} of fabricData) {
-			if (!assignedMesh) {
-				assignedMesh = 'default'
-			}
+		// FIXME STOP DUPLICATING CODE IN RANDOM PLACES OR YOU WILL BE IN TROUBLE! (see setSelectedFabrics in store.ts)
+		for (const data of fabricData) {
+			const {fabric, blockCategory} = data
+			let {assignedMesh} = data
+
+			if (!assignedMesh) assignedMesh = 'default'
 
 			const existingFabricsMap: PieceFabricsMap = newFabrics.get(blockCategory) ?? new Map()
 			existingFabricsMap.set(assignedMesh, fabric)
@@ -374,18 +353,14 @@ class TemplateHelpers {
 				// Add the main fabric (without assignedMesh - will be default)
 				if (templateData.materialId) {
 					const fabric = fabrics[collection ?? 'gap']?.find(fabric => fabric._id === templateData.materialId)
-					if (fabric) {
-						blockFabrics[fabric.assignedMesh || 'default'] = fabric
-					}
+					if (fabric) blockFabrics[fabric.assignedMesh || 'default'] = fabric
 				}
 
 				// Add extra materials with specific mesh assignments
 				if (templateData.extraMaterials) {
 					for (const extraMaterial of templateData.extraMaterials) {
 						const extraFabric = fabrics[collection ?? 'gap']?.find(fabric => fabric._id === extraMaterial.materialId)
-						if (extraFabric) {
-							blockFabrics[extraMaterial.mesh] = extraFabric
-						}
+						if (extraFabric) blockFabrics[extraMaterial.mesh] = extraFabric
 					}
 				}
 
@@ -434,13 +409,10 @@ class TemplateHelpers {
 			if (
 				selectedBlock?.templateName !== 'Pleated long sleeve shirt' &&
 				(spaceCollection === 'gap' || options.sourceCollection === 'gap')
-			) {
+			)
 				return []
-			}
 
-			if (spaceCollection === 'oofya' || options?.sourceCollection === 'oofya') {
-				return []
-			}
+			if (spaceCollection === 'oofya' || options?.sourceCollection === 'oofya') return []
 		}
 
 		const filteredMapping = mappingCategories.filter(category => categoriesFromBlocks.has(category))
@@ -575,16 +547,12 @@ class TemplateHelpers {
 		if (!trimmed) return {collectionSlug: null, value: null}
 
 		const pipeIndex = trimmed.indexOf('|')
-		if (pipeIndex === -1) {
-			return {collectionSlug: null, value: trimmed}
-		}
+		if (pipeIndex === -1) return {collectionSlug: null, value: trimmed}
 
 		const collectionSlug = trimmed.substring(0, pipeIndex).trim()
 		const value = trimmed.substring(pipeIndex + 1).trim()
 
-		if (!value) {
-			return {collectionSlug: null, value: trimmed}
-		}
+		if (!value) return {collectionSlug: null, value: trimmed}
 
 		return {
 			collectionSlug: collectionSlug.length > 0 ? collectionSlug : null,

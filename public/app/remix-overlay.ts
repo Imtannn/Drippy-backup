@@ -62,9 +62,7 @@ export class RemixOverlay extends Element {
 			target => target instanceof HTMLElement && target.tagName === 'FABRIC-SELECTION',
 		)
 
-		if (triggeredInsideFabricSelection) {
-			this.#scheduleUrlSync()
-		}
+		if (triggeredInsideFabricSelection) this.#scheduleUrlSync()
 	}
 	override connectedCallback() {
 		super.connectedCallback()
@@ -86,10 +84,10 @@ export class RemixOverlay extends Element {
 			}
 
 			// Use template blockOptions if available, otherwise fall back to templateHelpers
-			if (this.selectedTemplate.blockOptions && this.selectedTemplate.blockOptions.length > 0) {
+			if (this.selectedTemplate.blockOptions && this.selectedTemplate.blockOptions.length > 0)
 				// Flatten all blocks from blockOptions
 				this.availableBlocks = this.selectedTemplate.blockOptions.flatMap(option => option.blocks)
-			} else {
+			else {
 				this.availableBlocks = templateHelpers.getBlocksForTemplateCategory(
 					this.selectedTemplate.category,
 					this.spaceCollection,
@@ -103,9 +101,7 @@ export class RemixOverlay extends Element {
 
 		// Set activeTab immediately when selectedTemplate is set
 		this.createEffect(() => {
-			if (this.selectedTemplate && !this.activeTab) {
-				this.activeTab = FABRICS_TAB
-			}
+			if (this.selectedTemplate && !this.activeTab) this.activeTab = FABRICS_TAB
 		})
 
 		// Update block categories when template category changes (following blocks-selection logic)
@@ -116,9 +112,9 @@ export class RemixOverlay extends Element {
 			}
 
 			// Use template blockOptions if available, otherwise fall back to templateHelpers
-			if (this.selectedTemplate.blockOptions && this.selectedTemplate.blockOptions.length > 0) {
+			if (this.selectedTemplate.blockOptions && this.selectedTemplate.blockOptions.length > 0)
 				this.blocksCategories = this.selectedTemplate.blockOptions.map(option => option.category)
-			} else {
+			else {
 				const {blocksCategories} = templateHelpers.isRemixAvailableForTemplate(this.selectedTemplate, {
 					selectedGarments: untrack(() => store.selectedGarments),
 					selectedSpace: untrack(() => store.getEffectiveSpace()),
@@ -127,9 +123,7 @@ export class RemixOverlay extends Element {
 				this.blocksCategories = blocksCategories
 			}
 
-			if (this.blocksCategories.length > 0) {
-				this.selectedSubTab = this.blocksCategories[0]
-			}
+			if (this.blocksCategories.length > 0) this.selectedSubTab = this.blocksCategories[0]
 
 			onCleanup(() => {
 				this.blocksCategories = []
@@ -164,15 +158,12 @@ export class RemixOverlay extends Element {
 					fabric => fabric.category && optionCategories.has(fabric.category),
 				)
 
-				if (optionFabrics.length > 0) {
-					availableFabrics['default'] = [...optionFabrics, ...filteredDefaultFabrics]
-				}
+				if (optionFabrics.length > 0) availableFabrics['default'] = [...optionFabrics, ...filteredDefaultFabrics]
 
 				// Handle extraMaterials if they exist - use optionFabrics directly
 				if (this.selectedTemplate.extraMaterials && this.selectedTemplate.extraMaterials.length > 0) {
-					for (const extraMaterial of this.selectedTemplate.extraMaterials) {
+					for (const extraMaterial of this.selectedTemplate.extraMaterials)
 						availableFabrics[extraMaterial.mesh] = [...optionFabrics, ...filteredDefaultFabrics]
-					}
 				}
 
 				this.availableFabrics = availableFabrics
@@ -180,7 +171,8 @@ export class RemixOverlay extends Element {
 				this.availableFabrics =
 					templateHelpers.getAvailableFabricsForTemplate(this.spaceCollection, this.selectedTemplate) || {}
 
-				this.availableFabrics['default'] = this.availableFabrics['default']
+				// CONTINUE remove line, and ensure it works
+				this.availableFabrics['default'] = this.availableFabrics['default'] // eslint-disable-line -- trigger reactivity
 			}
 
 			// Make sure the overlay is scrolled to the top on opening
@@ -567,8 +559,10 @@ declare global {
 	}
 }
 
-declare module 'lume' {
-	interface IntrinsicElements {
-		'remix-overlay': ElementAttributes<RemixOverlay, RemixOverlayAttributes>
+declare module 'solid-js' {
+	namespace JSX {
+		interface IntrinsicElements {
+			'remix-overlay': ElementAttributes<RemixOverlay, RemixOverlayAttributes>
+		}
 	}
 }
