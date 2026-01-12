@@ -5,7 +5,7 @@ import {Meteor} from 'meteor/meteor'
 import {WebApp} from 'meteor/webapp'
 import * as path from 'path'
 import '../imports/collections/index.js'
-import {Visits} from '../imports/collections/Visits.js'
+import {Visits, type Visit} from '../imports/collections/Visits.js'
 import './imports/email-service.js'
 import './imports/load-env.js'
 import './imports/oauth-config.js'
@@ -162,7 +162,7 @@ WebApp.rawHandlers.use(
 )
 
 /**
- * Returns true if the file was found and and an attempt to send was made, false
+ * Returns true if the file was found and an attempt to send was made, false
  * otherwise. If an attempt to send fails, it still returns true, to end the
  * search for files.
  */
@@ -174,7 +174,7 @@ async function sendFile(res: ServerResponse, filePath: string): Promise<boolean>
 	} catch (e) {
 		if (typeof e === 'object' && e && (e as {code: string}).code === 'ENOENT') exists = false
 		else {
-			console.error('Failed to stat file: ', filePath, e)
+			failure(res, 'Failed to read and serve file: ', filePath, e)
 			return true // return true to stop searching for other files
 		}
 	}
@@ -196,14 +196,14 @@ function getCoffee(res: ServerResponse) {
 	res.end()
 }
 
-function failure(res: ServerResponse, ...msg: any[]) {
+function failure(res: ServerResponse, ...msg: unknown[]) {
 	console.error('Failure: ', ...msg)
 	res.statusCode = 500
 	res.write('Failure.')
 	res.end()
 }
 
-function sendOk(res: ServerResponse, body: any) {
+function sendOk(res: ServerResponse, body: unknown) {
 	res.statusCode = 200
 	res.write(body)
 	res.end()
@@ -232,7 +232,7 @@ const admins = [
 	'ngoc.huynhtieu1999@gmail.com',
 ]
 
-// Workaround for incorrect function signature in type definition
+// eslint-disable-next-line -- Workaround for incorrect function signature in type definition
 Accounts.findUserByEmailTmp = Accounts.findUserByEmail as any
 
 // If a user signs up with a known admin email, make them an admin.
@@ -291,9 +291,11 @@ for (const email of admins) {
 const visits = await Visits.find({}).fetchAsync()
 const visitsMigrationPromises: Promise<unknown>[] = []
 for (const visit of visits) {
-	if (!((visit as any).host && !visit.origin)) continue
+	type VisitWithHost = Visit & {host?: string}
+	const v = visit as VisitWithHost
+	if (!(v.host && !v.origin)) continue
 
-	const {_id, host} = visit as any
+	const {_id, host} = v
 	console.log('Migrating visit to rename host to origin:', host)
 	visitsMigrationPromises.push(
 		Visits.updateAsync(_id, {
