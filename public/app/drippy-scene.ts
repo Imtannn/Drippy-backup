@@ -17,6 +17,7 @@ import {
 	signal,
 	memo,
 	effect,
+	SpotLight,
 } from 'lume'
 import type {Accessor} from 'solid-js'
 import {createMemo} from 'solid-js'
@@ -808,11 +809,11 @@ export class DrippyScene extends Element {
 	override template = () => {
 		const shadowBias = -0.0005
 		const shadowNormalBias = /*0.005*/ 0
-		const shadowCameraSize = 5
-		const shadowMapSize = 1024
+		const shadowMapSize = 2048
 		const penumbra = 0.25
 		const spotAngle = 30
-		const shadowRadius = 4
+		const shadowRadius = 6
+		const shadowSamples = 8
 
 		return html`
 			<show-when
@@ -823,10 +824,22 @@ export class DrippyScene extends Element {
 			></show-when>
 
 			<show-when
-				condition=${() => store.isAdmin && !store.turnOffSettingsInSpace}
+				condition=${() => store.isAdmin && store.showAdminContent}
 				content=${() => html`
 					<div
-						style="position: absolute; top: 1rem; left: 50%; z-index: 1000; background: transparent; border-radius: 8px; padding: 6px 8px; display: none; flex-direction: column; gap: 4px; min-width: 60px; backdrop-filter: blur(4px);"
+						style="
+							position: absolute;
+							top: 1rem;
+							left: 50%;
+							z-index: 1000;
+							background: transparent;
+							border-radius: 8px;
+							padding: 6px 8px;
+							flex-direction: column;
+							gap: 4px;
+							width: 150px;
+							backdrop-filter: blur(4px);
+						"
 					>
 						<p style="color: black; font-size: 8px; font-weight: 500; margin: 0; text-align: center; line-height: 1;">
 							Env
@@ -839,7 +852,7 @@ export class DrippyScene extends Element {
 							max="3"
 							step="0.1"
 							value="0.3"
-							style="width: 50px; height: 3px; background: #333; border-radius: 2px; outline: none; -webkit-appearance: none; appearance: none;"
+							style="width: 100%; height: 3px; background: #333; border-radius: 2px; outline: none; -webkit-appearance: none; appearance: none;"
 							oninput=${(e: Event) => {
 								const input = e.target as HTMLInputElement
 								const value = Number(input.value) || 0
@@ -853,7 +866,20 @@ export class DrippyScene extends Element {
 
 			<div id="lume-scene-container">
 				<lume-scene
-					ref=${(el: Scene) => ((this.lumeScene = el), el && (el.three.environmentIntensity = 0.3))}
+					ref=${(el: Scene) => {
+						this.lumeScene = el
+						el.three.environmentIntensity = 0.3
+						console.log('gl renderer?', el.glRenderer)
+						setTimeout(() => {
+							if (el.glRenderer) {
+								el.glRenderer.shadowMap.type = THREE.VSMShadowMap
+								console.log('VSM shadow map enabled')
+								setTimeout(() => {
+									console.log('VSM shadow map (delayed)', el.glRenderer?.shadowMap.type)
+								}, 2000)
+							}
+						})
+					}}
 					id="drippy-scene"
 					webgl
 					perspective="800"
@@ -870,17 +896,17 @@ export class DrippyScene extends Element {
 						<lume-ambient-light visible="false" intensity="0.7" color="white"></lume-ambient-light>
 
 						<!-- a sphere to debug/visualize the env map -->
-						<lume-sphere visible="${() => store.isAdmin && !store.turnOffSettingsInSpace}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
+						<lume-sphere visible="${() => store.isAdmin && store.showAdminContent}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
 
 						<lume-spot-light
 							visible="true"
 							target="#avatar"
-							position="5 -5 1"
+							position="2 -5 1"
 							intensity="3"
-							shadow-camera-top="${-shadowCameraSize}"
-							shadow-camera-bottom="${shadowCameraSize}"
-							shadow-camera-left="${-shadowCameraSize}"
-							shadow-camera-right="${shadowCameraSize}"
+							ref=${(el: SpotLight) => {
+								el.three.shadow.focus = 1
+								el.three.shadow.blurSamples = shadowSamples
+							}}
 							shadow-map-width="${shadowMapSize}"
 							shadow-map-height="${shadowMapSize}"
 							shadow-bias="${shadowBias}"

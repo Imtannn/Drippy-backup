@@ -1,6 +1,6 @@
-import {attribute, booleanAttribute, css, element, Element, eventAttribute, html, type ElementAttributes} from 'lume'
+import {attribute, booleanAttribute, css, element, Element, html, type ElementAttributes} from 'lume'
 
-type IconButtonAttributes = 'disabled' | 'onclick' | 'group'
+export type IconButtonAttributes = 'disabled' | 'onclick' | 'group'
 
 @element
 export class IconButton extends Element {
@@ -9,21 +9,20 @@ export class IconButton extends Element {
 	@booleanAttribute disabled = false
 	@attribute group: string | null = null
 
-	@eventAttribute override onclick = null
-
-	#onClick = () => {
-		this.dispatchEvent(new CustomEvent('click', {bubbles: true}))
+	/**
+	 * An extension point for subclasses to provide default content, as an
+	 * alternative to composition with children and slots.
+	 */
+	protected defaultContent() {
+		return html`<span></span>` // nothing by default
 	}
+
 	override template = () => html`
-		<button
-			class="icon-button"
-			disabled=${() => this.disabled}
-			onclick=${this.#onClick}
-			classList=${() => ({group: this.group != null})}
-		>
-			<div class="icon-button-icon"><slot></slot></div>
+		<button class="icon-button" disabled=${() => this.disabled} classList=${() => ({group: this.group != null})}>
+			<div class="icon-button-icon"><slot>${() => this.defaultContent()}</slot></div>
 		</button>
 	`
+
 	override css = css /*css*/ `
 		.icon-button {
 			border-radius: 9999px;

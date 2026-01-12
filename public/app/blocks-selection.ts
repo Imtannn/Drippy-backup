@@ -3,6 +3,7 @@ import {blocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
 import {pushState, searchParams} from '../routes.js'
 
+import '../elements/admin-button.js'
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
 import '../elements/bottom-sheet.js'
@@ -20,12 +21,12 @@ import '../elements/refresh-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import '../elements/undo-button.js'
-import type {Block, BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
-import type {TemplateCategory} from '../types/template.js'
 import './app-buttons.js'
 import './fabric-selection.js'
 import './item-card.js'
+import type {Block, BlockCategory} from '../types/block.js'
+import type {Fabric} from '../types/fabric.js'
+import type {TemplateCategory} from '../types/template.js'
 import {store} from './store.js'
 
 type BlocksSelectionAttributes = keyof object // no attributes yet
@@ -236,6 +237,8 @@ export class BlocksSelection extends Element {
 			<app-buttons-group>
 				<person-button></person-button>
 				<cube-button></cube-button>
+				<admin-button></admin-button>
+
 				<show-when
 					condition=${() => store.getEffectiveCollection() === 'gap'}
 					content=${() => html` <animation-select></animation-select> `}
