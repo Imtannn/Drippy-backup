@@ -365,7 +365,7 @@ export class RemixOverlay extends Element {
 			</div>
 		</show-on-device>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: block;
 		}

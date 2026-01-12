@@ -11,7 +11,7 @@ export class SearchButton extends Element {
 		html`<button class="search-button" onclick=${this.#onClick}>
 			<img src="/images/action-buttons/search-button.svg" alt="Search" />
 		</button>`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		.search-button {
 			background: none;
 			border: none;

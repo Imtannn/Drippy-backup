@@ -75,7 +75,7 @@ export class LumeAutoRigger extends Element {
 			})
 		})
 	}
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: none;
 		}

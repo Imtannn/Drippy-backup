@@ -990,7 +990,7 @@ export class DrippyScene extends Element {
 		`
 	}
 
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			--sceneDesktopOffset: 15rem;
 			--sceneTranslateX: translateX(0);

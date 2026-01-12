@@ -26,7 +26,7 @@ export class HomePage extends Element {
 			}
 		</style>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			width: 100%;
 			height: 100%;

@@ -30,7 +30,7 @@ export class LogoButton extends Element {
 		>
 			LOGO
 		</button>`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		.logo-button {
 			background-color: #121316;
 			color: #ffffff;

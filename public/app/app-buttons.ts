@@ -45,7 +45,7 @@ export class AppButtonsLeft extends Element {
 		</div>
 	`
 
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			--app-buttons-left-transform: translateX(394px);
 		}
@@ -110,7 +110,7 @@ export class AppButtonsRight extends Element {
 		</div>
 	`
 
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		.app-buttons-right {
 			position: absolute;
 			z-index: 1;
@@ -189,7 +189,7 @@ export class AppButtonsGroup extends Element {
 		</div>
 	`
 
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			--app-buttons-group-direction: column;
 		}

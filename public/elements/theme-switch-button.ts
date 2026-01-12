@@ -10,7 +10,7 @@ export class ThemeSwitchButton extends Element {
 			<theme-switch></theme-switch>
 		</div>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		.theme-switch-container {
 			width: 2rem;
 			height: 2rem;

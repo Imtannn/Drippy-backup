@@ -321,7 +321,7 @@ export class BrandView extends Element {
 			</dialog-element>
 		</div>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			position: absolute;
 			top: 0;

@@ -44,7 +44,7 @@ export class SuccessView extends Element {
 			</div>
 		</bottom-sheet>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		${appStyles}
 
 		.success-container {

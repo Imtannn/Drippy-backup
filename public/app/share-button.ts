@@ -16,7 +16,7 @@ export class ShareButton extends Element {
 
 	override template = () => html` <button class="share-button">${this.shareIcon()}</button> `
 
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		.share-button {
 			border-radius: 999px;
 			cursor: pointer;

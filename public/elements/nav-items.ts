@@ -70,7 +70,7 @@ export class NavItems extends Element {
 			</button>
 		</div>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: flex;
 			align-items: center;

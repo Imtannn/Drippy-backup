@@ -382,7 +382,7 @@ export class BlocksSelection extends Element {
 			></show-when>
 		</bottom-sheet>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: contents;
 		}

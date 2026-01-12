@@ -173,7 +173,7 @@ export class ItemCard extends Element {
 			</div>
 		</div>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: contents;
 			--aspect-ratio: 1;

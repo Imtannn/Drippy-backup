@@ -24,7 +24,7 @@ export class IconButton extends Element {
 			<div class="icon-button-icon"><slot></slot></div>
 		</button>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		.icon-button {
 			border-radius: 9999px;
 			background-color: rgba(18, 19, 22, 0.75);

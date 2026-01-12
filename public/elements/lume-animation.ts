@@ -161,7 +161,7 @@ export class LumeAnimation extends Element {
 			})
 		})
 	}
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 		}
 	`

@@ -67,7 +67,7 @@ export class ImageLoading extends Element {
 		</div>
 	`
 
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: block;
 			width: 100vw;

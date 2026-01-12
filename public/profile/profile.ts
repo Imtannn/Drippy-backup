@@ -136,7 +136,7 @@ export class UserProfile extends Element {
 			></show-when>
 		</main>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			width: 400px;
 			height: 300px;

@@ -163,7 +163,7 @@ export class OrderItems extends Element {
 			</div>
 		</bottom-sheet>
 	`
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		${appStyles}
 
 		.order-container {

@@ -280,7 +280,7 @@ export class AppButtonsPreset extends Element {
 		<slot></slot>
 	`
 
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			display: contents;
 		}
