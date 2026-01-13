@@ -11,8 +11,8 @@
 		"dev": "npm run build:clean && concurrently --kill-others --prefix-colors=auto --names=typescript,meteor 'tsc --watch --preserveWatchOutput' 'npm run _meteor'",
 		"dev:mobile": "./start-mobile.sh",
 		"_link": "symlink-dir imports public/imports",
-		"_meteor": "meteor --exclude-archs web.browser.legacy --no-lint",
-		"_meteor:mobile": "MOBILE_DDP_URL=http://192.168.80.141:3000 MOBILE_ROOT_URL=http://192.168.80.141:3000 meteor run --exclude-archs web.browser.legacy --no-lint --port 3000",
+		"_meteor": "meteor --no-lint",
+		"_meteor:mobile": "MOBILE_DDP_URL=http://192.168.80.141:3000 MOBILE_ROOT_URL=http://192.168.80.141:3000 meteor run --no-lint --port 3000",
 		"clean": "npm run _clean:unix || npm run --script-shell=pwsh _clean:windows",
 		"_clean:unix": "rm -rf `find client -name '*.js*'` && rm -rf `find public -name '*.js*'` && rm -rf `find server -name '*.js*'` && rm -rf `find imports -name '*.js*'`",
 		"_clean:windows": "Get-ChildItem -r -i client | Where{$_.Name -Match '*.\\.js*.'} | rm -r -fo && Get-ChildItem -r -i public | Where{$_.Name -Match '*.\\.js*.'} | rm -r -fo && Get-ChildItem -r -i server | Where{$_.Name -Match '*.\\.js*.'} | rm -r -fo",
@@ -36,6 +36,7 @@
 		"@sendgrid/mail": "^8.1.5",
 		"aws-sdk": "^2.1692.0",
 		"handlebars": "^4.7.8",
+		"jquery": "^3.7.1",
 		"meteor-node-stubs": "^1.0.0"
 	},
 	"devDependencies": {
@@ -50,7 +51,6 @@
 		"eslint": "^9.39.2",
 		"eslint-config-prettier": "^10.1.8",
 		"googleapis": "^168.0.0",
-		"jquery": "^3.7.1",
 		"lume": "^0.3.0-alpha.46",
 		"prettier": "3.7.4",
 		"sharp": "^0.34.4",
