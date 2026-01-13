@@ -1,6 +1,6 @@
 import {attribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import type {Template} from '../types/template.js'
-import {templateHelpers} from './template-helpers.js'
+import {templateHelpers} from './TemplateHelpers.js'
 import {store} from './store.js'
 
 type TemplateItemOverlayAttributes = 'selectedTemplate'

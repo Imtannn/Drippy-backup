@@ -37,7 +37,7 @@ import {
 } from '../utils.js'
 import type {ConnectionStatus} from './network-monitor.js'
 import {createNetworkEffect} from './network-monitor.js'
-import {templateHelpers} from './template-helpers.js'
+import {templateHelpers} from './TemplateHelpers.js'
 
 export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
 export const username = () => currentUser()?.username ?? ''
