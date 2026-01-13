@@ -169,7 +169,7 @@ export const backgroundScenes: BackgroundScene[] = [
 		name: 'H&M',
 		slug: 'h&m',
 		description: 'H&M',
-		env: '/images/envs/brown_photostudio_02.jpg',
+		env: '/images/envs/H&M-env.webp',
 		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/h%26m/H%26M+Scene.glb',
 		includedModelFiles: [],
 	},
