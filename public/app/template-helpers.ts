@@ -352,8 +352,16 @@ class TemplateHelpers {
 
 				// Add the main fabric (without assignedMesh - will be default)
 				if (templateData.materialId) {
-					const fabric = fabrics[collection ?? 'gap']?.find(fabric => fabric._id === templateData.materialId)
-					if (fabric) blockFabrics[fabric.assignedMesh || 'default'] = fabric
+					// If no collection is provided, loop through all collections and find the fabric
+					if (!collection) {
+						for (const collection of Object.keys(fabrics)) {
+							const fabric = fabrics[collection]?.find(fabric => fabric._id === templateData.materialId)
+							if (fabric) blockFabrics[fabric.assignedMesh || 'default'] = fabric
+						}
+					} else {
+						const fabric = fabrics[collection]?.find(fabric => fabric._id === templateData.materialId)
+						if (fabric) blockFabrics[fabric.assignedMesh || 'default'] = fabric
+					}
 				}
 
 				// Add extra materials with specific mesh assignments
