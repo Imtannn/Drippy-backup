@@ -1,4 +1,4 @@
-import type {Element3D, GltfModel, Mesh} from 'lume'
+import {disposeObjectTree, type Element3D, type GltfModel, type Mesh} from 'lume'
 import {
 	batch,
 	createEffect,
@@ -687,22 +687,19 @@ export function setMaterialsVisibleOnModelLoad(el: GltfModel, visible: Accessor<
 }
 
 export function showSkeletonHelper(el: GltfModel, show: () => boolean) {
-	// TODO enable via admin UI
-	return
-
 	whenModelLoaded(el, () => {
 		if (!show()) return
+		if (!el.scene) return
 
 		const helper = new THREE.SkeletonHelper(el.three)
 		// helper.material.linewidth = 2
-		el.three.add(helper)
-		el.needsUpdate()
+		const scene = el.scene
+		scene.three.add(helper)
+		scene.needsUpdate()
 
 		onCleanup(() => {
-			el.three.remove(helper)
-			helper.geometry.dispose()
-			;(helper.material as THREE.Material).dispose()
-			el.needsUpdate()
+			disposeObjectTree(helper)
+			scene.needsUpdate()
 		})
 	})
 }
@@ -1064,7 +1061,7 @@ export function createFabricTexture(
 			setError(null)
 
 			try {
-				const textureSet = await textureManager.loadFabricTexturesWithUV(currentFabric)
+				const textureSet = await textureManager.loadFabricTextures(currentFabric)
 
 				if (canceled) return
 

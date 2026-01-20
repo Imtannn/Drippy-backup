@@ -28,6 +28,7 @@ export type Fabric = {
 	thumb?: string
 	normal?: string
 	baseColor?: string
+	/** @deprecated not usable for realtime graphics, requires very high poly models. */
 	displacement?: string
 	roughness?: string
 	alpha?: string

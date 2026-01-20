@@ -185,9 +185,9 @@ class TextureManager {
 		])
 	}
 	/**
-	 * Load fabric textures with UV-aware configuration
+	 * Given a fabric definition, load a set of Three.js Texture objects.
 	 */
-	async loadFabricTexturesWithUV(fabric: Fabric): Promise<TextureSet> {
+	async loadFabricTextures(fabric: Fabric): Promise<TextureSet> {
 		const config: TextureConfig = {
 			repeat: [...this.defaultConfig.repeat],
 			coef: fabric.coef || 1,
@@ -225,25 +225,20 @@ class TextureManager {
 	/**
 	 * Apply texture set to THREE.js material
 	 */
-	applyTexturesToMaterial(material: any, textureSet: TextureSet) {
+	applyTexturesToMaterial(material: THREE.MeshPhysicalMaterial, textureSet: TextureSet) {
 		// Apply textures
 		material.map = textureSet.baseColor || null
 		material.normalMap = textureSet.normal || null
-		// material.displacementMap = textureSet.displacement || null
 		material.roughnessMap = textureSet.roughness || null
 		material.alphaMap = textureSet.alpha || null
 
 		// Configure material properties
 		if (textureSet.baseColor) textureSet.baseColor.colorSpace = THREE.SRGBColorSpace
 
-		material.roughnessIntensity = 1
+		material.roughness = 1.4
+		material.metalness = 0.3
 		material.transparent = true
-		material.emissive = new THREE.Color(0x000000)
-		material.emissiveIntensity = 0
-		material.aoMapIntensity = 1
 		material.side = THREE.DoubleSide
-		material.normalScale = new THREE.Vector2(2, 2)
-		material.blending = THREE.NormalBlending
 
 		// Ensure GPU-side texture state updates
 		if (material.map) material.map.needsUpdate = true
@@ -251,6 +246,16 @@ class TextureManager {
 		// if (material.displacementMap) material.displacementMap.needsUpdate = true
 		if (material.roughnessMap) material.roughnessMap.needsUpdate = true
 		if (material.alphaMap) material.alphaMap.needsUpdate = true
+		material.needsUpdate = true
+	}
+
+	clearTexturesFromMaterial(material: THREE.MeshPhysicalMaterial) {
+		// Clear textures
+		material.map = null
+		material.normalMap = null
+		material.roughnessMap = null
+		material.alphaMap = null
+
 		material.needsUpdate = true
 	}
 
