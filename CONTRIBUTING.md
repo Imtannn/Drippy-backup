@@ -10,7 +10,7 @@
     - `@attribute` decorators (or derivatives such as `@numberAttribute` for
       coercing attribute values to JS values) to map DOM attributes to respective
       signal-backed JS properties.
-    - `@signal`, `@memo`, and `@effect decorators for reactivity.
+    - `@signal`, `@memo`, and `@effect` decorators for reactivity.
     - `template` for defining the element's Shadow DOM structure.
     - `css` for defining the element's Shadow DOM styles.
 - For all reactivity,
