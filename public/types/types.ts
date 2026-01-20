@@ -156,6 +156,19 @@ export type OrderData = {
 
 	spaceDescription?: string
 }
+
+export type OrderSuccessOrError =
+	| {
+			success: true
+			orderId: string
+			message: string
+	  }
+	| {
+			success: false
+			error: string
+			details: string
+	  }
+
 export type TemplateMap = Record<TemplateCategory, Template>
 export type CategoryBlocksMap = Map<BlockCategory, Block>
 export type TemplateBlocksMap = Map<TemplateCategory, CategoryBlocksMap>

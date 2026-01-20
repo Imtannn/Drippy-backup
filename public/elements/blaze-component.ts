@@ -1,6 +1,5 @@
 import '../promise.withResolvers.js'
 import {Blaze} from 'meteor/blaze'
-import {Template} from 'meteor/templating'
 import {
 	Element,
 	element,
@@ -41,7 +40,7 @@ export class BlazeComponent extends Element {
 
 	#container!: HTMLDivElement
 
-	#tmpl = () => (typeof this.tmpl === 'string' ? (Template[this.tmpl] as Blaze.Template | undefined) : this.tmpl)
+	#tmpl = () => (typeof this.tmpl === 'string' ? Blaze.Template[this.tmpl as keyof typeof Blaze.Template] : this.tmpl)
 
 	#memoized = false
 
@@ -102,7 +101,7 @@ export class BlazeComponent extends Element {
 			// Map the element's data to the reactive var so that changes will be picked up by Blaze.
 			createEffect(() => reactive.set(this.data))
 
-			const view = Blaze.renderWithData(tmpl, () => reactive.get(), this.#container)
+			const view = Blaze.renderWithData(tmpl as Blaze.Template, () => reactive.get(), this.#container)
 
 			// ensure all reactive updates are processed (is this needed?)
 			// Tracker.flush()

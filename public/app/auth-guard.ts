@@ -1,5 +1,5 @@
 import {createMemo} from 'solid-js'
-import {currentUser} from './store.js'
+import {currentUser, userLoading} from './store.js'
 
 export type AuthState = 'loading' | 'authenticated' | 'unauthenticated'
 
@@ -31,7 +31,7 @@ export type AuthGuardOptions = {
  *   redirectToOnUnauthenticated: '/onboarding?step=step3',
  *   debug: true
  * })
- * 
+ *
  * // Derive state in another memo:
  * const isUserLoggedIn = createMemo(() => authState() === 'authenticated')
  *
@@ -47,8 +47,7 @@ export function setupAuthGuard(options: AuthGuardOptions = {}) {
 	const authState = createMemo(() => {
 		const user = currentUser()
 
-		// If undefined, means the user is still loading
-		if (user === undefined) {
+		if (userLoading(user)) {
 			if (debug) console.log('[auth-guard] User is loading...')
 			return 'loading'
 		}

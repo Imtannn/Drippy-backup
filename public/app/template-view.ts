@@ -12,6 +12,7 @@ import {
 	wishlist,
 	pendingWishlistId,
 	setPendingWishlistId,
+	isLoggedIn,
 } from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
 
@@ -177,8 +178,9 @@ export class TemplateView extends Element {
 
 		// Close login dialog and auto-favorite pending template when user successfully logs in
 		this.createEffect(() => {
+			// FIXME: STOP making duplicate auth code. See the duplication in spaces-selection.ts
 			const user = currentUser()
-			if (user !== null && this.showLoginDialog) {
+			if (isLoggedIn(user) && this.showLoginDialog) {
 				this.showLoginDialog = false
 
 				// Auto-favorite pending template if exists

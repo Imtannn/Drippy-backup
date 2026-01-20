@@ -39,7 +39,15 @@ import type {ConnectionStatus} from './network-monitor.js'
 import {createNetworkEffect} from './network-monitor.js'
 import {templateHelpers} from './TemplateHelpers.js'
 
-export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
+/**
+ * The current user as a Solid.js signal. Undefined means loading during the
+ * app's initial load, null means logged out, and a Meteor.User object means
+ * logged in.
+ */
+export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null | undefined)
+
+export const userLoading = (user: Meteor.User | null | undefined): user is undefined => user === undefined
+export const isLoggedIn = (user: Meteor.User | null | undefined): user is Meteor.User | undefined => user !== null
 export const username = () => currentUser()?.username ?? ''
 export const dateOfBirth = () => currentUser()?.profile?.dateOfBirth ?? ''
 export const isAdmin = () => !!currentUser()?.profile?.isAdmin

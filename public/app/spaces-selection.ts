@@ -8,7 +8,7 @@ import '../elements/placeholder-image.js'
 import {pushState, searchParams} from '../routes.js'
 import type {Space, TemplateBlocksMap, TemplateFabricsMap} from '../types/types.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import {currentUser, store, updateGarmentsSelectionInUrl} from './store.js'
+import {currentUser, isLoggedIn, store, updateGarmentsSelectionInUrl} from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
 
 import '../elements/dialog-element.js'
@@ -53,8 +53,8 @@ export class SpacesSelection extends Element {
 
 		// Close login dialog when user successfully logs in
 		this.createEffect(() => {
-			const user = currentUser()
-			if (user !== null && this.showLoginDialog) this.showLoginDialog = false
+			// FIXME: STOP making duplicate auth code. See the duplication in template-view.ts
+			if (isLoggedIn(currentUser()) && this.showLoginDialog) this.showLoginDialog = false
 		})
 
 		// Ensure selectedTab is always set to a valid value
@@ -202,8 +202,7 @@ export class SpacesSelection extends Element {
 						<div class="nav-links">
 							<a href="/landing" class="learn-more-link">Learn more</a>
 							${() => {
-								const user = currentUser()
-								return user !== null
+								return isLoggedIn(currentUser())
 									? html`<login-ui></login-ui>`
 									: html`<button class="sign-in-button" onclick=${this.#onSignInClick}>Sign in</button>`
 							}}
