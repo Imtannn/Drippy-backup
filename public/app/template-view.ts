@@ -20,7 +20,6 @@ import '../elements/animation-select.js'
 import '../elements/avatar-dropdown.js'
 import '../elements/avatar-swap-bottom-sheet.js'
 import '../elements/back-button.js'
-import '../elements/bottom-navigation.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
 import '../elements/dialog-element.js'
@@ -30,6 +29,7 @@ import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
+import '../elements/nav-bar.js'
 import '../elements/nav-items.js'
 import '../elements/person-button.js'
 import '../elements/placeholder-image.js'
@@ -39,7 +39,6 @@ import '../elements/search-button.js'
 import '../elements/show-on-device.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
-import '../elements/top-navigation.js'
 
 import './app-buttons-preset.js'
 import './app-buttons.js'
@@ -620,7 +619,8 @@ export class TemplateView extends Element {
 					condition=${() => !(this.showRemixOverlay && store.remixOverlayTemplate !== null)}
 					content=${() => html`
 						<div class="template-view-buttons">
-							<top-navigation
+							<nav-bar
+								position="top"
 								classList=${() => ({
 									hidden: this.showDetailView,
 								})}
@@ -673,7 +673,7 @@ export class TemplateView extends Element {
 									></avatar-dropdown>
 									<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
 								</div>
-							</top-navigation>
+							</nav-bar>
 						</div>
 					`}
 				></show-when>
@@ -827,7 +827,8 @@ export class TemplateView extends Element {
 				`}
 			></show-when>
 			<show-on-device device="mobile">
-				<bottom-navigation
+				<nav-bar
+					position="bottom"
 					classList=${() => ({
 						hidden:
 							(this.showRemixOverlay && store.remixOverlayTemplate !== null) ||
@@ -883,7 +884,7 @@ export class TemplateView extends Element {
 						></avatar-dropdown>
 						<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
 					</div>
-				</bottom-navigation>
+				</nav-bar>
 			</show-on-device>
 		</bottom-sheet>
 
