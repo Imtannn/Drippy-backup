@@ -12,7 +12,7 @@ import '../elements/home-button.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/tabs.js'
-import type {Block, BlockCategory, TemplateCategory as BlockTemplateCategory} from '../types/block.js'
+import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric, FabricCategory} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {
@@ -735,7 +735,7 @@ export class UploadView extends Element {
 			category: block.category as BlockCategory,
 			templateId: templateId, // Will be set properly
 			templateName: uploadedTemplate.templateName,
-			templateCategory: 'Dress' as BlockTemplateCategory, // Default category for uploaded templates
+			templateCategory: 'Dress' as TemplateCategory, // Default category for uploaded templates
 		}))
 
 		// Convert template to system format
