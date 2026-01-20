@@ -1,6 +1,7 @@
-import {css, element, Element, html, signal, type ElementAttributes} from 'lume'
+import {css, element, Element, html, memo, signal, type ElementAttributes} from 'lume'
 import {Meteor} from 'meteor/meteor'
 import '../app/app-buttons.js'
+import {setupAuthGuard} from '../app/auth-guard.js'
 import {currentUser} from '../app/store.js'
 import '../elements/back-button.js'
 import '../elements/logic/show-when.js'
@@ -19,13 +20,19 @@ type OnboardingFlowAttributes = keyof object // no attributes yet
 export class OnboardingFlow extends Element {
 	static override readonly elementName = 'onboarding-flow'
 
+	#authState = setupAuthGuard({redirectToOnUnauthenticated: '/onboarding?step=step3', debug: true})
+
 	@signal email = ''
 	@signal username = ''
 	@signal dateOfBirth = ''
 	@signal currentStep: OnboardingStep = 'step1'
 	@signal errorMessage = ''
-	@signal isUserLoggedIn = false
 	@signal previousStep: OnboardingStep | null = null
+
+	@memo private get isUserLoggedIn() {
+		return this.#authState() === 'authenticated'
+	}
+
 	override connectedCallback() {
 		super.connectedCallback()
 
@@ -49,28 +56,11 @@ export class OnboardingFlow extends Element {
 			else this.#updateUrl('step1')
 		})
 
-		// Track login state and handle step visibility
 		this.createEffect(async () => {
-			// FIXME keep code maintainable, unduplicate this auth logic (same as in app-guard.ts and home-page.ts)
-			const user = currentUser()
-
-			// If undefined, means the user is still loading
-			if (user === undefined) return
-
-			this.isUserLoggedIn = user !== null
-
-			if (user !== null) {
+			if (this.isUserLoggedIn) {
 				await this.#loadUserProfile()
 				// If user is logged in and on step3, go directly to app
 				if (this.currentStep === 'step3') {
-					// if (this.username && this.dateOfBirth) {
-					// 	this.#goToApp()
-					// 	return
-					// } else {
-					// 	this.#nextStep()
-					// 	return
-					// }
-
 					// Skip step 4 entirely
 					this.#goToApp()
 					return

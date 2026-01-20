@@ -37,3 +37,10 @@
     into all Shadow Roots so it affects all elements.
   - Prefer CSS animations over JS animations wherever possible.
     - Exception: Lume 3D elements can be animated only with JS currently.
+
+# NEVER
+
+- Never create alternative reactivity patterns, only signals and effects. For
+  example, never create a callback-based API to pass data to a callback depending
+  on state, instead give the user a signal or a memo they can read from inside an
+  effect.
