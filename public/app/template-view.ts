@@ -13,7 +13,7 @@ import {
 	pendingWishlistId,
 	setPendingWishlistId,
 } from './store.js'
-import {templateHelpers} from './template-helpers.js'
+import {templateHelpers} from './TemplateHelpers.js'
 
 import {collections} from '../consts/collections.js'
 import '../elements/animation-select.js'

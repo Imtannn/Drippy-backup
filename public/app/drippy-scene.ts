@@ -61,8 +61,8 @@ import {
 import './app-buttons.js'
 import {AvatarSkeleton} from './avatar-skeleton.js'
 import {store} from './store.js'
-import {templateHelpers} from './template-helpers.js'
-import {textureManager} from './texture-manager.js'
+import {templateHelpers} from './TemplateHelpers.js'
+import {textureManager} from './TextureManager.js'
 import {blocks} from '../consts/blocks.js'
 
 // TODO Use the env specified for each space.

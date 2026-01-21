@@ -31,7 +31,7 @@ import './share-view.js'
 import './spaces-selection.js'
 import {store} from './store.js'
 import './success-view.js'
-import {templateHelpers} from './template-helpers.js'
+import {templateHelpers} from './TemplateHelpers.js'
 import './template-view.js'
 
 const isPreview = createMemo(() => searchParams().get('isPreview'))

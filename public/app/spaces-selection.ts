@@ -9,7 +9,7 @@ import {pushState, searchParams} from '../routes.js'
 import type {Space, TemplateBlocksMap, TemplateFabricsMap} from '../types/types.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import {currentUser, store, updateGarmentsSelectionInUrl} from './store.js'
-import {templateHelpers} from './template-helpers.js'
+import {templateHelpers} from './TemplateHelpers.js'
 
 import '../elements/dialog-element.js'
 import '../elements/heart-button.js'

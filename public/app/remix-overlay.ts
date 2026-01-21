@@ -25,7 +25,7 @@ import './fabric-selection.js'
 import './item-card.js'
 import './loading-spinner-overlay.js'
 import {store, updateGarmentsSelectionInUrl} from './store.js'
-import {templateHelpers} from './template-helpers.js'
+import {templateHelpers} from './TemplateHelpers.js'
 
 const STYLE_TAB = 'style'
 const FABRICS_TAB = 'fabrics'

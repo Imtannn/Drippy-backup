@@ -6,7 +6,7 @@ import {pushState, searchParams} from '../routes.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {TemplateMap} from '../types/types.js'
 import {store, updateGarmentsSelectionInUrl} from './store.js'
-import {templateHelpers} from './template-helpers.js'
+import {templateHelpers} from './TemplateHelpers.js'
 
 import '../elements/avatar-dropdown.js'
 import '../elements/dialog-element.js'
