@@ -45,8 +45,8 @@ export const spaces: Space[] = [
 		description: 'Drippy Shop',
 		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Logo-1/Oofya.png',
 		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SCENE.webp',
-		defaultScene: 'metamorphosis',
-		scenes: ['metamorphosis'],
+		defaultScene: 'drippy-shop',
+		scenes: ['drippy-shop'],
 		gender: 'female',
 		garmentsCount: sumGarmentsCount([
 			'anyshape',
