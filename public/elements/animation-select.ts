@@ -3,8 +3,6 @@ import {store} from '../app/store.js'
 
 export const appAnims = [
 	{id: 'none', name: null, src: null},
-	{id: 'walk', name: 'FV2_Walking in place.mtn', src: '/models/Yuna-walkinplace.glb'},
-	{id: 'dance', name: 'FV2_Dancing_01.mtn', src: '/models/Yuna-dancing01.glb'},
 	{id: 'idle', name: 'Animation', src: '/models/Idle01.glb'},
 ]
 @element
