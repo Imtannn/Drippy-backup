@@ -28,6 +28,7 @@ import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import {store} from './store.js'
+import {size, values} from '../utils.js'
 
 type BlocksSelectionAttributes = keyof object // no attributes yet
 
@@ -182,9 +183,9 @@ export class BlocksSelection extends Element {
 				return
 			}
 
-			const fabricsArray = Object.values(templateSelection)
+			const fabricsArray = values(templateSelection)
 				.map(selection => selection?.fabrics ?? {})
-				.filter(fabrics => Object.keys(fabrics).length > 0)
+				.filter(fabrics => size(fabrics) > 0)
 
 			if (fabricsArray.length === 0) {
 				this.pieceSelections = []

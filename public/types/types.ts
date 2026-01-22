@@ -169,13 +169,25 @@ export type OrderSuccessOrError =
 			details: string
 	  }
 
-export type TemplateMap = Record<TemplateCategory, Template>
-export type CategoryBlocksMap = Map<BlockCategory, Block>
-export type TemplateBlocksMap = Map<TemplateCategory, CategoryBlocksMap>
+export type TemplateMap = {
+	[k in TemplateCategory]?: Template
+}
+export type CategoryBlocksMap = {
+	[k in BlockCategory]?: Block
+}
+export type TemplateBlocksMap = {
+	[k in TemplateCategory]?: CategoryBlocksMap
+}
 
-export type PieceFabricsMap = Map<string, Fabric>
-export type BlockFabricsMap = Map<BlockCategory, PieceFabricsMap>
-export type TemplateFabricsMap = Map<TemplateCategory, BlockFabricsMap>
+export type PieceFabricsMap = {
+	[assignedMesh in string]?: Fabric
+}
+export type BlockFabricsMap = {
+	[k in BlockCategory]?: PieceFabricsMap
+}
+export type TemplateFabricsMap = {
+	[k in TemplateCategory]?: BlockFabricsMap
+}
 
 export type FabricSelection = {
 	fabric: Fabric
@@ -187,10 +199,16 @@ export type FabricSelection = {
 export type BlockSelection = {block: Block; templateCategory: TemplateCategory}
 
 export type SelectedGarment = {
+	/** The selected block for the garment category. Null if none selected. */
 	block: Block | null
-	fabrics: Record<string, Fabric>
+	/** The selected fabrics for the garment category, per assigned mesh. */
+	fabrics: PieceFabricsMap
 }
 
-export type TemplateCategorySelection = Partial<Record<BlockCategory, SelectedGarment>>
+export type TemplateCategorySelection = {
+	[k in BlockCategory]?: SelectedGarment
+}
 
-export type SelectedGarments = Partial<Record<TemplateCategory, TemplateCategorySelection>>
+export type SelectedGarments = {
+	[k in TemplateCategory]?: TemplateCategorySelection
+}

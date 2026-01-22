@@ -8,6 +8,7 @@ import {href} from '../routes.js'
 import {appStyles} from '../styles/app-styles.js'
 import './app-buttons-preset.js'
 import {store} from './store.js'
+import {entries} from '../utils.js'
 
 type OrderViewAttributes = 'onclick'
 
@@ -37,7 +38,7 @@ export class OrderView extends Element {
 		const retailOrderItems = []
 
 		// Only include items that are selected in the order
-		for (const [category, template] of Object.entries(store.selectedTemplates)) {
+		for (const [category, template] of entries(store.selectedTemplates)) {
 			if (store.selectedOrderItems.get(category)) {
 				if (isWholesale) {
 					// Wholesale order processing (existing logic)

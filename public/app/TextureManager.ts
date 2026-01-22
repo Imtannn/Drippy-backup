@@ -31,7 +31,9 @@ export interface CachedTexture {
 }
 
 class TextureManager {
+	// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 	private textureCache = new Map<string, CachedTexture>()
+	// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 	private loadingPromises = new Map<string, Promise<CachedTexture | null>>()
 	private defaultConfig: TextureConfig = DEFAULT_TEXTURE_CONFIG
 

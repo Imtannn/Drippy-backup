@@ -5,6 +5,7 @@ import {appStyles} from '../styles/app-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import './app-buttons-preset.js'
 import {store} from './store.js'
+import {entries} from '../utils.js'
 
 @element
 export class OrderSize extends Element {
@@ -59,9 +60,7 @@ export class OrderSize extends Element {
 						<div class="selected-items">
 							<for-each
 								items=${() =>
-									Object.entries(store.selectedTemplates).filter(([category]) =>
-										store.selectedOrderItems.get(category),
-									)}
+									entries(store.selectedTemplates).filter(([category]) => store.selectedOrderItems.get(category))}
 								content=${() =>
 									([category, template]: [TemplateCategory, Template]) => html`
 										<div class="item-section">

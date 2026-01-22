@@ -16,8 +16,6 @@ import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric, FabricCategory} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {
-	BlockFabricsMap,
-	CategoryBlocksMap,
 	PieceFabricsMap,
 	SelectedGarments,
 	Space,
@@ -26,6 +24,7 @@ import type {
 	TemplateFabricsMap,
 	TemplateMap,
 } from '../types/types.js'
+import {entries} from '../utils.js'
 
 interface UploadedMaterial {
 	_id: string
@@ -77,6 +76,7 @@ export class UploadView extends Element {
 	// Reactive properties
 	@signal selectedTab: string = BLOCK_CATEGORIES[0]
 	@signal uploadedTemplates: ParsedTemplate[] = []
+	// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 	@signal selectedMaterials = new Map<string, UploadedMaterial>() // blockCategory -> material
 	@signal isUploading = false
 	@signal uploadProgress = ''
@@ -85,8 +85,8 @@ export class UploadView extends Element {
 	@signal convertedFabrics: Fabric[] = []
 	@signal selectedSpace: Space | null = null
 	@signal selectedAvatar: string | null = null
-	@signal selectedFabrics: TemplateFabricsMap = new Map()
-	@signal selectedBlocks: TemplateBlocksMap = new Map()
+	@signal selectedFabrics: TemplateFabricsMap = {}
+	@signal selectedBlocks: TemplateBlocksMap = {}
 	@signal selectedTemplates: TemplateMap = {}
 	@signal fabricScaleX = 2
 	@signal fabricScaleY = 2
@@ -103,15 +103,20 @@ export class UploadView extends Element {
 	// DOM elements
 	private fileInput?: HTMLInputElement
 
+	// FIXME please stop creating more mapping/derivation. It is adding too
+	// much complexity and makes code more difficult to modify, understand, and
+	// debug.
+	// Common derivations need to be centralized, as solid memos, not
+	// recalculated in multiple places.
 	#getSelectedGarments = (): SelectedGarments => {
 		const selection: SelectedGarments = {}
 
-		for (const [templateCategory, blocksMap] of this.selectedBlocks.entries()) {
+		for (const [templateCategory, blocksMap] of entries(this.selectedBlocks)) {
 			if (!selection[templateCategory]) selection[templateCategory] = {} as TemplateCategorySelection
 
 			const templateSelection = selection[templateCategory] as TemplateCategorySelection
 
-			for (const [blockCategory, block] of blocksMap.entries()) {
+			for (const [blockCategory, block] of entries(blocksMap)) {
 				if (!templateSelection[blockCategory]) {
 					templateSelection[blockCategory] = {
 						block,
@@ -121,12 +126,12 @@ export class UploadView extends Element {
 			}
 		}
 
-		for (const [templateCategory, blockMap] of this.selectedFabrics.entries()) {
+		for (const [templateCategory, blockMap] of entries(this.selectedFabrics)) {
 			if (!selection[templateCategory]) selection[templateCategory] = {} as TemplateCategorySelection
 
 			const templateSelection = selection[templateCategory] as TemplateCategorySelection
 
-			for (const [blockCategory, fabricMap] of blockMap.entries()) {
+			for (const [blockCategory, fabricMap] of entries(blockMap)) {
 				if (!templateSelection[blockCategory]) {
 					templateSelection[blockCategory] = {
 						block: null,
@@ -134,8 +139,8 @@ export class UploadView extends Element {
 					}
 				}
 
-				const fabricsObject: Record<string, Fabric> = {}
-				for (const [piece, fabric] of fabricMap.entries()) fabricsObject[piece] = fabric
+				const fabricsObject: PieceFabricsMap = {}
+				for (const [piece, fabric] of entries(fabricMap)) fabricsObject[piece] = fabric
 
 				templateSelection[blockCategory]!.fabrics = fabricsObject
 			}
@@ -168,12 +173,13 @@ export class UploadView extends Element {
 	#clearUploadState = () => {
 		// Clear all upload-related state for fresh start
 		this.uploadedTemplates = []
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		this.selectedMaterials = new Map()
 		this.convertedTemplate = null
 		this.convertedBlocks = []
 		this.convertedFabrics = []
-		this.selectedFabrics = new Map()
-		this.selectedBlocks = new Map()
+		this.selectedFabrics = {}
+		this.selectedBlocks = {}
 		this.selectedTemplates = {}
 		this.uploadProgress = ''
 		this.showConfigPanel = false
@@ -225,6 +231,7 @@ export class UploadView extends Element {
 
 	#parseUploadedFiles = async (files: FileList) => {
 		const parsedTemplates: ParsedTemplate[] = []
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const templateGroups = new Map<string, File[]>()
 
 		// Check if files have directory structure or are individual files
@@ -381,6 +388,7 @@ export class UploadView extends Element {
 
 	#processMaterialsInTemplate = async (files: File[], templateName: string): Promise<UploadedMaterial[]> => {
 		const materials: UploadedMaterial[] = []
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const materialGroups = new Map<string, File[]>()
 
 		// Group files by material folder
@@ -417,6 +425,7 @@ export class UploadView extends Element {
 		meshName?: string,
 	): Promise<UploadedMaterial | null> => {
 		try {
+			// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 			const uploadedFiles = new Map<string, string>()
 
 			// Process all material files and create blob URLs
@@ -473,6 +482,7 @@ export class UploadView extends Element {
 
 	#processBlocksInTemplate = async (files: File[], templateName: string): Promise<UploadedBlock[]> => {
 		const blocks: UploadedBlock[] = []
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const blockTypeGroups = new Map<string, File[]>()
 
 		// Group files by block type folder
@@ -583,6 +593,7 @@ export class UploadView extends Element {
 
 		const extraMaterials: {mesh: string; materialId: string}[] = []
 		const processedMaterials: UploadedMaterial[] = []
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const meshFolderGroups = new Map<string, File[]>()
 
 		// Group files by mesh folder
@@ -608,6 +619,7 @@ export class UploadView extends Element {
 
 			// Group files by material folder within this mesh folder
 			// Expected: TemplateName/Extra Materials/MeshName/Category - MaterialName/materialfiles...
+			// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 			const materialGroups = new Map<string, File[]>()
 
 			meshFiles.forEach(file => {
@@ -819,21 +831,21 @@ export class UploadView extends Element {
 			}
 		}
 
-		const blocks: TemplateBlocksMap = new Map()
-		const fabrics: TemplateFabricsMap = new Map()
+		const blocks: TemplateBlocksMap = {}
+		const fabrics: TemplateFabricsMap = {}
 
-		blocks.set(template.category, new Map() as CategoryBlocksMap)
-		fabrics.set(template.category, new Map() as BlockFabricsMap)
+		blocks[template.category] = {}
+		fabrics[template.category] = {}
 
-		const blockMap = blocks.get(template.category)
-		const fabricMap = fabrics.get(template.category)
+		const blockMap = blocks[template.category]!
+		const fabricMap = fabrics[template.category]!
 
 		for (const block of this.convertedBlocks) {
-			blockMap?.set(block.category, block)
-			const blockFabrics: PieceFabricsMap = new Map()
-			for (const fabric of this.convertedFabrics) blockFabrics.set(fabric.assignedMesh || 'default', fabric)
+			blockMap[block.category] = block
+			const blockFabrics: PieceFabricsMap = {}
+			for (const fabric of this.convertedFabrics) blockFabrics[fabric.assignedMesh || 'default'] = fabric
 
-			fabricMap?.set(block.category as BlockCategory, blockFabrics)
+			fabricMap[block.category] = blockFabrics
 		}
 
 		// Replace blocks with uploaded blocks
@@ -872,11 +884,12 @@ export class UploadView extends Element {
 		}))
 
 		// Update selected fabrics as well
-		const updatedSelectedFabrics = new Map(this.selectedFabrics)
-		for (const [, blockMap] of updatedSelectedFabrics) {
-			for (const [, fabricMap] of blockMap) {
-				for (const [meshName, fabric] of fabricMap) {
-					fabricMap.set(meshName, {
+		// TODO please stop mapping, update directly.
+		const updatedSelectedFabrics = {...this.selectedFabrics}
+		for (const [, blockMap] of entries(updatedSelectedFabrics)) {
+			for (const [, fabricMap] of entries(blockMap)) {
+				for (const [meshName, fabric] of entries(fabricMap)) {
+					fabricMap[meshName] = {
 						...fabric,
 						scaleX: this.fabricScaleX,
 						scaleY: this.fabricScaleY,
@@ -884,7 +897,7 @@ export class UploadView extends Element {
 						offsetY: this.fabricOffsetY,
 						coef: this.fabricCoef,
 						rotate: this.fabricRotate,
-					})
+					}
 				}
 			}
 		}

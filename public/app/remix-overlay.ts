@@ -19,13 +19,14 @@ import '../elements/logic/show-when.js'
 import '../elements/show-on-device.js'
 import '../elements/tabs.js'
 import type {Block, BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
+import type {Fabric, FabricsByCategory} from '../types/fabric.js'
 import type {Template} from '../types/template.js'
 import './fabric-selection.js'
 import './item-card.js'
 import './loading-spinner-overlay.js'
 import {store, updateGarmentsSelectionInUrl} from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
+import {size, values} from '../utils.js'
 
 const STYLE_TAB = 'style'
 const FABRICS_TAB = 'fabrics'
@@ -43,7 +44,7 @@ export class RemixOverlay extends Element {
 	@signal spaceCollection: string | null = null
 	@signal availableBlocks: Block[] = []
 	@signal blocksCategories: string[] = []
-	@signal availableFabrics: Record<string, Fabric[]> = {}
+	@signal availableFabrics: FabricsByCategory = {}
 	@signal pieceSelections: string[] = []
 	@signal selectedSubTab: string | null = null
 	@signal isOpen: boolean = false
@@ -141,7 +142,7 @@ export class RemixOverlay extends Element {
 			if (this.selectedTemplate.fabricOptions && this.selectedTemplate.fabricOptions.length > 0) {
 				// Get fabrics from the collection that match the fabricOptions material IDs
 				const collection = this.spaceCollection
-				const availableFabrics: Record<string, Fabric[]> = {}
+				const availableFabrics: FabricsByCategory = {}
 
 				// Get fabrics that match the fabricOptions
 				const optionFabrics = this.selectedTemplate.fabricOptions
@@ -194,9 +195,9 @@ export class RemixOverlay extends Element {
 				return
 			}
 
-			const fabricsArray = Object.values(templateSelection)
-				.map(selection => selection?.fabrics ?? {})
-				.filter(fabrics => Object.keys(fabrics).length > 0)
+			const fabricsArray = values(templateSelection)
+				.map(selection => selection.fabrics)
+				.filter(fabrics => size(fabrics) > 0)
 
 			if (fabricsArray.length === 0) {
 				this.pieceSelections = []
@@ -245,7 +246,7 @@ export class RemixOverlay extends Element {
 
 		// Check if any fabrics for this selected block are loading
 		if (!selection?.fabrics) return false
-		return Object.values(selection.fabrics).some(fabric => store.isFabricLoading(fabric._id))
+		return values(selection.fabrics).some(fabric => store.isFabricLoading(fabric._id))
 	}
 
 	#filteredBlocksByCategory = (category: BlockCategory) => {

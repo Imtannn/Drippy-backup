@@ -79,6 +79,10 @@ export class BrandView extends Element {
 		this.#selectTemplate(template)
 	}
 
+	// TODO Too much logic here, too much data mapping data isolated into a single big procedure.
+	// Roughly 240 of lines code to select a template.
+	// Needs simplification.
+	// FIXME too much duplication (see template-view.ts)
 	#selectTemplate = (template: Template) => {
 		const effectiveSpace = store.getEffectiveSpace()
 		if (!effectiveSpace) return
@@ -101,10 +105,12 @@ export class BrandView extends Element {
 		newTemplates[template.category] = template
 		const effectiveCollection = store.getEffectiveCollection()
 		const templateBlockData = templateHelpers.convertTemplateToBlockData(template, effectiveCollection)
+		// Here we map to two objects
 		const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
 			templateBlockData,
 			effectiveCollection,
 		)
+		// then map back into one.
 		const templateSelection = templateHelpers.buildTemplateSelectionFromMaps(newBlocksMap, newFabricsMap)
 		nextSelection = templateHelpers.withTemplateSelection(nextSelection, template.category, templateSelection)
 

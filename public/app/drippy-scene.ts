@@ -57,6 +57,7 @@ import {
 	setEnvMapOnModelLoad,
 	setMaterialsVisibleOnModelLoad,
 	showSkeletonHelper,
+	values,
 	whenModelLoaded,
 } from '../utils.js'
 import './app-buttons.js'
@@ -230,9 +231,9 @@ export class DrippyScene extends Element {
 		const garmentSelections = this.selectedGarments ?? {}
 		const blocks: Block[] = []
 
-		for (const templateSelection of Object.values(garmentSelections)) {
+		for (const templateSelection of values(garmentSelections)) {
 			if (!templateSelection) continue
-			for (const selection of Object.values(templateSelection)) if (selection?.block) blocks.push(selection.block)
+			for (const selection of values(templateSelection)) if (selection?.block) blocks.push(selection.block)
 		}
 
 		return [
@@ -491,7 +492,7 @@ export class DrippyScene extends Element {
 			// TODO (FIXME?) This is loading state for all fabrics of
 			// the template category and block category, but is it the
 			// fabrics for the render block we're iterating?
-			for (const fabric of Object.values(fabricsForBlockCategory)) {
+			for (const fabric of values(fabricsForBlockCategory)) {
 				const textureState = createFabricTexture(() => fabric)
 				fabricLoadingSignals[fabric._id] = textureState
 
@@ -503,9 +504,7 @@ export class DrippyScene extends Element {
 				})
 			}
 
-			const fabricsLoaded = createMemo(() =>
-				Object.values(fabricLoadingSignals).every(f => !f.loading() && f.texture()),
-			)
+			const fabricsLoaded = createMemo(() => values(fabricLoadingSignals).every(f => !f.loading() && f.texture()))
 
 			const templateBlocks = createMemo(
 				() => this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),
@@ -532,7 +531,7 @@ export class DrippyScene extends Element {
 					store.clearLoadingTemplate(templateId)
 			})
 
-			const anyFabricErrors = createMemo(() => Object.values(fabricLoadingSignals).map(f => f.error()))
+			const anyFabricErrors = createMemo(() => values(fabricLoadingSignals).map(f => f.error()))
 
 			createEffect(() => {
 				if (anyFabricErrors().some(error => error !== null))
@@ -545,6 +544,7 @@ export class DrippyScene extends Element {
 				if (!fabricsLoaded()) return
 
 				// Create a map for mesh to meshes key
+				// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 				const meshToFabricMeshesMap = new Map<string, string>()
 				for (const meshesKey of Object.keys(fabricsForBlockCategory)) {
 					// CONTINUE ensure correct comment here:

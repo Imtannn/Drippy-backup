@@ -4,7 +4,7 @@ import {templates} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {Collection, TemplateMap} from '../types/types.js'
-import {getCollectionBySlug, getSpaceCollections, spaceHasMultipleCollections} from '../utils.js'
+import {getCollectionBySlug, getSpaceCollections, spaceHasMultipleCollections, values} from '../utils.js'
 import {
 	currentUser,
 	store,
@@ -114,7 +114,7 @@ export class TemplateView extends Element {
 				}
 				// If no space selected, search across all collections
 				else {
-					for (const collectionTemplatesList of Object.values(templates))
+					for (const collectionTemplatesList of values(templates))
 						collectionTemplates.push(...(collectionTemplatesList ?? []))
 				}
 			} else if (!this.spaceCollection && spaceHasMultipleCollections(store.selectedSpace)) {
@@ -139,6 +139,7 @@ export class TemplateView extends Element {
 			}
 
 			const orderedTemplates: Template[] = []
+			// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 			const categories = new Map<TemplateCategory, Template[]>()
 			categories.set('All', [])
 
@@ -258,7 +259,7 @@ export class TemplateView extends Element {
 		const template = e.detail.itemValue as Template
 
 		const isAlreadySelected =
-			store.selectedTemplates[template.category] && store.selectedTemplates[template.category]._id === template._id
+			store.selectedTemplates[template.category] && store.selectedTemplates[template.category]!._id === template._id
 
 		if (!isAlreadySelected) {
 			store.setLoadingTemplate(template._id, template.category)
@@ -501,6 +502,8 @@ export class TemplateView extends Element {
 		}
 	}
 
+	// FIXME too much mapping (see selectTemplate in brand-view.ts)
+	// too much duplication (see brand-view.ts)
 	#selectTemplate = (template: Template) => {
 		const effectiveSpace = store.getEffectiveSpace()
 		if (!effectiveSpace) return
@@ -630,31 +633,30 @@ export class TemplateView extends Element {
 								<div
 									class="template-info"
 									classList=${() => {
-										const templates = Object.values(store.selectedTemplates)
+										const templates = values(store.selectedTemplates)
 										return {hidden: templates.length === 0 || true}
 									}}
 								>
 									${() => {
-										const templates = Object.values(store.selectedTemplates)
-										if (templates.length > 0) {
-											const selectedTemplate = templates[0]
-											return html`
-												<div class="template-image-wrapper">
-													<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
-												</div>
-												<div class="template-details">
-													<div class="template-name">${selectedTemplate.name}</div>
-													<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
-												</div>
-											`
-										}
-										return ''
+										// TODO why only the first template? Seems wrong.
+										const templates = values(store.selectedTemplates)
+										const selectedTemplate = templates[0]!
+										if (!selectedTemplate) return ''
+										return html`
+											<div class="template-image-wrapper">
+												<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+											</div>
+											<div class="template-details">
+												<div class="template-name">${selectedTemplate.name}</div>
+												<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+											</div>
+										`
 									}}
 								</div>
 								<button
 									class="view-details-btn"
 									classList=${() => {
-										const templates = Object.values(store.selectedTemplates)
+										const templates = values(store.selectedTemplates)
 										return {hidden: templates.length === 0 || true}
 									}}
 									disabled
@@ -664,7 +666,7 @@ export class TemplateView extends Element {
 								<div
 									class="default-nav"
 									classList=${() => {
-										const templates = Object.values(store.selectedTemplates)
+										const templates = values(store.selectedTemplates)
 										return {hidden: templates.length > 0 && false}
 									}}
 								>
@@ -684,7 +686,7 @@ export class TemplateView extends Element {
 				condition=${() => this.showDetailView}
 				content=${() => html`
 					<template-detail-view
-						selected-template=${() => Object.values(store.selectedTemplates)[0] || null}
+						selected-template=${() => values(store.selectedTemplates)[0] || null}
 						onclose=${this.#onDetailViewClose}
 					></template-detail-view>
 				`}
@@ -841,31 +843,30 @@ export class TemplateView extends Element {
 					<div
 						class="template-info"
 						classList=${() => {
-							const templates = Object.values(store.selectedTemplates)
+							const templates = values(store.selectedTemplates)
 							return {hidden: templates.length === 0 || true}
 						}}
 					>
 						${() => {
-							const templates = Object.values(store.selectedTemplates)
-							if (templates.length > 0) {
-								const selectedTemplate = templates[0]
-								return html`
-									<div class="template-image-wrapper">
-										<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
-									</div>
-									<div class="template-details">
-										<div class="template-name">${selectedTemplate.name}</div>
-										<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
-									</div>
-								`
-							}
-							return ''
+							// TODO why only the first template? Seems wrong
+							const templates = values(store.selectedTemplates)
+							const selectedTemplate = templates[0]!
+							if (!selectedTemplate) return ''
+							return html`
+								<div class="template-image-wrapper">
+									<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+								</div>
+								<div class="template-details">
+									<div class="template-name">${selectedTemplate.name}</div>
+									<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+								</div>
+							`
 						}}
 					</div>
 					<button
 						class="view-details-btn"
 						classList=${() => {
-							const templates = Object.values(store.selectedTemplates)
+							const templates = values(store.selectedTemplates)
 							return {hidden: templates.length === 0 || true}
 						}}
 						disabled
@@ -875,7 +876,7 @@ export class TemplateView extends Element {
 					<div
 						class="default-nav"
 						classList=${() => {
-							const templates = Object.values(store.selectedTemplates)
+							const templates = values(store.selectedTemplates)
 							return {hidden: templates.length > 0 && false}
 						}}
 					>

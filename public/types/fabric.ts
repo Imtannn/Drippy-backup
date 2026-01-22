@@ -46,3 +46,7 @@ export type Fabric = {
 	templateCategories?: string[]
 	collection?: string
 }
+
+export type FabricsByCategory = {
+	[k in FabricCategory]?: Fabric[]
+}

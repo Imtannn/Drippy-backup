@@ -19,7 +19,7 @@ import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/tabs.js'
 import './item-card.js'
-import {getSpaceThumbnail, getSpaceCollections} from '../utils.js'
+import {getSpaceThumbnail, getSpaceCollections, size} from '../utils.js'
 
 @element
 export class SpacesSelection extends Element {
@@ -134,8 +134,8 @@ export class SpacesSelection extends Element {
 		const templateCategory = template.category as TemplateCategory
 
 		// Convert template to blocks and fabrics maps
-		const aggregatedBlocks: TemplateBlocksMap = new Map()
-		const aggregatedFabrics: TemplateFabricsMap = new Map()
+		const aggregatedBlocks: TemplateBlocksMap = {}
+		const aggregatedFabrics: TemplateFabricsMap = {}
 		const aggregatedTemplates: Record<TemplateCategory, Template> = {}
 
 		// Store template
@@ -151,10 +151,10 @@ export class SpacesSelection extends Element {
 		)
 
 		// Aggregate blocks
-		if (newBlocksMap.size > 0) aggregatedBlocks.set(templateCategory, newBlocksMap)
+		if (size(newBlocksMap) > 0) aggregatedBlocks[templateCategory] = newBlocksMap
 
 		// Aggregate fabrics
-		if (newFabricsMap.size > 0) aggregatedFabrics.set(templateCategory, newFabricsMap)
+		if (size(newFabricsMap) > 0) aggregatedFabrics[templateCategory] = newFabricsMap
 
 		// Build selected garments from maps
 		const selectedGarments = templateHelpers.buildSelectedGarmentsFromMaps(aggregatedBlocks, aggregatedFabrics)
