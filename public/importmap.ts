@@ -21,7 +21,7 @@
 			'@lume/custom-attributes/dist/index.js':
 				'https://cdn.jsdelivr.net/npm/@lume/custom-attributes@0.2.4/dist/index.js',
 			'@lume/element':
-				'https://cdn.jsdelivr.net/gh/lume/element@195a642ac89d21d172d953f83a3e2d2a2625a77a/dist/index.js',
+				'https://cdn.jsdelivr.net/gh/lume/element@47b2ff74c12a8fa13cae2ebad2099264c85e49ea/dist/index.js',
 			'@lume/eventful': 'https://cdn.jsdelivr.net/npm/@lume/eventful@0.3.3/dist/index.js',
 			'@lume/kiwi': 'https://cdn.jsdelivr.net/npm/@lume/kiwi@0.4.4/dist/kiwi.js',
 			'@lume/three-projected-material/dist/ProjectedMaterial.js':

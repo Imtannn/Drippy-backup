@@ -43,7 +43,7 @@
 	"devDependencies": {
 		"@eslint/js": "^9.39.2",
 		"@lume/cli": "^0.15.0",
-		"@lume/element": "^0.17.0",
+		"@lume/element": "github:lume/element#47b2ff74c12a8fa13cae2ebad2099264c85e49ea",
 		"@tweenjs/tween.js": "^18.6.4",
 		"@types/meteor": "^2.9.10",
 		"@types/three": "^0.174.0",
