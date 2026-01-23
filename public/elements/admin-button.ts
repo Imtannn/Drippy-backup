@@ -4,11 +4,10 @@ import {store} from '../app/store.js'
 
 type AdminButtonAttributes = IconButtonAttributes
 
-@element
-// @ts-expect-error override readonly elementName
-export class AdminButton extends IconButton {
-	static override readonly elementName = 'admin-button'
+const tag = 'admin-button'
 
+@element(tag)
+export class AdminButton extends IconButton {
 	@eventAttribute override onclick: EventListener | null = () => (store.showAdminContent = !store.showAdminContent)
 
 	override defaultContent() {
@@ -25,14 +24,14 @@ export class AdminButton extends IconButton {
 
 declare global {
 	interface HTMLElementTagNameMap {
-		'admin-button': AdminButton
+		[tag]: AdminButton
 	}
 }
 
 declare module 'solid-js' {
 	namespace JSX {
 		interface IntrinsicElements {
-			'admin-button': ElementAttributes<AdminButton, AdminButtonAttributes>
+			[tag]: ElementAttributes<AdminButton, AdminButtonAttributes>
 		}
 	}
 }

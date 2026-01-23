@@ -1,8 +1,8 @@
 {
 	// "extends": "./node_modules/@lume/cli/config/ts.config.json",
 	"compilerOptions": {
-		"allowJs": true,
-		"checkJs": true,
+		"allowJs": false,
+		"checkJs": false,
 		"declaration": false,
 		"declarationMap": false,
 		"sourceMap": true,
@@ -36,6 +36,11 @@
 		}
 	},
 
-	"include": ["./**/*.ts"],
+	// .mts files are used for non-module scripts so that usbuild will not treat
+	// them as CJS files and leave them without import/export statements in the
+	// output. Otherwise the type:commonjs in package.json makes usbuild treat
+	// .ts without import/export statements as CJS and outputs them with a CJS
+	// wrapper and an export statement, which is totally not what we want.
+	"include": ["./**/*.ts", "./**/*.mts"],
 	"exclude": ["node_modules", "scripts/imports"]
 }

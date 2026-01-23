@@ -101,8 +101,10 @@ const styleVars = {
 }
 
 // eslint-disable-next-line -- this is used, it defines global style variables
-interface Window {
-	styleVars: typeof styleVars
+declare global {
+	interface Window {
+		styleVars: typeof styleVars
+	}
 }
 
 window.styleVars = styleVars
