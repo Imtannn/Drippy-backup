@@ -15,6 +15,10 @@ import {store, wishlist, pendingWishlistId, setPendingWishlistId} from './store.
 import '../elements/placeholder-image.js'
 import {getWishlistHeartIcon} from '../consts/icons.js'
 
+// Track templates that are being unfavorited (optimistic update)
+// This Set is shared across all ItemCard instances
+const unfavoritingTemplates = new Set<string>()
+
 type ItemCardAttributes =
 	| 'itemValue'
 	| 'itemSrc'
@@ -40,17 +44,13 @@ export class ItemCard extends Element {
 	@eventAttribute oncardselected = null
 	@attribute imageStyle = ''
 
-	// Track templates that are being unfavorited (optimistic update)
-	// This Set is shared across all ItemCard instances
-	private static readonly unfavoritingTemplates = new Set<string>()
-
 	// Helper function to check if template is in wishlist (reactive)
 	#isInWishlist = () => {
 		const template = this.itemValue as Template | null
 		if (!template?._id) return false
 
 		// If template is being unfavorited, return false immediately (optimistic update)
-		if (ItemCard.unfavoritingTemplates.has(template._id)) return false
+		if (unfavoritingTemplates.has(template._id)) return false
 
 		const userWishlist = wishlist()
 		const inWishlist = userWishlist.some(item => item.templateId === template._id)
@@ -112,8 +112,8 @@ export class ItemCard extends Element {
 			// Clear pendingWishlistId if it matches
 			if (isPending) setPendingWishlistId(null)
 
-			if (wasFavorited) ItemCard.unfavoritingTemplates.add(template._id)
-			else ItemCard.unfavoritingTemplates.delete(template._id)
+			if (wasFavorited) unfavoritingTemplates.add(template._id)
+			else unfavoritingTemplates.delete(template._id)
 
 			await Meteor.callAsync('wishlist.toggle', template._id)
 			let retryCount = 0
@@ -123,17 +123,17 @@ export class ItemCard extends Element {
 				const isStillInWishlist = currentWishlist.some(item => item.templateId === template._id)
 
 				// If subscription has synced (item removed from wishlist), remove from unfavoriting set
-				if (wasFavorited && !isStillInWishlist) ItemCard.unfavoritingTemplates.delete(template._id)
+				if (wasFavorited && !isStillInWishlist) unfavoritingTemplates.delete(template._id)
 				else if (!wasFavorited && isStillInWishlist)
 					// If we favorited and it's now in wishlist, also remove (in case it was there before)
-					ItemCard.unfavoritingTemplates.delete(template._id)
+					unfavoritingTemplates.delete(template._id)
 				else if (retryCount < maxRetries) {
 					// Retry after a short delay if subscription hasn't synced yet
 					retryCount++
 					setTimeout(checkSync, 100)
 				} else
 					// Max retries reached, remove from set anyway to prevent memory leak
-					ItemCard.unfavoritingTemplates.delete(template._id)
+					unfavoritingTemplates.delete(template._id)
 			}
 
 			// Start checking after a short delay to allow subscription to sync
@@ -141,7 +141,7 @@ export class ItemCard extends Element {
 		} catch (error) {
 			console.error('Error toggling wishlist:', error)
 			// On error, remove from unfavoriting set to restore correct state
-			ItemCard.unfavoritingTemplates.delete(template._id)
+			unfavoritingTemplates.delete(template._id)
 		}
 	}
 
