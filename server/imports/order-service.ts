@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor'
-import type {OrderData} from '../../public/types/types.js'
+import type {OrderData, OrderSuccessOrError} from '../../public/types/types.js'
 import {EmailTemplates} from './email-service.js'
 
 // Helper function to generate order ID
@@ -83,7 +83,7 @@ function processOrderForEmail(orderData: OrderData) {
 
 // Meteor Methods
 Meteor.methods({
-	async 'order.submit'(orderData: OrderData) {
+	async 'order.submit'(orderData: OrderData): Promise<OrderSuccessOrError> {
 		// Validate required fields
 		if (!orderData.customerEmail || !orderData.firstName || !orderData.lastName)
 			throw new Meteor.Error('validation-error', 'Customer information is required')
@@ -174,8 +174,17 @@ Meteor.methods({
 				success: false,
 				error: 'Failed to process order. Please try again.',
 				details:
-					error instanceof Meteor.Error ? error.reason : error instanceof Error ? error.message : 'Unknown error',
+					(error instanceof Meteor.Error ? error.reason : error instanceof Error ? error.message : 'Unknown error') ??
+					'Unknown error',
 			}
 		}
 	},
 })
+
+// Augment the Meteor module's call function manually, for now.
+// TODO better solution for automatic Meteor method typings
+declare module 'meteor/meteor' {
+	namespace Meteor {
+		function callAsync(name: 'order.submit', orderData: OrderData): Promise<OrderSuccessOrError>
+	}
+}

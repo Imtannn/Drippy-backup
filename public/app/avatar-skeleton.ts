@@ -1,6 +1,6 @@
 import {createEffect, GltfModel} from 'lume'
 import * as THREE from 'three'
-import {getArmatureObject, onModelLoad} from '../utils.js'
+import {getArmatureObject, onModelLoad, size} from '../utils.js'
 
 class AvatarBone {
 	private restPosition: THREE.Vector3
@@ -166,7 +166,7 @@ export class AvatarSkeleton {
 	}
 
 	private anim = () => {
-		if (Object.keys(this.boneTargets).length == 0) {
+		if (size(this.boneTargets) == 0) {
 			this.frame = 0
 
 			return

@@ -8,7 +8,7 @@ import '../elements/placeholder-image.js'
 import {pushState, searchParams} from '../routes.js'
 import type {Space, TemplateBlocksMap, TemplateFabricsMap} from '../types/types.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import {currentUser, store, updateGarmentsSelectionInUrl} from './store.js'
+import {currentUser, isLoggedIn, store, updateGarmentsSelectionInUrl} from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
 
 import '../elements/dialog-element.js'
@@ -19,7 +19,7 @@ import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/tabs.js'
 import './item-card.js'
-import {getSpaceThumbnail, getSpaceCollections} from '../utils.js'
+import {getSpaceThumbnail, getSpaceCollections, size} from '../utils.js'
 
 @element
 export class SpacesSelection extends Element {
@@ -53,8 +53,8 @@ export class SpacesSelection extends Element {
 
 		// Close login dialog when user successfully logs in
 		this.createEffect(() => {
-			const user = currentUser()
-			if (user !== null && this.showLoginDialog) this.showLoginDialog = false
+			// FIXME: STOP making duplicate auth code. See the duplication in template-view.ts
+			if (isLoggedIn(currentUser()) && this.showLoginDialog) this.showLoginDialog = false
 		})
 
 		// Ensure selectedTab is always set to a valid value
@@ -134,8 +134,8 @@ export class SpacesSelection extends Element {
 		const templateCategory = template.category as TemplateCategory
 
 		// Convert template to blocks and fabrics maps
-		const aggregatedBlocks: TemplateBlocksMap = new Map()
-		const aggregatedFabrics: TemplateFabricsMap = new Map()
+		const aggregatedBlocks: TemplateBlocksMap = {}
+		const aggregatedFabrics: TemplateFabricsMap = {}
 		const aggregatedTemplates: Record<TemplateCategory, Template> = {}
 
 		// Store template
@@ -151,10 +151,10 @@ export class SpacesSelection extends Element {
 		)
 
 		// Aggregate blocks
-		if (newBlocksMap.size > 0) aggregatedBlocks.set(templateCategory, newBlocksMap)
+		if (size(newBlocksMap) > 0) aggregatedBlocks[templateCategory] = newBlocksMap
 
 		// Aggregate fabrics
-		if (newFabricsMap.size > 0) aggregatedFabrics.set(templateCategory, newFabricsMap)
+		if (size(newFabricsMap) > 0) aggregatedFabrics[templateCategory] = newFabricsMap
 
 		// Build selected garments from maps
 		const selectedGarments = templateHelpers.buildSelectedGarmentsFromMaps(aggregatedBlocks, aggregatedFabrics)
@@ -202,8 +202,7 @@ export class SpacesSelection extends Element {
 						<div class="nav-links">
 							<a href="/landing" class="learn-more-link">Learn more</a>
 							${() => {
-								const user = currentUser()
-								return user !== null
+								return isLoggedIn(currentUser())
 									? html`<login-ui></login-ui>`
 									: html`<button class="sign-in-button" onclick=${this.#onSignInClick}>Sign in</button>`
 							}}

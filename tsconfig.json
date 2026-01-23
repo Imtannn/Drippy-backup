@@ -25,15 +25,13 @@
 		// disable global types, use import syntax instead of globals
 		"types": [],
 
-		// "preserveSymlinks": true, // makes no difference for meteor types for me.
+		"preserveSymlinks": true,
 		"paths": {
 			"meteor/*": [
-				//
-				"./node_modules/@types/meteor/*",
+				"./.meteor/local/types/packages.d.ts",
 
-				// This is from zodern:types. It appears to not do anything
-				// though??? Plus missing packages???
-				"./.meteor/local/types/packages.d.ts"
+				// Enable these second so that Meteor types take precedence.
+				"./node_modules/@types/meteor/*"
 			]
 		}
 	},

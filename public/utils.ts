@@ -1,4 +1,4 @@
-import type {Element3D, GltfModel, Mesh} from 'lume'
+import {disposeObjectTree, type Element3D, type GltfModel, type Mesh} from 'lume'
 import {
 	batch,
 	createEffect,
@@ -687,22 +687,19 @@ export function setMaterialsVisibleOnModelLoad(el: GltfModel, visible: Accessor<
 }
 
 export function showSkeletonHelper(el: GltfModel, show: () => boolean) {
-	// TODO enable via admin UI
-	return
-
 	whenModelLoaded(el, () => {
 		if (!show()) return
+		if (!el.scene) return
 
 		const helper = new THREE.SkeletonHelper(el.three)
 		// helper.material.linewidth = 2
-		el.three.add(helper)
-		el.needsUpdate()
+		const scene = el.scene
+		scene.three.add(helper)
+		scene.needsUpdate()
 
 		onCleanup(() => {
-			el.three.remove(helper)
-			helper.geometry.dispose()
-			;(helper.material as THREE.Material).dispose()
-			el.needsUpdate()
+			disposeObjectTree(helper)
+			scene.needsUpdate()
 		})
 	})
 }
@@ -1064,7 +1061,7 @@ export function createFabricTexture(
 			setError(null)
 
 			try {
-				const textureSet = await textureManager.loadFabricTexturesWithUV(currentFabric)
+				const textureSet = await textureManager.loadFabricTextures(currentFabric)
 
 				if (canceled) return
 
@@ -1116,4 +1113,48 @@ export function removeItemUnsorted(array: unknown[], item: unknown) {
 	if (index === -1) return
 	array[index] = array[array.length - 1]
 	array.pop()
+}
+
+/** Maps an object type to an array of its entries, excluding entries with undefined values. */
+type EntriesNoUndefined<O> = Array<
+	{
+		[K in keyof O]-?: undefined extends O[K]
+			? Exclude<O[K], undefined> extends never
+				? never
+				: [K, Exclude<O[K], undefined>]
+			: [K, O[K]]
+	}[keyof O]
+>
+
+/**
+ * A version of Object.entries with a more helpful type. Note this only works
+ * with own keys, and skips entries with undefined values. Use null if you want
+ * to keep an entry but indicate absence.
+ *
+ * Example:
+ *   entries({n: 1, a: '123', b: undefined})
+ *   // => Array<["n" | "a", number | string]>
+ */
+export function entries<O extends Record<PropertyKey, unknown>>(obj: O) {
+	return Object.entries(obj).filter(([, v]) => v !== undefined) as EntriesNoUndefined<O>
+}
+
+/**
+ * A version of Object.values with a more helpful type. Note this only works
+ * with own keys, and skips entries with undefined values. Use null if you want
+ * to keep an entry but indicate absence.
+ *
+ * Example:
+ *   values({n: 1, a: '123', b: undefined})
+ *   // => Array<[number | string]>
+ */
+export function values<O extends Record<PropertyKey, unknown>>(obj: O) {
+	return Object.values(obj).filter(v => v !== undefined) as Array<Exclude<O[keyof O], undefined>>
+}
+
+/**
+ * Like Map.size, but for objects (only own keys).
+ */
+export function size(obj: Record<PropertyKey, unknown>) {
+	return Object.keys(obj).length
 }

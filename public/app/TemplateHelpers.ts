@@ -2,11 +2,12 @@ import {blocks, blocks as collectionBlocks} from '../consts/blocks.js'
 import {fabrics} from '../consts/fabrics.js'
 import {templates} from '../consts/templates.js'
 import type {Block, BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
+import type {Fabric, FabricsByCategory} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {
 	BlockFabricsMap,
 	CategoryBlocksMap,
+	FabricSelection,
 	PieceFabricsMap,
 	SelectedGarments,
 	Space,
@@ -15,8 +16,9 @@ import type {
 	TemplateFabricsMap,
 	TemplateMap,
 } from '../types/types.js'
-import {getSpacePrimaryCollection} from '../utils.js'
+import {entries, getSpacePrimaryCollection, size, values} from '../utils.js'
 
+// CONTINUE delete or update this comment. relationships.md does not exist.
 /**
  * Data Relationships Documentation
  *
@@ -81,20 +83,16 @@ class TemplateHelpers {
 	cloneSelectedGarments(selection: SelectedGarments): SelectedGarments {
 		const cloned: SelectedGarments = {}
 
-		for (const [templateCategory, templateSelection] of Object.entries(selection)) {
-			if (!templateSelection) continue
-
+		for (const [templateCategory, templateSelection] of entries(selection)) {
 			const clonedTemplate: TemplateCategorySelection = {}
-			for (const [blockCategory, garment] of Object.entries(templateSelection)) {
-				if (!garment) continue
-
+			for (const [blockCategory, garment] of entries(templateSelection)) {
 				clonedTemplate[blockCategory as BlockCategory] = {
 					block: garment.block ?? null,
 					fabrics: {...garment.fabrics},
 				}
 			}
 
-			if (Object.keys(clonedTemplate).length > 0) cloned[templateCategory as TemplateCategory] = clonedTemplate
+			if (size(clonedTemplate) > 0) cloned[templateCategory as TemplateCategory] = clonedTemplate
 		}
 
 		return cloned
@@ -114,19 +112,19 @@ class TemplateHelpers {
 		const templateSelection: TemplateCategorySelection = {}
 
 		if (blocksMap) {
-			for (const [blockCategory, block] of blocksMap.entries()) {
+			for (const [blockCategory, block] of entries(blocksMap)) {
 				const current = templateSelection[blockCategory] ?? {block: null, fabrics: {}}
-				current.block = block
 				templateSelection[blockCategory] = current
+				current.block = block
 			}
 		}
 
 		if (fabricsMap) {
-			for (const [blockCategory, fabricMap] of fabricsMap.entries()) {
-				const fabricsRecord = Object.fromEntries(fabricMap.entries())
+			for (const [blockCategory, fabricMap] of entries(fabricsMap)) {
+				const fabricsRecord = {...fabricMap}
 				const current = templateSelection[blockCategory] ?? {block: null, fabrics: {}}
-				current.fabrics = fabricsRecord
 				templateSelection[blockCategory] = current
+				current.fabrics = fabricsRecord
 			}
 		}
 
@@ -142,17 +140,14 @@ class TemplateHelpers {
 	 */
 	buildSelectedGarmentsFromMaps(blocksMap: TemplateBlocksMap, fabricsMap: TemplateFabricsMap): SelectedGarments {
 		const result: SelectedGarments = {}
-		const templateCategories = new Set<TemplateCategory>([
-			...(blocksMap.keys() as Iterable<TemplateCategory>),
-			...(fabricsMap.keys() as Iterable<TemplateCategory>),
-		])
+		const templateCategories = new Set<TemplateCategory>([...Object.keys(blocksMap), ...Object.keys(fabricsMap)])
 
 		for (const templateCategory of templateCategories) {
-			const templateBlocks = blocksMap.get(templateCategory)
-			const templateFabrics = fabricsMap.get(templateCategory)
+			const templateBlocks = blocksMap[templateCategory]
+			const templateFabrics = fabricsMap[templateCategory]
 			const templateSelection = this.buildTemplateSelectionFromMaps(templateBlocks, templateFabrics)
 
-			if (Object.keys(templateSelection).length > 0) result[templateCategory] = templateSelection
+			if (size(templateSelection) > 0) result[templateCategory] = templateSelection
 		}
 
 		return result
@@ -191,7 +186,7 @@ class TemplateHelpers {
 	): SelectedGarments {
 		const cloned = this.cloneSelectedGarments(selection)
 
-		if (Object.keys(templateSelection).length === 0) delete cloned[templateCategory]
+		if (size(templateSelection) === 0) delete cloned[templateCategory]
 		else cloned[templateCategory] = templateSelection
 
 		return cloned
@@ -220,8 +215,8 @@ class TemplateHelpers {
 	getCategoriesThatOverride(category: TemplateCategory): TemplateCategory[] {
 		const result: TemplateCategory[] = []
 
-		for (const [overrider, overridden] of Object.entries(this.overridingCategoriesMapping))
-			if (overridden.includes(category)) result.push(overrider as TemplateCategory)
+		for (const [overrider, overridden] of entries(this.overridingCategoriesMapping))
+			if (overridden.includes(category)) result.push(overrider)
 
 		return result
 	}
@@ -231,7 +226,7 @@ class TemplateHelpers {
 	}
 
 	getTemplateCategoryById(templateId: string): TemplateCategory | null {
-		for (const collectionTemplates of Object.values(templates)) {
+		for (const collectionTemplates of values(templates)) {
 			const match = collectionTemplates?.find(template => template?._id === templateId)
 			if (match) return match.category
 		}
@@ -268,7 +263,7 @@ class TemplateHelpers {
 			if (matches.length > 0) return matches
 		}
 
-		for (const blocksList of Object.values(collectionBlocks)) {
+		for (const blocksList of values(collectionBlocks)) {
 			const matches = blocksList.filter(block => block.templateId === template._id)
 			if (matches.length > 0) return matches
 		}
@@ -283,13 +278,11 @@ class TemplateHelpers {
 	 * @returns Block to piece fabric map for downstream consumption.
 	 */
 	#parseFabricDataToMap(
-		fabricData:
-			| {fabric: Fabric; blockCategory: BlockCategory; assignedMesh?: string}
-			| {fabric: Fabric; blockCategory: BlockCategory; assignedMesh?: string}[],
+		fabricData: Omit<FabricSelection, 'templateCategory'> | Omit<FabricSelection, 'templateCategory'>[],
 	): BlockFabricsMap {
 		if (!Array.isArray(fabricData)) fabricData = [fabricData]
 
-		const newFabrics: BlockFabricsMap = new Map()
+		const newFabrics: BlockFabricsMap = {}
 
 		// FIXME STOP DUPLICATING CODE IN RANDOM PLACES OR YOU WILL BE IN TROUBLE! (see setSelectedFabrics in store.ts)
 		for (const data of fabricData) {
@@ -298,9 +291,9 @@ class TemplateHelpers {
 
 			if (!assignedMesh) assignedMesh = 'default'
 
-			const existingFabricsMap: PieceFabricsMap = newFabrics.get(blockCategory) ?? new Map()
-			existingFabricsMap.set(assignedMesh, fabric)
-			newFabrics.set(blockCategory, existingFabricsMap)
+			const existingFabricsMap = newFabrics[blockCategory] ?? {}
+			existingFabricsMap[assignedMesh] = fabric
+			newFabrics[blockCategory] = existingFabricsMap
 		}
 
 		return newFabrics
@@ -324,7 +317,7 @@ class TemplateHelpers {
 		fabricOverrides?: BlockFabricsMap,
 	) {
 		// Completely replace selectedBlocks with new blocks (used for template selection)
-		const newBlocksMap: CategoryBlocksMap = new Map()
+		const newBlocksMap: CategoryBlocksMap = {}
 		const newFabrics: {
 			fabric: Fabric
 			blockCategory: BlockCategory
@@ -332,14 +325,13 @@ class TemplateHelpers {
 		}[] = []
 
 		for (const block of templateData.blocks) {
-			newBlocksMap.set(block.category, block)
+			newBlocksMap[block.category] = block
 
 			// Check if there are fabric overrides for this block category
-			const overrideFabrics = fabricOverrides?.get(block.category)
-
-			if (overrideFabrics && overrideFabrics.size > 0) {
+			const overrideFabrics = fabricOverrides?.[block.category]
+			if (overrideFabrics && size(overrideFabrics) > 0) {
 				// Use fabric overrides from URL
-				for (const [assignedMesh, fabric] of overrideFabrics.entries()) {
+				for (const [assignedMesh, fabric] of entries(overrideFabrics)) {
 					newFabrics.push({
 						fabric: fabric,
 						blockCategory: block.category,
@@ -348,19 +340,21 @@ class TemplateHelpers {
 				}
 			} else {
 				// Use default template fabrics
-				const blockFabrics: Record<string, Fabric> = {}
+				const blockFabrics: PieceFabricsMap = {}
 
 				// Add the main fabric (without assignedMesh - will be default)
 				if (templateData.materialId) {
 					// If no collection is provided, loop through all collections and find the fabric
 					let fabric: Fabric | undefined
 					if (!collection) {
+						/* eslint-disable */
 						for (const collection of Object.keys(fabrics)) {
 							fabric = fabrics[collection]?.find(fabric => fabric._id === templateData.materialId)
 						}
 					} else {
 						fabric = fabrics[collection]?.find(fabric => fabric._id === templateData.materialId)
 					}
+					/* eslint-enable */
 					if (fabric) blockFabrics[fabric.assignedMesh || 'default'] = fabric
 				}
 
@@ -373,7 +367,7 @@ class TemplateHelpers {
 				}
 
 				// Add all fabrics for this block category
-				for (const [assignedMesh, fabric] of Object.entries(blockFabrics)) {
+				for (const [assignedMesh, fabric] of entries(blockFabrics)) {
 					newFabrics.push({
 						fabric: fabric,
 						blockCategory: block.category,
@@ -435,13 +429,11 @@ class TemplateHelpers {
 	 * @param template - Template describing the fabric categories.
 	 * @returns Record keyed by mesh/piece name pointing to allowed fabrics.
 	 */
-	getAvailableFabricsForTemplate(
-		sourceCollection: string | null | undefined,
-		template: Template,
-	): Record<string, Fabric[]> {
+	getAvailableFabricsForTemplate(sourceCollection: string | null | undefined, template: Template): FabricsByCategory {
 		// Resolve template.materialId (fabric _id) to the fabric instance, then filter by allowed template categories
 		const collection = sourceCollection ?? 'gap'
-		const availableFabrics: Record<string, Fabric[]> = {}
+		/** Available fabrics by category. */
+		const availableFabrics: FabricsByCategory = {}
 
 		const defaultFabric = fabrics[collection]?.find(fabric => fabric._id === template.materialId)
 		availableFabrics['default'] = this.#getFabricsByFabricCategory(defaultFabric?.category, collection)
@@ -494,7 +486,7 @@ class TemplateHelpers {
 			template,
 		)
 		return {
-			available: blocksCategories.length > 0 || Object.values(fabrics).some(fabricArray => fabricArray.length > 1),
+			available: blocksCategories.length > 0 || values(fabrics).some(fabricArray => fabricArray.length > 1),
 			blocksCategories,
 			fabrics,
 		}
@@ -514,7 +506,7 @@ class TemplateHelpers {
 			if (found) return found
 		}
 
-		for (const collectionBlocks of Object.values(blocks)) {
+		for (const collectionBlocks of values(blocks)) {
 			const found = collectionBlocks?.find?.(b => b._id === blockId)
 			if (found) return found
 		}
@@ -536,7 +528,7 @@ class TemplateHelpers {
 			if (found) return found
 		}
 
-		for (const collectionFabrics of Object.values(fabrics)) {
+		for (const collectionFabrics of values(fabrics)) {
 			const found = collectionFabrics?.find?.(f => f._id === fabricId)
 			if (found) return found
 		}
@@ -582,7 +574,7 @@ class TemplateHelpers {
 			if (found) return found
 		}
 
-		for (const collectionTemplates of Object.values(templates)) {
+		for (const collectionTemplates of values(templates)) {
 			const found = collectionTemplates?.find?.(template => template._id === templateId)
 			if (found) return found
 		}

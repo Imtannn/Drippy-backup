@@ -13,8 +13,6 @@ import './imports/order-service.js'
 import './imports/proxy-service.js'
 import './imports/upload-service.js'
 
-// @ts-expect-error missing type (TODO update away from @types/meteor? Ask
-// Meteor's AI "How to set up TypeScript", there's some good docs.)
 WebApp.addHtmlAttributeHook(() => ({lang: 'en', prefix: 'og: http://ogp.me/ns#'}))
 
 // TODO update this with the primary app domain name. This should be the domain
@@ -232,9 +230,6 @@ const admins = [
 	'ngoc.huynhtieu1999@gmail.com',
 ]
 
-// eslint-disable-next-line -- Workaround for incorrect function signature in type definition
-Accounts.findUserByEmailTmp = Accounts.findUserByEmail as any
-
 // If a user signs up with a known admin email, make them an admin.
 Accounts.onCreateUser((options, user) => {
 	const googleEmail = user.services?.google?.email.toLowerCase()
@@ -280,7 +275,7 @@ const makeAdminPromises = [] as Promise<unknown>[]
 // Make all existing users with a known admin email admins.
 for (const email of admins) {
 	makeAdminPromises.push(
-		Accounts.findUserByEmailTmp(email).then((user: Meteor.User) => {
+		Accounts.findUserByEmail(email).then(user => {
 			if (user) return Meteor.users.updateAsync(user._id, {$set: {profile: {...user.profile, isAdmin: true}}})
 		}),
 	)

@@ -1087,6 +1087,7 @@ function initGenericCarousel(config: {
 // Handle <br> tags responsively (remove on mobile, restore on desktop)
 function handleResponsiveBreaks() {
 	const classes = ['.section-subtitle', '.highlight', '.cta__description--highlight']
+	// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 	const originalContent = new Map() // Store original content
 
 	function processBreaks() {

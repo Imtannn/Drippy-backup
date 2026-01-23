@@ -4,7 +4,7 @@ import '../elements/logic/for-each.js'
 import '../elements/theme-switch-button.js'
 import {appStyles} from '../styles/app-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import {captureGarmentScreenshot} from '../utils.js'
+import {captureGarmentScreenshot, entries} from '../utils.js'
 import './app-buttons-preset.js'
 import {store} from './store.js'
 
@@ -24,7 +24,7 @@ export class OrderItems extends Element {
 	}
 
 	private async generateScreenshots() {
-		for (const [category] of Object.entries(store.selectedTemplates)) {
+		for (const [category] of entries(store.selectedTemplates)) {
 			try {
 				// Mark this category as loading
 				store.addLoadingScreenshot(category)
@@ -95,7 +95,7 @@ export class OrderItems extends Element {
 					<!-- Items List -->
 					<div class="items-list">
 						<for-each
-							items=${() => Object.entries(store.selectedTemplates)}
+							items=${() => entries(store.selectedTemplates)}
 							content=${() =>
 								([category, template]: [TemplateCategory, Template]) => html`
 									<div class="item-row" onclick=${(e: MouseEvent) => this.#onItemRowClick(template, e)}>

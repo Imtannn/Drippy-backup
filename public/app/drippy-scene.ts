@@ -4,7 +4,6 @@ import {
 	clamp,
 	createEffect,
 	css,
-	disposeMaterial,
 	Element,
 	element,
 	Element3D,
@@ -26,6 +25,8 @@ import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.j
 import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js'
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
+// import {BloomPass} from 'three/examples/jsm/postprocessing/BloomPass.js'
+import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import {avatars} from '../consts/avatars.js'
 
 import {backgroundScenes} from '../consts/scenes.js'
@@ -56,6 +57,7 @@ import {
 	setEnvMapOnModelLoad,
 	setMaterialsVisibleOnModelLoad,
 	showSkeletonHelper,
+	values,
 	whenModelLoaded,
 } from '../utils.js'
 import './app-buttons.js'
@@ -140,18 +142,6 @@ export class DrippyScene extends Element {
 	// Post-processing for outline effect
 	private composer: EffectComposer | null = null
 	private outlinePass: OutlinePass | null = null
-
-	// Reset materials to default state (no textures)
-	#resetMaterialProperties(el: Element3D, mesh: THREE.Mesh) {
-		const material = mesh.material as THREE.MeshPhysicalMaterial
-		material.map = null
-		material.normalMap = null
-		material.roughnessMap = null
-		// material.displacementMap = null
-		material.needsUpdate = true
-
-		el.needsUpdate()
-	}
 
 	// TODO Move to `lume-block`
 	/**
@@ -241,9 +231,9 @@ export class DrippyScene extends Element {
 		const garmentSelections = this.selectedGarments ?? {}
 		const blocks: Block[] = []
 
-		for (const templateSelection of Object.values(garmentSelections)) {
+		for (const templateSelection of values(garmentSelections)) {
 			if (!templateSelection) continue
-			for (const selection of Object.values(templateSelection)) if (selection?.block) blocks.push(selection.block)
+			for (const selection of values(templateSelection)) if (selection?.block) blocks.push(selection.block)
 		}
 
 		return [
@@ -502,7 +492,7 @@ export class DrippyScene extends Element {
 			// TODO (FIXME?) This is loading state for all fabrics of
 			// the template category and block category, but is it the
 			// fabrics for the render block we're iterating?
-			for (const fabric of Object.values(fabricsForBlockCategory)) {
+			for (const fabric of values(fabricsForBlockCategory)) {
 				const textureState = createFabricTexture(() => fabric)
 				fabricLoadingSignals[fabric._id] = textureState
 
@@ -514,9 +504,7 @@ export class DrippyScene extends Element {
 				})
 			}
 
-			const fabricsLoaded = createMemo(() =>
-				Object.values(fabricLoadingSignals).every(f => !f.loading() && f.texture()),
-			)
+			const fabricsLoaded = createMemo(() => values(fabricLoadingSignals).every(f => !f.loading() && f.texture()))
 
 			const templateBlocks = createMemo(
 				() => this.renderBlocks.filter(rb => rb.templateCategory === templateCategory),
@@ -543,7 +531,7 @@ export class DrippyScene extends Element {
 					store.clearLoadingTemplate(templateId)
 			})
 
-			const anyFabricErrors = createMemo(() => Object.values(fabricLoadingSignals).map(f => f.error()))
+			const anyFabricErrors = createMemo(() => values(fabricLoadingSignals).map(f => f.error()))
 
 			createEffect(() => {
 				if (anyFabricErrors().some(error => error !== null))
@@ -556,6 +544,7 @@ export class DrippyScene extends Element {
 				if (!fabricsLoaded()) return
 
 				// Create a map for mesh to meshes key
+				// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 				const meshToFabricMeshesMap = new Map<string, string>()
 				for (const meshesKey of Object.keys(fabricsForBlockCategory)) {
 					// CONTINUE ensure correct comment here:
@@ -586,23 +575,11 @@ export class DrippyScene extends Element {
 					console.assert(textureSet, 'Texture set should be available here')
 					console.assert(!isLoading, 'Texture should not be loading here')
 
-					// CONTINUE revisit this to ensure materials/textures
-					// are properly disposed.
-					// Maybe we don't need to create a new material
-					// every time.
-					// OLD:
-					disposeMaterial(mesh)
-					mesh.material = new THREE.MeshPhysicalMaterial()
-					textureManager.applyTexturesToMaterial(mesh.material, textureSet)
-					onCleanup(() => {
-						disposeMaterial(mesh)
-						this.#resetMaterialProperties(el, mesh)
-						el.needsUpdate()
-					})
-					// NEW:
-					// textureManager.applyTexturesToMaterial(mesh.material, textureSet)
+					textureManager.applyTexturesToMaterial(mesh.material as THREE.MeshPhysicalMaterial, textureSet)
+					el.needsUpdate()
+					// skip cleanup so that we keep old fabric visible while loading new one.
 					// onCleanup(() => {
-					// 	this.#resetMaterialProperties(el, mesh)
+					// 	textureManager.clearTexturesFromMaterial(mesh.material as THREE.MeshPhysicalMaterial)
 					// 	el.needsUpdate()
 					// })
 				}
@@ -646,17 +623,17 @@ export class DrippyScene extends Element {
 				const renderPass = new RenderPass(threeScene, camera)
 				this.composer.addPass(renderPass)
 
+				// const bloomPass = new BloomPass(1, 25, 4)
+				// bloomPass.setSize(size.x, size.y)
+				const bloomPass = new UnrealBloomPass(size, 1.5, 0.4, 0.85)
+				this.composer.addPass(bloomPass)
+
 				this.outlinePass = new OutlinePass(size, threeScene, camera)
 				this.outlinePass.edgeStrength = 10
 				this.outlinePass.edgeGlow = 0
 				this.outlinePass.edgeThickness = 4
 				this.outlinePass.visibleEdgeColor.set(0x9b59b6) // purple accent
 				this.composer.addPass(this.outlinePass)
-
-				// const bloomPass = new BloomPass(1, 25, 4)
-				// bloomPass.setSize(size.x, size.y)
-				// CONTINUE: use threshold to get bright areas only. Use UnrealBloomPass instead if BloomPass has no threshold.
-				// this.composer.addPass(bloomPass)
 
 				const outputPass = new OutputPass()
 				this.composer.addPass(outputPass)
@@ -807,7 +784,7 @@ export class DrippyScene extends Element {
 	}
 
 	override template = () => {
-		const shadowBias = -0.0005
+		const shadowBias = -0.0004
 		const shadowNormalBias = /*0.005*/ 0
 		const shadowMapSize = 2048
 		const penumbra = 0.25
@@ -939,7 +916,7 @@ export class DrippyScene extends Element {
 								this.avatarSkeleton.setAvatar(el)
 								enableShadowOnModelLoad(el)
 								setEnvMapOnModelLoad(el, env)
-								showSkeletonHelper(el, () => true)
+								showSkeletonHelper(el, () => store.isAdmin && store.showAdminContent)
 								disableFrustumCulledOnLoad(el)
 							}}
 							attr:src=${() => avatars.find(avatar => avatar.name === this.selectedAvatar)?.src ?? ''}

@@ -1,3 +1,5 @@
+import type {TemplateCategory} from './template'
+
 export type BlockCategory =
 	| 'Accessory'
 	| 'Bag'
@@ -10,8 +12,6 @@ export type BlockCategory =
 	| 'Shoes'
 	| 'Skirt'
 	| 'Sleeves'
-
-export type TemplateCategory = 'Jacket' | 'Shirt' | 'Pants' | 'Accessories' | 'Dress' | 'Skirt' | 'Top' | string // For custom categories
 
 export type BlockAvatar = 'male' | 'female'
 

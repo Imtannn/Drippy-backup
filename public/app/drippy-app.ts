@@ -8,14 +8,7 @@ import '../routes.js' // track page visits
 import {pushState, searchParams} from '../routes.js'
 import type {BlockCategory} from '../types/block.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {
-	BlockFabricsMap,
-	CategoryBlocksMap,
-	PieceFabricsMap,
-	TemplateBlocksMap,
-	TemplateFabricsMap,
-	TemplateMap,
-} from '../types/types.js'
+import type {BlockFabricsMap, TemplateBlocksMap, TemplateFabricsMap, TemplateMap} from '../types/types.js'
 import './app-guard.js'
 import './avatar-selection.js'
 import './blocks-selection.js'
@@ -33,6 +26,7 @@ import {store} from './store.js'
 import './success-view.js'
 import {templateHelpers} from './TemplateHelpers.js'
 import './template-view.js'
+import {entries, size} from '../utils.js'
 
 const isPreview = createMemo(() => searchParams().get('isPreview'))
 const hasBrandParam = createMemo(() => !!searchParams().get('brand'))
@@ -86,11 +80,12 @@ export class DrippyApp extends Element {
 		const blocksParam = searchParams().get('blocks')
 		const fabricsParam = searchParams().get('fabrics')
 
-		if (Object.keys(store.selectedTemplates).length > 0) return
+		if (size(store.selectedTemplates) > 0) return
 
 		const aggregatedTemplates: TemplateMap = {}
-		const aggregatedBlocks: TemplateBlocksMap = new Map()
-		const aggregatedFabrics: TemplateFabricsMap = new Map()
+		const aggregatedBlocks: TemplateBlocksMap = {}
+		const aggregatedFabrics: TemplateFabricsMap = {}
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const templateCollectionHints = new Map<TemplateCategory, string | null>()
 		const templatesWithExplicitBlocks = new Set<TemplateCategory>()
 
@@ -101,22 +96,20 @@ export class DrippyApp extends Element {
 		}
 
 		const mergeBlockFabrics = (existing: BlockFabricsMap | undefined, defaults: BlockFabricsMap): BlockFabricsMap => {
+			// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 			const merged = new Map() as BlockFabricsMap
 
-			if (existing) {
-				for (const [blockCategory, fabricsMap] of existing.entries())
-					merged.set(blockCategory, new Map(fabricsMap) as PieceFabricsMap)
-			}
+			if (existing) for (const [blockCategory, fabricsMap] of entries(existing)) merged[blockCategory] = {...fabricsMap}
 
-			for (const [blockCategory, fabricsMap] of defaults.entries()) {
-				const existingPieces = merged.get(blockCategory)
+			for (const [blockCategory, fabricsMap] of entries(defaults)) {
+				const existingPieces = merged[blockCategory]
 				if (!existingPieces) {
-					merged.set(blockCategory, new Map(fabricsMap) as PieceFabricsMap)
+					merged[blockCategory] = {...fabricsMap}
 					continue
 				}
 
-				for (const [pieceKey, fabric] of fabricsMap.entries())
-					if (!existingPieces.has(pieceKey)) existingPieces.set(pieceKey, fabric)
+				for (const [pieceKey, fabric] of entries(fabricsMap))
+					if (!existingPieces[pieceKey]) existingPieces[pieceKey] = fabric
 			}
 
 			return merged
@@ -165,12 +158,12 @@ export class DrippyApp extends Element {
 
 				// Ensure the template referenced by this block is present in the aggregated templates,
 				// so URL sharing keeps working even when only block overrides are provided.
-				let templateBlocks = aggregatedBlocks.get(templateCategory)
+				let templateBlocks = aggregatedBlocks[templateCategory]
 				if (!templateBlocks) {
-					templateBlocks = new Map() as CategoryBlocksMap
-					aggregatedBlocks.set(templateCategory, templateBlocks)
+					templateBlocks = {}
+					aggregatedBlocks[templateCategory] = templateBlocks
 				}
-				templateBlocks.set(block.category, block)
+				templateBlocks[block.category] = block
 			}
 		}
 
@@ -208,29 +201,29 @@ export class DrippyApp extends Element {
 					rememberTemplate(existingTemplate, hintFromFabric)
 				}
 
-				let templateFabrics = aggregatedFabrics.get(templateCategory)
+				let templateFabrics = aggregatedFabrics[templateCategory]
 				if (!templateFabrics) {
-					templateFabrics = new Map() as BlockFabricsMap
-					aggregatedFabrics.set(templateCategory, templateFabrics)
+					templateFabrics = {}
+					aggregatedFabrics[templateCategory] = templateFabrics
 				}
 
-				let blockFabrics = templateFabrics.get(blockCategory)
+				let blockFabrics = templateFabrics[blockCategory]
 				if (!blockFabrics) {
-					blockFabrics = new Map() as PieceFabricsMap
-					templateFabrics.set(blockCategory, blockFabrics)
+					blockFabrics = {}
+					templateFabrics[blockCategory] = blockFabrics
 				}
 
-				blockFabrics.set(piece === 'default' ? 'default' : piece, fabric)
+				blockFabrics[piece === 'default' ? 'default' : piece] = fabric
 			}
 		}
 
-		if (Object.keys(aggregatedTemplates).length === 0) return
+		if (size(aggregatedTemplates) === 0) return
 
-		for (const [templateCategory, template] of Object.entries(aggregatedTemplates)) {
+		for (const [templateCategory, template] of entries(aggregatedTemplates)) {
 			const hasExplicitBlocks = templatesWithExplicitBlocks.has(templateCategory)
-			let templateBlocks = aggregatedBlocks.get(templateCategory)
+			let templateBlocks = aggregatedBlocks[templateCategory]
 
-			if (!templateBlocks || templateBlocks.size === 0) {
+			if (!templateBlocks || size(templateBlocks) === 0) {
 				const collectionHint = templateCollectionHints.get(templateCategory) ?? template.collection ?? null
 
 				if (!hasExplicitBlocks) {
@@ -240,16 +233,16 @@ export class DrippyApp extends Element {
 						collectionHint,
 					)
 
-					if (newBlocksMap.size > 0) {
-						aggregatedBlocks.set(templateCategory, newBlocksMap)
+					if (size(newBlocksMap) > 0) {
+						aggregatedBlocks[templateCategory] = newBlocksMap
 						templateBlocks = newBlocksMap
-					} else if (!templateBlocks) aggregatedBlocks.set(templateCategory, new Map() as CategoryBlocksMap)
+					} else if (!templateBlocks) aggregatedBlocks[templateCategory] = {}
 
-					if (newFabricsMap.size > 0) {
-						const merged = mergeBlockFabrics(aggregatedFabrics.get(templateCategory), newFabricsMap)
-						if (merged.size > 0) aggregatedFabrics.set(templateCategory, merged)
+					if (size(newFabricsMap) > 0) {
+						const merged = mergeBlockFabrics(aggregatedFabrics[templateCategory], newFabricsMap)
+						if (size(merged) > 0) aggregatedFabrics[templateCategory] = merged
 					}
-				} else if (!templateBlocks) aggregatedBlocks.set(templateCategory, new Map() as CategoryBlocksMap)
+				} else if (!templateBlocks) aggregatedBlocks[templateCategory] = {}
 			}
 		}
 

@@ -27,19 +27,30 @@ import type {
 	TemplateMap,
 } from '../types/types.js'
 import {
+	entries,
 	getSpaceDefaultScene,
 	getSpacePrimaryCollection,
 	onModelLoad,
 	removeItemUnsorted,
+	size,
 	spaceHasMultipleCollections,
 	syncSignals,
 	toSolidSignal,
+	values,
 } from '../utils.js'
 import type {ConnectionStatus} from './network-monitor.js'
 import {createNetworkEffect} from './network-monitor.js'
 import {templateHelpers} from './TemplateHelpers.js'
 
-export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null)
+/**
+ * The current user as a Solid.js signal. Undefined means loading during the
+ * app's initial load, null means logged out, and a Meteor.User object means
+ * logged in.
+ */
+export const currentUser = toSolidSignal(() => Meteor.user() as Readonly<Meteor.User> | null | undefined)
+
+export const userLoading = (user: Meteor.User | null | undefined): user is undefined => user === undefined
+export const isLoggedIn = (user: Meteor.User | null | undefined): user is Meteor.User | undefined => user !== null
 export const username = () => currentUser()?.username ?? ''
 export const dateOfBirth = () => currentUser()?.profile?.dateOfBirth ?? ''
 export const isAdmin = () => !!currentUser()?.profile?.isAdmin
@@ -156,18 +167,24 @@ class Store {
 	urlParamsLoaded = false
 
 	// Order-related state
+	// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 	selectedOrderItems = new Map<TemplateCategory, boolean>()
 	// Size-specific quantities: Map<TemplateCategory, Map<Size, quantity>>
+	// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 	orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
 	// For retail mode: overall item quantities (not per size)
+	// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 	retailItemQuantities = new Map<TemplateCategory, number>()
 	// For retail mode: selected size per category
+	// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 	retailItemSizes = new Map<TemplateCategory, string>()
 	// For retail mode: custom measurements per category
+	// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 	retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
 	// Track which category is currently being customized
 	currentCustomMeasurementCategory = null as TemplateCategory | null
 	// Screenshot cache for garment images
+	// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 	screenshotCache = new Map<TemplateCategory, string>()
 	remixOverlayTemplate = null as Template | null
 	// URL for iframe popup
@@ -216,10 +233,10 @@ class Store {
 		if (!templateSelection) return
 
 		const garmentSelection = templateSelection[blockCategory]
-		if (garmentSelection && garmentSelection.block === null && Object.keys(garmentSelection.fabrics).length === 0)
+		if (garmentSelection && garmentSelection.block === null && size(garmentSelection.fabrics) === 0)
 			delete templateSelection[blockCategory]
 
-		if (Object.keys(templateSelection).length === 0) delete this.selectedGarments[templateCategory]
+		if (size(templateSelection) === 0) delete this.selectedGarments[templateCategory]
 	}
 
 	getTemplateSelection(templateCategory: TemplateCategory): TemplateCategorySelection | undefined {
@@ -252,11 +269,11 @@ class Store {
 		if (!bodiceSelection) return
 
 		const bodiceFabrics = bodiceSelection.fabrics
-		if (!bodiceFabrics || Object.keys(bodiceFabrics).length === 0) return
+		if (!bodiceFabrics || size(bodiceFabrics) === 0) return
 
 		const sleevesSelection = this.getGarmentSelection(templateCategory, 'Sleeves')
 
-		for (const [meshKey, fabric] of Object.entries(bodiceFabrics)) sleevesSelection.fabrics[meshKey] = fabric
+		for (const [meshKey, fabric] of entries(bodiceFabrics)) sleevesSelection.fabrics[meshKey] = fabric
 	}
 
 	// FIXME we should avoid having different ways of setting the same thing
@@ -306,9 +323,9 @@ class Store {
 				// this.touchSelectedGarments()
 
 				// Update URL params to prevent re-adding from URL when last item is removed
-				// TODO side effects should be in an Effect (createEffect) or
+				// FIXME side effects should be in an Effect (createEffect) or
 				// derived in a memo (createMemo).
-				if (Object.keys(this.selectedTemplates).length === 0) {
+				if (size(this.selectedTemplates) === 0) {
 					untrack(searchParams).delete('garments')
 					untrack(searchParams).delete('blocks')
 					untrack(searchParams).delete('fabrics')
@@ -316,7 +333,7 @@ class Store {
 				} else {
 					// Update garments param with remaining templates
 					const garmentEntries: string[] = []
-					for (const t of Object.values(this.selectedTemplates)) {
+					for (const t of values(this.selectedTemplates)) {
 						const collectionSlug = t.collection ?? null
 						garmentEntries.push(collectionSlug ? `${collectionSlug}|${t._id}` : t._id)
 					}
@@ -439,11 +456,13 @@ class Store {
 
 	setSizeQuantity(category: TemplateCategory, size: string, quantity: number) {
 		// Create a new Map to trigger reactivity
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const newQuantities = new Map(this.orderSizeQuantities)
 
 		if (!newQuantities.has(category)) newQuantities.set(category, new Map<string, number>())
 
 		// Create new inner Map to trigger reactivity
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const categoryMap = new Map(newQuantities.get(category)!)
 		categoryMap.set(size, quantity)
 		newQuantities.set(category, categoryMap)
@@ -481,6 +500,7 @@ class Store {
 	}
 
 	setRetailItemQuantity(category: TemplateCategory, quantity: number) {
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const newQuantities = new Map(this.retailItemQuantities)
 		newQuantities.set(category, quantity)
 		this.retailItemQuantities = newQuantities
@@ -491,6 +511,7 @@ class Store {
 	}
 
 	setRetailItemSize(category: TemplateCategory, size: string) {
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const newSizes = new Map(this.retailItemSizes)
 		newSizes.set(category, size)
 		this.retailItemSizes = newSizes
@@ -501,6 +522,7 @@ class Store {
 	}
 
 	setRetailItemCustomMeasurement(category: TemplateCategory, measurement: CustomMeasurement) {
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const newMeasurements = new Map(this.retailItemCustomMeasurements)
 		newMeasurements.set(category, measurement)
 		this.retailItemCustomMeasurements = newMeasurements
@@ -523,6 +545,7 @@ class Store {
 	}
 
 	toggleOrderItem(category: TemplateCategory) {
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const newSelectedItems = new Map(this.selectedOrderItems)
 		const currentlySelected = newSelectedItems.get(category) || false
 
@@ -538,8 +561,9 @@ class Store {
 
 	initializeOrderItems() {
 		// Initialize all selected templates as checked
+		// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 		const newSelectedItems = new Map<TemplateCategory, boolean>()
-		for (const [category] of Object.entries(this.selectedTemplates)) newSelectedItems.set(category, true)
+		for (const [category] of entries(this.selectedTemplates)) newSelectedItems.set(category, true)
 
 		this.selectedOrderItems = newSelectedItems
 	}
@@ -553,11 +577,17 @@ class Store {
 			this.selectedScene = null
 			this.selectedTemplates = {}
 			this.selectedGarments = {}
+			// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 			this.selectedOrderItems = new Map<TemplateCategory, boolean>()
+			// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 			this.orderSizeQuantities = new Map<TemplateCategory, Map<string, number>>()
+			// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 			this.retailItemQuantities = new Map<TemplateCategory, number>()
+			// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 			this.retailItemSizes = new Map<TemplateCategory, string>()
+			// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 			this.retailItemCustomMeasurements = new Map<TemplateCategory, CustomMeasurement>()
+			// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 			this.screenshotCache = new Map<TemplateCategory, string>()
 			this.loadingScreenshots.length = 0
 			this.remixOverlayTemplate = null
@@ -635,7 +665,7 @@ class Store {
 		return Boolean(blockId && blockTracked)
 	}
 	get anyBlockIsLoading(): boolean {
-		return Object.keys(this.loadingBlocks).length > 0
+		return size(this.loadingBlocks) > 0
 	}
 
 	addLoadingFabric(fabricId: string) {
@@ -803,10 +833,10 @@ export function updateGarmentsSelectionInUrl(selectedGarments: SelectedGarments)
 	const blockEntries: string[] = []
 	const fabricEntries: string[] = []
 
-	for (const [templateCategory, blockSelections] of Object.entries(selectedGarments)) {
+	for (const [templateCategory, blockSelections] of entries(selectedGarments)) {
 		if (!blockSelections) continue
 
-		for (const [blockCategory, selection] of Object.entries(blockSelections)) {
+		for (const [blockCategory, selection] of entries(blockSelections)) {
 			if (!selection) continue
 
 			if (selection.block) {
@@ -814,7 +844,7 @@ export function updateGarmentsSelectionInUrl(selectedGarments: SelectedGarments)
 				blockEntries.push(collectionSlug ? `${collectionSlug}|${selection.block._id}` : selection.block._id)
 			}
 
-			for (const [piece, fabric] of Object.entries(selection.fabrics)) {
+			for (const [piece, fabric] of entries(selection.fabrics)) {
 				const collectionSlug = fabric.collection ?? null
 				fabricEntries.push(
 					collectionSlug

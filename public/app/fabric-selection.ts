@@ -2,10 +2,12 @@ import {attribute, booleanAttribute, css, Element, element, html, signal, type E
 import '../elements/logic/show-when.js'
 import '../elements/tabs.js'
 import type {BlockCategory} from '../types/block.js'
-import type {Fabric, FabricCategory} from '../types/fabric.js'
+import type {Fabric, FabricCategory, FabricsByCategory} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
 import './loading-spinner-overlay.js'
 import {store} from './store.js'
+import {entries, size, values} from '../utils.js'
+import type {PieceFabricsMap} from '../types/types.js'
 
 type FabricSelectionAttributes = 'pieceSelections' | 'availableFabrics' | 'selectedTemplateCategory' | 'isRemix'
 
@@ -14,7 +16,7 @@ export class FabricSelection extends Element {
 	static override readonly elementName = 'fabric-selection'
 
 	@attribute pieceSelections: string[] = []
-	@attribute availableFabrics: Record<string, Fabric[]> = {}
+	@attribute availableFabrics: FabricsByCategory = {}
 	@attribute selectedTemplateCategory: TemplateCategory | null = null
 	@booleanAttribute isRemix = false
 
@@ -39,15 +41,15 @@ export class FabricSelection extends Element {
 		store.setSelectingPiece = null
 	}
 
-	#getSelectedFabrics = (): Record<string, Fabric>[] => {
+	#getSelectedFabrics = (): PieceFabricsMap[] => {
 		if (!this.selectedTemplateCategory) return []
 
 		const templateSelection = store.getTemplateSelection(this.selectedTemplateCategory)
 		if (!templateSelection) return []
 
-		return Object.values(templateSelection)
-			.map(selection => selection?.fabrics ?? {})
-			.filter(fabrics => Object.keys(fabrics).length > 0)
+		return values(templateSelection)
+			.map(selection => selection.fabrics)
+			.filter(fabrics => size(fabrics) > 0)
 	}
 
 	#getPieceFabric = (piece: string) => {
@@ -86,8 +88,8 @@ export class FabricSelection extends Element {
 		const templateSelection = store.getTemplateSelection(this.selectedTemplateCategory)
 		if (!templateSelection) return
 
-		const actualBlockCategories = Object.entries(templateSelection)
-			.filter(([, selection]) => selection?.block)
+		const actualBlockCategories = entries(templateSelection)
+			.filter(([, selection]) => selection.block)
 			.map(([blockCategory]) => blockCategory as BlockCategory)
 
 		// Apply fabric to ALL selected blocks of this template category
@@ -111,7 +113,7 @@ export class FabricSelection extends Element {
 
 		if (!templateSelection) return false
 
-		return Object.values(templateSelection).some(selection => selection?.fabrics?.[piece]?._id === fabric._id)
+		return values(templateSelection).some(selection => selection?.fabrics?.[piece]?._id === fabric._id)
 	}
 
 	#getFabricCategories = (): (FabricCategory | 'All')[] => {
