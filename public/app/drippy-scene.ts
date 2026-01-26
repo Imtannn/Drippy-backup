@@ -767,7 +767,7 @@ export class DrippyScene extends Element {
 		})
 	}
 
-	#handleRigging(el: GltfModel, block: RenderBlock) {
+	#handleRigging(el: GltfModel, block: () => RenderBlock) {
 		const modelLoaded = onModelLoad(el)
 
 		createEffect(() => {
@@ -778,9 +778,19 @@ export class DrippyScene extends Element {
 				if (!avatarLoaded() || !modelLoaded()) return
 
 				this.#adoptAvatarSkeleton(el)
-				this.#checkAccessory(block, el.three)
+				this.#checkAccessory(block(), el.three)
 			})
 		})
+	}
+
+	@memo private get block0() {
+		return this.renderBlocks[0]
+	}
+	@memo private get block1() {
+		return this.renderBlocks[1]
+	}
+	@memo private get block2() {
+		return this.renderBlocks[2]
 	}
 
 	override template = () => {
@@ -855,7 +865,7 @@ export class DrippyScene extends Element {
 					perspective="800"
 					physically-correct-lights
 					shadow-mode="vsm"
-					attr:environment=${() => this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg'}
+					attr:environment=${() => /*TODO webp: this.scene?.env ??*/ '/images/envs/brown_photostudio_02.jpg'}
 					attr:environment-intensity="0.3"
 					oncapture:pointerdown=${this.#handlePointerDown}
 					oncapture:pointermove=${this.#handlePointerMove}
@@ -924,15 +934,103 @@ export class DrippyScene extends Element {
 							data-avatar
 						>
 							<lume-element3d ref=${(el: Element3D) => setMaterialsVisibleOnModelLoad(el.parentElement as GltfModel, () => store.isShowAvatar, el)}>
-								<!-- User-selected garments -->
-								<${For} each=${() => this.renderBlocks}>
+								<${() => {
+									// Instead of <For> loop here we're hard
+									// coding a fixed number of default garment
+									// models to avoid a Solid bug with <For>
+									// causing effects to stop running (they get
+									// cleaned up when the For updates).
+
+									return html`
+										<lume-gltf-model
+											ref=${(el: GltfModel) => {
+												enableShadowOnModelLoad(el)
+												setEnvMapOnModelLoad(el, env)
+												disableFrustumCulledOnLoad(el)
+												this.#handleRigging(el, () => this.block0)
+
+												createEffect(() => {
+													// Track default garment loading
+													if (this.block0.id.startsWith('default-')) {
+														const defaultGarmentId = Symbol(`default-garment-${this.block0.id}`)
+														store.trackModelLoading(defaultGarmentId, el)
+													}
+												})
+											}}
+											id=${() => this.block0.id}
+											attr:data-block-id=${() => this.block0.block._id}
+											data-block
+											attr:data-default=${() => this.block0.id.startsWith('default-')}
+											attr:src=${() => this.block0.block.modelFile}
+											scale=${() => (this.block0.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1')}
+											visible=${() => this.#isGarmentVisible(this.block0, store.selectedTemplates)}
+										></lume-gltf-model>
+									`
+								}}></>
+								<${() => {
+									return html`
+										<lume-gltf-model
+											ref=${(el: GltfModel) => {
+												enableShadowOnModelLoad(el)
+												setEnvMapOnModelLoad(el, env)
+												disableFrustumCulledOnLoad(el)
+												this.#handleRigging(el, () => this.block1)
+
+												createEffect(() => {
+													// Track default garment loading
+													if (this.block1.id.startsWith('default-')) {
+														const defaultGarmentId = Symbol(`default-garment-${this.block1.id}`)
+														store.trackModelLoading(defaultGarmentId, el)
+													}
+												})
+											}}
+											id=${() => this.block1.id}
+											attr:data-block-id=${() => this.block1.block._id}
+											data-block
+											attr:data-default=${() => this.block1.id.startsWith('default-')}
+											attr:src=${() => this.block1.block.modelFile}
+											scale=${() => (this.block1.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1')}
+											visible=${() => this.#isGarmentVisible(this.block1, store.selectedTemplates)}
+										></lume-gltf-model>
+									`
+								}}></>
+								<${() => {
+									return html`
+										<lume-gltf-model
+											ref=${(el: GltfModel) => {
+												enableShadowOnModelLoad(el)
+												setEnvMapOnModelLoad(el, env)
+												disableFrustumCulledOnLoad(el)
+												this.#handleRigging(el, () => this.block2)
+
+												createEffect(() => {
+													// Track default garment loading
+													if (this.block2.id.startsWith('default-')) {
+														const defaultGarmentId = Symbol(`default-garment-${this.block2.id}`)
+														store.trackModelLoading(defaultGarmentId, el)
+													}
+												})
+											}}
+											id=${() => this.block2.id}
+											attr:data-block-id=${() => this.block2.block._id}
+											data-block
+											attr:data-default=${() => this.block2.id.startsWith('default-')}
+											attr:src=${() => this.block2.block.modelFile}
+											scale=${() => (this.block2.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1')}
+											visible=${() => this.#isGarmentVisible(this.block2, store.selectedTemplates)}
+										></lume-gltf-model>
+									`
+								}}></>
+
+
+								<${For} each=${() => this.renderBlocks.slice(3)}>
 									${(item: RenderBlock) => html`
 										<lume-gltf-model
 											ref=${(el: GltfModel) => {
 												enableShadowOnModelLoad(el)
 												setEnvMapOnModelLoad(el, env)
 												disableFrustumCulledOnLoad(el)
-												this.#handleRigging(el, item)
+												this.#handleRigging(el, () => item)
 
 												// Track default garment loading
 												if (item.id.startsWith('default-')) {
@@ -950,6 +1048,7 @@ export class DrippyScene extends Element {
 										></lume-gltf-model>
 									`}
 								</>
+
 							</lume-element3d>
 
 							<lume-animation
@@ -1082,3 +1181,29 @@ function emptyNodeList<T extends Element>() {
 	const emptySelector = '.__empty__' + Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
 	return document.querySelectorAll(emptySelector) as NodeListOf<T>
 }
+
+// <${For} each=${() => this.renderBlocks}>
+// 	${(item: RenderBlock) => html`
+// 		<lume-gltf-model
+// 			ref=${(el: GltfModel) => {
+// 				enableShadowOnModelLoad(el)
+// 				setEnvMapOnModelLoad(el, env)
+// 				disableFrustumCulledOnLoad(el)
+// 				this.#handleRigging(el, item)
+
+// 				// Track default garment loading
+// 				if (item.id.startsWith('default-')) {
+// 					const defaultGarmentId = Symbol(`default-garment-${item.id}`)
+// 					store.trackModelLoading(defaultGarmentId, el)
+// 				}
+// 			}}
+// 			id=${item.id}
+// 			attr:data-block-id=${() => item.block._id}
+// 			data-block
+// 			attr:data-default=${() => item.id.startsWith('default-')}
+// 			attr:src=${item.block.modelFile}
+// 			scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
+// 			visible=${() => this.#isGarmentVisible(item, store.selectedTemplates)}
+// 		></lume-gltf-model>
+// 	`}
+// </>
