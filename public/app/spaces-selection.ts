@@ -200,7 +200,7 @@ export class SpacesSelection extends Element {
 							<avatar-dropdown hide-chevron></avatar-dropdown>
 						</a>
 						<div class="nav-links">
-							<a href="/landing" class="learn-more-link">Learn more</a>
+							<a href="/brand-experiences" class="learn-more-link">Learn more</a>
 							${() => {
 								return isLoggedIn(currentUser())
 									? html`<login-ui></login-ui>`

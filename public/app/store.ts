@@ -6,7 +6,7 @@ import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
 import {Visits, type Visit} from '../imports/collections/Visits.js'
 import {Wishlist, type Wishlist as WishlistType} from '../imports/collections/Wishlist.js'
-import {pushState, searchParams, url} from '../routes.js'
+import {hasBrandParam, pushState, searchParams, url} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
@@ -941,4 +941,35 @@ function selectedFabricsFromUrl() {
 	}
 
 	store.setSelectedFabrics = fabricData
+}
+
+/**
+ * If there is no selected space, and brand parameter is not present,
+ * automatically set ?space=drippy-shop and ?avatar to ensure the app loads with a default
+ * space and avatar.
+ *
+ * TODO If there's a space, and no avatar, we should still set a default avatar?
+ */
+export function setDefaultSpaceAndAvatar() {
+	// Set default space to drippy-shop if no space is selected
+	if (store.selectedSpace || hasBrandParam()) return
+
+	const drippyShopSpace = spaces.find(space => space.slug === 'drippy-shop')
+	if (!drippyShopSpace) return
+
+	// Set default avatar for the space's gender if not already set
+	if (!searchParams().get('avatar') && drippyShopSpace.gender) {
+		const defaultAvatar = avatars.find(a => a.gender === drippyShopSpace.gender && a.default)
+		if (defaultAvatar) {
+			store.selectedAvatar = defaultAvatar.name
+			searchParams().set('avatar', defaultAvatar.name)
+		}
+	}
+
+	searchParams().set('space', 'drippy-shop')
+	batch(() => {
+		pushState()
+		store.selectSpace = drippyShopSpace
+		store.view = 'template'
+	})
 }

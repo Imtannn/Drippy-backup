@@ -1,11 +1,11 @@
-import {batch, createMemo, css, Element, element, html, signal, effect} from 'lume'
+import {batch, css, Element, element, html, signal, effect} from 'lume'
 import '../elements/connection-warning.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/theme-switch.js'
 import '../elements/image-loading.js'
 import '../routes.js' // track page visits
-import {pushState, searchParams} from '../routes.js'
+import {hasBrandParam, isPreview, pushState, searchParams} from '../routes.js'
 import type {BlockCategory} from '../types/block.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {BlockFabricsMap, TemplateBlocksMap, TemplateFabricsMap, TemplateMap} from '../types/types.js'
@@ -22,20 +22,22 @@ import '../elements/iframe-popup.js'
 import './outfit-preview.js'
 import './share-view.js'
 import './spaces-selection.js'
-import {store} from './store.js'
+import {autoSelectDefaultSpace, store} from './store.js'
 import './success-view.js'
 import {templateHelpers} from './TemplateHelpers.js'
 import './template-view.js'
 import {entries, size} from '../utils.js'
-
-const isPreview = createMemo(() => searchParams().get('isPreview'))
-const hasBrandParam = createMemo(() => !!searchParams().get('brand'))
 
 @element
 export class DrippyApp extends Element {
 	static override elementName = 'drippy-app'
 
 	@signal appLoaded = false
+
+	override connectedCallback() {
+		super.connectedCallback()
+		autoSelectDefaultSpace()
+	}
 
 	// FIXME this needs re-work, currently can cause an infinite loop (the
 	// console.logs in loadFromUrlParameters will log repeatedly)
@@ -251,6 +253,7 @@ export class DrippyApp extends Element {
 			store.selectedTemplates = aggregatedTemplates
 		})
 	}
+
 	override template = () => html`
 		<show-when
 			condition=${() => this.appLoaded}
