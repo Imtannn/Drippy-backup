@@ -1,10 +1,7 @@
 import {html} from 'lume'
 import {createSignal} from 'solid-js'
 import '../app/drippy-scene.js'
-import '../elements/avatar-selector.js'
 import '../elements/custom-button.js'
-import '../elements/login-ui.js'
-import '../elements/theme-switch.js'
 import '../elements/image-loading.js'
 import '../routes.js' // track page visits
 

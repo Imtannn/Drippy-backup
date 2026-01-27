@@ -1,31 +1,27 @@
-import {batch, css, Element, element, html, signal, effect} from 'lume'
 import '../elements/connection-warning.js'
+import '../elements/iframe-popup.js'
 import '../elements/logic/show-when.js'
-import '../elements/login-ui.js'
-import '../elements/theme-switch.js'
-import '../elements/image-loading.js'
-import '../routes.js' // track page visits
-import {hasBrandParam, isPreview, pushState, searchParams} from '../routes.js'
-import type {BlockCategory} from '../types/block.js'
-import type {Template, TemplateCategory} from '../types/template.js'
-import type {BlockFabricsMap, TemplateBlocksMap, TemplateFabricsMap, TemplateMap} from '../types/types.js'
-import './app-guard.js'
 import './avatar-selection.js'
-import './blocks-selection.js'
 import './brand-view.js'
 import './custom-measurement.js'
 import './drippy-scene.js'
 import './order-items.js'
 import './order-size.js'
 import './order-view.js'
-import '../elements/iframe-popup.js'
 import './outfit-preview.js'
 import './share-view.js'
 import './spaces-selection.js'
-import {autoSelectDefaultSpace, store} from './store.js'
 import './success-view.js'
-import {templateHelpers} from './TemplateHelpers.js'
 import './template-view.js'
+
+import {batch, css, Element, element, html, signal, effect} from 'lume'
+import '../routes.js' // track page visits
+import {hasBrandParam, isPreview, pushState, searchParams} from '../routes.js'
+import type {BlockCategory} from '../types/block.js'
+import type {Template, TemplateCategory} from '../types/template.js'
+import type {BlockFabricsMap, TemplateBlocksMap, TemplateFabricsMap, TemplateMap} from '../types/types.js'
+import {setDefaultSpaceAndAvatar, store} from './store.js'
+import {templateHelpers} from './TemplateHelpers.js'
 import {entries, size} from '../utils.js'
 
 @element
@@ -36,7 +32,7 @@ export class DrippyApp extends Element {
 
 	override connectedCallback() {
 		super.connectedCallback()
-		autoSelectDefaultSpace()
+		setDefaultSpaceAndAvatar()
 	}
 
 	// FIXME this needs re-work, currently can cause an infinite loop (the

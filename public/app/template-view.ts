@@ -17,15 +17,13 @@ import {
 import {templateHelpers} from './TemplateHelpers.js'
 
 import {collections} from '../consts/collections.js'
-import '../elements/animation-select.js'
+
 import '../elements/avatar-dropdown.js'
 import '../elements/avatar-swap-bottom-sheet.js'
-import '../elements/back-button.js'
 import '../elements/bottom-sheet.js'
 import '../elements/cube-button.js'
 import '../elements/dialog-element.js'
 import '../elements/heart-button.js'
-import '../elements/home-button.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'

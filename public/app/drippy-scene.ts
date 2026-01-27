@@ -1,3 +1,7 @@
+import '../elements/logic/show-when.js'
+import '../elements/lume-animation.js'
+import '../elements/progress-loader.js'
+
 import {
 	attribute,
 	CameraRig,
@@ -31,11 +35,6 @@ import {avatars} from '../consts/avatars.js'
 
 import {backgroundScenes} from '../consts/scenes.js'
 import {appAnims} from '../elements/animation-select.js'
-import '../elements/logic/show-when.js'
-import '../elements/lume-animation.js'
-import '../elements/lume-rect-area-light.js'
-import '../elements/progress-loader.js'
-import '../elements/rig/lume-auto-rigger.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {TemplateCategory} from '../types/template.js'
@@ -60,7 +59,6 @@ import {
 	values,
 	whenModelLoaded,
 } from '../utils.js'
-import './app-buttons.js'
 import {AvatarSkeleton} from './avatar-skeleton.js'
 import {store} from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
