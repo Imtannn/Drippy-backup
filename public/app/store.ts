@@ -954,12 +954,12 @@ export function setDefaultSpaceAndAvatar() {
 	// Set default space to drippy-shop if no space is selected
 	if (store.selectedSpace || hasBrandParam()) return
 
-	const drippyShopSpace = spaces.find(space => space.slug === 'drippy-shop')
+	const drippyShopSpace = spaces().find(space => space.slug === 'drippy-shop')
 	if (!drippyShopSpace) return
 
 	// Set default avatar for the space's gender if not already set
 	if (!searchParams().get('avatar') && drippyShopSpace.gender) {
-		const defaultAvatar = avatars.find(a => a.gender === drippyShopSpace.gender && a.default)
+		const defaultAvatar = avatars().find(a => a.gender === drippyShopSpace.gender && a.default)
 		if (defaultAvatar) {
 			store.selectedAvatar = defaultAvatar.name
 			searchParams().set('avatar', defaultAvatar.name)
