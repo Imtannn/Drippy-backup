@@ -1,4 +1,4 @@
-import {batch, css, element, Element, html, signal, untrack, type ElementAttributes} from 'lume'
+import {batch, css, element, Element, html, signal, type ElementAttributes} from 'lume'
 import {blocks} from '../consts/blocks.js'
 import {getFabricsByCollection} from '../consts/fabrics.js'
 import {pushState, searchParams} from '../routes.js'
