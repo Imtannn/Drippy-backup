@@ -41,7 +41,7 @@ export class RemixOverlay extends Element {
 	@booleanAttribute disabledScroll = false
 
 	@signal activeTab: typeof STYLE_TAB | typeof FABRICS_TAB | null = null
-	@signal spaceCollection: string | null = null
+	@signal spaceCollection: string | string[] | null = null
 	@signal availableBlocks: Block[] = []
 	@signal blocksCategories: string[] = []
 	@signal availableFabrics: FabricsByCategory = {}

@@ -58,7 +58,7 @@ export class TemplateView extends Element {
 
 	@signal selectedTab: TemplateCategory | null = null
 	@signal templateCategories: Record<TemplateCategory, Template[]> = {} as Record<TemplateCategory, Template[]>
-	@signal spaceCollection: string | null = null
+	@signal spaceCollection: string | string[] | null = null
 	@signal showLoginDialog = false
 	@signal showAvatarSelection = false
 	@signal showPoseSelection = false
