@@ -71,7 +71,6 @@ export class TemplateView extends Element {
 	@signal isDragging = false
 	@signal startX = 0
 	@signal override scrollLeft = 0
-	private hasDragged = false
 
 	@signal disabledScroll = false
 	@signal showWishlistOnly = false
