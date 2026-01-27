@@ -2815,6 +2815,7 @@ export const blocks = toSolidSignal<Block[]>(() => {
 	return result
 })
 
-export const getBlocksByCollection = (collection: string) => {
+export const getBlocksByCollection = (collection: string | string[]) => {
+	if (Array.isArray(collection)) return blocks().filter(block => collection.includes(block.collection))
 	return blocks().filter(block => block.collection === collection)
 }

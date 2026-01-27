@@ -3002,6 +3002,7 @@ export const fabrics = toSolidSignal<Fabric[]>(() => {
 	return result
 })
 
-export const getFabricsByCollection = (collection: string) => {
+export const getFabricsByCollection = (collection: string | string[]) => {
+	if (Array.isArray(collection)) return fabrics().filter(fabric => collection.includes(fabric.collection))
 	return fabrics().filter(fabric => fabric.collection === collection)
 }

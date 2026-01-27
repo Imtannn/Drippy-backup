@@ -392,11 +392,11 @@ class Store {
 	}
 
 	/** Get the effective collection for the current space */
-	getEffectiveCollection(): string | null {
+	getEffectiveCollection(): string | string[] | null {
 		if (!this.selectedSpace) return null
 
-		// If multi-collection space, use selectedCollection (null means show all)
-		if (spaceHasMultipleCollections(this.selectedSpace)) return this.selectedCollection || null
+		// If multi-collection space, return all collections
+		if (spaceHasMultipleCollections(this.selectedSpace)) return this.selectedSpace.collections
 
 		// Single collection space, use primary
 		return getSpacePrimaryCollection(this.selectedSpace)
@@ -906,7 +906,7 @@ function selectedFabricsFromUrl() {
 	}[] = []
 
 	for (const entry of fabricEntries) {
-		const {collectionSlug, value} = templateHelpers.parseCollectionQualifiedEntry(entry)
+		const {value} = templateHelpers.parseCollectionQualifiedEntry(entry)
 		if (!value) continue
 
 		const [keyPart, fabricId] = value.split(':')
@@ -929,7 +929,7 @@ function selectedFabricsFromUrl() {
 
 		if (!templateCategory || !blockCategory || !piece) continue
 
-		const fabric = templateHelpers.findFabricById(fabricId, collectionSlug)
+		const fabric = templateHelpers.findFabricById(fabricId)
 		if (fabric) {
 			fabricData.push({
 				fabric,

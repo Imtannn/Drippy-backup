@@ -60,10 +60,10 @@ class TemplateHelpers {
 	 * Resolve available fabrics scoped to a specific fabric category.
 	 *
 	 * @param fabricCategory - Category slug pulled from a template fabric.
-	 * @param collection - Collection slug to read from; defaults to `gap`.
+	 * @param collection - Collection slug to read from.
 	 * @returns Fabrics that belong to the requested category within the collection.
 	 */
-	#getFabricsByFabricCategory(fabricCategory: string, collection: string | null | undefined): Fabric[] {
+	#getFabricsByFabricCategory(fabricCategory: string, collection: string | string[] | null | undefined): Fabric[] {
 		if (!fabricCategory) return []
 
 		// TODO: If no collection is provided, loop through all collections in space and find the fabrics
@@ -244,7 +244,7 @@ class TemplateHelpers {
 	 * @param collection - Collection slug used when resolving blocks.
 	 * @returns Block data shape storing blocks and material metadata.
 	 */
-	convertTemplateToBlockData(selectedTemplate: Template, collection: string | null | undefined) {
+	convertTemplateToBlockData(selectedTemplate: Template, collection: string | string[] | null | undefined) {
 		const templateBlocks = this.#resolveBlocksForTemplate(selectedTemplate, collection)
 		return {
 			blocks: templateBlocks,
@@ -253,10 +253,8 @@ class TemplateHelpers {
 		}
 	}
 
-	#resolveBlocksForTemplate(template: Template, collection: string | null | undefined): Block[] {
-		const lookupOrder: string[] = []
-
-		if (collection) lookupOrder.push(collection)
+	#resolveBlocksForTemplate(template: Template, collection: string | string[] | null | undefined): Block[] {
+		const lookupOrder: string[] = Array.isArray(collection) ? collection : collection ? [collection] : []
 
 		if (template.collection && !lookupOrder.includes(template.collection)) lookupOrder.push(template.collection)
 
@@ -299,7 +297,7 @@ class TemplateHelpers {
 		return newFabrics
 	}
 
-	#getFabricById(fabricId: string, collection: string | null | undefined): Fabric | undefined {
+	#getFabricById(fabricId: string, collection: string | string[] | null | undefined): Fabric | undefined {
 		if (!collection) {
 			const fabric = fabrics().find(fabric => fabric._id === fabricId)
 			if (fabric) return fabric
@@ -322,7 +320,7 @@ class TemplateHelpers {
 			materialId: string
 			extraMaterials?: {mesh: string; materialId: string}[]
 		},
-		collection: string | null | undefined,
+		collection: string | string[] | null | undefined,
 		fabricOverrides?: BlockFabricsMap,
 	) {
 		// Completely replace selectedBlocks with new blocks (used for template selection)
@@ -396,13 +394,13 @@ class TemplateHelpers {
 		options: {
 			selectedGarments?: SelectedGarments | undefined
 			selectedSpace?: Space | null | undefined
-			sourceCollection?: string | null | undefined
+			sourceCollection?: string | string[] | null | undefined
 		},
-		collectionOverride?: string | null | undefined,
+		collectionOverride?: string | string[] | null | undefined,
 	): BlockCategory[] {
 		const mappingCategories = [...(this.availableBlocksMapping[templateCategory] || [])] as BlockCategory[]
 		const collection =
-			collectionOverride ?? options.sourceCollection ?? getSpacePrimaryCollection(options.selectedSpace) ?? 'gap'
+			collectionOverride ?? options.sourceCollection ?? getSpacePrimaryCollection(options.selectedSpace)
 		const blocks = this.getBlocksForTemplateCategory(templateCategory, collection)
 		const categoriesFromBlocks = new Set<BlockCategory>(blocks.map(block => block.category))
 
@@ -430,7 +428,10 @@ class TemplateHelpers {
 	 * @param template - Template describing the fabric categories.
 	 * @returns Record keyed by mesh/piece name pointing to allowed fabrics.
 	 */
-	getAvailableFabricsForTemplate(collection: string | null | undefined, template: Template): FabricsByCategory {
+	getAvailableFabricsForTemplate(
+		collection: string | string[] | null | undefined,
+		template: Template,
+	): FabricsByCategory {
 		// Resolve template.materialId (fabric _id) to the fabric instance, then filter by allowed template categories
 		/** Available fabrics by category. */
 		const availableFabrics: FabricsByCategory = {}
@@ -458,8 +459,8 @@ class TemplateHelpers {
 	 * @param collection - Collection slug or null to fall back to default.
 	 * @returns Blocks belonging to the category and collection.
 	 */
-	getBlocksForTemplateCategory(templateCategory: TemplateCategory, collection: string | null | undefined) {
-		const resolvedCollection = collection ?? 'gap'
+	getBlocksForTemplateCategory(templateCategory: TemplateCategory, collection: string | string[] | null | undefined) {
+		const resolvedCollection = Array.isArray(collection) ? collection : collection ? [collection] : []
 		return (getBlocksByCollection(resolvedCollection) ?? []).filter(
 			block => block.templateCategory === templateCategory,
 		)
@@ -477,17 +478,16 @@ class TemplateHelpers {
 		options: {
 			selectedGarments?: SelectedGarments | undefined
 			selectedSpace?: Space | null | undefined
-			sourceCollection?: string | null | undefined
+			sourceCollection?: string | string[] | null | undefined
 		},
 	) {
 		const templateCategory = template.category
 		if (!['Shirt', 'Jacket', 'Pants', 'Dress', 'Skirt', 'Top'].includes(templateCategory))
 			return {available: false, blocksCategories: [], fabrics: []}
 		const blocksCategories = this.#getBlockCategoriesForTemplateCategory(templateCategory, options)
-		const fabrics = this.getAvailableFabricsForTemplate(
-			options.sourceCollection ?? getSpacePrimaryCollection(options.selectedSpace),
-			template,
-		)
+		const fabrics = options.sourceCollection
+			? this.getAvailableFabricsForTemplate(options.sourceCollection, template)
+			: {}
 		return {
 			available: blocksCategories.length > 0 || values(fabrics).some(fabricArray => fabricArray.length > 1),
 			blocksCategories,
@@ -502,7 +502,7 @@ class TemplateHelpers {
 	 * @param collectionSlug - Optional collection slug to search first.
 	 * @returns Matching block or `null` when not found.
 	 */
-	findBlockById(blockId: string, collectionSlug: string | null): Block | null {
+	findBlockById(blockId: string, collectionSlug?: string | null): Block | null {
 		if (collectionSlug) {
 			const collectionBlocks = getBlocksByCollection(collectionSlug)
 			const found = collectionBlocks?.find?.(b => b._id === blockId) ?? null
@@ -522,7 +522,7 @@ class TemplateHelpers {
 	 * @param collectionSlug - Optional collection slug to search first.
 	 * @returns Matching fabric or `null` when not found.
 	 */
-	findFabricById(fabricId: string, collectionSlug: string | null): Fabric | null {
+	findFabricById(fabricId: string, collectionSlug?: string | null): Fabric | null {
 		if (collectionSlug) {
 			const collectionFabrics = getFabricsByCollection(collectionSlug)
 			const found = collectionFabrics?.find?.(f => f._id === fabricId) ?? null
@@ -567,7 +567,7 @@ class TemplateHelpers {
 	 * @param collectionSlug - Optional collection slug to search first.
 	 * @returns Matching template or `null` when not found.
 	 */
-	findTemplateById(templateId: string, collectionSlug: string | null): Template | null {
+	findTemplateById(templateId: string, collectionSlug?: string | null): Template | null {
 		if (collectionSlug) {
 			const collectionTemplates = getTemplatesByCollection(collectionSlug)
 			const found = collectionTemplates?.find?.(template => template._id === templateId) ?? null

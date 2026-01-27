@@ -78,7 +78,6 @@ export class TemplateView extends Element {
 	@signal disabledScroll = false
 	@signal showWishlistOnly = false
 	private isOpeningOverlay = false
-	private defaultCollection = 'gap'
 	override connectedCallback() {
 		super.connectedCallback()
 
@@ -91,10 +90,8 @@ export class TemplateView extends Element {
 
 		this.createEffect(() => {
 			const effectiveCollection = store.getEffectiveCollection()
-			// For multi-collection spaces, allow null to show all templates
-			// For single-collection spaces, fallback to defaultCollection
-			if (spaceHasMultipleCollections(store.selectedSpace)) this.spaceCollection = effectiveCollection
-			else this.spaceCollection = effectiveCollection ?? this.defaultCollection
+
+			this.spaceCollection = effectiveCollection
 		})
 
 		// Update template categories when templates change
