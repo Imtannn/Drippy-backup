@@ -19,7 +19,7 @@ export const legacyBackgroundScenes: BackgroundScene[] = [
 		name: 'Drippy Shop',
 		slug: 'drippy-shop',
 		description: 'Drippy Shop',
-		env: '/images/envs/industrial_wooden_attic.jpg',
+		env: '/images/envs/Drippy-Shop-HDRIs.webp',
 		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/drippy-shop/Drippy+Shop+-+Scene.glb',
 		includedModelFiles: [],
 	},
