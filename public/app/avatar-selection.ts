@@ -9,6 +9,7 @@ import '../elements/save-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import './item-card.js'
+import type {Avatar} from '../types/types.js'
 
 type AvatarSelectionAttributes = 'contentOnly'
 
@@ -21,7 +22,7 @@ export class AvatarSelection extends Element {
 	override connectedCallback() {
 		super.connectedCallback()
 
-		const currentAvatar = avatars.find(avatar => avatar.name === store.selectedAvatar)
+		const currentAvatar = avatars().find(avatar => avatar.name === store.selectedAvatar)
 		if (currentAvatar?.gender) this.selectedTab = currentAvatar.gender
 	}
 
@@ -43,13 +44,13 @@ export class AvatarSelection extends Element {
 					<tabs-list>
 						<tabs-trigger
 							selected-value="female"
-							is-disabled=${() => avatars.find(avatar => avatar.name === store.selectedAvatar)?.gender === 'male'}
+							is-disabled=${() => avatars().find(avatar => avatar.name === store.selectedAvatar)?.gender === 'male'}
 						>
 							Female
 						</tabs-trigger>
 						<tabs-trigger
 							selected-value="male"
-							is-disabled=${() => avatars.find(avatar => avatar.name === store.selectedAvatar)?.gender === 'female'}
+							is-disabled=${() => avatars().find(avatar => avatar.name === store.selectedAvatar)?.gender === 'female'}
 						>
 							Male
 						</tabs-trigger>
@@ -61,8 +62,8 @@ export class AvatarSelection extends Element {
 				<tabs-content selected-value="female">
 					<div class="items-grid">
 						<for-each
-							items=${() => avatars.filter(avatar => avatar.gender === 'female')}
-							content=${() => (avatar: (typeof avatars)[number]) => html`
+							items=${() => avatars().filter(avatar => avatar.gender === 'female')}
+							content=${() => (avatar: Avatar) => html`
 								<item-card
 									class=${() => (store.selectedAvatar === avatar.name ? 'item-preview' : '')}
 									item-active=${() => store.selectedAvatar === avatar.name}
@@ -83,8 +84,8 @@ export class AvatarSelection extends Element {
 				<tabs-content selected-value="male">
 					<div class="items-grid">
 						<for-each
-							items=${() => avatars.filter(avatar => avatar.gender === 'male')}
-							content=${() => (avatar: (typeof avatars)[number]) => html`
+							items=${() => avatars().filter(avatar => avatar.gender === 'male')}
+							content=${() => (avatar: Avatar) => html`
 								<item-card
 									class=${() => (store.selectedAvatar === avatar.name ? 'item-preview' : '')}
 									item-active=${() => store.selectedAvatar === avatar.name}

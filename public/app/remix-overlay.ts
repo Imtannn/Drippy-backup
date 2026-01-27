@@ -12,7 +12,7 @@ import {
 	type ElementAttributes,
 } from 'lume'
 
-import {fabrics} from '../consts/fabrics.js'
+import {fabrics, getFabricsByCollection} from '../consts/fabrics.js'
 import '../elements/bottom-sheet.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
@@ -70,7 +70,7 @@ export class RemixOverlay extends Element {
 		this.addEventListener('cardselected', this.#onFabricCardSelected)
 
 		this.createEffect(() => {
-			this.spaceCollection = store.getEffectiveCollection() ?? 'gap'
+			this.spaceCollection = store.getEffectiveCollection()
 
 			onCleanup(() => {
 				this.spaceCollection = null
@@ -141,13 +141,12 @@ export class RemixOverlay extends Element {
 			// Use template fabricOptions if available, otherwise fall back to templateHelpers
 			if (this.selectedTemplate.fabricOptions && this.selectedTemplate.fabricOptions.length > 0) {
 				// Get fabrics from the collection that match the fabricOptions material IDs
-				const collection = this.spaceCollection
 				const availableFabrics: FabricsByCategory = {}
 
 				// Get fabrics that match the fabricOptions
 				const optionFabrics = this.selectedTemplate.fabricOptions
 					.map(materialId => {
-						return fabrics[collection]?.find(fabric => fabric._id === materialId)
+						return fabrics().find(fabric => fabric._id === materialId)
 					})
 					.filter(fabric => fabric !== undefined) as Fabric[]
 
@@ -155,7 +154,7 @@ export class RemixOverlay extends Element {
 				const optionCategories = new Set(optionFabrics.map(f => f.category).filter(Boolean))
 
 				// Filter default fabrics to only include those with matching categories (and not already in options)
-				const filteredDefaultFabrics = fabrics['default'].filter(
+				const filteredDefaultFabrics = getFabricsByCollection('default').filter(
 					fabric => fabric.category && optionCategories.has(fabric.category),
 				)
 

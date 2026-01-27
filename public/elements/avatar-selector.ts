@@ -2,7 +2,7 @@ import {attribute, css, Element, element, html, signal} from 'lume'
 import {store} from '../app/store.js'
 import {avatars} from '../consts/avatars.js'
 import {spaces} from '../consts/spaces.js'
-import {templates} from '../consts/templates.js'
+import {getTemplatesByCollection} from '../consts/templates.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
@@ -159,8 +159,8 @@ export class AvatarSelector extends Element {
 	private findAvatarByGender(gender: 'male' | 'female'): string | null {
 		let avatar
 
-		if (gender === 'male') avatar = avatars.find(avatar => avatar.gender === gender && avatar.name === 'luka')
-		else avatar = avatars.find(avatar => avatar.gender === gender && avatar.name === 'moidien')
+		if (gender === 'male') avatar = avatars().find(avatar => avatar.gender === gender && avatar.name === 'luka')
+		else avatar = avatars().find(avatar => avatar.gender === gender && avatar.name === 'moidien')
 
 		return avatar ? avatar.name : null
 	}
@@ -181,7 +181,7 @@ export class AvatarSelector extends Element {
 	private setSpaceForGender(gender: 'male' | 'female') {
 		try {
 			// Find the first space for the specified gender
-			const spaceForGender = spaces.find(space => space.gender === gender)
+			const spaceForGender = spaces().find(space => space.gender === gender)
 			if (spaceForGender) {
 				// Always set space when switching gender to ensure shoes are loaded
 				store.selectSpace = spaceForGender
@@ -213,19 +213,19 @@ export class AvatarSelector extends Element {
 			if (sleevesBlock || topBlock) {
 				// Find template by templateId from block
 				const templateId = sleevesBlock?.templateId || topBlock?.templateId
-				const topTemplate = templates[collection]?.find(t => t._id === String(templateId))
+				const topTemplate = getTemplatesByCollection(collection)?.find(t => t._id === String(templateId))
 				if (topTemplate) templateData.push(topTemplate)
 			}
 			if (shirtBlock) {
 				// Find template by templateId from block
 				const templateId = shirtBlock.templateId
-				const shirtTemplate = templates[collection]?.find(t => t._id === String(templateId))
+				const shirtTemplate = getTemplatesByCollection(collection)?.find(t => t._id === String(templateId))
 				if (shirtTemplate) templateData.push(shirtTemplate)
 			}
 			if (pantsBlock) {
 				// Find template by templateId from block
 				const templateId = pantsBlock.templateId
-				const pantsTemplate = templates[collection]?.find(t => t._id === String(templateId))
+				const pantsTemplate = getTemplatesByCollection(collection)?.find(t => t._id === String(templateId))
 				if (pantsTemplate) templateData.push(pantsTemplate)
 			}
 
@@ -699,7 +699,7 @@ export class AvatarSelector extends Element {
 	 */
 	public syncWithStore() {
 		const currentAvatar = store.selectedAvatar
-		const avatar = avatars.find(avatar => avatar.name === currentAvatar)
+		const avatar = avatars().find(avatar => avatar.name === currentAvatar)
 
 		if (avatar) {
 			const option = this.options.find(opt => opt.gender === avatar.gender)

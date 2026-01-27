@@ -40,7 +40,7 @@ export class AvatarSwapBottomSheet extends Element {
 
 	#getTargetAvatars = () => {
 		const targetGender = this.#getTargetGender()
-		return avatars.filter(avatar => avatar.gender === targetGender)
+		return avatars().filter(avatar => avatar.gender === targetGender)
 	}
 
 	#selectFirstAvatar = () => {

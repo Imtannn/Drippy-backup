@@ -1,5 +1,5 @@
 import {css, Element, element, eventAttribute, html, signal, type ElementAttributes} from 'lume'
-import {fabrics} from '../consts/fabrics.js'
+import {getFabricsByCollection} from '../consts/fabrics.js'
 import '../elements/logic/show-when.js'
 import '../elements/tabs.js'
 import type {Template} from '../types/template.js'
@@ -28,7 +28,7 @@ export class TemplateDetailView extends Element {
 		const collection = store.getEffectiveCollection()
 		if (!collection) return 'N/A'
 
-		const collectionFabrics = fabrics[collection]
+		const collectionFabrics = getFabricsByCollection(collection)
 		if (!collectionFabrics) return 'N/A'
 
 		const fabric = collectionFabrics.find(f => f._id === materialId)

@@ -41,8 +41,8 @@ export class SpacesSelection extends Element {
 		// Show all spaces regardless of gender
 		this.createEffect(() => {
 			let filteredSpaces = store.isAdmin
-				? spaces.filter(space => !space.isHidden)
-				: spaces.filter(space => !space.isWorkInProgress && !space.isHidden)
+				? spaces().filter(space => !space.isHidden)
+				: spaces().filter(space => !space.isWorkInProgress && !space.isHidden)
 
 			// Filter by brand if brand query parameter exists
 			const brandParam = searchParams().get('brand')
@@ -112,7 +112,7 @@ export class SpacesSelection extends Element {
 		const allTemplates: Template[] = []
 
 		for (const collectionSlug of spaceCollections) {
-			const collectionTemplates = templates[collectionSlug] ?? []
+			const collectionTemplates = templates().filter(template => template.collection === collectionSlug)
 			allTemplates.push(...collectionTemplates)
 		}
 
@@ -170,11 +170,11 @@ export class SpacesSelection extends Element {
 		searchParams().set('space', space.slug)
 
 		// Ensure avatar is set (use current if matches gender, otherwise default for space gender)
-		const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
+		const currentAvatar = avatars().find(a => a.name === store.selectedAvatar)
 		const avatarMatchesGender = currentAvatar && currentAvatar.gender === space.gender
 
 		if (!searchParams().get('avatar') || !avatarMatchesGender) {
-			const defaultAvatar = avatars.find(a => a.gender === space.gender && a.default)
+			const defaultAvatar = avatars().find(a => a.gender === space.gender && a.default)
 			if (defaultAvatar) searchParams().set('avatar', defaultAvatar.name)
 			else if (avatarMatchesGender && store.selectedAvatar) searchParams().set('avatar', store.selectedAvatar)
 		}

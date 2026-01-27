@@ -81,16 +81,18 @@ interface RenderBlock {
 	id: RenderBlockId
 }
 
-const defaultRenderBlocks: RenderBlock[] = blocks.default.map(block => {
-	if ((block.category as BlockCategory) === 'Sleeves')
-		throw new Error('Separate sleeves not currently supported for default garments.')
+const defaultRenderBlocks: RenderBlock[] = blocks()
+	.filter(block => block.collection === 'default')
+	?.map(block => {
+		if ((block.category as BlockCategory) === 'Sleeves')
+			throw new Error('Separate sleeves not currently supported for default garments.')
 
-	return {
-		block,
-		templateCategory: block.templateCategory,
-		id: `${block.collection}-${block.templateCategory}-${block.category}-${block._id}`,
-	} satisfies RenderBlock
-})
+		return {
+			block,
+			templateCategory: block.templateCategory,
+			id: `${block.collection}-${block.templateCategory}-${block.category}-${block._id}`,
+		} satisfies RenderBlock
+	})
 
 const defaultFemaleBlocks = defaultRenderBlocks.filter(b => b.block.avatar === 'female')
 const defaultMaleBlocks = defaultRenderBlocks.filter(b => b.block.avatar === 'male')
@@ -136,7 +138,7 @@ export class DrippyScene extends Element {
 
 	@memo get scene() {
 		const defaultSceneSlug = getSpaceDefaultScene(this.selectedSpace)
-		return getSceneBySlug(backgroundScenes, defaultSceneSlug)
+		return getSceneBySlug(backgroundScenes(), defaultSceneSlug)
 	}
 
 	// Post-processing for outline effect
@@ -213,7 +215,7 @@ export class DrippyScene extends Element {
 	}
 
 	@memo private get avatar() {
-		return avatars.find(a => a.name === this.selectedAvatar)
+		return avatars().find(a => a.name === this.selectedAvatar)
 	}
 
 	@memo private get avatarGender(): Gender {
@@ -929,7 +931,7 @@ export class DrippyScene extends Element {
 								showSkeletonHelper(el, () => store.isAdmin && store.showAdminContent)
 								disableFrustumCulledOnLoad(el)
 							}}
-							attr:src=${() => avatars.find(avatar => avatar.name === this.selectedAvatar)?.src ?? ''}
+							attr:src=${() => avatars().find(avatar => avatar.name === this.selectedAvatar)?.src ?? ''}
 							scale="1 1 1"
 							data-avatar
 						>

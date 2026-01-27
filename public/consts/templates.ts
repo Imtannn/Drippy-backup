@@ -1,6 +1,10 @@
 import type {Template} from '../types/template'
+// import {type Template as DbTemplate} from '../imports/collections/Templates.js'
+import {toSolidSignal} from '../utils.js'
 
-export const templates: Record<string, Template[]> = {
+// @deprecated
+// Will get replaced with the templates from the database
+export const legacyTemplates: Record<string, Template[]> = {
 	anyshape: [
 		{
 			_id: 'd9ba4aea-9279-4909-b6a5-a348fb32a9d9',
@@ -2016,4 +2020,15 @@ export const templates: Record<string, Template[]> = {
 			materialId: '5342ff62-5713-468b-bb7c-ee43b7b32a8f',
 		},
 	],
+}
+
+// TODO: Update this to use the templates from the database
+export const templates = toSolidSignal<Template[]>(() => {
+	const result: Template[] = []
+	for (const templateList of Object.values(legacyTemplates)) result.push(...templateList)
+	return result
+})
+
+export const getTemplatesByCollection = (collection: string) => {
+	return templates().filter(template => template.collection === collection)
 }

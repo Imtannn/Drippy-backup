@@ -1,6 +1,9 @@
 import type {BackgroundScene} from '../types/types.js'
+import {toSolidSignal} from '../utils.js'
 
-export const backgroundScenes: BackgroundScene[] = [
+// @deprecated
+// Will get replaced with the scenes from the database
+export const legacyBackgroundScenes: BackgroundScene[] = [
 	{
 		name: 'Metamorphosis',
 		slug: 'metamorphosis',
@@ -29,3 +32,11 @@ export const backgroundScenes: BackgroundScene[] = [
 		includedModelFiles: [],
 	},
 ]
+
+export const backgroundScenes = toSolidSignal<BackgroundScene[]>(() => {
+	return legacyBackgroundScenes
+})
+
+export const getBackgroundSceneBySlug = (slug: string) => {
+	return backgroundScenes().find(scene => scene.slug === slug)
+}

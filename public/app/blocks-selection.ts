@@ -1,6 +1,6 @@
 import {batch, css, element, Element, html, signal, untrack, type ElementAttributes} from 'lume'
 import {blocks} from '../consts/blocks.js'
-import {fabrics} from '../consts/fabrics.js'
+import {getFabricsByCollection} from '../consts/fabrics.js'
 import {pushState, searchParams} from '../routes.js'
 
 import '../elements/admin-button.js'
@@ -21,14 +21,14 @@ import '../elements/refresh-button.js'
 import '../elements/tabs.js'
 import '../elements/theme-switch-button.js'
 import '../elements/undo-button.js'
-import './app-buttons.js'
-import './fabric-selection.js'
-import './item-card.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
 import type {TemplateCategory} from '../types/template.js'
-import {store} from './store.js'
 import {size, values} from '../utils.js'
+import './app-buttons.js'
+import './fabric-selection.js'
+import './item-card.js'
+import {store} from './store.js'
 
 type BlocksSelectionAttributes = keyof object // no attributes yet
 
@@ -86,10 +86,12 @@ export class BlocksSelection extends Element {
 
 			const selectedTemplate = store.selectedTemplates[this.selectedTemplateCategory]
 			if (selectedTemplate) {
-				this.availableBlocks = blocks[this.spaceCollection as keyof typeof blocks].filter(block => {
-					if (block.templateCategory === 'Pants' || block.templateCategory === 'Accessories') return true
-					else return block.templateCategory === selectedTemplate.category
-				})
+				this.availableBlocks = blocks()
+					.filter(block => block.collection === this.spaceCollection)
+					.filter(block => {
+						if (block.templateCategory === 'Pants' || block.templateCategory === 'Accessories') return true
+						else return block.templateCategory === selectedTemplate.category
+					})
 			} else this.availableBlocks = []
 		})
 
@@ -99,7 +101,7 @@ export class BlocksSelection extends Element {
 
 			const selectedTemplate = store.selectedTemplates[this.selectedTemplateCategory]
 			if (selectedTemplate) {
-				this.availableFabrics = fabrics[this.spaceCollection]?.filter(fabric =>
+				this.availableFabrics = getFabricsByCollection(this.spaceCollection).filter(fabric =>
 					fabric.templateCategories?.includes(selectedTemplate.category),
 				)
 			} else this.availableFabrics = []

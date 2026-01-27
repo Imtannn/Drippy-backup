@@ -1,6 +1,9 @@
 import type {Avatar} from '../types/types.js'
+import {toSolidSignal} from '../utils.js'
 
-export const avatars: Avatar[] = [
+// @deprecated
+// Will get replace with the avatars from the database
+export const legacyAvatars: Avatar[] = [
 	{
 		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/male/Leo/thumbnail.png',
 		src: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/male/Leo/model.glb',
@@ -35,3 +38,25 @@ export const avatars: Avatar[] = [
 		name: 'mia-a-pose',
 	},
 ]
+
+export const avatars = toSolidSignal<Avatar[]>(() => {
+	return legacyAvatars
+})
+
+export const getDefaultAvatarName = () => {
+	const list = avatars()
+	return list.find(avatar => avatar.default)?.name ?? list[0]?.name ?? ''
+}
+
+export const getAvatarByName = (name: string) => {
+	return avatars().find(avatar => avatar.name === name) ?? null
+}
+
+export const getAvatarByGender = (gender: Avatar['gender']) => {
+	const list = avatars()
+	return (
+		list.find(avatar => avatar.gender === gender && avatar.default) ??
+		list.find(avatar => avatar.gender === gender) ??
+		null
+	)
+}
