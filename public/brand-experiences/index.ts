@@ -1,7 +1,6 @@
 import {html} from 'lume'
 import {createSignal} from 'solid-js'
 import '../app/drippy-scene.js'
-import {store} from '../app/store.js'
 import '../elements/avatar-selector.js'
 import '../elements/custom-button.js'
 import '../elements/login-ui.js'
@@ -9,56 +8,6 @@ import '../elements/theme-switch.js'
 import '../elements/image-loading.js'
 import '../routes.js' // track page visits
 
-import type {BlockCategory} from '../types/block.js'
-import type {Fabric} from '../types/fabric.js'
-import type {TemplateCategory} from '../types/template.js'
-
-const materials: Fabric[] = [
-	{
-		_id: '6',
-		thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_RENDER.webp',
-		normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_NORMAL.jpg',
-		baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_BASE.jpg',
-		displacement:
-			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_DISPLACE.jpg',
-		roughness:
-			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/POLYESTER_-_NAVY/POLYESTER_-_NAVY_-_ROUGH.jpg',
-		alpha: '',
-		materialName: 'Navy',
-		category: 'Polyester',
-		templateCategories: ['Top', 'Pants'],
-	},
-	{
-		_id: '9',
-		thumb:
-			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_RENDER.webp',
-		normal:
-			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_NORMAL.jpg',
-		baseColor:
-			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_BASE.jpg',
-		displacement:
-			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_DISPLACE.jpg',
-		roughness:
-			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/STRIPED_-_TANKTOP/STRIPED_-_TANKTOP_-_ROUGH.jpg',
-		alpha: '',
-		materialName: 'Tanktop',
-		category: 'Striped',
-		templateCategories: ['Top'],
-	},
-	{
-		_id: '8',
-		thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_RENDER.webp',
-		normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_NORMAL.jpg',
-		baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_BASE.jpg',
-		displacement:
-			'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_DISPLACE.jpg',
-		roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/eliseF/root/COTTON_-_ORANGE/COTTON_-_ORANGE_-_ROUGH.jpg',
-		alpha: '',
-		materialName: 'Orange',
-		category: 'Cotton',
-		templateCategories: ['Top'],
-	},
-]
 // Show image loading initially
 function showVideoLoading() {
 	console.log('Showing image loading screen')
@@ -84,32 +33,6 @@ function hideVideoLoading(videoLoadingElement: any) {
 }
 const [isYearlyActive, setIsYearlyActive] = createSignal(true)
 
-const currentMaterials = materials
-
-function handleMaterialClick(material: Fabric) {
-	const fabricData: {
-		fabric: Fabric
-		blockCategory: BlockCategory
-		templateCategory: TemplateCategory
-		assignedMesh: string
-	}[] = []
-
-	// Convert material to Fabric format
-	const fabric: Fabric = {
-		...material,
-	}
-
-	// Set fabric for Top template and Bodice block category
-	fabricData.push({
-		fabric: fabric,
-		blockCategory: 'Bodice' as BlockCategory,
-		templateCategory: 'Top' as TemplateCategory,
-		assignedMesh: '42-44-31-23-6-9-41-27', // Use the same mesh key as existing fabric
-	})
-
-	if (fabricData.length > 0) store.setSelectedFabrics = fabricData
-}
-
 // Hide the loading cover
 // const loadingCover = document.getElementById('loadingCover')
 // console.log('loadingCover', loadingCover)
@@ -121,7 +44,6 @@ const logoUrlDark = new URL('../images/landing/logo.png', import.meta.url)
 const blingImage1 = new URL('../images/landing/bling-1.png', import.meta.url).href
 const blingImage2 = new URL('../images/landing/bling-2.png', import.meta.url).href
 const blingImage3 = new URL('../images/landing/bling-3.png', import.meta.url).href
-const modelImage1 = new URL('../images/landing/model-1.png', import.meta.url).href
 
 const stepImage1 = new URL('../images/landing/step-1.png', import.meta.url).href
 
@@ -304,58 +226,7 @@ const mainContent = html`
 							</div>
 						</section>
 
-						<!-- Interactive 3D Section -->
-						<section class="section" id="interactive">
-							<div class="section-header">
-								<div class="section-title text-lg">
-									<span>Interactive 3D is </span> <span class="hero__title--highlight">the new black.</span>
-								</div>
-								<div class="section-subtitle text-md-2">Static images are dead — Today shoppers want fun,<br> interaction, and engagement.</div>
-							</div>
-							<div class="showcase__container">
-								<div class="showcase">
-									<div class="showcase__item">
-										<div class="showcase__background">
-											<div class="showcase__model-display">
-												<img class="showcase__model" src="${modelImage1}" alt="3D model visualization showing product customization" />
-											</div>
-										</div>
-										<div class="showcase__label text-xs">Static product photo</div>
-									</div>
-									<div class="showcase__item">
-										<div class="showcase__background">
-											<div class="showcase__controls">
-												${currentMaterials.map(
-													(material: any) => html`
-														<div
-															class="showcase__avatar-option"
-															data-material-id=${material.id}
-															onclick=${() => handleMaterialClick(material)}
-														>
-															<img src=${material.thumb} alt=${material.materialName} />
-														</div>
-													`,
-												)}
-											</div>
-
-											<avatar-selector fabrics-selection=${materials} target-model=".showcase__avatar-model" class="showcase__selector"></avatar-selector>
-
-											<div class="showcase__model-center">
-												<drippy-scene
-													class="showcase__model"
-													selected-space=${() => store.selectedSpace}
-													selected-avatar=${() => store.selectedAvatar}
-													selected-garments=${() => store.selectedGarments}
-													landing=${true}
-												></drippy-scene>
-											</div>
-											<div class="showcase__label text-xs">Interactive 3D with avatars</div>
-										</div>
-									</div>
-								</div>
-							</div>
-
-						</section>
+						<!-- Interactive 3D Section - Commented out -->
 
 						<!-- Statistics Section -->
 						<section class="section" id="statistics">

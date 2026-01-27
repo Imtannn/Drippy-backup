@@ -502,6 +502,10 @@ export class TemplateView extends Element {
 		}
 	}
 
+	#onBuildStoreButtonClick = () => {
+		window.location.href = '/brand-experiences'
+	}
+
 	// FIXME too much mapping (see selectTemplate in brand-view.ts)
 	// too much duplication (see brand-view.ts)
 	#selectTemplate = (template: Template) => {
@@ -588,6 +592,17 @@ export class TemplateView extends Element {
 				></show-when>
 			</show-on-device>
 		</app-buttons-preset>
+
+		<button class="build-store-button build-store-button-outer" onclick=${this.#onBuildStoreButtonClick}>
+			<div class="build-store-button-icon">
+				<div class="build-store-icon-circle">
+					<img src="/images/landing/logo.png" alt="Drippy logo" />
+				</div>
+			</div>
+			<span class="build-store-button-text">Build your own 3D store</span>
+			<span class="build-store-button-emoji">🔥</span>
+			<span class="build-store-button-arrow">→</span>
+		</button>
 
 		<bottom-sheet
 			show-remix-overlay=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
@@ -1016,6 +1031,88 @@ export class TemplateView extends Element {
 			border: none;
 		}
 
+		.build-store-button {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			padding: 8px 16px;
+			background: rgba(18, 19, 22, 0.15);
+			border: none;
+			border-radius: 999px;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			margin: 0 auto;
+			margin-bottom: var(--uiSpacingSmall);
+		}
+
+		.build-store-button-outer {
+			position: fixed;
+			bottom: 2%;
+			left: 2%;
+			z-index: 1000;
+			margin: 0;
+		}
+
+		.build-store-button-icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.build-store-icon-circle {
+			width: 24px;
+			height: 24px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.build-store-icon-circle img {
+			height: 100%;
+			margin-top: 0 !important;
+		}
+
+		.build-store-button-text {
+			color: white;
+			font-size: var(--fontSizeTextSm);
+			font-weight: var(--fontWeightSemiBold);
+			white-space: nowrap;
+		}
+
+		.build-store-button-emoji {
+			font-size: 14px;
+		}
+
+		.build-store-button-arrow {
+			color: white;
+			font-size: 14px;
+			font-weight: var(--fontWeightSemiBold);
+		}
+
+		@media (max-width: 767px) {
+			.build-store-button {
+				padding: 7.5px 10px;
+			}
+			.build-store-button-outer {
+				bottom: calc(var(--bottom-sheet-height, 100dvh * 0.41) + 9px);
+				left: 10px;
+			}
+			.build-store-icon-circle {
+				width: 19px;
+				height: 19px;
+			}
+			.build-store-button-text {
+				font-size: var(--fontSizeTextXs);
+			}
+
+			.build-store-button-emoji {
+				font-size: var(--fontSizeTextXs);
+			}
+
+			.build-store-button-arrow {
+				font-size: var(--fontSizeTextXs);
+			}
+		}
+
 		.tabs-content-container {
 			padding: var(--uiSpacing);
 			padding-top: 0;
@@ -1107,7 +1204,7 @@ export class TemplateView extends Element {
 			font-size: var(--fontSizeTextXxs);
 			font-weight: var(--fontWeightNormal);
 			color: #424347;
-			text-wrap: wrap;
+			word-wrap: break-word;
 		}
 
 		/* Done button styles */

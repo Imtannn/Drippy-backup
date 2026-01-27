@@ -1,12 +1,16 @@
 import {Meteor} from 'meteor/meteor'
 import {Session} from 'meteor/session'
-import {createMemo, createSignal, untrack} from 'solid-js'
+import {createEffect, createMemo, createSignal, untrack} from 'solid-js'
 import {effect} from './meteor-signals.js'
 
 // We'll keep the title up to date once we add routing. For now it is constant.
 const appName = 'Drippy'
 const [_appTitle] = createSignal(appName)
 export const appTitle = () => _appTitle()
+
+createEffect(() => (document.title = appTitle()))
+
+// Generic routing features ////////////////////////////////////////////////////
 
 // Track the url of the current page on route change. This is used to track
 // visits to the page.
@@ -80,3 +84,8 @@ effect(() => {
 // debugging
 const win = window as any
 win.routes = {url, replaceState, pushState}
+
+// App-specific features ///////////////////////////////////////////////////////
+
+export const isPreview = createMemo(() => searchParams().get('isPreview'))
+export const hasBrandParam = createMemo(() => !!searchParams().get('brand'))
