@@ -123,7 +123,7 @@ export class DrippyApp extends Element {
 				const {collectionSlug, value: templateId} = templateHelpers.parseCollectionQualifiedEntry(entry)
 				if (!templateId) continue
 
-				const template = templateHelpers.findTemplateById(templateId, collectionSlug)
+				const template = templateHelpers.findTemplateById(templateId)
 				if (!template) continue
 
 				const collectionKey = template.collection ?? collectionSlug ?? null
@@ -141,7 +141,7 @@ export class DrippyApp extends Element {
 				const {collectionSlug, value: blockId} = templateHelpers.parseCollectionQualifiedEntry(entry)
 				if (!blockId) continue
 
-				const block = templateHelpers.findBlockById(blockId, collectionSlug)
+				const block = templateHelpers.findBlockById(blockId)
 				if (!block) continue
 
 				const templateCategory = block.templateCategory as TemplateCategory
@@ -190,7 +190,7 @@ export class DrippyApp extends Element {
 
 				if (!templateCategory || !blockCategory || !piece) continue
 
-				const fabric = templateHelpers.findFabricById(fabricId, collectionSlug)
+				const fabric = templateHelpers.findFabricById(fabricId)
 				if (!fabric) continue
 
 				const existingTemplate = aggregatedTemplates[templateCategory]

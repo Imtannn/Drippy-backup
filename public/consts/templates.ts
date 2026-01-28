@@ -2028,6 +2028,7 @@ export const templates = toSolidSignal<Template[]>(() => {
 	return result
 })
 
-export const getTemplatesByCollection = (collection: string) => {
+export const getTemplatesByCollection = (collection: string | string[]) => {
+	if (Array.isArray(collection)) return templates().filter(template => collection.includes(template.collection))
 	return templates().filter(template => template.collection === collection)
 }

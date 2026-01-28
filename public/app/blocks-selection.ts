@@ -1,4 +1,4 @@
-import {batch, css, element, Element, html, signal, untrack, type ElementAttributes} from 'lume'
+import {batch, css, element, Element, html, signal, type ElementAttributes} from 'lume'
 import {blocks} from '../consts/blocks.js'
 import {getFabricsByCollection} from '../consts/fabrics.js'
 import {pushState, searchParams} from '../routes.js'
@@ -45,10 +45,8 @@ export class BlocksSelection extends Element {
 	@signal fabricCategories: string[] = []
 	@signal availableBlocks: Block[] = []
 	@signal availableFabrics: Fabric[] = []
-	@signal spaceCollection: string | null = null
+	@signal spaceCollection: string | string[] | null = null
 	@signal pieceSelections: string[] = []
-
-	private defaultCollection = 'gap'
 
 	private availableBlocksMapping: Record<TemplateCategory, BlockCategory[]> = {
 		All: [],
@@ -64,7 +62,7 @@ export class BlocksSelection extends Element {
 		super.connectedCallback()
 
 		this.createEffect(() => {
-			this.spaceCollection = store.getEffectiveCollection() ?? this.defaultCollection
+			this.spaceCollection = store.getEffectiveCollection()
 		})
 
 		// Update available template categories from selectedTemplates
@@ -120,19 +118,6 @@ export class BlocksSelection extends Element {
 				...new Set(this.availableBlocksMapping[this.selectedTemplateCategory] || []),
 			] as BlockCategory[]
 
-			const selectedBlock = untrack(
-				() => store.getBlockSelection(this.selectedTemplateCategory!, this.selectedBlockCategory)?.block,
-			)
-
-			if (
-				this.selectedTemplateCategory === 'Shirt' &&
-				selectedBlock?.templateId !== 'Item 9' &&
-				store.getEffectiveCollection() === 'gap'
-			) {
-				this.blocksCategories = []
-				return
-			}
-
 			// Filter categories in the desired order, then add any remaining categories
 			const orderedCategories = categoryOrder.filter(category => availableCategories.includes(category))
 			const remainingCategories = availableCategories.filter(category => !categoryOrder.includes(category))
@@ -141,12 +126,6 @@ export class BlocksSelection extends Element {
 			this.blocksCategories = newCategories
 
 			// Auto-select first sub-tab (first block category or fabric if no blocks)
-			// if (newCategories.length > 0) {
-			// 	this.selectedBlockCategory = newCategories[0]
-			// 	this.selectedSubTab = newCategories[0]
-			// } else if (this.availableFabrics.length > 0) {
-			// 	this.selectedSubTab = 'fabric'
-			// }
 			if (this.availableFabrics.length > 0) this.selectedSubTab = 'fabric'
 			else if (newCategories.length > 0) {
 				this.selectedBlockCategory = newCategories[0]
@@ -241,11 +220,6 @@ export class BlocksSelection extends Element {
 				<person-button></person-button>
 				<cube-button></cube-button>
 				<admin-button></admin-button>
-
-				<show-when
-					condition=${() => store.getEffectiveCollection() === 'gap'}
-					content=${() => html` <animation-select></animation-select> `}
-				></show-when>
 			</app-buttons-group>
 		</app-buttons-right>
 
