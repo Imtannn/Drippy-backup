@@ -231,10 +231,8 @@ class TemplateHelpers {
 		return this.overridingCategoriesMapping[category] ?? []
 	}
 
-	getTemplateCategoryById(templateId: string): TemplateCategory | null {
-		const match = templates().find(template => template?._id === templateId)
-		if (match) return match.category
-		return null
+	getTemplateCategoryById(templateId: string): TemplateCategory | undefined {
+		return templates().find(template => template?._id === templateId)?.category
 	}
 
 	/**
@@ -299,13 +297,8 @@ class TemplateHelpers {
 		return newFabrics
 	}
 
-	#getFabricById(fabricId: string, collection: string | null | undefined): Fabric | undefined {
-		if (!collection) {
-			const fabric = fabrics().find(fabric => fabric._id === fabricId)
-			if (fabric) return fabric
-		} else return getFabricsByCollection(collection).find(fabric => fabric._id === fabricId) ?? undefined
-
-		return undefined
+	#getFabricById(fabricId: string, collection?: string | null): Fabric | undefined {
+		return (collection ? getFabricsByCollection(collection) : fabrics()).find(fabric => fabric._id === fabricId)
 	}
 
 	/**
@@ -502,17 +495,8 @@ class TemplateHelpers {
 	 * @param collectionSlug - Optional collection slug to search first.
 	 * @returns Matching block or `null` when not found.
 	 */
-	findBlockById(blockId: string, collectionSlug: string | null): Block | null {
-		if (collectionSlug) {
-			const collectionBlocks = getBlocksByCollection(collectionSlug)
-			const found = collectionBlocks?.find?.(b => b._id === blockId) ?? null
-			if (found) return found
-		}
-
-		const found = blocks().find(b => b._id === blockId)
-		if (found) return found
-
-		return null
+	findBlockById(blockId: string, collectionSlug?: string | null): Block | undefined {
+		return (collectionSlug ? getBlocksByCollection(collectionSlug) : blocks()).find(b => b._id === blockId)
 	}
 
 	/**
@@ -522,17 +506,8 @@ class TemplateHelpers {
 	 * @param collectionSlug - Optional collection slug to search first.
 	 * @returns Matching fabric or `null` when not found.
 	 */
-	findFabricById(fabricId: string, collectionSlug: string | null): Fabric | null {
-		if (collectionSlug) {
-			const collectionFabrics = getFabricsByCollection(collectionSlug)
-			const found = collectionFabrics?.find?.(f => f._id === fabricId) ?? null
-			if (found) return found
-		}
-
-		const found = fabrics().find(f => f._id === fabricId)
-		if (found) return found
-
-		return null
+	findFabricById(fabricId: string, collectionSlug?: string | null): Fabric | undefined {
+		return (collectionSlug ? getFabricsByCollection(collectionSlug) : fabrics()).find(f => f._id === fabricId)
 	}
 
 	/**
@@ -567,17 +542,10 @@ class TemplateHelpers {
 	 * @param collectionSlug - Optional collection slug to search first.
 	 * @returns Matching template or `null` when not found.
 	 */
-	findTemplateById(templateId: string, collectionSlug: string | null): Template | null {
-		if (collectionSlug) {
-			const collectionTemplates = getTemplatesByCollection(collectionSlug)
-			const found = collectionTemplates?.find?.(template => template._id === templateId) ?? null
-			if (found) return found
-		}
-
-		const found = templates().find(template => template._id === templateId)
-		if (found) return found
-
-		return null
+	findTemplateById(templateId: string, collectionSlug?: string | null): Template | undefined {
+		return (collectionSlug ? getTemplatesByCollection(collectionSlug) : templates()).find(
+			template => template._id === templateId,
+		)
 	}
 }
 
