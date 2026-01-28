@@ -1,7 +1,4 @@
-import {attribute, batch, booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
-import {pushState, searchParams} from '../routes.js'
-import {store} from './store.js'
-
+import '../elements/admin-button.js'
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
 import '../elements/control-button-group.js'
@@ -17,6 +14,10 @@ import '../elements/undo-button.js'
 import './app-buttons.js'
 import './buy-button.js'
 import './share-button.js'
+
+import {attribute, batch, booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
+import {pushState, searchParams} from '../routes.js'
+import {isAdmin, store} from './store.js'
 
 type LayoutPreset = 'order-flow' | 'template-flow' | 'preview-flow' | 'simple-flow' | 'custom'
 
@@ -140,7 +141,7 @@ export class AppButtonsPreset extends Element {
 				left: {
 					all: {
 						back: true,
-						home: false, // disabled for now, re-enable when spaces page is ready
+						home: isAdmin() && store.showAdminContent, // disabled for now, re-enable when spaces page is ready
 					},
 				},
 				right: {
@@ -151,7 +152,7 @@ export class AppButtonsPreset extends Element {
 			'template-flow': {
 				left: {
 					all: {
-						back: false, // disabled for now, re-enable when spaces page is ready
+						back: isAdmin() && store.showAdminContent, // disabled for now, re-enable when spaces page is ready
 					},
 				},
 				right: {
@@ -165,7 +166,7 @@ export class AppButtonsPreset extends Element {
 				left: {
 					all: {
 						back: true,
-						home: false, // disabled for now, re-enable when spaces page is ready
+						home: isAdmin() && store.showAdminContent, // disabled for now, re-enable when spaces page is ready
 					},
 				},
 				right: {
@@ -178,7 +179,7 @@ export class AppButtonsPreset extends Element {
 				left: {
 					all: {
 						back: true,
-						home: false, // disabled for now, re-enable when spaces page is ready
+						home: isAdmin() && store.showAdminContent, // disabled for now, re-enable when spaces page is ready
 					},
 				},
 				right: {logo: true},

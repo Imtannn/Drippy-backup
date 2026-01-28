@@ -23,13 +23,12 @@ import {
 	SpotLight,
 } from 'lume'
 import type {Accessor} from 'solid-js'
-import {createMemo} from 'solid-js'
+import {createMemo, untrack} from 'solid-js'
 import * as THREE from 'three'
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js'
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
-// import {BloomPass} from 'three/examples/jsm/postprocessing/BloomPass.js'
 import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import {avatars} from '../consts/avatars.js'
 
@@ -597,9 +596,23 @@ export class DrippyScene extends Element {
 		this.animSrc = new URL(anim.src, import.meta.url).href
 	}
 
+	@signal accessor #envIntensity: number = 1
+	@signal accessor #bloomStrength: number = 0.18
+	@signal accessor #bloomRadius: number = 0
+	@signal accessor #bloomThreshold: number = 0.8
+
 	@effect sceneEffects() {
 		const lumeScene = this.lumeScene
 		if (!lumeScene) return
+
+		setTimeout(() => {
+			if (lumeScene.glRenderer) lumeScene.glRenderer.shadowMap.type = THREE.VSMShadowMap
+		})
+
+		createEffect(() => {
+			lumeScene.three.environmentIntensity = this.#envIntensity
+			lumeScene.needsUpdate()
+		})
 
 		createEffect(() => {
 			const renderer = lumeScene.glRenderer
@@ -623,9 +636,15 @@ export class DrippyScene extends Element {
 				const renderPass = new RenderPass(threeScene, camera)
 				this.composer.addPass(renderPass)
 
-				// const bloomPass = new BloomPass(1, 25, 4)
-				// bloomPass.setSize(size.x, size.y)
-				const bloomPass = new UnrealBloomPass(size, 1.5, 0.4, 0.85)
+				const bloomPass = untrack(
+					() => new UnrealBloomPass(size, this.#bloomStrength, this.#bloomRadius, this.#bloomThreshold),
+				)
+				createEffect(() => {
+					bloomPass.strength = this.#bloomStrength
+					bloomPass.radius = this.#bloomRadius
+					bloomPass.threshold = this.#bloomThreshold
+					lumeScene.needsUpdate()
+				})
 				this.composer.addPass(bloomPass)
 
 				this.outlinePass = new OutlinePass(size, threeScene, camera)
@@ -641,23 +660,28 @@ export class DrippyScene extends Element {
 				// Store original drawScene
 				const originalDrawScene = lumeScene.drawScene.bind(lumeScene)
 
+				const postprocessingEnabled = true
+
 				// Override the render loop to use composer
 				lumeScene.drawScene = () => {
-					// Skip if size is invalid
-					const currentSize = new THREE.Vector2()
-					renderer.getSize(currentSize)
-					if (currentSize.x === 0 || currentSize.y === 0) return
-
-					// Only use composer if we have objects to outline AND selectingPiece is set
-					if (this.outlinePass && store.selectingPiece && this.outlinePass.selectedObjects.length > 0) {
+					if (postprocessingEnabled) {
 						// Update cameras to current frame's camera
 						const currentCamera = lumeScene.threeCamera!
+
 						if (renderPass) renderPass.camera = currentCamera
-						this.outlinePass.renderCamera = currentCamera
+
+						if (this.outlinePass) {
+							// Only use outline pass if we have objects to outline AND selectingPiece is set
+							if (store.selectingPiece && this.outlinePass.selectedObjects.length > 0) {
+								this.outlinePass.enabled = true
+								this.outlinePass.renderCamera = currentCamera
+							} else this.outlinePass.enabled = false
+						}
+
 						this.composer!.render()
-					} else
-						// Fall back to original rendering when no outline needed
-						originalDrawScene()
+					}
+					// Fall back to original rendering when no outline needed
+					else originalDrawScene()
 				}
 
 				// Handle resize
@@ -813,60 +837,111 @@ export class DrippyScene extends Element {
 			<show-when
 				condition=${() => store.isAdmin && store.showAdminContent}
 				content=${() => html`
-					<div
-						style="
-							position: absolute;
-							top: 1rem;
-							left: 50%;
-							z-index: 1000;
-							background: transparent;
-							border-radius: 8px;
-							padding: 6px 8px;
-							flex-direction: column;
-							gap: 4px;
-							width: 150px;
-							backdrop-filter: blur(4px);
-						"
-					>
-						<p style="color: black; font-size: 8px; font-weight: 500; margin: 0; text-align: center; line-height: 1;">
-							Env
-						</p>
-						<input
-							id="env-intensity"
-							title="Environment Intensity"
-							type="range"
-							min="0"
-							max="3"
-							step="0.1"
-							value="0.3"
-							style="width: 100%; height: 3px; background: #333; border-radius: 2px; outline: none; -webkit-appearance: none; appearance: none;"
-							oninput=${(e: Event) => {
-								const input = e.target as HTMLInputElement
-								const value = Number(input.value) || 0
-								this.lumeScene!.three.environmentIntensity = value
-								this.lumeScene!.needsUpdate()
-							}}
-						/>
+					<div id="debugUi">
+						<div>
+							<p>Environment Intensity (${() => this.#envIntensity})</p>
+
+							<input
+								id="envIntensity"
+								type="range"
+								min="0"
+								max="3"
+								step="0.01"
+								prop:value=${() => this.#envIntensity}
+								oninput=${(e: Event) => (this.#envIntensity = Number((e.target as HTMLInputElement).value) || 0)}
+							/>
+						</div>
+
+						<div>
+							<p>Light glow strength (${() => this.#bloomStrength})</p>
+
+							<input
+								id="bloomStrength"
+								type="range"
+								min="0"
+								max="1.5"
+								step="0.01"
+								prop:value=${() => this.#bloomStrength}
+								oninput=${(e: Event) => (this.#bloomStrength = Number((e.target as HTMLInputElement).value) || 0)}
+							/>
+						</div>
+
+						<div>
+							<p>Light glow radius (${() => this.#bloomRadius})</p>
+
+							<input
+								id="bloomRadius"
+								type="range"
+								min="0"
+								max="3"
+								step="0.01"
+								prop:value=${() => this.#bloomRadius}
+								oninput=${(e: Event) => (this.#bloomRadius = Number((e.target as HTMLInputElement).value) || 0)}
+							/>
+						</div>
+
+						<div>
+							<p>Light glow threshold (${() => this.#bloomThreshold})</p>
+
+							<input
+								id="bloomThreshold"
+								type="range"
+								min="0"
+								max="3"
+								step="0.01"
+								prop:value=${() => this.#bloomThreshold}
+								oninput=${(e: Event) => (this.#bloomThreshold = Number((e.target as HTMLInputElement).value) || 0)}
+							/>
+						</div>
+
+						<style>
+							#debugUi {
+								position: absolute;
+								top: 1rem;
+								left: 50%;
+								z-index: 1000;
+								background: transparent;
+								border-radius: 8px;
+								padding: 6px 8px;
+								display: flex;
+								flex-direction: column;
+								gap: 20px;
+								width: 150px;
+								backdrop-filter: blur(4px);
+
+								p {
+									color: white;
+									font-size: 8px;
+									font-weight: 500;
+									margin: 0;
+									text-align: center;
+									line-height: 1;
+								}
+
+								input {
+									width: 100%;
+									height: 3px;
+									background: #333;
+									border-radius: 2px;
+									outline: none;
+									appearance: none;
+								}
+							}
+						</style>
 					</div>
 				`}
 			></show-when>
 
 			<div id="lume-scene-container">
 				<lume-scene
-					ref=${(el: Scene) => {
-						this.lumeScene = el
-						el.three.environmentIntensity = 0.6
-						setTimeout(() => {
-							if (el.glRenderer) el.glRenderer.shadowMap.type = THREE.VSMShadowMap
-						})
-					}}
+					ref=${(el: Scene) => (this.lumeScene = el)}
 					id="drippy-scene"
 					webgl
 					perspective="800"
 					physically-correct-lights
 					shadow-mode="vsm"
 					attr:environment=${() => /*TODO webp: this.scene?.env ??*/ '/images/envs/brown_photostudio_02.jpg'}
-					attr:environment-intensity="0.3"
+					attr:environment-intensity=${() => this.#envIntensity}
 					oncapture:pointerdown=${this.#handlePointerDown}
 					oncapture:pointermove=${this.#handlePointerMove}
 					oncapture:pointerup=${this.#handlePointerUp}
