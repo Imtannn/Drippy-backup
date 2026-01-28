@@ -295,7 +295,7 @@ class TemplateHelpers {
 		return newFabrics
 	}
 
-	#getFabricById(fabricId: string, collection?: string | null): Fabric | undefined {
+	#getFabricById(fabricId: string, collection?: string | string[] | null): Fabric | undefined {
 		return (collection ? getFabricsByCollection(collection) : fabrics()).find(fabric => fabric._id === fabricId)
 	}
 
@@ -345,7 +345,7 @@ class TemplateHelpers {
 				// Add the main fabric (without assignedMesh - will be default)
 				if (templateData.materialId) {
 					// If no collection is provided, loop through all collections and find the fabric
-					const fabric = this.#getFabricById(templateData.materialId)
+					const fabric = this.#getFabricById(templateData.materialId, collection)
 
 					if (fabric) blockFabrics[fabric.assignedMesh || 'default'] = fabric
 				}
@@ -353,7 +353,7 @@ class TemplateHelpers {
 				// Add extra materials with specific mesh assignments
 				if (templateData.extraMaterials) {
 					for (const extraMaterial of templateData.extraMaterials) {
-						const extraFabric = this.#getFabricById(extraMaterial.materialId)
+						const extraFabric = this.#getFabricById(extraMaterial.materialId, collection)
 						if (extraFabric) blockFabrics[extraMaterial.mesh] = extraFabric
 					}
 				}
