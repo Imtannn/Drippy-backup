@@ -137,14 +137,23 @@ export class AppButtonsPreset extends Element {
 	#presetConfig = (): PresetConfig => {
 		const presets: Record<LayoutPreset, PresetConfig> = {
 			'order-flow': {
-				left: {all: {back: true, home: true}},
+				left: {
+					all: {
+						back: true,
+						home: false, // disabled for now, re-enable when spaces page is ready
+					},
+				},
 				right: {
 					logo: true,
 					desktop: {share: true, buy: true},
 				},
 			},
 			'template-flow': {
-				left: {all: {back: true}},
+				left: {
+					all: {
+						back: false, // disabled for now, re-enable when spaces page is ready
+					},
+				},
 				right: {
 					logo: true,
 					tools: true,
@@ -153,7 +162,12 @@ export class AppButtonsPreset extends Element {
 				},
 			},
 			'preview-flow': {
-				left: {all: {back: true, home: true}},
+				left: {
+					all: {
+						back: true,
+						home: false, // disabled for now, re-enable when spaces page is ready
+					},
+				},
 				right: {
 					logo: true,
 					tools: true,
@@ -161,7 +175,12 @@ export class AppButtonsPreset extends Element {
 				},
 			},
 			'simple-flow': {
-				left: {all: {back: true, home: true}},
+				left: {
+					all: {
+						back: true,
+						home: false, // disabled for now, re-enable when spaces page is ready
+					},
+				},
 				right: {logo: true},
 			},
 			custom: {},
