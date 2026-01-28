@@ -23,7 +23,6 @@ export const legacyAvatars: Avatar[] = [
 
 		gender: 'female',
 		name: 'yuna-a-pose',
-		default: true,
 	},
 	{
 		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar-1/Naomi/Naomi.png',
@@ -36,6 +35,7 @@ export const legacyAvatars: Avatar[] = [
 		src: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Mia.glb',
 		gender: 'female',
 		name: 'mia-a-pose',
+		default: true,
 	},
 ]
 
