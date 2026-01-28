@@ -192,7 +192,7 @@ class TextureManager {
 	async loadFabricTextures(fabric: Fabric): Promise<TextureSet> {
 		const config: TextureConfig = {
 			repeat: [...this.defaultConfig.repeat],
-			coef: fabric.coef || 1,
+			coef: fabric.coef || this.defaultConfig.coef,
 			offset: [...this.defaultConfig.offset],
 			rotate: this.defaultConfig.rotate,
 		}
