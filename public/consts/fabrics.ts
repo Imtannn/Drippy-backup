@@ -1,5 +1,4 @@
 import type {Fabric} from '../types/fabric.js'
-// import {type Fabric as DbFabric} from '../imports/collections/Fabrics.js'
 import {toSolidSignal} from '../utils.js'
 
 // @deprecated

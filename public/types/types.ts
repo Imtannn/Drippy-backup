@@ -32,7 +32,6 @@ export type Collection = {
 	slug: string
 	logo: string
 	gender: Gender
-	garmentsCount: number
 }
 
 export type BackgroundScene = {
@@ -60,7 +59,6 @@ export type Space = {
 	/** Slug for the default BackgroundScene. */
 	defaultScene: string
 	gender: 'male' | 'female'
-	garmentsCount: number
 	isWholesale: boolean
 
 	/** When true, the space is view-only without pricing, and does not allow purchases. */

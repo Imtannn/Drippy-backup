@@ -4,7 +4,7 @@ import {getTemplatesByCollection} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {TemplateMap} from '../types/types.js'
-import {getSpaceCollections, spaceHasMultipleCollections, values} from '../utils.js'
+import {getSpaceCollectionSlugs, spaceHasMultipleCollections, values} from '../utils.js'
 import {
 	currentUser,
 	isLoggedIn,
@@ -99,12 +99,13 @@ export class TemplateView extends Element {
 			const defaultCategories: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants', 'Jumpsuit']
 			let collectionTemplates: Template[] = []
 
-			if (!this.spaceCollection) {
+			if (this.spaceCollection) collectionTemplates = getTemplatesByCollection(this.spaceCollection)
+			else {
 				// If no collection selected and multi-collection space, aggregate from all collections
-				const spaceCollections = getSpaceCollections(store.selectedSpace)
+				const spaceCollections = getSpaceCollectionSlugs(store.selectedSpace)
 				for (const collectionSlug of spaceCollections)
 					collectionTemplates.push(...getTemplatesByCollection(collectionSlug))
-			} else collectionTemplates = getTemplatesByCollection(this.spaceCollection)
+			}
 
 			// Filter by wishlist if showWishlistOnly is true
 			if (this.showWishlistOnly) {

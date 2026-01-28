@@ -1,14 +1,7 @@
-import type {Space} from '../types/types.js'
+import type {Collection, Space} from '../types/types.js'
 import {toSolidSignal} from '../utils.js'
+import {getBlocksByCollection} from './blocks.js'
 import {collections} from './collections.js'
-
-const sumGarmentsCount = (collectionSlugs: string[]) => {
-	return collectionSlugs.reduce(
-		(acc, collectionSlug) =>
-			acc + (collections().find(collection => collection.slug === collectionSlug)?.garmentsCount ?? 0),
-		0,
-	)
-}
 
 // @deprecated
 // Will get replaced with the spaces from the database
@@ -26,7 +19,6 @@ export const legacySpaces: Space[] = [
 		isWholesale: false,
 		isWorkInProgress: false,
 		isHidden: false,
-		garmentsCount: sumGarmentsCount(['metamorphosis']),
 	},
 	{
 		name: 'H&M',
@@ -41,7 +33,6 @@ export const legacySpaces: Space[] = [
 		isWholesale: false,
 		isWorkInProgress: false,
 		isHidden: false,
-		garmentsCount: sumGarmentsCount(['h&m']),
 	},
 	{
 		name: 'Drippy Shop',
@@ -106,59 +97,25 @@ export const legacySpaces: Space[] = [
 		isWholesale: false,
 		isWorkInProgress: false,
 		isHidden: false,
-		garmentsCount: sumGarmentsCount([
-			'anyshape',
-			'ayarabbim',
-			'baum-und-pferdgarten',
-			'bloom.womenswear',
-			'bupbes',
-			'call-me-ari',
-			'cecilie-bahnsen',
-			'crescent',
-			'cuba-vera',
-			'dario-mittmann',
-			'givenchy',
-			'dico',
-			'dottie',
-			'edini',
-			'erroris.ltd',
-			'gola',
-			'h2b',
-			'joie-des-roses',
-			'jubin-studio',
-			'celeste-studio',
-			'just-etro-gang',
-			'kido',
-			'levents',
-			'bad-habits',
-			'beachclub.official',
-			'berta',
-			'cara-club',
-			'ceci-cela',
-			'celine',
-			'colin',
-			'demobaza',
-			'diane',
-			'hani',
-			'huelley-rose',
-			'hurricane-b',
-			'fig.cool-leather',
-			'libeworkshop',
-			'liniss-official',
-			'meanbldv',
-			'milk-white',
-			'mono-talk',
-			'monroe-the-label',
-			'naked',
-			'nakedandfamousdenim',
-			'zd-eye-of-the-storm',
-			'abercrombie',
-			'oceania-london',
-			'cortana',
-		]),
 	},
 ]
 
+// TODO: Update this to use the spaces from the database
 export const spaces = toSolidSignal<Space[]>(() => {
 	return legacySpaces
 })
+
+export function collectionsInSpace(spaceOrSlug: string | Space): Collection[] {
+	const space = spaces().find(s => s === spaceOrSlug || s.slug === spaceOrSlug)
+	if (!space) return []
+	return collections().filter(c => space.collections.includes(c.slug))
+}
+
+export function countItemsInSpace(spaceOrSlug: string | Space): number {
+	const space = spaces().find(s => s === spaceOrSlug || s.slug === spaceOrSlug)
+	if (!space) return 0
+	const spaceCollections = collectionsInSpace(space)
+	let count = 0
+	for (const collection of spaceCollections) count += getBlocksByCollection(collection).length
+	return count
+}

@@ -1,7 +1,7 @@
 import {batch, css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
 import {avatars} from '../consts/avatars.js'
-import {spaces} from '../consts/spaces.js'
+import {countItemsInSpace, spaces} from '../consts/spaces.js'
 import {templates} from '../consts/templates.js'
 import '../elements/avatar-dropdown.js'
 import '../elements/placeholder-image.js'
@@ -19,7 +19,7 @@ import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/tabs.js'
 import './item-card.js'
-import {getSpaceThumbnail, getSpaceCollections, size} from '../utils.js'
+import {getSpaceThumbnail, getSpaceCollectionSlugs, size} from '../utils.js'
 
 @element
 export class SpacesSelection extends Element {
@@ -108,7 +108,7 @@ export class SpacesSelection extends Element {
 	}
 
 	#getSpaceTemplates = (space: Space): Template[] => {
-		const spaceCollections = getSpaceCollections(space)
+		const spaceCollections = getSpaceCollectionSlugs(space)
 		const allTemplates: Template[] = []
 
 		for (const collectionSlug of spaceCollections) {
@@ -142,7 +142,7 @@ export class SpacesSelection extends Element {
 		aggregatedTemplates[templateCategory] = template
 
 		// Convert template to block data
-		const spaceCollections = getSpaceCollections(space)
+		const spaceCollections = getSpaceCollectionSlugs(space)
 		const collectionHint = template.collection ?? spaceCollections[0] ?? null
 		const templateBlockData = templateHelpers.convertTemplateToBlockData(template, collectionHint)
 		const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
@@ -270,12 +270,13 @@ export class SpacesSelection extends Element {
 					items=${() => this.filteredSpace}
 					content=${() => (space: Accessor<Space>) => html`
 						<!-- Bloom Realm Card -->
+						<!-- FIXME: avoid duplicate code with the space card below -->
 						<div class="space-card">
 							<div class="scene-preview">
 								<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
 									<placeholder-image src=${getSpaceThumbnail(space())} alt=${space().name} object-fit="cover" />
 								</div>
-								<div class="garments-count">${space().garmentsCount} garments</div>
+								<div class="garments-count">${countItemsInSpace(space())} garments</div>
 							</div>
 							<div class="card-content">
 								<div class="text-content">
@@ -392,12 +393,13 @@ export class SpacesSelection extends Element {
 							items=${() => this.filteredSpace}
 							content=${() => (space: Accessor<Space>) => html`
 								<!-- Bloom Realm Card -->
+								<!-- FIXME: avoid duplicate code with the space card above -->
 								<div class="space-card">
 									<div class="scene-preview">
 										<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
 											<placeholder-image src=${getSpaceThumbnail(space())} alt=${space().name} object-fit="cover" />
 										</div>
-										<div class="garments-count">${space().garmentsCount} garments</div>
+										<div class="garments-count">${countItemsInSpace(space())} garments</div>
 									</div>
 									<div class="card-content_block">
 										<div class="text-content">

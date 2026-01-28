@@ -948,7 +948,8 @@ export function spaceHasMultipleCollections(space: {collections: string[]} | nul
  * @param space - The space to get collections from.
  * @returns Array of collection slugs.
  */
-export function getSpaceCollections(space: {collections: string[]} | null | undefined): string[] {
+// TODO helpers like these belong next to the data models they operate on
+export function getSpaceCollectionSlugs(space: {collections: string[]} | null | undefined): string[] {
 	return space?.collections ?? []
 }
 
