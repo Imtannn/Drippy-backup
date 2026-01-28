@@ -1,5 +1,4 @@
 import type {Block} from '../types/block.js'
-// import {type Block as DbBlock} from '../imports/collections/Blocks.js'
 import {toSolidSignal} from '../utils.js'
 
 // @deprecated

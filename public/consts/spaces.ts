@@ -158,6 +158,7 @@ export const legacySpaces: Space[] = [
 	},
 ]
 
+// TODO: Update this to use the spaces from the database
 export const spaces = toSolidSignal<Space[]>(() => {
 	return legacySpaces
 })

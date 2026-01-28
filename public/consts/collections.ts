@@ -357,6 +357,8 @@ export const legacyCollections: Collection[] = [
 	},
 ]
 
+// TODO: Update this to use the collections from the database
+// TODO: rename "collections" to something better, we already have Meteor "collections" and a Collection type.
 export const collections = toSolidSignal<Collection[]>(() => {
 	return legacyCollections
 })
