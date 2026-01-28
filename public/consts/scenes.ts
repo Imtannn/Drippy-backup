@@ -33,10 +33,7 @@ export const legacyBackgroundScenes: BackgroundScene[] = [
 	},
 ]
 
+// TODO: Update this to use the scenes from the database
 export const backgroundScenes = toSolidSignal<BackgroundScene[]>(() => {
 	return legacyBackgroundScenes
 })
-
-export const getBackgroundSceneBySlug = (slug: string) => {
-	return backgroundScenes().find(scene => scene.slug === slug)
-}

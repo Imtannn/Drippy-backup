@@ -1,5 +1,4 @@
 import type {Template} from '../types/template'
-// import {type Template as DbTemplate} from '../imports/collections/Templates.js'
 import {toSolidSignal} from '../utils.js'
 
 // @deprecated

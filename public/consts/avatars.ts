@@ -23,7 +23,6 @@ export const legacyAvatars: Avatar[] = [
 
 		gender: 'female',
 		name: 'yuna-a-pose',
-		default: true,
 	},
 	{
 		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar-1/Naomi/Naomi.png',
@@ -36,27 +35,11 @@ export const legacyAvatars: Avatar[] = [
 		src: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Mia.glb',
 		gender: 'female',
 		name: 'mia-a-pose',
+		default: true,
 	},
 ]
 
+// TODO: Update this to use the avatars from the database
 export const avatars = toSolidSignal<Avatar[]>(() => {
 	return legacyAvatars
 })
-
-export const getDefaultAvatarName = () => {
-	const list = avatars()
-	return list.find(avatar => avatar.default)?.name ?? list[0]?.name ?? ''
-}
-
-export const getAvatarByName = (name: string) => {
-	return avatars().find(avatar => avatar.name === name) ?? null
-}
-
-export const getAvatarByGender = (gender: Avatar['gender']) => {
-	const list = avatars()
-	return (
-		list.find(avatar => avatar.gender === gender && avatar.default) ??
-		list.find(avatar => avatar.gender === gender) ??
-		null
-	)
-}

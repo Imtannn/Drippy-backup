@@ -1,5 +1,5 @@
 import type {Block} from '../types/block.js'
-// import {type Block as DbBlock} from '../imports/collections/Blocks.js'
+import type {Collection} from '../types/types.js'
 import {toSolidSignal} from '../utils.js'
 
 // @deprecated
@@ -2815,7 +2815,8 @@ export const blocks = toSolidSignal<Block[]>(() => {
 	return result
 })
 
-export const getBlocksByCollection = (collection: string | string[]) => {
-	if (Array.isArray(collection)) return blocks().filter(block => collection.includes(block.collection))
-	return blocks().filter(block => block.collection === collection)
+export const getBlocksByCollection = (collectionOrSlug: string | Collection) => {
+	return typeof collectionOrSlug === 'string'
+		? blocks().filter(block => block.collection === collectionOrSlug)
+		: blocks().filter(block => block.collection === collectionOrSlug.slug)
 }
