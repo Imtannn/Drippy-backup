@@ -1,6 +1,10 @@
-import type {Block} from '../types/block'
+import type {Block} from '../types/block.js'
+import type {Collection} from '../types/types.js'
+import {toSolidSignal} from '../utils.js'
 
-export const blocks: Record<string, Block[]> = {
+// @deprecated
+// Will get replaced with the blocks from the database
+export const legacyBlocks: Record<string, Block[]> = {
 	default: [
 		// Female
 		{
@@ -2802,4 +2806,17 @@ export const blocks: Record<string, Block[]> = {
 			templateCategory: 'Dress',
 		},
 	],
+}
+
+// TODO: Update this to use the blocks from the database
+export const blocks = toSolidSignal<Block[]>(() => {
+	const result: Block[] = []
+	for (const blockList of Object.values(legacyBlocks)) result.push(...blockList)
+	return result
+})
+
+export const getBlocksByCollection = (collectionOrSlug: string | Collection) => {
+	return typeof collectionOrSlug === 'string'
+		? blocks().filter(block => block.collection === collectionOrSlug)
+		: blocks().filter(block => block.collection === collectionOrSlug.slug)
 }

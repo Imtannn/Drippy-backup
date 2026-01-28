@@ -1,18 +1,18 @@
 import {batch, css, Element, element, html, onCleanup, signal, type ElementAttributes} from 'lume'
 import {Meteor} from 'meteor/meteor'
-import {templates} from '../consts/templates.js'
+import {getTemplatesByCollection} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {Collection, TemplateMap} from '../types/types.js'
-import {getCollectionBySlug, getSpaceCollections, spaceHasMultipleCollections, values} from '../utils.js'
+import {getCollectionBySlug, getSpaceCollectionSlugs, spaceHasMultipleCollections, values} from '../utils.js'
 import {
 	currentUser,
+	isLoggedIn,
+	pendingWishlistId,
+	setPendingWishlistId,
 	store,
 	updateGarmentsSelectionInUrl,
 	wishlist,
-	pendingWishlistId,
-	setPendingWishlistId,
-	isLoggedIn,
 } from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
 
@@ -102,25 +102,13 @@ export class TemplateView extends Element {
 			const defaultCategories: TemplateCategory[] = ['Dress', 'Shirt', 'Top', 'Jacket', 'Skirt', 'Pants', 'Jumpsuit']
 			let collectionTemplates: Template[] = []
 
-			// When filtering by wishlist, search across all collections in the space (or all collections if no space)
-			// Otherwise, filter by selected collection
-			if (this.showWishlistOnly) {
-				if (store.selectedSpace) {
-					// For wishlist filter, get templates from all collections in the space
-					const spaceCollections = getSpaceCollections(store.selectedSpace)
-					for (const collectionSlug of spaceCollections) collectionTemplates.push(...(templates[collectionSlug] ?? []))
-				}
-				// If no space selected, search across all collections
-				else {
-					for (const collectionTemplatesList of values(templates))
-						collectionTemplates.push(...(collectionTemplatesList ?? []))
-				}
-			} else if (!this.spaceCollection && spaceHasMultipleCollections(store.selectedSpace)) {
+			if (this.spaceCollection) collectionTemplates = getTemplatesByCollection(this.spaceCollection)
+			else {
 				// If no collection selected and multi-collection space, aggregate from all collections
-				const spaceCollections = getSpaceCollections(store.selectedSpace)
-				for (const collectionSlug of spaceCollections) collectionTemplates.push(...(templates[collectionSlug] ?? []))
-			} else if (this.spaceCollection) collectionTemplates = templates[this.spaceCollection] ?? []
-			else collectionTemplates = templates[this.defaultCollection] ?? []
+				const spaceCollections = getSpaceCollectionSlugs(store.selectedSpace)
+				for (const collectionSlug of spaceCollections)
+					collectionTemplates.push(...getTemplatesByCollection(collectionSlug))
+			}
 
 			// Filter by wishlist if showWishlistOnly is true
 			if (this.showWishlistOnly) {
@@ -768,7 +756,9 @@ export class TemplateView extends Element {
 												>
 													<for-each
 														items=${() =>
-															getSpaceCollections(store.selectedSpace).map(c => getCollectionBySlug(collections, c))}
+															getSpaceCollectionSlugs(store.selectedSpace).map(c =>
+																getCollectionBySlug(collections(), c),
+															)}
 														content=${() => (collection: Collection) => html`
 															<button
 																draggable=${false}

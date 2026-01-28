@@ -1,7 +1,7 @@
 import {batch, css, Element, element, html, signal, type ElementAttributes} from 'lume'
 import type {Accessor} from 'solid-js'
 import {spaces} from '../consts/spaces.js'
-import {templates} from '../consts/templates.js'
+import {getTemplatesByCollection} from '../consts/templates.js'
 import {pushState, searchParams} from '../routes.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {TemplateMap} from '../types/types.js'
@@ -14,11 +14,11 @@ import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/tabs.js'
+import {formatNumber} from '../utils.js'
 import './item-card.js'
 import './loading-spinner-overlay.js'
 import './spaces-selection.js'
 import './template-item-overlay.js'
-import {formatNumber} from '../utils.js'
 
 type BrandViewAttributes = keyof object // no attributes yet
 
@@ -58,7 +58,7 @@ export class BrandView extends Element {
 		// Brand-view only displays when brand param exists, so we always navigate
 		const brandParam = searchParams().get('brand')
 		if (brandParam) {
-			const space = spaces.find(s => s.collections.includes(brandParam))
+			const space = spaces().find(s => s.collections.includes(brandParam))
 			if (space) {
 				// Remove brand parameter and set scene parameter in URL
 				searchParams().delete('brand')
@@ -138,7 +138,7 @@ export class BrandView extends Element {
 			// Navigate to template view to show remix overlay
 			const brandParam = searchParams().get('brand')
 			if (brandParam) {
-				const space = spaces.find(s => s.collections.includes(brandParam))
+				const space = spaces().find(s => s.collections.includes(brandParam))
 				if (space) {
 					searchParams().delete('brand')
 					searchParams().set('space', space.slug)
@@ -176,7 +176,7 @@ export class BrandView extends Element {
 
 			${() => {
 				const brandParam = searchParams().get('brand')
-				const space = spaces.find(space => space.collections.includes(brandParam || ''))
+				const space = spaces().find(space => space.collections.includes(brandParam || ''))
 
 				if (!brandParam) return null
 
@@ -218,7 +218,7 @@ export class BrandView extends Element {
 					${() => {
 						const brandParam = searchParams().get('brand')
 						const collection = brandParam || store.selectedSpace?.collections[0] || 'gap'
-						const collectionTemplates = (templates as any)[collection] || []
+						const collectionTemplates = getTemplatesByCollection(collection) || []
 
 						// Apply same ordering logic as template-view
 						const defaultCategories: TemplateCategory[] = [

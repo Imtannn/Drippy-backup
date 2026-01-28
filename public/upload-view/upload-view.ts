@@ -16,6 +16,7 @@ import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric, FabricCategory} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {
+	Avatar,
 	PieceFabricsMap,
 	SelectedGarments,
 	Space,
@@ -1013,24 +1014,20 @@ export class UploadView extends Element {
 					<option disabled selected value>-- select an avatar --</option>
 					<for-each
 						items=${() => avatars}
-						content=${() => (avatar: (typeof avatars)[number]) => html`
-							<option value=${avatar.name}>${avatar.name}</option>
-						`}
+						content=${() => (avatar: Avatar) => html` <option value=${avatar.name}>${avatar.name}</option> `}
 					></for-each>
 				</select>
 				<select
 					id="space-select"
 					onchange=${(e: Event) => {
 						const value = (e.target as HTMLSelectElement).value
-						this.selectedSpace = spaces.find(space => space.slug === value) ?? null
+						this.selectedSpace = spaces().find(space => space.slug === value) ?? null
 					}}
 				>
 					<option disabled selected value>-- select a space --</option>
 					<for-each
 						items=${() => spaces}
-						content=${() => (space: (typeof spaces)[number]) => html`
-							<option value=${space.slug}>${space.slug}</option>
-						`}
+						content=${() => (space: Space) => html` <option value=${space.slug}>${space.slug}</option> `}
 					></for-each>
 				</select>
 				<button class="upload-button" onclick=${this.#handleUploadClick} disabled=${() => this.isUploading}>

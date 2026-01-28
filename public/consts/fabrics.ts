@@ -1,6 +1,9 @@
-import type {Fabric} from '../types/fabric'
+import type {Fabric} from '../types/fabric.js'
+import {toSolidSignal} from '../utils.js'
 
-export const fabrics: Record<string, Fabric[]> = {
+// @deprecated
+// Will get replaced with the fabrics from the database
+const legacyFabrics: Record<string, Fabric[]> = {
 	default: [
 		{
 			_id: '7b888d46-e955-4f12-95f9-d9d03a00c026',
@@ -2990,3 +2993,14 @@ export const fabrics: Record<string, Fabric[]> = {
 		},
 	],
 } as const
+
+// TODO: Update this to use the fabrics from the database
+export const fabrics = toSolidSignal<Fabric[]>(() => {
+	const result: Fabric[] = []
+	for (const fabricList of Object.values(legacyFabrics)) result.push(...fabricList)
+	return result
+})
+
+export const getFabricsByCollection = (collection: string) => {
+	return fabrics().filter(fabric => fabric.collection === collection)
+}

@@ -1,7 +1,7 @@
 import '../app/drippy-scene.js'
 import type {DrippyScene} from '../app/drippy-scene.js'
 import {avatars} from '../consts/avatars.js'
-import {blocks as allBlocks} from '../consts/blocks.js'
+import {blocks} from '../consts/blocks.js'
 import {spaces} from '../consts/spaces.js'
 import type {BlockCategory} from '../types/block.js'
 import type {Fabric} from '../types/fabric.js'
@@ -24,7 +24,7 @@ let selectedSpace: Space | null = null
 let selectedCollection: string | null = null
 
 if (spaceParam) {
-	selectedSpace = spaces.find(s => s.slug === spaceParam) || null
+	selectedSpace = spaces().find(s => s.slug === spaceParam) || null
 
 	// Determine the collection to use
 	if (selectedSpace) {
@@ -36,7 +36,7 @@ if (spaceParam) {
 // Find the avatar by name
 let selectedAvatar: string | null = null
 if (avatarParam) {
-	const avatar = avatars.find(a => a.name === avatarParam)
+	const avatar = avatars().find(a => a.name === avatarParam)
 	if (avatar) selectedAvatar = avatarParam
 }
 
@@ -83,7 +83,7 @@ if (garmentsParam && selectedCollection) {
 	const garmentIds = garmentsParam.split(',').map(id => id.trim())
 
 	// Get blocks for the selected collection
-	const collectionBlocks = allBlocks[selectedCollection as keyof typeof allBlocks] ?? []
+	const collectionBlocks = blocks().filter(b => b.collection === selectedCollection) ?? []
 
 	for (const garmentId of garmentIds) {
 		const block = collectionBlocks.find(b => b._id === garmentId)

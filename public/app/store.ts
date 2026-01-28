@@ -99,7 +99,7 @@ const setPendingWishlistId = (id: string | null) => {
 export {pendingWishlistId, setPendingWishlistId}
 
 const spaceFromParam = createMemo<Space | null>(() => {
-	return spaces.find(space => space.slug === searchParams().get('space')) ?? null
+	return spaces().find(space => space.slug === searchParams().get('space')) ?? null
 })
 
 class Store {
@@ -136,7 +136,7 @@ class Store {
 	view = searchParams().get('space') && searchParams().get('avatar') ? ('template' as AppRoute) : ('scene' as AppRoute)
 
 	/** Selected avatar defaults based on space gender to the one in the URL. */
-	selectedAvatar = searchParams().get('avatar') ?? avatars[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
+	selectedAvatar = searchParams().get('avatar') ?? avatars()[0].name // TODO get this from localStorage (later, from backend) if we want to save the user value to make it the initial value
 	selectedSpace = spaceFromParam()
 	/** Selected collection within a space (for multi-collection spaces) */
 	selectedCollection: string | null = null
@@ -807,7 +807,7 @@ createEffect(() => {
 	syncSignals(
 		() => store.selectedAvatar,
 		(value: string) => (store.selectedAvatar = value),
-		() => searchParams().get('avatar') ?? avatars[0].name,
+		() => searchParams().get('avatar') ?? avatars()[0].name,
 		(value: string) => {
 			searchParams().set('avatar', value)
 			pushState()
@@ -820,11 +820,11 @@ createEffect(() => {
 	const space = store.selectSpace
 	if (!space) return
 
-	const currentAvatar = avatars.find(a => a.name === store.selectedAvatar)
+	const currentAvatar = avatars().find(a => a.name === store.selectedAvatar)
 
 	// If space gender doesn't match avatar gender, switch to default avatar for that gender
 	if (space.gender && currentAvatar && space.gender !== currentAvatar.gender) {
-		const defaultAvatar = avatars.find(a => a.gender === space.gender && a.default)
+		const defaultAvatar = avatars().find(a => a.gender === space.gender && a.default)
 		if (defaultAvatar) store.selectedAvatar = defaultAvatar.name
 	}
 })
@@ -954,12 +954,12 @@ export function setDefaultSpaceAndAvatar() {
 	// Set default space to drippy-shop if no space is selected
 	if (store.selectedSpace || hasBrandParam()) return
 
-	const drippyShopSpace = spaces.find(space => space.slug === 'drippy-shop')
+	const drippyShopSpace = spaces().find(space => space.slug === 'drippy-shop')
 	if (!drippyShopSpace) return
 
 	// Set default avatar for the space's gender if not already set
 	if (!searchParams().get('avatar') && drippyShopSpace.gender) {
-		const defaultAvatar = avatars.find(a => a.gender === drippyShopSpace.gender && a.default)
+		const defaultAvatar = avatars().find(a => a.gender === drippyShopSpace.gender && a.default)
 		if (defaultAvatar) {
 			store.selectedAvatar = defaultAvatar.name
 			searchParams().set('avatar', defaultAvatar.name)

@@ -1,6 +1,6 @@
-import {blocks, blocks as collectionBlocks} from '../consts/blocks.js'
-import {fabrics} from '../consts/fabrics.js'
-import {templates} from '../consts/templates.js'
+import {blocks, getBlocksByCollection} from '../consts/blocks.js'
+import {fabrics, getFabricsByCollection} from '../consts/fabrics.js'
+import {getTemplatesByCollection, templates} from '../consts/templates.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {Fabric, FabricsByCategory} from '../types/fabric.js'
 import type {Template, TemplateCategory} from '../types/template.js'
@@ -63,13 +63,19 @@ class TemplateHelpers {
 	 * @param collection - Collection slug to read from; defaults to `gap`.
 	 * @returns Fabrics that belong to the requested category within the collection.
 	 */
-	#getFabricsByFabricCategory(fabricCategory?: string, collection: string = 'gap'): Fabric[] {
+	#getFabricsByFabricCategory(fabricCategory: string, collection: string | null | undefined): Fabric[] {
 		if (!fabricCategory) return []
 
-		const fabricsInCategory = (fabrics[collection] ?? []).filter(fabric => fabric.category === fabricCategory)
+		// TODO: If no collection is provided, loop through all collections in space and find the fabrics
+		let fabricsInCategory: Fabric[] = []
+		if (collection)
+			fabricsInCategory = getFabricsByCollection(collection).filter(fabric => fabric.category === fabricCategory)
+		else fabricsInCategory = fabrics().filter(fabric => fabric.category === fabricCategory)
 
 		// Include default fabrics with the same category (not already in the collection)
-		const defaultFabrics = fabrics['default'].filter(fabric => fabric.category === fabricCategory)
+		const defaultFabrics = getFabricsByCollection('default')?.filter(fabric => fabric.category === fabricCategory) ?? []
+
+		console.log('fabricsInCategory', [...fabricsInCategory, ...defaultFabrics])
 
 		return [...fabricsInCategory, ...defaultFabrics]
 	}
@@ -225,12 +231,8 @@ class TemplateHelpers {
 		return this.overridingCategoriesMapping[category] ?? []
 	}
 
-	getTemplateCategoryById(templateId: string): TemplateCategory | null {
-		for (const collectionTemplates of values(templates)) {
-			const match = collectionTemplates?.find(template => template?._id === templateId)
-			if (match) return match.category
-		}
-		return null
+	getTemplateCategoryById(templateId: string): TemplateCategory | undefined {
+		return templates().find(template => template?._id === templateId)?.category
 	}
 
 	/**
@@ -257,16 +259,12 @@ class TemplateHelpers {
 		if (template.collection && !lookupOrder.includes(template.collection)) lookupOrder.push(template.collection)
 
 		for (const slug of lookupOrder) {
-			const matches = (collectionBlocks[slug as keyof typeof collectionBlocks] ?? []).filter(
-				block => block.templateId === template._id,
-			)
+			const matches = getBlocksByCollection(slug).filter(block => block.templateId === template._id)
 			if (matches.length > 0) return matches
 		}
 
-		for (const blocksList of values(collectionBlocks)) {
-			const matches = blocksList.filter(block => block.templateId === template._id)
-			if (matches.length > 0) return matches
-		}
+		const matches = blocks().filter(block => block.templateId === template._id)
+		if (matches.length > 0) return matches
 
 		return []
 	}
@@ -297,6 +295,10 @@ class TemplateHelpers {
 		}
 
 		return newFabrics
+	}
+
+	#getFabricById(fabricId: string, collection?: string | null): Fabric | undefined {
+		return (collection ? getFabricsByCollection(collection) : fabrics()).find(fabric => fabric._id === fabricId)
 	}
 
 	/**
@@ -345,23 +347,15 @@ class TemplateHelpers {
 				// Add the main fabric (without assignedMesh - will be default)
 				if (templateData.materialId) {
 					// If no collection is provided, loop through all collections and find the fabric
-					let fabric: Fabric | undefined
-					if (!collection) {
-						/* eslint-disable */
-						for (const collection of Object.keys(fabrics)) {
-							fabric = fabrics[collection]?.find(fabric => fabric._id === templateData.materialId)
-						}
-					} else {
-						fabric = fabrics[collection]?.find(fabric => fabric._id === templateData.materialId)
-					}
-					/* eslint-enable */
+					const fabric = this.#getFabricById(templateData.materialId, collection)
+
 					if (fabric) blockFabrics[fabric.assignedMesh || 'default'] = fabric
 				}
 
 				// Add extra materials with specific mesh assignments
 				if (templateData.extraMaterials) {
 					for (const extraMaterial of templateData.extraMaterials) {
-						const extraFabric = fabrics[collection ?? 'gap']?.find(fabric => fabric._id === extraMaterial.materialId)
+						const extraFabric = this.#getFabricById(extraMaterial.materialId, collection)
 						if (extraFabric) blockFabrics[extraMaterial.mesh] = extraFabric
 					}
 				}
@@ -425,23 +419,25 @@ class TemplateHelpers {
 	/**
 	 * Resolve available fabrics for each mesh slot in a template.
 	 *
-	 * @param sourceCollection - Collection slug to search; defaults to `gap`.
+	 * @param collection - Collection slug to search; defaults to `gap`.
 	 * @param template - Template describing the fabric categories.
 	 * @returns Record keyed by mesh/piece name pointing to allowed fabrics.
 	 */
-	getAvailableFabricsForTemplate(sourceCollection: string | null | undefined, template: Template): FabricsByCategory {
+	getAvailableFabricsForTemplate(collection: string | null | undefined, template: Template): FabricsByCategory {
 		// Resolve template.materialId (fabric _id) to the fabric instance, then filter by allowed template categories
-		const collection = sourceCollection ?? 'gap'
 		/** Available fabrics by category. */
 		const availableFabrics: FabricsByCategory = {}
 
-		const defaultFabric = fabrics[collection]?.find(fabric => fabric._id === template.materialId)
-		availableFabrics['default'] = this.#getFabricsByFabricCategory(defaultFabric?.category, collection)
+		const defaultFabric = fabrics().find(fabric => fabric._id === template.materialId)
+		if (defaultFabric?.category)
+			availableFabrics['default'] = this.#getFabricsByFabricCategory(defaultFabric.category, collection)
 
 		if (template.extraMaterials && template.extraMaterials.length > 0) {
 			for (const extraMaterial of template.extraMaterials) {
-				const extraFabric = fabrics[collection]?.find(fabric => fabric._id === extraMaterial.materialId)
-				availableFabrics[extraMaterial.mesh] = this.#getFabricsByFabricCategory(extraFabric?.category, collection)
+				const extraFabric = fabrics().find(fabric => fabric._id === extraMaterial.materialId)
+				console.log('extraFabric', extraFabric)
+				if (!extraFabric?.category) continue
+				availableFabrics[extraMaterial.mesh] = this.#getFabricsByFabricCategory(extraFabric.category, collection)
 			}
 		}
 
@@ -457,7 +453,7 @@ class TemplateHelpers {
 	 */
 	getBlocksForTemplateCategory(templateCategory: TemplateCategory, collection: string | null | undefined) {
 		const resolvedCollection = collection ?? 'gap'
-		return (collectionBlocks[resolvedCollection as keyof typeof collectionBlocks] ?? []).filter(
+		return (getBlocksByCollection(resolvedCollection) ?? []).filter(
 			block => block.templateCategory === templateCategory,
 		)
 	}
@@ -499,19 +495,8 @@ class TemplateHelpers {
 	 * @param collectionSlug - Optional collection slug to search first.
 	 * @returns Matching block or `null` when not found.
 	 */
-	findBlockById(blockId: string, collectionSlug: string | null): Block | null {
-		if (collectionSlug) {
-			const collectionBlocks = blocks[collectionSlug as keyof typeof blocks]
-			const found = collectionBlocks?.find?.(b => b._id === blockId) ?? null
-			if (found) return found
-		}
-
-		for (const collectionBlocks of values(blocks)) {
-			const found = collectionBlocks?.find?.(b => b._id === blockId)
-			if (found) return found
-		}
-
-		return null
+	findBlockById(blockId: string, collectionSlug?: string | null): Block | undefined {
+		return (collectionSlug ? getBlocksByCollection(collectionSlug) : blocks()).find(b => b._id === blockId)
 	}
 
 	/**
@@ -521,19 +506,8 @@ class TemplateHelpers {
 	 * @param collectionSlug - Optional collection slug to search first.
 	 * @returns Matching fabric or `null` when not found.
 	 */
-	findFabricById(fabricId: string, collectionSlug: string | null): Fabric | null {
-		if (collectionSlug) {
-			const collectionFabrics = fabrics[collectionSlug]
-			const found = collectionFabrics?.find?.(f => f._id === fabricId) ?? null
-			if (found) return found
-		}
-
-		for (const collectionFabrics of values(fabrics)) {
-			const found = collectionFabrics?.find?.(f => f._id === fabricId)
-			if (found) return found
-		}
-
-		return null
+	findFabricById(fabricId: string, collectionSlug?: string | null): Fabric | undefined {
+		return (collectionSlug ? getFabricsByCollection(collectionSlug) : fabrics()).find(f => f._id === fabricId)
 	}
 
 	/**
@@ -560,6 +534,7 @@ class TemplateHelpers {
 		}
 	}
 
+	// TODO: Remove collectionSlug parameter and use templates() instead
 	/**
 	 * Find a template by id across collections, favoring the provided slug.
 	 *
@@ -567,19 +542,10 @@ class TemplateHelpers {
 	 * @param collectionSlug - Optional collection slug to search first.
 	 * @returns Matching template or `null` when not found.
 	 */
-	findTemplateById(templateId: string, collectionSlug: string | null): Template | null {
-		if (collectionSlug) {
-			const collectionTemplates = templates[collectionSlug]
-			const found = collectionTemplates?.find?.(template => template._id === templateId) ?? null
-			if (found) return found
-		}
-
-		for (const collectionTemplates of values(templates)) {
-			const found = collectionTemplates?.find?.(template => template._id === templateId)
-			if (found) return found
-		}
-
-		return null
+	findTemplateById(templateId: string, collectionSlug?: string | null): Template | undefined {
+		return (collectionSlug ? getTemplatesByCollection(collectionSlug) : templates()).find(
+			template => template._id === templateId,
+		)
 	}
 }
 
