@@ -3,8 +3,8 @@ import {Meteor} from 'meteor/meteor'
 import {getTemplatesByCollection} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {Collection, TemplateMap} from '../types/types.js'
-import {getCollectionBySlug, getSpaceCollectionSlugs, spaceHasMultipleCollections, values} from '../utils.js'
+import type {TemplateMap} from '../types/types.js'
+import {getSpaceCollectionSlugs, spaceHasMultipleCollections, values} from '../utils.js'
 import {
 	currentUser,
 	isLoggedIn,
@@ -15,8 +15,6 @@ import {
 	wishlist,
 } from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
-
-import {collections} from '../consts/collections.js'
 
 import '../elements/avatar-dropdown.js'
 import '../elements/avatar-swap-bottom-sheet.js'
@@ -73,7 +71,6 @@ export class TemplateView extends Element {
 	@signal isDragging = false
 	@signal startX = 0
 	@signal override scrollLeft = 0
-	private hasDragged = false
 
 	@signal disabledScroll = false
 	@signal showWishlistOnly = false
@@ -208,34 +205,6 @@ export class TemplateView extends Element {
 		this.createEffect(() => {
 			updateGarmentsSelectionInUrl(store.selectedGarments)
 		})
-	}
-
-	#onDragStart = (e: MouseEvent) => {
-		const container = e.currentTarget as HTMLElement
-		this.isDragging = true
-		this.hasDragged = false
-		this.startX = e.pageX - container.offsetLeft
-		this.scrollLeft = container.scrollLeft
-		container.style.cursor = 'grabbing'
-	}
-
-	#onDragEnd = (e: MouseEvent) => {
-		const container = e.currentTarget as HTMLElement
-		this.isDragging = false
-		container.style.cursor = 'grab'
-		// Reset hasDragged after a short delay to allow click to be blocked
-		setTimeout(() => (this.hasDragged = false), 0)
-	}
-
-	#onDragMove = (e: MouseEvent) => {
-		if (!this.isDragging) return
-		e.preventDefault()
-		const container = e.currentTarget as HTMLElement
-		const x = e.pageX - container.offsetLeft
-		const walk = (x - this.startX) * 1.5 // Scroll speed multiplier
-		// Mark as dragged if moved more than 5px
-		if (Math.abs(x - this.startX) > 5) this.hasDragged = true
-		container.scrollLeft = this.scrollLeft - walk
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -463,13 +432,6 @@ export class TemplateView extends Element {
 			setPendingWishlistId(customEvent.detail.templateId)
 
 		this.showLoginDialog = true
-	}
-
-	#onCollectionSelect = (collection: Collection) => {
-		if (this.hasDragged) return
-		// Toggle: if already selected, unselect to show all templates
-		if (store.getEffectiveCollection() === collection.slug) store.setSelectedCollection = null
-		else store.setSelectedCollection = collection.slug
 	}
 
 	#onHeartButtonClick = () => {
@@ -735,46 +697,6 @@ export class TemplateView extends Element {
 											></for-each>
 										</tabs-list>
 									</div>
-									<show-when
-										condition=${() =>
-											spaceHasMultipleCollections(store.selectedSpace) &&
-											!this.showAvatarSelection &&
-											!this.showPoseSelection &&
-											!this.showDetailView &&
-											this.selectedTab !== null}
-										content=${() => html`
-											<div class="collections-navigation">
-												<div
-													class="collections-scroll-container"
-													onmousedown=${this.#onDragStart}
-													onmouseleave=${this.#onDragEnd}
-													onmouseup=${this.#onDragEnd}
-													onmousemove=${this.#onDragMove}
-												>
-													<for-each
-														items=${() =>
-															getSpaceCollectionSlugs(store.selectedSpace).map(c =>
-																getCollectionBySlug(collections(), c),
-															)}
-														content=${() => (collection: Collection) => html`
-															<button
-																draggable=${false}
-																class="collection-logo-button"
-																classList=${() => ({active: store.getEffectiveCollection() === collection.slug})}
-																onclick=${() => this.#onCollectionSelect(collection)}
-															>
-																<img
-																	draggable=${false}
-																	src=${collection.logo || '/images/drippy-logo.webp'}
-																	alt=${collection.name}
-																/>
-															</button>
-														`}
-													></for-each>
-												</div>
-											</div>
-										`}
-									></show-when>
 								</bottom-sheet-header>
 							`}
 						></show-when>
@@ -1293,62 +1215,6 @@ export class TemplateView extends Element {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-		}
-
-		.collections-navigation {
-			display: block;
-			padding-right: 0;
-			padding-left: var(--uiSpacing);
-			padding-top: 0;
-			padding-bottom: var(--uiSpacingSmall);
-			background: var(--uiColorPrimaryWhite);
-		}
-
-		.collections-scroll-container {
-			display: flex;
-			gap: var(--uiSpacingSmall);
-			overflow-x: auto;
-			align-items: center;
-			scrollbar-width: none;
-			padding-right: 20px;
-			cursor: grab;
-			user-select: none;
-		}
-
-		.collections-scroll-container::-webkit-scrollbar {
-			display: none;
-		}
-
-		.collection-logo-button {
-			width: 42px;
-			height: 42px;
-			min-width: 42px;
-			min-height: 42px;
-			border-radius: var(--borderRadiusCircular);
-			background: var(--uiColorPrimaryWhite);
-			cursor: pointer;
-			transition: all var(--transitionFast);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			overflow: hidden;
-			border: 1px solid #e9e9ea;
-			padding: 0;
-		}
-
-		.collection-logo-button:hover {
-		}
-
-		.collection-logo-button.active {
-			border-color: var(--uiColorAccentViolet);
-		}
-
-		.collection-logo-button img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			object-position: center;
-			margin-top: 0;
 		}
 
 		remix-overlay {

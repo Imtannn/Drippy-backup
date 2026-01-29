@@ -38,8 +38,9 @@ export const legacySpaces: Space[] = [
 		name: 'Drippy Shop',
 		slug: 'drippy-shop',
 		description: 'Drippy Shop',
-		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Logo-1/Oofya.png',
-		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SCENE.webp',
+		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/drippy-shop/Drippy+Shop+-+Logo.jpg',
+		thumbnail:
+			'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/drippy-shop/Drippy+Shop+-+Logo.jpg',
 		defaultScene: 'drippy-shop',
 		scenes: ['drippy-shop'],
 		gender: 'female',
