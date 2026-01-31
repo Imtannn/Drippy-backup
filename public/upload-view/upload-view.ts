@@ -714,6 +714,7 @@ export class UploadView extends Element {
 		})
 
 		// Convert materials to fabrics
+		// @ts-expect-error FIXME `collection` is a required field, missing here. We will update so collections own template instead.
 		const convertedFabrics: Fabric[] = uploadedTemplate.materials.map(material => ({
 			_id: material._id,
 			thumb: material.thumb,
@@ -739,11 +740,12 @@ export class UploadView extends Element {
 		const templateId = Date.now().toString() + Math.random().toString(36).substr(2, 9)
 
 		// Convert blocks to system format
+		// @ts-expect-error FIXME `collection` is a required field, missing here. We will update so collections own template instead.
 		const convertedBlocks: Block[] = uploadedTemplate.blocks.map(block => ({
 			_id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
 			thumb: block.thumbUrl,
 			modelFile: block.modelUrl,
-			blockName: block.blockName,
+			blockName: block.blockName, //
 			avatar: 'female' as const,
 			category: block.category as BlockCategory,
 			templateId: templateId, // Will be set properly
@@ -752,6 +754,7 @@ export class UploadView extends Element {
 		}))
 
 		// Convert template to system format
+		// @ts-expect-error FIXME `collection` is a required field, missing here. We will update so collections own template instead.
 		const convertedTemplate: Template = {
 			_id: templateId,
 			thumb: uploadedTemplate.templateThumbnail || '',
