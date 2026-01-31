@@ -4,7 +4,7 @@ import {getTemplatesByCollection} from '../consts/templates.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {TemplateMap} from '../types/types.js'
-import {getSpaceCollectionSlugs, spaceHasMultipleCollections, values} from '../utils.js'
+import {getSpaceCollectionSlugs, values} from '../utils.js'
 import {
 	currentUser,
 	isLoggedIn,
