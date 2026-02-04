@@ -100,7 +100,6 @@ const styleVars = {
 	buttonHeight: 38,
 }
 
-// eslint-disable-next-line -- this is used, it defines global style variables
 declare global {
 	interface Window {
 		styleVars: typeof styleVars
