@@ -86,19 +86,25 @@ export class LumeAnimation extends Element {
 				if (!parentModelLoaded()) return
 
 				const [clips, setClips] = createSignal<THREE.AnimationClip[]>([])
+				let hasLoadedExternalAnimation = false
 
 				// Load animations frome external source.
 				createEffect(() => {
 					if (!this.src) {
 						// If no external source, use parent animations (when they are loaded).
-						setClips(this.parentElement!.behaviors?.get?.('gltf-model')?.model?.animations ?? [])
+						if (!hasLoadedExternalAnimation && clips().length === 0)
+							setClips(this.parentElement!.behaviors?.get?.('gltf-model')?.model?.animations ?? [])
 						return
 					}
 
 					let cleaned = false
 
+					// Clear clips before loading new animation to stop old animation
+					setClips([])
+
 					gltfLoader.load(this.src, loadedModel => {
 						if (cleaned) return
+						hasLoadedExternalAnimation = true
 						setClips(loadedModel.animations)
 						// console.log('Loaded external animations:', clips().map(c => c.name))
 					})
@@ -130,10 +136,9 @@ export class LumeAnimation extends Element {
 
 							mixer.update(delta)
 
-							const parent = this.parentElement as Element3D
-
-							parent.needsUpdate()
-							parent.scene!.needsUpdate()
+						const parent = this.parentElement as Element3D
+						parent.needsUpdate()
+						parent.scene!.needsUpdate()
 
 							frame = requestAnimationFrame(anim)
 						}

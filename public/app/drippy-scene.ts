@@ -33,6 +33,7 @@ import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass
 import {avatars} from '../consts/avatars.js'
 
 import {backgroundScenes} from '../consts/scenes.js'
+import {animations} from '../consts/poses.js'
 import {appAnims} from '../elements/animation-select.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
@@ -153,8 +154,8 @@ export class DrippyScene extends Element {
 		const sourceSkeleton = getArmatureObject(this.avatarModel.three)?.skeleton
 		if (!sourceSkeleton) throw new Error('Avatar model has no skeleton for rigging.')
 
-		model.three.traverse((obj: any) => {
-			if (obj.skeleton) obj.skeleton = sourceSkeleton
+		model.three.traverse((obj: THREE.Object3D) => {
+			if ('skeleton' in obj && obj.skeleton) obj.skeleton = sourceSkeleton
 		})
 	}
 
@@ -589,6 +590,18 @@ export class DrippyScene extends Element {
 	}
 
 	@effect animationEffect() {
+		if (store.selectedAnimationValue) {
+			const gender = this.avatarGender
+			const anims = gender === 'male' ? animations.male : animations.female
+			const anim = anims.find(a => a.value === store.selectedAnimationValue)
+			if (anim && anim.src) {
+				this.animName = anim.clipName
+				this.animSrc = new URL(anim.src, import.meta.url).href
+				return
+			}
+		}
+
+		// Fallback to appAnims for backward compatibility (dropdown selector)
 		const anim = appAnims.find(val => val.id === store.selectedAnimation)
 		if (!anim || !anim.src) return
 
@@ -705,7 +718,6 @@ export class DrippyScene extends Element {
 			if (!this.outlinePass) return
 
 			const selectingPiece = store.selectingPiece
-
 			// Skip if same piece (avoid redundant work)
 			if (selectingPiece === lastSelectingPiece) return
 			lastSelectingPiece = selectingPiece

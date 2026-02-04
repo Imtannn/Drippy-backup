@@ -11,8 +11,11 @@ export class AnimationSelect extends Element {
 		<div>
 			<select
 				id="animation-select"
-				onchange=${(ev: any) => {
-					store.selectedAnimation = ev.target.value
+				onchange=${(ev: Event) => {
+					const target = ev.target as HTMLSelectElement
+					store.selectedAnimation = target.value as 'none' | 'walk' | 'dance' | 'idle'
+					// Clear selectedAnimationValue when using dropdown to use appAnims instead
+					store.selectedAnimationValue = null
 				}}
 				value=${() => store.selectedAnimation}
 			>

@@ -29,6 +29,7 @@ type ItemCardAttributes =
 	| 'objectPosition'
 	| 'aspectRatio'
 	| 'imageStyle'
+	| 'itemName'
 
 @element
 export class ItemCard extends Element {
@@ -43,6 +44,7 @@ export class ItemCard extends Element {
 	@attribute aspectRatio = '1'
 	@eventAttribute oncardselected = null
 	@attribute imageStyle = ''
+	@stringAttribute itemName = ''
 
 	// Helper function to check if template is in wishlist (reactive)
 	#isInWishlist = () => {
@@ -148,30 +150,33 @@ export class ItemCard extends Element {
 	get #shouldShowWishlist() {
 		return this.hasAttribute('data-show-wishlist')
 	}
+
 	override template = () => html`
-		<div class="item-card" onclick=${this.#onClick} classList=${() => ({active: this.itemActive})}>
-			<div class="item-preview">
-				${() =>
-					this.#shouldShowWishlist
-						? html`
-								<button
-									class="wishlist-heart"
-									onclick=${this.#onHeartClick}
-									classList=${() => ({active: this.#isInWishlist()})}
-								>
-									${getWishlistHeartIcon}
-								</button>
-							`
-						: null}
-				<placeholder-image
-					src=${() => this.itemSrc}
-					alt=${() => this.itemAlt}
-					object-fit=${() => this.objectFit}
-					object-position=${() => this.objectPosition}
-					image-style=${() => this.imageStyle}
-				></placeholder-image>
+
+			<div class="item-card" onclick=${this.#onClick} classList=${() => ({active: this.itemActive})}>
+				<div class="item-preview">
+					${() =>
+						this.#shouldShowWishlist
+							? html`
+									<button
+										class="wishlist-heart"
+										onclick=${this.#onHeartClick}
+										classList=${() => ({active: this.#isInWishlist()})}
+									>
+										${getWishlistHeartIcon}
+									</button>
+								`
+							: null}
+					<placeholder-image
+						src=${() => this.itemSrc}
+						alt=${() => this.itemAlt}
+						object-fit=${() => this.objectFit}
+						object-position=${() => this.objectPosition}
+						image-style=${() => this.imageStyle}
+					></placeholder-image>
+				</div>
+				${() => (this.itemName ? html`<p class="item-card-name">${this.itemName}</p>` : null)}
 			</div>
-		</div>
 	`
 	override css = css /*css*/ `
 		:host {
@@ -182,34 +187,22 @@ export class ItemCard extends Element {
 		}
 
 		.item-card {
-			aspect-ratio: var(--aspect-ratio);
-			/* Two-layer background: inner fill on padding-box, gradient border on border-box */
-			background: var(--item-card-border);
+			display: flex;
+			flex-direction: column;
 			border-radius: 12px;
-			overflow: hidden;
 			cursor: pointer;
-			border: 2px solid transparent; /* needed so the border-box layer shows */
 			position: relative;
-			left: 0; /* needed because the border shifted the element to the right */
-			transition:
-				transform 0.2s ease,
-				background 0.2s ease;
+			transition: transform 0.2s ease;
 		}
 
 		.item-card:hover {
 			transform: scale(1.02);
-			--item-card-border: var(--uiColorAccentViolet);
 		}
 
 		@media (max-width: 768px) {
 			.item-card:hover {
 				transform: none;
-				--item-card-border: none;
 			}
-		}
-
-		.item-card.active {
-			--item-card-border: var(--uiColorAccentViolet);
 		}
 
 		.item-preview {
@@ -219,14 +212,39 @@ export class ItemCard extends Element {
 			justify-content: center;
 			position: relative;
 			width: 100%;
-			height: 100%;
+			aspect-ratio: var(--aspect-ratio);
+			overflow: visible;
+			border-radius: 10px;
+			border: 2px solid transparent;
+			transition: border-color 0.2s ease;
+		}
 
-			img {
-				width: 100%;
-				height: 100%;
-				object-fit: var(--object-fit);
-				object-position: var(--object-position);
-			}
+		.item-preview > * {
+			overflow: hidden;
+			border-radius: 8px;
+		}
+
+		.item-card:hover .item-preview {
+			border-color: var(--uiColorAccentViolet);
+		}
+
+		.item-card.active .item-preview {
+			border-color: var(--uiColorAccentViolet);
+		}
+
+		.item-preview img {
+			width: 100%;
+			height: 100%;
+			object-fit: var(--object-fit);
+			object-position: var(--object-position);
+		}
+		.item-card-name {
+			font-size: 12px;
+			font-weight: 600;
+			color: var(--uiColorPrimaryBlack);
+			text-align: center;
+			margin: 0;
+			padding: 0;
 		}
 
 		.wishlist-heart {
