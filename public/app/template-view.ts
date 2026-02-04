@@ -1,6 +1,7 @@
 import {batch, css, Element, element, html, onCleanup, signal, type ElementAttributes} from 'lume'
 import {Meteor} from 'meteor/meteor'
 import {getTemplatesByCollection} from '../consts/templates.js'
+import {poses, animations} from '../consts/poses.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {TemplateMap} from '../types/types.js'
@@ -16,26 +17,19 @@ import {
 } from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
 
+import {avatars} from '../consts/avatars.js'
 import '../elements/avatar-dropdown.js'
 import '../elements/avatar-swap-bottom-sheet.js'
 import '../elements/bottom-sheet.js'
-import '../elements/cube-button.js'
 import '../elements/dialog-element.js'
 import '../elements/heart-button.js'
 import '../elements/logic/for-each.js'
-import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
 import '../elements/nav-bar.js'
 import '../elements/nav-items.js'
-import '../elements/person-button.js'
-import '../elements/placeholder-image.js'
-import '../elements/preview-button.js'
-import '../elements/save-button.js'
-import '../elements/search-button.js'
 import '../elements/show-on-device.js'
 import '../elements/tabs.js'
-import '../elements/theme-switch-button.js'
 
 import './app-buttons-preset.js'
 import './app-buttons.js'
@@ -50,6 +44,8 @@ import './template-item-overlay.js'
 
 type TemplateViewAttributes = keyof object // no attributes yet
 
+type AvatarsTab = 'pose' | 'animation'
+
 @element
 export class TemplateView extends Element {
 	static override readonly elementName = 'template-view'
@@ -59,6 +55,8 @@ export class TemplateView extends Element {
 	@signal spaceCollection: string | string[] | null = null
 	@signal showLoginDialog = false
 	@signal showAvatarSelection = false
+	@signal showAvatarsSelection = false
+	@signal avatarsSelectedTab: AvatarsTab = 'pose'
 	@signal showPoseSelection = false
 	@signal showRemixOverlay = false
 	@signal showTemplateOverlay: Template | null = null
@@ -229,6 +227,64 @@ export class TemplateView extends Element {
 		return store.selectedTemplates[template.category]?._id === template._id
 	}
 
+	#onPoseClick = (e: CustomEvent) => {
+		const poseValue = e.detail.itemValue.value
+		store.selectedAnimation = poseValue as 'none' | 'walk' | 'dance' | 'idle'
+	}
+
+	#onAnimationClick = (e: CustomEvent) => {
+		console.log('onAnimationClick', e.detail.itemValue)
+		const animation = e.detail.itemValue as (typeof animations.female)[number]
+		store.selectedAnimation = animation.type
+		store.selectedAnimationValue = animation.value
+	}
+
+	#getCurrentPosesData = () => {
+		const currentAvatar = avatars().find(a => a.name === store.selectedAvatar)
+		return currentAvatar?.gender === 'male' ? poses.male : poses.female
+	}
+
+	#getCurrentAnimationsData = () => {
+		const currentAvatar = avatars().find(a => a.name === store.selectedAvatar)
+		return currentAvatar?.gender === 'male' ? animations.male : animations.female
+	}
+
+	#renderPoseItem = (pose: (typeof poses.female)[number]) => {
+		return html`
+			<item-card
+				class=${() => (store.selectedAnimation === pose.value ? 'item-preview' : '')}
+				item-active=${() => store.selectedAnimation === pose.value}
+				item-src=${pose.thumbnail}
+				item-alt=${pose.name}
+				item-value=${pose}
+				oncardselected=${this.#onPoseClick}
+				object-fit="cover"
+				object-position="center"
+				aspect-ratio="0.79"
+				image-style="width: 79px; height: 141px;margin: 0 auto;"
+				item-name=${pose.name}
+			></item-card>
+		`
+	}
+
+	#renderAnimationItem = (animation: (typeof animations.female)[number]) => {
+		return html`
+			<item-card
+				class=${() => (store.selectedAnimation === animation.value ? 'item-preview' : '')}
+				item-active=${() => store.selectedAnimation === animation.value}
+				item-src=${animation.thumbnail}
+				item-alt=${animation.name}
+				item-value=${animation}
+				oncardselected=${this.#onAnimationClick}
+				object-fit="cover"
+				object-position="center"
+				aspect-ratio="0.79"
+				image-style="width: 79px; height: 141px;margin: 0 auto;"
+				item-name=${animation.name}
+			></item-card>
+		`
+	}
+
 	#renderTemplateItem = (template: Template) => {
 		return html`
 			<div
@@ -292,25 +348,6 @@ export class TemplateView extends Element {
 		`
 	}
 
-	// #onPreviewButtonClick = () => {
-	// 	batch(() => {
-	// 		const user = currentUser()
-
-	// 		if (user) {
-	// 			searchParams().set('isPreview', 'true')
-	// 			store.isPreview = true
-	// 			this.showAvatarSelection = false
-	// 			this.showPoseSelection = false
-	// 			this.showRemixOverlay = false
-	// 			this.showTemplateOverlay = null
-	// 			store.setSelectingPiece = null
-	// 			pushState()
-	// 		} else {
-	// 			this.showLoginDialog = true
-	// 		}
-	// 	})
-	// }
-
 	#onBuyButtonClick = () => {
 		store.view = 'order-items'
 	}
@@ -352,9 +389,16 @@ export class TemplateView extends Element {
 			if (tab === 'pose') {
 				this.showPoseSelection = true
 				this.showAvatarSelection = false
+				this.showAvatarsSelection = false
+			} else if (tab === 'avatars') {
+				this.showPoseSelection = false
+				this.showAvatarSelection = false
+				this.showAvatarsSelection = true
+				this.avatarsSelectedTab = 'pose' // Default to pose tab
 			} else {
 				this.showPoseSelection = false
 				this.showAvatarSelection = false
+				this.showAvatarsSelection = false
 			}
 			this.showRemixOverlay = false
 			store.setSelectingPiece = null
@@ -410,16 +454,6 @@ export class TemplateView extends Element {
 			this.avatarSwapTemplate = null
 		})
 	}
-
-	// #onViewDetailsClick = () => {
-	// 	batch(() => {
-	// 		this.showDetailView = true
-	// 		this.showAvatarSelection = false
-	// 		this.showPoseSelection = false
-	// 		this.showRemixOverlay = false
-	// 		this.showTemplateOverlay = null
-	// 	})
-	// }
 
 	#onDetailViewClose = () => {
 		this.showDetailView = false
@@ -664,11 +698,17 @@ export class TemplateView extends Element {
 					!this.showAvatarSelection &&
 					!this.showPoseSelection &&
 					!this.showDetailView &&
-					(this.selectedTab !== null || this.showWishlistOnly)}
+					(this.showAvatarsSelection || this.selectedTab !== null || this.showWishlistOnly)}
 				content=${() => html`
 					<tabs-provider
-						selected-value=${() => (this.showWishlistOnly ? 'wishlist' : this.selectedTab || '')}
-						default-value=${() => this.selectedTab || ''}
+						selected-value=${() => {
+							if (this.showAvatarsSelection) return this.avatarsSelectedTab
+							return this.showWishlistOnly ? 'wishlist' : this.selectedTab || ''
+						}}
+						default-value=${() => {
+							if (this.showAvatarsSelection) return this.avatarsSelectedTab
+							return this.selectedTab || ''
+						}}
 						ontabchange=${(e: CustomEvent) => {
 							// Disable wishlist filter when a tab is selected (not wishlist)
 							if (e.detail.value !== 'wishlist') this.showWishlistOnly = false
@@ -689,12 +729,24 @@ export class TemplateView extends Element {
 											<search-button></search-button>
 										</div>
 										<tabs-list>
-											<for-each
-												items=${() => Object.keys(this.templateCategories)}
-												content=${() => (category: TemplateCategory) => html`
-													<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
+											<show-when
+												condition=${() => this.showAvatarsSelection}
+												content=${() => html`
+													<tabs-trigger selected-value="pose">Pose</tabs-trigger>
+													<tabs-trigger selected-value="animation">Animation</tabs-trigger>
 												`}
-											></for-each>
+											></show-when>
+											<show-when
+												condition=${() => !this.showAvatarsSelection}
+												content=${() => html`
+													<for-each
+														items=${() => Object.keys(this.templateCategories)}
+														content=${() => (category: TemplateCategory) => html`
+															<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
+														`}
+													></for-each>
+												`}
+											></show-when>
 										</tabs-list>
 									</div>
 								</bottom-sheet-header>
@@ -702,9 +754,32 @@ export class TemplateView extends Element {
 						></show-when>
 
 						<div class="tabs-content-container">
+							<!-- Show avatars selection (poses and animations) when avatars tab is active -->
+							<show-when
+								condition=${() => this.showAvatarsSelection}
+								content=${() => html`
+									<tabs-content selected-value="pose">
+										<div class="items-grid">
+											<for-each
+												items=${() => this.#getCurrentPosesData()}
+												content=${() => (pose: (typeof poses.female)[number]) => this.#renderPoseItem(pose)}
+											></for-each>
+										</div>
+									</tabs-content>
+									<tabs-content selected-value="animation">
+										<div class="items-grid">
+											<for-each
+												items=${() => this.#getCurrentAnimationsData()}
+												content=${() => (animation: (typeof animations.female)[number]) =>
+													this.#renderAnimationItem(animation)}
+											></for-each>
+										</div>
+									</tabs-content>
+								`}
+							></show-when>
 							<!-- Show wishlist items when wishlist filter is active -->
 							<show-when
-								condition=${() => this.showWishlistOnly}
+								condition=${() => this.showWishlistOnly && !this.showAvatarsSelection}
 								content=${() => html`
 									<tabs-content selected-value="wishlist">
 										<div class="items-grid">
@@ -716,9 +791,9 @@ export class TemplateView extends Element {
 									</tabs-content>
 								`}
 							></show-when>
-							<!-- Show category tabs when wishlist is not active -->
+							<!-- Show category tabs when wishlist is not active and avatars selection is not active -->
 							<show-when
-								condition=${() => !this.showWishlistOnly}
+								condition=${() => !this.showWishlistOnly && !this.showAvatarsSelection}
 								content=${() => html`
 									<for-each
 										items=${() => Object.keys(this.templateCategories)}

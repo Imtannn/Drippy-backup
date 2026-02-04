@@ -1080,8 +1080,8 @@ export class SpacesSelection extends Element {
 		}
 
 		.trending-logo-circle {
-			width: 32px;
-			height: 32px;
+			width: 24px;
+			height: 24px;
 			border-radius: 50%;
 			background: var(--uiColorPrimaryBlack);
 			display: flex;
@@ -1091,14 +1091,14 @@ export class SpacesSelection extends Element {
 		}
 
 		.trending-logo-circle span {
-			font-size: 10px;
+			font-size: 9px;
 			font-weight: var(--fontWeightSemiBold);
 			color: var(--uiColorPrimaryWhite);
 		}
 
 		.trending-logo-text {
-			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightSemiBold);
+			font-size: var(--fontSizeTextXxs);
+			font-weight: 500;
 			color: var(--uiColorPrimaryBlack);
 			text-decoration: underline;
 			cursor: pointer;

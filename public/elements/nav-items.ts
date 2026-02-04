@@ -28,11 +28,21 @@ export class NavItems extends Element {
 	}
 	override template = () => html`
 		<div class="nav-items-container">
-			<button class="nav-item" classList=${{active: () => this.activeTab === 'avatars'}} disabled>
+			<button
+				class="nav-item"
+				classList=${{active: () => this.activeTab === 'avatars'}}
+				onclick=${() => this.#onTabClick('avatars')}
+			>
 				<div class="nav-icon">
-					<img src="/images/top-nav/avatars-inactive.svg" alt="Avatars" />
+					<img
+						src=${() =>
+							this.activeTab === 'avatars'
+								? '/images/top-nav/avatars-active.svg'
+								: '/images/top-nav/avatars-inactive.svg'}
+						alt="Avatars"
+					/>
 				</div>
-				<span class="nav-label">Avatars</span>
+				<span class="nav-label">Avatar</span>
 			</button>
 			<button
 				class="nav-item"
