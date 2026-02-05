@@ -60,62 +60,62 @@ const [isYearlyActive, setIsYearlyActive] = createSignal(true)
 // loadingCover?.addEventListener('transitionend', () => loadingCover.remove())
 
 // const logoUrl = new URL('../images/logo.svg', import.meta.url)
-const logoUrlDark = new URL('../images/landing/logo.png', import.meta.url)
-const blingImage1 = new URL('../images/landing/bling-1.png', import.meta.url).href
-const blingImage2 = new URL('../images/landing/bling-2.png', import.meta.url).href
-const blingImage3 = new URL('../images/landing/bling-3.png', import.meta.url).href
+const logoUrlDark = new URL('../images/landing/logo.webp', import.meta.url)
+const blingImage1 = new URL('../images/landing/bling-1.webp', import.meta.url).href
+const blingImage2 = new URL('../images/landing/bling-2.webp', import.meta.url).href
+const blingImage3 = new URL('../images/landing/bling-3.webp', import.meta.url).href
 
-const stepImage1 = new URL('../images/landing/step-1.png', import.meta.url).href
+const stepImage1 = new URL('../images/landing/step-1.webp', import.meta.url).href
 
-const cta__background = new URL('../images/landing/cta-background.png', import.meta.url).href
-const cta_model = new URL('../images/landing/cta-model.png', import.meta.url).href
+const cta__background = new URL('../images/landing/cta-background.webp', import.meta.url).href
+const cta_model = new URL('../images/landing/cta-model.webp', import.meta.url).href
 
-const instagramIcon = new URL('../images/landing/discord.png', import.meta.url).href
-const discordIcon = new URL('../images/landing/instagram.png', import.meta.url).href
-const redditIcon = new URL('../images/landing/reddit.png', import.meta.url).href
-const twitterIcon = new URL('../images/landing/twiter.png', import.meta.url).href
+const instagramIcon = new URL('../images/landing/discord.webp', import.meta.url).href
+const discordIcon = new URL('../images/landing/instagram.webp', import.meta.url).href
+const redditIcon = new URL('../images/landing/reddit.webp', import.meta.url).href
+const twitterIcon = new URL('../images/landing/twiter.webp', import.meta.url).href
 
 // Brands data
 const brands: Brand[] = [
 	{
 		id: 1,
 		name: 'Brand 1',
-		logo: new URL('../images/landing/brand-1.png', import.meta.url).href,
+		logo: new URL('../images/landing/brand-1.webp', import.meta.url).href,
 	},
 	// {
 	// 	id: 2,
 	// 	name: 'Brand 2',
-	// 	logo: new URL('../images/landing/brand-2.png', import.meta.url).href,
+	// 	logo: new URL('../images/landing/brand-2.webp', import.meta.url).href,
 	// },
 	// {
 	// 	id: 3,
 	// 	name: 'Brand 3',
-	// 	logo: new URL('../images/landing/brand-3.png', import.meta.url).href,
+	// 	logo: new URL('../images/landing/brand-3.webp', import.meta.url).href,
 	// },
 	{
 		id: 4,
 		name: 'Brand 4',
-		logo: new URL('../images/landing/brand-4.png', import.meta.url).href,
+		logo: new URL('../images/landing/brand-4.webp', import.meta.url).href,
 	},
 	{
 		id: 5,
 		name: 'Brand 5',
-		logo: new URL('../images/landing/brand-5.png', import.meta.url).href,
+		logo: new URL('../images/landing/brand-5.webp', import.meta.url).href,
 	},
 	{
 		id: 6,
 		name: 'Brand 6',
-		logo: new URL('../images/landing/brand-6.png', import.meta.url).href,
+		logo: new URL('../images/landing/brand-6.webp', import.meta.url).href,
 	},
 	{
 		id: 7,
 		name: 'Brand 7',
-		logo: new URL('../images/landing/brand-7.png', import.meta.url).href,
+		logo: new URL('../images/landing/brand-7.webp', import.meta.url).href,
 	},
 	{
 		id: 8,
 		name: 'Brand 8',
-		logo: new URL('../images/landing/brand-8.png', import.meta.url).href,
+		logo: new URL('../images/landing/brand-8.webp', import.meta.url).href,
 	},
 ]
 
@@ -125,25 +125,25 @@ const steps: Step[] = [
 		id: 1,
 		name: 'Pick an avatar',
 		des: 'Shoppers choose an avatar that feels like them.',
-		logo: new URL('../images/landing/step-2.png', import.meta.url).href,
+		logo: new URL('../images/landing/step-2.webp', import.meta.url).href,
 	},
 	{
 		id: 2,
 		name: 'Explore themed space',
 		des: 'Each space is each collection that tells a story.',
-		logo: new URL('../images/landing/step-3.png', import.meta.url).href,
+		logo: new URL('../images/landing/step-3.webp', import.meta.url).href,
 	},
 	{
 		id: 3,
 		name: 'Browse & remix products',
 		des: 'Remix design, swap fabrics & style avatars in real time.',
-		logo: new URL('../images/landing/step-4.png', import.meta.url).href,
+		logo: new URL('../images/landing/step-4.webp', import.meta.url).href,
 	},
 	{
 		id: 4,
 		name: 'Place custom order',
 		des: 'Send order inquiry directly to your email for quotation.',
-		logo: new URL('../images/landing/step-5.png', import.meta.url).href,
+		logo: new URL('../images/landing/step-5.webp', import.meta.url).href,
 	},
 ]
 
@@ -152,7 +152,7 @@ const statistics: Statistic[] = [
 		id: 1,
 		name: 'Lift in conversions',
 		des: 'Conversion rate of 3D preview compared to static images.',
-		image: new URL('../images/landing/statistic-1.png', import.meta.url).href,
+		image: new URL('../images/landing/statistic-1.webp', import.meta.url).href,
 		number: 94,
 		source: 'Source: Shopify, 2021',
 	},
@@ -160,7 +160,7 @@ const statistics: Statistic[] = [
 		id: 2,
 		name: 'Boost up engagement',
 		des: 'Four in five shoppers interact longer with 3D (34% over 30+ seconds)',
-		image: new URL('../images/landing/statistic-2.png', import.meta.url).href,
+		image: new URL('../images/landing/statistic-2.webp', import.meta.url).href,
 		number: 82,
 		source: 'Source: Cappasity, 2020',
 	},
@@ -168,7 +168,7 @@ const statistics: Statistic[] = [
 		id: 3,
 		name: 'More add-to-cart',
 		des: 'More add-to-cart actions if 3D and personalization is being offered.',
-		image: new URL('../images/landing/statistic-3.png', import.meta.url).href,
+		image: new URL('../images/landing/statistic-3.webp', import.meta.url).href,
 		number: 35,
 		source: 'Source: Cappasity, 2020',
 	},
@@ -176,7 +176,7 @@ const statistics: Statistic[] = [
 		id: 4,
 		name: 'More sales',
 		des: 'Brands using personalization see higher revenue on average.',
-		image: new URL('../images/landing/statistic-4.png', import.meta.url).href,
+		image: new URL('../images/landing/statistic-4.webp', import.meta.url).href,
 		number: 20,
 		source: 'Source: McKinsey, 2021',
 	},
@@ -475,7 +475,10 @@ const mainContent = html`
 											<div class="pricing__plan-header">
 												<div class="pricing__plan-name text-md">Studio</div>
 												<p class="pricing__plan-price">
-													<span class="interactive__title text-md">€${() => (isYearlyActive() ? '70' : '50')}</span> <span class="pricing__plan-period text-md">/month/studio</span>
+													<span class="interactive__title text-md">€${() =>
+														isYearlyActive()
+															? '70'
+															: '50'}</span> <span class="pricing__plan-period text-md">/month/studio</span>
 												</p>
 											</div>
 											<div class="pricing__features-list">
@@ -504,7 +507,10 @@ const mainContent = html`
 													<div class="pricing__plan-badge"><div class="pricing__plan-badge-text text-md">Best value</div></div>
 												</div>
 												<p class="pricing__plan-price--pro">
-													<span class="interactive__title text-md">€${() => (isYearlyActive() ? '145' : '75')}</span> <span class="pricing__plan-period--pro text-md">/month/studio</span>
+													<span class="interactive__title text-md">€${() =>
+														isYearlyActive()
+															? '145'
+															: '75'}</span> <span class="pricing__plan-period--pro text-md">/month/studio</span>
 												</p>
 											</div>
 											<div class="pricing__features-list--pro">
@@ -547,6 +553,7 @@ const mainContent = html`
 										<span class="cta__description--highlight">playable, immersive,<br> made-to-order</span>
 										<span class="cta__description"> experiences today. </span>
 									</p>
+									<!-- FIXME don't use images from some random internet service. -->
 									<custom-button variant="primary">See Drippy in action<img class="cta__arrow-icon" src="https://c.animaapp.com/mejigj1rAIvhIh/img/arrow-1.svg" /></custom-button>
 								</div>
 							</div>

@@ -1,3 +1,4 @@
+// FIXME this is currently broken, we're gonna switch to uploads via backend
 import * as AWS from 'aws-sdk'
 import {randomUUID as uuidv4} from 'crypto'
 import * as fs from 'fs'
@@ -554,7 +555,9 @@ async function processOptionBlocks(
 					),
 					uploadToS3(
 						gltfBuffer,
-						`models/${collection}/options/${templateCategory}/${blockCategory}/${blockFolder.name}${path.extname(gltfFile.name)}`,
+						`models/${collection}/options/${templateCategory}/${blockCategory}/${blockFolder.name}${path.extname(
+							gltfFile.name,
+						)}`,
 						'model/gltf+json',
 					),
 				])
@@ -611,9 +614,19 @@ async function processTemplateFolder(
 	const blockTypeFolders = templateContents.filter(
 		item =>
 			item.mimeType === 'application/vnd.google-apps.folder' &&
-			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory', 'coat', 'jacket'].some(
-				blockType => item.name.toLowerCase().includes(blockType.toLowerCase()),
-			),
+			[
+				'bodice',
+				'pants',
+				'sleeves',
+				'hat',
+				'dress',
+				'skirt',
+				'fullbody',
+				'bag',
+				'accessory',
+				'coat',
+				'jacket',
+			].some(blockType => item.name.toLowerCase().includes(blockType.toLowerCase())),
 	)
 
 	const materialFolders = templateContents.filter(
@@ -641,9 +654,19 @@ async function processTemplateFolder(
 		item =>
 			item.mimeType === 'application/vnd.google-apps.folder' &&
 			item.name.toLowerCase().startsWith('option ') &&
-			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory', 'coat', 'jacket'].some(
-				blockType => item.name.toLowerCase().includes(blockType.toLowerCase()),
-			),
+			[
+				'bodice',
+				'pants',
+				'sleeves',
+				'hat',
+				'dress',
+				'skirt',
+				'fullbody',
+				'bag',
+				'accessory',
+				'coat',
+				'jacket',
+			].some(blockType => item.name.toLowerCase().includes(blockType.toLowerCase())),
 	)
 
 	console.log(`    Found ${optionMaterialsFolders.length} option materials folders`)
@@ -779,7 +802,9 @@ async function processTemplateFolder(
 			pngFiles = [templateThumbnail]
 		}
 		console.log(
-			`      📁 Found ${gltfFiles.length} GLTF files and ${pngFiles.length} PNG files, block type: ${gltfFiles[0]?.name || ''} ${pngFiles[0]?.name || ''}`,
+			`      📁 Found ${gltfFiles.length} GLTF files and ${pngFiles.length} PNG files, block type: ${
+				gltfFiles[0]?.name || ''
+			} ${pngFiles[0]?.name || ''}`,
 		)
 
 		// Match GLTF and PNG pairs
@@ -806,7 +831,9 @@ async function processTemplateFolder(
 						),
 						uploadToS3(
 							gltfBuffer,
-							`models/${collection}/blocks/${category}/${blockTypeFolder.name}/${baseName}${path.extname(gltfFile.name)}`,
+							`models/${collection}/blocks/${category}/${blockTypeFolder.name}/${baseName}${path.extname(
+								gltfFile.name,
+							)}`,
 							'model/gltf+json',
 						),
 					])
@@ -1425,11 +1452,15 @@ function applyCategoryAssignments(): void {
 		materialKeys.forEach(materialKey => {
 			if (rootMaterials.has(materialKey)) {
 				console.log(
-					`    📊 Before adding "${categoryName}": templateCategories = ${Array.from(rootMaterials.get(materialKey)!.templateCategories)}`,
+					`    📊 Before adding "${categoryName}": templateCategories = ${Array.from(
+						rootMaterials.get(materialKey)!.templateCategories,
+					)}`,
 				)
 				rootMaterials.get(materialKey)!.templateCategories.add(categoryName)
 				console.log(
-					`    📊 After adding "${categoryName}": templateCategories = ${Array.from(rootMaterials.get(materialKey)!.templateCategories)}`,
+					`    📊 After adding "${categoryName}": templateCategories = ${Array.from(
+						rootMaterials.get(materialKey)!.templateCategories,
+					)}`,
 				)
 				console.log(`  ✅ Added category ${categoryName} to material ${materialKey}`)
 			} else {
@@ -1465,7 +1496,9 @@ async function main(): Promise<void> {
 		console.log(`📦 Using S3 bucket: ${S3_BUCKET}`)
 		console.log(`🌍 S3 region: ${S3_REGION}`)
 		console.log(
-			`🏷️  Processing ${COLLECTION_CONFIGS.length} collections: ${COLLECTION_CONFIGS.map(c => c.collection).join(', ')}`,
+			`🏷️  Processing ${COLLECTION_CONFIGS.length} collections: ${COLLECTION_CONFIGS.map(c => c.collection).join(
+				', ',
+			)}`,
 		)
 
 		// Initialize combined data structures

@@ -29,41 +29,41 @@ function hideVideoLoading(videoLoadingElement: Element | null) {
 
 // Image URLs
 const bgSvg = new URL('./bg-2.svg', import.meta.url).href
-const heroCard1 = new URL('./images/hero-card-1.png', import.meta.url).href
-const heroCard2 = new URL('./images/hero-card-2.png', import.meta.url).href
-const heroCard3 = new URL('./images/hero-card-3.png', import.meta.url).href
+const heroCard1 = new URL('./images/hero-card-1.webp', import.meta.url).href
+const heroCard2 = new URL('./images/hero-card-2.webp', import.meta.url).href
+const heroCard3 = new URL('./images/hero-card-3.webp', import.meta.url).href
 const heroSub1 = new URL('./images/hero-sub-1.svg', import.meta.url).href
 const heroSub2 = new URL('./images/hero-sub-2.svg', import.meta.url).href
 const heroSub3 = new URL('./images/hero-sub-3.svg', import.meta.url).href
 const heroSub4 = new URL('./images/hero-sub-4.svg', import.meta.url).href
 const heroSub5 = new URL('./images/hero-sub-5.svg', import.meta.url).href
-const logoIcon = new URL('../images/landing/logo.png', import.meta.url).href
-const heroThumb1 = new URL('./images/heroThumb-1.png', import.meta.url).href
-const heroThumb2 = new URL('./images/heroThumb-2.png', import.meta.url).href
+const logoIcon = new URL('../images/landing/logo.webp', import.meta.url).href
+const heroThumb1 = new URL('./images/heroThumb-1.webp', import.meta.url).href
+const heroThumb2 = new URL('./images/heroThumb-2.webp', import.meta.url).href
 const streetIcon1 = new URL('./images/street-1.svg', import.meta.url).href
 const streetIcon2 = new URL('./images/street-2.svg', import.meta.url).href
 const streetIcon3 = new URL('./images/street-3.svg', import.meta.url).href
 const streetIcon4 = new URL('./images/street-4.svg', import.meta.url).href
 
-const discover1 = new URL('./images/discorver-1.png', import.meta.url).href
-const discover2 = new URL('./images/discorver-2.png', import.meta.url).href
-const discover3 = new URL('./images/discorver-3.png', import.meta.url).href
-const discover4 = new URL('./images/discorver-4.png', import.meta.url).href
-const discover5 = new URL('./images/discorver-5.png', import.meta.url).href
-const discover6 = new URL('./images/discorver-6.png', import.meta.url).href
-const styleBackground1 = new URL('./images/styleBg1.png', import.meta.url).href
-const styleBackground2 = new URL('./images/styleBg2.png', import.meta.url).href
-const styleBackground3 = new URL('./images/styleBg3.png', import.meta.url).href
-const styleBackground4 = new URL('./images/styleBg4.png', import.meta.url).href
-const ex1 = new URL('./images/ex1.png', import.meta.url).href
-const ex2 = new URL('./images/ex2.png', import.meta.url).href
-const ex3 = new URL('./images/ex3.png', import.meta.url).href
+const discover1 = new URL('./images/discorver-1.webp', import.meta.url).href
+const discover2 = new URL('./images/discorver-2.webp', import.meta.url).href
+const discover3 = new URL('./images/discorver-3.webp', import.meta.url).href
+const discover4 = new URL('./images/discorver-4.webp', import.meta.url).href
+const discover5 = new URL('./images/discorver-5.webp', import.meta.url).href
+const discover6 = new URL('./images/discorver-6.webp', import.meta.url).href
+const styleBackground1 = new URL('./images/styleBg1.webp', import.meta.url).href
+const styleBackground2 = new URL('./images/styleBg2.webp', import.meta.url).href
+const styleBackground3 = new URL('./images/styleBg3.webp', import.meta.url).href
+const styleBackground4 = new URL('./images/styleBg4.webp', import.meta.url).href
+const ex1 = new URL('./images/ex1.webp', import.meta.url).href
+const ex2 = new URL('./images/ex2.webp', import.meta.url).href
+const ex3 = new URL('./images/ex3.webp', import.meta.url).href
 const socialIcon1 = new URL('./images/social-1.svg', import.meta.url).href
 const socialIcon2 = new URL('./images/social-2.svg', import.meta.url).href
 const socialIcon3 = new URL('./images/social-3.svg', import.meta.url).href
 const socialIcon4 = new URL('./images/social-4.svg', import.meta.url).href
 
-const videoBg = new URL('./images/videoBg.png', import.meta.url).href
+const videoBg = new URL('./images/videoBg.webp', import.meta.url).href
 
 // Add navbar with empty structure
 const navbar = html`

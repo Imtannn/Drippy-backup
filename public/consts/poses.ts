@@ -16,22 +16,22 @@ type AnimationItem = {
 export const poses = {
 	female: [
 		{
-			thumbnail: '/images/avatars/poses/Standing01.png',
+			thumbnail: '/images/avatars/poses/Standing01.webp',
 			name: 'Standing 01',
 			value: 'standing01',
 		},
 		{
-			thumbnail: '/images/avatars/poses/Standing02.png',
+			thumbnail: '/images/avatars/poses/Standing02.webp',
 			name: 'Standing 02',
 			value: 'standing02',
 		},
 		{
-			thumbnail: '/images/avatars/poses/Standing03.png',
+			thumbnail: '/images/avatars/poses/Standing03.webp',
 			name: 'Standing 03',
 			value: 'standing03',
 		},
 		{
-			thumbnail: '/images/avatars/poses/Standing04.png',
+			thumbnail: '/images/avatars/poses/Standing04.webp',
 			name: 'Standing 04',
 			value: 'standing04',
 		},
@@ -42,7 +42,7 @@ export const poses = {
 export const animations = {
 	female: [
 		{
-			thumbnail: '/images/avatars/animations/Idle01.png',
+			thumbnail: '/images/avatars/animations/Idle01.webp',
 			name: 'Idle 01',
 			value: 'idle01',
 			src: '/models/Idle01.glb',
@@ -50,7 +50,7 @@ export const animations = {
 			clipName: 'Animation',
 		},
 		{
-			thumbnail: '/images/avatars/animations/Idle02.png',
+			thumbnail: '/images/avatars/animations/Idle02.webp',
 			name: 'Idle 02',
 			value: 'idle02',
 			src: '/models/Idle_F02.glb',
@@ -58,7 +58,7 @@ export const animations = {
 			clipName: 'Animation',
 		},
 		{
-			thumbnail: '/images/avatars/animations/Idle03.png',
+			thumbnail: '/images/avatars/animations/Idle03.webp',
 			name: 'Idle 03',
 			value: 'idle03',
 			src: '/models/Idle_F03.glb',
@@ -66,7 +66,7 @@ export const animations = {
 			clipName: 'Animation',
 		},
 		{
-			thumbnail: '/images/avatars/animations/Idle04.png',
+			thumbnail: '/images/avatars/animations/Idle04.webp',
 			name: 'Idle 04',
 			value: 'idle04',
 			src: '/models/Idle_F04.glb',

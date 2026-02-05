@@ -1,6 +1,8 @@
-import * as AWS from 'aws-sdk'
 import {Meteor} from 'meteor/meteor'
 import {getEnvConfig} from './load-env.js'
+
+import {DeleteObjectCommand, S3Client} from '@aws-sdk/client-s3'
+import {Upload} from '@aws-sdk/lib-storage' // For multipart upload support like v2 upload()
 
 /**
  * Upload to S3 and return the public URL
@@ -12,14 +14,32 @@ const S3_REGION = getEnvConfig('S3_REGION', 'eu-west-3')
 const S3_ACCESS_KEY = getEnvConfig('AWS_ACCESS_KEY_ID')
 const S3_SECRET_KEY = getEnvConfig('AWS_SECRET_ACCESS_KEY')
 
-// Initialize AWS configuration
-AWS.config.update({
-	accessKeyId: S3_ACCESS_KEY,
-	secretAccessKey: S3_SECRET_KEY,
+const s3Client = new S3Client({
 	region: S3_REGION,
+	credentials: {
+		accessKeyId: S3_ACCESS_KEY,
+		secretAccessKey: S3_SECRET_KEY,
+	},
 })
 
-const s3 = new AWS.S3()
+// backwards-compatible API wrapper
+// TODO we will replace this with cloudflare's API.
+const s3 = {
+	upload: params => {
+		// AWS SDK v2 upload supports multipart uploads and progress events.
+		// In v3, use @aws-sdk/lib-storage Upload class for similar functionality.
+		const upload = new Upload({client: s3Client, params})
+
+		return {
+			promise: () => upload.done(), // returns a Promise resolving when upload completes
+		}
+	},
+
+	deleteObject: params => {
+		const command = new DeleteObjectCommand(params)
+		return {promise: () => s3Client.send(command)}
+	},
+}
 
 interface UploadFileData {
 	fileName: string

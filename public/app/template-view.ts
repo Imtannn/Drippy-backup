@@ -575,7 +575,7 @@ export class TemplateView extends Element {
 		<button class="build-store-button build-store-button-outer" onclick=${this.#onBuildStoreButtonClick}>
 			<div class="build-store-button-icon">
 				<div class="build-store-icon-circle">
-					<img src="/images/landing/logo.png" alt="Drippy logo" />
+					<img src="/images/landing/logo.webp" alt="Drippy logo" />
 				</div>
 			</div>
 			<span class="build-store-button-text">Build your own 3D store</span>

@@ -620,7 +620,7 @@ section {
 	background-color: var(--color-primary);
 	position: relative;
 	border-radius: 20px;
-	background-image: url(./images/drippyBg.png);
+	background-image: url(./images/drippyBg.webp);
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -914,7 +914,7 @@ section {
 }
 
 .drippy {
-	background-image: url(./images/drippyBg.png);
+	background-image: url(./images/drippyBg.webp);
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;

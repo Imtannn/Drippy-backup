@@ -120,7 +120,7 @@ p {
 	margin-bottom: 75px;
 }
 .landing-page-desktop .hero-header .bg-background {
-	background-image: url('../images/landing/bg-main.png');
+	background-image: url('../images/landing/bg-main.webp');
 	background-size: cover;
 	background-position: 65% 50%;
 	background-repeat: no-repeat;
@@ -1865,17 +1865,17 @@ p {
 	object-fit: cover;
 }
 .studio-1 {
-	background-image: url('../images/landing/studio-1.png');
+	background-image: url('../images/landing/studio-1.webp');
 	max-width: 243px;
 	max-height: 249px;
 }
 .studio-2 {
-	background-image: url('../images/landing/studio-2.png');
+	background-image: url('../images/landing/studio-2.webp');
 	max-width: 243px;
 	max-height: 249px;
 }
 .studio-3 {
-	background-image: url('../images/landing/studio-3.png');
+	background-image: url('../images/landing/studio-3.webp');
 }
 
 /* ======================================== */

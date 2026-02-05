@@ -8,8 +8,8 @@ import '../elements/logic/show-when.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 
 const createAccountImg = '/images/create-account.webp'
-const step1Img = '/images/img-3-big.png'
-const step2Img = '/images/img-4-big.png'
+const step1Img = '/images/img-3-big.webp'
+const step2Img = '/images/img-4-big.webp'
 const logoLight = '/images/logo-light-fullsize.webp'
 
 type OnboardingStep = 'step1' | 'step2' | 'step3' | 'step4'

@@ -288,6 +288,7 @@ export class UploadView extends Element {
 			return (
 				pathParts.length === 2 && // File in root of template folder
 				pathParts[0] === templateName &&
+				// FIXME no PNGs!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				file.name.toLowerCase().endsWith('.png')
 			)
 		})
@@ -523,6 +524,7 @@ export class UploadView extends Element {
 		const gltfFiles = files.filter(
 			file => file.name.toLowerCase().endsWith('.gltf') || file.name.toLowerCase().endsWith('.glb'),
 		)
+		// FIXME no PNGs!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		const pngFiles = files.filter(file => file.name.toLowerCase().endsWith('.png'))
 
 		console.log(`  📁 Processing block type: ${blockTypeFolder}`)

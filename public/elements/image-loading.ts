@@ -1,6 +1,6 @@
 import {css, Element, element, html, signal} from 'lume'
 
-const loadingImageUrl = new URL('../images/loading.png', import.meta.url).href
+const loadingImageUrl = new URL('../images/loading.webp', import.meta.url).href
 
 @element
 export class ImageLoading extends Element {
