@@ -5,16 +5,39 @@ import '../elements/custom-button.js'
 import '../elements/image-loading.js'
 import '../routes.js' // track page visits
 
+type Brand = {
+	id: number
+	name: string
+	logo: string
+}
+
+type Step = {
+	id: number
+	name: string
+	des: string
+	logo: string
+}
+
+type Statistic = {
+	id: number
+	name: string
+	des: string
+	image: string
+	number: number
+	source: string
+}
+
 // Show image loading initially
-function showVideoLoading() {
+function showVideoLoading(): Element {
 	console.log('Showing image loading screen')
 	const videoLoadingElement = html`<image-loading></image-loading>`
-	document.body.appendChild(videoLoadingElement as any)
-	return videoLoadingElement
+	const element = Array.isArray(videoLoadingElement) ? videoLoadingElement[0] : videoLoadingElement
+	document.body.appendChild(element as Element)
+	return element as Element
 }
 
 // Hide video loading when content is ready
-function hideVideoLoading(videoLoadingElement: any) {
+function hideVideoLoading(videoLoadingElement: Element | null) {
 	if (videoLoadingElement && videoLoadingElement.parentNode) {
 		console.log('Hiding video loading screen')
 		videoLoadingElement.remove()
@@ -51,8 +74,9 @@ const instagramIcon = new URL('../images/landing/discord.png', import.meta.url).
 const discordIcon = new URL('../images/landing/instagram.png', import.meta.url).href
 const redditIcon = new URL('../images/landing/reddit.png', import.meta.url).href
 const twitterIcon = new URL('../images/landing/twiter.png', import.meta.url).href
+
 // Brands data
-const brands = [
+const brands: Brand[] = [
 	{
 		id: 1,
 		name: 'Brand 1',
@@ -96,7 +120,7 @@ const brands = [
 ]
 
 // Step
-const steps = [
+const steps: Step[] = [
 	{
 		id: 1,
 		name: 'Pick an avatar',
@@ -123,7 +147,7 @@ const steps = [
 	},
 ]
 
-const statistics = [
+const statistics: Statistic[] = [
 	{
 		id: 1,
 		name: 'Lift in conversions',
@@ -214,7 +238,7 @@ const mainContent = html`
 							</div>
 							<div class="brands__grid">
 								${brands.map(
-									(brand: any) => html`
+									(brand: Brand) => html`
 										<div class="brands__item">
 											<img src="${brand.logo}" alt="${brand.name}" class="brands__logo" />
 										</div>
@@ -233,7 +257,7 @@ const mainContent = html`
 							</div>
 							<div class="statistics__grid">
 								${statistics.map(
-									(stat: any) => html`
+									(stat: Statistic) => html`
 									<div class="statistics__item">
 											<div class="statistics__icon-overlap">
 											<div class="statistics__ellipse" data-percent=${stat.number}>
@@ -345,7 +369,7 @@ const mainContent = html`
 							<div class="how-it-works__content">
 								<div class="how-it-works__grid">
 									${steps.map(
-										(step: any) => html`
+										(step: Step) => html`
 											<div class="how-it-works__item">
 												<div class="how-it-works__step">
 													<img class="how-it-works__step-image" src=${step.logo} />
@@ -934,7 +958,7 @@ function initGenericCarousel(config: {
 	setTimeout(checkScreenSize, 200) // Ensure DOM is ready
 
 	// Debug function
-	;(window as any).forceDeactivateCarousel = () => {
+	;(window as Window & {forceDeactivateCarousel?: () => void}).forceDeactivateCarousel = () => {
 		container.classList.remove('carousel')
 		items.forEach(item => item.classList.remove('carousel-item'))
 		removeEventListeners()
