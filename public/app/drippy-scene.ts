@@ -572,7 +572,7 @@ export class DrippyScene extends Element {
 					const isLoading = textureState.loading()!
 
 					// These must be true because of fabricsLoaded() check above
-					console.assert(textureSet, 'Texture set should be available here')
+					console.assert(!!textureSet, 'Texture set should be available here')
 					console.assert(!isLoading, 'Texture should not be loading here')
 
 					textureManager.applyTexturesToMaterial(mesh.material as THREE.MeshPhysicalMaterial, textureSet)

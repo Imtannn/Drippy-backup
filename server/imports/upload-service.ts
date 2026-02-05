@@ -25,7 +25,7 @@ const s3Client = new S3Client({
 // backwards-compatible API wrapper
 // TODO we will replace this with cloudflare's API.
 const s3 = {
-	upload: params => {
+	upload: (params: any) => {
 		// AWS SDK v2 upload supports multipart uploads and progress events.
 		// In v3, use @aws-sdk/lib-storage Upload class for similar functionality.
 		const upload = new Upload({client: s3Client, params})
@@ -35,7 +35,7 @@ const s3 = {
 		}
 	},
 
-	deleteObject: params => {
+	deleteObject: (params: any) => {
 		const command = new DeleteObjectCommand(params)
 		return {promise: () => s3Client.send(command)}
 	},
@@ -100,7 +100,7 @@ async function uploadFileToS3(fileData: UploadFileData): Promise<UploadResult> {
 
 		return {
 			fileName: fileData.fileName,
-			url: result.Location,
+			url: result.Location!,
 			success: true,
 		}
 	} catch (error) {
