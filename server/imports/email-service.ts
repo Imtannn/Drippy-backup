@@ -2,6 +2,7 @@ import * as sgMail from '@sendgrid/mail'
 import * as Handlebars from 'handlebars'
 import {Email} from 'meteor/email'
 import {Meteor} from 'meteor/meteor'
+import {Accounts} from 'meteor/accounts-base'
 
 // Access Assets from Meteor global
 declare const Assets: {
@@ -271,3 +272,6 @@ export const EmailTemplates = {
 		await EmailService.sendWithHandlebarsTemplate(options)
 	},
 }
+
+// Configure email templates for Meteor accounts system
+Accounts.emailTemplates.from = process.env.SENDGRID_FROM_EMAIL || 'noreply@drippy3d.com'

@@ -10,7 +10,6 @@ import './imports/email-service.js'
 import './imports/load-env.js'
 import './imports/oauth-config.js'
 import './imports/order-service.js'
-import './imports/proxy-service.js'
 import './imports/upload-service.js'
 
 WebApp.addHtmlAttributeHook(() => ({lang: 'en', prefix: 'og: http://ogp.me/ns#'}))
@@ -51,9 +50,48 @@ WebApp.rawHandlers.use(
 	/*'/public',*/
 	async function (req, res, next) {
 		///////////////////////////////////////////////////////////////////////////
-		// CORS handling to disallow foreign origins from embedding the app domain,
-		// hence forbidding them from using an iframe to get a user's auth
-		// credentials.
+		// Cross-origin handling to disallow foreign origins from embedding our
+		// app, hence forbidding them from using an iframe to get a user's auth
+		// credentials, and to disallow them opening our app with window.open()
+		// and accessing our window global APIs.
+
+		// Allow embedding third-party assets, but ignore their cookies so
+		// they don't track our users. Required for cross-origin isolation.
+		res.setHeader('Cross-Origin-Embedder-Policy', 'credentialless')
+
+		// Allow only our origins to access `window.*` APIs when we open our
+		// own pages with `window.open('<url-to-our-site>')`. Any other
+		// sites that open our site will not be able to access the global
+		// context.
+		//
+		// This, paired with Cross-Origin-Embedder-Policy:credentialless,
+		// enables cross-origin isolation, which allows cool features like
+		// `SharedArrayBuffer` for shared memory across workers. We do not need
+		// to use 'same-origin-allow-popups' because we don't open new oauth
+		// windows, instead we redirect to separate oauth pages that return
+		// users back to our site after login (f.e. after Log In With Google),
+		// plus that will disable cross-origin isolation and cool features like
+		// `SharedArrayBuffer` will no longer be available and thus will prevent
+		// certain types of performance optimization that we wish to implement.
+		res.setHeader('Cross-Origin-Opener-Policy', 'same-origin')
+
+		// Specify that cross-origin isolation should be enabled using a new
+		// header. At time of writing this is not supported by Firefox or Safari
+		// yet, and those browsers will enable it with only the above two
+		// Cross-Origin-Embedder-Policy and Cross-Origin-Opener-Policy headers,
+		// being present, while the supporting browsers will check all three
+		// headers.
+		res.setHeader(
+			'Permissions-Policy',
+			`cross-origin-isolated=(${allowedOrigins.map(origin => `"${origin}"`).join(' ')})`,
+		)
+
+		// TODO maybe we only need to set this for documents (not scripts,
+		// images, etc).
+		res.setHeader(
+			'Content-Security-Policy',
+			`frame-ancestors 'self' ${Meteor.isDevelopment ? localhostOrigins.join(' ') : remoteOrigins.join(' ')}`,
+		)
 
 		// Respond to preflight requests.
 		// TODO Do we need this (if we're only on GET)?
@@ -87,21 +125,6 @@ WebApp.rawHandlers.use(
 		if (!req.headers.origin || allowedOrigins.includes(req.headers.origin)) {
 			res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*')
 			res.setHeader('Vary', 'Origin')
-
-			// Allow OAuth popup communication only for OAuth endpoints
-			if (req.url?.includes('/_oauth/') || req.url === '/')
-				res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups')
-
-			// TODO maybe we only need to set this for documents (not scripts,
-			// images, etc).
-			// Allow /embed to be embedded from any domain (for Shopify, etc.)
-			if (req.url?.startsWith('/embed')) res.setHeader('Content-Security-Policy', `frame-ancestors *`)
-			else {
-				res.setHeader(
-					'Content-Security-Policy',
-					`frame-ancestors 'self' ${Meteor.isDevelopment ? localhostOrigins.join(' ') : remoteOrigins.join(' ')}`,
-				)
-			}
 		} else return getCoffee(res)
 
 		if (req.url !== req.originalUrl) {
@@ -223,11 +246,8 @@ const admins = [
 	'trusktr@gmail.com',
 	'tan@drippy3d.com',
 	'ruby@drippy3d.com',
-	'dinhthinh.ng@gmail.com',
 	'ngu.nguyen4616@gmail.com',
 	'kylebruceofficial@gmail.com',
-	'ntthuyen03@gmail.com',
-	'ngoc.huynhtieu1999@gmail.com',
 ]
 
 // If a user signs up with a known admin email, make them an admin.
@@ -304,6 +324,3 @@ await Promise.all([...makeAdminPromises, ...visitsMigrationPromises])
 
 // TODO configure default field selector.
 // Accounts.config({ defaultFieldSelector: { includeThisOne: 1, excludeThisOne: 0 } })
-
-// Configure email templates for Meteor accounts system
-Accounts.emailTemplates.from = process.env.SENDGRID_FROM_EMAIL || 'noreply@drippy3d.com'
