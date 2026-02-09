@@ -58,10 +58,11 @@ WebApp.rawHandlers.use(
 		// Allow embedding third-party assets, but ignore their cookies so
 		// they don't track our users. Required for cross-origin isolation.
 		const userAgent = req.headers['user-agent']?.toLowerCase()
-		const isFirefox = userAgent?.includes('firefox')
-		const isSafari = userAgent?.includes('safari') && userAgent.includes('chrome')
+		const isFirefox = userAgent?.includes('firefox/')
+		const isOpera = userAgent?.includes('opr/')
+		const isSafari = userAgent?.includes('safari/') && !userAgent.includes('chrome/')
 		// At time of writing Firefox and Safari don't fully support the credentialless value yet.
-		res.setHeader('Cross-Origin-Embedder-Policy', isFirefox || isSafari ? 'require-corp' : 'credentialless')
+		res.setHeader('Cross-Origin-Embedder-Policy', isFirefox || isSafari || isOpera ? 'require-corp' : 'credentialless')
 
 		// Allow only our origins to access `window.*` APIs when we open our
 		// own pages with `window.open('<url-to-our-site>')`. Any other
@@ -102,7 +103,7 @@ WebApp.rawHandlers.use(
 		// if (req.method === 'OPTIONS') {
 		// 	res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*')
 		//  // Meteor is on GET only by default, with API communication over
-		//  // WebSockets, we're currently not handling anything other than GET.c
+		//  // WebSockets, we're currently not handling anything other than GET.
 		// 	res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
 		// 	res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 		// 	res.setHeader('Access-Control-Max-Age', '3600')
