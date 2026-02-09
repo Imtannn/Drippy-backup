@@ -317,31 +317,9 @@ class Store {
 	}
 
 	set unselectTemplate(template: Template) {
-		untrack(() => {
-			batch(() => {
-				delete this.selectedTemplates[template.category]
-				delete this.selectedGarments[template.category]
-				// this.touchSelectedGarments()
-
-				// Update URL params to prevent re-adding from URL when last item is removed
-				// FIXME side effects should be in an Effect (createEffect) or
-				// derived in a memo (createMemo).
-				if (size(this.selectedTemplates) === 0) {
-					untrack(searchParams).delete('garments')
-					untrack(searchParams).delete('blocks')
-					untrack(searchParams).delete('fabrics')
-					pushState()
-				} else {
-					// Update garments param with remaining templates
-					const garmentEntries: string[] = []
-					for (const t of values(this.selectedTemplates)) {
-						const collectionSlug = t.collection ?? null
-						garmentEntries.push(collectionSlug ? `${collectionSlug}|${t._id}` : t._id)
-					}
-					untrack(searchParams).set('garments', garmentEntries.join(','))
-					pushState()
-				}
-			})
+		batch(() => {
+			delete this.selectedTemplates[template.category]
+			delete this.selectedGarments[template.category]
 		})
 	}
 	set setRemixOverlayTemplate(template: Template | null) {

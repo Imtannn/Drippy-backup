@@ -74,7 +74,6 @@ export class DrippyApp extends Element {
 	 * @param space - Selected space
 	 */
 	#loadFromUrlParameters() {
-		const garmentsParam = searchParams().get('garments')
 		const blocksParam = searchParams().get('blocks')
 		const fabricsParam = searchParams().get('fabrics')
 
@@ -111,24 +110,6 @@ export class DrippyApp extends Element {
 			}
 
 			return merged
-		}
-
-		if (garmentsParam) {
-			const garmentEntries = garmentsParam
-				.split(',')
-				.map(entry => entry.trim())
-				.filter(Boolean)
-
-			for (const entry of garmentEntries) {
-				const {collectionSlug, value: templateId} = templateHelpers.parseCollectionQualifiedEntry(entry)
-				if (!templateId) continue
-
-				const template = templateHelpers.findTemplateById(templateId)
-				if (!template) continue
-
-				const collectionKey = template.collection ?? collectionSlug ?? null
-				rememberTemplate(template, collectionKey)
-			}
 		}
 
 		if (blocksParam) {
