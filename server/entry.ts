@@ -1,5 +1,6 @@
 import * as fs from 'fs'
 import type {ServerResponse} from 'http'
+import * as https from 'https'
 import {Accounts} from 'meteor/accounts-base'
 import {Meteor} from 'meteor/meteor'
 import {WebApp} from 'meteor/webapp'
@@ -49,6 +50,27 @@ const allowedOrigins = [...remoteOrigins, ...localhostOrigins]
 WebApp.rawHandlers.use(
 	/*'/public',*/
 	async function (req, res, next) {
+		// Proxy any requests to /static/<path> to ASSET_SERVER/<path>, to work around CORS blockage from our enabling of cross-origin isolation below in Safari, Opera, and Firefox (when we update to COEP credentialless mode for those browsers we won't need to proxy).
+		const ASSET_SERVER = 'https://d1e6s1h8cqcr26.cloudfront.net'
+		if (req.url?.startsWith('/static/')) {
+			const assetUrl = new URL(ASSET_SERVER + req.url.replace('/static', ''))
+
+			https
+				.get(assetUrl, assetRes => {
+					res.statusCode = assetRes.statusCode || 200
+
+					// Forward all headers from the response
+					for (const [key, value] of Object.entries(assetRes.headers))
+						if (value !== undefined) res.setHeader(key, value)
+
+					// Forward the response stream directly to the client
+					assetRes.pipe(res)
+				})
+				.on('error', e => failure(res, 'Failed to fetch from static asset:', assetUrl.toString(), e))
+
+			return
+		}
+
 		///////////////////////////////////////////////////////////////////////////
 		// Cross-origin handling to disallow foreign origins from embedding our
 		// app, hence forbidding them from using an iframe to get a user's auth

@@ -5,34 +5,34 @@ import {toSolidSignal} from '../utils.js'
 // Will get replace with the avatars from the database
 export const legacyAvatars: Avatar[] = [
 	{
-		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/male/Leo/thumbnail.png',
-		src: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/male/Leo/model.glb',
+		thumbnail: '/static/drippy-app/drippy-app-3D/models/male/Leo/thumbnail.png',
+		src: '/static/drippy-app/drippy-app-3D/models/male/Leo/model.glb',
 		name: 'leo',
 		gender: 'male',
 		default: true,
 	},
 	{
-		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/male/Luka/thumbnail.png',
-		src: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/male/Luka/model.glb',
+		thumbnail: '/static/drippy-app/drippy-app-3D/models/male/Luka/thumbnail.png',
+		src: '/static/drippy-app/drippy-app-3D/models/male/Luka/model.glb',
 		name: 'luka',
 		gender: 'male',
 	},
 	{
-		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar-1/Yuna/Yuna.png',
-		src: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Yuna.glb',
+		thumbnail: '/static/drippy-app/drippy-app-3D/models/female/Avatar-1/Yuna/Yuna.png',
+		src: '/static/drippy-app/drippy-app-3D/Yuna.glb',
 
 		gender: 'female',
 		name: 'yuna-a-pose',
 	},
 	{
-		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar-1/Naomi/Naomi.png',
-		src: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Naomi.glb',
+		thumbnail: '/static/drippy-app/drippy-app-3D/models/female/Avatar-1/Naomi/Naomi.png',
+		src: '/static/drippy-app/drippy-app-3D/Naomi.glb',
 		gender: 'female',
 		name: 'naomi-a-pose',
 	},
 	{
-		thumbnail: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar-1/Mia/Mia.png',
-		src: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/Mia.glb',
+		thumbnail: '/static/drippy-app/drippy-app-3D/models/female/Avatar-1/Mia/Mia.png',
+		src: '/static/drippy-app/drippy-app-3D/Mia.glb',
 		gender: 'female',
 		name: 'mia-a-pose',
 		default: true,

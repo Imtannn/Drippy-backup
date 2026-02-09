@@ -7,18 +7,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	default: [
 		{
 			_id: '7b888d46-e955-4f12-95f9-d9d03a00c026',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+ALPHA.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+ROUGH.jpg',
+			alpha: '/static/fabrics/Drippy+Fabrics/CHIFFON+-+PLEATED+STRIPED/CHIFFON+-+PLEATED+STRIPED+-+ALPHA.jpg',
 			materialName: 'Pleated Striped',
 			category: 'Chiffon',
 			collection: 'default',
@@ -26,16 +20,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'b3f83890-f777-4547-b25b-3bdd6180f1d0',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+CHAMBRAY/COTTON+-+CHAMBRAY+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+CHAMBRAY/COTTON+-+CHAMBRAY+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+CHAMBRAY/COTTON+-+CHAMBRAY+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+CHAMBRAY/COTTON+-+CHAMBRAY+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+CHAMBRAY/COTTON+-+CHAMBRAY+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/COTTON+-+CHAMBRAY/COTTON+-+CHAMBRAY+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/COTTON+-+CHAMBRAY/COTTON+-+CHAMBRAY+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/COTTON+-+CHAMBRAY/COTTON+-+CHAMBRAY+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/COTTON+-+CHAMBRAY/COTTON+-+CHAMBRAY+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/COTTON+-+CHAMBRAY/COTTON+-+CHAMBRAY+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Chambray',
 			category: 'Cotton',
@@ -44,16 +33,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'a10afb41-6183-4a80-b31b-c0982f419b32',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+POPLIN/COTTON+-+POPLIN+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+POPLIN/COTTON+-+POPLIN+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+POPLIN/COTTON+-+POPLIN+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+POPLIN/COTTON+-+POPLIN+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+POPLIN/COTTON+-+POPLIN+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/COTTON+-+POPLIN/COTTON+-+POPLIN+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/COTTON+-+POPLIN/COTTON+-+POPLIN+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/COTTON+-+POPLIN/COTTON+-+POPLIN+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/COTTON+-+POPLIN/COTTON+-+POPLIN+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/COTTON+-+POPLIN/COTTON+-+POPLIN+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Poplin',
 			category: 'Cotton',
@@ -62,16 +46,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'e84b4d6e-0837-4501-ab98-24eb083f2095',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+WAFFLE/COTTON+-+WAFFLE+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+WAFFLE/COTTON+-+WAFFLE+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+WAFFLE/COTTON+-+WAFFLE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+WAFFLE/COTTON+-+WAFFLE+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+-+WAFFLE/COTTON+-+WAFFLE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/COTTON+-+WAFFLE/COTTON+-+WAFFLE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/COTTON+-+WAFFLE/COTTON+-+WAFFLE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/COTTON+-+WAFFLE/COTTON+-+WAFFLE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/COTTON+-+WAFFLE/COTTON+-+WAFFLE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/COTTON+-+WAFFLE/COTTON+-+WAFFLE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Waffle',
 			category: 'Cotton',
@@ -80,16 +59,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '6fa62e1d-3ff2-437d-ba10-a32f9f8df4dd',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+CANVAS+-+STRIPED/COTTON+CANVAS+-+STRIPED+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+CANVAS+-+STRIPED/COTTON+CANVAS+-+STRIPED+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+CANVAS+-+STRIPED/COTTON+CANVAS+-+STRIPED+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+CANVAS+-+STRIPED/COTTON+CANVAS+-+STRIPED+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+CANVAS+-+STRIPED/COTTON+CANVAS+-+STRIPED+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/COTTON+CANVAS+-+STRIPED/COTTON+CANVAS+-+STRIPED+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/COTTON+CANVAS+-+STRIPED/COTTON+CANVAS+-+STRIPED+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/COTTON+CANVAS+-+STRIPED/COTTON+CANVAS+-+STRIPED+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/COTTON+CANVAS+-+STRIPED/COTTON+CANVAS+-+STRIPED+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/COTTON+CANVAS+-+STRIPED/COTTON+CANVAS+-+STRIPED+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Striped',
 			category: 'Cotton Canvas',
@@ -98,16 +72,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '38f94928-8ba2-4c8b-9a3e-8e820b92c0f8',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+TWILL+-+WHITE/COTTON+TWILL+-+WHITE+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+TWILL+-+WHITE/COTTON+TWILL+-+WHITE+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+TWILL+-+WHITE/COTTON+TWILL+-+WHITE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+TWILL+-+WHITE/COTTON+TWILL+-+WHITE+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+TWILL+-+WHITE/COTTON+TWILL+-+WHITE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/COTTON+TWILL+-+WHITE/COTTON+TWILL+-+WHITE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/COTTON+TWILL+-+WHITE/COTTON+TWILL+-+WHITE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/COTTON+TWILL+-+WHITE/COTTON+TWILL+-+WHITE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/COTTON+TWILL+-+WHITE/COTTON+TWILL+-+WHITE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/COTTON+TWILL+-+WHITE/COTTON+TWILL+-+WHITE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Cotton Twill',
@@ -116,16 +85,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '7941cd8a-7e89-49cd-bc84-43eaa562a394',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+WOVEN+-+STRIPED/COTTON+WOVEN+-+STRIPED+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+WOVEN+-+STRIPED/COTTON+WOVEN+-+STRIPED+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+WOVEN+-+STRIPED/COTTON+WOVEN+-+STRIPED+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+WOVEN+-+STRIPED/COTTON+WOVEN+-+STRIPED+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/COTTON+WOVEN+-+STRIPED/COTTON+WOVEN+-+STRIPED+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/COTTON+WOVEN+-+STRIPED/COTTON+WOVEN+-+STRIPED+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/COTTON+WOVEN+-+STRIPED/COTTON+WOVEN+-+STRIPED+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/COTTON+WOVEN+-+STRIPED/COTTON+WOVEN+-+STRIPED+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/COTTON+WOVEN+-+STRIPED/COTTON+WOVEN+-+STRIPED+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/COTTON+WOVEN+-+STRIPED/COTTON+WOVEN+-+STRIPED+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Striped',
 			category: 'Cotton Woven',
@@ -134,16 +98,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '37724000-d610-4794-bc44-8238c7b1772d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+ACID+WASH/DENIM+-+ACID+WASH+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+ACID+WASH/DENIM+-+ACID+WASH+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+ACID+WASH/DENIM+-+ACID+WASH+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+ACID+WASH/DENIM+-+ACID+WASH+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+ACID+WASH/DENIM+-+ACID+WASH+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/DENIM+-+ACID+WASH/DENIM+-+ACID+WASH+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/DENIM+-+ACID+WASH/DENIM+-+ACID+WASH+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/DENIM+-+ACID+WASH/DENIM+-+ACID+WASH+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/DENIM+-+ACID+WASH/DENIM+-+ACID+WASH+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/DENIM+-+ACID+WASH/DENIM+-+ACID+WASH+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Acid Wash',
 			category: 'Denim',
@@ -152,12 +111,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'fed9f15d-deb7-465d-81a5-e53d4f02584e',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+BLACK/DENIM+-+BLACK+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+BLACK/DENIM+-+BLACK+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+BLACK/DENIM+-+BLACK+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+BLACK/DENIM+-+BLACK+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+BLACK/DENIM+-+BLACK+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/DENIM+-+BLACK/DENIM+-+BLACK+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/DENIM+-+BLACK/DENIM+-+BLACK+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/DENIM+-+BLACK/DENIM+-+BLACK+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/DENIM+-+BLACK/DENIM+-+BLACK+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/DENIM+-+BLACK/DENIM+-+BLACK+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Denim',
@@ -166,12 +124,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '9c2dbbd2-b9e9-434a-9c4d-03d6ad6ea7af',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+DARK/DENIM+-+DARK+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+DARK/DENIM+-+DARK+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+DARK/DENIM+-+DARK+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+DARK/DENIM+-+DARK+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+DARK/DENIM+-+DARK+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/DENIM+-+DARK/DENIM+-+DARK+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/DENIM+-+DARK/DENIM+-+DARK+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/DENIM+-+DARK/DENIM+-+DARK+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/DENIM+-+DARK/DENIM+-+DARK+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/DENIM+-+DARK/DENIM+-+DARK+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Dark',
 			category: 'Denim',
@@ -180,12 +137,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '2abb3687-2a3e-4ef3-97b3-234a3e94a9ff',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+LIGHT/DENIM+-+LIGHT+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+LIGHT/DENIM+-+LIGHT+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+LIGHT/DENIM+-+LIGHT+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+LIGHT/DENIM+-+LIGHT+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+LIGHT/DENIM+-+LIGHT+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/DENIM+-+LIGHT/DENIM+-+LIGHT+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/DENIM+-+LIGHT/DENIM+-+LIGHT+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/DENIM+-+LIGHT/DENIM+-+LIGHT+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/DENIM+-+LIGHT/DENIM+-+LIGHT+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/DENIM+-+LIGHT/DENIM+-+LIGHT+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Light',
 			category: 'Denim',
@@ -195,11 +151,10 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: '848965d2-5596-47ad-84a8-b629d87cb547',
 			thumb: '',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+PINK/DENIM+-+PINK+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+PINK/DENIM+-+PINK+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+PINK/DENIM+-+PINK+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/DENIM+-+PINK/DENIM+-+PINK+-+ROUGH.jpg',
+			normal: '/static/fabrics/Drippy+Fabrics/DENIM+-+PINK/DENIM+-+PINK+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/DENIM+-+PINK/DENIM+-+PINK+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/DENIM+-+PINK/DENIM+-+PINK+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/DENIM+-+PINK/DENIM+-+PINK+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Pink',
 			category: 'Denim',
@@ -208,16 +163,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '3c7f0c94-d768-4f3c-bf17-8c37750613a9',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/JACQUARD+-+LIGHT+TAUPE/JACQUARD+-+LIGHT+TAUPE+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/JACQUARD+-+LIGHT+TAUPE/JACQUARD+-+LIGHT+TAUPE+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/JACQUARD+-+LIGHT+TAUPE/JACQUARD+-+LIGHT+TAUPE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/JACQUARD+-+LIGHT+TAUPE/JACQUARD+-+LIGHT+TAUPE+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/JACQUARD+-+LIGHT+TAUPE/JACQUARD+-+LIGHT+TAUPE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/JACQUARD+-+LIGHT+TAUPE/JACQUARD+-+LIGHT+TAUPE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/JACQUARD+-+LIGHT+TAUPE/JACQUARD+-+LIGHT+TAUPE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/JACQUARD+-+LIGHT+TAUPE/JACQUARD+-+LIGHT+TAUPE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/JACQUARD+-+LIGHT+TAUPE/JACQUARD+-+LIGHT+TAUPE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/JACQUARD+-+LIGHT+TAUPE/JACQUARD+-+LIGHT+TAUPE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Light Taupe',
 			category: 'Jacquard',
@@ -226,14 +176,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '35d32120-81fd-4953-a1e0-89cc0202648d',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/JERSEY+-+BROWN/JERSEY+-+BROWN+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/JERSEY+-+BROWN/JERSEY+-+BROWN+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/JERSEY+-+BROWN/JERSEY+-+BROWN+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/JERSEY+-+BROWN/JERSEY+-+BROWN+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/JERSEY+-+BROWN/JERSEY+-+BROWN+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/JERSEY+-+BROWN/JERSEY+-+BROWN+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/JERSEY+-+BROWN/JERSEY+-+BROWN+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/JERSEY+-+BROWN/JERSEY+-+BROWN+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/JERSEY+-+BROWN/JERSEY+-+BROWN+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/JERSEY+-+BROWN/JERSEY+-+BROWN+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Brown',
 			category: 'Jersey',
@@ -242,18 +189,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'bc1e29b1-7a15-4e3d-8567-1dcbf9b74cb0',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+ALPHA.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+ROUGH.jpg',
+			alpha: '/static/fabrics/Drippy+Fabrics/KNIT+-+BOUCLE+YELLOW/KNIT+-+BOUCLE+YELLOW+-+ALPHA.jpg',
 			materialName: 'Boucle Yellow',
 			category: 'Knit',
 			collection: 'default',
@@ -261,12 +202,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '9ca53071-e580-435d-aa8c-04d1e7eb5966',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+CABLE/KNIT+-+CABLE+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+CABLE/KNIT+-+CABLE+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+CABLE/KNIT+-+CABLE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+CABLE/KNIT+-+CABLE+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+CABLE/KNIT+-+CABLE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/KNIT+-+CABLE/KNIT+-+CABLE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/KNIT+-+CABLE/KNIT+-+CABLE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/KNIT+-+CABLE/KNIT+-+CABLE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/KNIT+-+CABLE/KNIT+-+CABLE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/KNIT+-+CABLE/KNIT+-+CABLE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Cable',
 			category: 'Knit',
@@ -275,12 +215,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '929f73f0-bcbd-4d41-9f53-e3dc960a7951',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+GREEN/KNIT+-+GREEN+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+GREEN/KNIT+-+GREEN+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+GREEN/KNIT+-+GREEN+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+GREEN/KNIT+-+GREEN+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+GREEN/KNIT+-+GREEN+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/KNIT+-+GREEN/KNIT+-+GREEN+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/KNIT+-+GREEN/KNIT+-+GREEN+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/KNIT+-+GREEN/KNIT+-+GREEN+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/KNIT+-+GREEN/KNIT+-+GREEN+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/KNIT+-+GREEN/KNIT+-+GREEN+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Green',
 			category: 'Knit',
@@ -289,12 +228,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '01b673a0-937d-4057-95f9-3b4d1fdaff78',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+GREY/KNIT+-+GREY+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+GREY/KNIT+-+GREY+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+GREY/KNIT+-+GREY+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+GREY/KNIT+-+GREY+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+GREY/KNIT+-+GREY+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/KNIT+-+GREY/KNIT+-+GREY+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/KNIT+-+GREY/KNIT+-+GREY+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/KNIT+-+GREY/KNIT+-+GREY+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/KNIT+-+GREY/KNIT+-+GREY+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/KNIT+-+GREY/KNIT+-+GREY+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Grey',
 			category: 'Knit',
@@ -303,16 +241,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'f9571fbf-57f9-42bd-9389-a5be8b5281d8',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+MICRO+FLEECE/KNIT+-+MICRO+FLEECE+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+MICRO+FLEECE/KNIT+-+MICRO+FLEECE+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+MICRO+FLEECE/KNIT+-+MICRO+FLEECE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+MICRO+FLEECE/KNIT+-+MICRO+FLEECE+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+MICRO+FLEECE/KNIT+-+MICRO+FLEECE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/KNIT+-+MICRO+FLEECE/KNIT+-+MICRO+FLEECE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/KNIT+-+MICRO+FLEECE/KNIT+-+MICRO+FLEECE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/KNIT+-+MICRO+FLEECE/KNIT+-+MICRO+FLEECE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/KNIT+-+MICRO+FLEECE/KNIT+-+MICRO+FLEECE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/KNIT+-+MICRO+FLEECE/KNIT+-+MICRO+FLEECE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Micro Fleece',
 			category: 'Knit',
@@ -321,12 +254,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '49e1c867-c272-453f-9fba-c811747e6c68',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+PIQUE/KNIT+-+PIQUE+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+PIQUE/KNIT+-+PIQUE+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+PIQUE/KNIT+-+PIQUE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+PIQUE/KNIT+-+PIQUE+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+PIQUE/KNIT+-+PIQUE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/KNIT+-+PIQUE/KNIT+-+PIQUE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/KNIT+-+PIQUE/KNIT+-+PIQUE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/KNIT+-+PIQUE/KNIT+-+PIQUE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/KNIT+-+PIQUE/KNIT+-+PIQUE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/KNIT+-+PIQUE/KNIT+-+PIQUE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Pique',
 			category: 'Knit',
@@ -335,12 +267,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'a22941e5-e817-4a58-9631-befc9e165ff1',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+PLAID/KNIT+-+PLAID+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+PLAID/KNIT+-+PLAID+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+PLAID/KNIT+-+PLAID+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+PLAID/KNIT+-+PLAID+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+PLAID/KNIT+-+PLAID+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/KNIT+-+PLAID/KNIT+-+PLAID+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/KNIT+-+PLAID/KNIT+-+PLAID+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/KNIT+-+PLAID/KNIT+-+PLAID+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/KNIT+-+PLAID/KNIT+-+PLAID+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/KNIT+-+PLAID/KNIT+-+PLAID+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Plaid',
 			category: 'Knit',
@@ -349,12 +280,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '3dc4341b-7bb0-44f5-95d7-516f5e73d338',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+STRIPE/KNIT+-+STRIPE+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+STRIPE/KNIT+-+STRIPE+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+STRIPE/KNIT+-+STRIPE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+STRIPE/KNIT+-+STRIPE+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+STRIPE/KNIT+-+STRIPE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/KNIT+-+STRIPE/KNIT+-+STRIPE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/KNIT+-+STRIPE/KNIT+-+STRIPE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/KNIT+-+STRIPE/KNIT+-+STRIPE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/KNIT+-+STRIPE/KNIT+-+STRIPE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/KNIT+-+STRIPE/KNIT+-+STRIPE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Stripe',
 			category: 'Knit',
@@ -363,12 +293,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '8df86d79-0ba8-4ced-b047-bfca62259a30',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+TRICOT/KNIT+-+TRICOT+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+TRICOT/KNIT+-+TRICOT+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+TRICOT/KNIT+-+TRICOT+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+TRICOT/KNIT+-+TRICOT+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+TRICOT/KNIT+-+TRICOT+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/KNIT+-+TRICOT/KNIT+-+TRICOT+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/KNIT+-+TRICOT/KNIT+-+TRICOT+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/KNIT+-+TRICOT/KNIT+-+TRICOT+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/KNIT+-+TRICOT/KNIT+-+TRICOT+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/KNIT+-+TRICOT/KNIT+-+TRICOT+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Tricot',
 			category: 'Knit',
@@ -377,12 +306,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '0340b9cb-483e-4443-854a-a0bb2dd905c6',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+WHITE/KNIT+-+WHITE+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+WHITE/KNIT+-+WHITE+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+WHITE/KNIT+-+WHITE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+WHITE/KNIT+-+WHITE+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/KNIT+-+WHITE/KNIT+-+WHITE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/KNIT+-+WHITE/KNIT+-+WHITE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/KNIT+-+WHITE/KNIT+-+WHITE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/KNIT+-+WHITE/KNIT+-+WHITE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/KNIT+-+WHITE/KNIT+-+WHITE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/KNIT+-+WHITE/KNIT+-+WHITE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Knit',
@@ -391,18 +319,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '4a7ddb20-c0f4-4f3b-9b06-17f8bf60234f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+ALPHA.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+ROUGH.jpg',
+			alpha: '/static/fabrics/Drippy+Fabrics/LACE++-+WHITE+FLOWER/LACE++-+WHITE+FLOWER+-+ALPHA.jpg',
 			materialName: 'White Flower',
 			category: 'Lace',
 			collection: 'default',
@@ -410,18 +332,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'b1ec4b09-1426-4fbc-ba30-866bf14b1087',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+OPACITY.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+ROUGH.jpg',
+			alpha: '/static/fabrics/Drippy+Fabrics/LACE+-+CREAM+FLOWER/LACE+-+CREAM+FLOWER+-+OPACITY.jpg',
 			materialName: 'Cream Flower',
 			category: 'Lace',
 			collection: 'default',
@@ -429,18 +345,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '21d58240-c5f7-4552-9824-8b4037deaed8',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+ALPHA.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+ROUGH.jpg',
+			alpha: '/static/fabrics/Drippy+Fabrics/LACE+-+LAVENDER+BLUSH/LACE+-+LAVENDER+BLUSH+-+ALPHA.jpg',
 			materialName: 'Lavender Blush',
 			category: 'Lace',
 			collection: 'default',
@@ -448,16 +358,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '46b7704f-5eab-4835-8b09-586b61d23372',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LEATHER+-+BLACK/LEATHER+-+BLACK+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LEATHER+-+BLACK/LEATHER+-+BLACK+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LEATHER+-+BLACK/LEATHER+-+BLACK+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LEATHER+-+BLACK/LEATHER+-+BLACK+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LEATHER+-+BLACK/LEATHER+-+BLACK+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/LEATHER+-+BLACK/LEATHER+-+BLACK+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/LEATHER+-+BLACK/LEATHER+-+BLACK+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/LEATHER+-+BLACK/LEATHER+-+BLACK+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/LEATHER+-+BLACK/LEATHER+-+BLACK+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/LEATHER+-+BLACK/LEATHER+-+BLACK+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Leather',
@@ -466,15 +371,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '40600bce-72dc-43ff-a30b-c5257b10f872',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LEATHER+-+BROWN/LEATHER+-+BROWN+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LEATHER+-+BROWN/LEATHER+-+BROWN+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LEATHER+-+BROWN/LEATHER+-+BROWN+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LEATHER+-+BROWN/LEATHER+-+BROWN+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LEATHER+-+BROWN/LEATHER+-+BROWN+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/LEATHER+-+BROWN/LEATHER+-+BROWN+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/LEATHER+-+BROWN/LEATHER+-+BROWN+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/LEATHER+-+BROWN/LEATHER+-+BROWN+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/LEATHER+-+BROWN/LEATHER+-+BROWN+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/LEATHER+-+BROWN/LEATHER+-+BROWN+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Brown',
 			category: 'Leather',
@@ -483,14 +384,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '425e8e24-8f8e-48a3-a53f-0ab1a4f57cda',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+CANVAS/LINEN+-+CANVAS+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+CANVAS/LINEN+-+CANVAS+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+CANVAS/LINEN+-+CANVAS+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+CANVAS/LINEN+-+CANVAS+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+CANVAS/LINEN+-+CANVAS+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/LINEN+-+CANVAS/LINEN+-+CANVAS+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/LINEN+-+CANVAS/LINEN+-+CANVAS+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/LINEN+-+CANVAS/LINEN+-+CANVAS+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/LINEN+-+CANVAS/LINEN+-+CANVAS+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/LINEN+-+CANVAS/LINEN+-+CANVAS+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Canvas',
 			category: 'Linen',
@@ -499,16 +397,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'cf2a4b2b-88cc-4a20-a94d-0f1aad35ba8a',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+CHAMBRAY/LINEN+-+CHAMBRAY+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+CHAMBRAY/LINEN+-+CHAMBRAY+-+785+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+CHAMBRAY/LINEN+-+CHAMBRAY+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+CHAMBRAY/LINEN+-+CHAMBRAY+-+785+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+CHAMBRAY/LINEN+-+CHAMBRAY+-+785+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/LINEN+-+CHAMBRAY/LINEN+-+CHAMBRAY+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/LINEN+-+CHAMBRAY/LINEN+-+CHAMBRAY+-+785+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/LINEN+-+CHAMBRAY/LINEN+-+CHAMBRAY+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/LINEN+-+CHAMBRAY/LINEN+-+CHAMBRAY+-+785+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/LINEN+-+CHAMBRAY/LINEN+-+CHAMBRAY+-+785+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Chambray',
 			category: 'Linen',
@@ -517,12 +410,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '4234526f-d273-4d37-9a83-91c315330a6c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+NAVY/LINEN+-+NAVY+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+NAVY/LINEN+-+NAVY+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+NAVY/LINEN+-+NAVY+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+NAVY/LINEN+-+NAVY+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/LINEN+-+NAVY/LINEN+-+NAVY+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/LINEN+-+NAVY/LINEN+-+NAVY+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/LINEN+-+NAVY/LINEN+-+NAVY+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/LINEN+-+NAVY/LINEN+-+NAVY+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/LINEN+-+NAVY/LINEN+-+NAVY+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/LINEN+-+NAVY/LINEN+-+NAVY+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Navy',
 			category: 'Linen',
@@ -531,15 +423,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'f73ee985-9ddb-425e-aa22-0b151a21ee86',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/METAL+BEADS+-+GOLD/METAL+BEADS+-+GOLD+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/METAL+BEADS+-+GOLD/METAL+BEADS+-+GOLD+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/METAL+BEADS+-+GOLD/METAL+BEADS+-+GOLD+-+BASE.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/METAL+BEADS+-+GOLD/METAL+BEADS+-+GOLD+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/METAL+BEADS+-+GOLD/METAL+BEADS+-+GOLD+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/METAL+BEADS+-+GOLD/METAL+BEADS+-+GOLD+-+BASE.jpg',
 			displacement: '',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/METAL+BEADS+-+GOLD/METAL+BEADS+-+GOLD+-+ROUGH.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/METAL+BEADS+-+GOLD/METAL+BEADS+-+GOLD+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Gold',
 			category: 'Metal Beads',
@@ -548,16 +436,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'd16302b1-43ca-4ce4-b1ac-155320090700',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/MUSLIN+-+DEEP+TEAL/MUSLIN+-+DEEP+TEAL+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/MUSLIN+-+DEEP+TEAL/MUSLIN+-+DEEP+TEAL+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/MUSLIN+-+DEEP+TEAL/MUSLIN+-+DEEP+TEAL+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/MUSLIN+-+DEEP+TEAL/MUSLIN+-+DEEP+TEAL+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/MUSLIN+-+DEEP+TEAL/MUSLIN+-+DEEP+TEAL+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/MUSLIN+-+DEEP+TEAL/MUSLIN+-+DEEP+TEAL+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/MUSLIN+-+DEEP+TEAL/MUSLIN+-+DEEP+TEAL+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/MUSLIN+-+DEEP+TEAL/MUSLIN+-+DEEP+TEAL+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/MUSLIN+-+DEEP+TEAL/MUSLIN+-+DEEP+TEAL+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/MUSLIN+-+DEEP+TEAL/MUSLIN+-+DEEP+TEAL+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Deep Teal',
 			category: 'Muslin',
@@ -566,18 +449,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '97c191a2-ada8-486a-bd97-af8344e8b736',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+ALPHA.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+ROUGH.jpg',
+			alpha: '/static/fabrics/Drippy+Fabrics/ORGANZA+-+DARK+NAVY/ORGANZA+-+DARK+NAVY+-+ALPHA.jpg',
 			materialName: 'Dark Navy',
 			category: 'Organza',
 			collection: 'default',
@@ -585,16 +462,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '7f2ada25-affb-4b70-843c-62b8f0980cef',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/POLY+-+ARMY+GREEN/POLY+-+ARMY+GREEN+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/POLY+-+ARMY+GREEN/POLY+-+ARMY+GREEN+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/POLY+-+ARMY+GREEN/POLY+-+ARMY+GREEN+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/POLY+-+ARMY+GREEN/POLY+-+ARMY+GREEN+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/POLY+-+ARMY+GREEN/POLY+-+ARMY+GREEN+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/POLY+-+ARMY+GREEN/POLY+-+ARMY+GREEN+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/POLY+-+ARMY+GREEN/POLY+-+ARMY+GREEN+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/POLY+-+ARMY+GREEN/POLY+-+ARMY+GREEN+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/POLY+-+ARMY+GREEN/POLY+-+ARMY+GREEN+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/POLY+-+ARMY+GREEN/POLY+-+ARMY+GREEN+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Army Green',
 			category: 'Poly',
@@ -603,12 +475,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'c45539b3-1ae9-4c2b-a643-dd5d1d543fff',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SATEEN+-+PINK/SATEEN+-+PINK+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SATEEN+-+PINK/SATEEN+-+PINK+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SATEEN+-+PINK/SATEEN+-+PINK+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SATEEN+-+PINK/SATEEN+-+PINK+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SATEEN+-+PINK/SATEEN+-+PINK+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/SATEEN+-+PINK/SATEEN+-+PINK+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/SATEEN+-+PINK/SATEEN+-+PINK+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/SATEEN+-+PINK/SATEEN+-+PINK+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/SATEEN+-+PINK/SATEEN+-+PINK+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/SATEEN+-+PINK/SATEEN+-+PINK+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Pink',
 			category: 'Sateen',
@@ -617,15 +488,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'b67d71bc-6cce-4954-8c38-615f7d549c4c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE++-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE+-+ROUGH.jpg',
-			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE+-+OPACITY.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE++-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE+-+ROUGH.jpg',
+			alpha: '/static/fabrics/Drippy+Fabrics/SEQUIN+-+WHITE/SEQUIN+-+WHITE+-+OPACITY.jpg',
 			materialName: 'White',
 			category: 'Sequin',
 			collection: 'default',
@@ -633,16 +501,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '9049782d-9b96-428e-9bc0-bf1374cba323',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SILK+-+DARK+NAVY/SILK+-+DARK+NAVY+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SILK+-+DARK+NAVY/SILK+-+DARK+NAVY+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SILK+-+DARK+NAVY/SILK+-+DARK+NAVY+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SILK+-+DARK+NAVY/SILK+-+DARK+NAVY+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SILK+-+DARK+NAVY/SILK+-+DARK+NAVY+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/SILK+-+DARK+NAVY/SILK+-+DARK+NAVY+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/SILK+-+DARK+NAVY/SILK+-+DARK+NAVY+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/SILK+-+DARK+NAVY/SILK+-+DARK+NAVY+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/SILK+-+DARK+NAVY/SILK+-+DARK+NAVY+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/SILK+-+DARK+NAVY/SILK+-+DARK+NAVY+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Dark Navy',
 			category: 'Silk',
@@ -651,16 +514,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '2e1493fc-722f-4098-b283-a0226bf369c8',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SILK+-+STRIPED+METALLIC/SILK+-+STRIPED+METALLIC+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SILK+-+STRIPED+METALLIC/SILK+-+STRIPED+METALLIC+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SILK+-+STRIPED+METALLIC/SILK+-+STRIPED+METALLIC+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SILK+-+STRIPED+METALLIC/SILK+-+STRIPED+METALLIC+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/SILK+-+STRIPED+METALLIC/SILK+-+STRIPED+METALLIC+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/SILK+-+STRIPED+METALLIC/SILK+-+STRIPED+METALLIC+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/SILK+-+STRIPED+METALLIC/SILK+-+STRIPED+METALLIC+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/SILK+-+STRIPED+METALLIC/SILK+-+STRIPED+METALLIC+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/SILK+-+STRIPED+METALLIC/SILK+-+STRIPED+METALLIC+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/SILK+-+STRIPED+METALLIC/SILK+-+STRIPED+METALLIC+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Striped Metallic',
 			category: 'Silk',
@@ -669,12 +527,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '01428d7d-3bb6-495c-a80a-873da7e42379',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWEED+-+CREAM/TWEED+-+CREAM+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWEED+-+CREAM/TWEED+-+CREAM+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWEED+-+CREAM/TWEED+-+CREAM+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWEED+-+CREAM/TWEED+-+CREAM+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWEED+-+CREAM/TWEED+-+CREAM+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/TWEED+-+CREAM/TWEED+-+CREAM+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/TWEED+-+CREAM/TWEED+-+CREAM+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/TWEED+-+CREAM/TWEED+-+CREAM+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/TWEED+-+CREAM/TWEED+-+CREAM+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/TWEED+-+CREAM/TWEED+-+CREAM+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Cream',
 			category: 'Tweed',
@@ -683,16 +540,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '327f8146-deb0-4178-bc0a-0d5c1ddbb5d4',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWEED+JACQUARD+-+OLIVE/TWEED+JACQUARD+-+OLIVE+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWEED+JACQUARD+-+OLIVE/TWEED+JACQUARD+-+OLIVE+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWEED+JACQUARD+-+OLIVE/TWEED+JACQUARD+-+OLIVE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWEED+JACQUARD+-+OLIVE/TWEED+JACQUARD+-+OLIVE+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWEED+JACQUARD+-+OLIVE/TWEED+JACQUARD+-+OLIVE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/TWEED+JACQUARD+-+OLIVE/TWEED+JACQUARD+-+OLIVE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/TWEED+JACQUARD+-+OLIVE/TWEED+JACQUARD+-+OLIVE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/TWEED+JACQUARD+-+OLIVE/TWEED+JACQUARD+-+OLIVE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/TWEED+JACQUARD+-+OLIVE/TWEED+JACQUARD+-+OLIVE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/TWEED+JACQUARD+-+OLIVE/TWEED+JACQUARD+-+OLIVE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Olive',
 			category: 'Tweed Jacquard',
@@ -701,12 +553,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '7fa54b48-aff5-4906-ba4f-242daac0e5ca',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWILL+-+BEIGE/TWILL+-+BEIGE+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWILL+-+BEIGE/TWILL+-+BEIGE+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWILL+-+BEIGE/TWILL+-+BEIGE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWILL+-+BEIGE/TWILL+-+BEIGE+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/TWILL+-+BEIGE/TWILL+-+BEIGE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/TWILL+-+BEIGE/TWILL+-+BEIGE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/TWILL+-+BEIGE/TWILL+-+BEIGE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/TWILL+-+BEIGE/TWILL+-+BEIGE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/TWILL+-+BEIGE/TWILL+-+BEIGE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/TWILL+-+BEIGE/TWILL+-+BEIGE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Beige',
 			category: 'Twill',
@@ -715,12 +566,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'f59664ab-6ecb-4b77-88cd-198a528be415',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+BOUCLE/WOOL+-+BOUCLE+-++RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+BOUCLE/WOOL+-+BOUCLE+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+BOUCLE/WOOL+-+BOUCLE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+BOUCLE/WOOL+-+BOUCLE+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+BOUCLE/WOOL+-+BOUCLE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/WOOL+-+BOUCLE/WOOL+-+BOUCLE+-++RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/WOOL+-+BOUCLE/WOOL+-+BOUCLE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/WOOL+-+BOUCLE/WOOL+-+BOUCLE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/WOOL+-+BOUCLE/WOOL+-+BOUCLE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/WOOL+-+BOUCLE/WOOL+-+BOUCLE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Boucle',
 			category: 'Wool',
@@ -729,12 +579,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '2e12447f-f6e4-4ee4-9074-1ebbc0c2cfb6',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+GREY/WOOL+-+GREY+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+GREY/WOOL+-+GREY+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+GREY/WOOL+-+GREY+-+BASE.png',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+GREY/WOOL+-+GREY+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+GREY/WOOL+-+GREY+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/WOOL+-+GREY/WOOL+-+GREY+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/WOOL+-+GREY/WOOL+-+GREY+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/WOOL+-+GREY/WOOL+-+GREY+-+BASE.png',
+			displacement: '/static/fabrics/Drippy+Fabrics/WOOL+-+GREY/WOOL+-+GREY+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/WOOL+-+GREY/WOOL+-+GREY+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Grey',
 			category: 'Wool',
@@ -743,12 +592,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '1179ee87-f38e-4ff2-96d3-4eb8c48a11a5',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+TWILL/WOOL+-+TWILL+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+TWILL/WOOL+-+TWILL+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+TWILL/WOOL+-+TWILL+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+TWILL/WOOL+-+TWILL+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+-+TWILL/WOOL+-+TWILL+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/WOOL+-+TWILL/WOOL+-+TWILL+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/WOOL+-+TWILL/WOOL+-+TWILL+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/WOOL+-+TWILL/WOOL+-+TWILL+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/WOOL+-+TWILL/WOOL+-+TWILL+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/WOOL+-+TWILL/WOOL+-+TWILL+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Twill',
 			category: 'Wool',
@@ -757,16 +605,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '219c9d9e-18eb-4cf1-b603-96ee0175071d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+SUITING+-+OLIVE/WOOL+SUITING+-+OLIVE+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+SUITING+-+OLIVE/WOOL+SUITING+-+OLIVE+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+SUITING+-+OLIVE/WOOL+SUITING+-+OLIVE+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+SUITING+-+OLIVE/WOOL+SUITING+-+OLIVE+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOOL+SUITING+-+OLIVE/WOOL+SUITING+-+OLIVE+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/WOOL+SUITING+-+OLIVE/WOOL+SUITING+-+OLIVE+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/WOOL+SUITING+-+OLIVE/WOOL+SUITING+-+OLIVE+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/WOOL+SUITING+-+OLIVE/WOOL+SUITING+-+OLIVE+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/WOOL+SUITING+-+OLIVE/WOOL+SUITING+-+OLIVE+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/WOOL+SUITING+-+OLIVE/WOOL+SUITING+-+OLIVE+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Olive',
 			category: 'Wool Suiting',
@@ -775,12 +618,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '9c19e174-f723-48fa-8ddb-1f191d390d3e',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+DOBBY/WOVEN+-+DOBBY+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+DOBBY/WOVEN+-+DOBBY+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+DOBBY/WOVEN+-+DOBBY+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+DOBBY/WOVEN+-+DOBBY+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+DOBBY/WOVEN+-+DOBBY+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/WOVEN+-+DOBBY/WOVEN+-+DOBBY+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/WOVEN+-+DOBBY/WOVEN+-+DOBBY+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/WOVEN+-+DOBBY/WOVEN+-+DOBBY+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/WOVEN+-+DOBBY/WOVEN+-+DOBBY+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/WOVEN+-+DOBBY/WOVEN+-+DOBBY+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Dobby',
 			category: 'Woven',
@@ -789,16 +631,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'f8d81a26-05c8-48c2-9854-e427034654c4',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+FLANNEL+PLAID/WOVEN+-+FLANNEL+PLAID+-+RENDER.png',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+FLANNEL+PLAID/WOVEN+-+FLANNEL+PLAID+-+NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+FLANNEL+PLAID/WOVEN+-+FLANNEL+PLAID+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+FLANNEL+PLAID/WOVEN+-+FLANNEL+PLAID+-+DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+FLANNEL+PLAID/WOVEN+-+FLANNEL+PLAID+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/WOVEN+-+FLANNEL+PLAID/WOVEN+-+FLANNEL+PLAID+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/WOVEN+-+FLANNEL+PLAID/WOVEN+-+FLANNEL+PLAID+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/WOVEN+-+FLANNEL+PLAID/WOVEN+-+FLANNEL+PLAID+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/WOVEN+-+FLANNEL+PLAID/WOVEN+-+FLANNEL+PLAID+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/WOVEN+-+FLANNEL+PLAID/WOVEN+-+FLANNEL+PLAID+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Flannel Plaid',
 			category: 'Woven',
@@ -807,12 +644,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'c46efce4-abbd-4dfe-af2d-d4289d093c90',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+PLAIN/WOVEN+-+PLAIN+-+RENDER.png',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+PLAIN/WOVEN+-+PLAIN+-+NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+PLAIN/WOVEN+-+PLAIN+-+BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+PLAIN/WOVEN+-+PLAIN+-+DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/Drippy+Fabrics/WOVEN+-+PLAIN/WOVEN+-+PLAIN+-+ROUGH.jpg',
+			thumb: '/static/fabrics/Drippy+Fabrics/WOVEN+-+PLAIN/WOVEN+-+PLAIN+-+RENDER.png',
+			normal: '/static/fabrics/Drippy+Fabrics/WOVEN+-+PLAIN/WOVEN+-+PLAIN+-+NORMAL.jpg',
+			baseColor: '/static/fabrics/Drippy+Fabrics/WOVEN+-+PLAIN/WOVEN+-+PLAIN+-+BASE.jpg',
+			displacement: '/static/fabrics/Drippy+Fabrics/WOVEN+-+PLAIN/WOVEN+-+PLAIN+-+DISPLACE.jpg',
+			roughness: '/static/fabrics/Drippy+Fabrics/WOVEN+-+PLAIN/WOVEN+-+PLAIN+-+ROUGH.jpg',
 			alpha: '',
 			materialName: 'Plain',
 			category: 'Woven',
@@ -823,16 +659,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	anyshape: [
 		{
 			_id: '3edd2e51-42a1-4b00-bcef-083a445220e6',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_BASE.jpg',
+			thumb: '/static/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_RENDER.webp',
+			normal: '/static/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_ALPHA.jpg',
+				'/static/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/anyshape/root/SILK_SEETHROUGH_-_DARK_NAVY/SILK_SEETHROUGH_-_DARK_NAVY_-_ALPHA.jpg',
 			alpha: '',
 			materialName: 'Dark Navy',
 			category: 'Silk Seethrough',
@@ -841,16 +673,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'eb7b3511-7669-43bc-a1c8-2629daf19c8d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_ROUGH.jpg',
+			thumb: '/static/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_RENDER.webp',
+			normal: '/static/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_BASE.jpg',
+			displacement: '/static/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/anyshape/root/SILK_-_DARK_NAVY/SILK_-_DARK_NAVY_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Dark Navy',
 			category: 'Silk',
@@ -861,14 +688,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	ayarabbim: [
 		{
 			_id: '23a8ed1f-5c40-4d9b-9211-1eae7a7df11d',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ayarabbim/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ayarabbim/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ayarabbim/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ayarabbim/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ayarabbim/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/ayarabbim/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/ayarabbim/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/ayarabbim/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/ayarabbim/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/ayarabbim/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Jersey',
@@ -877,16 +701,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '27dc4ee6-f903-4f2a-a12d-095bf23c6f40',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ayarabbim/root/WOOL_SUIT_-_CHALK/WOOL_SUIT_-_CHALK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ayarabbim/root/WOOL_SUIT_-_CHALK/WOOL_SUIT_-_CHALK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ayarabbim/root/WOOL_SUIT_-_CHALK/WOOL_SUIT_-_CHALK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ayarabbim/root/WOOL_SUIT_-_CHALK/WOOL_SUIT_-_CHALK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ayarabbim/root/WOOL_SUIT_-_CHALK/WOOL_SUIT_-_CHALK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/ayarabbim/root/WOOL_SUIT_-_CHALK/WOOL_SUIT_-_CHALK_-_RENDER.webp',
+			normal: '/static/fabrics/ayarabbim/root/WOOL_SUIT_-_CHALK/WOOL_SUIT_-_CHALK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/ayarabbim/root/WOOL_SUIT_-_CHALK/WOOL_SUIT_-_CHALK_-_BASE.jpg',
+			displacement: '/static/fabrics/ayarabbim/root/WOOL_SUIT_-_CHALK/WOOL_SUIT_-_CHALK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/ayarabbim/root/WOOL_SUIT_-_CHALK/WOOL_SUIT_-_CHALK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Chalk',
 			category: 'Wool Suit',
@@ -897,18 +716,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'baum-und-pferdgarten': [
 		{
 			_id: 'cb8ce73e-7121-4c61-b4a6-2103fd6dcc9a',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_ALPHA.jpg',
+			thumb: '/static/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_RENDER.webp',
+			normal: '/static/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_BASE.jpg',
+			displacement: '/static/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_ROUGH.jpg',
+			alpha: '/static/fabrics/baum-und-pferdgarten/root/LACE_-_RUSSET/LACE_-_RUSSET_-_ALPHA.jpg',
 			materialName: 'Russet',
 			category: 'Lace',
 			collection: 'baum-und-pferdgarten',
@@ -919,15 +732,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: '9b21627e-1049-46e5-9c1b-daf0028d5de4',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_GOLDENROD_BATIK_PRINT/COTTON_-_GOLDENROD_BATIK_PRINT_-_RENDER.webp',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_GOLDENROD_BATIK_PRINT/COTTON_-_GOLDENROD_BATIK_PRINT_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_GOLDENROD_BATIK_PRINT/COTTON_-_GOLDENROD_BATIK_PRINT_-_NORMAL.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_GOLDENROD_BATIK_PRINT/COTTON_-_GOLDENROD_BATIK_PRINT_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_GOLDENROD_BATIK_PRINT/COTTON_-_GOLDENROD_BATIK_PRINT_-_BASE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_GOLDENROD_BATIK_PRINT/COTTON_-_GOLDENROD_BATIK_PRINT_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_GOLDENROD_BATIK_PRINT/COTTON_-_GOLDENROD_BATIK_PRINT_-_DISPLACE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_GOLDENROD_BATIK_PRINT/COTTON_-_GOLDENROD_BATIK_PRINT_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_GOLDENROD_BATIK_PRINT/COTTON_-_GOLDENROD_BATIK_PRINT_-_ROUGH.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_GOLDENROD_BATIK_PRINT/COTTON_-_GOLDENROD_BATIK_PRINT_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Goldenrod Batik Print',
 			category: 'Cotton',
@@ -936,16 +749,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '3d347de9-10ec-4065-b70a-01288bc35bcf',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/bloom.womenswear/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Jersey',
@@ -954,16 +762,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'c8fd0907-457f-4dbc-adec-04a284e85643',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT__-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT_-_BASE.jpg',
+			thumb: '/static/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT_-_RENDER.webp',
+			normal: '/static/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT__-_NORMAL.jpg',
+			baseColor: '/static/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT__-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT__-_ROUGH.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT__-_DISPLACE.jpg',
+			roughness: '/static/fabrics/bloom.womenswear/root/COTTON_-_SKY_BATIK_PRINT/COTTON_-_SKY_BATIK_PRINT__-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Sky Batik Print',
 			category: 'Cotton',
@@ -973,15 +777,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: 'a63b3d3d-edf3-4357-94c5-5b685994d5fc',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_RENDER.webp',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_NORMAL.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_BASE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_DISPLACE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_ROUGH.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_BLOOD_BATIK_PRINT/COTTON_-_BLOOD_BATIK_PRINT_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Blood Batik Print',
 			category: 'Cotton',
@@ -991,15 +795,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: '4add5616-c523-4581-a241-0e6be132ebda',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_RENDER.webp',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_NORMAL.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_BASE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_DISPLACE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_ROUGH.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_CHAMPANGE_BATIK_PRINT/COTTON_-_CHAMPANGE_BATIK_PRINT_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Champange Batik Print',
 			category: 'Cotton',
@@ -1008,16 +812,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'dbdcd1c0-921e-4b6f-871a-80f8706f62db',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_RENDER.webp',
+			normal: '/static/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_BASE.jpg',
+			displacement: '/static/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/bloom.womenswear/root/SATEEN_-_PINK/SATEEN_-_PINK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Pink',
 			category: 'Sateen',
@@ -1026,16 +825,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '6296d32d-5b1c-40fb-a98c-76017dcf994f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-ROUGH.jpg',
+			thumb: '/static/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_RENDER.webp',
+			normal: '/static/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_BASE.jpg',
+			displacement: '/static/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/bloom.womenswear/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-ROUGH.jpg',
 			alpha: '',
 			materialName: 'Powder Blue',
 			category: 'Sateen',
@@ -1045,15 +839,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: 'a213ff94-1cc2-46d9-b2ab-d3a4faeb7468',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_RENDER.webp',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_NORMAL.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_BASE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_DISPLACE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_ROUGH.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_PURPLE_BATIK_PRINT/COTTON_-_PURPLE_BATIK_PRINT_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Purple Batik Print',
 			category: 'Cotton',
@@ -1063,15 +857,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: '0cbbf89a-6ccd-4935-9931-5bdc68563d03',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_RENDER.webp',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_NORMAL.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_BASE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_DISPLACE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_ROUGH.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_PEACH_BATIK_PRINT/COTTON_-_PEACH_BATIK_PRINT_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Peach Batik Print',
 			category: 'Cotton',
@@ -1081,15 +875,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: '7f099bdb-7aa9-43f0-8871-6da6125c99c7',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_RENDER.webp',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_NORMAL.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_BASE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_DISPLACE.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_ROUGH.jpg',
+				'/static/fabrics/bloom.womenswear/root/COTTON_-_BEIGE_BATIK_PRINT/COTTON_-_BEIGE_BATIK_PRINT_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Beige Batik Print',
 			category: 'Cotton',
@@ -1100,13 +894,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	bupbes: [
 		{
 			_id: '300624a8-bcee-4c13-979f-4ce867f656d3',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
-			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ALPHA.jpg',
+			thumb: '/static/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			alpha: '/static/fabrics/bupbes/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ALPHA.jpg',
 			materialName: 'White',
 			category: 'Jersey',
 			collection: 'bupbes',
@@ -1116,16 +909,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'call-me-ari': [
 		{
 			_id: '560a33bf-4e59-467c-a5bf-5bc91bd58534',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/call-me-ari/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/call-me-ari/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/call-me-ari/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/call-me-ari/root/COTTON_-_WHITE/COTTON_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/call-me-ari/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/call-me-ari/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/call-me-ari/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/call-me-ari/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/call-me-ari/root/COTTON_-_WHITE/COTTON_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/call-me-ari/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Cotton',
@@ -1136,16 +924,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'cecilie-bahnsen': [
 		{
 			_id: '2f1440ea-386c-4348-87d0-6a410fd30f62',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/cecilie-bahnsen/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Off White',
 			category: 'Silk',
@@ -1156,13 +939,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	crescent: [
 		{
 			_id: '7dec9e26-80b0-4ebd-a5e0-fa34e33af1ae',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_ROUGH.jpg',
+			thumb: '/static/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_RENDER.webp',
+			normal: '/static/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_BASE.jpg',
+			displacement: '/static/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/crescent/root/JERSEY_-_BROWN/JERSEY_-_BROWN_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Brown',
 			category: 'Jersey',
@@ -1173,13 +954,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'cuba-vera': [
 		{
 			_id: 'fd8d3d2e-141e-4031-8a6a-59a815aa8684',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cuba-vera/root/COTTON_-_PINK/COTTON_-_PINK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cuba-vera/root/COTTON_-_PINK/COTTON_-_BLACK_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cuba-vera/root/COTTON_-_PINK/COTTON_-_PINK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cuba-vera/root/COTTON_-_PINK/COTTON_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cuba-vera/root/COTTON_-_PINK/COTTON_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/cuba-vera/root/COTTON_-_PINK/COTTON_-_PINK_-_RENDER.webp',
+			normal: '/static/fabrics/cuba-vera/root/COTTON_-_PINK/COTTON_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/cuba-vera/root/COTTON_-_PINK/COTTON_-_PINK_-_BASE.jpg',
+			displacement: '/static/fabrics/cuba-vera/root/COTTON_-_PINK/COTTON_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/cuba-vera/root/COTTON_-_PINK/COTTON_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Pink',
 			category: 'Cotton',
@@ -1190,16 +969,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'dario-mittmann': [
 		{
 			_id: '3d9ce558-a224-47d7-abf7-9b300a407953',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_RENDER.webp',
+			normal: '/static/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_BASE.jpg',
+			displacement: '/static/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/dario-mittmann/root/POLY_-_INDIGO_ARGYLE/POLY_-_INDIGO_ARGYLE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Indigo Argyle',
 			category: 'Poly',
@@ -1208,16 +982,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '0ede53fa-3da6-4979-a37d-24c2628f7850',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE__-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_RENDER.webp',
+			normal: '/static/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_BASE.jpg',
+			displacement: '/static/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE__-_DISPLACE.jpg',
+			roughness: '/static/fabrics/dario-mittmann/root/POLY_-_PLUM_ARGYLE/POLY_-_PLUM_ARGYLE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Plum Argyle',
 			category: 'Poly',
@@ -1226,16 +995,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'b332a0db-9551-4d0c-8027-efa01c1e6505',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_RENDER.webp',
+			normal: '/static/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_BASE.jpg',
+			displacement: '/static/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/dario-mittmann/root/POLY_-_BLUE_ARGYLE/POLY_-_BLUE_ARGYLE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Blue Argyle',
 			category: 'Poly',
@@ -1244,16 +1008,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'acc5a4a0-6901-4a01-a6cc-ee1eb68d9234',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_ROUGH.jpg',
+			thumb: '/static/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_RENDER.webp',
+			normal: '/static/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_BASE.jpg',
+			displacement: '/static/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/dario-mittmann/root/POPLIN_-_STRIPED/POPLIN_-_STRIPED_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Striped',
 			category: 'Poplin',
@@ -1264,18 +1023,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	givenchy: [
 		{
 			_id: '1cc1f5a4-3b37-453b-97dc-a05d7702bbad',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_ALPHA.jpg',
+			thumb: '/static/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_ROUGH.jpg',
+			alpha: '/static/fabrics/givenchy/root/SMALL_MESH_-_BLACK/SMALL_MESH_-_BLACK_-_ALPHA.jpg',
 			materialName: 'Black',
 			category: 'Small Mesh',
 			collection: 'givenchy',
@@ -1284,12 +1037,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: '941d1f69-0ba2-446c-80c0-1c13163dc9fc',
 			thumb: '',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/MESH_-_BLACK/MESH_-_BLACK_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/MESH_-_BLACK/MESH_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/MESH_-_BLACK/MESH_-_BLACK_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/MESH_-_BLACK/MESH_-_BLACK_-_ROUGH.jpg',
-			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/MESH_-_BLACK/MESH_-_BLACK_-_ALPHA.jpg',
+			normal: '/static/fabrics/givenchy/root/MESH_-_BLACK/MESH_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/givenchy/root/MESH_-_BLACK/MESH_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/givenchy/root/MESH_-_BLACK/MESH_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/givenchy/root/MESH_-_BLACK/MESH_-_BLACK_-_ROUGH.jpg',
+			alpha: '/static/fabrics/givenchy/root/MESH_-_BLACK/MESH_-_BLACK_-_ALPHA.jpg',
 			materialName: 'Black',
 			category: 'Mesh',
 			collection: 'givenchy',
@@ -1297,13 +1049,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '3d97fd91-3339-4eae-9ed1-f2b8e6dddb07',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/COTTON_-_BLACK/COTTON_-_BLACK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/COTTON_-_BLACK/COTTON_-_BLACK_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/COTTON_-_BLACK/COTTON_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/COTTON_-_BLACK/COTTON_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/givenchy/root/COTTON_-_BLACK/COTTON_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/givenchy/root/COTTON_-_BLACK/COTTON_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/givenchy/root/COTTON_-_BLACK/COTTON_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/givenchy/root/COTTON_-_BLACK/COTTON_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/givenchy/root/COTTON_-_BLACK/COTTON_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/givenchy/root/COTTON_-_BLACK/COTTON_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Cotton',
@@ -1314,12 +1064,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	dico: [
 		{
 			_id: '55f95375-e3bc-4d74-b7f0-757121091135',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_PINK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_WHITE_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_PINK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_WHITE_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_PINK_-_RENDER.webp',
+			normal: '/static/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_PINK_-_BASE.jpg',
+			displacement: '/static/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/dico/root/JERSEY_-_PINK/JERSEY_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Pink',
 			category: 'Jersey',
@@ -1328,11 +1077,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'bd3f754a-8014-483e-ac06-e0ecdc54e0f9',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_BASE.jpg',
-			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_ROUGH.jpg',
+			thumb: '/static/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_RENDER.webp',
+			normal: '/static/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_BASE.jpg',
+			displacement: '/static/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/dico/root/DENIM_-_WASH/DENIM_-_WASH_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Wash',
 			category: 'Denim',
@@ -1343,12 +1092,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	dottie: [
 		{
 			_id: '2d7355dc-38a6-4ace-a7db-a2bf5fe11260',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/dottie/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Sateen',
@@ -1359,12 +1107,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	edini: [
 		{
 			_id: '79e6f9cb-d616-4125-a961-5af1c79f2563',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/edini/root/VELVET_-_BLACK/VELVET_-_BLACK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/edini/root/VELVET_-_BLACK/VELVET_-_BLACK_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/edini/root/VELVET_-_BLACK/VELVET_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/edini/root/VELVET_-_BLACK/VELVET_-_BLACK_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/edini/root/VELVET_-_BLACK/VELVET_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/edini/root/VELVET_-_BLACK/VELVET_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/edini/root/VELVET_-_BLACK/VELVET_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/edini/root/VELVET_-_BLACK/VELVET_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/edini/root/VELVET_-_BLACK/VELVET_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/edini/root/VELVET_-_BLACK/VELVET_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Velvet',
@@ -1375,16 +1122,14 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'erroris.ltd': [
 		{
 			_id: 'add00446-bc77-42e8-8663-df874f03bfc0',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE/SATEEN_-_POWDER_BLUE_TEXTURE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE/SATEEN_-_POWDER_BLUE_TEXTURE_-_NORMAL.jpg',
+			thumb: '/static/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE/SATEEN_-_POWDER_BLUE_TEXTURE_-_RENDER.webp',
+			normal: '/static/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE/SATEEN_-_POWDER_BLUE_TEXTURE_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE/SATEEN_-_POWDER_BLUE_TEXTURE_-_BASE.jpg',
+				'/static/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE/SATEEN_-_POWDER_BLUE_TEXTURE_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE/SATEEN_-_POWDER_BLUE_TEXTURE_-_DISPLACE.jpg',
+				'/static/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE/SATEEN_-_POWDER_BLUE_TEXTURE_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE/SATEEN_-_POWDER_BLUE_TEXTURE_-_ROUGH.jpg',
+				'/static/fabrics/erroris.ltd/root/SATEEN_-_POWDER_BLUE_TEXTURE/SATEEN_-_POWDER_BLUE_TEXTURE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Powder Blue Texture',
 			category: 'Sateen',
@@ -1393,12 +1138,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'aad5db65-19d9-4afd-a499-888759e8746c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_ROUGH.jpg',
+			thumb: '/static/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_RENDER.webp',
+			normal: '/static/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_BASE.jpg',
+			displacement: '/static/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/erroris.ltd/root/POLY_-_GRAY/POLY_-_GRAY_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Gray',
 			category: 'Poly',
@@ -1409,16 +1153,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	gola: [
 		{
 			_id: 'd4bb629b-10b0-4cfa-9e7d-e01e1c89692a',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_RENDER.webp',
+			normal: '/static/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_BASE.jpg',
+			displacement: '/static/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/gola/root/SATEEN_-_POWDER_BLUE/SATEEN_-_POWDER_BLUE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Powder Blue',
 			category: 'Sateen',
@@ -1429,11 +1168,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	h2b: [
 		{
 			_id: 'd6d712d2-b90a-4d71-89dd-0d23fdfe962f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_BASE.jpg',
-			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_ROUGH.jpg',
+			thumb: '/static/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_RENDER.webp',
+			normal: '/static/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_BASE.jpg',
+			displacement: '/static/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/h2b/root/SILK_-_CREAM/SILK_-_CREAM_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Cream',
 			category: 'Silk',
@@ -1444,16 +1183,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'joie-des-roses': [
 		{
 			_id: '4e228f27-84e7-48bf-a280-3dce2019da78',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_ROUGH.jpg',
+			thumb: '/static/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_RENDER.webp',
+			normal: '/static/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_BASE.jpg',
+			displacement: '/static/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/joie-des-roses/root/SILK_-_CREAM/SILK_-_CREAM_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Cream',
 			category: 'Silk',
@@ -1464,16 +1198,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'jubin-studio': [
 		{
 			_id: 'a56c6fad-cc95-4025-bf14-d70abca7a385',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/jubin-studio/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/jubin-studio/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/jubin-studio/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/jubin-studio/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/jubin-studio/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Jersey',
@@ -1482,14 +1211,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'd33e9093-e9fb-449f-ae9f-9fba6366c77f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_ROUGH.jpg',
-			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_ALPHA.jpg',
+			thumb: '/static/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_RENDER.webp',
+			normal: '/static/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_BASE.jpg',
+			displacement: '/static/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_ROUGH.jpg',
+			alpha: '/static/fabrics/jubin-studio/root/LACE_-_CREAM/LACE_-_CREAM_-_ALPHA.jpg',
 			materialName: 'Cream',
 			category: 'Lace',
 			collection: 'jubin-studio',
@@ -1497,12 +1224,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '5f1b06a2-6c99-4fb5-bf1b-b1a45c413590',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_RENDER.webp',
+			thumb: '/static/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_RENDER.webp',
 			normal: '',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_ROUGH.jpg',
+			baseColor: '/static/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_BASE.jpg',
+			displacement: '/static/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/jubin-studio/root/TWILL_-_DOT/TWILL_-_DOT_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Dot',
 			category: 'Twill',
@@ -1513,16 +1239,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'celeste-studio': [
 		{
 			_id: '7ba6106e-5c96-4135-9815-317620353275',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celeste-studio/root/TWEED_-_NAVY/TWEED_-_NAVY_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celeste-studio/root/TWEED_-_NAVY/TWEED_-_NAVY_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celeste-studio/root/TWEED_-_NAVY/TWEED_-_NAVY_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celeste-studio/root/TWEED_-_NAVY/TWEED_-_NAVY_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celeste-studio/root/TWEED_-_NAVY/TWEED_-_NAVY_-_ROUGH.jpg',
+			thumb: '/static/fabrics/celeste-studio/root/TWEED_-_NAVY/TWEED_-_NAVY_-_RENDER.webp',
+			normal: '/static/fabrics/celeste-studio/root/TWEED_-_NAVY/TWEED_-_NAVY_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/celeste-studio/root/TWEED_-_NAVY/TWEED_-_NAVY_-_BASE.jpg',
+			displacement: '/static/fabrics/celeste-studio/root/TWEED_-_NAVY/TWEED_-_NAVY_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/celeste-studio/root/TWEED_-_NAVY/TWEED_-_NAVY_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Navy',
 			category: 'Tweed',
@@ -1531,16 +1252,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'b85309b0-53bb-4f54-9aa0-32047405cb2f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celeste-studio/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celeste-studio/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celeste-studio/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celeste-studio/root/COTTON_-_WHITE/COTTON_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celeste-studio/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/celeste-studio/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/celeste-studio/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/celeste-studio/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/celeste-studio/root/COTTON_-_WHITE/COTTON_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/celeste-studio/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Cotton',
@@ -1551,11 +1267,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'just-etro-gang': [
 		{
 			_id: 'ef6725d4-a5cc-4b3e-a526-db7a303e22d3',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/RIB_-_WINE/RIB_-_WINE_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/RIB_-_WINE/RIB_-_WINE_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/RIB_-_WINE/RIB_-_WINE_-_BASE.jpg',
+			thumb: '/static/fabrics/just-etro-gang/root/RIB_-_WINE/RIB_-_WINE_-_RENDER.webp',
+			normal: '/static/fabrics/just-etro-gang/root/RIB_-_WINE/RIB_-_WINE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/just-etro-gang/root/RIB_-_WINE/RIB_-_WINE_-_BASE.jpg',
 			displacement: '',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/RIB_-_WINE/RIB_-_WINE_-_ROUGH.jpg',
+			roughness: '/static/fabrics/just-etro-gang/root/RIB_-_WINE/RIB_-_WINE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Wine',
 			category: 'Rib',
@@ -1564,16 +1280,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '39f656b8-d10f-490e-adb1-8873680d736a',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/KNIT_-_GARNET/KNIT_-_GARNET_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/KNIT_-_GARNET/KNIT_-_GARNET_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/KNIT_-_GARNET/KNIT_-_GARNET_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/KNIT_-_GARNET/KNIT_-_GARNET_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/KNIT_-_GARNET/KNIT_-_GARNET_-_ROUGH.jpg',
+			thumb: '/static/fabrics/just-etro-gang/root/KNIT_-_GARNET/KNIT_-_GARNET_-_RENDER.webp',
+			normal: '/static/fabrics/just-etro-gang/root/KNIT_-_GARNET/KNIT_-_GARNET_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/just-etro-gang/root/KNIT_-_GARNET/KNIT_-_GARNET_-_BASE.jpg',
+			displacement: '/static/fabrics/just-etro-gang/root/KNIT_-_GARNET/KNIT_-_GARNET_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/just-etro-gang/root/KNIT_-_GARNET/KNIT_-_GARNET_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Garnet',
 			category: 'Knit',
@@ -1582,16 +1293,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '3a372a13-e33c-43e6-9f4c-abe863ae20bb',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/WOVEN_-_PLAID/WOVEN_-_PLAID_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/WOVEN_-_PLAID/WOVEN_-_PLAID_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/WOVEN_-_PLAID/WOVEN_-_PLAID_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/WOVEN_-_PLAID/WOVEN_-_PLAID_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/just-etro-gang/root/WOVEN_-_PLAID/WOVEN_-_PLAID_-_ROUGH.jpg',
+			thumb: '/static/fabrics/just-etro-gang/root/WOVEN_-_PLAID/WOVEN_-_PLAID_-_RENDER.webp',
+			normal: '/static/fabrics/just-etro-gang/root/WOVEN_-_PLAID/WOVEN_-_PLAID_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/just-etro-gang/root/WOVEN_-_PLAID/WOVEN_-_PLAID_-_BASE.jpg',
+			displacement: '/static/fabrics/just-etro-gang/root/WOVEN_-_PLAID/WOVEN_-_PLAID_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/just-etro-gang/root/WOVEN_-_PLAID/WOVEN_-_PLAID_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Plaid',
 			category: 'Woven',
@@ -1602,13 +1308,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	kido: [
 		{
 			_id: '42a4e026-942f-4233-af9a-1b21883fa1d9',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_ROUGH.jpg',
+			thumb: '/static/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_RENDER.webp',
+			normal: '/static/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_BASE.jpg',
+			displacement: '/static/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/kido/root/JERSEY_-_STRIPED/JERSEY_-_STRIPED_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Striped',
 			category: 'Jersey',
@@ -1617,12 +1321,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '31da8159-c9c5-4a9a-9ef2-ad5469ff5fc2',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_RENDER.webp',
+			normal: '/static/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_BASE.jpg',
+			displacement: '/static/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/kido/root/TWILL_-_BEIGE/TWILL_-_BEIGE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Beige',
 			category: 'Twill',
@@ -1633,11 +1336,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	levents: [
 		{
 			_id: 'aca7497a-2bff-4e5b-81ff-ba4320e17af7',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_NORMAL.png',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_BASE.png',
-			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_DISPLACE.png',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_ROUGH.png',
+			thumb: '/static/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_RENDER.webp',
+			normal: '/static/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_NORMAL.png',
+			baseColor: '/static/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_BASE.png',
+			displacement: '/static/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_DISPLACE.png',
+			roughness: '/static/fabrics/levents/root/KNIT_-_RIB/KNIT_-_RIB_-_ROUGH.png',
 			alpha: '',
 			materialName: 'Rib',
 			category: 'Knit',
@@ -1646,11 +1349,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'c8734403-d321-4730-8b61-744a8ca5cf98',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_NORMAL.png',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_BASE.png',
-			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_DISPLACE.png',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_ROUGH.png',
+			thumb: '/static/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_RENDER.webp',
+			normal: '/static/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_NORMAL.png',
+			baseColor: '/static/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_BASE.png',
+			displacement: '/static/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_DISPLACE.png',
+			roughness: '/static/fabrics/levents/root/KNIT_-_NAVY/KNIT_-_NAVY_-_ROUGH.png',
 			alpha: '',
 			materialName: 'Navy',
 			category: 'Knit',
@@ -1659,11 +1362,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'e474b77f-9a7b-4b7b-8b77-a014136c8150',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_BASE.jpg',
-			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/levents/root/POLY_-_NAVY/POLY_-_DUSTY_BLUE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_RENDER.webp',
+			normal: '/static/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_BASE.jpg',
+			displacement: '/static/fabrics/levents/root/POLY_-_NAVY/POLY_-_NAVY_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/levents/root/POLY_-_NAVY/POLY_-_DUSTY_BLUE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Navy',
 			category: 'Poly',
@@ -1674,18 +1377,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'bad-habits': [
 		{
 			_id: 'f7dd6f7b-0ad8-4220-97cd-0eb1876f15a1',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_ALPHA.jpg',
+			thumb: '/static/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_RENDER.webp',
+			normal: '/static/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_BASE.jpg',
+			displacement: '/static/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_ROUGH.jpg',
+			alpha: '/static/fabrics/bad-habits/root/PRINT_-_ARTWORK_/PRINT_-_ARTWORK_-_ALPHA.jpg',
 			materialName: 'Artwork',
 			category: 'Print',
 			collection: 'bad-habits',
@@ -1693,12 +1390,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'e507ecd2-0567-4309-81a6-c221446e93b4',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/POLY_-_CAMO/POLY_-_CAMO_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/POLY_-_CAMO/POLY_-_CAMO_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/POLY_-_CAMO/POLY_-_CAMO_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/POLY_-_CAMO/POLY_-_CAMO_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/POLY_-_CAMO/POLY_-_CAMO_-_ROUGH.jpg',
+			thumb: '/static/fabrics/bad-habits/root/POLY_-_CAMO/POLY_-_CAMO_-_RENDER.webp',
+			normal: '/static/fabrics/bad-habits/root/POLY_-_CAMO/POLY_-_CAMO_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/bad-habits/root/POLY_-_CAMO/POLY_-_CAMO_-_BASE.jpg',
+			displacement: '/static/fabrics/bad-habits/root/POLY_-_CAMO/POLY_-_CAMO_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/bad-habits/root/POLY_-_CAMO/POLY_-_CAMO_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Camo',
 			category: 'Poly',
@@ -1707,16 +1403,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'f7e6362b-3d7b-4787-854f-b107d848f4d9',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/bad-habits/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/bad-habits/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/bad-habits/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/bad-habits/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/bad-habits/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/bad-habits/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Jersey',
@@ -1727,18 +1418,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'beachclub.official': [
 		{
 			_id: '7688a77e-7527-48d7-a468-da92ae53215e',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_ALPHA.jpg',
+			thumb: '/static/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_ROUGH.jpg',
+			alpha: '/static/fabrics/beachclub.official/root/LACE_-_WHITE/LACE_-_WHITE_-_ALPHA.jpg',
 			materialName: 'White',
 			category: 'Lace',
 			collection: 'beachclub.official',
@@ -1746,16 +1431,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '73bd0261-2114-4eb3-a1ca-74f432958ec6',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/beachclub.official/root/COTTON_-_STRIPED/COTTON_-_STRIPED_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/beachclub.official/root/COTTON_-_STRIPED/COTTON_-_STRIPED_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/beachclub.official/root/COTTON_-_STRIPED/COTTON_-_STRIPED_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/beachclub.official/root/COTTON_-_STRIPED/COTTON_-_STRIPED_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/beachclub.official/root/COTTON_-_STRIPED/COTTON_-_STRIPED_-_ROUGH.jpg',
+			thumb: '/static/fabrics/beachclub.official/root/COTTON_-_STRIPED/COTTON_-_STRIPED_-_RENDER.webp',
+			normal: '/static/fabrics/beachclub.official/root/COTTON_-_STRIPED/COTTON_-_STRIPED_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/beachclub.official/root/COTTON_-_STRIPED/COTTON_-_STRIPED_-_BASE.jpg',
+			displacement: '/static/fabrics/beachclub.official/root/COTTON_-_STRIPED/COTTON_-_STRIPED_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/beachclub.official/root/COTTON_-_STRIPED/COTTON_-_STRIPED_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Striped',
 			category: 'Cotton',
@@ -1766,11 +1446,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	berta: [
 		{
 			_id: '80748fe1-ee76-4e3d-9a90-52835bac9c1e',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/berta/root/SILK_-_WHITE/SILK_-_WHITE_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/berta/root/SILK_-_WHITE/SILK_-_WHITE_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/berta/root/SILK_-_WHITE/SILK_-_WHITE_-_BASE.jpg',
-			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/berta/root/SILK_-_WHITE/SILK_-_WHITE_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/berta/root/SILK_-_WHITE/SILK_-_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/berta/root/SILK_-_WHITE/SILK_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/berta/root/SILK_-_WHITE/SILK_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/berta/root/SILK_-_WHITE/SILK_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/berta/root/SILK_-_WHITE/SILK_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/berta/root/SILK_-_WHITE/SILK_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Silk',
@@ -1781,18 +1461,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'cara-club': [
 		{
 			_id: '47dc5217-3a64-4f56-bdc9-884588eca386',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_ALPHA.jpg',
+			thumb: '/static/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_RENDER.webp',
+			normal: '/static/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_BASE.jpg',
+			displacement: '/static/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_ROUGH.jpg',
+			alpha: '/static/fabrics/cara-club/root/JERSEY_-_WHITE_01/JERSEY_-_WHITE_01_-_ALPHA.jpg',
 			materialName: 'White 01',
 			category: 'Jersey',
 			collection: 'cara-club',
@@ -1800,14 +1474,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '2879e652-c40c-405d-8b49-a4745b4c8170',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/cara-club/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/cara-club/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/cara-club/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/cara-club/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/cara-club/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Jersey',
@@ -1816,16 +1487,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '80cff713-a16c-42d4-9e8b-1235379255e2',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/COTTON_-_CHECKERED/COTTON_-_CHECKERED_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/COTTON_-_CHECKERED/COTTON_-_CHECKERED_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/COTTON_-_CHECKERED/COTTON_-_CHECKERED_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/COTTON_-_CHECKERED/COTTON_-_CHECKERED_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cara-club/root/COTTON_-_CHECKERED/COTTON_-_CHECKERED_-_ROUGH.jpg',
+			thumb: '/static/fabrics/cara-club/root/COTTON_-_CHECKERED/COTTON_-_CHECKERED_-_RENDER.webp',
+			normal: '/static/fabrics/cara-club/root/COTTON_-_CHECKERED/COTTON_-_CHECKERED_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/cara-club/root/COTTON_-_CHECKERED/COTTON_-_CHECKERED_-_BASE.jpg',
+			displacement: '/static/fabrics/cara-club/root/COTTON_-_CHECKERED/COTTON_-_CHECKERED_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/cara-club/root/COTTON_-_CHECKERED/COTTON_-_CHECKERED_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Checkered',
 			category: 'Cotton',
@@ -1836,16 +1502,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'ceci-cela': [
 		{
 			_id: 'cb708948-cd3b-4636-850d-060bab9dd285',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ceci-cela/root/SILK_-_DEEP_RED/SILK_-_DEEP_RED_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ceci-cela/root/SILK_-_DEEP_RED/SILK_-_DEEP_RED_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ceci-cela/root/SILK_-_DEEP_RED/SILK_-_DEEP_RED_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ceci-cela/root/SILK_-_DEEP_RED/SILK_-_DEEP_RED_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/ceci-cela/root/SILK_-_DEEP_RED/SILK_-_DEEP_RED_-_ROUGH.jpg',
+			thumb: '/static/fabrics/ceci-cela/root/SILK_-_DEEP_RED/SILK_-_DEEP_RED_-_RENDER.webp',
+			normal: '/static/fabrics/ceci-cela/root/SILK_-_DEEP_RED/SILK_-_DEEP_RED_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/ceci-cela/root/SILK_-_DEEP_RED/SILK_-_DEEP_RED_-_BASE.jpg',
+			displacement: '/static/fabrics/ceci-cela/root/SILK_-_DEEP_RED/SILK_-_DEEP_RED_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/ceci-cela/root/SILK_-_DEEP_RED/SILK_-_DEEP_RED_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Deep Red',
 			category: 'Silk',
@@ -1856,16 +1517,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	celine: [
 		{
 			_id: '735d75d1-2a73-45cf-83ac-d1163ef829a9',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celine/root/WOOL_TWILL_-_PINK/WOOL_TWILL_-_PINK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celine/root/WOOL_TWILL_-_PINK/WOOL_TWILL_-_PINK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celine/root/WOOL_TWILL_-_PINK/WOOL_TWILL_-_PINK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celine/root/WOOL_TWILL_-_PINK/WOOL_TWILL_-_PINK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/celine/root/WOOL_TWILL_-_PINK/WOOL_TWILL_-_PINK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/celine/root/WOOL_TWILL_-_PINK/WOOL_TWILL_-_PINK_-_RENDER.webp',
+			normal: '/static/fabrics/celine/root/WOOL_TWILL_-_PINK/WOOL_TWILL_-_PINK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/celine/root/WOOL_TWILL_-_PINK/WOOL_TWILL_-_PINK_-_BASE.jpg',
+			displacement: '/static/fabrics/celine/root/WOOL_TWILL_-_PINK/WOOL_TWILL_-_PINK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/celine/root/WOOL_TWILL_-_PINK/WOOL_TWILL_-_PINK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Pink',
 			category: 'Wool Twill',
@@ -1876,18 +1532,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	colin: [
 		{
 			_id: 'ca1880fa-24a7-4da9-9aa4-063440e8045b',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_ALPHA.jpg',
+			thumb: '/static/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_RENDER.webp',
+			normal: '/static/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_BASE.jpg',
+			displacement: '/static/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_ROUGH.jpg',
+			alpha: '/static/fabrics/colin/root/LACE__-_WHITE_FLOWER/LACE__-_WHITE_FLOWER_-_ALPHA.jpg',
 			materialName: 'White Flower',
 			category: 'Lace',
 			collection: 'colin',
@@ -1895,12 +1545,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'df0fcfe7-9973-4a4b-8860-19a6784b6143',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/colin/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/colin/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/colin/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/colin/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/colin/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/colin/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/colin/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/colin/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/colin/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/colin/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Jersey',
@@ -1911,13 +1560,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	demobaza: [
 		{
 			_id: '6dc31530-23b2-4fa5-b115-75070a935729',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_ROUGH.jpg',
-			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_ALPHA.jpg',
+			thumb: '/static/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_RENDER.webp',
+			normal: '/static/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_BASE.jpg',
+			displacement: '/static/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_ROUGH.jpg',
+			alpha: '/static/fabrics/demobaza/root/LACE_-_1227/LACE_-_1227_-_ALPHA.jpg',
 			materialName: '1227',
 			category: 'Lace',
 			collection: 'demobaza',
@@ -1926,14 +1574,10 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: 'be5fedf5-5502-4fb9-a9a9-3cc7c6fb1f9e',
 			thumb: '',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/LEATHER_-_DARK_NAVY/LEATHER_-_DARK_NAVY_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/LEATHER_-_DARK_NAVY/LEATHER_-_DARK_NAVY_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/LEATHER_-_DARK_NAVY/LEATHER_-_DARK_NAVY_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/LEATHER_-_DARK_NAVY/LEATHER_-_DARK_NAVY_-_ROUGH.jpg',
+			normal: '/static/fabrics/demobaza/root/LEATHER_-_DARK_NAVY/LEATHER_-_DARK_NAVY_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/demobaza/root/LEATHER_-_DARK_NAVY/LEATHER_-_DARK_NAVY_-_BASE.jpg',
+			displacement: '/static/fabrics/demobaza/root/LEATHER_-_DARK_NAVY/LEATHER_-_DARK_NAVY_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/demobaza/root/LEATHER_-_DARK_NAVY/LEATHER_-_DARK_NAVY_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Dark Navy',
 			category: 'Leather',
@@ -1942,13 +1586,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '62ad1e0c-a9fa-49d0-8815-66e6a1e6cd81',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/demobaza/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/demobaza/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/demobaza/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/demobaza/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/demobaza/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Jersey',
@@ -1957,18 +1599,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'f4055e71-02b8-492a-b494-72adabcf27ae',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_ALPHA.jpg',
+			thumb: '/static/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_RENDER.webp',
+			normal: '/static/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_BASE.jpg',
+			displacement: '/static/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_ROUGH.jpg',
+			alpha: '/static/fabrics/demobaza/root/SILK_-_HONEY_TAN/SILK_-_HONEY_TAN_-_ALPHA.jpg',
 			materialName: 'Honey Tan',
 			category: 'Silk',
 			collection: 'demobaza',
@@ -1978,12 +1614,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	diane: [
 		{
 			_id: '48c65736-143c-4070-85f0-3d060b77c5c9',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_ROUGH.jpg',
+			thumb: '/static/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_RENDER.webp',
+			normal: '/static/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_BASE.jpg',
+			displacement: '/static/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/diane/root/SILK_-_MUSTARD/SILK_-_MUSTARD_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Mustard',
 			category: 'Silk',
@@ -1992,11 +1627,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '8651088c-f569-475e-853f-05b3447421a5',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_BASE.jpg',
-			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_RENDER.webp',
+			normal: '/static/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_BASE.jpg',
+			displacement: '/static/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/diane/root/SILK_-_PINK/SILK_-_PINK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Pink',
 			category: 'Silk',
@@ -2007,12 +1642,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	hani: [
 		{
 			_id: '915c27c7-58dd-466a-b632-c344fc6a747a',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hani/root/SILK_-_PRINT_B/SILK_-_PRINT_B_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hani/root/SILK_-_PRINT_B/SILK_-_PRINT_B_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hani/root/SILK_-_PRINT_B/SILK_-_PRINT_B_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hani/root/SILK_-_PRINT_B/SILK_-_PRINT_B_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hani/root/SILK_-_PRINT_B/SILK_-_PRINT_B_-_ROUGH.jpg',
+			thumb: '/static/fabrics/hani/root/SILK_-_PRINT_B/SILK_-_PRINT_B_-_RENDER.webp',
+			normal: '/static/fabrics/hani/root/SILK_-_PRINT_B/SILK_-_PRINT_B_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/hani/root/SILK_-_PRINT_B/SILK_-_PRINT_B_-_BASE.jpg',
+			displacement: '/static/fabrics/hani/root/SILK_-_PRINT_B/SILK_-_PRINT_B_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/hani/root/SILK_-_PRINT_B/SILK_-_PRINT_B_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Print B',
 			category: 'Silk',
@@ -2021,12 +1655,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '0b904c42-4f70-485e-b61b-46b756a876b1',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hani/root/SILK_-_PRINT_A/SILK_-_PRINT_A_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hani/root/SILK_-_PRINT_A/SILK_-_PRINT_A_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hani/root/SILK_-_PRINT_A/SILK_-_PRINT_A_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hani/root/SILK_-_PRINT_A/SILK_-_PRINT_A_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hani/root/SILK_-_PRINT_A/SILK_-_PRINT_A_-_ROUGH.jpg',
+			thumb: '/static/fabrics/hani/root/SILK_-_PRINT_A/SILK_-_PRINT_A_-_RENDER.webp',
+			normal: '/static/fabrics/hani/root/SILK_-_PRINT_A/SILK_-_PRINT_A_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/hani/root/SILK_-_PRINT_A/SILK_-_PRINT_A_-_BASE.jpg',
+			displacement: '/static/fabrics/hani/root/SILK_-_PRINT_A/SILK_-_PRINT_A_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/hani/root/SILK_-_PRINT_A/SILK_-_PRINT_A_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Print A',
 			category: 'Silk',
@@ -2037,16 +1670,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'huelley-rose': [
 		{
 			_id: '2f65893d-490a-4068-b28a-841a7976e7de',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/huelley-rose/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/huelley-rose/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.png',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/huelley-rose/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/huelley-rose/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/huelley-rose/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/huelley-rose/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/huelley-rose/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.png',
+			baseColor: '/static/fabrics/huelley-rose/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/huelley-rose/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/huelley-rose/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Jersey',
@@ -2057,16 +1685,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'hurricane-b': [
 		{
 			_id: '9474b6a0-7832-4f8b-a452-4c19014fb7cf',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hurricane-b/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hurricane-b/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hurricane-b/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hurricane-b/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/hurricane-b/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/hurricane-b/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/hurricane-b/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/hurricane-b/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/hurricane-b/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/hurricane-b/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Sateen',
@@ -2077,16 +1700,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'fig.cool-leather': [
 		{
 			_id: 'a91d2222-d8e0-499d-91dc-25b65b0cfc8d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/fig.cool-leather/root/KNIT_-_BROWN/KNIT_-_BROWN_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/fig.cool-leather/root/KNIT_-_BROWN/KNIT_-_BROWN_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/fig.cool-leather/root/KNIT_-_BROWN/KNIT_-_BROWN_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/fig.cool-leather/root/KNIT_-_BROWN/KNIT_-_BROWN_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/fig.cool-leather/root/KNIT_-_BROWN/KNIT_-_BROWN_-_ROUGH.jpg',
+			thumb: '/static/fabrics/fig.cool-leather/root/KNIT_-_BROWN/KNIT_-_BROWN_-_RENDER.webp',
+			normal: '/static/fabrics/fig.cool-leather/root/KNIT_-_BROWN/KNIT_-_BROWN_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/fig.cool-leather/root/KNIT_-_BROWN/KNIT_-_BROWN_-_BASE.jpg',
+			displacement: '/static/fabrics/fig.cool-leather/root/KNIT_-_BROWN/KNIT_-_BROWN_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/fig.cool-leather/root/KNIT_-_BROWN/KNIT_-_BROWN_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Brown',
 			category: 'Knit',
@@ -2095,16 +1713,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '7af180f5-50a8-40d9-a087-8906b3b4a8fa',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/fig.cool-leather/root/LEATHER_-_GRAY_MAUVE/LEATHER_-_GRAY_MAUVE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/fig.cool-leather/root/LEATHER_-_GRAY_MAUVE/LEATHER_-_GRAY_MAUVE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/fig.cool-leather/root/LEATHER_-_GRAY_MAUVE/LEATHER_-_GRAY_MAUVE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/fig.cool-leather/root/LEATHER_-_GRAY_MAUVE/LEATHER_-_GRAY_MAUVE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/fig.cool-leather/root/LEATHER_-_GRAY_MAUVE/LEATHER_-_GRAY_MAUVE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/fig.cool-leather/root/LEATHER_-_GRAY_MAUVE/LEATHER_-_GRAY_MAUVE_-_RENDER.webp',
+			normal: '/static/fabrics/fig.cool-leather/root/LEATHER_-_GRAY_MAUVE/LEATHER_-_GRAY_MAUVE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/fig.cool-leather/root/LEATHER_-_GRAY_MAUVE/LEATHER_-_GRAY_MAUVE_-_BASE.jpg',
+			displacement: '/static/fabrics/fig.cool-leather/root/LEATHER_-_GRAY_MAUVE/LEATHER_-_GRAY_MAUVE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/fig.cool-leather/root/LEATHER_-_GRAY_MAUVE/LEATHER_-_GRAY_MAUVE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Gray Mauve',
 			category: 'Leather',
@@ -2115,13 +1728,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	libeworkshop: [
 		{
 			_id: 'f8acaf44-9751-46fe-981b-4322463f135d',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/LACE_-_WHITE/LACE_-_WHITE_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/LACE_-_WHITE/LACE_-_WHITE_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/LACE_-_WHITE/LACE_-_WHITE_-_BASE.jpg',
+			thumb: '/static/fabrics/libeworkshop/root/LACE_-_WHITE/LACE_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/libeworkshop/root/LACE_-_WHITE/LACE_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/libeworkshop/root/LACE_-_WHITE/LACE_-_WHITE_-_BASE.jpg',
 			displacement: '',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/LACE_-_WHITE/LACE_-_WHITE_-_ROUGH.jpg',
-			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/LACE_-_WHITE/LACE_-_WHITE_-_ALPHA.jpg',
+			roughness: '/static/fabrics/libeworkshop/root/LACE_-_WHITE/LACE_-_WHITE_-_ROUGH.jpg',
+			alpha: '/static/fabrics/libeworkshop/root/LACE_-_WHITE/LACE_-_WHITE_-_ALPHA.jpg',
 			materialName: 'White',
 			category: 'Lace',
 			collection: 'libeworkshop',
@@ -2129,16 +1741,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '923240af-0078-46b6-be8a-a495aa8b80e1',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/libeworkshop/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/libeworkshop/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/libeworkshop/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/libeworkshop/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/libeworkshop/root/SILK_-_OFF_WHITE/SILK_-_OFF_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Off White',
 			category: 'Silk',
@@ -2147,16 +1754,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'daab94c3-1919-4b10-998b-8ac33c3f77b1',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/COTTON_-_FLORAL/COTTON_-_FLORAL_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/COTTON_-_FLORAL/COTTON_-_FLORAL_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/COTTON_-_FLORAL/COTTON_-_FLORAL_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/COTTON_-_FLORAL/COTTON_-_FLORAL_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/libeworkshop/root/COTTON_-_FLORAL/COTTON_-_FLORAL_-_ROUGH.jpg',
+			thumb: '/static/fabrics/libeworkshop/root/COTTON_-_FLORAL/COTTON_-_FLORAL_-_RENDER.webp',
+			normal: '/static/fabrics/libeworkshop/root/COTTON_-_FLORAL/COTTON_-_FLORAL_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/libeworkshop/root/COTTON_-_FLORAL/COTTON_-_FLORAL_-_BASE.jpg',
+			displacement: '/static/fabrics/libeworkshop/root/COTTON_-_FLORAL/COTTON_-_FLORAL_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/libeworkshop/root/COTTON_-_FLORAL/COTTON_-_FLORAL_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Floral',
 			category: 'Cotton',
@@ -2167,16 +1769,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'liniss-official': [
 		{
 			_id: 'af209606-093f-4e94-a04d-68e543cb942b',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/liniss-official/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/liniss-official/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/liniss-official/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/liniss-official/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/liniss-official/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Jersey',
@@ -2185,15 +1782,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '227d36bd-5058-4f36-96c3-2be411d3003f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/TRIMS_-_COPPER/TRIMS_-_COPPER_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/TRIMS_-_COPPER/TRIMS_-_COPPER-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/TRIMS_-_COPPER/TRIMS_-_COPPER_-_BASE.jpg',
+			thumb: '/static/fabrics/liniss-official/root/TRIMS_-_COPPER/TRIMS_-_COPPER_-_RENDER.webp',
+			normal: '/static/fabrics/liniss-official/root/TRIMS_-_COPPER/TRIMS_-_COPPER-_NORMAL.jpg',
+			baseColor: '/static/fabrics/liniss-official/root/TRIMS_-_COPPER/TRIMS_-_COPPER_-_BASE.jpg',
 			displacement: '',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/TRIMS_-_COPPER/TRIMS_-_COPPER-_ROUGH.jpg',
+			roughness: '/static/fabrics/liniss-official/root/TRIMS_-_COPPER/TRIMS_-_COPPER-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Copper',
 			category: 'Trims',
@@ -2202,16 +1795,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '27d30768-7fe1-4fbd-9476-ece7d367c4ba',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/SILK_-_BLOOD_RED/SILK_-_BLOOD_RED_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/SILK_-_BLOOD_RED/SILK_-_BLOOD_RED_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/SILK_-_BLOOD_RED/SILK_-_BLOOD_RED_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/SILK_-_BLOOD_RED/SILK_-_BLOOD_RED_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/SILK_-_BLOOD_RED/SILK_-_BLOOD_RED_-_ROUGH.jpg',
+			thumb: '/static/fabrics/liniss-official/root/SILK_-_BLOOD_RED/SILK_-_BLOOD_RED_-_RENDER.webp',
+			normal: '/static/fabrics/liniss-official/root/SILK_-_BLOOD_RED/SILK_-_BLOOD_RED_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/liniss-official/root/SILK_-_BLOOD_RED/SILK_-_BLOOD_RED_-_BASE.jpg',
+			displacement: '/static/fabrics/liniss-official/root/SILK_-_BLOOD_RED/SILK_-_BLOOD_RED_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/liniss-official/root/SILK_-_BLOOD_RED/SILK_-_BLOOD_RED_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Blood Red',
 			category: 'Silk',
@@ -2220,16 +1808,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'dd2eac8d-48a9-424c-bf97-cdb43e1a8c78',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/DENIM_-_DARK/DENIM_-_DARK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/DENIM_-_DARK/DENIM_-_DARK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/DENIM_-_DARK/DENIM_-_DARK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/DENIM_-_DARK/DENIM_-_DARK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/liniss-official/root/DENIM_-_DARK/DENIM_-_DARK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/liniss-official/root/DENIM_-_DARK/DENIM_-_DARK_-_RENDER.webp',
+			normal: '/static/fabrics/liniss-official/root/DENIM_-_DARK/DENIM_-_DARK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/liniss-official/root/DENIM_-_DARK/DENIM_-_DARK_-_BASE.jpg',
+			displacement: '/static/fabrics/liniss-official/root/DENIM_-_DARK/DENIM_-_DARK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/liniss-official/root/DENIM_-_DARK/DENIM_-_DARK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Dark',
 			category: 'Denim',
@@ -2240,13 +1823,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	meanbldv: [
 		{
 			_id: 'f0287eab-aff0-4503-9ccd-5d8caa089b8f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/meanbldv/root/COTTON_-_BLACK/COTTON_-_BLACK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/meanbldv/root/COTTON_-_BLACK/COTTON_-_BLACK_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/meanbldv/root/COTTON_-_BLACK/COTTON_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/meanbldv/root/COTTON_-_BLACK/COTTON_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/meanbldv/root/COTTON_-_BLACK/COTTON_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/meanbldv/root/COTTON_-_BLACK/COTTON_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/meanbldv/root/COTTON_-_BLACK/COTTON_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/meanbldv/root/COTTON_-_BLACK/COTTON_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/meanbldv/root/COTTON_-_BLACK/COTTON_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/meanbldv/root/COTTON_-_BLACK/COTTON_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Cotton',
@@ -2255,16 +1836,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'ff1afc4a-06d6-400b-a199-b3269835a0b5',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/meanbldv/root/SILK_-_DUSTY_BLUE/SILK_-_DUSTY_BLUE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/meanbldv/root/SILK_-_DUSTY_BLUE/SILK_-_DUSTY_BLUE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/meanbldv/root/SILK_-_DUSTY_BLUE/SILK_-_DUSTY_BLUE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/meanbldv/root/SILK_-_DUSTY_BLUE/SILK_-_DUSTY_BLUE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/meanbldv/root/SILK_-_DUSTY_BLUE/SILK_-_DUSTY_BLUE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/meanbldv/root/SILK_-_DUSTY_BLUE/SILK_-_DUSTY_BLUE_-_RENDER.webp',
+			normal: '/static/fabrics/meanbldv/root/SILK_-_DUSTY_BLUE/SILK_-_DUSTY_BLUE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/meanbldv/root/SILK_-_DUSTY_BLUE/SILK_-_DUSTY_BLUE_-_BASE.jpg',
+			displacement: '/static/fabrics/meanbldv/root/SILK_-_DUSTY_BLUE/SILK_-_DUSTY_BLUE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/meanbldv/root/SILK_-_DUSTY_BLUE/SILK_-_DUSTY_BLUE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Dusty Blue',
 			category: 'Silk',
@@ -2275,18 +1851,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'milk-white': [
 		{
 			_id: 'df0606a6-1bfd-434a-8a38-93509901cae9',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_ALPHA.jpg',
+			thumb: '/static/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_ROUGH.jpg',
+			alpha: '/static/fabrics/milk-white/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_ALPHA.jpg',
 			materialName: 'White',
 			category: 'Chiffon',
 			collection: 'milk-white',
@@ -2294,16 +1864,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '587c3d6f-ac37-4774-9085-41c29b95d10e',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/milk-white/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/milk-white/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/milk-white/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/milk-white/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/milk-white/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/milk-white/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/milk-white/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/milk-white/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/milk-white/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/milk-white/root/SATEEN_-_BLACK/SATEEN_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Sateen',
@@ -2314,12 +1879,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'mono-talk': [
 		{
 			_id: '6c49147a-7fae-40bc-90fe-c8623d8a6b59',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/mono-talk/root/TWEED_-_CREAM/TWEED_-_CREAM_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/mono-talk/root/TWEED_-_CREAM/TWEED_-_CREAM_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/mono-talk/root/TWEED_-_CREAM/TWEED_-_CREAM_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/mono-talk/root/TWEED_-_CREAM/TWEED_-_CREAM_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/mono-talk/root/TWEED_-_CREAM/TWEED_-_CREAM_-_ROUGH.jpg',
+			thumb: '/static/fabrics/mono-talk/root/TWEED_-_CREAM/TWEED_-_CREAM_-_RENDER.webp',
+			normal: '/static/fabrics/mono-talk/root/TWEED_-_CREAM/TWEED_-_CREAM_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/mono-talk/root/TWEED_-_CREAM/TWEED_-_CREAM_-_BASE.jpg',
+			displacement: '/static/fabrics/mono-talk/root/TWEED_-_CREAM/TWEED_-_CREAM_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/mono-talk/root/TWEED_-_CREAM/TWEED_-_CREAM_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Cream',
 			category: 'Tweed',
@@ -2330,16 +1894,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'monroe-the-label': [
 		{
 			_id: 'b597723d-9331-4a3d-8293-21dfb4b980f8',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/monroe-the-label/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/monroe-the-label/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/monroe-the-label/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/monroe-the-label/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/monroe-the-label/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Jersey',
@@ -2348,16 +1907,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'e051e414-a910-4fcb-b15c-49f95766511f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/JERSEY_-_GRAY/JERSEY_-_GRAY_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/JERSEY_-_GRAY/JERSEY_-_GRAY_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/JERSEY_-_GRAY/JERSEY_-_GRAY_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/JERSEY_-_GRAY/JERSEY_-_GRAY_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/JERSEY_-_GRAY/JERSEY_-_GRAY_-_ROUGH.jpg',
+			thumb: '/static/fabrics/monroe-the-label/root/JERSEY_-_GRAY/JERSEY_-_GRAY_-_RENDER.webp',
+			normal: '/static/fabrics/monroe-the-label/root/JERSEY_-_GRAY/JERSEY_-_GRAY_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/monroe-the-label/root/JERSEY_-_GRAY/JERSEY_-_GRAY_-_BASE.jpg',
+			displacement: '/static/fabrics/monroe-the-label/root/JERSEY_-_GRAY/JERSEY_-_GRAY_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/monroe-the-label/root/JERSEY_-_GRAY/JERSEY_-_GRAY_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Gray',
 			category: 'Jersey',
@@ -2366,16 +1920,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '2e309558-ec82-4f4c-8304-8891ad24854f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_ARMY_GREEN/POLY_-_ARMY_GREEN_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_ARMY_GREEN/POLY_-_ARMY_GREEN_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_ARMY_GREEN/POLY_-_ARMY_GREEN_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_ARMY_GREEN/POLY_-_ARMY_GREEN_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_ARMY_GREEN/POLY_-_ARMY_GREEN_-_ROUGH.jpg',
+			thumb: '/static/fabrics/monroe-the-label/root/POLY_-_ARMY_GREEN/POLY_-_ARMY_GREEN_-_RENDER.webp',
+			normal: '/static/fabrics/monroe-the-label/root/POLY_-_ARMY_GREEN/POLY_-_ARMY_GREEN_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/monroe-the-label/root/POLY_-_ARMY_GREEN/POLY_-_ARMY_GREEN_-_BASE.jpg',
+			displacement: '/static/fabrics/monroe-the-label/root/POLY_-_ARMY_GREEN/POLY_-_ARMY_GREEN_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/monroe-the-label/root/POLY_-_ARMY_GREEN/POLY_-_ARMY_GREEN_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Army Green',
 			category: 'Poly',
@@ -2384,16 +1933,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'd81d3d71-82c0-4271-bf73-d4c31d5f55e3',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_BLACK/POLY_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_BLACK/POLY_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_BLACK/POLY_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_BLACK/POLY_-_BLACK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_BLACK/POLY_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/monroe-the-label/root/POLY_-_BLACK/POLY_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/monroe-the-label/root/POLY_-_BLACK/POLY_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/monroe-the-label/root/POLY_-_BLACK/POLY_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/monroe-the-label/root/POLY_-_BLACK/POLY_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/monroe-the-label/root/POLY_-_BLACK/POLY_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Poly',
@@ -2402,16 +1946,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '0ab3889d-24d8-4001-91a7-6e42c083cb3a',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/monroe-the-label/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/monroe-the-label/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_RENDER.webp',
+			normal: '/static/fabrics/monroe-the-label/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/monroe-the-label/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_BASE.jpg',
+			displacement: '/static/fabrics/monroe-the-label/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/monroe-the-label/root/POLY_-_DUSTY_BLUE/POLY_-_DUSTY_BLUE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Dusty Blue',
 			category: 'Poly',
@@ -2422,12 +1961,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	naked: [
 		{
 			_id: '8eb783d8-17a1-4127-abe7-8d5391906dae',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_BASE.jpg',
-			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_ROUGH.jpg',
-			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_ALPHA.jpg',
+			thumb: '/static/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_RENDER.webp',
+			normal: '/static/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_BASE.jpg',
+			displacement: '/static/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_ROUGH.jpg',
+			alpha: '/static/fabrics/naked/root/SHEER_-_PINK/SHEER_-_PINK_-_ALPHA.jpg',
 			materialName: 'Pink',
 			category: 'Sheer',
 			collection: 'naked',
@@ -2435,12 +1974,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '7acba337-2493-4ca1-9b0c-d8f765baf01d',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/naked/root/SILK_-_TEXTURE/SILK_-_TEXTURE_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/naked/root/SILK_-_TEXTURE/SILK_-_YELLOW_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/naked/root/SILK_-_TEXTURE/SILK_-_TEXTURE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/naked/root/SILK_-_TEXTURE/SILK_-_YELLOW_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/naked/root/SILK_-_TEXTURE/SILK_-_YELLOW_-_ROUGH.jpg',
+			thumb: '/static/fabrics/naked/root/SILK_-_TEXTURE/SILK_-_TEXTURE_-_RENDER.webp',
+			normal: '/static/fabrics/naked/root/SILK_-_TEXTURE/SILK_-_YELLOW_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/naked/root/SILK_-_TEXTURE/SILK_-_TEXTURE_-_BASE.jpg',
+			displacement: '/static/fabrics/naked/root/SILK_-_TEXTURE/SILK_-_YELLOW_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/naked/root/SILK_-_TEXTURE/SILK_-_YELLOW_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Texture',
 			category: 'Silk',
@@ -2451,15 +1989,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	nakedandfamousdenim: [
 		{
 			_id: 'e7a05897-d3a3-4782-8495-30062153426f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/TRIMS_-_SILVER/TRIMS_-_SILVER_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/TRIMS_-_SILVER/TRIMS_-_SILVER_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/TRIMS_-_SILVER/TRIMS_-_SILVER_-_BASE.jpg',
+			thumb: '/static/fabrics/nakedandfamousdenim/root/TRIMS_-_SILVER/TRIMS_-_SILVER_-_RENDER.webp',
+			normal: '/static/fabrics/nakedandfamousdenim/root/TRIMS_-_SILVER/TRIMS_-_SILVER_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/nakedandfamousdenim/root/TRIMS_-_SILVER/TRIMS_-_SILVER_-_BASE.jpg',
 			displacement: '',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/TRIMS_-_SILVER/TRIMS_-_SILVER_-_ROUGH.jpg',
+			roughness: '/static/fabrics/nakedandfamousdenim/root/TRIMS_-_SILVER/TRIMS_-_SILVER_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Silver',
 			category: 'Trims',
@@ -2468,16 +2002,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '467de8e3-e785-43c2-87c1-6219d412a270',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/nakedandfamousdenim/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/nakedandfamousdenim/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/nakedandfamousdenim/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/nakedandfamousdenim/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/nakedandfamousdenim/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Jersey',
@@ -2486,16 +2015,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '4d0a93ef-774d-4a45-8540-3c3e6028a582',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/DENIM_-_ECRU/DENIM_-_ECRU_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/DENIM_-_ECRU/DENIM_-_PINK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/DENIM_-_ECRU/DENIM_-_ECRU_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/DENIM_-_ECRU/DENIM_-_PINK_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/nakedandfamousdenim/root/DENIM_-_ECRU/DENIM_-_PINK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/nakedandfamousdenim/root/DENIM_-_ECRU/DENIM_-_ECRU_-_RENDER.webp',
+			normal: '/static/fabrics/nakedandfamousdenim/root/DENIM_-_ECRU/DENIM_-_PINK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/nakedandfamousdenim/root/DENIM_-_ECRU/DENIM_-_ECRU_-_BASE.jpg',
+			displacement: '/static/fabrics/nakedandfamousdenim/root/DENIM_-_ECRU/DENIM_-_PINK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/nakedandfamousdenim/root/DENIM_-_ECRU/DENIM_-_PINK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Ecru',
 			category: 'Denim',
@@ -2506,16 +2030,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	'zd-eye-of-the-storm': [
 		{
 			_id: '06ae5637-9ffa-4df6-be84-90e0ca6108fd',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/zd-eye-of-the-storm/root/WOOL_-_TWILL/WOOL_TWILL_-_GRAY_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/zd-eye-of-the-storm/root/WOOL_-_TWILL/WOOL_TWILL_-_GRAY_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/zd-eye-of-the-storm/root/WOOL_-_TWILL/WOOL_TWILL_-_GRAY_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/zd-eye-of-the-storm/root/WOOL_-_TWILL/WOOL_TWILL_-_GRAY_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/zd-eye-of-the-storm/root/WOOL_-_TWILL/WOOL_TWILL_-_GRAY_-_ROUGH.jpg',
+			thumb: '/static/fabrics/zd-eye-of-the-storm/root/WOOL_-_TWILL/WOOL_TWILL_-_GRAY_-_RENDER.webp',
+			normal: '/static/fabrics/zd-eye-of-the-storm/root/WOOL_-_TWILL/WOOL_TWILL_-_GRAY_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/zd-eye-of-the-storm/root/WOOL_-_TWILL/WOOL_TWILL_-_GRAY_-_BASE.jpg',
+			displacement: '/static/fabrics/zd-eye-of-the-storm/root/WOOL_-_TWILL/WOOL_TWILL_-_GRAY_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/zd-eye-of-the-storm/root/WOOL_-_TWILL/WOOL_TWILL_-_GRAY_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Twill',
 			category: 'Wool',
@@ -2527,15 +2046,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: 'a5b4b320-0778-44de-81a7-520266b33a98',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_RENDER.webp',
+				'/static/fabrics/metamorphosis/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_NORMAL.jpg',
+				'/static/fabrics/metamorphosis/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_BASE.jpg',
+				'/static/fabrics/metamorphosis/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_DISPLACE.jpg',
+				'/static/fabrics/metamorphosis/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_ROUGH.jpg',
+				'/static/fabrics/metamorphosis/root/3D_-_SQUARE_%3C11%2C_10%2C_0%2C_0%2C_1000%2C_0%3E/3D_-_SQUARE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Square',
 			category: '3d',
@@ -2550,15 +2069,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '9616e904-33a5-4571-9921-b755f4519941',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_BASE.jpg',
+			thumb: '/static/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_BASE.jpg',
 			displacement: '',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_ROUGH.jpg',
+			roughness: '/static/fabrics/metamorphosis/root/COTTON_-_BLACK/COTTON_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Cotton',
@@ -2567,14 +2082,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'e671748d-bd53-4088-8bfc-cb4368c618cb',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_GRAY/COTTON_-_GRAY_-_RENDER.webp',
+			thumb: '/static/fabrics/metamorphosis/root/COTTON_-_GRAY/COTTON_-_GRAY_-_RENDER.webp',
 			normal: '',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_GRAY/COTTON_-_GRAY_-_BASE.jpg',
+			baseColor: '/static/fabrics/metamorphosis/root/COTTON_-_GRAY/COTTON_-_GRAY_-_BASE.jpg',
 			displacement: '',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_GRAY/COTTON_-_GRAY_-_ROUGH.jpg',
+			roughness: '/static/fabrics/metamorphosis/root/COTTON_-_GRAY/COTTON_-_GRAY_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Gray',
 			category: 'Cotton',
@@ -2583,15 +2095,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '875a13d9-7dca-4541-af75-3065091629ad',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_BASE.jpg',
+			thumb: '/static/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_RENDER.webp',
+			normal: '/static/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_BASE.jpg',
 			displacement: '',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_ALPHA.jpg',
+			roughness: '/static/fabrics/metamorphosis/root/COTTON_-_BLACK_SEETHROUGH/COTTON_-_BLACK_SEETHROUGH_-_ALPHA.jpg',
 			alpha: '',
 			materialName: 'Black Seethrough',
 			category: 'Cotton',
@@ -2600,15 +2108,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '0e922b8e-210c-40de-927e-6a3aba8db1e1',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
+			thumb: '/static/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_BASE.jpg',
 			displacement: '',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
+			roughness: '/static/fabrics/metamorphosis/root/COTTON_-_WHITE/COTTON_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Cotton',
@@ -2617,15 +2121,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '435ed249-8f35-4081-aad9-d607405abb91',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_BASE.jpg',
+			thumb: '/static/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_BASE.jpg',
 			displacement: '',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_ROUGH.jpg',
+			roughness: '/static/fabrics/metamorphosis/root/TAFFETA_-_BLACK/TAFFETA_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Taffeta',
@@ -2635,15 +2135,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: '17595e6d-3020-4cbc-b484-210a899b5417',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_RENDER.webp',
+				'/static/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_NORMAL.jpg',
+				'/static/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_BASE.jpg',
+				'/static/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_DISPLACE.jpg',
+				'/static/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_ROUGH.jpg',
+				'/static/fabrics/metamorphosis/root/CORDUROY_-_GOLDEN_BROWN_GRID/CORDUROY_-_GOLDEN_BROWN_GRID_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Golden Brown Grid',
 			category: 'Corduroy',
@@ -2652,16 +2152,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '05b2824c-0dac-4407-89ce-e8e6194f5190',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/metamorphosis/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_ROUGH.jpg',
+			thumb: '/static/fabrics/metamorphosis/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_RENDER.webp',
+			normal: '/static/fabrics/metamorphosis/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/metamorphosis/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_BASE.jpg',
+			displacement: '/static/fabrics/metamorphosis/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/metamorphosis/root/CORDUROY_-_GRID/CORDUROY_-_GRID_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Grid',
 			category: 'Corduroy',
@@ -2673,15 +2168,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: 'f8121f08-28bf-40f1-abd2-664ee56f7b32',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_PALE_BEIGE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_PALE_BEIGE_-_RENDER.webp',
+				'/static/fabrics/h%26m/root/SILK_-_PALE_BEIGE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_PALE_BEIGE_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_PALE_BEIGE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_PALE_BEIGE_-_NORMAL.jpg',
+				'/static/fabrics/h%26m/root/SILK_-_PALE_BEIGE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_PALE_BEIGE_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_PALE_BEIGE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_PALE_BEIGE_-_BASE.jpg',
+				'/static/fabrics/h%26m/root/SILK_-_PALE_BEIGE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_PALE_BEIGE_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_PALE_BEIGE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_PALE_BEIGE_-_DISPLACE.jpg',
+				'/static/fabrics/h%26m/root/SILK_-_PALE_BEIGE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_PALE_BEIGE_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_PALE_BEIGE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_PALE_BEIGE_-_ROUGH.jpg',
+				'/static/fabrics/h%26m/root/SILK_-_PALE_BEIGE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_PALE_BEIGE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Pale Beige',
 			category: 'Silk',
@@ -2697,15 +2192,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: '2e81147f-c4b3-459c-9396-953ca60ff339',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_MISTY_ROSE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_MISTY_ROSE_-_RENDER.webp',
+				'/static/fabrics/h%26m/root/SILK_-_MISTY_ROSE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_MISTY_ROSE_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_MISTY_ROSE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_MISTY_ROSE_-_NORMAL.jpg',
+				'/static/fabrics/h%26m/root/SILK_-_MISTY_ROSE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_MISTY_ROSE_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_MISTY_ROSE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_MISTY_ROSE_-_BASE.jpg',
+				'/static/fabrics/h%26m/root/SILK_-_MISTY_ROSE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_MISTY_ROSE_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_MISTY_ROSE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_MISTY_ROSE_-_DISPLACE.jpg',
+				'/static/fabrics/h%26m/root/SILK_-_MISTY_ROSE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_MISTY_ROSE_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_MISTY_ROSE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_MISTY_ROSE_-_ROUGH.jpg',
+				'/static/fabrics/h%26m/root/SILK_-_MISTY_ROSE_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_MISTY_ROSE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Misty Rose',
 			category: 'Silk',
@@ -2720,16 +2215,12 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '9081c423-d6c7-4c16-8190-ac7c0317d6ed',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_CREAM_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_CREAM_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_CREAM_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_CREAM_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_CREAM_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_CREAM_-_BASE.jpg',
+			thumb: '/static/fabrics/h%26m/root/SILK_-_CREAM_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_CREAM_-_RENDER.webp',
+			normal: '/static/fabrics/h%26m/root/SILK_-_CREAM_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_CREAM_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/h%26m/root/SILK_-_CREAM_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_CREAM_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_CREAM_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_CREAM_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SILK_-_CREAM_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_CREAM_-_ROUGH.jpg',
+				'/static/fabrics/h%26m/root/SILK_-_CREAM_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_CREAM_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/h%26m/root/SILK_-_CREAM_%3C5%2C_5%2C_0%2C_0%2C_500%2C_0%3E/SILK_-_CREAM_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Cream',
 			category: 'Silk',
@@ -2745,15 +2236,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: '0ec6763a-44db-4b2d-b47d-327fbff89c3f',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SEERSUCKER_-_WHITE_%3C5%2C_5%2C_0%2C_0%2C_900%2C_0%3E/SEERSUCKER_-_WHITE_-_RENDER.webp',
+				'/static/fabrics/h%26m/root/SEERSUCKER_-_WHITE_%3C5%2C_5%2C_0%2C_0%2C_900%2C_0%3E/SEERSUCKER_-_WHITE_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SEERSUCKER_-_WHITE_%3C5%2C_5%2C_0%2C_0%2C_900%2C_0%3E/SEERSUCKER_-_WHITE_-_NORMAL.jpg',
+				'/static/fabrics/h%26m/root/SEERSUCKER_-_WHITE_%3C5%2C_5%2C_0%2C_0%2C_900%2C_0%3E/SEERSUCKER_-_WHITE_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SEERSUCKER_-_WHITE_%3C5%2C_5%2C_0%2C_0%2C_900%2C_0%3E/SEERSUCKER_-_WHITE_-_BASE.jpg',
+				'/static/fabrics/h%26m/root/SEERSUCKER_-_WHITE_%3C5%2C_5%2C_0%2C_0%2C_900%2C_0%3E/SEERSUCKER_-_WHITE_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SEERSUCKER_-_WHITE_%3C5%2C_5%2C_0%2C_0%2C_900%2C_0%3E/SEERSUCKER_-_WHITE_-_DISPLACE.jpg',
+				'/static/fabrics/h%26m/root/SEERSUCKER_-_WHITE_%3C5%2C_5%2C_0%2C_0%2C_900%2C_0%3E/SEERSUCKER_-_WHITE_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/SEERSUCKER_-_WHITE_%3C5%2C_5%2C_0%2C_0%2C_900%2C_0%3E/SEERSUCKER_-_WHITE_-_ROUGH.jpg',
+				'/static/fabrics/h%26m/root/SEERSUCKER_-_WHITE_%3C5%2C_5%2C_0%2C_0%2C_900%2C_0%3E/SEERSUCKER_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Seersucker',
@@ -2769,15 +2260,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: 'bd9d8848-e463-440e-8ca3-1fa70d8b547e',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/CREPE_COTTON_-_FLORAL_%3C4%2C_4%2C_0%2C_0%2C_850%2C_0%3E/CREPE_COTTON_-_FLORAL_-_RENDER.webp',
+				'/static/fabrics/h%26m/root/CREPE_COTTON_-_FLORAL_%3C4%2C_4%2C_0%2C_0%2C_850%2C_0%3E/CREPE_COTTON_-_FLORAL_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/CREPE_COTTON_-_FLORAL_%3C4%2C_4%2C_0%2C_0%2C_850%2C_0%3E/CREPE_COTTON_-_FLORAL_-_NORMAL.jpg',
+				'/static/fabrics/h%26m/root/CREPE_COTTON_-_FLORAL_%3C4%2C_4%2C_0%2C_0%2C_850%2C_0%3E/CREPE_COTTON_-_FLORAL_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/CREPE_COTTON_-_FLORAL_%3C4%2C_4%2C_0%2C_0%2C_850%2C_0%3E/CREPE_COTTON_-_FLORAL_-_BASE.jpg',
+				'/static/fabrics/h%26m/root/CREPE_COTTON_-_FLORAL_%3C4%2C_4%2C_0%2C_0%2C_850%2C_0%3E/CREPE_COTTON_-_FLORAL_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/CREPE_COTTON_-_FLORAL_%3C4%2C_4%2C_0%2C_0%2C_850%2C_0%3E/CREPE_COTTON_-_FLORAL_-_DISPLACE.jpg',
+				'/static/fabrics/h%26m/root/CREPE_COTTON_-_FLORAL_%3C4%2C_4%2C_0%2C_0%2C_850%2C_0%3E/CREPE_COTTON_-_FLORAL_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/CREPE_COTTON_-_FLORAL_%3C4%2C_4%2C_0%2C_0%2C_850%2C_0%3E/CREPE_COTTON_-_FLORAL_-_ROUGH.jpg',
+				'/static/fabrics/h%26m/root/CREPE_COTTON_-_FLORAL_%3C4%2C_4%2C_0%2C_0%2C_850%2C_0%3E/CREPE_COTTON_-_FLORAL_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Floral',
 			category: 'Crepe Cotton',
@@ -2793,15 +2284,15 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: '71843548-4ab2-49ae-81f0-acb5e387d581',
 			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_SHEPHERD_%3C3%2C_3%2C_0%2C_0%2C_200%2C_0%3E/COTTON_-_SHEPHERD_-_RENDER.webp',
+				'/static/fabrics/h%26m/root/COTTON_-_SHEPHERD_%3C3%2C_3%2C_0%2C_0%2C_200%2C_0%3E/COTTON_-_SHEPHERD_-_RENDER.webp',
 			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_SHEPHERD_%3C3%2C_3%2C_0%2C_0%2C_200%2C_0%3E/COTTON_-_SHEPHERD_-_NORMAL.jpg',
+				'/static/fabrics/h%26m/root/COTTON_-_SHEPHERD_%3C3%2C_3%2C_0%2C_0%2C_200%2C_0%3E/COTTON_-_SHEPHERD_-_NORMAL.jpg',
 			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_SHEPHERD_%3C3%2C_3%2C_0%2C_0%2C_200%2C_0%3E/COTTON_-_SHEPHERD_-_BASE.jpg',
+				'/static/fabrics/h%26m/root/COTTON_-_SHEPHERD_%3C3%2C_3%2C_0%2C_0%2C_200%2C_0%3E/COTTON_-_SHEPHERD_-_BASE.jpg',
 			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_SHEPHERD_%3C3%2C_3%2C_0%2C_0%2C_200%2C_0%3E/COTTON_-_SHEPHERD_-_DISPLACE.jpg',
+				'/static/fabrics/h%26m/root/COTTON_-_SHEPHERD_%3C3%2C_3%2C_0%2C_0%2C_200%2C_0%3E/COTTON_-_SHEPHERD_-_DISPLACE.jpg',
 			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_SHEPHERD_%3C3%2C_3%2C_0%2C_0%2C_200%2C_0%3E/COTTON_-_SHEPHERD_-_ROUGH.jpg',
+				'/static/fabrics/h%26m/root/COTTON_-_SHEPHERD_%3C3%2C_3%2C_0%2C_0%2C_200%2C_0%3E/COTTON_-_SHEPHERD_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Shepherd',
 			category: 'Cotton',
@@ -2816,11 +2307,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '0f63e7c3-994b-40d8-9d86-e2e3fe515032',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_BASE.jpg',
-			displacement: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/h%26m/root/KNIT_-_BLACK/KNIT_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Knit',
@@ -2829,12 +2320,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '7a71ad9d-7761-4cb4-b85e-19dbc45cdc3c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/h%26m/root/TWILL_-_BLACK/TWILL_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Twill',
@@ -2843,12 +2333,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '8a473fac-46f7-4c01-8c08-d2bf9a5261e3',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_ROUGH.jpg',
+			thumb: '/static/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_RENDER.webp',
+			normal: '/static/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_BASE.jpg',
+			displacement: '/static/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/h%26m/root/DENIM_-_TOPAZ/DENIM_-_TOPAZ_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Topaz',
 			category: 'Denim',
@@ -2857,11 +2346,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'caa62680-67d0-401b-ada8-4febf05bd887',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_BROWN/COTTON_-_BROWN_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_BROWN/COTTON_-_BROWN_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_BROWN/COTTON_-_BROWN_-_BASE.jpg',
+			thumb: '/static/fabrics/h%26m/root/COTTON_-_BROWN/COTTON_-_BROWN_-_RENDER.webp',
+			normal: '/static/fabrics/h%26m/root/COTTON_-_BROWN/COTTON_-_BROWN_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/h%26m/root/COTTON_-_BROWN/COTTON_-_BROWN_-_BASE.jpg',
 			displacement: '',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/COTTON_-_BROWN/COTTON_-_BROWN_-_ROUGH.jpg',
+			roughness: '/static/fabrics/h%26m/root/COTTON_-_BROWN/COTTON_-_BROWN_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Brown',
 			category: 'Cotton',
@@ -2870,12 +2359,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '716358c3-36ec-438a-9a7c-43085598d198',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
+			thumb: '/static/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_RENDER.webp',
+			normal: '/static/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_BASE.jpg',
+			displacement: '/static/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/h%26m/root/JERSEY_-_BLACK/JERSEY_-_BLACK_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Black',
 			category: 'Jersey',
@@ -2884,12 +2372,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: 'ec90de13-727a-4dbe-8762-d1497c49a510',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
-			normal: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
-			baseColor: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
-			roughness: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_RENDER.webp',
+			normal: '/static/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/h%26m/root/JERSEY_-_WHITE/JERSEY_-_WHITE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'White',
 			category: 'Jersey',
@@ -2900,16 +2387,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	abercrombie: [
 		{
 			_id: '7ef8181e-2309-4f73-88a8-17e28aac6219',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/abercrombie/root/SILK_-_OXBLOOD/SILK_-_OXBLOOD_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/abercrombie/root/SILK_-_OXBLOOD/SILK_-_OXBLOOD_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/abercrombie/root/SILK_-_OXBLOOD/SILK_-_OXBLOOD_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/abercrombie/root/SILK_-_OXBLOOD/SILK_-_OXBLOOD_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/abercrombie/root/SILK_-_OXBLOOD/SILK_-_OXBLOOD_-_ROUGH.jpg',
+			thumb: '/static/fabrics/abercrombie/root/SILK_-_OXBLOOD/SILK_-_OXBLOOD_-_RENDER.webp',
+			normal: '/static/fabrics/abercrombie/root/SILK_-_OXBLOOD/SILK_-_OXBLOOD_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/abercrombie/root/SILK_-_OXBLOOD/SILK_-_OXBLOOD_-_BASE.jpg',
+			displacement: '/static/fabrics/abercrombie/root/SILK_-_OXBLOOD/SILK_-_OXBLOOD_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/abercrombie/root/SILK_-_OXBLOOD/SILK_-_OXBLOOD_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Oxblood',
 			category: 'Silk',
@@ -2918,16 +2400,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		},
 		{
 			_id: '51c13009-dd67-41c9-97fb-1f77a81ae996',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/abercrombie/root/SILK_-_DUSTY_ROSE/SILK_-_DUSTY_ROSE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/abercrombie/root/SILK_-_DUSTY_ROSE/SILK_-_DUSTY_ROSE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/abercrombie/root/SILK_-_DUSTY_ROSE/SILK_-_DUSTY_ROSE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/abercrombie/root/SILK_-_DUSTY_ROSE/SILK_-_DUSTY_ROSE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/abercrombie/root/SILK_-_DUSTY_ROSE/SILK_-_DUSTY_ROSE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/abercrombie/root/SILK_-_DUSTY_ROSE/SILK_-_DUSTY_ROSE_-_RENDER.webp',
+			normal: '/static/fabrics/abercrombie/root/SILK_-_DUSTY_ROSE/SILK_-_DUSTY_ROSE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/abercrombie/root/SILK_-_DUSTY_ROSE/SILK_-_DUSTY_ROSE_-_BASE.jpg',
+			displacement: '/static/fabrics/abercrombie/root/SILK_-_DUSTY_ROSE/SILK_-_DUSTY_ROSE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/abercrombie/root/SILK_-_DUSTY_ROSE/SILK_-_DUSTY_ROSE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Dusty Rose',
 			category: 'Silk',
@@ -2939,15 +2416,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: '07c3fecb-69a9-47be-a251-2034ec76fb93',
 			thumb: '',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oceania-london/root/LACE_-_WHITE/LACE_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oceania-london/root/LACE_-_WHITE/LACE_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oceania-london/root/LACE_-_WHITE/LACE_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oceania-london/root/LACE_-_WHITE/LACE_-_WHITE_-_ROUGH.jpg',
-			alpha: 'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oceania-london/root/LACE_-_WHITE/LACE_-_WHITE_-_ALPHA.jpg',
+			normal: '/static/fabrics/oceania-london/root/LACE_-_WHITE/LACE_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/oceania-london/root/LACE_-_WHITE/LACE_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/oceania-london/root/LACE_-_WHITE/LACE_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/oceania-london/root/LACE_-_WHITE/LACE_-_WHITE_-_ROUGH.jpg',
+			alpha: '/static/fabrics/oceania-london/root/LACE_-_WHITE/LACE_-_WHITE_-_ALPHA.jpg',
 			materialName: 'White',
 			category: 'Lace',
 			collection: 'oceania-london',
@@ -2956,16 +2429,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 		{
 			_id: 'a5fc298b-47c5-4a33-8573-4bf30b7b2681',
 			thumb: '',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oceania-london/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oceania-london/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oceania-london/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oceania-london/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_ROUGH.jpg',
-			alpha:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/oceania-london/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_ALPHA.jpg',
+			normal: '/static/fabrics/oceania-london/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/oceania-london/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_BASE.jpg',
+			displacement: '/static/fabrics/oceania-london/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/oceania-london/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_ROUGH.jpg',
+			alpha: '/static/fabrics/oceania-london/root/CHIFFON_-_WHITE/CHIFFON_-_WHITE_-_ALPHA.jpg',
 			materialName: 'White',
 			category: 'Chiffon',
 			collection: 'oceania-london',
@@ -2975,16 +2443,11 @@ const legacyFabrics: Record<string, Fabric[]> = {
 	cortana: [
 		{
 			_id: '5342ff62-5713-468b-bb7c-ee43b7b32a8f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cortana/root/SILK_-_BURNT_ORANGE/SILK_-_BURNT_ORANGE_-_RENDER.webp',
-			normal:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cortana/root/SILK_-_BURNT_ORANGE/SILK_-_BURNT_ORANGE_-_NORMAL.jpg',
-			baseColor:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cortana/root/SILK_-_BURNT_ORANGE/SILK_-_BURNT_ORANGE_-_BASE.jpg',
-			displacement:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cortana/root/SILK_-_BURNT_ORANGE/SILK_-_BURNT_ORANGE_-_DISPLACE.jpg',
-			roughness:
-				'https://d1e6s1h8cqcr26.cloudfront.net/fabrics/cortana/root/SILK_-_BURNT_ORANGE/SILK_-_BURNT_ORANGE_-_ROUGH.jpg',
+			thumb: '/static/fabrics/cortana/root/SILK_-_BURNT_ORANGE/SILK_-_BURNT_ORANGE_-_RENDER.webp',
+			normal: '/static/fabrics/cortana/root/SILK_-_BURNT_ORANGE/SILK_-_BURNT_ORANGE_-_NORMAL.jpg',
+			baseColor: '/static/fabrics/cortana/root/SILK_-_BURNT_ORANGE/SILK_-_BURNT_ORANGE_-_BASE.jpg',
+			displacement: '/static/fabrics/cortana/root/SILK_-_BURNT_ORANGE/SILK_-_BURNT_ORANGE_-_DISPLACE.jpg',
+			roughness: '/static/fabrics/cortana/root/SILK_-_BURNT_ORANGE/SILK_-_BURNT_ORANGE_-_ROUGH.jpg',
 			alpha: '',
 			materialName: 'Burnt Orange',
 			category: 'Silk',

@@ -9,10 +9,10 @@ export const legacyBackgroundScenes: BackgroundScene[] = [
 		slug: 'metamorphosis',
 		description: 'OOFYA',
 		env: '/images/envs/OOFYA-env.webp',
-		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+Scene.glb',
+		scene: '/static/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+Scene.glb',
 		// scene: '/models/OOFYA+SCENE-light+(4).glb',
 		includedModelFiles: [
-			// 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SHOES.glb',
+			// '/static/drippy-app/drippy-app-3D/brands/oofya/OOFYA+-+SHOES.glb',
 		],
 	},
 	{
@@ -20,7 +20,7 @@ export const legacyBackgroundScenes: BackgroundScene[] = [
 		slug: 'drippy-shop',
 		description: 'Drippy Shop',
 		env: '/images/envs/Drippy-Shop-HDRIs.webp',
-		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/drippy-shop/Drippy+Shop+-+Scene.glb',
+		scene: '/static/drippy-app/drippy-app-3D/brands/drippy-shop/Drippy+Shop+-+Scene.glb',
 		includedModelFiles: [],
 	},
 	{
@@ -28,7 +28,7 @@ export const legacyBackgroundScenes: BackgroundScene[] = [
 		slug: 'h&m',
 		description: 'H&M',
 		env: '/images/envs/H&M-env.webp',
-		scene: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/h%26m/H%26M+Scene.glb',
+		scene: '/static/drippy-app/drippy-app-3D/brands/h%26m/H%26M+Scene.glb',
 		includedModelFiles: [],
 	},
 ]

@@ -7,7 +7,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	anyshape: [
 		{
 			_id: 'd9ba4aea-9279-4909-b6a5-a348fb32a9d9',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/anyshape/templates/Dress_/Item_1.webp',
+			thumb: '/static/images/anyshape/templates/Dress_/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -16,7 +16,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 			materialId: 'eb7b3511-7669-43bc-a1c8-2629daf19c8d',
 			extraMaterials: [
 				{
-					mesh: 'fullbody_1801-fullbody_1788-fullbody_1803-fullbody_1789-fullbody_1806-fullbody_1800-fullbody_1794-fullbody_1791-fullbody_1810',
+					mesh:
+						'fullbody_1801-fullbody_1788-fullbody_1803-fullbody_1789-fullbody_1806-fullbody_1800-fullbody_1794-fullbody_1791-fullbody_1810',
 					materialId: '3edd2e51-42a1-4b00-bcef-083a445220e6',
 				},
 			],
@@ -25,7 +26,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	ayarabbim: [
 		{
 			_id: '575e0a9a-b8cb-4ec1-acf2-fe8fdad25c49',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/ayarabbim/templates/Skirt/Item_1.webp',
+			thumb: '/static/images/ayarabbim/templates/Skirt/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -35,7 +36,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '50054819-7f4b-46c0-b478-b3b1ccd1ddbd',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/ayarabbim/templates/Top/Item_1.webp',
+			thumb: '/static/images/ayarabbim/templates/Top/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -53,7 +54,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'baum-und-pferdgarten': [
 		{
 			_id: 'b190ed3f-fa45-4090-a847-99447b4468be',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/templates/Dress/ANDINE_DRESS.webp',
+			thumb: '/static/images/baum-und-pferdgarten/templates/Dress/ANDINE_DRESS.webp',
 			name: 'ANDINE DRESS',
 			price: 'N/A',
 			avatar: 'female',
@@ -66,10 +67,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: '6dbc1b48-5621-48a3-ad12-993bc3965b87',
-							thumb:
-								'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_5.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_5.glb',
+							thumb: '/static/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_5.webp',
+							modelFile: '/static/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_5.glb',
 							blockName: 'Skirt 5',
 							avatar: 'female',
 							category: 'Skirt',
@@ -78,10 +77,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'aaf65de7-8d56-4589-9e68-cac5b9baee34',
-							thumb:
-								'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_4.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_4.glb',
+							thumb: '/static/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_4.webp',
+							modelFile: '/static/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_4.glb',
 							blockName: 'Skirt 4',
 							avatar: 'female',
 							category: 'Skirt',
@@ -90,10 +87,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '441f3fbc-3215-421a-9971-eb569f796940',
-							thumb:
-								'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_3.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_3.glb',
+							thumb: '/static/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_3.webp',
+							modelFile: '/static/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_3.glb',
 							blockName: 'Skirt 3',
 							avatar: 'female',
 							category: 'Skirt',
@@ -102,10 +97,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '9ebb0ce2-1da8-4105-b547-9e53caec4e6d',
-							thumb:
-								'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_2.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_2.glb',
+							thumb: '/static/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_2.webp',
+							modelFile: '/static/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_2.glb',
 							blockName: 'Skirt 2',
 							avatar: 'female',
 							category: 'Skirt',
@@ -114,10 +107,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '3bd0f7c7-06a6-47b9-b3ef-c7dfeb72ca34',
-							thumb:
-								'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_1.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_1.glb',
+							thumb: '/static/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_1.webp',
+							modelFile: '/static/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_1.glb',
 							blockName: 'Skirt 1',
 							avatar: 'female',
 							category: 'Skirt',
@@ -132,7 +123,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'bloom.womenswear': [
 		{
 			_id: '84027586-b9fa-48e1-8e5f-89953e3cc61b',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/templates/Dress/Item_1.webp',
+			thumb: '/static/images/bloom.womenswear/templates/Dress/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -142,7 +133,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '54019ac4-d644-422e-882e-a30933a14e16',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/templates/Skirt/Item_2.webp',
+			thumb: '/static/images/bloom.womenswear/templates/Skirt/Item_2.webp',
 			name: 'Item 2',
 			price: 'N/A',
 			avatar: 'female',
@@ -152,7 +143,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '568f31ea-c5fe-4805-a772-e05474bcb440',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/templates/Skirt/Item_1.webp',
+			thumb: '/static/images/bloom.womenswear/templates/Skirt/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -162,7 +153,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '24b5fca3-8976-448a-9d36-1a4630ecbcaa',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/templates/Top/Item_2.webp',
+			thumb: '/static/images/bloom.womenswear/templates/Top/Item_2.webp',
 			name: 'Item 2',
 			price: 'N/A',
 			avatar: 'female',
@@ -172,7 +163,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '2681e8eb-30cc-447e-a081-fbc5ba8a171b',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/templates/Top/Item_1.webp',
+			thumb: '/static/images/bloom.womenswear/templates/Top/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -184,7 +175,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	bupbes: [
 		{
 			_id: 'f937a929-a87d-42d3-8388-ee5a424e4e2b',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bupbes/templates/Dress/Item_1.webp',
+			thumb: '/static/images/bupbes/templates/Dress/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -196,7 +187,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'call-me-ari': [
 		{
 			_id: 'b123090f-ede6-4661-b64b-8fbbc495c890',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/templates/Dress/KATIE_MAXI_DRESS.webp',
+			thumb: '/static/images/call-me-ari/templates/Dress/KATIE_MAXI_DRESS.webp',
 			name: 'KATIE MAXI DRESS',
 			price: 'N/A',
 			avatar: 'female',
@@ -209,8 +200,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: '50032a98-8807-4ea8-b9d8-f7b2873795b3',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/options/Dress/Skirt/Skirt_5.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/options/Dress/Skirt/Skirt_5.glb',
+							thumb: '/static/images/call-me-ari/options/Dress/Skirt/Skirt_5.webp',
+							modelFile: '/static/models/call-me-ari/options/Dress/Skirt/Skirt_5.glb',
 							blockName: 'Skirt 5',
 							avatar: 'female',
 							category: 'Skirt',
@@ -219,8 +210,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '7b4c8bde-3615-4871-b427-dfce62eae66b',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/options/Dress/Skirt/Skirt_4.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/options/Dress/Skirt/Skirt_4.glb',
+							thumb: '/static/images/call-me-ari/options/Dress/Skirt/Skirt_4.webp',
+							modelFile: '/static/models/call-me-ari/options/Dress/Skirt/Skirt_4.glb',
 							blockName: 'Skirt 4',
 							avatar: 'female',
 							category: 'Skirt',
@@ -229,8 +220,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'a9b813de-ec23-4033-bb64-1f1400a9fefe',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/options/Dress/Skirt/Skirt_3.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/options/Dress/Skirt/Skirt_3.glb',
+							thumb: '/static/images/call-me-ari/options/Dress/Skirt/Skirt_3.webp',
+							modelFile: '/static/models/call-me-ari/options/Dress/Skirt/Skirt_3.glb',
 							blockName: 'Skirt 3',
 							avatar: 'female',
 							category: 'Skirt',
@@ -239,8 +230,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '0308584d-a92c-4f93-b390-de22f9f83575',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/options/Dress/Skirt/Skirt_2.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/options/Dress/Skirt/Skirt_2.glb',
+							thumb: '/static/images/call-me-ari/options/Dress/Skirt/Skirt_2.webp',
+							modelFile: '/static/models/call-me-ari/options/Dress/Skirt/Skirt_2.glb',
 							blockName: 'Skirt 2',
 							avatar: 'female',
 							category: 'Skirt',
@@ -249,8 +240,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '4f4525d7-bed9-4808-bbe8-45fd59c84ec4',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/options/Dress/Skirt/Skirt_1.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/options/Dress/Skirt/Skirt_1.glb',
+							thumb: '/static/images/call-me-ari/options/Dress/Skirt/Skirt_1.webp',
+							modelFile: '/static/models/call-me-ari/options/Dress/Skirt/Skirt_1.glb',
 							blockName: 'Skirt 1',
 							avatar: 'female',
 							category: 'Skirt',
@@ -265,7 +256,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'cecilie-bahnsen': [
 		{
 			_id: 'd3e061c3-3d87-42a3-88f2-d59188dd0a9d',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cecilie-bahnsen/templates/Dress/Bosco_Dress.webp',
+			thumb: '/static/images/cecilie-bahnsen/templates/Dress/Bosco_Dress.webp',
 			name: 'Bosco Dress',
 			price: 'N/A',
 			avatar: 'female',
@@ -277,7 +268,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	crescent: [
 		{
 			_id: 'f2067303-9dde-43ad-aa1d-c9c656094727',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/crescent/templates/Dress/Featuring_Auburn_Dress.webp',
+			thumb: '/static/images/crescent/templates/Dress/Featuring_Auburn_Dress.webp',
 			name: 'Featuring Auburn Dress',
 			price: 'N/A',
 			avatar: 'female',
@@ -289,7 +280,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'cuba-vera': [
 		{
 			_id: 'be2999ef-dcde-494e-99ca-9538de41d3fd',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cuba-vera/templates/Dress/Pink_Dress.webp',
+			thumb: '/static/images/cuba-vera/templates/Dress/Pink_Dress.webp',
 			name: 'Pink Dress',
 			price: 'N/A',
 			avatar: 'female',
@@ -301,7 +292,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'dario-mittmann': [
 		{
 			_id: '28400841-fb02-4a3a-a949-0ea24b41d01b',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/templates/Skirt/Saia_Gravata_Colorida.webp',
+			thumb: '/static/images/dario-mittmann/templates/Skirt/Saia_Gravata_Colorida.webp',
 			name: 'Saia Gravata Colorida',
 			price: 'N/A',
 			avatar: 'female',
@@ -324,8 +315,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: '9e9cf702-87ef-43d9-aa52-516726808e36',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/options/Skirt/Skirt/Skirt_5.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/options/Skirt/Skirt/Skirt_5.glb',
+							thumb: '/static/images/dario-mittmann/options/Skirt/Skirt/Skirt_5.webp',
+							modelFile: '/static/models/dario-mittmann/options/Skirt/Skirt/Skirt_5.glb',
 							blockName: 'Skirt 5',
 							avatar: 'female',
 							category: 'Skirt',
@@ -334,8 +325,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'f02555c7-8415-4b1b-8d34-bd1abf75329d',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/options/Skirt/Skirt/Skirt_4.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/options/Skirt/Skirt/Skirt_4.glb',
+							thumb: '/static/images/dario-mittmann/options/Skirt/Skirt/Skirt_4.webp',
+							modelFile: '/static/models/dario-mittmann/options/Skirt/Skirt/Skirt_4.glb',
 							blockName: 'Skirt 4',
 							avatar: 'female',
 							category: 'Skirt',
@@ -344,8 +335,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '898d9e9d-8026-4517-82a9-d26e8b2958c4',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/options/Skirt/Skirt/Skirt_3.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/options/Skirt/Skirt/Skirt_3.glb',
+							thumb: '/static/images/dario-mittmann/options/Skirt/Skirt/Skirt_3.webp',
+							modelFile: '/static/models/dario-mittmann/options/Skirt/Skirt/Skirt_3.glb',
 							blockName: 'Skirt 3',
 							avatar: 'female',
 							category: 'Skirt',
@@ -354,8 +345,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '960198d6-3c8c-4bae-b010-a6c7b3c11bab',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/options/Skirt/Skirt/Skirt_2.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/options/Skirt/Skirt/Skirt_2.glb',
+							thumb: '/static/images/dario-mittmann/options/Skirt/Skirt/Skirt_2.webp',
+							modelFile: '/static/models/dario-mittmann/options/Skirt/Skirt/Skirt_2.glb',
 							blockName: 'Skirt 2',
 							avatar: 'female',
 							category: 'Skirt',
@@ -368,7 +359,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'e3c9aa99-647e-43f1-b64e-8d66cab6fc3b',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/templates/Top/Camisa_Alfaiataria_Azul.webp',
+			thumb: '/static/images/dario-mittmann/templates/Top/Camisa_Alfaiataria_Azul.webp',
 			name: 'Camisa Alfaiataria Azul',
 			price: 'N/A',
 			avatar: 'female',
@@ -380,8 +371,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	givenchy: [
 		{
 			_id: '68548cf4-29f9-4a2a-806b-01be931099b0',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/templates/Dress/Open_back_ruffled_dress_in_mesh.webp',
+			thumb: '/static/images/givenchy/templates/Dress/Open_back_ruffled_dress_in_mesh.webp',
 			name: 'Open back ruffled dress in mesh',
 			price: 'N/A',
 			avatar: 'female',
@@ -404,8 +394,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: 'beb3587e-012f-4243-813f-3310bbae73f2',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/options/Dress/Skirt/Skirt_5.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/options/Dress/Skirt/Skirt_5.glb',
+							thumb: '/static/images/givenchy/options/Dress/Skirt/Skirt_5.webp',
+							modelFile: '/static/models/givenchy/options/Dress/Skirt/Skirt_5.glb',
 							blockName: 'Skirt 5',
 							avatar: 'female',
 							category: 'Skirt',
@@ -414,8 +404,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '8b034c1c-4021-4803-ba60-26fc65ef85e2',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/options/Dress/Skirt/Skirt_4.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/options/Dress/Skirt/Skirt_4.glb',
+							thumb: '/static/images/givenchy/options/Dress/Skirt/Skirt_4.webp',
+							modelFile: '/static/models/givenchy/options/Dress/Skirt/Skirt_4.glb',
 							blockName: 'Skirt 4',
 							avatar: 'female',
 							category: 'Skirt',
@@ -424,8 +414,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'f554a5e1-2635-4ed5-8b76-1f64d91582a7',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/options/Dress/Skirt/Skirt_3.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/options/Dress/Skirt/Skirt_3.glb',
+							thumb: '/static/images/givenchy/options/Dress/Skirt/Skirt_3.webp',
+							modelFile: '/static/models/givenchy/options/Dress/Skirt/Skirt_3.glb',
 							blockName: 'Skirt 3',
 							avatar: 'female',
 							category: 'Skirt',
@@ -434,8 +424,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '548fcd71-5af4-48fe-9099-38577029f1d5',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/options/Dress/Skirt/Skirt_2.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/options/Dress/Skirt/Skirt_2.glb',
+							thumb: '/static/images/givenchy/options/Dress/Skirt/Skirt_2.webp',
+							modelFile: '/static/models/givenchy/options/Dress/Skirt/Skirt_2.glb',
 							blockName: 'Skirt 2',
 							avatar: 'female',
 							category: 'Skirt',
@@ -444,8 +434,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '4d219078-37b8-4c08-9274-c74a52ca832a',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/options/Dress/Skirt/Skirt_1.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/options/Dress/Skirt/Skirt_1.glb',
+							thumb: '/static/images/givenchy/options/Dress/Skirt/Skirt_1.webp',
+							modelFile: '/static/models/givenchy/options/Dress/Skirt/Skirt_1.glb',
 							blockName: 'Skirt 1',
 							avatar: 'female',
 							category: 'Skirt',
@@ -460,7 +450,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	dico: [
 		{
 			_id: 'f8c88e49-1e0c-41c9-a411-e440fcf5c6a2',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dico/templates/Pants/Item_1.webp',
+			thumb: '/static/images/dico/templates/Pants/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -470,7 +460,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '8ea47753-5edd-4c28-a046-78373980b6b6',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dico/templates/Top/Dico_Fluffy_Print_T-Shirt_Blac.webp',
+			thumb: '/static/images/dico/templates/Top/Dico_Fluffy_Print_T-Shirt_Blac.webp',
 			name: 'Dico Fluffy Print T',
 			price: 'N/A',
 			avatar: 'female',
@@ -482,7 +472,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	dottie: [
 		{
 			_id: '41a61ceb-5b92-4375-88c2-a98bc33bae23',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dottie/templates/Pants/Item_1.webp',
+			thumb: '/static/images/dottie/templates/Pants/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -492,7 +482,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '3553d0e3-9d30-4328-870e-3ae5a11f3018',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dottie/templates/Top/Ruffled_Trim_Cami.webp',
+			thumb: '/static/images/dottie/templates/Top/Ruffled_Trim_Cami.webp',
 			name: 'Ruffled Trim Cami',
 			price: 'N/A',
 			avatar: 'female',
@@ -504,7 +494,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	edini: [
 		{
 			_id: '38871b4e-9baa-48bc-b971-44030b715a29',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/edini/templates/Dress/D1641.webp',
+			thumb: '/static/images/edini/templates/Dress/D1641.webp',
 			name: 'D1641',
 			price: 'N/A',
 			avatar: 'female',
@@ -516,7 +506,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'erroris.ltd': [
 		{
 			_id: '2a32a40b-fd7c-4fd8-a971-adff3ae1f3c0',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/erroris.ltd/templates/Pants/GREY_CAPRI.webp',
+			thumb: '/static/images/erroris.ltd/templates/Pants/GREY_CAPRI.webp',
 			name: 'GREY CAPRI',
 			price: 'N/A',
 			avatar: 'female',
@@ -526,7 +516,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '0c58654d-a6d9-4bee-aa88-979931af5e6d',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/erroris.ltd/templates/Top/LUE_BABYDOLL.webp',
+			thumb: '/static/images/erroris.ltd/templates/Top/LUE_BABYDOLL.webp',
 			name: 'LUE BABYDOLL',
 			price: 'N/A',
 			avatar: 'female',
@@ -538,7 +528,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	gola: [
 		{
 			_id: '3340f1c9-0b0c-4b3c-aae8-486558a39655',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/gola/templates/Dress/Item_1.webp',
+			thumb: '/static/images/gola/templates/Dress/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -550,7 +540,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	h2b: [
 		{
 			_id: '19dedeb6-5de8-4da2-ade0-882ad5510786',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h2b/templates/Pants/Item_1.webp',
+			thumb: '/static/images/h2b/templates/Pants/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -560,7 +550,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'b4282c23-93e1-42ea-8c2d-9a844d70b551',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h2b/templates/Top/Item_1.webp',
+			thumb: '/static/images/h2b/templates/Top/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -572,7 +562,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'joie-des-roses': [
 		{
 			_id: '013245d3-eea0-413e-94f5-a87726ed1b1c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/templates/Jacket/Ena_jacket.webp',
+			thumb: '/static/images/joie-des-roses/templates/Jacket/Ena_jacket.webp',
 			name: 'Ena jacket',
 			price: 'N/A',
 			avatar: 'female',
@@ -582,7 +572,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '1461fdf5-628a-4aab-8a6f-035e9934a4a8',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/templates/Dress/Ena_Dress.webp',
+			thumb: '/static/images/joie-des-roses/templates/Dress/Ena_Dress.webp',
 			name: 'Ena Dress',
 			price: 'N/A',
 			avatar: 'female',
@@ -595,8 +585,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: '0fd83fb4-97f2-47d7-84b9-ba15f6de9276',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Skirt/Skirt_2.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Skirt/Skirt_2.glb',
+							thumb: '/static/images/joie-des-roses/options/Dress/Skirt/Skirt_2.webp',
+							modelFile: '/static/models/joie-des-roses/options/Dress/Skirt/Skirt_2.glb',
 							blockName: 'Skirt 2',
 							avatar: 'female',
 							category: 'Skirt',
@@ -605,8 +595,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'd196172e-2c37-4042-978c-892a89f7a027',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Skirt/Skirt_1.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Skirt/Skirt_1.glb',
+							thumb: '/static/images/joie-des-roses/options/Dress/Skirt/Skirt_1.webp',
+							modelFile: '/static/models/joie-des-roses/options/Dress/Skirt/Skirt_1.glb',
 							blockName: 'Skirt 1',
 							avatar: 'female',
 							category: 'Skirt',
@@ -620,9 +610,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: 'fa26354b-9578-4ad3-9b6e-11bc52ef0f15',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Sleeves/Sleeves_5.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Sleeves/Sleeves_5.glb',
+							thumb: '/static/images/joie-des-roses/options/Dress/Sleeves/Sleeves_5.webp',
+							modelFile: '/static/models/joie-des-roses/options/Dress/Sleeves/Sleeves_5.glb',
 							blockName: 'Sleeves 5',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -631,9 +620,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '4ae1f5ea-a083-4dc4-a437-99a9c66f410b',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Sleeves/Sleeves_4.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Sleeves/Sleeves_4.glb',
+							thumb: '/static/images/joie-des-roses/options/Dress/Sleeves/Sleeves_4.webp',
+							modelFile: '/static/models/joie-des-roses/options/Dress/Sleeves/Sleeves_4.glb',
 							blockName: 'Sleeves 4',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -642,9 +630,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'eb00a2e5-f3e6-4c83-a1e8-81d92526a488',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Sleeves/Sleeves_3.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Sleeves/Sleeves_3.glb',
+							thumb: '/static/images/joie-des-roses/options/Dress/Sleeves/Sleeves_3.webp',
+							modelFile: '/static/models/joie-des-roses/options/Dress/Sleeves/Sleeves_3.glb',
 							blockName: 'Sleeves 3',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -653,9 +640,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'fa9cdbdf-2b2c-43b4-b146-36fc4ccdf22d',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Sleeves/Sleeves_2.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Sleeves/Sleeves_2.glb',
+							thumb: '/static/images/joie-des-roses/options/Dress/Sleeves/Sleeves_2.webp',
+							modelFile: '/static/models/joie-des-roses/options/Dress/Sleeves/Sleeves_2.glb',
 							blockName: 'Sleeves 2',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -664,9 +650,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'b3a3e4d7-839a-4983-8704-dde567b7eeab',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Sleeves/Sleeves_1.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Sleeves/Sleeves_1.glb',
+							thumb: '/static/images/joie-des-roses/options/Dress/Sleeves/Sleeves_1.webp',
+							modelFile: '/static/models/joie-des-roses/options/Dress/Sleeves/Sleeves_1.glb',
 							blockName: 'Sleeves 1',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -681,7 +666,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'jubin-studio': [
 		{
 			_id: '2d9ba7a1-1037-4ceb-bcb4-da227220f974',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/jubin-studio/templates/Dress/Item_1.webp',
+			thumb: '/static/images/jubin-studio/templates/Dress/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -703,7 +688,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'celeste-studio': [
 		{
 			_id: '88e0452f-3c2b-4c89-9029-8a4361ec010f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/templates/Dress/RINA_DRESS.webp',
+			thumb: '/static/images/celeste-studio/templates/Dress/RINA_DRESS.webp',
 			name: 'RINA DRESS',
 			price: 'N/A',
 			avatar: 'female',
@@ -712,7 +697,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 			materialId: '7ba6106e-5c96-4135-9815-317620353275',
 			extraMaterials: [
 				{
-					mesh: 'fullbody_1952-07-fullbody_1952-03-fullbody_1952-14-fullbody_1952-17-fullbody_1952-09-fullbody_1952-05-fullbody_1952-06-fullbody_1952-12-fullbody_1952-13-buttonhead003-buttonhead002-buttonhead001-buttonhead-fullbody_1952-10-fullbody_1952-04',
+					mesh:
+						'fullbody_1952-07-fullbody_1952-03-fullbody_1952-14-fullbody_1952-17-fullbody_1952-09-fullbody_1952-05-fullbody_1952-06-fullbody_1952-12-fullbody_1952-13-buttonhead003-buttonhead002-buttonhead001-buttonhead-fullbody_1952-10-fullbody_1952-04',
 					materialId: 'b85309b0-53bb-4f54-9aa0-32047405cb2f',
 				},
 			],
@@ -722,9 +708,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: '76b08c1d-a88b-4fcd-900e-c844e199e09d',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/options/Dress/Sleeves/Sleeves_5.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/options/Dress/Sleeves/Sleeves_5.glb',
+							thumb: '/static/images/celeste-studio/options/Dress/Sleeves/Sleeves_5.webp',
+							modelFile: '/static/models/celeste-studio/options/Dress/Sleeves/Sleeves_5.glb',
 							blockName: 'Sleeves 5',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -733,9 +718,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '41ef2d25-dc97-4b28-8f60-7a5ea0d588e0',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/options/Dress/Sleeves/Sleeves_4.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/options/Dress/Sleeves/Sleeves_4.glb',
+							thumb: '/static/images/celeste-studio/options/Dress/Sleeves/Sleeves_4.webp',
+							modelFile: '/static/models/celeste-studio/options/Dress/Sleeves/Sleeves_4.glb',
 							blockName: 'Sleeves 4',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -744,9 +728,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '4b55bb6e-49aa-41c3-9b93-6b39712a20c5',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/options/Dress/Sleeves/Sleeves_3.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/options/Dress/Sleeves/Sleeves_3.glb',
+							thumb: '/static/images/celeste-studio/options/Dress/Sleeves/Sleeves_3.webp',
+							modelFile: '/static/models/celeste-studio/options/Dress/Sleeves/Sleeves_3.glb',
 							blockName: 'Sleeves 3',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -755,9 +738,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'fc72235c-7f42-4d1b-82a3-047391fee0d8',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/options/Dress/Sleeves/Sleeves_2.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/options/Dress/Sleeves/Sleeves_2.glb',
+							thumb: '/static/images/celeste-studio/options/Dress/Sleeves/Sleeves_2.webp',
+							modelFile: '/static/models/celeste-studio/options/Dress/Sleeves/Sleeves_2.glb',
 							blockName: 'Sleeves 2',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -766,10 +748,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '96dbdeae-cf75-48dc-89d4-219775f470b4',
-							thumb:
-								'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/options/Dress/Sleeves/_Sleeves_1.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/options/Dress/Sleeves/_Sleeves_1.glb',
+							thumb: '/static/images/celeste-studio/options/Dress/Sleeves/_Sleeves_1.webp',
+							modelFile: '/static/models/celeste-studio/options/Dress/Sleeves/_Sleeves_1.glb',
 							blockName: 'Sleeves 1',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -784,7 +764,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'just-etro-gang': [
 		{
 			_id: 'ddea397d-c2ed-4be6-9af6-07547e294388',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/just-etro-gang/templates/Skirt/Rogue_Knit_set.webp',
+			thumb: '/static/images/just-etro-gang/templates/Skirt/Rogue_Knit_set.webp',
 			name: 'Rogue Knit set',
 			price: 'N/A',
 			avatar: 'female',
@@ -794,7 +774,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '1b581b47-1f12-458b-8eac-55560ca58958',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/just-etro-gang/templates/Top/Rogue_Knit_set.webp',
+			thumb: '/static/images/just-etro-gang/templates/Top/Rogue_Knit_set.webp',
 			name: 'Rogue Knit set',
 			price: 'N/A',
 			avatar: 'female',
@@ -806,7 +786,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	kido: [
 		{
 			_id: 'c870b176-bd9e-4e00-a8e0-c2af5aab165e',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/kido/templates/Top/Item_1.webp',
+			thumb: '/static/images/kido/templates/Top/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -818,7 +798,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	levents: [
 		{
 			_id: 'a41cd95f-9fed-4461-9c07-9dad8d80ce63',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/templates/Top/Item_1.webp',
+			thumb: '/static/images/levents/templates/Top/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -828,7 +808,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '6abb18f5-b435-4119-9d74-b52af4854f7b',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/templates/Skirt/Item_1.webp',
+			thumb: '/static/images/levents/templates/Skirt/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -841,8 +821,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: '85665fb2-a090-4d97-9b01-b2756727b73c',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/options/Skirt/Skirt/Skirt_5.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/options/Skirt/Skirt/Skirt_5.glb',
+							thumb: '/static/images/levents/options/Skirt/Skirt/Skirt_5.webp',
+							modelFile: '/static/models/levents/options/Skirt/Skirt/Skirt_5.glb',
 							blockName: 'Skirt 5',
 							avatar: 'female',
 							category: 'Skirt',
@@ -851,8 +831,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '3410fd53-cbb7-46c6-9666-7de1d5f18e7c',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/options/Skirt/Skirt/Skirt_4.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/options/Skirt/Skirt/Skirt_4.glb',
+							thumb: '/static/images/levents/options/Skirt/Skirt/Skirt_4.webp',
+							modelFile: '/static/models/levents/options/Skirt/Skirt/Skirt_4.glb',
 							blockName: 'Skirt 4',
 							avatar: 'female',
 							category: 'Skirt',
@@ -861,8 +841,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '276540a5-498d-4496-b2d0-c27169f5a1f0',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/options/Skirt/Skirt/Skirt_3.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/options/Skirt/Skirt/Skirt_3.glb',
+							thumb: '/static/images/levents/options/Skirt/Skirt/Skirt_3.webp',
+							modelFile: '/static/models/levents/options/Skirt/Skirt/Skirt_3.glb',
 							blockName: 'Skirt 3',
 							avatar: 'female',
 							category: 'Skirt',
@@ -871,8 +851,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'badd0121-ab81-4617-a452-1667e8732ae0',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/options/Skirt/Skirt/Skirt_2.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/options/Skirt/Skirt/Skirt_2.glb',
+							thumb: '/static/images/levents/options/Skirt/Skirt/Skirt_2.webp',
+							modelFile: '/static/models/levents/options/Skirt/Skirt/Skirt_2.glb',
 							blockName: 'Skirt 2',
 							avatar: 'female',
 							category: 'Skirt',
@@ -881,8 +861,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '3ed64830-77a4-4156-8675-2349bb1f4265',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/options/Skirt/Skirt/Skirt_1.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/options/Skirt/Skirt/Skirt_1.glb',
+							thumb: '/static/images/levents/options/Skirt/Skirt/Skirt_1.webp',
+							modelFile: '/static/models/levents/options/Skirt/Skirt/Skirt_1.glb',
 							blockName: 'Skirt 1',
 							avatar: 'female',
 							category: 'Skirt',
@@ -895,7 +875,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'b34d9893-24f2-42cc-a0b7-ddc33d3648d5',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/templates/Jacket/SMALL_KNIT_CARDIGAN.webp',
+			thumb: '/static/images/levents/templates/Jacket/SMALL_KNIT_CARDIGAN.webp',
 			name: 'SMALL KNIT CARDIGAN',
 			price: 'N/A',
 			avatar: 'female',
@@ -904,7 +884,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 			materialId: 'aca7497a-2bff-4e5b-81ff-ba4320e17af7',
 			extraMaterials: [
 				{
-					mesh: 'sleeves_1818-03-sleeves_1818-02-buttonhead002-buttonhead001-buttonhead-bodice_1816-12-bodice_1816-07-bodice_1816-11-bodice_1816-04',
+					mesh:
+						'sleeves_1818-03-sleeves_1818-02-buttonhead002-buttonhead001-buttonhead-bodice_1816-12-bodice_1816-07-bodice_1816-11-bodice_1816-04',
 					materialId: 'c8734403-d321-4730-8b61-744a8ca5cf98',
 				},
 			],
@@ -913,7 +894,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'bad-habits': [
 		{
 			_id: '727a2789-d77a-400d-bb08-f0068261c06f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bad-habits/templates/Top/INFO_TEE.webp',
+			thumb: '/static/images/bad-habits/templates/Top/INFO_TEE.webp',
 			name: 'INFO TEE',
 			price: 'N/A',
 			avatar: 'female',
@@ -923,7 +904,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'ba919bc6-4086-480a-bbd7-aa419dc17f6f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bad-habits/templates/Pants/Item_1.webp',
+			thumb: '/static/images/bad-habits/templates/Pants/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -935,7 +916,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'beachclub.official': [
 		{
 			_id: '8e169f7a-a641-4390-bcd5-2e2de789dcf7',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/templates/Skirt/Delila_Set.webp',
+			thumb: '/static/images/beachclub.official/templates/Skirt/Delila_Set.webp',
 			name: 'Delila Set',
 			price: 'N/A',
 			avatar: 'female',
@@ -951,7 +932,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'c92614a3-ab50-429b-b201-04c2799ba9ae',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/templates/Top/Delila_Set.webp',
+			thumb: '/static/images/beachclub.official/templates/Top/Delila_Set.webp',
 			name: 'Delila Set',
 			price: 'N/A',
 			avatar: 'female',
@@ -970,10 +951,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: '29ea399c-3023-44f7-a969-920652c06460',
-							thumb:
-								'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/options/Top/Sleeves/Sleeves_5.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/options/Top/Sleeves/Sleeves_5.glb',
+							thumb: '/static/images/beachclub.official/options/Top/Sleeves/Sleeves_5.webp',
+							modelFile: '/static/models/beachclub.official/options/Top/Sleeves/Sleeves_5.glb',
 							blockName: 'Sleeves 5',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -982,10 +961,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '4704a194-203b-401e-8cec-6ebdf29d4d83',
-							thumb:
-								'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/options/Top/Sleeves/Sleeves_4.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/options/Top/Sleeves/Sleeves_4.glb',
+							thumb: '/static/images/beachclub.official/options/Top/Sleeves/Sleeves_4.webp',
+							modelFile: '/static/models/beachclub.official/options/Top/Sleeves/Sleeves_4.glb',
 							blockName: 'Sleeves 4',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -994,10 +971,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'dad733d3-9a1d-4a7c-9a02-63eb9c5bde96',
-							thumb:
-								'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/options/Top/Sleeves/Sleeves_3.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/options/Top/Sleeves/Sleeves_3.glb',
+							thumb: '/static/images/beachclub.official/options/Top/Sleeves/Sleeves_3.webp',
+							modelFile: '/static/models/beachclub.official/options/Top/Sleeves/Sleeves_3.glb',
 							blockName: 'Sleeves 3',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1006,10 +981,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'f825cb43-4d93-4fe1-8e21-f5466982b95d',
-							thumb:
-								'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/options/Top/Sleeves/Sleeves_2.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/options/Top/Sleeves/Sleeves_2.glb',
+							thumb: '/static/images/beachclub.official/options/Top/Sleeves/Sleeves_2.webp',
+							modelFile: '/static/models/beachclub.official/options/Top/Sleeves/Sleeves_2.glb',
 							blockName: 'Sleeves 2',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1018,10 +991,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '2f64251d-d16e-4f7d-a755-fc3ed01f0d60',
-							thumb:
-								'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/options/Top/Sleeves/Sleeves_1.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/options/Top/Sleeves/Sleeves_1.glb',
+							thumb: '/static/images/beachclub.official/options/Top/Sleeves/Sleeves_1.webp',
+							modelFile: '/static/models/beachclub.official/options/Top/Sleeves/Sleeves_1.glb',
 							blockName: 'Sleeves 1',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1036,7 +1007,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	berta: [
 		{
 			_id: '68c4697d-0fee-419a-b1a6-2120f78f3177',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/berta/templates/Dress/Item_1.webp',
+			thumb: '/static/images/berta/templates/Dress/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -1048,7 +1019,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'cara-club': [
 		{
 			_id: '0c64366d-c971-458f-af47-44d595102a0e',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/templates/Dress/Item_1.webp',
+			thumb: '/static/images/cara-club/templates/Dress/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -1061,7 +1032,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					materialId: '47dc5217-3a64-4f56-bdc9-884588eca386',
 				},
 				{
-					mesh: 'buttonhead006-buttonhead005-buttonhead004-buttonhead003-buttonhead002-buttonhead001-buttonhead-fullbody_1872-05-fullbody_1872-14-fullbody_1872-13-fullbody_1872-08',
+					mesh:
+						'buttonhead006-buttonhead005-buttonhead004-buttonhead003-buttonhead002-buttonhead001-buttonhead-fullbody_1872-05-fullbody_1872-14-fullbody_1872-13-fullbody_1872-08',
 					materialId: '2879e652-c40c-405d-8b49-a4745b4c8170',
 				},
 			],
@@ -1071,8 +1043,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: '6f0ba51d-fb36-499a-a164-36e0acacfc09',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/options/Dress/Sleeves/Sleeves_5.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/cara-club/options/Dress/Sleeves/Sleeves_5.glb',
+							thumb: '/static/images/cara-club/options/Dress/Sleeves/Sleeves_5.webp',
+							modelFile: '/static/models/cara-club/options/Dress/Sleeves/Sleeves_5.glb',
 							blockName: 'Sleeves 5',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1081,8 +1053,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'f3651508-e386-4487-aa00-d320434886fa',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/options/Dress/Sleeves/Sleeves_4.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/cara-club/options/Dress/Sleeves/Sleeves_4.glb',
+							thumb: '/static/images/cara-club/options/Dress/Sleeves/Sleeves_4.webp',
+							modelFile: '/static/models/cara-club/options/Dress/Sleeves/Sleeves_4.glb',
 							blockName: 'Sleeves 4',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1091,8 +1063,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'd9002526-2e3d-43e0-a050-a95b1a479cc1',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/options/Dress/Sleeves/Sleeves_3.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/cara-club/options/Dress/Sleeves/Sleeves_3.glb',
+							thumb: '/static/images/cara-club/options/Dress/Sleeves/Sleeves_3.webp',
+							modelFile: '/static/models/cara-club/options/Dress/Sleeves/Sleeves_3.glb',
 							blockName: 'Sleeves 3',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1101,8 +1073,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '979dcb04-b9e3-40c4-a930-24392b019305',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/options/Dress/Sleeves/Sleeves_2.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/cara-club/options/Dress/Sleeves/Sleeves_2.glb',
+							thumb: '/static/images/cara-club/options/Dress/Sleeves/Sleeves_2.webp',
+							modelFile: '/static/models/cara-club/options/Dress/Sleeves/Sleeves_2.glb',
 							blockName: 'Sleeves 2',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1111,8 +1083,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'be2ecf50-2491-4991-9208-e95d688c0eab',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/options/Dress/Sleeves/Sleeves_1.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/cara-club/options/Dress/Sleeves/Sleeves_1.glb',
+							thumb: '/static/images/cara-club/options/Dress/Sleeves/Sleeves_1.webp',
+							modelFile: '/static/models/cara-club/options/Dress/Sleeves/Sleeves_1.glb',
 							blockName: 'Sleeves 1',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1127,7 +1099,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'ceci-cela': [
 		{
 			_id: '64f24b15-7e7a-469b-97be-2d0c6a473b51',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/ceci-cela/templates/Dress/Item_1.webp',
+			thumb: '/static/images/ceci-cela/templates/Dress/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -1139,7 +1111,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	celine: [
 		{
 			_id: '9f752df5-e115-4d42-b1c3-eaf4b0000fac',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/celine/templates/Dress/Dress_IN_acetate_silk_crepe.webp',
+			thumb: '/static/images/celine/templates/Dress/Dress_IN_acetate_silk_crepe.webp',
 			name: 'Dress IN acetate silk crepe',
 			price: 'N/A',
 			avatar: 'female',
@@ -1151,7 +1123,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	colin: [
 		{
 			_id: '7ff379c8-abee-47b4-aa6b-dd52ace1c121',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/templates/Dress/SET_REN_VAI_DAY_HOA.webp',
+			thumb: '/static/images/colin/templates/Dress/SET_REN_VAI_DAY_HOA.webp',
 			name: 'SET REN VAI DAY HOA',
 			price: 'N/A',
 			avatar: 'female',
@@ -1164,8 +1136,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: 'a98fbbc6-e07e-41e3-a978-ef8de1a7de43',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/options/Dress/Sleeves/Sleeves_5.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/options/Dress/Sleeves/Sleeves_5.glb',
+							thumb: '/static/images/colin/options/Dress/Sleeves/Sleeves_5.webp',
+							modelFile: '/static/models/colin/options/Dress/Sleeves/Sleeves_5.glb',
 							blockName: 'Sleeves 5',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1174,8 +1146,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'f5fabfad-9419-44f9-884d-f0cd4a00c9f2',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/options/Dress/Sleeves/Sleeves_4.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/options/Dress/Sleeves/Sleeves_4.glb',
+							thumb: '/static/images/colin/options/Dress/Sleeves/Sleeves_4.webp',
+							modelFile: '/static/models/colin/options/Dress/Sleeves/Sleeves_4.glb',
 							blockName: 'Sleeves 4',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1184,8 +1156,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '778d5fa3-b6d1-4e36-8442-a929e702c530',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/options/Dress/Sleeves/Sleeves_3.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/options/Dress/Sleeves/Sleeves_3.glb',
+							thumb: '/static/images/colin/options/Dress/Sleeves/Sleeves_3.webp',
+							modelFile: '/static/models/colin/options/Dress/Sleeves/Sleeves_3.glb',
 							blockName: 'Sleeves 3',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1194,8 +1166,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '22049b8a-bac4-4e57-8287-bc7f4325b2b3',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/options/Dress/Sleeves/Sleeves_2.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/options/Dress/Sleeves/Sleeves_2.glb',
+							thumb: '/static/images/colin/options/Dress/Sleeves/Sleeves_2.webp',
+							modelFile: '/static/models/colin/options/Dress/Sleeves/Sleeves_2.glb',
 							blockName: 'Sleeves 2',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1204,8 +1176,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '20149be4-a05a-4132-bd5a-0b9ea138516f',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/options/Dress/Sleeves/Sleeves_1.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/options/Dress/Sleeves/Sleeves_1.glb',
+							thumb: '/static/images/colin/options/Dress/Sleeves/Sleeves_1.webp',
+							modelFile: '/static/models/colin/options/Dress/Sleeves/Sleeves_1.glb',
 							blockName: 'Sleeves 1',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1220,7 +1192,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	demobaza: [
 		{
 			_id: '42a88519-3d70-4127-bcae-3ed7d821dd83',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/templates/Pants/Item_1.webp',
+			thumb: '/static/images/demobaza/templates/Pants/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -1230,7 +1202,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '1638cfd4-7b30-4f68-ba47-c16ac9b87d56',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/templates/Dress/DRESS_ARISE.webp',
+			thumb: '/static/images/demobaza/templates/Dress/DRESS_ARISE.webp',
 			name: 'DRESS ARISE',
 			price: 'N/A',
 			avatar: 'female',
@@ -1243,8 +1215,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: '9ff067c4-8f37-4a78-90d4-901d274a1cc6',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/options/Dress/Sleeves/Sleeves_5.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/options/Dress/Sleeves/Sleeves_5.glb',
+							thumb: '/static/images/demobaza/options/Dress/Sleeves/Sleeves_5.webp',
+							modelFile: '/static/models/demobaza/options/Dress/Sleeves/Sleeves_5.glb',
 							blockName: 'Sleeves 5',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1253,8 +1225,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '7c5635ea-3cc9-4086-8afb-eeca9b099d0e',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/options/Dress/Sleeves/Sleeves_4.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/options/Dress/Sleeves/Sleeves_4.glb',
+							thumb: '/static/images/demobaza/options/Dress/Sleeves/Sleeves_4.webp',
+							modelFile: '/static/models/demobaza/options/Dress/Sleeves/Sleeves_4.glb',
 							blockName: 'Sleeves 4',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1263,8 +1235,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '80c2f452-4437-4af0-9d22-c1b73ed99531',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/options/Dress/Sleeves/Sleeves_3.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/options/Dress/Sleeves/Sleeves_3.glb',
+							thumb: '/static/images/demobaza/options/Dress/Sleeves/Sleeves_3.webp',
+							modelFile: '/static/models/demobaza/options/Dress/Sleeves/Sleeves_3.glb',
 							blockName: 'Sleeves 3',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1273,8 +1245,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'edf70062-0615-4eb8-ace1-fa3c10985b76',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/options/Dress/Sleeves/Sleeves_2.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/options/Dress/Sleeves/Sleeves_2.glb',
+							thumb: '/static/images/demobaza/options/Dress/Sleeves/Sleeves_2.webp',
+							modelFile: '/static/models/demobaza/options/Dress/Sleeves/Sleeves_2.glb',
 							blockName: 'Sleeves 2',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1283,8 +1255,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '04d5831f-a774-4cec-8e68-fd75b4bc8d1c',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/options/Dress/Sleeves/Sleeves_1.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/options/Dress/Sleeves/Sleeves_1.glb',
+							thumb: '/static/images/demobaza/options/Dress/Sleeves/Sleeves_1.webp',
+							modelFile: '/static/models/demobaza/options/Dress/Sleeves/Sleeves_1.glb',
 							blockName: 'Sleeves 1',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1297,7 +1269,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '7909e2fd-f5f4-4d2b-8913-4a5b9eb45e56',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/templates/Dress/DRESS_REVERSE.webp',
+			thumb: '/static/images/demobaza/templates/Dress/DRESS_REVERSE.webp',
 			name: 'DRESS REVERSE',
 			price: 'N/A',
 			avatar: 'female',
@@ -1309,7 +1281,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	diane: [
 		{
 			_id: '02802552-a70d-41cb-a815-20d2192ca9e8',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/templates/Skirt/APHRODITE_-_POMME.webp',
+			thumb: '/static/images/diane/templates/Skirt/APHRODITE_-_POMME.webp',
 			name: 'APHRODITE',
 			price: 'N/A',
 			avatar: 'female',
@@ -1319,7 +1291,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'b77a41ef-b230-459c-86d9-0b65e07b1bad',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/templates/Top/AMOUR_-_POMME.webp',
+			thumb: '/static/images/diane/templates/Top/AMOUR_-_POMME.webp',
 			name: 'AMOUR',
 			price: 'N/A',
 			avatar: 'female',
@@ -1329,7 +1301,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'bc52caf2-be6c-4bba-ac4a-d7ab38063808',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/templates/Dress/H%C3%89M%C3%89RA_-_FUCHSIA.webp',
+			thumb: '/static/images/diane/templates/Dress/H%C3%89M%C3%89RA_-_FUCHSIA.webp',
 			name: 'HÉMÉRA',
 			price: 'N/A',
 			avatar: 'female',
@@ -1341,7 +1313,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	hani: [
 		{
 			_id: '529c419f-77ab-4f95-9aa3-cf60ce4af7d3',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/hani/templates/Dress/Item_1.webp',
+			thumb: '/static/images/hani/templates/Dress/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -1359,7 +1331,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'huelley-rose': [
 		{
 			_id: '002f42dc-9a26-4061-b21d-9e8560e1e73d',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/huelley-rose/templates/Dress/Item_1.webp',
+			thumb: '/static/images/huelley-rose/templates/Dress/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -1371,7 +1343,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'hurricane-b': [
 		{
 			_id: '4a59fc25-20f0-4e29-a331-2d6852bb07e8',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/hurricane-b/templates/Dress/Abito_lungo_con_cut_out.webp',
+			thumb: '/static/images/hurricane-b/templates/Dress/Abito_lungo_con_cut_out.webp',
 			name: 'Abito lungo con cut out',
 			price: 'N/A',
 			avatar: 'female',
@@ -1384,8 +1356,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: 'db6d3012-38a1-4012-ac65-fd794efb9952',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/hurricane-b/options/Dress/Sleeves/Sleeves_2.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/hurricane-b/options/Dress/Sleeves/Sleeves_2.glb',
+							thumb: '/static/images/hurricane-b/options/Dress/Sleeves/Sleeves_2.webp',
+							modelFile: '/static/models/hurricane-b/options/Dress/Sleeves/Sleeves_2.glb',
 							blockName: 'Sleeves 2',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1394,8 +1366,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '44f8f3fd-17d0-454f-be70-6e9e24c3d823',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/hurricane-b/options/Dress/Sleeves/Sleeves_1.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/hurricane-b/options/Dress/Sleeves/Sleeves_1.glb',
+							thumb: '/static/images/hurricane-b/options/Dress/Sleeves/Sleeves_1.webp',
+							modelFile: '/static/models/hurricane-b/options/Dress/Sleeves/Sleeves_1.glb',
 							blockName: 'Sleeves 1',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1410,7 +1382,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'fig.cool-leather': [
 		{
 			_id: '3a0eaf89-a600-4823-adc5-670ba0377995',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/fig.cool-leather/templates/Skirt/Saia_de_Couro_Adele.webp',
+			thumb: '/static/images/fig.cool-leather/templates/Skirt/Saia_de_Couro_Adele.webp',
 			name: 'Saia de Couro Adele',
 			price: 'N/A',
 			avatar: 'female',
@@ -1420,7 +1392,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '9dd379b6-0b1f-4541-98ea-b30ff0a5b1bc',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/fig.cool-leather/templates/Top/Item_1.webp',
+			thumb: '/static/images/fig.cool-leather/templates/Top/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -1432,7 +1404,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	libeworkshop: [
 		{
 			_id: '1fc1b5c3-ec98-4efa-86d9-9843307b44da',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/libeworkshop/templates/Skirt/Item_1.webp',
+			thumb: '/static/images/libeworkshop/templates/Skirt/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -1448,8 +1420,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'b10f11db-b2a1-4acf-a0f3-f4897b1b389c',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/libeworkshop/templates/Top/Floral_Scoop_Neck_Drawstring_Top.webp',
+			thumb: '/static/images/libeworkshop/templates/Top/Floral_Scoop_Neck_Drawstring_Top.webp',
 			name: 'Floral Scoop Neck Drawstring Top',
 			price: 'N/A',
 			avatar: 'female',
@@ -1461,7 +1432,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'liniss-official': [
 		{
 			_id: 'ad034a52-807f-43f4-b227-a9f61149d834',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/liniss-official/templates/Pants/ROSE_SET.webp',
+			thumb: '/static/images/liniss-official/templates/Pants/ROSE_SET.webp',
 			name: 'ROSE SET',
 			price: 'N/A',
 			avatar: 'female',
@@ -1481,7 +1452,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'e373d707-e738-4b12-b718-0eba503b07d1',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/liniss-official/templates/Top/ROSE_SET.webp',
+			thumb: '/static/images/liniss-official/templates/Top/ROSE_SET.webp',
 			name: 'ROSE SET',
 			price: 'N/A',
 			avatar: 'female',
@@ -1503,8 +1474,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	meanbldv: [
 		{
 			_id: 'a994c271-0712-4953-9802-b2775928b562',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/meanbldv/templates/Dress/Islington_Mermaid_Ribbon_Maxi_Dress.webp',
+			thumb: '/static/images/meanbldv/templates/Dress/Islington_Mermaid_Ribbon_Maxi_Dress.webp',
 			name: 'Islington Mermaid Ribbon Maxi Dress',
 			price: 'N/A',
 			avatar: 'female',
@@ -1522,7 +1492,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'milk-white': [
 		{
 			_id: '4d191893-1a62-42db-a075-ac892cefde5c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/milk-white/templates/Pants/SHORTS_WITH_FLOWER_DETAIL.webp',
+			thumb: '/static/images/milk-white/templates/Pants/SHORTS_WITH_FLOWER_DETAIL.webp',
 			name: 'SHORTS WITH FLOWER DETAIL',
 			price: 'N/A',
 			avatar: 'female',
@@ -1538,7 +1508,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '2ced1a9d-240c-4e6d-a434-6f67f18beb7f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/milk-white/templates/Top/Item_1.webp',
+			thumb: '/static/images/milk-white/templates/Top/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -1550,7 +1520,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'mono-talk': [
 		{
 			_id: 'f4a30f3f-57e9-479e-80db-dd35c15dbc6c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/templates/Top/MCS25W.webp',
+			thumb: '/static/images/mono-talk/templates/Top/MCS25W.webp',
 			name: 'MCS25W',
 			price: 'N/A',
 			avatar: 'female',
@@ -1563,8 +1533,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: '2efdf7ca-23dd-4698-a35c-420850c976ae',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/options/Top/Sleeves/Sleeves_5.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/options/Top/Sleeves/Sleeves_5.glb',
+							thumb: '/static/images/mono-talk/options/Top/Sleeves/Sleeves_5.webp',
+							modelFile: '/static/models/mono-talk/options/Top/Sleeves/Sleeves_5.glb',
 							blockName: 'Sleeves 5',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1573,8 +1543,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '817187cd-ffe9-47e2-b885-42c3b3300794',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/options/Top/Sleeves/Sleeves_4.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/options/Top/Sleeves/Sleeves_4.glb',
+							thumb: '/static/images/mono-talk/options/Top/Sleeves/Sleeves_4.webp',
+							modelFile: '/static/models/mono-talk/options/Top/Sleeves/Sleeves_4.glb',
 							blockName: 'Sleeves 4',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1583,8 +1553,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '9339b577-f5a4-470b-a9b9-4505d87ab4ea',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/options/Top/Sleeves/Sleeves_3.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/options/Top/Sleeves/Sleeves_3.glb',
+							thumb: '/static/images/mono-talk/options/Top/Sleeves/Sleeves_3.webp',
+							modelFile: '/static/models/mono-talk/options/Top/Sleeves/Sleeves_3.glb',
 							blockName: 'Sleeves 3',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1593,8 +1563,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '4764a5da-7a9f-427d-b6b1-db7216d9bd16',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/options/Top/Sleeves/Sleeves_2.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/options/Top/Sleeves/Sleeves_2.glb',
+							thumb: '/static/images/mono-talk/options/Top/Sleeves/Sleeves_2.webp',
+							modelFile: '/static/models/mono-talk/options/Top/Sleeves/Sleeves_2.glb',
 							blockName: 'Sleeves 2',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1603,8 +1573,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '5598e5a3-1179-42d4-b02a-d76456716c92',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/options/Top/Sleeves/Sleeves_1.webp',
-							modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/options/Top/Sleeves/Sleeves_1.glb',
+							thumb: '/static/images/mono-talk/options/Top/Sleeves/Sleeves_1.webp',
+							modelFile: '/static/models/mono-talk/options/Top/Sleeves/Sleeves_1.glb',
 							blockName: 'Sleeves 1',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1617,7 +1587,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '2b9efb05-8965-45dd-bb2d-552950a9d607',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/templates/Skirt/Item_1.webp',
+			thumb: '/static/images/mono-talk/templates/Skirt/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -1629,7 +1599,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'monroe-the-label': [
 		{
 			_id: '7d1f6933-0c61-49e0-b452-c66a82b111e4',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/templates/Pants/JUNO_PANTS.webp',
+			thumb: '/static/images/monroe-the-label/templates/Pants/JUNO_PANTS.webp',
 			name: 'JUNO PANTS',
 			price: 'N/A',
 			avatar: 'female',
@@ -1639,7 +1609,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'b069115c-6cfb-4f10-b9f5-b3df4e83a30a',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/templates/Top/SUKI_LONG_SLEEVE.webp',
+			thumb: '/static/images/monroe-the-label/templates/Top/SUKI_LONG_SLEEVE.webp',
 			name: 'SUKI LONG SLEEVE',
 			price: 'N/A',
 			avatar: 'female',
@@ -1658,9 +1628,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 					blocks: [
 						{
 							_id: '0105723d-ed87-4965-9f1e-c93bd9586144',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/options/Top/Sleeves/Sleeves_5.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/options/Top/Sleeves/Sleeves_5.glb',
+							thumb: '/static/images/monroe-the-label/options/Top/Sleeves/Sleeves_5.webp',
+							modelFile: '/static/models/monroe-the-label/options/Top/Sleeves/Sleeves_5.glb',
 							blockName: 'Sleeves 5',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1669,9 +1638,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '123da780-17b9-47d7-b72b-6512f4d8ec26',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/options/Top/Sleeves/Sleeves_4.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/options/Top/Sleeves/Sleeves_4.glb',
+							thumb: '/static/images/monroe-the-label/options/Top/Sleeves/Sleeves_4.webp',
+							modelFile: '/static/models/monroe-the-label/options/Top/Sleeves/Sleeves_4.glb',
 							blockName: 'Sleeves 4',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1680,9 +1648,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '7fe38b20-88e4-43fb-bb05-268e74bef124',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/options/Top/Sleeves/Sleeves_3.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/options/Top/Sleeves/Sleeves_3.glb',
+							thumb: '/static/images/monroe-the-label/options/Top/Sleeves/Sleeves_3.webp',
+							modelFile: '/static/models/monroe-the-label/options/Top/Sleeves/Sleeves_3.glb',
 							blockName: 'Sleeves 3',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1691,9 +1658,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: '6b74b943-9eb6-4a88-bd5f-fa4b9f0a2b95',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/options/Top/Sleeves/Sleeves_2.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/options/Top/Sleeves/Sleeves_2.glb',
+							thumb: '/static/images/monroe-the-label/options/Top/Sleeves/Sleeves_2.webp',
+							modelFile: '/static/models/monroe-the-label/options/Top/Sleeves/Sleeves_2.glb',
 							blockName: 'Sleeves 2',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1702,9 +1668,8 @@ export const legacyTemplates: Record<string, Template[]> = {
 						},
 						{
 							_id: 'f1608ed2-bf22-450f-8af6-cc29602d8245',
-							thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/options/Top/Sleeves/Sleeves_1.webp',
-							modelFile:
-								'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/options/Top/Sleeves/Sleeves_1.glb',
+							thumb: '/static/images/monroe-the-label/options/Top/Sleeves/Sleeves_1.webp',
+							modelFile: '/static/models/monroe-the-label/options/Top/Sleeves/Sleeves_1.glb',
 							blockName: 'Sleeves 1',
 							avatar: 'female',
 							category: 'Sleeves',
@@ -1719,7 +1684,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	naked: [
 		{
 			_id: '12a030a9-6f53-48b8-87b3-4c3e4cd7734e',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/naked/templates/Skirt/Khu%C3%AA_%C4%90i%E1%BB%87p.webp',
+			thumb: '/static/images/naked/templates/Skirt/Khu%C3%AA_%C4%90i%E1%BB%87p.webp',
 			name: 'Khuê Điệp',
 			price: 'N/A',
 			avatar: 'female',
@@ -1729,7 +1694,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '4d1e9684-22f0-407a-8fd8-3d7b39734edd',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/naked/templates/Top/Khu%C3%AA_%C4%90i%E1%BB%87p.webp',
+			thumb: '/static/images/naked/templates/Top/Khu%C3%AA_%C4%90i%E1%BB%87p.webp',
 			name: 'Khuê Điệp',
 			price: 'N/A',
 			avatar: 'female',
@@ -1741,7 +1706,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	nakedandfamousdenim: [
 		{
 			_id: 'b90777b2-55bb-4311-904f-631873399f23',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/nakedandfamousdenim/templates/Top/Cropped_Denim_Jacket.webp',
+			thumb: '/static/images/nakedandfamousdenim/templates/Top/Cropped_Denim_Jacket.webp',
 			name: 'Cropped Denim Jacket',
 			price: 'N/A',
 			avatar: 'female',
@@ -1761,7 +1726,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'b6be439b-66ae-4a6e-b338-b4934e5e1b1c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/nakedandfamousdenim/templates/Pants/Judo_Sashiko.webp',
+			thumb: '/static/images/nakedandfamousdenim/templates/Pants/Judo_Sashiko.webp',
 			name: 'Judo Sashiko',
 			price: 'N/A',
 			avatar: 'female',
@@ -1773,7 +1738,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'zd-eye-of-the-storm': [
 		{
 			_id: '8211585d-d339-4366-963f-5e3ceebff247',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/zd-eye-of-the-storm/templates/Top/JACKET.webp',
+			thumb: '/static/images/zd-eye-of-the-storm/templates/Top/JACKET.webp',
 			name: 'JACKET',
 			price: 'N/A',
 			avatar: 'female',
@@ -1783,7 +1748,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '8c0785b4-0819-4b05-a38b-a44b9c4ef39c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/zd-eye-of-the-storm/templates/Pants/ARCHRISE_SHORTS.webp',
+			thumb: '/static/images/zd-eye-of-the-storm/templates/Pants/ARCHRISE_SHORTS.webp',
 			name: 'ARCHRISE SHORTS',
 			price: 'N/A',
 			avatar: 'female',
@@ -1795,7 +1760,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	metamorphosis: [
 		{
 			_id: 'e127a26f-cef4-4253-a6ed-25a468199d31',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/templates/Accessories/Ava_-_170_Euro.webp',
+			thumb: '/static/images/metamorphosis/templates/Accessories/Ava_-_170_Euro.webp',
 			name: 'Ava',
 			price: '170',
 			avatar: 'female',
@@ -1805,7 +1770,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'a7d35b1c-22f2-4dd6-a75a-19b39ea755e2',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/templates/Accessories/Pli_-_170_Euro.webp',
+			thumb: '/static/images/metamorphosis/templates/Accessories/Pli_-_170_Euro.webp',
 			name: 'Pli',
 			price: '170',
 			avatar: 'female',
@@ -1815,7 +1780,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '7629b681-5369-412f-83cb-e0673484e834',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/templates/Dress/Severance_-_300_Euro.webp',
+			thumb: '/static/images/metamorphosis/templates/Dress/Severance_-_300_Euro.webp',
 			name: 'Severance',
 			price: '300',
 			avatar: 'female',
@@ -1831,7 +1796,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'e73d2cc8-f45a-4660-9de3-a43d86e485f6',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/templates/Dress/Item_2.webp',
+			thumb: '/static/images/metamorphosis/templates/Dress/Item_2.webp',
 			name: 'Item 2',
 			price: 'N/A',
 			avatar: 'female',
@@ -1847,7 +1812,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'a60efe32-5853-4935-b92a-a1d574eb9092',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/templates/Pants/Liminal_-_130_Euro.webp',
+			thumb: '/static/images/metamorphosis/templates/Pants/Liminal_-_130_Euro.webp',
 			name: 'Liminal',
 			price: '130',
 			avatar: 'female',
@@ -1857,7 +1822,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '20e12023-a26c-4da1-94bc-a7683fea8708',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/templates/Top/Whiteout_-_130_Euro.webp',
+			thumb: '/static/images/metamorphosis/templates/Top/Whiteout_-_130_Euro.webp',
 			name: 'Whiteout',
 			price: '130',
 			avatar: 'female',
@@ -1867,7 +1832,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'cf823967-86f4-4f66-9b5f-10d898fd9fb2',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/templates/Top/The_Triad_-_200_Euro.webp',
+			thumb: '/static/images/metamorphosis/templates/Top/The_Triad_-_200_Euro.webp',
 			name: 'The Triad',
 			price: '200',
 			avatar: 'female',
@@ -1877,7 +1842,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '2eb802b0-940f-4914-8eb8-dbeb2eb192d8',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/templates/Top/Frame_-_130_Euro.webp',
+			thumb: '/static/images/metamorphosis/templates/Top/Frame_-_130_Euro.webp',
 			name: 'Frame',
 			price: '130',
 			avatar: 'female',
@@ -1887,7 +1852,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '9450696d-310c-407f-aea3-a40f61081722',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/templates/Skirt/Lamella_-_170_Euro.webp',
+			thumb: '/static/images/metamorphosis/templates/Skirt/Lamella_-_170_Euro.webp',
 			name: 'Lamella',
 			price: '170',
 			avatar: 'female',
@@ -1899,7 +1864,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'h&m': [
 		{
 			_id: '8b24dc1a-b2ba-414b-87ee-6bb85df4c472',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Skirt/Flared_Skirt_-_39.99.webp',
+			thumb: '/static/images/h%26m/templates/Skirt/Flared_Skirt_-_39.99.webp',
 			name: 'Flared Skirt',
 			price: '39.99',
 			avatar: 'female',
@@ -1909,7 +1874,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '59a3c7a7-694c-4e3b-9c8e-649052a79bf4',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Skirt/Silk_satin_maxi_skirt_-_26.6.webp',
+			thumb: '/static/images/h%26m/templates/Skirt/Silk_satin_maxi_skirt_-_26.6.webp',
 			name: 'Silk satin maxi skirt',
 			price: '26.6',
 			avatar: 'female',
@@ -1919,7 +1884,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '72dbbde8-ceb9-4d2c-ba99-8f4f3615243f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Skirt/Frilled_mini_skort_-_31.97.webp',
+			thumb: '/static/images/h%26m/templates/Skirt/Frilled_mini_skort_-_31.97.webp',
 			name: 'Frilled mini skort',
 			price: '31.97',
 			avatar: 'female',
@@ -1929,7 +1894,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '779ddb1a-e14c-4b51-a8ba-ffaf004c3df6',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Dress/Mini_Dress_-_95.webp',
+			thumb: '/static/images/h%26m/templates/Dress/Mini_Dress_-_95.webp',
 			name: 'Mini Dress',
 			price: '95',
 			avatar: 'female',
@@ -1939,8 +1904,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '5b415153-c832-43c8-b2d1-31188602f768',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Dress/Bow_Detail_One_Shoulder_Dress_-_22.8.webp',
+			thumb: '/static/images/h%26m/templates/Dress/Bow_Detail_One_Shoulder_Dress_-_22.8.webp',
 			name: 'Bow Detail One Shoulder Dress',
 			price: '22.8',
 			avatar: 'female',
@@ -1950,7 +1914,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'bd87de0a-0286-4c18-b2bc-0cd75466bc12',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Dress/Draped_Halterneck_Dress_-_15.2.webp',
+			thumb: '/static/images/h%26m/templates/Dress/Draped_Halterneck_Dress_-_15.2.webp',
 			name: 'Draped Halterneck Dress',
 			price: '15.2',
 			avatar: 'female',
@@ -1960,7 +1924,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '1d080b9b-854a-458d-9974-d06052331b11',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Dress/Draped_One_Shoulder_Dress_-_30.4.webp',
+			thumb: '/static/images/h%26m/templates/Dress/Draped_One_Shoulder_Dress_-_30.4.webp',
 			name: 'Draped One Shoulder Dress',
 			price: '30.4',
 			avatar: 'female',
@@ -1970,7 +1934,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'b7dce5b7-8f11-48c0-b171-13d0d369ee1b',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Pants/Jeans_Short_-_19.95.webp',
+			thumb: '/static/images/h%26m/templates/Pants/Jeans_Short_-_19.95.webp',
 			name: 'Jeans Short',
 			price: '19.95',
 			avatar: 'female',
@@ -1980,7 +1944,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '54583898-f814-4d51-a522-3b81fa5cc769',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Pants/Jersey_Pants_-_14.5.webp',
+			thumb: '/static/images/h%26m/templates/Pants/Jersey_Pants_-_14.5.webp',
 			name: 'Jersey Pants',
 			price: '14.5',
 			avatar: 'female',
@@ -1990,7 +1954,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '231f4078-2195-4385-a481-28d51904bc2e',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Top/Cap_Sleeved_top_-_7.75.webp',
+			thumb: '/static/images/h%26m/templates/Top/Cap_Sleeved_top_-_7.75.webp',
 			name: 'Cap Sleeved top',
 			price: '7.75',
 			avatar: 'female',
@@ -2000,7 +1964,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '969b221c-23fb-4177-b53e-53f0752c343f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Top/Bandeau_peplum_top_-_15.webp',
+			thumb: '/static/images/h%26m/templates/Top/Bandeau_peplum_top_-_15.webp',
 			name: 'Bandeau peplum top',
 			price: '15',
 			avatar: 'female',
@@ -2010,7 +1974,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '7439e9cd-eb53-4a2c-b01a-95db66f5435a',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Top/Crinkled_jersey_top_-_17.9.webp',
+			thumb: '/static/images/h%26m/templates/Top/Crinkled_jersey_top_-_17.9.webp',
 			name: 'Crinkled jersey top',
 			price: '17.9',
 			avatar: 'female',
@@ -2020,7 +1984,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: '6c500f31-912e-483a-a99e-0da49c5dc1d5',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Top/Cotton_seersucker_top_-_11.webp',
+			thumb: '/static/images/h%26m/templates/Top/Cotton_seersucker_top_-_11.webp',
 			name: 'Cotton seersucker top',
 			price: '11',
 			avatar: 'female',
@@ -2030,7 +1994,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 		},
 		{
 			_id: 'ba8b27dc-562d-45d3-b408-30a83b585fb9',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/templates/Top/Frilled_mini_skort.webp',
+			thumb: '/static/images/h%26m/templates/Top/Frilled_mini_skort.webp',
 			name: 'Frilled mini skort',
 			price: 'N/A',
 			avatar: 'female',
@@ -2042,7 +2006,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	abercrombie: [
 		{
 			_id: '75aafa30-fa99-47ad-8fe5-f84a92d28674',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/abercrombie/templates/Dress/Item_1.webp',
+			thumb: '/static/images/abercrombie/templates/Dress/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -2060,7 +2024,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	'oceania-london': [
 		{
 			_id: 'e8ab0090-5b6f-455a-beda-de7f760b1373',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/oceania-london/templates/Dress/Item_1.webp',
+			thumb: '/static/images/oceania-london/templates/Dress/Item_1.webp',
 			name: 'Item 1',
 			price: 'N/A',
 			avatar: 'female',
@@ -2078,7 +2042,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 	cortana: [
 		{
 			_id: 'cb2713d5-aed1-45af-a5c7-0bdc0b9eb798',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cortana/templates/Dress/orange_silk_crepe_halter_dress.webp',
+			thumb: '/static/images/cortana/templates/Dress/orange_silk_crepe_halter_dress.webp',
 			name: 'orange silk crepe halter dress',
 			price: 'N/A',
 			avatar: 'female',

@@ -13,7 +13,7 @@ export const legacyCollections: Collection[] = [
 	{
 		name: 'H&M',
 		slug: 'h&m',
-		logo: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/brands/h%26m/lgo-h%26m.webp',
+		logo: '/static/drippy-app/drippy-app-3D/brands/h%26m/lgo-h%26m.webp',
 		gender: 'female',
 	},
 	{

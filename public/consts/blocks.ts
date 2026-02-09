@@ -10,8 +10,7 @@ export const legacyBlocks: Record<string, Block[]> = {
 		{
 			_id: 'default-top',
 			thumb: '',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar-1/Default+Garments/Default+Top.glb',
+			modelFile: '/static/drippy-app/drippy-app-3D/models/female/Avatar-1/Default+Garments/Default+Top.glb',
 			blockName: 'Default Top',
 			avatar: 'female',
 			category: 'Bodice',
@@ -23,8 +22,7 @@ export const legacyBlocks: Record<string, Block[]> = {
 		{
 			_id: 'default-shorts',
 			thumb: '',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar-1/Default+Garments/Default+Shorts.glb',
+			modelFile: '/static/drippy-app/drippy-app-3D/models/female/Avatar-1/Default+Garments/Default+Shorts.glb',
 			blockName: 'Default Shorts',
 			avatar: 'female',
 			category: 'Pants',
@@ -36,8 +34,7 @@ export const legacyBlocks: Record<string, Block[]> = {
 		{
 			_id: 'default-shoes',
 			thumb: '',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/female/Avatar-1/Default+Garments/Shoes.glb',
+			modelFile: '/static/drippy-app/drippy-app-3D/models/female/Avatar-1/Default+Garments/Shoes.glb',
 			blockName: 'Default Shoes',
 			avatar: 'female',
 			category: 'Shoes',
@@ -50,7 +47,7 @@ export const legacyBlocks: Record<string, Block[]> = {
 		{
 			_id: 'default-male-top',
 			thumb: '',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/male/Male+-+Top.glb',
+			modelFile: '/static/drippy-app/drippy-app-3D/models/male/Male+-+Top.glb',
 			blockName: 'Default Male Top',
 			avatar: 'male',
 			category: 'Bodice',
@@ -62,7 +59,7 @@ export const legacyBlocks: Record<string, Block[]> = {
 		{
 			_id: 'default-male-pants',
 			thumb: '',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/male/Male+-+Pants.glb',
+			modelFile: '/static/drippy-app/drippy-app-3D/models/male/Male+-+Pants.glb',
 			blockName: 'Default Male Pants',
 			avatar: 'male',
 			category: 'Pants',
@@ -74,7 +71,7 @@ export const legacyBlocks: Record<string, Block[]> = {
 		{
 			_id: 'default-male-shoes',
 			thumb: '',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/drippy-app/drippy-app-3D/models/male/Shoes.glb',
+			modelFile: '/static/drippy-app/drippy-app-3D/models/male/Shoes.glb',
 			blockName: 'Default Male Shoes',
 			avatar: 'male',
 			category: 'Shoes',
@@ -87,9 +84,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	anyshape: [
 		{
 			_id: '910c6a1e-7879-41d6-8ade-1aa10ecbd199',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/anyshape/blocks/Dress_/Item_1___Fullbody/fullbody_1788.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/anyshape/blocks/Dress_/Item_1___Fullbody/fullbody_1788.glb',
+			thumb: '/static/images/anyshape/blocks/Dress_/Item_1___Fullbody/fullbody_1788.webp',
+			modelFile: '/static/models/anyshape/blocks/Dress_/Item_1___Fullbody/fullbody_1788.glb',
 			blockName: 'fullbody 1788',
 			avatar: 'female',
 			category: 'Full Body',
@@ -103,8 +99,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	ayarabbim: [
 		{
 			_id: '40d2fbd0-addc-4456-ab03-1133b5a148af',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/ayarabbim/blocks/Skirt/Item_1_Skirt/skirt_1932.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/ayarabbim/blocks/Skirt/Item_1_Skirt/skirt_1932.glb',
+			thumb: '/static/images/ayarabbim/blocks/Skirt/Item_1_Skirt/skirt_1932.webp',
+			modelFile: '/static/models/ayarabbim/blocks/Skirt/Item_1_Skirt/skirt_1932.glb',
 			blockName: 'skirt 1932',
 			avatar: 'female',
 			category: 'Skirt',
@@ -115,8 +111,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'd6087bcd-b3f5-4ce7-b578-1588933ff6da',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/ayarabbim/blocks/Top/Item_1_Sleeves/sleeves_1934.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/ayarabbim/blocks/Top/Item_1_Sleeves/sleeves_1934.glb',
+			thumb: '/static/images/ayarabbim/blocks/Top/Item_1_Sleeves/sleeves_1934.webp',
+			modelFile: '/static/models/ayarabbim/blocks/Top/Item_1_Sleeves/sleeves_1934.glb',
 			blockName: 'sleeves 1934',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -127,8 +123,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'c88525be-812e-4a99-b861-36aac961eab6',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/ayarabbim/blocks/Top/Item_1_Bodice/bodice_1933.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/ayarabbim/blocks/Top/Item_1_Bodice/bodice_1933.glb',
+			thumb: '/static/images/ayarabbim/blocks/Top/Item_1_Bodice/bodice_1933.webp',
+			modelFile: '/static/models/ayarabbim/blocks/Top/Item_1_Bodice/bodice_1933.glb',
 			blockName: 'bodice 1933',
 			avatar: 'female',
 			category: 'Bodice',
@@ -142,10 +138,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'baum-und-pferdgarten': [
 		{
 			_id: '8500104a-d926-4439-b4af-434a2a6c40ce',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Sleeves/sleeves_1843-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Sleeves/sleeves_1843-a_pose.glb',
+			thumb: '/static/images/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Sleeves/sleeves_1843-a_pose.webp',
+			modelFile: '/static/models/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Sleeves/sleeves_1843-a_pose.glb',
 			blockName: 'sleeves 1843-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -156,10 +150,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '4f9b70a3-4388-4e84-952c-0dbceab3f8a8',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Skirt/skirt_1842-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Skirt/skirt_1842-a_pose.glb',
+			thumb: '/static/images/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Skirt/skirt_1842-a_pose.webp',
+			modelFile: '/static/models/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Skirt/skirt_1842-a_pose.glb',
 			blockName: 'skirt 1842-a pose',
 			avatar: 'female',
 			category: 'Dress',
@@ -170,10 +162,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'a8d924bd-5d6a-4f92-8cbe-304481f5c2d7',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Bodice/bodice_1841-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Bodice/bodice_1841-a_pose.glb',
+			thumb: '/static/images/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Bodice/bodice_1841-a_pose.webp',
+			modelFile: '/static/models/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Bodice/bodice_1841-a_pose.glb',
 			blockName: 'bodice 1841-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -184,8 +174,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '77cbc1a9-9588-4a05-b05e-d9e73893f0bc',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_5.glb',
+			thumb: '/static/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_5.webp',
+			modelFile: '/static/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_5.glb',
 			blockName: 'Skirt 5',
 			avatar: 'female',
 			category: 'Skirt',
@@ -196,8 +186,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '04eb2884-1ded-48c2-9bb3-c1678932d7dc',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_4.glb',
+			thumb: '/static/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_4.webp',
+			modelFile: '/static/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_4.glb',
 			blockName: 'Skirt 4',
 			avatar: 'female',
 			category: 'Skirt',
@@ -208,8 +198,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'e41430d6-94aa-4654-89e9-7db62c9247e9',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_3.glb',
+			thumb: '/static/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_3.webp',
+			modelFile: '/static/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_3.glb',
 			blockName: 'Skirt 3',
 			avatar: 'female',
 			category: 'Skirt',
@@ -220,8 +210,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'f47bd45c-d24f-4091-b60c-ed1f780b70ca',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_2.glb',
+			thumb: '/static/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_2.webp',
+			modelFile: '/static/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_2.glb',
 			blockName: 'Skirt 2',
 			avatar: 'female',
 			category: 'Skirt',
@@ -232,8 +222,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '2973136a-fa7d-4cbc-9146-ae01615c4bf1',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_1.glb',
+			thumb: '/static/images/baum-und-pferdgarten/options/Dress/Skirt/Skirt_1.webp',
+			modelFile: '/static/models/baum-und-pferdgarten/options/Dress/Skirt/Skirt_1.glb',
 			blockName: 'Skirt 1',
 			avatar: 'female',
 			category: 'Skirt',
@@ -247,10 +237,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'bloom.womenswear': [
 		{
 			_id: '3ef5350d-df73-41d4-80e3-a3d2b61634c5',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Dress/Item_1___Bodice/bodice_1750-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Dress/Item_1___Bodice/bodice_1750-a_pose.glb',
+			thumb: '/static/images/bloom.womenswear/blocks/Dress/Item_1___Bodice/bodice_1750-a_pose.webp',
+			modelFile: '/static/models/bloom.womenswear/blocks/Dress/Item_1___Bodice/bodice_1750-a_pose.glb',
 			blockName: 'bodice 1750-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -261,10 +249,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '8de50f18-6810-4cae-bd02-90ab7cc75db3',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Dress/Item_1___Skirt/skirt_1751-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Dress/Item_1___Skirt/skirt_1751-a_pose.glb',
+			thumb: '/static/images/bloom.womenswear/blocks/Dress/Item_1___Skirt/skirt_1751-a_pose.webp',
+			modelFile: '/static/models/bloom.womenswear/blocks/Dress/Item_1___Skirt/skirt_1751-a_pose.glb',
 			blockName: 'skirt 1751-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -275,10 +261,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '389a7fb1-90bb-44b7-84a0-915573aa7522',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Skirt/Item_2___Skirt/skirt_1753-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Skirt/Item_2___Skirt/skirt_1753-a_pose.glb',
+			thumb: '/static/images/bloom.womenswear/blocks/Skirt/Item_2___Skirt/skirt_1753-a_pose.webp',
+			modelFile: '/static/models/bloom.womenswear/blocks/Skirt/Item_2___Skirt/skirt_1753-a_pose.glb',
 			blockName: 'skirt 1753-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -289,10 +273,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '0e31449b-8b88-4dca-97c7-52cc4fda50b7',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Skirt/Item_1___Skirt/skirt_1749-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Skirt/Item_1___Skirt/skirt_1749-a_pose.glb',
+			thumb: '/static/images/bloom.womenswear/blocks/Skirt/Item_1___Skirt/skirt_1749-a_pose.webp',
+			modelFile: '/static/models/bloom.womenswear/blocks/Skirt/Item_1___Skirt/skirt_1749-a_pose.glb',
 			blockName: 'skirt 1749-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -303,10 +285,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'ca99ae8d-f6f6-4cfc-bf2d-c8990af615b9',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Top/Item_2___Bodice/bodice_1752-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Top/Item_2___Bodice/bodice_1752-a_pose.glb',
+			thumb: '/static/images/bloom.womenswear/blocks/Top/Item_2___Bodice/bodice_1752-a_pose.webp',
+			modelFile: '/static/models/bloom.womenswear/blocks/Top/Item_2___Bodice/bodice_1752-a_pose.glb',
 			blockName: 'bodice 1752-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -317,10 +297,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'edbd1e4d-397e-4926-9135-4949f0296267',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/bloom.womenswear/blocks/Top/Item_1___Bodice/bodice_1748-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/bloom.womenswear/blocks/Top/Item_1___Bodice/bodice_1748-a_pose.glb',
+			thumb: '/static/images/bloom.womenswear/blocks/Top/Item_1___Bodice/bodice_1748-a_pose.webp',
+			modelFile: '/static/models/bloom.womenswear/blocks/Top/Item_1___Bodice/bodice_1748-a_pose.glb',
 			blockName: 'bodice 1748-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -334,8 +312,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	bupbes: [
 		{
 			_id: '60dddac5-6b83-4d50-aca9-fa6b528ceac4',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bupbes/blocks/Dress/Item_1_Fullbody/fullbody_1892.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/bupbes/blocks/Dress/Item_1_Fullbody/fullbody_1892.glb',
+			thumb: '/static/images/bupbes/blocks/Dress/Item_1_Fullbody/fullbody_1892.webp',
+			modelFile: '/static/models/bupbes/blocks/Dress/Item_1_Fullbody/fullbody_1892.glb',
 			blockName: 'fullbody 1892',
 			avatar: 'female',
 			category: 'Full Body',
@@ -349,10 +327,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'call-me-ari': [
 		{
 			_id: '2ccac98f-5e3a-4554-b082-9e4d10453244',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/blocks/Dress/KATIE_MAXI_DRESS_Skirt/skirt_1940.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/blocks/Dress/KATIE_MAXI_DRESS_Skirt/skirt_1940.glb',
+			thumb: '/static/images/call-me-ari/blocks/Dress/KATIE_MAXI_DRESS_Skirt/skirt_1940.webp',
+			modelFile: '/static/models/call-me-ari/blocks/Dress/KATIE_MAXI_DRESS_Skirt/skirt_1940.glb',
 			blockName: 'skirt 1940',
 			avatar: 'female',
 			category: 'Dress',
@@ -363,10 +339,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'd77d20f9-69d8-42bd-b160-42d5d73bd89d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/blocks/Dress/KATIE_MAXI_DRESS_Bodice/bodice_1939.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/blocks/Dress/KATIE_MAXI_DRESS_Bodice/bodice_1939.glb',
+			thumb: '/static/images/call-me-ari/blocks/Dress/KATIE_MAXI_DRESS_Bodice/bodice_1939.webp',
+			modelFile: '/static/models/call-me-ari/blocks/Dress/KATIE_MAXI_DRESS_Bodice/bodice_1939.glb',
 			blockName: 'bodice 1939',
 			avatar: 'female',
 			category: 'Bodice',
@@ -377,8 +351,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'f715fa05-b376-4592-ab12-57be7ef6b81b',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/options/Dress/Skirt/Skirt_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/options/Dress/Skirt/Skirt_5.glb',
+			thumb: '/static/images/call-me-ari/options/Dress/Skirt/Skirt_5.webp',
+			modelFile: '/static/models/call-me-ari/options/Dress/Skirt/Skirt_5.glb',
 			blockName: 'Skirt 5',
 			avatar: 'female',
 			category: 'Skirt',
@@ -389,8 +363,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'ec509bce-8773-413b-ab09-a2da8961c45e',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/options/Dress/Skirt/Skirt_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/options/Dress/Skirt/Skirt_4.glb',
+			thumb: '/static/images/call-me-ari/options/Dress/Skirt/Skirt_4.webp',
+			modelFile: '/static/models/call-me-ari/options/Dress/Skirt/Skirt_4.glb',
 			blockName: 'Skirt 4',
 			avatar: 'female',
 			category: 'Skirt',
@@ -401,8 +375,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '7b2fc3bf-e889-467e-856f-2522dea37e85',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/options/Dress/Skirt/Skirt_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/options/Dress/Skirt/Skirt_3.glb',
+			thumb: '/static/images/call-me-ari/options/Dress/Skirt/Skirt_3.webp',
+			modelFile: '/static/models/call-me-ari/options/Dress/Skirt/Skirt_3.glb',
 			blockName: 'Skirt 3',
 			avatar: 'female',
 			category: 'Skirt',
@@ -413,8 +387,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '66c8c7db-f11b-45d5-8e94-fc7fe68c2eab',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/options/Dress/Skirt/Skirt_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/options/Dress/Skirt/Skirt_2.glb',
+			thumb: '/static/images/call-me-ari/options/Dress/Skirt/Skirt_2.webp',
+			modelFile: '/static/models/call-me-ari/options/Dress/Skirt/Skirt_2.glb',
 			blockName: 'Skirt 2',
 			avatar: 'female',
 			category: 'Skirt',
@@ -425,8 +399,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'f7121792-1f18-47e1-aea4-0a2f8d3a71e0',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/call-me-ari/options/Dress/Skirt/Skirt_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/call-me-ari/options/Dress/Skirt/Skirt_1.glb',
+			thumb: '/static/images/call-me-ari/options/Dress/Skirt/Skirt_1.webp',
+			modelFile: '/static/models/call-me-ari/options/Dress/Skirt/Skirt_1.glb',
 			blockName: 'Skirt 1',
 			avatar: 'female',
 			category: 'Skirt',
@@ -440,10 +414,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'cecilie-bahnsen': [
 		{
 			_id: '13f72b4a-9b01-4b17-94ee-6467e45f8b2c',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/cecilie-bahnsen/blocks/Dress/Bosco_Dress___Fullbody/fullbody_1820.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/cecilie-bahnsen/blocks/Dress/Bosco_Dress___Fullbody/fullbody_1820.glb',
+			thumb: '/static/images/cecilie-bahnsen/blocks/Dress/Bosco_Dress___Fullbody/fullbody_1820.webp',
+			modelFile: '/static/models/cecilie-bahnsen/blocks/Dress/Bosco_Dress___Fullbody/fullbody_1820.glb',
 			blockName: 'fullbody 1820',
 			avatar: 'female',
 			category: 'Dress',
@@ -457,10 +429,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'cuba-vera': [
 		{
 			_id: '2c2afde8-d50c-427c-93c3-c05a87deff58',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/cuba-vera/blocks/Dress/Pink_Dress_Fullbody/fullbody_1925.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/cuba-vera/blocks/Dress/Pink_Dress_Fullbody/fullbody_1925.glb',
+			thumb: '/static/images/cuba-vera/blocks/Dress/Pink_Dress_Fullbody/fullbody_1925.webp',
+			modelFile: '/static/models/cuba-vera/blocks/Dress/Pink_Dress_Fullbody/fullbody_1925.glb',
 			blockName: 'fullbody 1925',
 			avatar: 'female',
 			category: 'Dress',
@@ -474,10 +444,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'dario-mittmann': [
 		{
 			_id: 'e83b0f07-e54e-4c91-9246-d4b5866a5db1',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/blocks/Skirt/Saia_Gravata_Colorida___Skirt/skirt_1794-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/blocks/Skirt/Saia_Gravata_Colorida___Skirt/skirt_1794-a_pose.glb',
+			thumb: '/static/images/dario-mittmann/blocks/Skirt/Saia_Gravata_Colorida___Skirt/skirt_1794-a_pose.webp',
+			modelFile: '/static/models/dario-mittmann/blocks/Skirt/Saia_Gravata_Colorida___Skirt/skirt_1794-a_pose.glb',
 			blockName: 'skirt 1794-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -488,8 +456,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'e9fe5c3c-7c28-433a-9647-d81a258a5d52',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/options/Skirt/Skirt/Skirt_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/options/Skirt/Skirt/Skirt_5.glb',
+			thumb: '/static/images/dario-mittmann/options/Skirt/Skirt/Skirt_5.webp',
+			modelFile: '/static/models/dario-mittmann/options/Skirt/Skirt/Skirt_5.glb',
 			blockName: 'Skirt 5',
 			avatar: 'female',
 			category: 'Skirt',
@@ -500,8 +468,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'bb11d44e-7a08-4cd8-8a48-b049d07ea13d',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/options/Skirt/Skirt/Skirt_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/options/Skirt/Skirt/Skirt_4.glb',
+			thumb: '/static/images/dario-mittmann/options/Skirt/Skirt/Skirt_4.webp',
+			modelFile: '/static/models/dario-mittmann/options/Skirt/Skirt/Skirt_4.glb',
 			blockName: 'Skirt 4',
 			avatar: 'female',
 			category: 'Skirt',
@@ -512,8 +480,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'cb300200-c69b-4818-9921-806de15f4d67',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/options/Skirt/Skirt/Skirt_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/options/Skirt/Skirt/Skirt_3.glb',
+			thumb: '/static/images/dario-mittmann/options/Skirt/Skirt/Skirt_3.webp',
+			modelFile: '/static/models/dario-mittmann/options/Skirt/Skirt/Skirt_3.glb',
 			blockName: 'Skirt 3',
 			avatar: 'female',
 			category: 'Skirt',
@@ -524,8 +492,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'ca8be371-c2b4-4ab3-8fc9-fcd2893f03b6',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/options/Skirt/Skirt/Skirt_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/options/Skirt/Skirt/Skirt_2.glb',
+			thumb: '/static/images/dario-mittmann/options/Skirt/Skirt/Skirt_2.webp',
+			modelFile: '/static/models/dario-mittmann/options/Skirt/Skirt/Skirt_2.glb',
 			blockName: 'Skirt 2',
 			avatar: 'female',
 			category: 'Skirt',
@@ -536,10 +504,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '44ddab43-b5e7-40ed-adff-a63a6dbf8af6',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Sleeves/sleeves_1799-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Sleeves/sleeves_1799-a_pose.glb',
+			thumb: '/static/images/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Sleeves/sleeves_1799-a_pose.webp',
+			modelFile: '/static/models/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Sleeves/sleeves_1799-a_pose.glb',
 			blockName: 'sleeves 1799-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -550,10 +516,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '546a2c01-905f-4787-89fb-5df217b7b18b',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Bodice/bodice_1798-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Bodice/bodice_1798-a_pose.glb',
+			thumb: '/static/images/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Bodice/bodice_1798-a_pose.webp',
+			modelFile: '/static/models/dario-mittmann/blocks/Top/Camisa_Alfaiataria_Azul___Bodice/bodice_1798-a_pose.glb',
 			blockName: 'bodice 1798-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -567,10 +531,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	givenchy: [
 		{
 			_id: '814f89b7-5ad0-467c-b9e1-718c4773daaf',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/blocks/Dress/Open_back_ruffled_dress_in_mesh_Skirt/skirt_1907-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/blocks/Dress/Open_back_ruffled_dress_in_mesh_Skirt/skirt_1907-a_pose.glb',
+			thumb: '/static/images/givenchy/blocks/Dress/Open_back_ruffled_dress_in_mesh_Skirt/skirt_1907-a_pose.webp',
+			modelFile: '/static/models/givenchy/blocks/Dress/Open_back_ruffled_dress_in_mesh_Skirt/skirt_1907-a_pose.glb',
 			blockName: 'skirt 1907-a pose',
 			avatar: 'female',
 			category: 'Dress',
@@ -581,10 +543,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'b7609bd2-6392-4242-a706-abbd59e9ac36',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/blocks/Dress/Open_back_ruffled_dress_in_mesh_Bodice/bodice_1906-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/blocks/Dress/Open_back_ruffled_dress_in_mesh_Bodice/bodice_1906-a_pose.glb',
+			thumb: '/static/images/givenchy/blocks/Dress/Open_back_ruffled_dress_in_mesh_Bodice/bodice_1906-a_pose.webp',
+			modelFile: '/static/models/givenchy/blocks/Dress/Open_back_ruffled_dress_in_mesh_Bodice/bodice_1906-a_pose.glb',
 			blockName: 'bodice 1906-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -595,8 +555,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '09f6ab10-0467-4b83-ab3a-95ded0fe26e0',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/options/Dress/Skirt/Skirt_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/options/Dress/Skirt/Skirt_5.glb',
+			thumb: '/static/images/givenchy/options/Dress/Skirt/Skirt_5.webp',
+			modelFile: '/static/models/givenchy/options/Dress/Skirt/Skirt_5.glb',
 			blockName: 'Skirt 5',
 			avatar: 'female',
 			category: 'Skirt',
@@ -607,8 +567,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '22863b11-78cc-4535-add9-776a63a032af',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/options/Dress/Skirt/Skirt_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/options/Dress/Skirt/Skirt_4.glb',
+			thumb: '/static/images/givenchy/options/Dress/Skirt/Skirt_4.webp',
+			modelFile: '/static/models/givenchy/options/Dress/Skirt/Skirt_4.glb',
 			blockName: 'Skirt 4',
 			avatar: 'female',
 			category: 'Skirt',
@@ -619,8 +579,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '54612caf-5e08-444c-8da8-5c1fbd2528f5',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/options/Dress/Skirt/Skirt_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/options/Dress/Skirt/Skirt_3.glb',
+			thumb: '/static/images/givenchy/options/Dress/Skirt/Skirt_3.webp',
+			modelFile: '/static/models/givenchy/options/Dress/Skirt/Skirt_3.glb',
 			blockName: 'Skirt 3',
 			avatar: 'female',
 			category: 'Skirt',
@@ -631,8 +591,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '76b6f13a-166b-477e-b8d7-5ec4c0ad1a9f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/options/Dress/Skirt/Skirt_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/options/Dress/Skirt/Skirt_2.glb',
+			thumb: '/static/images/givenchy/options/Dress/Skirt/Skirt_2.webp',
+			modelFile: '/static/models/givenchy/options/Dress/Skirt/Skirt_2.glb',
 			blockName: 'Skirt 2',
 			avatar: 'female',
 			category: 'Skirt',
@@ -643,8 +603,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '969765bf-598c-4e2c-9c6f-fe834addedc2',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/givenchy/options/Dress/Skirt/Skirt_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/givenchy/options/Dress/Skirt/Skirt_1.glb',
+			thumb: '/static/images/givenchy/options/Dress/Skirt/Skirt_1.webp',
+			modelFile: '/static/models/givenchy/options/Dress/Skirt/Skirt_1.glb',
 			blockName: 'Skirt 1',
 			avatar: 'female',
 			category: 'Skirt',
@@ -658,8 +618,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	dico: [
 		{
 			_id: '1fde42db-35b0-48f7-ad1d-0eae1988da7d',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dico/blocks/Pants/Item_1___Pants/pants_1826.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dico/blocks/Pants/Item_1___Pants/pants_1826.glb',
+			thumb: '/static/images/dico/blocks/Pants/Item_1___Pants/pants_1826.webp',
+			modelFile: '/static/models/dico/blocks/Pants/Item_1___Pants/pants_1826.glb',
 			blockName: 'pants 1826',
 			avatar: 'female',
 			category: 'Pants',
@@ -670,10 +630,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '3934a7e1-3d35-41bb-8151-c95aeac6be43',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/dico/blocks/Top/Dico_Fluffy_Print_T-Shirt_Blac__Sleeves/sleeves_1829-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/dico/blocks/Top/Dico_Fluffy_Print_T-Shirt_Blac__Sleeves/sleeves_1829-a_pose.glb',
+			thumb: '/static/images/dico/blocks/Top/Dico_Fluffy_Print_T-Shirt_Blac__Sleeves/sleeves_1829-a_pose.webp',
+			modelFile: '/static/models/dico/blocks/Top/Dico_Fluffy_Print_T-Shirt_Blac__Sleeves/sleeves_1829-a_pose.glb',
 			blockName: 'sleeves 1829-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -684,10 +642,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '7514d92b-8da8-4d95-ae90-2c47a373a78a',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/dico/blocks/Top/Dico_Fluffy_Print_T-Shirt_Blac__Bodice/bodice_1827-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/dico/blocks/Top/Dico_Fluffy_Print_T-Shirt_Blac__Bodice/bodice_1827-a_pose.glb',
+			thumb: '/static/images/dico/blocks/Top/Dico_Fluffy_Print_T-Shirt_Blac__Bodice/bodice_1827-a_pose.webp',
+			modelFile: '/static/models/dico/blocks/Top/Dico_Fluffy_Print_T-Shirt_Blac__Bodice/bodice_1827-a_pose.glb',
 			blockName: 'bodice 1827-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -701,8 +657,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	dottie: [
 		{
 			_id: '3f5951e0-1d3f-4642-a8df-02f6851688e5',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/dottie/blocks/Pants/Item_1_Pants/pants_1809-a_pose.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/dottie/blocks/Pants/Item_1_Pants/pants_1809-a_pose.glb',
+			thumb: '/static/images/dottie/blocks/Pants/Item_1_Pants/pants_1809-a_pose.webp',
+			modelFile: '/static/models/dottie/blocks/Pants/Item_1_Pants/pants_1809-a_pose.glb',
 			blockName: 'pants 1809-a pose',
 			avatar: 'female',
 			category: 'Pants',
@@ -713,10 +669,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '57577783-7696-4dcf-b6c5-e62ed4c41f84',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/dottie/blocks/Top/Ruffled_Trim_Cami_Bodice/bodice_1808-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/dottie/blocks/Top/Ruffled_Trim_Cami_Bodice/bodice_1808-a_pose.glb',
+			thumb: '/static/images/dottie/blocks/Top/Ruffled_Trim_Cami_Bodice/bodice_1808-a_pose.webp',
+			modelFile: '/static/models/dottie/blocks/Top/Ruffled_Trim_Cami_Bodice/bodice_1808-a_pose.glb',
 			blockName: 'bodice 1808-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -730,9 +684,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	edini: [
 		{
 			_id: '89b92fcf-619d-4d54-928f-fcc5f92fe86c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/edini/blocks/Dress/D1641_Fullbody/fullbody_1887-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/edini/blocks/Dress/D1641_Fullbody/fullbody_1887-a_pose.glb',
+			thumb: '/static/images/edini/blocks/Dress/D1641_Fullbody/fullbody_1887-a_pose.webp',
+			modelFile: '/static/models/edini/blocks/Dress/D1641_Fullbody/fullbody_1887-a_pose.glb',
 			blockName: 'fullbody 1887-a pose',
 			avatar: 'female',
 			category: 'Full Body',
@@ -746,10 +699,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'erroris.ltd': [
 		{
 			_id: 'ca502de8-26cb-4be0-aba1-dd4a122c03c3',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/erroris.ltd/blocks/Pants/GREY_CAPRI_Pants/pants_1850-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/erroris.ltd/blocks/Pants/GREY_CAPRI_Pants/pants_1850-a_pose.glb',
+			thumb: '/static/images/erroris.ltd/blocks/Pants/GREY_CAPRI_Pants/pants_1850-a_pose.webp',
+			modelFile: '/static/models/erroris.ltd/blocks/Pants/GREY_CAPRI_Pants/pants_1850-a_pose.glb',
 			blockName: 'pants 1850-a pose',
 			avatar: 'female',
 			category: 'Pants',
@@ -760,10 +711,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '1cf5da1a-d34e-4ff3-83eb-4e6f63356e8d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/erroris.ltd/blocks/Top/LUE_BABYDOLL_Bodice/bodice_1849-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/erroris.ltd/blocks/Top/LUE_BABYDOLL_Bodice/bodice_1849-a_pose.glb',
+			thumb: '/static/images/erroris.ltd/blocks/Top/LUE_BABYDOLL_Bodice/bodice_1849-a_pose.webp',
+			modelFile: '/static/models/erroris.ltd/blocks/Top/LUE_BABYDOLL_Bodice/bodice_1849-a_pose.glb',
 			blockName: 'bodice 1849-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -777,8 +726,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	gola: [
 		{
 			_id: '47030315-4e2e-4cc0-8ec3-2da0eafd1a8b',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/gola/blocks/Dress/Item_1___Fullbody/fullbody_1833.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/gola/blocks/Dress/Item_1___Fullbody/fullbody_1833.glb',
+			thumb: '/static/images/gola/blocks/Dress/Item_1___Fullbody/fullbody_1833.webp',
+			modelFile: '/static/models/gola/blocks/Dress/Item_1___Fullbody/fullbody_1833.glb',
 			blockName: 'fullbody 1833',
 			avatar: 'female',
 			category: 'Full Body',
@@ -792,8 +741,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	h2b: [
 		{
 			_id: '5dca9564-e74a-4839-a281-97b4b64d55b2',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h2b/blocks/Pants/Item_1___Pants/pants_1785.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/h2b/blocks/Pants/Item_1___Pants/pants_1785.glb',
+			thumb: '/static/images/h2b/blocks/Pants/Item_1___Pants/pants_1785.webp',
+			modelFile: '/static/models/h2b/blocks/Pants/Item_1___Pants/pants_1785.glb',
 			blockName: 'pants 1785',
 			avatar: 'female',
 			category: 'Pants',
@@ -804,8 +753,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '9b40f383-9ffe-47eb-8787-298e7a23d925',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h2b/blocks/Top/Item_1___Bodice/top_1786.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/h2b/blocks/Top/Item_1___Bodice/top_1786.glb',
+			thumb: '/static/images/h2b/blocks/Top/Item_1___Bodice/top_1786.webp',
+			modelFile: '/static/models/h2b/blocks/Top/Item_1___Bodice/top_1786.glb',
 			blockName: 'top 1786',
 			avatar: 'female',
 			category: 'Bodice',
@@ -819,10 +768,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'joie-des-roses': [
 		{
 			_id: '81c17d3c-c69d-49f9-8fdf-8fd5c80d49a7',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/blocks/Jacket/Ena_jacket___Bodice/shirt_1783.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/blocks/Jacket/Ena_jacket___Bodice/shirt_1783.glb',
+			thumb: '/static/images/joie-des-roses/blocks/Jacket/Ena_jacket___Bodice/shirt_1783.webp',
+			modelFile: '/static/models/joie-des-roses/blocks/Jacket/Ena_jacket___Bodice/shirt_1783.glb',
 			blockName: 'shirt 1783',
 			avatar: 'female',
 			category: 'Bodice',
@@ -833,10 +780,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'a3222748-c589-4398-b1f3-1bb2a05a390f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/blocks/Jacket/Ena_jacket___Sleeves/sleeve_1781.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/blocks/Jacket/Ena_jacket___Sleeves/sleeve_1781.glb',
+			thumb: '/static/images/joie-des-roses/blocks/Jacket/Ena_jacket___Sleeves/sleeve_1781.webp',
+			modelFile: '/static/models/joie-des-roses/blocks/Jacket/Ena_jacket___Sleeves/sleeve_1781.glb',
 			blockName: 'sleeve 1781',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -847,10 +792,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'a3560e4d-df6c-4e42-b17d-992d575ac9c0',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/blocks/Dress/Ena_dress___Skirt/skirt_1782.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/blocks/Dress/Ena_dress___Skirt/skirt_1782.glb',
+			thumb: '/static/images/joie-des-roses/blocks/Dress/Ena_dress___Skirt/skirt_1782.webp',
+			modelFile: '/static/models/joie-des-roses/blocks/Dress/Ena_dress___Skirt/skirt_1782.glb',
 			blockName: 'skirt 1782',
 			avatar: 'female',
 			category: 'Dress',
@@ -861,10 +804,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '1be774ef-5963-4df9-8524-78528fc59253',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/blocks/Dress/Ena_dress___Bodice/bodice_1780.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/blocks/Dress/Ena_dress___Bodice/bodice_1780.glb',
+			thumb: '/static/images/joie-des-roses/blocks/Dress/Ena_dress___Bodice/bodice_1780.webp',
+			modelFile: '/static/models/joie-des-roses/blocks/Dress/Ena_dress___Bodice/bodice_1780.glb',
 			blockName: 'bodice 1780',
 			avatar: 'female',
 			category: 'Bodice',
@@ -875,8 +816,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '610858d5-fc69-461d-a159-1b54648e8d7b',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Skirt/Skirt_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Skirt/Skirt_2.glb',
+			thumb: '/static/images/joie-des-roses/options/Dress/Skirt/Skirt_2.webp',
+			modelFile: '/static/models/joie-des-roses/options/Dress/Skirt/Skirt_2.glb',
 			blockName: 'Skirt 2',
 			avatar: 'female',
 			category: 'Skirt',
@@ -887,8 +828,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'c118b591-5f14-4243-82f3-36cc5a569fb9',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Skirt/Skirt_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Skirt/Skirt_1.glb',
+			thumb: '/static/images/joie-des-roses/options/Dress/Skirt/Skirt_1.webp',
+			modelFile: '/static/models/joie-des-roses/options/Dress/Skirt/Skirt_1.glb',
 			blockName: 'Skirt 1',
 			avatar: 'female',
 			category: 'Skirt',
@@ -899,8 +840,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '9ae5c8ba-0e87-4291-97ce-28d89863677c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Sleeves/Sleeves_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Sleeves/Sleeves_5.glb',
+			thumb: '/static/images/joie-des-roses/options/Dress/Sleeves/Sleeves_5.webp',
+			modelFile: '/static/models/joie-des-roses/options/Dress/Sleeves/Sleeves_5.glb',
 			blockName: 'Sleeves 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -911,8 +852,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'dcc46ebe-b1aa-43f8-999a-09ced207b689',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Sleeves/Sleeves_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Sleeves/Sleeves_4.glb',
+			thumb: '/static/images/joie-des-roses/options/Dress/Sleeves/Sleeves_4.webp',
+			modelFile: '/static/models/joie-des-roses/options/Dress/Sleeves/Sleeves_4.glb',
 			blockName: 'Sleeves 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -923,8 +864,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'b4659947-4324-483d-9af2-e0782e8e7d28',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Sleeves/Sleeves_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Sleeves/Sleeves_3.glb',
+			thumb: '/static/images/joie-des-roses/options/Dress/Sleeves/Sleeves_3.webp',
+			modelFile: '/static/models/joie-des-roses/options/Dress/Sleeves/Sleeves_3.glb',
 			blockName: 'Sleeves 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -935,8 +876,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '101cb3c3-8c47-431a-bc31-20d0ce7dfb4c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Sleeves/Sleeves_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Sleeves/Sleeves_2.glb',
+			thumb: '/static/images/joie-des-roses/options/Dress/Sleeves/Sleeves_2.webp',
+			modelFile: '/static/models/joie-des-roses/options/Dress/Sleeves/Sleeves_2.glb',
 			blockName: 'Sleeves 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -947,8 +888,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '656d1dbe-e45a-4bed-b14e-71f3dcb97e65',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/joie-des-roses/options/Dress/Sleeves/Sleeves_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/joie-des-roses/options/Dress/Sleeves/Sleeves_1.glb',
+			thumb: '/static/images/joie-des-roses/options/Dress/Sleeves/Sleeves_1.webp',
+			modelFile: '/static/models/joie-des-roses/options/Dress/Sleeves/Sleeves_1.glb',
 			blockName: 'Sleeves 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -962,10 +903,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'jubin-studio': [
 		{
 			_id: '7e17a528-9d4f-4db9-b19c-ef1331676144',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/jubin-studio/blocks/Dress/Item_1_Fullbody/fullbody_1834.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/jubin-studio/blocks/Dress/Item_1_Fullbody/fullbody_1834.glb',
+			thumb: '/static/images/jubin-studio/blocks/Dress/Item_1_Fullbody/fullbody_1834.webp',
+			modelFile: '/static/models/jubin-studio/blocks/Dress/Item_1_Fullbody/fullbody_1834.glb',
 			blockName: 'fullbody 1834',
 			avatar: 'female',
 			category: 'Full Body',
@@ -979,10 +918,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'celeste-studio': [
 		{
 			_id: '2c985b34-0b31-4937-bf38-53ccb5de1567',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/blocks/Dress/RINA_DRESS_Sleeves/sleeves_1953.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/blocks/Dress/RINA_DRESS_Sleeves/sleeves_1953.glb',
+			thumb: '/static/images/celeste-studio/blocks/Dress/RINA_DRESS_Sleeves/sleeves_1953.webp',
+			modelFile: '/static/models/celeste-studio/blocks/Dress/RINA_DRESS_Sleeves/sleeves_1953.glb',
 			blockName: 'sleeves 1953',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -993,10 +930,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '1edbbb7b-1926-49e0-b881-8f8775487753',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/blocks/Dress/RINA_DRESS_Fullbody/fullbody_1952.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/blocks/Dress/RINA_DRESS_Fullbody/fullbody_1952.glb',
+			thumb: '/static/images/celeste-studio/blocks/Dress/RINA_DRESS_Fullbody/fullbody_1952.webp',
+			modelFile: '/static/models/celeste-studio/blocks/Dress/RINA_DRESS_Fullbody/fullbody_1952.glb',
 			blockName: 'fullbody 1952',
 			avatar: 'female',
 			category: 'Dress',
@@ -1007,8 +942,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'c33c2146-21f0-4338-8b2a-d5e30c704929',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/options/Dress/Sleeves/Sleeves_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/options/Dress/Sleeves/Sleeves_5.glb',
+			thumb: '/static/images/celeste-studio/options/Dress/Sleeves/Sleeves_5.webp',
+			modelFile: '/static/models/celeste-studio/options/Dress/Sleeves/Sleeves_5.glb',
 			blockName: 'Sleeves 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1019,8 +954,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'd9996231-ad3b-4479-850e-c715ce471033',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/options/Dress/Sleeves/Sleeves_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/options/Dress/Sleeves/Sleeves_4.glb',
+			thumb: '/static/images/celeste-studio/options/Dress/Sleeves/Sleeves_4.webp',
+			modelFile: '/static/models/celeste-studio/options/Dress/Sleeves/Sleeves_4.glb',
 			blockName: 'Sleeves 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1031,8 +966,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '5e6795da-b6a3-481e-9bef-8d7578b955ce',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/options/Dress/Sleeves/Sleeves_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/options/Dress/Sleeves/Sleeves_3.glb',
+			thumb: '/static/images/celeste-studio/options/Dress/Sleeves/Sleeves_3.webp',
+			modelFile: '/static/models/celeste-studio/options/Dress/Sleeves/Sleeves_3.glb',
 			blockName: 'Sleeves 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1043,8 +978,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'fa4b8cad-e5d6-4b47-a9a6-e0578455f179',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/options/Dress/Sleeves/Sleeves_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/options/Dress/Sleeves/Sleeves_2.glb',
+			thumb: '/static/images/celeste-studio/options/Dress/Sleeves/Sleeves_2.webp',
+			modelFile: '/static/models/celeste-studio/options/Dress/Sleeves/Sleeves_2.glb',
 			blockName: 'Sleeves 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1055,8 +990,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '227beb49-070c-496a-88b1-9d636ff263e5',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/celeste-studio/options/Dress/Sleeves/_Sleeves_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/celeste-studio/options/Dress/Sleeves/_Sleeves_1.glb',
+			thumb: '/static/images/celeste-studio/options/Dress/Sleeves/_Sleeves_1.webp',
+			modelFile: '/static/models/celeste-studio/options/Dress/Sleeves/_Sleeves_1.glb',
 			blockName: 'Sleeves 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1070,10 +1005,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'just-etro-gang': [
 		{
 			_id: '9de3a87a-6fab-4a13-8979-7483da46a196',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/just-etro-gang/blocks/Skirt/Rogue_Knit_set_Skirt/skirt_1891-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/just-etro-gang/blocks/Skirt/Rogue_Knit_set_Skirt/skirt_1891-a_pose.glb',
+			thumb: '/static/images/just-etro-gang/blocks/Skirt/Rogue_Knit_set_Skirt/skirt_1891-a_pose.webp',
+			modelFile: '/static/models/just-etro-gang/blocks/Skirt/Rogue_Knit_set_Skirt/skirt_1891-a_pose.glb',
 			blockName: 'skirt 1891-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1084,10 +1017,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '8a2ef1b7-1394-45f3-8871-5f1c2228f947',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/just-etro-gang/blocks/Top/Rogue_Knit_set_Sleeves/sleeves_1890-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/just-etro-gang/blocks/Top/Rogue_Knit_set_Sleeves/sleeves_1890-a_pose.glb',
+			thumb: '/static/images/just-etro-gang/blocks/Top/Rogue_Knit_set_Sleeves/sleeves_1890-a_pose.webp',
+			modelFile: '/static/models/just-etro-gang/blocks/Top/Rogue_Knit_set_Sleeves/sleeves_1890-a_pose.glb',
 			blockName: 'sleeves 1890-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1098,10 +1029,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '623bc05a-6bd5-43ea-bfbc-0464c515363b',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/just-etro-gang/blocks/Top/Rogue_Knit_set_Bodice/bodice_1889-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/just-etro-gang/blocks/Top/Rogue_Knit_set_Bodice/bodice_1889-a_pose.glb',
+			thumb: '/static/images/just-etro-gang/blocks/Top/Rogue_Knit_set_Bodice/bodice_1889-a_pose.webp',
+			modelFile: '/static/models/just-etro-gang/blocks/Top/Rogue_Knit_set_Bodice/bodice_1889-a_pose.glb',
 			blockName: 'bodice 1889-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1115,8 +1044,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	kido: [
 		{
 			_id: 'b2f6087d-c40f-4b5d-bd38-e7f967de3179',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/kido/blocks/Top/Item_1_Bodice/top_1832.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/kido/blocks/Top/Item_1_Bodice/top_1832.glb',
+			thumb: '/static/images/kido/blocks/Top/Item_1_Bodice/top_1832.webp',
+			modelFile: '/static/models/kido/blocks/Top/Item_1_Bodice/top_1832.glb',
 			blockName: 'top 1832',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1127,8 +1056,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '057c748d-ef71-4f16-9247-e81976d3dd6c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/kido/blocks/Top/Item_1_Sleeves/sleeve_1831.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/kido/blocks/Top/Item_1_Sleeves/sleeve_1831.glb',
+			thumb: '/static/images/kido/blocks/Top/Item_1_Sleeves/sleeve_1831.webp',
+			modelFile: '/static/models/kido/blocks/Top/Item_1_Sleeves/sleeve_1831.glb',
 			blockName: 'sleeve 1831',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1142,9 +1071,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	levents: [
 		{
 			_id: '9ac58bf8-dd08-4aea-be39-0909adcf3114',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/blocks/Top/Item_1_Sleeves/sleeves_1819-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/blocks/Top/Item_1_Sleeves/sleeves_1819-a_pose.glb',
+			thumb: '/static/images/levents/blocks/Top/Item_1_Sleeves/sleeves_1819-a_pose.webp',
+			modelFile: '/static/models/levents/blocks/Top/Item_1_Sleeves/sleeves_1819-a_pose.glb',
 			blockName: 'sleeves 1819-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1155,8 +1083,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '6a950d4b-4df9-426f-afa3-7f2489ab34ec',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/blocks/Top/Item_1_Bodice/bodice_1817-a_pose.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/blocks/Top/Item_1_Bodice/bodice_1817-a_pose.glb',
+			thumb: '/static/images/levents/blocks/Top/Item_1_Bodice/bodice_1817-a_pose.webp',
+			modelFile: '/static/models/levents/blocks/Top/Item_1_Bodice/bodice_1817-a_pose.glb',
 			blockName: 'bodice 1817-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1167,9 +1095,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'e47162c1-8f1c-4a47-9e65-531201ad8ea4',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/blocks/Skirt/Item_1_Skirt/skirt__1815-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/blocks/Skirt/Item_1_Skirt/skirt__1815-a_pose.glb',
+			thumb: '/static/images/levents/blocks/Skirt/Item_1_Skirt/skirt__1815-a_pose.webp',
+			modelFile: '/static/models/levents/blocks/Skirt/Item_1_Skirt/skirt__1815-a_pose.glb',
 			blockName: 'skirt 1815-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1180,8 +1107,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'eeb14179-6bf7-4c54-a68a-e7b1f0f45314',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/options/Skirt/Skirt/Skirt_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/options/Skirt/Skirt/Skirt_5.glb',
+			thumb: '/static/images/levents/options/Skirt/Skirt/Skirt_5.webp',
+			modelFile: '/static/models/levents/options/Skirt/Skirt/Skirt_5.glb',
 			blockName: 'Skirt 5',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1192,8 +1119,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '4eb7705f-e46f-4a09-95a2-74b7bf09c1bb',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/options/Skirt/Skirt/Skirt_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/options/Skirt/Skirt/Skirt_4.glb',
+			thumb: '/static/images/levents/options/Skirt/Skirt/Skirt_4.webp',
+			modelFile: '/static/models/levents/options/Skirt/Skirt/Skirt_4.glb',
 			blockName: 'Skirt 4',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1204,8 +1131,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'ba9f1356-8e5b-4b5f-b1cc-e8b2dac38e7a',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/options/Skirt/Skirt/Skirt_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/options/Skirt/Skirt/Skirt_3.glb',
+			thumb: '/static/images/levents/options/Skirt/Skirt/Skirt_3.webp',
+			modelFile: '/static/models/levents/options/Skirt/Skirt/Skirt_3.glb',
 			blockName: 'Skirt 3',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1216,8 +1143,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'b2d91398-6f5f-4917-ad88-94c11a0301cf',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/options/Skirt/Skirt/Skirt_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/options/Skirt/Skirt/Skirt_2.glb',
+			thumb: '/static/images/levents/options/Skirt/Skirt/Skirt_2.webp',
+			modelFile: '/static/models/levents/options/Skirt/Skirt/Skirt_2.glb',
 			blockName: 'Skirt 2',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1228,8 +1155,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '09315974-a575-49df-8665-fa894dbb4d05',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/options/Skirt/Skirt/Skirt_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/options/Skirt/Skirt/Skirt_1.glb',
+			thumb: '/static/images/levents/options/Skirt/Skirt/Skirt_1.webp',
+			modelFile: '/static/models/levents/options/Skirt/Skirt/Skirt_1.glb',
 			blockName: 'Skirt 1',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1240,10 +1167,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '59b433d7-75b0-4b7a-9a9b-494d868a0632',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Sleeves/sleeves_1818-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Sleeves/sleeves_1818-a_pose.glb',
+			thumb: '/static/images/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Sleeves/sleeves_1818-a_pose.webp',
+			modelFile: '/static/models/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Sleeves/sleeves_1818-a_pose.glb',
 			blockName: 'sleeves 1818-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1254,10 +1179,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '1bd0ed92-5855-4095-8642-f3e95e26da82',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Bodice/bodice_1816-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Bodice/bodice_1816-a_pose.glb',
+			thumb: '/static/images/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Bodice/bodice_1816-a_pose.webp',
+			modelFile: '/static/models/levents/blocks/Jacket/SMALL_KNIT_CARDIGAN_Bodice/bodice_1816-a_pose.glb',
 			blockName: 'bodice 1816-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1271,8 +1194,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'bad-habits': [
 		{
 			_id: 'd6b44a5c-4d18-41fe-8f82-ab1a6f98a221',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bad-habits/blocks/Top/INFO_TEE_Sleeves/sleeves_1840.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/bad-habits/blocks/Top/INFO_TEE_Sleeves/sleeves_1840.glb',
+			thumb: '/static/images/bad-habits/blocks/Top/INFO_TEE_Sleeves/sleeves_1840.webp',
+			modelFile: '/static/models/bad-habits/blocks/Top/INFO_TEE_Sleeves/sleeves_1840.glb',
 			blockName: 'sleeves 1840',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1283,8 +1206,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'c5fad9e7-e846-4a03-9cf6-bacc95c88dd4',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bad-habits/blocks/Top/INFO_TEE_Bodice/bodice_1838.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/bad-habits/blocks/Top/INFO_TEE_Bodice/bodice_1838.glb',
+			thumb: '/static/images/bad-habits/blocks/Top/INFO_TEE_Bodice/bodice_1838.webp',
+			modelFile: '/static/models/bad-habits/blocks/Top/INFO_TEE_Bodice/bodice_1838.glb',
 			blockName: 'bodice 1838',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1295,8 +1218,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'd0fec71e-03e1-47ca-b2a4-4353d2ee6fca',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/bad-habits/blocks/Pants/Item_1_Pants/pants_1839.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/bad-habits/blocks/Pants/Item_1_Pants/pants_1839.glb',
+			thumb: '/static/images/bad-habits/blocks/Pants/Item_1_Pants/pants_1839.webp',
+			modelFile: '/static/models/bad-habits/blocks/Pants/Item_1_Pants/pants_1839.glb',
 			blockName: 'pants 1839',
 			avatar: 'female',
 			category: 'Pants',
@@ -1310,10 +1233,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'beachclub.official': [
 		{
 			_id: '4c37c23f-eb04-4703-9eef-16f1e0fa290f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/blocks/Skirt/Delila_Set_Skirt/skirt_1866-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/blocks/Skirt/Delila_Set_Skirt/skirt_1866-a_pose.glb',
+			thumb: '/static/images/beachclub.official/blocks/Skirt/Delila_Set_Skirt/skirt_1866-a_pose.webp',
+			modelFile: '/static/models/beachclub.official/blocks/Skirt/Delila_Set_Skirt/skirt_1866-a_pose.glb',
 			blockName: 'skirt 1866-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1324,10 +1245,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '58217aed-3dbc-45a2-815a-6b124098ef55',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/blocks/Top/Delila_Set_Bodice/bodice_1865-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/blocks/Top/Delila_Set_Bodice/bodice_1865-a_pose.glb',
+			thumb: '/static/images/beachclub.official/blocks/Top/Delila_Set_Bodice/bodice_1865-a_pose.webp',
+			modelFile: '/static/models/beachclub.official/blocks/Top/Delila_Set_Bodice/bodice_1865-a_pose.glb',
 			blockName: 'bodice 1865-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1338,8 +1257,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '62b15e9d-236e-4e83-aa57-763ac15123f0',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/options/Top/Sleeves/Sleeves_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/options/Top/Sleeves/Sleeves_5.glb',
+			thumb: '/static/images/beachclub.official/options/Top/Sleeves/Sleeves_5.webp',
+			modelFile: '/static/models/beachclub.official/options/Top/Sleeves/Sleeves_5.glb',
 			blockName: 'Sleeves 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1350,8 +1269,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '4999bd57-dd48-4b7c-82be-b31e06cebedb',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/options/Top/Sleeves/Sleeves_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/options/Top/Sleeves/Sleeves_4.glb',
+			thumb: '/static/images/beachclub.official/options/Top/Sleeves/Sleeves_4.webp',
+			modelFile: '/static/models/beachclub.official/options/Top/Sleeves/Sleeves_4.glb',
 			blockName: 'Sleeves 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1362,8 +1281,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '10265cf7-cdcf-49ab-a1ee-7c68c24af652',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/options/Top/Sleeves/Sleeves_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/options/Top/Sleeves/Sleeves_3.glb',
+			thumb: '/static/images/beachclub.official/options/Top/Sleeves/Sleeves_3.webp',
+			modelFile: '/static/models/beachclub.official/options/Top/Sleeves/Sleeves_3.glb',
 			blockName: 'Sleeves 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1374,8 +1293,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'ffb0d542-6075-4119-abd1-f7a924eaf966',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/options/Top/Sleeves/Sleeves_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/options/Top/Sleeves/Sleeves_2.glb',
+			thumb: '/static/images/beachclub.official/options/Top/Sleeves/Sleeves_2.webp',
+			modelFile: '/static/models/beachclub.official/options/Top/Sleeves/Sleeves_2.glb',
 			blockName: 'Sleeves 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1386,8 +1305,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'cd9a377e-efda-49a8-b19a-0cadbe5ea22c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/beachclub.official/options/Top/Sleeves/Sleeves_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/beachclub.official/options/Top/Sleeves/Sleeves_1.glb',
+			thumb: '/static/images/beachclub.official/options/Top/Sleeves/Sleeves_1.webp',
+			modelFile: '/static/models/beachclub.official/options/Top/Sleeves/Sleeves_1.glb',
 			blockName: 'Sleeves 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1401,8 +1320,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	berta: [
 		{
 			_id: 'd5be76ba-41d1-43bb-a9be-7c9dbfd01d52',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/berta/blocks/Dress/Item_1___Sleeves/sleeves_1938.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/berta/blocks/Dress/Item_1___Sleeves/sleeves_1938.glb',
+			thumb: '/static/images/berta/blocks/Dress/Item_1___Sleeves/sleeves_1938.webp',
+			modelFile: '/static/models/berta/blocks/Dress/Item_1___Sleeves/sleeves_1938.glb',
 			blockName: 'sleeves 1938',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1413,8 +1332,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '2863a88b-bb0e-407f-bfb9-3f703ef84b45',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/berta/blocks/Dress/Item_1___Fullbody/full_body_1937.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/berta/blocks/Dress/Item_1___Fullbody/full_body_1937.glb',
+			thumb: '/static/images/berta/blocks/Dress/Item_1___Fullbody/full_body_1937.webp',
+			modelFile: '/static/models/berta/blocks/Dress/Item_1___Fullbody/full_body_1937.glb',
 			blockName: 'full body 1937',
 			avatar: 'female',
 			category: 'Full Body',
@@ -1428,10 +1347,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'cara-club': [
 		{
 			_id: 'cb477628-8a27-4fd7-abe4-ff73b0f1f11d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/blocks/Dress/Item_1_Fullbody/fullbody_1872-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/cara-club/blocks/Dress/Item_1_Fullbody/fullbody_1872-a_pose.glb',
+			thumb: '/static/images/cara-club/blocks/Dress/Item_1_Fullbody/fullbody_1872-a_pose.webp',
+			modelFile: '/static/models/cara-club/blocks/Dress/Item_1_Fullbody/fullbody_1872-a_pose.glb',
 			blockName: 'fullbody 1872-a pose',
 			avatar: 'female',
 			category: 'Full Body',
@@ -1442,8 +1359,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'a7609a08-bc5a-4471-a69a-646e8820a683',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/options/Dress/Sleeves/Sleeves_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/cara-club/options/Dress/Sleeves/Sleeves_5.glb',
+			thumb: '/static/images/cara-club/options/Dress/Sleeves/Sleeves_5.webp',
+			modelFile: '/static/models/cara-club/options/Dress/Sleeves/Sleeves_5.glb',
 			blockName: 'Sleeves 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1454,8 +1371,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '1b50f39b-f050-45f5-9226-3a7d79b2fb06',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/options/Dress/Sleeves/Sleeves_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/cara-club/options/Dress/Sleeves/Sleeves_4.glb',
+			thumb: '/static/images/cara-club/options/Dress/Sleeves/Sleeves_4.webp',
+			modelFile: '/static/models/cara-club/options/Dress/Sleeves/Sleeves_4.glb',
 			blockName: 'Sleeves 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1466,8 +1383,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'a7b160aa-844d-4ad9-af7b-f930d2278fdc',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/options/Dress/Sleeves/Sleeves_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/cara-club/options/Dress/Sleeves/Sleeves_3.glb',
+			thumb: '/static/images/cara-club/options/Dress/Sleeves/Sleeves_3.webp',
+			modelFile: '/static/models/cara-club/options/Dress/Sleeves/Sleeves_3.glb',
 			blockName: 'Sleeves 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1478,8 +1395,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'e8f1a457-4b23-484b-b7f6-3cc6ae146360',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/options/Dress/Sleeves/Sleeves_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/cara-club/options/Dress/Sleeves/Sleeves_2.glb',
+			thumb: '/static/images/cara-club/options/Dress/Sleeves/Sleeves_2.webp',
+			modelFile: '/static/models/cara-club/options/Dress/Sleeves/Sleeves_2.glb',
 			blockName: 'Sleeves 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1490,8 +1407,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'ce6058df-7f9d-4291-87dc-7de4d535ab3a',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/cara-club/options/Dress/Sleeves/Sleeves_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/cara-club/options/Dress/Sleeves/Sleeves_1.glb',
+			thumb: '/static/images/cara-club/options/Dress/Sleeves/Sleeves_1.webp',
+			modelFile: '/static/models/cara-club/options/Dress/Sleeves/Sleeves_1.glb',
 			blockName: 'Sleeves 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1505,10 +1422,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'ceci-cela': [
 		{
 			_id: '22d484b6-ad9a-4736-b5a8-f029ad0e89c8',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/ceci-cela/blocks/Dress/Item_1_Fullbody/fullbody_1904-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/ceci-cela/blocks/Dress/Item_1_Fullbody/fullbody_1904-a_pose.glb',
+			thumb: '/static/images/ceci-cela/blocks/Dress/Item_1_Fullbody/fullbody_1904-a_pose.webp',
+			modelFile: '/static/models/ceci-cela/blocks/Dress/Item_1_Fullbody/fullbody_1904-a_pose.glb',
 			blockName: 'fullbody 1904-a pose',
 			avatar: 'female',
 			category: 'Full Body',
@@ -1522,10 +1437,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	celine: [
 		{
 			_id: '1f3845b9-4c9b-4e1f-85cb-3d4a3f1fdbc5',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/celine/blocks/Dress/Dress_IN_acetate_silk_crepe_Sleeves/sleeves_1936.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/celine/blocks/Dress/Dress_IN_acetate_silk_crepe_Sleeves/sleeves_1936.glb',
+			thumb: '/static/images/celine/blocks/Dress/Dress_IN_acetate_silk_crepe_Sleeves/sleeves_1936.webp',
+			modelFile: '/static/models/celine/blocks/Dress/Dress_IN_acetate_silk_crepe_Sleeves/sleeves_1936.glb',
 			blockName: 'sleeves 1936',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1536,10 +1449,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'd2022eca-036a-404f-9fe0-5882ab436d02',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/celine/blocks/Dress/Dress_IN_acetate_silk_crepe_Fullbody/fullbody_1935.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/celine/blocks/Dress/Dress_IN_acetate_silk_crepe_Fullbody/fullbody_1935.glb',
+			thumb: '/static/images/celine/blocks/Dress/Dress_IN_acetate_silk_crepe_Fullbody/fullbody_1935.webp',
+			modelFile: '/static/models/celine/blocks/Dress/Dress_IN_acetate_silk_crepe_Fullbody/fullbody_1935.glb',
 			blockName: 'fullbody 1935',
 			avatar: 'female',
 			category: 'Dress',
@@ -1553,10 +1464,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	colin: [
 		{
 			_id: '80a12a43-a43c-45c2-bc19-dfdd7700e9f5',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/blocks/Dress/SET_REN_VAI_DAY_HOA_Skirt/skirt_1897-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/blocks/Dress/SET_REN_VAI_DAY_HOA_Skirt/skirt_1897-a_pose.glb',
+			thumb: '/static/images/colin/blocks/Dress/SET_REN_VAI_DAY_HOA_Skirt/skirt_1897-a_pose.webp',
+			modelFile: '/static/models/colin/blocks/Dress/SET_REN_VAI_DAY_HOA_Skirt/skirt_1897-a_pose.glb',
 			blockName: 'skirt 1897-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1567,10 +1476,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '663d5dc7-15bc-472c-85e9-98c0f569a4ff',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/blocks/Dress/SET_REN_VAI_DAY_HOA_Bodice/bodice_1896-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/blocks/Dress/SET_REN_VAI_DAY_HOA_Bodice/bodice_1896-a_pose.glb',
+			thumb: '/static/images/colin/blocks/Dress/SET_REN_VAI_DAY_HOA_Bodice/bodice_1896-a_pose.webp',
+			modelFile: '/static/models/colin/blocks/Dress/SET_REN_VAI_DAY_HOA_Bodice/bodice_1896-a_pose.glb',
 			blockName: 'bodice 1896-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1581,8 +1488,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'a0e76621-21d1-47b0-ad9a-aa2bc32fb3f2',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/options/Dress/Sleeves/Sleeves_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/options/Dress/Sleeves/Sleeves_5.glb',
+			thumb: '/static/images/colin/options/Dress/Sleeves/Sleeves_5.webp',
+			modelFile: '/static/models/colin/options/Dress/Sleeves/Sleeves_5.glb',
 			blockName: 'Sleeves 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1593,8 +1500,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '2d804db5-8e3d-4831-b50c-9e27a3279f06',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/options/Dress/Sleeves/Sleeves_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/options/Dress/Sleeves/Sleeves_4.glb',
+			thumb: '/static/images/colin/options/Dress/Sleeves/Sleeves_4.webp',
+			modelFile: '/static/models/colin/options/Dress/Sleeves/Sleeves_4.glb',
 			blockName: 'Sleeves 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1605,8 +1512,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'b8a9277d-6291-40fa-9b48-53d6ead75cce',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/options/Dress/Sleeves/Sleeves_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/options/Dress/Sleeves/Sleeves_3.glb',
+			thumb: '/static/images/colin/options/Dress/Sleeves/Sleeves_3.webp',
+			modelFile: '/static/models/colin/options/Dress/Sleeves/Sleeves_3.glb',
 			blockName: 'Sleeves 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1617,8 +1524,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '1bc108e6-acfb-4a05-8cea-579e6edba087',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/options/Dress/Sleeves/Sleeves_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/options/Dress/Sleeves/Sleeves_2.glb',
+			thumb: '/static/images/colin/options/Dress/Sleeves/Sleeves_2.webp',
+			modelFile: '/static/models/colin/options/Dress/Sleeves/Sleeves_2.glb',
 			blockName: 'Sleeves 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1629,8 +1536,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '4a04d207-6e9d-4372-ad2c-e1cc9128df9f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/colin/options/Dress/Sleeves/Sleeves_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/colin/options/Dress/Sleeves/Sleeves_1.glb',
+			thumb: '/static/images/colin/options/Dress/Sleeves/Sleeves_1.webp',
+			modelFile: '/static/models/colin/options/Dress/Sleeves/Sleeves_1.glb',
 			blockName: 'Sleeves 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1644,10 +1551,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	demobaza: [
 		{
 			_id: '8c5b92cd-ffac-437a-ab64-d9dce4922542',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/blocks/Dress/DRESS_ARISE_Sleeves/sleeves_1885-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/blocks/Dress/DRESS_ARISE_Sleeves/sleeves_1885-a_pose.glb',
+			thumb: '/static/images/demobaza/blocks/Dress/DRESS_ARISE_Sleeves/sleeves_1885-a_pose.webp',
+			modelFile: '/static/models/demobaza/blocks/Dress/DRESS_ARISE_Sleeves/sleeves_1885-a_pose.glb',
 			blockName: 'sleeves 1885-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1658,10 +1563,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '3322ed7d-6954-4ac7-ada0-ac8f616f1616',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/blocks/Dress/DRESS_ARISE_Fullbody/fullbody_1886-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/blocks/Dress/DRESS_ARISE_Fullbody/fullbody_1886-a_pose.glb',
+			thumb: '/static/images/demobaza/blocks/Dress/DRESS_ARISE_Fullbody/fullbody_1886-a_pose.webp',
+			modelFile: '/static/models/demobaza/blocks/Dress/DRESS_ARISE_Fullbody/fullbody_1886-a_pose.glb',
 			blockName: 'fullbody 1886-a pose',
 			avatar: 'female',
 			category: 'Dress',
@@ -1672,8 +1575,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '4c502eb9-539e-462b-9a1a-954e3f5bde61',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/options/Dress/Sleeves/Sleeves_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/options/Dress/Sleeves/Sleeves_5.glb',
+			thumb: '/static/images/demobaza/options/Dress/Sleeves/Sleeves_5.webp',
+			modelFile: '/static/models/demobaza/options/Dress/Sleeves/Sleeves_5.glb',
 			blockName: 'Sleeves 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1684,8 +1587,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '7c0ed1da-cc40-4c0d-9f53-ba9252960ac8',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/options/Dress/Sleeves/Sleeves_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/options/Dress/Sleeves/Sleeves_4.glb',
+			thumb: '/static/images/demobaza/options/Dress/Sleeves/Sleeves_4.webp',
+			modelFile: '/static/models/demobaza/options/Dress/Sleeves/Sleeves_4.glb',
 			blockName: 'Sleeves 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1696,8 +1599,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'dca89190-c1b5-431e-901b-6481514a9f34',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/options/Dress/Sleeves/Sleeves_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/options/Dress/Sleeves/Sleeves_3.glb',
+			thumb: '/static/images/demobaza/options/Dress/Sleeves/Sleeves_3.webp',
+			modelFile: '/static/models/demobaza/options/Dress/Sleeves/Sleeves_3.glb',
 			blockName: 'Sleeves 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1708,8 +1611,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '69b37768-a08a-4c04-ab7a-945d909a9ae8',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/options/Dress/Sleeves/Sleeves_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/options/Dress/Sleeves/Sleeves_2.glb',
+			thumb: '/static/images/demobaza/options/Dress/Sleeves/Sleeves_2.webp',
+			modelFile: '/static/models/demobaza/options/Dress/Sleeves/Sleeves_2.glb',
 			blockName: 'Sleeves 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1720,8 +1623,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '6a81a7d4-4cb2-4126-a068-f4cfefb2d9ac',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/options/Dress/Sleeves/Sleeves_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/options/Dress/Sleeves/Sleeves_1.glb',
+			thumb: '/static/images/demobaza/options/Dress/Sleeves/Sleeves_1.webp',
+			modelFile: '/static/models/demobaza/options/Dress/Sleeves/Sleeves_1.glb',
 			blockName: 'Sleeves 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1732,10 +1635,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '9a44b759-f8cc-4c0f-a0b9-2fc665602529',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/blocks/Dress/DRESS_REVERSE_Sleeves/sleeves_1861-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/blocks/Dress/DRESS_REVERSE_Sleeves/sleeves_1861-a_pose.glb',
+			thumb: '/static/images/demobaza/blocks/Dress/DRESS_REVERSE_Sleeves/sleeves_1861-a_pose.webp',
+			modelFile: '/static/models/demobaza/blocks/Dress/DRESS_REVERSE_Sleeves/sleeves_1861-a_pose.glb',
 			blockName: 'sleeves 1861-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1746,10 +1647,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '073100f2-7e6d-4403-bf37-8e9a637e88b7',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/demobaza/blocks/Dress/DRESS_REVERSE_Bodice/fullbody_1860-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/demobaza/blocks/Dress/DRESS_REVERSE_Bodice/fullbody_1860-a_pose.glb',
+			thumb: '/static/images/demobaza/blocks/Dress/DRESS_REVERSE_Bodice/fullbody_1860-a_pose.webp',
+			modelFile: '/static/models/demobaza/blocks/Dress/DRESS_REVERSE_Bodice/fullbody_1860-a_pose.glb',
 			blockName: 'fullbody 1860-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1763,9 +1662,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	diane: [
 		{
 			_id: '92a60769-62e9-4b93-bd9b-4c6e078d7e16',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/blocks/Skirt/APHRODITE_-_POMME_Skirt/skirt_1757.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/diane/blocks/Skirt/APHRODITE_-_POMME_Skirt/skirt_1757.glb',
+			thumb: '/static/images/diane/blocks/Skirt/APHRODITE_-_POMME_Skirt/skirt_1757.webp',
+			modelFile: '/static/models/diane/blocks/Skirt/APHRODITE_-_POMME_Skirt/skirt_1757.glb',
 			blockName: 'skirt 1757',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1776,9 +1674,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '455db927-69e0-424e-9594-9e85b4c4a328',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/blocks/Top/AMOUR_-_POMME___Sleeves/sleeve_1746.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/diane/blocks/Top/AMOUR_-_POMME___Sleeves/sleeve_1746.glb',
+			thumb: '/static/images/diane/blocks/Top/AMOUR_-_POMME___Sleeves/sleeve_1746.webp',
+			modelFile: '/static/models/diane/blocks/Top/AMOUR_-_POMME___Sleeves/sleeve_1746.glb',
 			blockName: 'sleeve 1746',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1789,8 +1686,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '0a9ffbec-5256-4019-8bfe-007abf9b45bc',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/blocks/Top/AMOUR_-_POMME___Bodice/bodice_1924.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/diane/blocks/Top/AMOUR_-_POMME___Bodice/bodice_1924.glb',
+			thumb: '/static/images/diane/blocks/Top/AMOUR_-_POMME___Bodice/bodice_1924.webp',
+			modelFile: '/static/models/diane/blocks/Top/AMOUR_-_POMME___Bodice/bodice_1924.glb',
 			blockName: 'bodice 1924',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1801,10 +1698,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '20f91d2e-086a-49a8-9a59-f0b45ab51de2',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Fullbody/fullbody_1745.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Fullbody/fullbody_1745.glb',
+			thumb: '/static/images/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Fullbody/fullbody_1745.webp',
+			modelFile: '/static/models/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Fullbody/fullbody_1745.glb',
 			blockName: 'fullbody 1745',
 			avatar: 'female',
 			category: 'Full Body',
@@ -1815,10 +1710,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'a3b78cfa-ce47-474c-b9e5-0f76ee86ba1b',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Sleeves/sleeve_1746.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Sleeves/sleeve_1746.glb',
+			thumb: '/static/images/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Sleeves/sleeve_1746.webp',
+			modelFile: '/static/models/diane/blocks/Dress/H%C3%89M%C3%89RA_-_FUCHSIA___Sleeves/sleeve_1746.glb',
 			blockName: 'sleeve 1746',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1832,8 +1725,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	hani: [
 		{
 			_id: 'dc123085-ee96-4835-abcd-31c285e944d0',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/hani/blocks/Dress/Item_1_Skirt/skirt_1867.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/hani/blocks/Dress/Item_1_Skirt/skirt_1867.glb',
+			thumb: '/static/images/hani/blocks/Dress/Item_1_Skirt/skirt_1867.webp',
+			modelFile: '/static/models/hani/blocks/Dress/Item_1_Skirt/skirt_1867.glb',
 			blockName: 'skirt 1867',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1844,8 +1737,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '7e7279e7-0283-4af5-bb3b-f95014234556',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/hani/blocks/Dress/Item_1_Bodice/bodice_1869.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/hani/blocks/Dress/Item_1_Bodice/bodice_1869.glb',
+			thumb: '/static/images/hani/blocks/Dress/Item_1_Bodice/bodice_1869.webp',
+			modelFile: '/static/models/hani/blocks/Dress/Item_1_Bodice/bodice_1869.glb',
 			blockName: 'bodice 1869',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1859,10 +1752,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'huelley-rose': [
 		{
 			_id: '638aee65-bc2d-43f0-8b15-42dd8ebd563d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/huelley-rose/blocks/Dress/Item_1_Fullbody/fullbody_1864.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/huelley-rose/blocks/Dress/Item_1_Fullbody/fullbody_1864.glb',
+			thumb: '/static/images/huelley-rose/blocks/Dress/Item_1_Fullbody/fullbody_1864.webp',
+			modelFile: '/static/models/huelley-rose/blocks/Dress/Item_1_Fullbody/fullbody_1864.glb',
 			blockName: 'fullbody 1864',
 			avatar: 'female',
 			category: 'Full Body',
@@ -1876,10 +1767,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'hurricane-b': [
 		{
 			_id: '92a20587-ca0c-4af0-8cc9-de4904f80403',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/hurricane-b/blocks/Dress/Abito_lungo_con_cut_out_Fullbody/fullbody_1879-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/hurricane-b/blocks/Dress/Abito_lungo_con_cut_out_Fullbody/fullbody_1879-a_pose.glb',
+			thumb: '/static/images/hurricane-b/blocks/Dress/Abito_lungo_con_cut_out_Fullbody/fullbody_1879-a_pose.webp',
+			modelFile: '/static/models/hurricane-b/blocks/Dress/Abito_lungo_con_cut_out_Fullbody/fullbody_1879-a_pose.glb',
 			blockName: 'fullbody 1879-a pose',
 			avatar: 'female',
 			category: 'Full Body',
@@ -1890,8 +1779,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '03837a90-2d11-403d-884f-a951808cc207',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/hurricane-b/options/Dress/Sleeves/Sleeves_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/hurricane-b/options/Dress/Sleeves/Sleeves_2.glb',
+			thumb: '/static/images/hurricane-b/options/Dress/Sleeves/Sleeves_2.webp',
+			modelFile: '/static/models/hurricane-b/options/Dress/Sleeves/Sleeves_2.glb',
 			blockName: 'Sleeves 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1902,8 +1791,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '7161b007-b2a5-4387-85ae-8b8c8fc5adc8',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/hurricane-b/options/Dress/Sleeves/Sleeves_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/hurricane-b/options/Dress/Sleeves/Sleeves_1.glb',
+			thumb: '/static/images/hurricane-b/options/Dress/Sleeves/Sleeves_1.webp',
+			modelFile: '/static/models/hurricane-b/options/Dress/Sleeves/Sleeves_1.glb',
 			blockName: 'Sleeves 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -1917,10 +1806,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'fig.cool-leather': [
 		{
 			_id: 'c5928fe3-ef5a-4615-b586-1abf6bc06f58',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/fig.cool-leather/blocks/Skirt/Saia_de_Couro_Adele_Skirt/skirt_1871-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/fig.cool-leather/blocks/Skirt/Saia_de_Couro_Adele_Skirt/skirt_1871-a_pose.glb',
+			thumb: '/static/images/fig.cool-leather/blocks/Skirt/Saia_de_Couro_Adele_Skirt/skirt_1871-a_pose.webp',
+			modelFile: '/static/models/fig.cool-leather/blocks/Skirt/Saia_de_Couro_Adele_Skirt/skirt_1871-a_pose.glb',
 			blockName: 'skirt 1871-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1931,10 +1818,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '8b34574d-f8f5-42e3-b4af-59ca2ae2d6d4',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/fig.cool-leather/blocks/Top/Item_1_Bodice/bodice_1870-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/fig.cool-leather/blocks/Top/Item_1_Bodice/bodice_1870-a_pose.glb',
+			thumb: '/static/images/fig.cool-leather/blocks/Top/Item_1_Bodice/bodice_1870-a_pose.webp',
+			modelFile: '/static/models/fig.cool-leather/blocks/Top/Item_1_Bodice/bodice_1870-a_pose.glb',
 			blockName: 'bodice 1870-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1948,10 +1833,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	libeworkshop: [
 		{
 			_id: '9045073f-54c3-4a01-9238-cdfcffc8014e',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/libeworkshop/blocks/Skirt/Item_1_Skirt/skirts_1837-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/libeworkshop/blocks/Skirt/Item_1_Skirt/skirts_1837-a_pose.glb',
+			thumb: '/static/images/libeworkshop/blocks/Skirt/Item_1_Skirt/skirts_1837-a_pose.webp',
+			modelFile: '/static/models/libeworkshop/blocks/Skirt/Item_1_Skirt/skirts_1837-a_pose.glb',
 			blockName: 'skirts 1837-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -1962,10 +1845,9 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '1b5a844e-6e89-4c6b-bdf5-9b385f652a7e',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/libeworkshop/blocks/Top/Floral_Scoop_Neck_Drawstring_Top_Bodice/bodice_1877-a_pose.webp',
+			thumb: '/static/images/libeworkshop/blocks/Top/Floral_Scoop_Neck_Drawstring_Top_Bodice/bodice_1877-a_pose.webp',
 			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/libeworkshop/blocks/Top/Floral_Scoop_Neck_Drawstring_Top_Bodice/bodice_1877-a_pose.glb',
+				'/static/models/libeworkshop/blocks/Top/Floral_Scoop_Neck_Drawstring_Top_Bodice/bodice_1877-a_pose.glb',
 			blockName: 'bodice 1877-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -1979,10 +1861,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'liniss-official': [
 		{
 			_id: '06ee9a28-7776-44a7-bba4-c3be4558e216',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/liniss-official/blocks/Pants/ROSE_SET_Pants/pants_1884-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/liniss-official/blocks/Pants/ROSE_SET_Pants/pants_1884-a_pose.glb',
+			thumb: '/static/images/liniss-official/blocks/Pants/ROSE_SET_Pants/pants_1884-a_pose.webp',
+			modelFile: '/static/models/liniss-official/blocks/Pants/ROSE_SET_Pants/pants_1884-a_pose.glb',
 			blockName: 'pants 1884-a pose',
 			avatar: 'female',
 			category: 'Pants',
@@ -1993,10 +1873,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '2d447f9e-1f7b-436b-a1ce-5a973d6f3c2f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/liniss-official/blocks/Top/ROSE_SET_Sleeves/sleeves_1883-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/liniss-official/blocks/Top/ROSE_SET_Sleeves/sleeves_1883-a_pose.glb',
+			thumb: '/static/images/liniss-official/blocks/Top/ROSE_SET_Sleeves/sleeves_1883-a_pose.webp',
+			modelFile: '/static/models/liniss-official/blocks/Top/ROSE_SET_Sleeves/sleeves_1883-a_pose.glb',
 			blockName: 'sleeves 1883-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2007,10 +1885,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'becb2325-f376-42b7-a359-d9e2276871fe',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/liniss-official/blocks/Top/ROSE_SET_Bodice/bodice_1882-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/liniss-official/blocks/Top/ROSE_SET_Bodice/bodice_1882-a_pose.glb',
+			thumb: '/static/images/liniss-official/blocks/Top/ROSE_SET_Bodice/bodice_1882-a_pose.webp',
+			modelFile: '/static/models/liniss-official/blocks/Top/ROSE_SET_Bodice/bodice_1882-a_pose.glb',
 			blockName: 'bodice 1882-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2024,10 +1900,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	meanbldv: [
 		{
 			_id: 'c1169c2c-603f-479f-887d-18994c384e23',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/meanbldv/blocks/Dress/Islington_Mermaid_Ribbon_Maxi_Dress_Fullbody/fullbody_1955.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/meanbldv/blocks/Dress/Islington_Mermaid_Ribbon_Maxi_Dress_Fullbody/fullbody_1955.glb',
+			thumb: '/static/images/meanbldv/blocks/Dress/Islington_Mermaid_Ribbon_Maxi_Dress_Fullbody/fullbody_1955.webp',
+			modelFile: '/static/models/meanbldv/blocks/Dress/Islington_Mermaid_Ribbon_Maxi_Dress_Fullbody/fullbody_1955.glb',
 			blockName: 'fullbody 1955',
 			avatar: 'female',
 			category: 'Dress',
@@ -2041,10 +1915,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'milk-white': [
 		{
 			_id: '2a627b44-9607-4d8f-8067-f1227321ff85',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/milk-white/blocks/Pants/SHORTS_WITH_FLOWER_DETAIL_Pants/pants_1903-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/milk-white/blocks/Pants/SHORTS_WITH_FLOWER_DETAIL_Pants/pants_1903-a_pose.glb',
+			thumb: '/static/images/milk-white/blocks/Pants/SHORTS_WITH_FLOWER_DETAIL_Pants/pants_1903-a_pose.webp',
+			modelFile: '/static/models/milk-white/blocks/Pants/SHORTS_WITH_FLOWER_DETAIL_Pants/pants_1903-a_pose.glb',
 			blockName: 'pants 1903-a pose',
 			avatar: 'female',
 			category: 'Pants',
@@ -2055,10 +1927,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'b3a32226-e639-4f52-aed3-15bef5bf9036',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/milk-white/blocks/Top/Item_1_Sleeves/sleeves_1902-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/milk-white/blocks/Top/Item_1_Sleeves/sleeves_1902-a_pose.glb',
+			thumb: '/static/images/milk-white/blocks/Top/Item_1_Sleeves/sleeves_1902-a_pose.webp',
+			modelFile: '/static/models/milk-white/blocks/Top/Item_1_Sleeves/sleeves_1902-a_pose.glb',
 			blockName: 'sleeves 1902-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2069,9 +1939,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '13937349-ba9d-433f-b916-8282800d3899',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/milk-white/blocks/Top/Item_1_Bodice/bodice_1901-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/milk-white/blocks/Top/Item_1_Bodice/bodice_1901-a_pose.glb',
+			thumb: '/static/images/milk-white/blocks/Top/Item_1_Bodice/bodice_1901-a_pose.webp',
+			modelFile: '/static/models/milk-white/blocks/Top/Item_1_Bodice/bodice_1901-a_pose.glb',
 			blockName: 'bodice 1901-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2085,10 +1954,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'mono-talk': [
 		{
 			_id: 'f6aebc7f-bd96-4179-8262-729d44a74e0f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/blocks/Top/MCS25W_Sleeves/sleeves_1857-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/blocks/Top/MCS25W_Sleeves/sleeves_1857-a_pose.glb',
+			thumb: '/static/images/mono-talk/blocks/Top/MCS25W_Sleeves/sleeves_1857-a_pose.webp',
+			modelFile: '/static/models/mono-talk/blocks/Top/MCS25W_Sleeves/sleeves_1857-a_pose.glb',
 			blockName: 'sleeves 1857-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2099,9 +1966,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'fcba4b95-a2ff-4b22-a7a6-9d70bddcdf0d',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/blocks/Top/MCS25W_Bodice/bodice_1856-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/blocks/Top/MCS25W_Bodice/bodice_1856-a_pose.glb',
+			thumb: '/static/images/mono-talk/blocks/Top/MCS25W_Bodice/bodice_1856-a_pose.webp',
+			modelFile: '/static/models/mono-talk/blocks/Top/MCS25W_Bodice/bodice_1856-a_pose.glb',
 			blockName: 'bodice 1856-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2112,8 +1978,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '3b522070-3592-4639-ad9a-9f126a3b7896',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/options/Top/Sleeves/Sleeves_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/options/Top/Sleeves/Sleeves_5.glb',
+			thumb: '/static/images/mono-talk/options/Top/Sleeves/Sleeves_5.webp',
+			modelFile: '/static/models/mono-talk/options/Top/Sleeves/Sleeves_5.glb',
 			blockName: 'Sleeves 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2124,8 +1990,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'a6803a04-561d-4d12-af81-fa8bc4ea0c1d',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/options/Top/Sleeves/Sleeves_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/options/Top/Sleeves/Sleeves_4.glb',
+			thumb: '/static/images/mono-talk/options/Top/Sleeves/Sleeves_4.webp',
+			modelFile: '/static/models/mono-talk/options/Top/Sleeves/Sleeves_4.glb',
 			blockName: 'Sleeves 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2136,8 +2002,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'cd73d49d-491d-4587-963f-28e1aafab722',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/options/Top/Sleeves/Sleeves_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/options/Top/Sleeves/Sleeves_3.glb',
+			thumb: '/static/images/mono-talk/options/Top/Sleeves/Sleeves_3.webp',
+			modelFile: '/static/models/mono-talk/options/Top/Sleeves/Sleeves_3.glb',
 			blockName: 'Sleeves 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2148,8 +2014,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '2c9df7cc-1346-49d6-906e-3b3dde76f8a7',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/options/Top/Sleeves/Sleeves_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/options/Top/Sleeves/Sleeves_2.glb',
+			thumb: '/static/images/mono-talk/options/Top/Sleeves/Sleeves_2.webp',
+			modelFile: '/static/models/mono-talk/options/Top/Sleeves/Sleeves_2.glb',
 			blockName: 'Sleeves 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2160,8 +2026,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '042c752f-96ad-4578-a83c-ecdf5d9abc82',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/options/Top/Sleeves/Sleeves_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/options/Top/Sleeves/Sleeves_1.glb',
+			thumb: '/static/images/mono-talk/options/Top/Sleeves/Sleeves_1.webp',
+			modelFile: '/static/models/mono-talk/options/Top/Sleeves/Sleeves_1.glb',
 			blockName: 'Sleeves 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2172,9 +2038,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'ae24e02c-62a0-4c7c-a997-786aba2975f9',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/mono-talk/blocks/Skirt/Item_1_Skirt/skirt_1858-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/mono-talk/blocks/Skirt/Item_1_Skirt/skirt_1858-a_pose.glb',
+			thumb: '/static/images/mono-talk/blocks/Skirt/Item_1_Skirt/skirt_1858-a_pose.webp',
+			modelFile: '/static/models/mono-talk/blocks/Skirt/Item_1_Skirt/skirt_1858-a_pose.glb',
 			blockName: 'skirt 1858-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -2188,10 +2053,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'monroe-the-label': [
 		{
 			_id: 'a326b077-28d9-43c5-a6c6-71f48f757fd5',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/blocks/Pants/JUNO_PANTS_Pants/pants_1772-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/blocks/Pants/JUNO_PANTS_Pants/pants_1772-a_pose.glb',
+			thumb: '/static/images/monroe-the-label/blocks/Pants/JUNO_PANTS_Pants/pants_1772-a_pose.webp',
+			modelFile: '/static/models/monroe-the-label/blocks/Pants/JUNO_PANTS_Pants/pants_1772-a_pose.glb',
 			blockName: 'pants 1772-a pose',
 			avatar: 'female',
 			category: 'Pants',
@@ -2202,10 +2065,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '54d07a5f-39cc-4adb-9f9a-1d100dabaa38',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/blocks/Top/SUKI_LONG_SLEEVE_Sleeves/sleeves_1771-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/blocks/Top/SUKI_LONG_SLEEVE_Sleeves/sleeves_1771-a_pose.glb',
+			thumb: '/static/images/monroe-the-label/blocks/Top/SUKI_LONG_SLEEVE_Sleeves/sleeves_1771-a_pose.webp',
+			modelFile: '/static/models/monroe-the-label/blocks/Top/SUKI_LONG_SLEEVE_Sleeves/sleeves_1771-a_pose.glb',
 			blockName: 'sleeves 1771-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2216,10 +2077,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '5cdcd867-e697-4939-91db-8147779ba36f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/blocks/Top/SUKI_LONG_SLEEVE_Bodice/bodice_1770-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/blocks/Top/SUKI_LONG_SLEEVE_Bodice/bodice_1770-a_pose.glb',
+			thumb: '/static/images/monroe-the-label/blocks/Top/SUKI_LONG_SLEEVE_Bodice/bodice_1770-a_pose.webp',
+			modelFile: '/static/models/monroe-the-label/blocks/Top/SUKI_LONG_SLEEVE_Bodice/bodice_1770-a_pose.glb',
 			blockName: 'bodice 1770-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2230,8 +2089,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'd169382d-9ca5-491c-a739-7c67bf437163',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/options/Top/Sleeves/Sleeves_5.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/options/Top/Sleeves/Sleeves_5.glb',
+			thumb: '/static/images/monroe-the-label/options/Top/Sleeves/Sleeves_5.webp',
+			modelFile: '/static/models/monroe-the-label/options/Top/Sleeves/Sleeves_5.glb',
 			blockName: 'Sleeves 5',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2242,8 +2101,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '1953051a-6186-4e53-bd11-b3084d6e038a',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/options/Top/Sleeves/Sleeves_4.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/options/Top/Sleeves/Sleeves_4.glb',
+			thumb: '/static/images/monroe-the-label/options/Top/Sleeves/Sleeves_4.webp',
+			modelFile: '/static/models/monroe-the-label/options/Top/Sleeves/Sleeves_4.glb',
 			blockName: 'Sleeves 4',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2254,8 +2113,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'a0da1823-f339-4e77-a67b-c2bb1a11dd52',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/options/Top/Sleeves/Sleeves_3.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/options/Top/Sleeves/Sleeves_3.glb',
+			thumb: '/static/images/monroe-the-label/options/Top/Sleeves/Sleeves_3.webp',
+			modelFile: '/static/models/monroe-the-label/options/Top/Sleeves/Sleeves_3.glb',
 			blockName: 'Sleeves 3',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2266,8 +2125,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '63e79161-3e72-4045-86d5-506c74926f7f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/options/Top/Sleeves/Sleeves_2.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/options/Top/Sleeves/Sleeves_2.glb',
+			thumb: '/static/images/monroe-the-label/options/Top/Sleeves/Sleeves_2.webp',
+			modelFile: '/static/models/monroe-the-label/options/Top/Sleeves/Sleeves_2.glb',
 			blockName: 'Sleeves 2',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2278,8 +2137,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '1789ff96-1454-40a7-8ec9-0f5382b64cfe',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/monroe-the-label/options/Top/Sleeves/Sleeves_1.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/monroe-the-label/options/Top/Sleeves/Sleeves_1.glb',
+			thumb: '/static/images/monroe-the-label/options/Top/Sleeves/Sleeves_1.webp',
+			modelFile: '/static/models/monroe-the-label/options/Top/Sleeves/Sleeves_1.glb',
 			blockName: 'Sleeves 1',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2293,10 +2152,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	naked: [
 		{
 			_id: 'eeef6348-218a-482b-9f89-5ea43c568ab9',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/naked/blocks/Skirt/Khu%C3%AA_%C4%90i%E1%BB%87p_Skirt/skirt_1854-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/naked/blocks/Skirt/Khu%C3%AA_%C4%90i%E1%BB%87p_Skirt/skirt_1854-a_pose.glb',
+			thumb: '/static/images/naked/blocks/Skirt/Khu%C3%AA_%C4%90i%E1%BB%87p_Skirt/skirt_1854-a_pose.webp',
+			modelFile: '/static/models/naked/blocks/Skirt/Khu%C3%AA_%C4%90i%E1%BB%87p_Skirt/skirt_1854-a_pose.glb',
 			blockName: 'skirt 1854-a pose',
 			avatar: 'female',
 			category: 'Skirt',
@@ -2307,10 +2164,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '6e874d00-770d-458f-bb4e-360aa2b0a4a8',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/naked/blocks/Top/Khu%C3%AA_Di%E1%BB%87p_Sleeves/sleeves_1855-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/naked/blocks/Top/Khu%C3%AA_Di%E1%BB%87p_Sleeves/sleeves_1855-a_pose.glb',
+			thumb: '/static/images/naked/blocks/Top/Khu%C3%AA_Di%E1%BB%87p_Sleeves/sleeves_1855-a_pose.webp',
+			modelFile: '/static/models/naked/blocks/Top/Khu%C3%AA_Di%E1%BB%87p_Sleeves/sleeves_1855-a_pose.glb',
 			blockName: 'sleeves 1855-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2321,10 +2176,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '735aff67-7b37-40b9-829e-9d280483d5ce',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/naked/blocks/Top/Khu%C3%AA_%C4%90i%E1%BB%87p_Bodice/bodice_1853-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/naked/blocks/Top/Khu%C3%AA_%C4%90i%E1%BB%87p_Bodice/bodice_1853-a_pose.glb',
+			thumb: '/static/images/naked/blocks/Top/Khu%C3%AA_%C4%90i%E1%BB%87p_Bodice/bodice_1853-a_pose.webp',
+			modelFile: '/static/models/naked/blocks/Top/Khu%C3%AA_%C4%90i%E1%BB%87p_Bodice/bodice_1853-a_pose.glb',
 			blockName: 'bodice 1853-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2338,10 +2191,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	nakedandfamousdenim: [
 		{
 			_id: '2893f7e6-e690-4248-984a-607d0e5c68ea',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/nakedandfamousdenim/blocks/Top/Cropped_Denim_Jacket_Sleeves/sleeves_1928.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/nakedandfamousdenim/blocks/Top/Cropped_Denim_Jacket_Sleeves/sleeves_1928.glb',
+			thumb: '/static/images/nakedandfamousdenim/blocks/Top/Cropped_Denim_Jacket_Sleeves/sleeves_1928.webp',
+			modelFile: '/static/models/nakedandfamousdenim/blocks/Top/Cropped_Denim_Jacket_Sleeves/sleeves_1928.glb',
 			blockName: 'sleeves 1928',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2352,10 +2203,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '034c8ac0-d008-475c-9473-213e6a61a45e',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/nakedandfamousdenim/blocks/Top/Cropped_Denim_Jacket_Bodice/bodice_1926.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/nakedandfamousdenim/blocks/Top/Cropped_Denim_Jacket_Bodice/bodice_1926.glb',
+			thumb: '/static/images/nakedandfamousdenim/blocks/Top/Cropped_Denim_Jacket_Bodice/bodice_1926.webp',
+			modelFile: '/static/models/nakedandfamousdenim/blocks/Top/Cropped_Denim_Jacket_Bodice/bodice_1926.glb',
 			blockName: 'bodice 1926',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2366,10 +2215,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '26993899-d26d-46b0-9251-977bac5a532f',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/nakedandfamousdenim/blocks/Pants/Judo_Sashiko_Pants/pants_1927.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/nakedandfamousdenim/blocks/Pants/Judo_Sashiko_Pants/pants_1927.glb',
+			thumb: '/static/images/nakedandfamousdenim/blocks/Pants/Judo_Sashiko_Pants/pants_1927.webp',
+			modelFile: '/static/models/nakedandfamousdenim/blocks/Pants/Judo_Sashiko_Pants/pants_1927.glb',
 			blockName: 'pants 1927',
 			avatar: 'female',
 			category: 'Pants',
@@ -2383,10 +2230,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'zd-eye-of-the-storm': [
 		{
 			_id: '3dca2ec5-7ed6-4faf-b411-13066661583d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/zd-eye-of-the-storm/blocks/Top/JACKET_Sleeves/sleeves_1802-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/zd-eye-of-the-storm/blocks/Top/JACKET_Sleeves/sleeves_1802-a_pose.glb',
+			thumb: '/static/images/zd-eye-of-the-storm/blocks/Top/JACKET_Sleeves/sleeves_1802-a_pose.webp',
+			modelFile: '/static/models/zd-eye-of-the-storm/blocks/Top/JACKET_Sleeves/sleeves_1802-a_pose.glb',
 			blockName: 'sleeves 1802-a pose',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2397,10 +2242,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'bd9429a2-aca0-428d-b503-79f1bec23f6d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/zd-eye-of-the-storm/blocks/Top/JACKET_Bodice/bodice_1801-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/zd-eye-of-the-storm/blocks/Top/JACKET_Bodice/bodice_1801-a_pose.glb',
+			thumb: '/static/images/zd-eye-of-the-storm/blocks/Top/JACKET_Bodice/bodice_1801-a_pose.webp',
+			modelFile: '/static/models/zd-eye-of-the-storm/blocks/Top/JACKET_Bodice/bodice_1801-a_pose.glb',
 			blockName: 'bodice 1801-a pose',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2411,10 +2254,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '91c5a2a2-42ac-4af5-82d8-05cb42a428c6',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/zd-eye-of-the-storm/blocks/Pants/ARCHRISE_SHORTS_Pants/pants_1797-a_pose.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/zd-eye-of-the-storm/blocks/Pants/ARCHRISE_SHORTS_Pants/pants_1797-a_pose.glb',
+			thumb: '/static/images/zd-eye-of-the-storm/blocks/Pants/ARCHRISE_SHORTS_Pants/pants_1797-a_pose.webp',
+			modelFile: '/static/models/zd-eye-of-the-storm/blocks/Pants/ARCHRISE_SHORTS_Pants/pants_1797-a_pose.glb',
 			blockName: 'pants 1797-a pose',
 			avatar: 'female',
 			category: 'Pants',
@@ -2428,10 +2269,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	metamorphosis: [
 		{
 			_id: '60cfcb27-547e-477d-89c8-1b870cd15f7e',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/blocks/Accessories/Item_1_Accessory/accessory_1519.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/metamorphosis/blocks/Accessories/Item_1_Accessory/accessory_1519.glb',
+			thumb: '/static/images/metamorphosis/blocks/Accessories/Item_1_Accessory/accessory_1519.webp',
+			modelFile: '/static/models/metamorphosis/blocks/Accessories/Item_1_Accessory/accessory_1519.glb',
 			blockName: 'accessory 1519',
 			avatar: 'female',
 			category: 'Accessory',
@@ -2442,10 +2281,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '55080b36-fd9e-4295-b4bf-6cd5f9f1aad4',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/blocks/Accessories/Item_2_Accessory/accessory_1586.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/metamorphosis/blocks/Accessories/Item_2_Accessory/accessory_1586.glb',
+			thumb: '/static/images/metamorphosis/blocks/Accessories/Item_2_Accessory/accessory_1586.webp',
+			modelFile: '/static/models/metamorphosis/blocks/Accessories/Item_2_Accessory/accessory_1586.glb',
 			blockName: 'accessory 1586',
 			avatar: 'female',
 			category: 'Accessory',
@@ -2456,10 +2293,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '13ee6ed4-7038-4632-8ce2-17ba2439bf4c',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/blocks/Dress/Item_1_Fullbody/fullbody_1517.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/metamorphosis/blocks/Dress/Item_1_Fullbody/fullbody_1517.glb',
+			thumb: '/static/images/metamorphosis/blocks/Dress/Item_1_Fullbody/fullbody_1517.webp',
+			modelFile: '/static/models/metamorphosis/blocks/Dress/Item_1_Fullbody/fullbody_1517.glb',
 			blockName: 'fullbody 1517',
 			avatar: 'female',
 			category: 'Full Body',
@@ -2470,10 +2305,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '7c810a2d-1974-4937-96cd-5f030b3ce522',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/blocks/Dress/Item_2_Fullbody/fullbody_1518.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/metamorphosis/blocks/Dress/Item_2_Fullbody/fullbody_1518.glb',
+			thumb: '/static/images/metamorphosis/blocks/Dress/Item_2_Fullbody/fullbody_1518.webp',
+			modelFile: '/static/models/metamorphosis/blocks/Dress/Item_2_Fullbody/fullbody_1518.glb',
 			blockName: 'fullbody 1518',
 			avatar: 'female',
 			category: 'Full Body',
@@ -2484,9 +2317,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '365c10d4-32cd-4b0f-8869-875d2ed937f1',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/blocks/Pants/Item_1___Pants/pants_1606.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/metamorphosis/blocks/Pants/Item_1___Pants/pants_1606.glb',
+			thumb: '/static/images/metamorphosis/blocks/Pants/Item_1___Pants/pants_1606.webp',
+			modelFile: '/static/models/metamorphosis/blocks/Pants/Item_1___Pants/pants_1606.glb',
 			blockName: 'pants 1606',
 			avatar: 'female',
 			category: 'Pants',
@@ -2497,9 +2329,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '4ac9cb49-6c20-4faf-aec2-3f26c57c6137',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/blocks/Top/Item_2_Sleeves/sleeves_1581.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/metamorphosis/blocks/Top/Item_2_Sleeves/sleeves_1581.glb',
+			thumb: '/static/images/metamorphosis/blocks/Top/Item_2_Sleeves/sleeves_1581.webp',
+			modelFile: '/static/models/metamorphosis/blocks/Top/Item_2_Sleeves/sleeves_1581.glb',
 			blockName: 'sleeves 1581',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2510,8 +2341,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '9517708b-f938-4345-ad02-f6005a58aa2f',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/blocks/Top/Item_1_Bodice/bodice_1580.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/metamorphosis/blocks/Top/Item_1_Bodice/bodice_1580.glb',
+			thumb: '/static/images/metamorphosis/blocks/Top/Item_1_Bodice/bodice_1580.webp',
+			modelFile: '/static/models/metamorphosis/blocks/Top/Item_1_Bodice/bodice_1580.glb',
 			blockName: 'bodice 1580',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2522,8 +2353,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '2ac4f5aa-aa0f-40f2-88c1-585b732d25b5',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/blocks/Top/Item_3_Bodice/bodice_190.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/metamorphosis/blocks/Top/Item_3_Bodice/bodice_190.glb',
+			thumb: '/static/images/metamorphosis/blocks/Top/Item_3_Bodice/bodice_190.webp',
+			modelFile: '/static/models/metamorphosis/blocks/Top/Item_3_Bodice/bodice_190.glb',
 			blockName: 'bodice 190',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2534,8 +2365,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '63f90b62-3ed5-4b87-a70c-caedb2c42181',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/blocks/Top/Item_3_Sleeves/sleeves_190.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/metamorphosis/blocks/Top/Item_3_Sleeves/sleeves_190.glb',
+			thumb: '/static/images/metamorphosis/blocks/Top/Item_3_Sleeves/sleeves_190.webp',
+			modelFile: '/static/models/metamorphosis/blocks/Top/Item_3_Sleeves/sleeves_190.glb',
 			blockName: 'sleeves 190',
 			avatar: 'female',
 			category: 'Sleeves',
@@ -2546,8 +2377,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '2cba1904-9173-4764-bece-8c05eb1d5740',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/blocks/Top/Item_2_Bodice/bodice_1585.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/metamorphosis/blocks/Top/Item_2_Bodice/bodice_1585.glb',
+			thumb: '/static/images/metamorphosis/blocks/Top/Item_2_Bodice/bodice_1585.webp',
+			modelFile: '/static/models/metamorphosis/blocks/Top/Item_2_Bodice/bodice_1585.glb',
 			blockName: 'bodice 1585',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2558,8 +2389,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '923172aa-dfcf-42e0-a6aa-7465c765e064',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/metamorphosis/blocks/Skirt/Item_1_Skirt/skirt_1584.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/metamorphosis/blocks/Skirt/Item_1_Skirt/skirt_1584.glb',
+			thumb: '/static/images/metamorphosis/blocks/Skirt/Item_1_Skirt/skirt_1584.webp',
+			modelFile: '/static/models/metamorphosis/blocks/Skirt/Item_1_Skirt/skirt_1584.glb',
 			blockName: 'skirt 1584',
 			avatar: 'female',
 			category: 'Skirt',
@@ -2573,8 +2404,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'h&m': [
 		{
 			_id: '48389db6-bcda-4046-a694-15e6b400075c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Skirt/Flared_Skirt_Skirt/skirt_1920.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Skirt/Flared_Skirt_Skirt/skirt_1920.glb',
+			thumb: '/static/images/h%26m/blocks/Skirt/Flared_Skirt_Skirt/skirt_1920.webp',
+			modelFile: '/static/models/h%26m/blocks/Skirt/Flared_Skirt_Skirt/skirt_1920.glb',
 			blockName: 'skirt 1920',
 			avatar: 'female',
 			category: 'Skirt',
@@ -2585,10 +2416,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'e4c07949-abb6-45b5-9424-e07dbbd1aa6b',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Skirt/Silk_satin_maxi_skirt_Skirt/skirt_1919.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Skirt/Silk_satin_maxi_skirt_Skirt/skirt_1919.glb',
+			thumb: '/static/images/h%26m/blocks/Skirt/Silk_satin_maxi_skirt_Skirt/skirt_1919.webp',
+			modelFile: '/static/models/h%26m/blocks/Skirt/Silk_satin_maxi_skirt_Skirt/skirt_1919.glb',
 			blockName: 'skirt 1919',
 			avatar: 'female',
 			category: 'Skirt',
@@ -2599,9 +2428,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'fef35e2e-6ec0-4ef6-8439-a39d8c6ad245',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Skirt/Frilled_mini_skort_Skirt/skirt_1917.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Skirt/Frilled_mini_skort_Skirt/skirt_1917.glb',
+			thumb: '/static/images/h%26m/blocks/Skirt/Frilled_mini_skort_Skirt/skirt_1917.webp',
+			modelFile: '/static/models/h%26m/blocks/Skirt/Frilled_mini_skort_Skirt/skirt_1917.glb',
 			blockName: 'skirt 1917',
 			avatar: 'female',
 			category: 'Skirt',
@@ -2612,9 +2440,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '6e181ab3-7c5e-4ae2-9dfd-86e85bd17d20',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Dress/Mini_Dress_Fullbody/fullbody_1921.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Dress/Mini_Dress_Fullbody/fullbody_1921.glb',
+			thumb: '/static/images/h%26m/blocks/Dress/Mini_Dress_Fullbody/fullbody_1921.webp',
+			modelFile: '/static/models/h%26m/blocks/Dress/Mini_Dress_Fullbody/fullbody_1921.glb',
 			blockName: 'fullbody 1921',
 			avatar: 'female',
 			category: 'Dress',
@@ -2625,10 +2452,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'b6b0b2f8-f2cc-4b7f-beb6-e1670e2ede6a',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Dress/Bow_Detail_One_Shoulder_Dress_Fullbody/fullbody_1915.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Dress/Bow_Detail_One_Shoulder_Dress_Fullbody/fullbody_1915.glb',
+			thumb: '/static/images/h%26m/blocks/Dress/Bow_Detail_One_Shoulder_Dress_Fullbody/fullbody_1915.webp',
+			modelFile: '/static/models/h%26m/blocks/Dress/Bow_Detail_One_Shoulder_Dress_Fullbody/fullbody_1915.glb',
 			blockName: 'fullbody 1915',
 			avatar: 'female',
 			category: 'Dress',
@@ -2639,10 +2464,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'c5991125-7113-46d6-bce0-33620b205ae8',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Dress/Draped_Halterneck_Dress_Fullbody/fullbody_1914.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Dress/Draped_Halterneck_Dress_Fullbody/fullbody_1914.glb',
+			thumb: '/static/images/h%26m/blocks/Dress/Draped_Halterneck_Dress_Fullbody/fullbody_1914.webp',
+			modelFile: '/static/models/h%26m/blocks/Dress/Draped_Halterneck_Dress_Fullbody/fullbody_1914.glb',
 			blockName: 'fullbody 1914',
 			avatar: 'female',
 			category: 'Dress',
@@ -2653,10 +2476,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '4ef75be5-a999-47aa-af12-90b738306b6a',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Dress/Draped_One_Shoulder_Dress_Fullbody/fullbody_1922.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Dress/Draped_One_Shoulder_Dress_Fullbody/fullbody_1922.glb',
+			thumb: '/static/images/h%26m/blocks/Dress/Draped_One_Shoulder_Dress_Fullbody/fullbody_1922.webp',
+			modelFile: '/static/models/h%26m/blocks/Dress/Draped_One_Shoulder_Dress_Fullbody/fullbody_1922.glb',
 			blockName: 'fullbody 1922',
 			avatar: 'female',
 			category: 'Dress',
@@ -2667,8 +2488,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '32538e89-e7eb-4a2b-a671-dcfc18bbef53',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Pants/Jeans_Short_Pants/pants_1912.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Pants/Jeans_Short_Pants/pants_1912.glb',
+			thumb: '/static/images/h%26m/blocks/Pants/Jeans_Short_Pants/pants_1912.webp',
+			modelFile: '/static/models/h%26m/blocks/Pants/Jeans_Short_Pants/pants_1912.glb',
 			blockName: 'pants 1912',
 			avatar: 'female',
 			category: 'Pants',
@@ -2679,8 +2500,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'e627f21b-b733-4e7b-a690-a1ade3d85e0c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Pants/Jersey_Pants_Pants/wp_pants_1909.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Pants/Jersey_Pants_Pants/wp_pants_1909.glb',
+			thumb: '/static/images/h%26m/blocks/Pants/Jersey_Pants_Pants/wp_pants_1909.webp',
+			modelFile: '/static/models/h%26m/blocks/Pants/Jersey_Pants_Pants/wp_pants_1909.glb',
 			blockName: 'wp pants 1909',
 			avatar: 'female',
 			category: 'Pants',
@@ -2691,8 +2512,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'd60a0e64-7a9c-4b0f-94c9-d1da77cea3a2',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Top/Cap_Sleeved_Top_Bodice/bodice_1908.webp',
-			modelFile: 'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Top/Cap_Sleeved_Top_Bodice/bodice_1908.glb',
+			thumb: '/static/images/h%26m/blocks/Top/Cap_Sleeved_Top_Bodice/bodice_1908.webp',
+			modelFile: '/static/models/h%26m/blocks/Top/Cap_Sleeved_Top_Bodice/bodice_1908.glb',
 			blockName: 'bodice 1908',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2703,9 +2524,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'b8e370bd-26f5-4aae-a8cd-58c42ef2688a',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Top/Bandeau_peplum_top_Bodice/bodice_1913.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Top/Bandeau_peplum_top_Bodice/bodice_1913.glb',
+			thumb: '/static/images/h%26m/blocks/Top/Bandeau_peplum_top_Bodice/bodice_1913.webp',
+			modelFile: '/static/models/h%26m/blocks/Top/Bandeau_peplum_top_Bodice/bodice_1913.glb',
 			blockName: 'bodice 1913',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2716,10 +2536,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: '06e3ba9f-034e-439a-a1ab-e1b72aa4170d',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Top/Crinkled_jersey_top_Bodice/bodice_1923.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Top/Crinkled_jersey_top_Bodice/bodice_1923.glb',
+			thumb: '/static/images/h%26m/blocks/Top/Crinkled_jersey_top_Bodice/bodice_1923.webp',
+			modelFile: '/static/models/h%26m/blocks/Top/Crinkled_jersey_top_Bodice/bodice_1923.glb',
 			blockName: 'bodice 1923',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2730,10 +2548,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'd66850be-fcad-4a9d-9ce5-58b46a8f63b0',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Top/Cotton_seersucker_top_Bodice/bodice_1911.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Top/Cotton_seersucker_top_Bodice/bodice_1911.glb',
+			thumb: '/static/images/h%26m/blocks/Top/Cotton_seersucker_top_Bodice/bodice_1911.webp',
+			modelFile: '/static/models/h%26m/blocks/Top/Cotton_seersucker_top_Bodice/bodice_1911.glb',
 			blockName: 'bodice 1911',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2744,9 +2560,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 		},
 		{
 			_id: 'ce44f9d2-917f-44d5-be53-bb6676ac5361',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/h%26m/blocks/Top/Frilled_mini_skort_Bodice/bodice_1916.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/h%26m/blocks/Top/Frilled_mini_skort_Bodice/bodice_1916.glb',
+			thumb: '/static/images/h%26m/blocks/Top/Frilled_mini_skort_Bodice/bodice_1916.webp',
+			modelFile: '/static/models/h%26m/blocks/Top/Frilled_mini_skort_Bodice/bodice_1916.glb',
 			blockName: 'bodice 1916',
 			avatar: 'female',
 			category: 'Bodice',
@@ -2760,9 +2575,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	abercrombie: [
 		{
 			_id: '53e36346-3497-4128-a11d-60fe18281c3c',
-			thumb: 'https://d1e6s1h8cqcr26.cloudfront.net/images/abercrombie/blocks/Dress/Item_1_Fullbody/fullbody_1905.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/abercrombie/blocks/Dress/Item_1_Fullbody/fullbody_1905.glb',
+			thumb: '/static/images/abercrombie/blocks/Dress/Item_1_Fullbody/fullbody_1905.webp',
+			modelFile: '/static/models/abercrombie/blocks/Dress/Item_1_Fullbody/fullbody_1905.glb',
 			blockName: 'fullbody 1905',
 			avatar: 'female',
 			category: 'Full Body',
@@ -2776,10 +2590,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	'oceania-london': [
 		{
 			_id: '6a26c924-5d03-4e4b-9c53-806ad657bbce',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/oceania-london/blocks/Dress/Item_1_Fullbody/fullbody_1888.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/oceania-london/blocks/Dress/Item_1_Fullbody/fullbody_1888.glb',
+			thumb: '/static/images/oceania-london/blocks/Dress/Item_1_Fullbody/fullbody_1888.webp',
+			modelFile: '/static/models/oceania-london/blocks/Dress/Item_1_Fullbody/fullbody_1888.glb',
 			blockName: 'fullbody 1888',
 			avatar: 'female',
 			category: 'Full Body',
@@ -2793,10 +2605,8 @@ export const legacyBlocks: Record<string, Block[]> = {
 	cortana: [
 		{
 			_id: 'ef59727b-ac8a-4e35-a834-34a47366bbbf',
-			thumb:
-				'https://d1e6s1h8cqcr26.cloudfront.net/images/cortana/blocks/Dress/orange_silk_crepe_halter_dress_Fullbody/fullbody_1941.webp',
-			modelFile:
-				'https://d1e6s1h8cqcr26.cloudfront.net/models/cortana/blocks/Dress/orange_silk_crepe_halter_dress_Fullbody/fullbody_1941.glb',
+			thumb: '/static/images/cortana/blocks/Dress/orange_silk_crepe_halter_dress_Fullbody/fullbody_1941.webp',
+			modelFile: '/static/models/cortana/blocks/Dress/orange_silk_crepe_halter_dress_Fullbody/fullbody_1941.glb',
 			blockName: 'fullbody 1941',
 			avatar: 'female',
 			category: 'Dress',
