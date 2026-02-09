@@ -57,7 +57,11 @@ WebApp.rawHandlers.use(
 
 		// Allow embedding third-party assets, but ignore their cookies so
 		// they don't track our users. Required for cross-origin isolation.
-		res.setHeader('Cross-Origin-Embedder-Policy', 'credentialless')
+		const userAgent = req.headers['user-agent']?.toLowerCase()
+		const isFirefox = userAgent?.includes('firefox')
+		const isSafari = userAgent?.includes('safari') && userAgent.includes('chrome')
+		// At time of writing Firefox and Safari don't fully support the credentialless value yet.
+		res.setHeader('Cross-Origin-Embedder-Policy', isFirefox || isSafari ? 'require-corp' : 'credentialless')
 
 		// Allow only our origins to access `window.*` APIs when we open our
 		// own pages with `window.open('<url-to-our-site>')`. Any other
@@ -78,7 +82,7 @@ WebApp.rawHandlers.use(
 		// Specify that cross-origin isolation should be enabled using a new
 		// header. At time of writing this is not supported by Firefox or Safari
 		// yet, and those browsers will enable it with only the above two
-		// Cross-Origin-Embedder-Policy and Cross-Origin-Opener-Policy headers,
+		// Cross-Origin-Embedder-Policy and Cross-Origin-Opener-Policy headers
 		// being present, while the supporting browsers will check all three
 		// headers.
 		res.setHeader(
