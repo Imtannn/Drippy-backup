@@ -10,6 +10,8 @@ public/imports
 
 /**/*.js
 /**/*.js.map
+/**/*.mjs
+/**/*.mjs.map
 
 website.tar.gz
 
