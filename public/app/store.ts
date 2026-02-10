@@ -36,7 +36,6 @@ import {
 	spaceHasMultipleCollections,
 	syncSignals,
 	toSolidSignal,
-	values,
 } from '../utils.js'
 import type {ConnectionStatus} from './network-monitor.js'
 import {createNetworkEffect} from './network-monitor.js'
