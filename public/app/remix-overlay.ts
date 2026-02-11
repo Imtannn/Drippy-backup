@@ -105,7 +105,7 @@ export class RemixOverlay extends Element {
 			if (this.selectedTemplate && !this.activeTab) this.activeTab = FABRICS_TAB
 		})
 
-		// Update block categories when template category changes (following blocks-selection logic)
+		// Update block categories when template category changes
 		this.createEffect(() => {
 			if (!this.selectedTemplate) {
 				this.blocksCategories = []
@@ -183,7 +183,7 @@ export class RemixOverlay extends Element {
 			})
 		})
 
-		// Update piece selections when selected fabrics change (following blocks-selection logic)
+		// Update piece selections when selected fabrics change
 		this.createEffect(() => {
 			const templateSelection = this.selectedTemplate
 				? store.getTemplateSelection(this.selectedTemplate.category)
