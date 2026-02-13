@@ -21,6 +21,7 @@ import {
 	memo,
 	effect,
 	SpotLight,
+	type Sphere
 } from 'lume'
 import type {Accessor} from 'solid-js'
 import {createMemo, untrack} from 'solid-js'
@@ -50,6 +51,8 @@ import {
 	getSpaceDefaultScene,
 	hasAncestorWithName,
 	isDesktop,
+	isMesh,
+	materialsOfRenderable,
 	meshesInTree,
 	onModelLoad,
 	querySelectorAllSignal,
@@ -139,6 +142,10 @@ export class DrippyScene extends Element {
 		return getSceneBySlug(backgroundScenes(), defaultSceneSlug)
 	}
 
+	@memo private get isDrippyShop() {
+		return this.scene?.scene.includes('Drippy%20Shop')
+	}
+
 	// Post-processing for outline effect
 	private composer: EffectComposer | null = null
 	private outlinePass: OutlinePass | null = null
@@ -200,7 +207,7 @@ export class DrippyScene extends Element {
 		const isMobile = !isDesktop()
 		if (!this.isVerticalPan) return
 		// Scale the movement - dragging down increases Y (looks up), dragging up decreases Y (looks down)
-		this.cameraY -= e.movementY / 1000
+		this.cameraY -= e.movementY / 200
 		this.cameraY = clamp(this.cameraY, -2, 0)
 		if (!isMobile) e.stopImmediatePropagation()
 	}
@@ -295,8 +302,55 @@ export class DrippyScene extends Element {
 		setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
 		whenModelLoaded(backgroundModel, () => {
 			backgroundModel.three.traverse(obj => {
-				// if ((obj as any).isLight)
-				obj.castShadow = false
+				obj.castShadow = true
+
+				// If an artist forgot to convert baked materials back into PBR
+				// materials, fix it, so that our dynamic lights will have
+				// effect on objects with those materials.
+				if (isMesh(obj)) {
+					function copyMapsToPhysical(mat: THREE.Material) {
+						if (mat instanceof THREE.MeshStandardMaterial) return mat
+						console.log('found non-PBR material')
+						const newMat = new THREE.MeshPhysicalMaterial()
+						for (const key of Object.keys(mat)) {
+							// @ts-expect-error too dymamic for TS, but this is valid
+							if (key === 'map' || key.endsWith('Map')) newMat[key] = mat[key]
+						}
+						return newMat
+					}
+					if (Array.isArray(obj.material)) {
+						const newMats = []
+						for (const mat of materialsOfRenderable(obj)) newMats.push(copyMapsToPhysical(mat))
+						obj.material = newMats
+					} else {
+						obj.material = copyMapsToPhysical(obj.material)
+					}
+				}
+
+				if (this.isDrippyShop) {
+					if (isMesh(obj))
+						for (const mat of materialsOfRenderable(obj) as Generator<THREE.MeshStandardMaterial>) {
+							mat.envMap = new THREE.TextureLoader().load(this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg')
+							mat.envMap.mapping = THREE.EquirectangularReflectionMapping
+							mat.envMap.colorSpace = THREE.SRGBColorSpace
+							mat.envMapRotation = new THREE.Euler(0, Math.PI/2, 0)
+							createEffect(() => {
+								mat.envMapIntensity = 30 * this.#overallEnvIntensity
+								if (obj.name === 'MatShape_1988') mat.envMapIntensity *= 3
+								if (obj.name === 'Plane') mat.envMapIntensity *= 3
+							})
+						}
+
+
+					if (obj.parent?.name.includes('Drippy_Shop_-_Logo')) {
+						const mat = ((obj as THREE.Mesh).material as THREE.MeshStandardMaterial)
+						// mat.color.set('#ccc')
+						mat.map = null
+						mat.metalness = 1
+						mat.roughness = 0.15
+						mat.needsUpdate = true
+					}
+				}
 			})
 		})
 
@@ -609,7 +663,7 @@ export class DrippyScene extends Element {
 		this.animSrc = new URL(anim.src, import.meta.url).href
 	}
 
-	@signal accessor #envIntensity: number = 1
+	@signal accessor #overallEnvIntensity: number = 1
 	@signal accessor #bloomStrength: number = 0.18
 	@signal accessor #bloomRadius: number = 0
 	@signal accessor #bloomThreshold: number = 0.8
@@ -623,7 +677,7 @@ export class DrippyScene extends Element {
 		})
 
 		createEffect(() => {
-			lumeScene.three.environmentIntensity = this.#envIntensity
+			lumeScene.three.environmentIntensity = this.#overallEnvIntensity
 			lumeScene.needsUpdate()
 		})
 
@@ -851,7 +905,7 @@ export class DrippyScene extends Element {
 				content=${() => html`
 					<div id="debugUi">
 						<div>
-							<p>Environment Intensity (${() => this.#envIntensity})</p>
+							<p>Environment Intensity (${() => this.#overallEnvIntensity})</p>
 
 							<input
 								id="envIntensity"
@@ -859,8 +913,8 @@ export class DrippyScene extends Element {
 								min="0"
 								max="3"
 								step="0.01"
-								prop:value=${() => this.#envIntensity}
-								oninput=${(e: Event) => (this.#envIntensity = Number((e.target as HTMLInputElement).value) || 0)}
+								prop:value=${() => this.#overallEnvIntensity}
+								oninput=${(e: Event) => (this.#overallEnvIntensity = Number((e.target as HTMLInputElement).value) || 0)}
 							/>
 						</div>
 
@@ -953,7 +1007,7 @@ export class DrippyScene extends Element {
 					physically-correct-lights
 					shadow-mode="vsm"
 					attr:environment=${() => /*TODO webp: this.scene?.env ??*/ '/images/envs/brown_photostudio_02.jpg'}
-					attr:environment-intensity=${() => this.#envIntensity}
+					attr:environment-intensity=${() => this.#overallEnvIntensity}
 					oncapture:pointerdown=${this.#handlePointerDown}
 					oncapture:pointermove=${this.#handlePointerMove}
 					oncapture:pointerup=${this.#handlePointerUp}
@@ -963,13 +1017,45 @@ export class DrippyScene extends Element {
 						<lume-ambient-light visible="false" intensity="0.7" color="white"></lume-ambient-light>
 
 						<!-- a sphere to debug/visualize the env map -->
-						<lume-sphere visible="${() => store.isAdmin && store.showAdminContent}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
+						<lume-sphere ref=${(el: Sphere) => {
+							createEffect(() => {
+
+								// For now timeout as quick hack to wait for the material behavior (non-element) to define the material.
+								// FIXME Delete timeout after we switch to behavior elements, as it will be clear when to run logic (with the ref of the material behavior element)
+								setTimeout(() => {
+									const mat = el.three.material as THREE.MeshPhysicalMaterial
+								// TODO replace hard-coded scene-specific values
+								// with values from the data models.
+									if (this.isDrippyShop) {
+										mat.envMap = new THREE.TextureLoader().load(this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg')
+										mat.envMap.mapping = THREE.EquirectangularReflectionMapping
+										mat.envMap.colorSpace = THREE.SRGBColorSpace
+										mat.envMapRotation = new THREE.Euler(0, Math.PI/2, 0)
+										createEffect(() => mat.envMapIntensity = 10 * this.#overallEnvIntensity)
+										mat.needsUpdate = true
+									} else {
+										mat.envMap = null
+										mat.needsUpdate = true
+									}
+								}, 100)
+							})
+						}} visible="${() => store.isAdmin && store.showAdminContent}" size="0.5 0.5 0.5" color="white" position="-2 -2 0" metalness="1" roughness="0"></lume-sphere>
 
 						<lume-spot-light
 							visible="true"
 							target="#avatar"
-							position="2 -4.3 2"
-							intensity="3"
+							position=${() =>
+								// TODO replace hard-coded scene-specific values
+								// with values from the data models.
+								this.isDrippyShop
+									? (_x: number, _y: number, _z: number, t: number) => [2.4*Math.sin(t * 0.0001), -4.3, 2.4*Math.cos(t * 0.0001)]
+									: "2 -4.3 2"
+							}
+							intensity=${() =>
+								// TODO replace hard-coded scene-specific values
+								// with values from the data models.
+								this.isDrippyShop ? 20 : 3
+							}
 							ref=${(el: SpotLight) => {
 								el.three.shadow.focus = 1
 								el.three.shadow.blurSamples = shadowSamples
@@ -993,10 +1079,20 @@ export class DrippyScene extends Element {
 						<lume-camera-rig
 							ref=${(el: CameraRig) => (this.cameraRig = el)}
 							min-distance="0.5"
-							max-distance="${() => (isDesktop() ? 30 : 50)}"
+							max-distance="${() => (isDesktop() ? 4 : 6)}"
 							distance="${() => (isDesktop() ? 2.5 : 4)}"
 							min-vertical-angle="${() => (isDesktop() ? '-17' : '0')}"
 							max-vertical-angle="${() => (isDesktop() ? '45' : '0')}"
+							min-horizontal-angle="${() =>
+								// TODO replace hard-coded scene-specific values
+								// with values from the data models.
+								this.isDrippyShop ? -120 : -Infinity
+							}"
+							max-horizontal-angle="${() =>
+								// TODO replace hard-coded scene-specific values
+								// with values from the data models.
+								this.isDrippyShop ? 120 : Infinity
+							}"
 							dolly-speed="${() => (this.landing ? 0 : 0.01)}"
 							attr:position="${() => `0 ${this.cameraY} 0`}"
 							xinteractive=${() => {
@@ -1006,6 +1102,7 @@ export class DrippyScene extends Element {
 							<lume-perspective-camera active slot="camera-child" near="0.05" far="60" fov="50"></lume-perspective-camera>
 						</lume-camera-rig>
 
+						
 						<lume-gltf-model
 							id="avatar"
 							ref=${(el: GltfModel) => {
