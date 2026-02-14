@@ -668,179 +668,167 @@ export class DrippyScene extends Element {
 	@signal accessor #bloomRadius: number = 0
 	@signal accessor #bloomThreshold: number = 0.8
 
-	@effect sceneEffects() {
+	@signal accessor #glRenderer: THREE.WebGLRenderer | null = null
+
+	@effect grabRenderer() {
+		const lumeScene = this.lumeScene
+		if (!lumeScene) return null
+		if (!lumeScene.glRenderer)  return null
+		// lumeScene.glRenderer is not reactive, but will be available after a timeout.
+		// FIXME make lume's renderer glRenderer a signal so we don't need a timeout hack in this consumer code.
+		setTimeout(() => this.#glRenderer = lumeScene.glRenderer!)
+	}
+
+	@effect updateEnvIntensity() {
 		const lumeScene = this.lumeScene
 		if (!lumeScene) return
+		lumeScene.three.environmentIntensity = this.#overallEnvIntensity
+		lumeScene.needsUpdate()
+	}
 
-		setTimeout(() => {
-			if (lumeScene.glRenderer) lumeScene.glRenderer.shadowMap.type = THREE.VSMShadowMap
-		})
+	@effect setShadowType() {
+		if (!this.#glRenderer) return
+		this.#glRenderer.shadowMap.type = THREE.VSMShadowMap
+	}
 
-		createEffect(() => {
-			lumeScene.three.environmentIntensity = this.#overallEnvIntensity
-			lumeScene.needsUpdate()
-		})
+	@effect foo() {
+		const lumeScene = this.lumeScene
+		const renderer = this.#glRenderer
+		if (!renderer || !lumeScene) return
 
-		createEffect(() => {
-			const renderer = lumeScene.glRenderer
-			if (!renderer) return
+		renderer.toneMapping = THREE.ACESFilmicToneMapping
 
-			renderer.toneMapping = THREE.ACESFilmicToneMapping
+		const threeScene = lumeScene.three
+		const camera = lumeScene.threeCamera
 
-			const threeScene = lumeScene.three
-			const camera = lumeScene.threeCamera
+		// Wait for valid size before initializing composer
+		const size = new THREE.Vector2()
+		renderer.getSize(size)
+		if (size.x === 0 || size.y === 0) return
 
-			// Wait for valid size before initializing composer
-			const size = new THREE.Vector2()
-			renderer.getSize(size)
-			if (size.x === 0 || size.y === 0) return
+		// Create composer if not exists
+		if (!this.composer) {
+			this.composer = new EffectComposer(renderer)
 
-			// Create composer if not exists
-			if (!this.composer) {
-				this.composer = new EffectComposer(renderer)
+			// Set up post-processing for outline effect
+			const renderPass = new RenderPass(threeScene, camera)
+			this.composer.addPass(renderPass)
 
-				// Set up post-processing for outline effect
-				const renderPass = new RenderPass(threeScene, camera)
-				this.composer.addPass(renderPass)
+			const bloomPass = untrack(
+				() => new UnrealBloomPass(size, this.#bloomStrength, this.#bloomRadius, this.#bloomThreshold),
+			)
+			createEffect(() => {
+				bloomPass.strength = this.#bloomStrength
+				bloomPass.radius = this.#bloomRadius
+				bloomPass.threshold = this.#bloomThreshold
+				lumeScene.needsUpdate()
+			})
+			this.composer.addPass(bloomPass)
 
-				const bloomPass = untrack(
-					() => new UnrealBloomPass(size, this.#bloomStrength, this.#bloomRadius, this.#bloomThreshold),
-				)
-				createEffect(() => {
-					bloomPass.strength = this.#bloomStrength
-					bloomPass.radius = this.#bloomRadius
-					bloomPass.threshold = this.#bloomThreshold
-					lumeScene.needsUpdate()
-				})
-				this.composer.addPass(bloomPass)
+			this.outlinePass = new OutlinePass(size, threeScene, camera)
+			this.outlinePass.edgeStrength = 10
+			this.outlinePass.edgeGlow = 0
+			this.outlinePass.edgeThickness = 4
+			this.outlinePass.visibleEdgeColor.set(0x9b59b6) // purple accent
+			this.composer.addPass(this.outlinePass)
 
-				this.outlinePass = new OutlinePass(size, threeScene, camera)
-				this.outlinePass.edgeStrength = 10
-				this.outlinePass.edgeGlow = 0
-				this.outlinePass.edgeThickness = 4
-				this.outlinePass.visibleEdgeColor.set(0x9b59b6) // purple accent
-				this.composer.addPass(this.outlinePass)
+			const outputPass = new OutputPass()
+			this.composer.addPass(outputPass)
 
-				const outputPass = new OutputPass()
-				this.composer.addPass(outputPass)
+			// Store original drawScene
+			const originalDrawScene = lumeScene.drawScene.bind(lumeScene)
 
-				// Store original drawScene
-				const originalDrawScene = lumeScene.drawScene.bind(lumeScene)
+			const postprocessingEnabled = true
 
-				const postprocessingEnabled = true
+			// Override the render loop to use composer
+			lumeScene.drawScene = () => {
+				if (postprocessingEnabled) {
+					// Update cameras to current frame's camera
+					const currentCamera = lumeScene.threeCamera!
 
-				// Override the render loop to use composer
-				lumeScene.drawScene = () => {
-					if (postprocessingEnabled) {
-						// Update cameras to current frame's camera
-						const currentCamera = lumeScene.threeCamera!
+					if (renderPass) renderPass.camera = currentCamera
 
-						if (renderPass) renderPass.camera = currentCamera
-
-						if (this.outlinePass) {
-							// Only use outline pass if we have objects to outline AND selectingPiece is set
-							if (store.selectingPiece && this.outlinePass.selectedObjects.length > 0) {
-								this.outlinePass.enabled = true
-								this.outlinePass.renderCamera = currentCamera
-							} else this.outlinePass.enabled = false
-						}
-
-						this.composer!.render()
-					}
-					// Fall back to original rendering when no outline needed
-					else originalDrawScene()
-				}
-
-				// Handle resize
-				const resizeObserver = new ResizeObserver(() => {
-					if (!lumeScene || !this.composer) return
-					const newSize = new THREE.Vector2()
-					renderer.getSize(newSize)
-					if (newSize.x > 0 && newSize.y > 0) this.composer.setSize(newSize.x, newSize.y)
-				})
-				resizeObserver.observe(lumeScene)
-				onCleanup(() => resizeObserver.disconnect())
-			}
-		})
-
-		// Update outline selection based on store.selectingPiece
-		// Use debounce and async processing to avoid blocking render
-		let outlineUpdateTimeout: number | null = null
-		let lastSelectingPiece: string | null = null
-
-		createEffect(() => {
-			if (!this.outlinePass) return
-
-			const selectingPiece = store.selectingPiece
-			// Skip if same piece (avoid redundant work)
-			if (selectingPiece === lastSelectingPiece) return
-			lastSelectingPiece = selectingPiece
-
-			// Clear previous timeout
-			if (outlineUpdateTimeout) {
-				cancelAnimationFrame(outlineUpdateTimeout)
-				outlineUpdateTimeout = null
-			}
-
-			if (!selectingPiece) {
-				this.outlinePass.selectedObjects = []
-				this.lumeScene?.needsUpdate()
-				return
-			}
-
-			// Defer heavy work to next frame to avoid blocking
-			outlineUpdateTimeout = requestAnimationFrame(() => {
-				if (!this.outlinePass || store.selectingPiece !== selectingPiece) return
-
-				const models = this.garmentModels
-				if (models.length === 0) return
-
-				// "default" means all meshes in the garment for the currently selected template only
-				const isDefault = selectingPiece === 'default'
-				const pieceNames = isDefault ? [] : selectingPiece.split('-')
-				const selectedMeshes: THREE.Object3D[] = []
-
-				// Get the template category being edited (from remix overlay)
-				const editingTemplateCategory = store.remixOverlayTemplate?.category
-
-				// Process models in chunks to avoid long blocking
-				for (const garmentModel of models) {
-					if (!garmentModel.three) continue
-
-					// For "default", only outline models belonging to the selected template
-					if (isDefault && editingTemplateCategory) {
-						const modelId = garmentModel.getAttribute('id') || ''
-						// ID format: collection-templateCategory-blockCategory-blockId
-						const parts = modelId.split('-')
-						const modelTemplateCategory = parts[1] as TemplateCategory | undefined
-						if (modelTemplateCategory !== editingTemplateCategory) continue
+					if (this.outlinePass) {
+						// Only use outline pass if we have objects to outline AND selectingPiece is set
+						if (store.selectingPiece && this.outlinePass.selectedObjects.length > 0) {
+							this.outlinePass.enabled = true
+							this.outlinePass.renderCamera = currentCamera
+						} else this.outlinePass.enabled = false
 					}
 
-					garmentModel.three.traverse((obj: THREE.Object3D) => {
-						if (!(obj as THREE.Mesh).isMesh) return
-
-						if (isDefault) selectedMeshes.push(obj)
-						else {
-							for (const pieceName of pieceNames) {
-								if (hasAncestorWithName(obj, pieceName)) {
-									selectedMeshes.push(obj)
-									break
-								}
-							}
-						}
-					})
+					this.composer!.render()
 				}
+				// Fall back to original rendering when no outline needed
+				else originalDrawScene()
+			}
 
-				if (this.outlinePass && store.selectingPiece === selectingPiece) {
-					this.outlinePass.selectedObjects = selectedMeshes
-					// Trigger re-render after updating outline selection
-					this.lumeScene?.needsUpdate()
+			// Handle resize
+			const resizeObserver = new ResizeObserver(() => {
+				if (!lumeScene || !this.composer) return
+				const newSize = new THREE.Vector2()
+				renderer.getSize(newSize)
+				if (newSize.x > 0 && newSize.y > 0) this.composer.setSize(newSize.x, newSize.y)
+			})
+			resizeObserver.observe(lumeScene)
+			onCleanup(() => resizeObserver.disconnect())
+		}
+	}
+
+	/** To prevent same values from triggering */
+	@memo private get selectingPiece() {
+		return store.selectingPiece
+	}
+
+	/**
+	 * Update outline selection based on store.selectingPiece
+	 */
+	@effect updateOutlineSelection() {
+		const lumeScene = this.lumeScene
+		const outlinePass = this.outlinePass
+		const selectingPiece = this.selectingPiece
+		if (!outlinePass || !lumeScene || !selectingPiece) return
+		if (!this.garmentModelsInSyncAndLoaded) return
+
+		const models = this.garmentModels
+		if (models.length === 0) return
+
+		// "default" means all meshes in the garment for the currently selected template only
+		const isDefault = selectingPiece === 'default'
+		const pieceNames = isDefault ? [] : selectingPiece.split('-')
+		const selectedMeshes: THREE.Object3D[] = []
+
+		// Get the template category being edited (from remix overlay)
+		const editingTemplateCategory = store.remixOverlayTemplate?.category
+
+		// Process models in chunks to avoid long blocking
+		for (const [i, garmentModel] of models.entries()) {
+			const rb = this.renderBlocks[i]
+
+			// For "default", only outline models belonging to the selected template
+			if (isDefault && editingTemplateCategory) if (rb.block.templateCategory !== editingTemplateCategory) continue
+
+			garmentModel.three.traverse(obj => {
+				if (!(obj as THREE.Mesh).isMesh) return
+
+				if (isDefault) selectedMeshes.push(obj)
+				else {
+					for (const pieceName of pieceNames) {
+						if (hasAncestorWithName(obj, pieceName)) {
+							selectedMeshes.push(obj)
+							break
+						}
+					}
 				}
 			})
-		})
+		}
+
+		outlinePass.selectedObjects = selectedMeshes
+		// Trigger re-render after updating outline selection
+		lumeScene.needsUpdate()
 
 		onCleanup(() => {
-			if (outlineUpdateTimeout) cancelAnimationFrame(outlineUpdateTimeout)
+			outlinePass.selectedObjects = []
+			lumeScene.needsUpdate()
 		})
 	}
 
@@ -1102,7 +1090,7 @@ export class DrippyScene extends Element {
 							<lume-perspective-camera active slot="camera-child" near="0.05" far="60" fov="50"></lume-perspective-camera>
 						</lume-camera-rig>
 
-						
+
 						<lume-gltf-model
 							id="avatar"
 							ref=${(el: GltfModel) => {
