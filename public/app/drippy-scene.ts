@@ -302,7 +302,7 @@ export class DrippyScene extends Element {
 		disableFrustumCulledOnLoad(backgroundModel)
 		enableFrontsideOnModelLoad(backgroundModel)
 		enableShadowOnModelLoad(backgroundModel)
-		setEnvMapOnModelLoad(backgroundModel, env)
+		// setEnvMapOnModelLoad(backgroundModel, env)
 		setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
 		whenModelLoaded(backgroundModel, () => {
 			backgroundModel.three.traverse(obj => {
@@ -934,11 +934,15 @@ export class DrippyScene extends Element {
 		setTimeout(() => {
 			// Remove the old canvas
 			const oldRenderer = lumeScene.glRenderer!
+			console.log('remove old canvas', oldRenderer.domElement)
 			oldRenderer.domElement.remove()
 			oldRenderer.dispose()
 
 			// Append the new canvas
+			console.log('add new canvas', renderer.domElement)
 			lumeScene._glLayer!.appendChild(renderer.domElement)
+
+			this.#glRenderer = renderer
 		})
 
 		// }}
@@ -1361,7 +1365,7 @@ export class DrippyScene extends Element {
 								this.avatarModel = el
 								this.avatarSkeleton.setAvatar(el)
 								enableShadowOnModelLoad(el)
-								setEnvMapOnModelLoad(el, env)
+								setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
 								showSkeletonHelper(el, () => store.isAdmin && store.showAdminContent)
 								disableFrustumCulledOnLoad(el)
 							}}
@@ -1381,7 +1385,7 @@ export class DrippyScene extends Element {
 										<lume-gltf-model
 											ref=${(el: GltfModel) => {
 												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env)
+												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
 												disableFrustumCulledOnLoad(el)
 												this.#handleRigging(el, () => this.block0)
 
@@ -1408,7 +1412,7 @@ export class DrippyScene extends Element {
 										<lume-gltf-model
 											ref=${(el: GltfModel) => {
 												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env)
+												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
 												disableFrustumCulledOnLoad(el)
 												this.#handleRigging(el, () => this.block1)
 
@@ -1435,7 +1439,7 @@ export class DrippyScene extends Element {
 										<lume-gltf-model
 											ref=${(el: GltfModel) => {
 												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env)
+												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
 												disableFrustumCulledOnLoad(el)
 												this.#handleRigging(el, () => this.block2)
 
@@ -1464,7 +1468,7 @@ export class DrippyScene extends Element {
 										<lume-gltf-model
 											ref=${(el: GltfModel) => {
 												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env)
+												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
 												disableFrustumCulledOnLoad(el)
 												this.#handleRigging(el, () => item)
 
@@ -1509,7 +1513,7 @@ export class DrippyScene extends Element {
 					>
 						${(item: Accessor<string>) => html`
 							<lume-gltf-model
-								ref=${(el: GltfModel) => (enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env))}
+								ref=${(el: GltfModel) => (enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8))}
 								attr:src=${() => item()}
 								class="extraObjects"
 							></lume-gltf-model>
@@ -1623,7 +1627,7 @@ function emptyNodeList<T extends Element>() {
 // 		<lume-gltf-model
 // 			ref=${(el: GltfModel) => {
 // 				enableShadowOnModelLoad(el)
-// 				setEnvMapOnModelLoad(el, env)
+// 				setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
 // 				disableFrustumCulledOnLoad(el)
 // 				this.#handleRigging(el, item)
 

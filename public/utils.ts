@@ -627,7 +627,7 @@ export function enableFrontsideOnModelLoad(el: GltfModel) {
 	whenModelLoaded(el, () => enableFrontsideRendering(el))
 }
 
-export function setEnvMap(el: Element3D, env: string) {
+export function setEnvMap(el: Element3D, env: string, intensity = () => 1) {
 	let cleaned = false
 
 	if (!env) return
@@ -642,7 +642,11 @@ export function setEnvMap(el: Element3D, env: string) {
 		})
 		mat.envMap.mapping = THREE.EquirectangularReflectionMapping
 		mat.envMap.colorSpace = THREE.SRGBColorSpace
-		mat.envMapIntensity = 1.3
+		mat.envMapIntensity = 1
+		mat.needsUpdate = true
+		createEffect(() => {
+			mat.envMapIntensity = intensity()
+		})
 	}
 
 	el.needsUpdate()
@@ -650,13 +654,8 @@ export function setEnvMap(el: Element3D, env: string) {
 	onCleanup(() => (cleaned = true))
 }
 
-export function setEnvMapOnModelLoad(el: GltfModel, env: string) {
-	// XXX For now this is disabled, and we're using the scene's env map
-	// instead.  If we need to adjust the env map per model, we can re-enable
-	// this.
-	return
-
-	whenModelLoaded(el, () => setEnvMap(el, env))
+export function setEnvMapOnModelLoad(el: GltfModel, env: string, intensity = () => 1) {
+	whenModelLoaded(el, () => setEnvMap(el, env, intensity))
 }
 
 /**
