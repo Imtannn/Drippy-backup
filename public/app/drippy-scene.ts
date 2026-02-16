@@ -960,7 +960,7 @@ export class DrippyScene extends Element {
 		this.#glRenderer.shadowMap.type = THREE.VSMShadowMap
 	}
 
-	@effect foo() {
+	@effect postprocessing() {
 		const lumeScene = this.lumeScene
 		const renderer = this.#glRenderer
 		if (!renderer || !lumeScene) return
