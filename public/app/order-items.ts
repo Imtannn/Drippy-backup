@@ -57,30 +57,7 @@ export class OrderItems extends Element {
 		// Prevent click if clicking on checkbox
 		if ((e.target as HTMLElement).closest('.checkbox-icon')) return
 
-		if (template.productUrl) {
-			try {
-				const proxyUrl = `/api/proxy?url=${encodeURIComponent(template.productUrl)}`
-				const response = await fetch(proxyUrl, {
-					method: 'GET',
-					// Only fetch headers, don't wait for full body
-					// Abort after getting headers
-				})
-
-				// If fetch fails or returns error status (403, 404, 500, etc.), open in new tab
-				if (!response.ok || response.status >= 400) {
-					console.log(`URL blocked (status ${response.status}), opening in new tab:`, template.productUrl)
-					window.open(template.productUrl, '_blank')
-					return
-				}
-
-				// URL is accessible, show in iframe
-				store.iframePopupUrl = template.productUrl
-				store.view = 'iframe-popup'
-			} catch (error) {
-				console.log('Error checking URL, opening in new tab:', error)
-				window.open(template.productUrl, '_blank')
-			}
-		}
+		if (template.productUrl) window.open(template.productUrl, '_blank')
 	}
 
 	override template = () => html`

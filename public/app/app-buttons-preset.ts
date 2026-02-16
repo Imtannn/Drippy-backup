@@ -91,10 +91,6 @@ export class AppButtonsPreset extends Element {
 					case 'custom-measurement':
 						store.view = 'order-size'
 						break
-					case 'iframe-popup':
-						store.view = 'order-items'
-						store.iframePopupUrl = null
-						break
 					default:
 						store.view = 'order-items'
 				}

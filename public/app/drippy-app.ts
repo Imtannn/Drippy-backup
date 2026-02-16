@@ -1,5 +1,4 @@
 import '../elements/connection-warning.js'
-import '../elements/iframe-popup.js'
 import '../elements/logic/show-when.js'
 import './avatar-selection.js'
 import './brand-view.js'
@@ -291,11 +290,6 @@ export class DrippyApp extends Element {
 							<show-when
 								condition=${() => store.view === 'custom-measurement'}
 								content=${() => html`<custom-measurement></custom-measurement>`}
-							></show-when>
-
-							<show-when
-								condition=${() => store.view === 'iframe-popup'}
-								content=${() => html`<iframe-popup url=${() => store.iframePopupUrl || ''}></iframe-popup>`}
 							></show-when>
 
 							<show-when

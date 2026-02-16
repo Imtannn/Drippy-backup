@@ -13,7 +13,6 @@ export type AppRoute =
 	| 'order-size'
 	| 'share'
 	| 'template'
-	| 'iframe-popup'
 
 export type Gender = 'male' | 'female'
 
