@@ -83,13 +83,7 @@ const navbar = html`
 
 			<a href="#" class="btn btn-black btn-small">
 				Talk to us
-				<svg
-					width="16"
-					height="16"
-					viewBox="0 0 16 16"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-				>
+				<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<path
 						d="M2 8H12M10 6L12 8L10 10"
 						stroke="currentColor"
@@ -114,7 +108,8 @@ const mainHero = html`
 					<span class="hero-title-accent">Start selling experiences.</span>
 				</h1>
 				<p class="hero-description">
-					Turn your static web-store into an interactive 3D shopping experience <br> <strong>boosting sales & engagement.</strong>
+					Turn your static web-store into an interactive 3D shopping experience <br />
+					<strong>boosting sales & engagement.</strong>
 				</p>
 				<div class="hero-features">
 					<span class="hero-feature-item">Mobile-first</span>
@@ -265,26 +260,20 @@ const mainStreet = html`
 					<h1>1-3%</h1>
 
 					<h3 class="street__title">Conversion rate.</h3>
-					<p class="street__description">
-						most visitors bounce without buying
-					</p>
+					<p class="street__description">most visitors bounce without buying</p>
 					<div class="street__number">01</div>
 				</div>
 				<div class="street__item">
 					<h1>70%</h1>
 
 					<h3 class="street__title">Cart abandonment.</h3>
-					<p class="street__description">
-						Uncertainty kills checkout
-					</p>
+					<p class="street__description">Uncertainty kills checkout</p>
 					<div class="street__number">02</div>
 				</div>
 				<div class="street__item">
 					<h1>25%</h1>
 					<h3 class="street__title">Return rate</h3>
-					<p class="street__description">
-						Customers "just to see" and return.
-					</p>
+					<p class="street__description">Customers "just to see" and return.</p>
 					<div class="street__number">03</div>
 				</div>
 			</div>
@@ -297,14 +286,12 @@ const mainStyle = html`<section class="style">
 		<div class="section-dest">How it works: Experience fashion before you buy it.</div>
 		<div class="style__flex">
 			<div class="flex-left">
-				<div class="section-tag">
-					Step 1
-				</div>
+				<div class="section-tag">Step 1</div>
 				<div class="section-title text-left">Try on an avatar.</div>
 				<div class="section-dest text-left">
 					Shopper previews how outfits move and <br />
-					feel on an animated avatar, with a body <br>
-					like theirs  — not a static photo.
+					feel on an animated avatar, with a body <br />
+					like theirs — not a static photo.
 				</div>
 				<div class="wrap-btn">
 					<a href="#" class="btn-get-started">
@@ -330,14 +317,12 @@ const mainStyle = html`<section class="style">
 
 		<div class="style__flex revert">
 			<div class="flex-left">
-				<div class="section-tag">
-					Step 2
-				</div>
+				<div class="section-tag">Step 2</div>
 				<div class="section-title text-left">Style full looks.</div>
 				<div class="section-dest text-left">
 					Shoppers mix and match multiple items<br />
-					in 3D to see how the look comes together<br><br>
-					Understanding the full fit reduces<br>
+					in 3D to see how the look comes together<br /><br />
+					Understanding the full fit reduces<br />
 					hesitation and increases buying intent.
 				</div>
 				<div class="wrap-btn">
@@ -364,17 +349,15 @@ const mainStyle = html`<section class="style">
 
 		<div class="style__flex">
 			<div class="flex-left">
-				<div class="section-tag">
-					Step 3
-				</div>
+				<div class="section-tag">Step 3</div>
 				<div class="section-title text-left">Select options</div>
 				<div class="section-dest text-left">
 					Shoppers personalize products using <br />
-					pre-set options you control — like fabrics, <br>
-					colors, or finishes. <br>
-					<br>
+					pre-set options you control — like fabrics, <br />
+					colors, or finishes. <br />
+					<br />
 					Enough choices to feel personal, without <br />
-					adding complexity to production. <br>
+					adding complexity to production. <br />
 				</div>
 				<div class="wrap-btn">
 					<a href="#" class="btn-get-started">
@@ -400,14 +383,12 @@ const mainStyle = html`<section class="style">
 
 		<div class="style__flex revert">
 			<div class="flex-left">
-				<div class="section-tag">
-					Step 4
-				</div>
+				<div class="section-tag">Step 4</div>
 				<div class="section-title text-left">Shop it IRL.</div>
 				<div class="section-dest text-left">
 					When it feels right, shoppers click Shop IRL<br />
-					and complete the purchase on your <br>
-					Shopify store. <br><br>
+					and complete the purchase on your <br />
+					Shopify store. <br /><br />
 					Same checkout. Higher intent.
 				</div>
 				<div class="wrap-btn">
@@ -435,69 +416,67 @@ const mainStyle = html`<section class="style">
 </section>`
 
 const streetBlack = html`<section class="street black">
-			<div class="container">
-				<div class="section-title">Built to real conversion. <br> Not just for ‘immersion’.</div>
-				<div class="section-dest">Drippy isn’t another “virtual showroom” made to impress. It’s built to help shoppers <br>understand what they’re buying — and feel confident enough to check out.</div>
-				<div class="street__content">
-					<div class="street__item">
-						<p>
-							<img src=${streetIcon1} alt="Style Star" />
-						</p>
-						<h3 class="street__title">Conversion rate.</h3>
-						<p class="street__description">
-							most visitors bounce without buying
-						</p>
-						<div class="street__number">01</div>
-					</div>
-					<div class="street__item">
-						<p>
-							<img src=${streetIcon2} alt="Style Star" />
-						</p>
-						<h3 class="street__title">Cart abandonment.</h3>
-						<p class="street__description">
-							Uncertainty kills checkout
-						</p>
-						<div class="street__number">02</div>
-					</div>
-					<div class="street__item">
-						<p>
-							<img src=${streetIcon3} alt="Style Star" />
-						</p>
-						<h3 class="street__title">Return rate</h3>
-						<p class="street__description">
-							Customers "just to see" and return.
-						</p>
-						<div class="street__number">03</div>
-					</div>
-					<div class="street__item">
-						<p>
-							<img src=${streetIcon4} alt="Style Star" />
-						</p>
-						<h3 class="street__title">Return rate</h3>
-						<p class="street__description">
-							Customers "just to see" and return.
-						</p>
-						<div class="street__number">03</div>
-					</div>
-				</div>
-				<div class="wrap-btn center">
-					<a href="#" class="btn-get-started gray">
-						<div class="btn-get-started__icon">
-							<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-								<path
-									d="M2 8H12M10 6L12 8L10 10"
-									stroke="currentColor"
-									stroke-width="1.5"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
-							</svg>
-						</div>
-						Get started
-					</a>
-				</div>
+	<div class="container">
+		<div class="section-title">
+			Built to real conversion. <br />
+			Not just for ‘immersion’.
+		</div>
+		<div class="section-dest">
+			Drippy isn’t another “virtual showroom” made to impress. It’s built to help shoppers <br />understand what they’re
+			buying — and feel confident enough to check out.
+		</div>
+		<div class="street__content">
+			<div class="street__item">
+				<p>
+					<img src=${streetIcon1} alt="Style Star" />
+				</p>
+				<h3 class="street__title">Conversion rate.</h3>
+				<p class="street__description">most visitors bounce without buying</p>
+				<div class="street__number">01</div>
 			</div>
-		</section>`
+			<div class="street__item">
+				<p>
+					<img src=${streetIcon2} alt="Style Star" />
+				</p>
+				<h3 class="street__title">Cart abandonment.</h3>
+				<p class="street__description">Uncertainty kills checkout</p>
+				<div class="street__number">02</div>
+			</div>
+			<div class="street__item">
+				<p>
+					<img src=${streetIcon3} alt="Style Star" />
+				</p>
+				<h3 class="street__title">Return rate</h3>
+				<p class="street__description">Customers "just to see" and return.</p>
+				<div class="street__number">03</div>
+			</div>
+			<div class="street__item">
+				<p>
+					<img src=${streetIcon4} alt="Style Star" />
+				</p>
+				<h3 class="street__title">Return rate</h3>
+				<p class="street__description">Customers "just to see" and return.</p>
+				<div class="street__number">03</div>
+			</div>
+		</div>
+		<div class="wrap-btn center">
+			<a href="#" class="btn-get-started gray">
+				<div class="btn-get-started__icon">
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M2 8H12M10 6L12 8L10 10"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+				</div>
+				Get started
+			</a>
+		</div>
+	</div>
+</section>`
 
 // Add main content with empty HTML blocks
 const mainContent = html`
@@ -524,8 +503,14 @@ const mainContent = html`
 
 		<section class="action-video">
 			<div class="container">
-				<div class="section-title">Drippy turns passive browsing <br> into active styling.</div>
-				<div class="section-dest">Instead of scrolling through disconnected product photos, shopper enter <br> a 3D dressing room, have fund and shop when they are ready</div>
+				<div class="section-title">
+					Drippy turns passive browsing <br />
+					into active styling.
+				</div>
+				<div class="section-dest">
+					Instead of scrolling through disconnected product photos, shopper enter <br />
+					a 3D dressing room, have fund and shop when they are ready
+				</div>
 				<div class="video-bg">
 					<img src=${videoBg} alt="" />
 				</div>
@@ -552,12 +537,13 @@ const mainContent = html`
 
 		<section class="discover">
 			<div class="container">
-				<div class="section-title">An immersive environment <br>
+				<div class="section-title">
+					An immersive environment <br />
 					that tells your story.
 				</div>
 				<div class="section-dest">
 					Drippy places shopping inside a world that reflects your brand — <br />
-				 	not a generic product grid. shopping has never been so fun!
+					not a generic product grid. shopping has never been so fun!
 				</div>
 				<div class="discover__content">
 					<div class="discover__item">
@@ -602,39 +588,39 @@ const mainContent = html`
 
 		<section class="experience">
 			<div class="container">
-			<div class="section-title">One experience, lives everywhere.</div>
-			<div class="section-dest">A plug-and-play interactive 3D store, wherever your customers are. </div>
+				<div class="section-title">One experience, lives everywhere.</div>
+				<div class="section-dest">A plug-and-play interactive 3D store, wherever your customers are.</div>
 
-			<div class="experience__content">
-				<div class="experience__item">
-					<div class="experience__image-wrapper violet">
-						<img src=${ex1} alt="Link in bios" />
+				<div class="experience__content">
+					<div class="experience__item">
+						<div class="experience__image-wrapper violet">
+							<img src=${ex1} alt="Link in bios" />
+						</div>
+						<p class="experience__title">Link in bios</p>
+						<p class="experience__description">
+							No website? no problem. Drop Drippy in your bio and turn followers into shoppers.
+						</p>
 					</div>
-					<p class="experience__title">Link in bios</p>
-					<p class="experience__description">
-						No website? no problem. Drop Drippy in your bio and turn followers into shoppers.
-					</p>
-				</div>
-				<div class="experience__item ">
-					<div class="experience__image-wrapper gray">
-						<img src=${ex2} alt="Embed on website" />
+					<div class="experience__item ">
+						<div class="experience__image-wrapper gray">
+							<img src=${ex2} alt="Embed on website" />
+						</div>
+						<p class="experience__title">Embed on website</p>
+						<p class="experience__description">
+							Plug Drippy directly into your online store. Same site, new experience.
+						</p>
 					</div>
-					<p class="experience__title">Embed on website</p>
-					<p class="experience__description">
-						Plug Drippy directly into your online store. Same site, new experience.
-					</p>
-				</div>
-				<div class="experience__item">
-					<div class="experience__image-wrapper experience__image-wrapper--no-bg">
-						<img src=${ex3} alt="In-store QR" />
+					<div class="experience__item">
+						<div class="experience__image-wrapper experience__image-wrapper--no-bg">
+							<img src=${ex3} alt="In-store QR" />
+						</div>
+						<p class="experience__title">In-store QR</p>
+						<p class="experience__description">
+							Turn retail into an interactive playground. One scan -> instant 3D try-on -> Order.
+						</p>
 					</div>
-					<p class="experience__title">In-store QR</p>
-					<p class="experience__description">
-						Turn retail into an interactive playground. One scan -> instant 3D try-on -> Order.
-					</p>
 				</div>
-			</div>
-			<div class="wrap-btn center">
+				<div class="wrap-btn center">
 					<a href="#" class="btn-get-started">
 						<div class="btn-get-started__icon">
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -656,19 +642,20 @@ const mainContent = html`
 		<section class="store">
 			<div class="container">
 				<div class="cta-section">
-				<div class="cta-section__inner">
-					<h2 class="cta-section__title">
-						Your store deserves <em>better</em> <br> than flat photos.
-					</h2>
-					<p class="cta-section__description">
-						Shoppers want to see the fit and the full look, not guess at it. Give <br> them a 3D dressing room and watch what happens.
-					</p>
-					<a href="#" class="btn btn-violet">Talk to us →</a>
-				</div>
+					<div class="cta-section__inner">
+						<h2 class="cta-section__title">
+							Your store deserves <em>better</em> <br />
+							than flat photos.
+						</h2>
+						<p class="cta-section__description">
+							Shoppers want to see the fit and the full look, not guess at it. Give <br />
+							them a 3D dressing room and watch what happens.
+						</p>
+						<a href="#" class="btn btn-violet">Talk to us →</a>
+					</div>
 				</div>
 			</div>
 		</section>
-
 
 		<footer class="footer">
 			<div class="container">

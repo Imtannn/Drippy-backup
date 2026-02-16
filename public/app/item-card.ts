@@ -152,31 +152,30 @@ export class ItemCard extends Element {
 	}
 
 	override template = () => html`
-
-			<div class="item-card" onclick=${this.#onClick} classList=${() => ({active: this.itemActive})}>
-				<div class="item-preview">
-					${() =>
-						this.#shouldShowWishlist
-							? html`
-									<button
-										class="wishlist-heart"
-										onclick=${this.#onHeartClick}
-										classList=${() => ({active: this.#isInWishlist()})}
-									>
-										${getWishlistHeartIcon}
-									</button>
-								`
-							: null}
-					<placeholder-image
-						src=${() => this.itemSrc}
-						alt=${() => this.itemAlt}
-						object-fit=${() => this.objectFit}
-						object-position=${() => this.objectPosition}
-						image-style=${() => this.imageStyle}
-					></placeholder-image>
-				</div>
-				${() => (this.itemName ? html`<p class="item-card-name">${this.itemName}</p>` : null)}
+		<div class="item-card" onclick=${this.#onClick} classList=${() => ({active: this.itemActive})}>
+			<div class="item-preview">
+				${() =>
+					this.#shouldShowWishlist
+						? html`
+								<button
+									class="wishlist-heart"
+									onclick=${this.#onHeartClick}
+									classList=${() => ({active: this.#isInWishlist()})}
+								>
+									${getWishlistHeartIcon}
+								</button>
+							`
+						: null}
+				<placeholder-image
+					src=${() => this.itemSrc}
+					alt=${() => this.itemAlt}
+					object-fit=${() => this.objectFit}
+					object-position=${() => this.objectPosition}
+					image-style=${() => this.imageStyle}
+				></placeholder-image>
 			</div>
+			${() => (this.itemName ? html`<p class="item-card-name">${this.itemName}</p>` : null)}
+		</div>
 	`
 	override css = css /*css*/ `
 		:host {

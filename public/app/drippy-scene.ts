@@ -22,7 +22,7 @@ import {
 	effect,
 	SpotLight,
 	type Sphere,
-    Motor,
+	Motor,
 	triangleBlurTexture,
 	type ShadowMapTypeString,
 } from 'lume'
@@ -337,7 +337,7 @@ export class DrippyScene extends Element {
 							mat.envMap = new THREE.TextureLoader().load(this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg')
 							mat.envMap.mapping = THREE.EquirectangularReflectionMapping
 							mat.envMap.colorSpace = THREE.SRGBColorSpace
-							mat.envMapRotation = new THREE.Euler(0, Math.PI/2, 0)
+							mat.envMapRotation = new THREE.Euler(0, Math.PI / 2, 0)
 							createEffect(() => {
 								mat.envMapIntensity = 30 * this.#overallEnvIntensity
 								if (obj.name === 'MatShape_1988') mat.envMapIntensity *= 3
@@ -345,9 +345,8 @@ export class DrippyScene extends Element {
 							})
 						}
 
-
 					if (obj.parent?.name.includes('Drippy_Shop_-_Logo')) {
-						const mat = ((obj as THREE.Mesh).material as THREE.MeshStandardMaterial)
+						const mat = (obj as THREE.Mesh).material as THREE.MeshStandardMaterial
 						// mat.color.set('#ccc')
 						mat.map = null
 						mat.metalness = 1
@@ -1275,19 +1274,20 @@ export class DrippyScene extends Element {
 						<!-- a sphere to debug/visualize the env map -->
 						<lume-sphere ref=${(el: Sphere) => {
 							createEffect(() => {
-
 								// For now timeout as quick hack to wait for the material behavior (non-element) to define the material.
 								// FIXME Delete timeout after we switch to behavior elements, as it will be clear when to run logic (with the ref of the material behavior element)
 								setTimeout(() => {
 									const mat = el.three.material as THREE.MeshPhysicalMaterial
-								// TODO replace hard-coded scene-specific values
-								// with values from the data models.
+									// TODO replace hard-coded scene-specific values
+									// with values from the data models.
 									if (this.isDrippyShop) {
-										mat.envMap = new THREE.TextureLoader().load(this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg')
+										mat.envMap = new THREE.TextureLoader().load(
+											this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg',
+										)
 										mat.envMap.mapping = THREE.EquirectangularReflectionMapping
 										mat.envMap.colorSpace = THREE.SRGBColorSpace
-										mat.envMapRotation = new THREE.Euler(0, Math.PI/2, 0)
-										createEffect(() => mat.envMapIntensity = 10 * this.#overallEnvIntensity)
+										mat.envMapRotation = new THREE.Euler(0, Math.PI / 2, 0)
+										createEffect(() => (mat.envMapIntensity = 10 * this.#overallEnvIntensity))
 										mat.needsUpdate = true
 									} else {
 										mat.envMap = null
@@ -1304,14 +1304,16 @@ export class DrippyScene extends Element {
 								// TODO replace hard-coded scene-specific values
 								// with values from the data models.
 								this.isDrippyShop
-									? (_x: number, _y: number, _z: number, t: number) => [2.4*Math.sin(t * 0.0001), -4.3, 2.4*Math.cos(t * 0.0001)]
-									: "2 -4.3 2"
-							}
+									? (_x: number, _y: number, _z: number, t: number) => [
+											2.4 * Math.sin(t * 0.0001),
+											-4.3,
+											2.4 * Math.cos(t * 0.0001),
+										]
+									: '2 -4.3 2'}
 							intensity=${() =>
 								// TODO replace hard-coded scene-specific values
 								// with values from the data models.
-								this.isDrippyShop ? 20 : 3
-							}
+								this.isDrippyShop ? 20 : 3}
 							ref=${(el: SpotLight) => {
 								el.three.shadow.focus = 1
 								el.three.shadow.blurSamples = shadowSamples
@@ -1342,13 +1344,11 @@ export class DrippyScene extends Element {
 							min-horizontal-angle="${() =>
 								// TODO replace hard-coded scene-specific values
 								// with values from the data models.
-								this.isDrippyShop ? -120 : -Infinity
-							}"
+								this.isDrippyShop ? -120 : -Infinity}"
 							max-horizontal-angle="${() =>
 								// TODO replace hard-coded scene-specific values
 								// with values from the data models.
-								this.isDrippyShop ? 120 : Infinity
-							}"
+								this.isDrippyShop ? 120 : Infinity}"
 							dolly-speed="${() => (this.landing ? 0 : 0.01)}"
 							attr:position="${() => `0 ${this.cameraY} 0`}"
 							xinteractive=${() => {
@@ -1513,7 +1513,10 @@ export class DrippyScene extends Element {
 					>
 						${(item: Accessor<string>) => html`
 							<lume-gltf-model
-								ref=${(el: GltfModel) => (enableShadowOnModelLoad(el), setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8))}
+								ref=${(el: GltfModel) => (
+									enableShadowOnModelLoad(el),
+									setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
+								)}
 								attr:src=${() => item()}
 								class="extraObjects"
 							></lume-gltf-model>
@@ -1525,7 +1528,7 @@ export class DrippyScene extends Element {
 		`
 	}
 
-	override css = css/*css*/ `
+	override css = css /*css*/ `
 		:host {
 			--sceneDesktopOffset: 15rem;
 			--sceneTranslateX: translateX(0);

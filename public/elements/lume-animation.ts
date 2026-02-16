@@ -136,9 +136,9 @@ export class LumeAnimation extends Element {
 
 							mixer.update(delta)
 
-						const parent = this.parentElement as Element3D
-						parent.needsUpdate()
-						parent.scene!.needsUpdate()
+							const parent = this.parentElement as Element3D
+							parent.needsUpdate()
+							parent.scene!.needsUpdate()
 
 							frame = requestAnimationFrame(anim)
 						}

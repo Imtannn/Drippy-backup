@@ -16,8 +16,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			materialId: 'eb7b3511-7669-43bc-a1c8-2629daf19c8d',
 			extraMaterials: [
 				{
-					mesh:
-						'fullbody_1801-fullbody_1788-fullbody_1803-fullbody_1789-fullbody_1806-fullbody_1800-fullbody_1794-fullbody_1791-fullbody_1810',
+					mesh: 'fullbody_1801-fullbody_1788-fullbody_1803-fullbody_1789-fullbody_1806-fullbody_1800-fullbody_1794-fullbody_1791-fullbody_1810',
 					materialId: '3edd2e51-42a1-4b00-bcef-083a445220e6',
 				},
 			],
@@ -697,8 +696,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			materialId: '7ba6106e-5c96-4135-9815-317620353275',
 			extraMaterials: [
 				{
-					mesh:
-						'fullbody_1952-07-fullbody_1952-03-fullbody_1952-14-fullbody_1952-17-fullbody_1952-09-fullbody_1952-05-fullbody_1952-06-fullbody_1952-12-fullbody_1952-13-buttonhead003-buttonhead002-buttonhead001-buttonhead-fullbody_1952-10-fullbody_1952-04',
+					mesh: 'fullbody_1952-07-fullbody_1952-03-fullbody_1952-14-fullbody_1952-17-fullbody_1952-09-fullbody_1952-05-fullbody_1952-06-fullbody_1952-12-fullbody_1952-13-buttonhead003-buttonhead002-buttonhead001-buttonhead-fullbody_1952-10-fullbody_1952-04',
 					materialId: 'b85309b0-53bb-4f54-9aa0-32047405cb2f',
 				},
 			],
@@ -884,8 +882,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			materialId: 'aca7497a-2bff-4e5b-81ff-ba4320e17af7',
 			extraMaterials: [
 				{
-					mesh:
-						'sleeves_1818-03-sleeves_1818-02-buttonhead002-buttonhead001-buttonhead-bodice_1816-12-bodice_1816-07-bodice_1816-11-bodice_1816-04',
+					mesh: 'sleeves_1818-03-sleeves_1818-02-buttonhead002-buttonhead001-buttonhead-bodice_1816-12-bodice_1816-07-bodice_1816-11-bodice_1816-04',
 					materialId: 'c8734403-d321-4730-8b61-744a8ca5cf98',
 				},
 			],
@@ -1032,8 +1029,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 					materialId: '47dc5217-3a64-4f56-bdc9-884588eca386',
 				},
 				{
-					mesh:
-						'buttonhead006-buttonhead005-buttonhead004-buttonhead003-buttonhead002-buttonhead001-buttonhead-fullbody_1872-05-fullbody_1872-14-fullbody_1872-13-fullbody_1872-08',
+					mesh: 'buttonhead006-buttonhead005-buttonhead004-buttonhead003-buttonhead002-buttonhead001-buttonhead-fullbody_1872-05-fullbody_1872-14-fullbody_1872-13-fullbody_1872-08',
 					materialId: '2879e652-c40c-405d-8b49-a4745b4c8170',
 				},
 			],

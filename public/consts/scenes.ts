@@ -19,8 +19,7 @@ export const legacyBackgroundScenes: BackgroundScene[] = [
 		name: 'Drippy Shop',
 		slug: 'drippy-shop',
 		description: 'Drippy Shop',
-		env:
-			'https://rawcdn.githack.com/trusktr/assets/b516a3c6b35732cb65b74b541a97c9636fef3bd8/scenes/DAMAGED%20WALL.webp',
+		env: 'https://rawcdn.githack.com/trusktr/assets/b516a3c6b35732cb65b74b541a97c9636fef3bd8/scenes/DAMAGED%20WALL.webp',
 		scene:
 			'https://rawcdn.githack.com/trusktr/assets/b516a3c6b35732cb65b74b541a97c9636fef3bd8/scenes/Drippy%20Shop%20-%20Scene-%20Damaged%20wall.glb',
 		includedModelFiles: [],

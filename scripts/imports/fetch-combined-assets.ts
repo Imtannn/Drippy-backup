@@ -614,19 +614,9 @@ async function processTemplateFolder(
 	const blockTypeFolders = templateContents.filter(
 		item =>
 			item.mimeType === 'application/vnd.google-apps.folder' &&
-			[
-				'bodice',
-				'pants',
-				'sleeves',
-				'hat',
-				'dress',
-				'skirt',
-				'fullbody',
-				'bag',
-				'accessory',
-				'coat',
-				'jacket',
-			].some(blockType => item.name.toLowerCase().includes(blockType.toLowerCase())),
+			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory', 'coat', 'jacket'].some(
+				blockType => item.name.toLowerCase().includes(blockType.toLowerCase()),
+			),
 	)
 
 	const materialFolders = templateContents.filter(
@@ -654,19 +644,9 @@ async function processTemplateFolder(
 		item =>
 			item.mimeType === 'application/vnd.google-apps.folder' &&
 			item.name.toLowerCase().startsWith('option ') &&
-			[
-				'bodice',
-				'pants',
-				'sleeves',
-				'hat',
-				'dress',
-				'skirt',
-				'fullbody',
-				'bag',
-				'accessory',
-				'coat',
-				'jacket',
-			].some(blockType => item.name.toLowerCase().includes(blockType.toLowerCase())),
+			['bodice', 'pants', 'sleeves', 'hat', 'dress', 'skirt', 'fullbody', 'bag', 'accessory', 'coat', 'jacket'].some(
+				blockType => item.name.toLowerCase().includes(blockType.toLowerCase()),
+			),
 	)
 
 	console.log(`    Found ${optionMaterialsFolders.length} option materials folders`)
