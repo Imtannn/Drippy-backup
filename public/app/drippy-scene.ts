@@ -146,8 +146,9 @@ export class DrippyScene extends Element {
 		return getSceneBySlug(backgroundScenes(), defaultSceneSlug)
 	}
 
+	// TODO this is a temporary hack. Scenes should have specific features saved in the DB once we migrate to DB.
 	@memo private get isDrippyShop() {
-		return this.scene?.scene.includes('Drippy%20Shop')
+		return this.selectedSpace?.slug === 'drippy-shop' 
 	}
 
 	// Post-processing for outline effect
