@@ -349,11 +349,15 @@ export class DrippyScene extends Element {
 								if (obj.name === 'Plane') mat.envMapIntensity *= 3
 							})
 						}
+				}
 
-					if (obj.parent?.name.includes('Drippy_Shop_-_Logo') && isMesh(obj)) {
+				if (this.isDrippyShop) {
+					// Remove baked lighting from metallic logo, let the dynamic
+					// env map reflections take over.
+					if ((obj.parent?.name.includes('Drippy_Shop_-_Logo') || obj.name === 'Pattern_21273') && isMesh(obj)) {
 						const mat = obj.material as THREE.MeshStandardMaterial
 						// mat.color.set('#ccc')
-						// mat.map = null
+						mat.map = null
 						mat.metalness = 1
 						mat.roughness = 0.15
 						mat.needsUpdate = true
