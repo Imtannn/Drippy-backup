@@ -147,8 +147,12 @@ export class DrippyScene extends Element {
 	}
 
 	// TODO this is a temporary hack. Scenes should have specific features saved in the DB once we migrate to DB.
+	@memo private get isDamagedWallScene() {
+		return !!this.scene?.scene.includes('Damaged%20wall')
+	}
+	// TODO this is a temporary hack. Scenes should have specific features saved in the DB once we migrate to DB.
 	@memo private get isDrippyShop() {
-		return this.selectedSpace?.slug === 'drippy-shop' 
+		return this.selectedSpace?.slug === 'drippy-shop'
 	}
 
 	// Post-processing for outline effect
@@ -332,7 +336,7 @@ export class DrippyScene extends Element {
 					}
 				}
 
-				if (this.isDrippyShop) {
+				if (this.isDamagedWallScene) {
 					if (isMesh(obj))
 						for (const mat of materialsOfRenderable(obj) as Generator<THREE.MeshStandardMaterial>) {
 							mat.envMap = new THREE.TextureLoader().load(this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg')
@@ -346,10 +350,10 @@ export class DrippyScene extends Element {
 							})
 						}
 
-					if (obj.parent?.name.includes('Drippy_Shop_-_Logo')) {
-						const mat = (obj as THREE.Mesh).material as THREE.MeshStandardMaterial
+					if (obj.parent?.name.includes('Drippy_Shop_-_Logo') && isMesh(obj)) {
+						const mat = obj.material as THREE.MeshStandardMaterial
 						// mat.color.set('#ccc')
-						mat.map = null
+						// mat.map = null
 						mat.metalness = 1
 						mat.roughness = 0.15
 						mat.needsUpdate = true
@@ -1280,7 +1284,7 @@ export class DrippyScene extends Element {
 									const mat = el.three.material as THREE.MeshPhysicalMaterial
 									// TODO replace hard-coded scene-specific values
 									// with values from the data models.
-									if (this.isDrippyShop) {
+									if (this.isDamagedWallScene) {
 										mat.envMap = new THREE.TextureLoader().load(
 											this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg',
 										)
