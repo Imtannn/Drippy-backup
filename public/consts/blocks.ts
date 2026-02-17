@@ -154,7 +154,7 @@ export const legacyBlocks: Record<string, Block[]> = {
 			modelFile: '/static/models/baum-und-pferdgarten/blocks/Dress/ANDINE_DRESS___Skirt/skirt_1842-a_pose.glb',
 			blockName: 'skirt 1842-a pose',
 			avatar: 'female',
-			category: 'Dress',
+			category: 'Skirt',
 			collection: 'baum-und-pferdgarten',
 			templateId: 'b190ed3f-fa45-4090-a847-99447b4468be',
 			templateName: 'ANDINE DRESS',
