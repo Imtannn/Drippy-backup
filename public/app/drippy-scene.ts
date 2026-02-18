@@ -1147,7 +1147,7 @@ export class DrippyScene extends Element {
 				obj.material = obj.material.clone()
 
 				matMap[obj.material.uuid] = obj.material
-			}
+			} else obj.material = matMap[obj.material.uuid]
 		}
 
 		if (block.templateCategory === 'Pants' || block.templateCategory === 'Skirt') {
