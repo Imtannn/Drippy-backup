@@ -704,6 +704,7 @@ export class DrippyScene extends Element {
 			alpha: true,
 			premultipliedAlpha: true,
 			antialias: true,
+			stencil: true,
 		})
 
 		// Recreate lume's renderer setup and re-create the mappings from lume
@@ -983,7 +984,14 @@ export class DrippyScene extends Element {
 
 		// Create composer if not exists
 		if (!this.composer) {
-			this.composer = new EffectComposer(renderer)
+			const pixelRatio = renderer.getPixelRatio()
+			// Required for stencil to work with EffectComposer.
+			const renderTarget = new THREE.WebGLRenderTarget(size.x * pixelRatio, size.y * pixelRatio, {
+				depthBuffer: true,
+				stencilBuffer: true,
+			})
+
+			this.composer = new EffectComposer(renderer, renderTarget)
 
 			// Set up post-processing for outline effect
 			const renderPass = new RenderPass(threeScene, camera)
@@ -1120,6 +1128,66 @@ export class DrippyScene extends Element {
 		})
 	}
 
+	#createStencil(el: GltfModel, block: RenderBlock) {
+		// Generic render order:
+		// Pants/Skirt -> Top -> Jacket
+
+		/* if (!this.#stencilRenderer) {
+			// Recreate renderer with stencil enabled.
+			this.#stencilRenderer = recreateRenderer(this.lumeScene!.glRenderer!, {stencil: true}, true)
+
+			// In case we need multiple render passes at some point.
+			this.#stencilRenderer.autoClear = false
+			this.#stencilRenderer.shadowMap.type = THREE.VSMShadowMap
+
+			this.lumeScene!.drawScene = () => {
+				this.#stencilRenderer!.clear(true, true, true)
+
+				this.#stencilRenderer!.render(this.lumeScene!.three, this.lumeScene!.threeCamera)
+			}
+		} */
+
+		setTimeout(() => {
+			console.log('SETTING')
+			if (block.templateCategory === 'Pants' || block.templateCategory === 'Skirt') {
+				el.three.traverse(obj => {
+					if (!(obj instanceof THREE.Mesh)) return
+
+					obj.material.transparent = false
+
+					// Cloned so it doesn't affect other meshes with the same material.
+					//obj.material = obj.material.clone()
+					Object.assign(obj.material, {
+						stencilWrite: true,
+						stencilRef: 1,
+						stencilFunc: THREE.NotEqualStencilFunc,
+					})
+
+					// Use render order above the top garment so depth check doesn't prevent stencil.
+					obj.renderOrder = 3
+				})
+			} else if (block.templateCategory === 'Top') {
+				el.three.traverse(obj => {
+					// Don't write stencil on sleeves (for now).
+					if (!(obj instanceof THREE.Mesh) || obj.name.includes('Sleeves')) return
+
+					obj.material.transparent = false
+
+					//obj.material = obj.material.clone()
+					Object.assign(obj.material, {
+						stencilWrite: true,
+						stencilRef: 1,
+						stencilZPass: THREE.ReplaceStencilOp,
+					})
+
+					obj.renderOrder = 2
+				})
+			} else if (block.templateCategory === 'Jacket') {
+				// TODO
+			}
+		}, 0)
+	}
+
 	#handleRigging(el: GltfModel, block: () => RenderBlock) {
 		const modelLoaded = onModelLoad(el)
 
@@ -1129,6 +1197,8 @@ export class DrippyScene extends Element {
 
 			createEffect(() => {
 				if (!avatarLoaded() || !modelLoaded()) return
+
+				this.#createStencil(el, block())
 
 				this.#adoptAvatarSkeleton(el)
 				this.#checkAccessory(block(), el.three)

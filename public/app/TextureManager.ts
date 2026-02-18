@@ -239,7 +239,20 @@ class TextureManager {
 
 		material.roughness = 1.4
 		material.metalness = 0.3
-		material.transparent = true
+
+		// For stencil to work (at the moment), the material cannot be transparent since it changes
+		// the render order, which the current implementation relies on.
+		// TODO: Use additional render pass to render transparent materials in the necessary render
+		// order to write the stencil buffer correctly before the final render.
+		if (!material.stencilWrite) {
+			// Never set `transparent` to `true` if the code for setting stencil properties runs 
+			// first and needs a garment to have stencil enabled.
+			// Right now, this *should* always run before the stencil code (in which case, the 
+			// stencil code will disable transparency), but in the future if some of these effects
+			// get refactored this should prevent stencil from breaking.
+			material.transparent = true
+		}
+
 		material.side = THREE.DoubleSide
 
 		// Ensure GPU-side texture state updates
