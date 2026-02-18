@@ -1130,55 +1130,93 @@ export class DrippyScene extends Element {
 		})
 	}
 
-	#createStencil(el: GltfModel, block: RenderBlock) {
-		// For this garment, we want to make sure to clone it's material(s) so that other garments
-		// that may share the material aren't affected by the stencil.
-		// However, to avoid unnecessarily cloning the same material a bunch of times for every
-		// piece of a garment, we only clone once and use that among this specific garment only.
-		const matMap: {[uuid: string]: THREE.Material} = {} // Only 1 material per mesh for now.
+	#setupStencil(el: GltfModel, block: RenderBlock) {
+		type StencilProps = Partial<
+			Pick<
+				THREE.Material,
+				| 'stencilWrite'
+				| 'stencilFunc'
+				| 'stencilRef'
+				| 'stencilFuncMask'
+				| 'stencilFail'
+				| 'stencilZFail'
+				| 'stencilZPass'
+				| 'transparent'
+			>
+		>
+		const createStencil = (obj: THREE.Mesh, stencilProps: StencilProps, renderOrder?: number) => {
+			if (Array.isArray(obj.material)) throw new Error('Mesh has multiple materials.')
 
-		// Do stuff necessary to the material for stencil to work.
-		const prepareMaterial = (obj: THREE.Mesh) => {
-			if (Array.isArray(obj.material)) throw 'Mesh has multiple materials.'
+			// Only reset what we actually might change, since copying/resetting all properties
+			// seems to break the texture.
+			const originalStencilProps = {
+				stencilWrite: obj.material.stencilWrite,
+				stencilFunc: obj.material.stencilFunc,
+				stencilFuncMask: obj.material.stencilFuncMask,
+				stencilRef: obj.material.stencilRef,
+				stencilFail: obj.material.stencilFail,
+				stencilZFail: obj.material.stencilZFail,
+				stencilZPass: obj.material.stencilZPass,
+				transparent: obj.material.transparent,
+			}
 
-			obj.material.transparent = false
+			const originalRenderOrder = obj.renderOrder
 
-			if (!matMap[obj.material.uuid]) {
-				obj.material = obj.material.clone()
+			obj.material = obj.material.clone()
 
-				matMap[obj.material.uuid] = obj.material
-			} else obj.material = matMap[obj.material.uuid]
+			const resetState = () => {
+				Object.assign(obj.material, originalStencilProps)
+
+				obj.renderOrder = originalRenderOrder
+			}
+
+			createEffect(() => {
+				if (this.#stencilEnabled) {
+					// Transparency breaks render order so for now disable it for garment types we
+					// want stencil on.
+					Object.assign(obj.material, {...stencilProps, transparent: false})
+
+					if (renderOrder !== undefined) obj.renderOrder = renderOrder
+
+					return
+				}
+
+				resetState()
+
+				onCleanup(() => {
+					resetState()
+				})
+			})
 		}
 
 		if (block.templateCategory === 'Pants' || block.templateCategory === 'Skirt') {
 			el.three.traverse(obj => {
 				if (!(obj instanceof THREE.Mesh)) return
 
-				prepareMaterial(obj)
-
-				Object.assign(obj.material, {
-					stencilWrite: this.#stencilEnabled,
-					stencilRef: 1,
-					stencilFunc: THREE.NotEqualStencilFunc,
-				})
-
-				// Use render order above the top garment so depth check doesn't prevent stencil.
-				obj.renderOrder = 3
+				createStencil(
+					obj,
+					{
+						stencilWrite: true,
+						stencilRef: 1,
+						stencilFunc: THREE.NotEqualStencilFunc,
+					},
+					3,
+				)
 			})
 		} else if (block.templateCategory === 'Top') {
 			el.three.traverse(obj => {
 				// Don't write stencil on sleeves (for now).
 				if (!(obj instanceof THREE.Mesh) || obj.name.includes('Sleeves')) return
 
-				prepareMaterial(obj)
-
-				Object.assign(obj.material, {
-					stencilWrite: this.#stencilEnabled,
-					stencilRef: 1,
-					stencilZPass: THREE.ReplaceStencilOp,
-				})
-
-				obj.renderOrder = 2
+				createStencil(
+					obj,
+					{
+						stencilWrite: true,
+						stencilRef: 1,
+						stencilZPass: THREE.ReplaceStencilOp,
+					},
+					2,
+				)
 			})
 		} else if (block.templateCategory === 'Jacket') {
 			// TODO
@@ -1195,7 +1233,7 @@ export class DrippyScene extends Element {
 			createEffect(() => {
 				if (!avatarLoaded() || !modelLoaded()) return
 
-				this.#createStencil(el, block())
+				this.#setupStencil(el, block())
 
 				this.#adoptAvatarSkeleton(el)
 				this.#checkAccessory(block(), el.three)
@@ -1291,7 +1329,7 @@ export class DrippyScene extends Element {
 						</div>
 
 						<div>
-							<p>Stecil</p>
+							<p>Stencil</p>
 							<input
 								id="stencilEnabled"
 								type="checkbox"
