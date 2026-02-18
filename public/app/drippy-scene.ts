@@ -679,6 +679,8 @@ export class DrippyScene extends Element {
 	@signal accessor #bloomRadius: number = 0
 	@signal accessor #bloomThreshold: number = 0.8
 
+	@signal accessor #stencilEnabled: boolean = true
+
 	@signal accessor #glRenderer: THREE.WebGLRenderer | null = null
 
 	@effect grabRenderer() {
@@ -1129,63 +1131,58 @@ export class DrippyScene extends Element {
 	}
 
 	#createStencil(el: GltfModel, block: RenderBlock) {
-		// Generic render order:
-		// Pants/Skirt -> Top -> Jacket
+		// For this garment, we want to make sure to clone it's material(s) so that other garments
+		// that may share the material aren't affected by the stencil.
+		// However, to avoid unnecessarily cloning the same material a bunch of times for every
+		// piece of a garment, we only clone once and use that among this specific garment only.
+		const matMap: {[uuid: string]: THREE.Material} = {} // Only 1 material per mesh for now.
 
-		/* if (!this.#stencilRenderer) {
-			// Recreate renderer with stencil enabled.
-			this.#stencilRenderer = recreateRenderer(this.lumeScene!.glRenderer!, {stencil: true}, true)
+		// Do stuff necessary to the material for stencil to work.
+		const prepareMaterial = (obj: THREE.Mesh) => {
+			if (Array.isArray(obj.material)) throw 'Mesh has multiple materials.'
 
-			// In case we need multiple render passes at some point.
-			this.#stencilRenderer.autoClear = false
-			this.#stencilRenderer.shadowMap.type = THREE.VSMShadowMap
+			obj.material.transparent = false
 
-			this.lumeScene!.drawScene = () => {
-				this.#stencilRenderer!.clear(true, true, true)
+			if (!matMap[obj.material.uuid]) {
+				obj.material = obj.material.clone()
 
-				this.#stencilRenderer!.render(this.lumeScene!.three, this.lumeScene!.threeCamera)
+				matMap[obj.material.uuid] = obj.material
 			}
-		} */
+		}
 
-		setTimeout(() => {
-			console.log('SETTING')
-			if (block.templateCategory === 'Pants' || block.templateCategory === 'Skirt') {
-				el.three.traverse(obj => {
-					if (!(obj instanceof THREE.Mesh)) return
+		if (block.templateCategory === 'Pants' || block.templateCategory === 'Skirt') {
+			el.three.traverse(obj => {
+				if (!(obj instanceof THREE.Mesh)) return
 
-					obj.material.transparent = false
+				prepareMaterial(obj)
 
-					// Cloned so it doesn't affect other meshes with the same material.
-					//obj.material = obj.material.clone()
-					Object.assign(obj.material, {
-						stencilWrite: true,
-						stencilRef: 1,
-						stencilFunc: THREE.NotEqualStencilFunc,
-					})
-
-					// Use render order above the top garment so depth check doesn't prevent stencil.
-					obj.renderOrder = 3
+				Object.assign(obj.material, {
+					stencilWrite: this.#stencilEnabled,
+					stencilRef: 1,
+					stencilFunc: THREE.NotEqualStencilFunc,
 				})
-			} else if (block.templateCategory === 'Top') {
-				el.three.traverse(obj => {
-					// Don't write stencil on sleeves (for now).
-					if (!(obj instanceof THREE.Mesh) || obj.name.includes('Sleeves')) return
 
-					obj.material.transparent = false
+				// Use render order above the top garment so depth check doesn't prevent stencil.
+				obj.renderOrder = 3
+			})
+		} else if (block.templateCategory === 'Top') {
+			el.three.traverse(obj => {
+				// Don't write stencil on sleeves (for now).
+				if (!(obj instanceof THREE.Mesh) || obj.name.includes('Sleeves')) return
 
-					//obj.material = obj.material.clone()
-					Object.assign(obj.material, {
-						stencilWrite: true,
-						stencilRef: 1,
-						stencilZPass: THREE.ReplaceStencilOp,
-					})
+				prepareMaterial(obj)
 
-					obj.renderOrder = 2
+				Object.assign(obj.material, {
+					stencilWrite: this.#stencilEnabled,
+					stencilRef: 1,
+					stencilZPass: THREE.ReplaceStencilOp,
 				})
-			} else if (block.templateCategory === 'Jacket') {
-				// TODO
-			}
-		}, 0)
+
+				obj.renderOrder = 2
+			})
+		} else if (block.templateCategory === 'Jacket') {
+			// TODO
+		}
 	}
 
 	#handleRigging(el: GltfModel, block: () => RenderBlock) {
@@ -1293,6 +1290,18 @@ export class DrippyScene extends Element {
 							/>
 						</div>
 
+						<div>
+							<p>Stecil</p>
+							<input
+								id="stencilEnabled"
+								type="checkbox"
+								checked=${() => this.#stencilEnabled}
+								oninput=${() => {
+									this.#stencilEnabled = !this.#stencilEnabled
+								}}
+							/>
+						</div>
+
 						<style>
 							#debugUi {
 								position: absolute;
@@ -1317,13 +1326,19 @@ export class DrippyScene extends Element {
 									line-height: 1;
 								}
 
-								input {
+								input[type='range'] {
 									width: 100%;
 									height: 3px;
 									background: #333;
 									border-radius: 2px;
 									outline: none;
 									appearance: none;
+								}
+
+								div:has(input[type='checkbox']) {
+									display: flex;
+									justify-content: center;
+									flex-direction: column;
 								}
 							}
 						</style>
