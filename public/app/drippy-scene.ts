@@ -181,7 +181,7 @@ export class DrippyScene extends Element {
 	 * @param block
 	 * @param obj
 	 */
-	#checkAccessory(block: RenderBlock, obj: THREE.Object3D) {
+	#syncAccessoryWithSkeleton(block: RenderBlock, obj: THREE.Object3D) {
 		if (block.block.category !== 'Accessory') return
 
 		this.avatarSkeleton.createBoneTarget(obj, 'Left_HandIndex_Tip')
@@ -331,13 +331,11 @@ export class DrippyScene extends Element {
 						const newMats = []
 						for (const mat of materialsOfRenderable(obj)) newMats.push(copyMapsToPhysical(mat))
 						obj.material = newMats
-					} else {
-						obj.material = copyMapsToPhysical(obj.material)
-					}
+					} else obj.material = copyMapsToPhysical(obj.material)
 				}
 
 				if (this.isDamagedWallScene) {
-					if (isMesh(obj))
+					if (isMesh(obj)) {
 						for (const mat of materialsOfRenderable(obj) as Generator<THREE.MeshStandardMaterial>) {
 							mat.envMap = new THREE.TextureLoader().load(this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg')
 							mat.envMap.mapping = THREE.EquirectangularReflectionMapping
@@ -349,6 +347,7 @@ export class DrippyScene extends Element {
 								if (obj.name === 'Plane') mat.envMapIntensity *= 3
 							})
 						}
+					}
 				}
 
 				if (this.isDrippyShop) {
@@ -679,6 +678,8 @@ export class DrippyScene extends Element {
 	@signal accessor #bloomRadius: number = 0
 	@signal accessor #bloomThreshold: number = 0.8
 
+	@signal accessor #stencilEnabled: boolean = true
+
 	@signal accessor #glRenderer: THREE.WebGLRenderer | null = null
 
 	@effect grabRenderer() {
@@ -704,6 +705,7 @@ export class DrippyScene extends Element {
 			alpha: true,
 			premultipliedAlpha: true,
 			antialias: true,
+			stencil: true,
 		})
 
 		// Recreate lume's renderer setup and re-create the mappings from lume
@@ -739,13 +741,9 @@ export class DrippyScene extends Element {
 			// TODO shouldn't need a cast here. Bug on TypeScript: https://github.com/microsoft/TypeScript/issues/32054
 			type = type.toLowerCase() as ShadowMapTypeString
 
-			if (type == 'pcf') {
-				renderer.shadowMap.type = THREE.PCFShadowMap
-			} else if (type == 'pcfsoft') {
-				renderer.shadowMap.type = THREE.PCFSoftShadowMap
-			} else if (type == 'basic') {
-				renderer.shadowMap.type = THREE.BasicShadowMap
-			}
+			if (type == 'pcf') renderer.shadowMap.type = THREE.PCFShadowMap
+			else if (type == 'pcfsoft') renderer.shadowMap.type = THREE.PCFSoftShadowMap
+			else if (type == 'basic') renderer.shadowMap.type = THREE.BasicShadowMap
 		})
 
 		createEffect(() => {
@@ -848,9 +846,7 @@ export class DrippyScene extends Element {
 				if (bgIsEquirectangular) {
 					bgTexture = pmremgen!.fromEquirectangular(tex).texture
 					tex.dispose() // might not be needed, but just in case.
-				} else {
-					bgTexture = tex
-				}
+				} else bgTexture = tex
 
 				cb(bgTexture)
 			})
@@ -983,7 +979,14 @@ export class DrippyScene extends Element {
 
 		// Create composer if not exists
 		if (!this.composer) {
-			this.composer = new EffectComposer(renderer)
+			const pixelRatio = renderer.getPixelRatio()
+			// Required for stencil to work with EffectComposer.
+			const renderTarget = new THREE.WebGLRenderTarget(size.x * pixelRatio, size.y * pixelRatio, {
+				depthBuffer: true,
+				stencilBuffer: true,
+			})
+
+			this.composer = new EffectComposer(renderer, renderTarget)
 
 			// Set up post-processing for outline effect
 			const renderPass = new RenderPass(threeScene, camera)
@@ -1120,19 +1123,133 @@ export class DrippyScene extends Element {
 		})
 	}
 
-	#handleRigging(el: GltfModel, block: () => RenderBlock) {
-		const modelLoaded = onModelLoad(el)
+	#setupStencil(el: GltfModel, block: RenderBlock) {
+		type StencilProps = Partial<
+			Pick<
+				THREE.Material,
+				| 'stencilWrite'
+				| 'stencilFunc'
+				| 'stencilRef'
+				| 'stencilFuncMask'
+				| 'stencilFail'
+				| 'stencilZFail'
+				| 'stencilZPass'
+				| 'transparent'
+			>
+		>
+		const createStencil = (obj: THREE.Mesh, stencilProps: StencilProps, renderOrder?: number) => {
+			if (Array.isArray(obj.material)) throw new Error('Stencil not yet supported with multi materials.')
 
-		createEffect(() => {
-			if (!this.avatarModel) return
-			const avatarLoaded = onModelLoad(this.avatarModel!)
+			// Only reset what we actually might change, since copying/resetting all properties
+			// seems to break the texture.
+			const originalStencilProps = {
+				stencilWrite: obj.material.stencilWrite,
+				stencilFunc: obj.material.stencilFunc,
+				stencilFuncMask: obj.material.stencilFuncMask,
+				stencilRef: obj.material.stencilRef,
+				stencilFail: obj.material.stencilFail,
+				stencilZFail: obj.material.stencilZFail,
+				stencilZPass: obj.material.stencilZPass,
+				transparent: obj.material.transparent,
+			}
+
+			const originalRenderOrder = obj.renderOrder
+
+			const resetState = () => {
+				Object.assign(obj.material, originalStencilProps)
+
+				obj.renderOrder = originalRenderOrder
+			}
 
 			createEffect(() => {
-				if (!avatarLoaded() || !modelLoaded()) return
+				if (!this.#stencilEnabled) return
 
-				this.#adoptAvatarSkeleton(el)
-				this.#checkAccessory(block(), el.three)
+				// Transparency breaks render order so for now disable it for garment types we
+				// want stencil on.
+				Object.assign(obj.material, {...stencilProps, transparent: false})
+
+				if (renderOrder !== undefined) obj.renderOrder = renderOrder
+
+				onCleanup(() => resetState())
 			})
+		}
+
+		if (block.templateCategory === 'Pants' || block.templateCategory === 'Skirt') {
+			el.three.traverse(obj => {
+				if (!(obj instanceof THREE.Mesh)) return
+
+				createStencil(
+					obj,
+					{
+						stencilWrite: true,
+						stencilRef: 1,
+						stencilFunc: THREE.NotEqualStencilFunc,
+					},
+					3,
+				)
+			})
+		} else if (block.templateCategory === 'Top') {
+			el.three.traverse(obj => {
+				// Don't write stencil on sleeves (for now).
+				if (!(obj instanceof THREE.Mesh) || obj.name.includes('Sleeves')) return
+
+				createStencil(
+					obj,
+					{
+						stencilWrite: true,
+						stencilRef: 1,
+						stencilZPass: THREE.ReplaceStencilOp,
+					},
+					2,
+				)
+			})
+		} else if (block.templateCategory === 'Jacket') {
+			// TODO
+		}
+	}
+
+	#handleBlockModel(el: GltfModel, block: () => RenderBlock) {
+		enableShadowOnModelLoad(el)
+		setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
+		disableFrustumCulledOnLoad(el)
+
+		createEffect(() => {
+			// Track default garment loading
+			if (block().id.startsWith('default-')) {
+				const defaultGarmentId = Symbol(`default-garment-${block().id}`)
+				store.trackModelLoading(defaultGarmentId, el)
+			}
+		})
+
+		whenModelLoaded(el, () => {
+			createEffect(() => {
+				if (!this.avatarModel) return
+				const avatarLoaded = onModelLoad(this.avatarModel!)
+
+				createEffect(() => {
+					if (!avatarLoaded()) return
+
+					this.#adoptAvatarSkeleton(el)
+					this.#syncAccessoryWithSkeleton(block(), el.three)
+				})
+			})
+
+			el.three.traverse(obj => {
+				if (!isMesh(obj)) return
+
+				const material = obj.material
+
+				if (Array.isArray(material)) throw new Error('blocks with multi materials not yet supported.')
+				if (!(material instanceof THREE.MeshStandardMaterial))
+					throw new Error('only blocks with standard PBR materials supported')
+
+				material.roughness = 1.4
+				material.metalness = 0.3
+				material.transparent = true
+				material.side = THREE.DoubleSide
+			})
+
+			this.#setupStencil(el, block())
 		})
 	}
 
@@ -1223,6 +1340,16 @@ export class DrippyScene extends Element {
 							/>
 						</div>
 
+						<div>
+							<p>Stencil</p>
+							<input
+								id="stencilEnabled"
+								type="checkbox"
+								checked=${() => this.#stencilEnabled}
+								oninput=${() => (this.#stencilEnabled = !this.#stencilEnabled)}
+							/>
+						</div>
+
 						<style>
 							#debugUi {
 								position: absolute;
@@ -1247,13 +1374,19 @@ export class DrippyScene extends Element {
 									line-height: 1;
 								}
 
-								input {
+								input[type='range'] {
 									width: 100%;
 									height: 3px;
 									background: #333;
 									border-radius: 2px;
 									outline: none;
 									appearance: none;
+								}
+
+								div:has(input[type='checkbox']) {
+									display: flex;
+									justify-content: center;
+									flex-direction: column;
 								}
 							}
 						</style>
@@ -1391,20 +1524,7 @@ export class DrippyScene extends Element {
 
 									return html`
 										<lume-gltf-model
-											ref=${(el: GltfModel) => {
-												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
-												disableFrustumCulledOnLoad(el)
-												this.#handleRigging(el, () => this.block0)
-
-												createEffect(() => {
-													// Track default garment loading
-													if (this.block0.id.startsWith('default-')) {
-														const defaultGarmentId = Symbol(`default-garment-${this.block0.id}`)
-														store.trackModelLoading(defaultGarmentId, el)
-													}
-												})
-											}}
+											ref=${(el: GltfModel) => this.#handleBlockModel(el, () => this.block0)}
 											id=${() => this.block0.id}
 											attr:data-block-id=${() => this.block0.block._id}
 											data-block
@@ -1418,20 +1538,7 @@ export class DrippyScene extends Element {
 								<${() => {
 									return html`
 										<lume-gltf-model
-											ref=${(el: GltfModel) => {
-												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
-												disableFrustumCulledOnLoad(el)
-												this.#handleRigging(el, () => this.block1)
-
-												createEffect(() => {
-													// Track default garment loading
-													if (this.block1.id.startsWith('default-')) {
-														const defaultGarmentId = Symbol(`default-garment-${this.block1.id}`)
-														store.trackModelLoading(defaultGarmentId, el)
-													}
-												})
-											}}
+											ref=${(el: GltfModel) => this.#handleBlockModel(el, () => this.block1)}
 											id=${() => this.block1.id}
 											attr:data-block-id=${() => this.block1.block._id}
 											data-block
@@ -1445,20 +1552,7 @@ export class DrippyScene extends Element {
 								<${() => {
 									return html`
 										<lume-gltf-model
-											ref=${(el: GltfModel) => {
-												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
-												disableFrustumCulledOnLoad(el)
-												this.#handleRigging(el, () => this.block2)
-
-												createEffect(() => {
-													// Track default garment loading
-													if (this.block2.id.startsWith('default-')) {
-														const defaultGarmentId = Symbol(`default-garment-${this.block2.id}`)
-														store.trackModelLoading(defaultGarmentId, el)
-													}
-												})
-											}}
+											ref=${(el: GltfModel) => this.#handleBlockModel(el, () => this.block2)}
 											id=${() => this.block2.id}
 											attr:data-block-id=${() => this.block2.block._id}
 											data-block
@@ -1474,18 +1568,7 @@ export class DrippyScene extends Element {
 								<${For} each=${() => this.renderBlocks.slice(3)}>
 									${(item: RenderBlock) => html`
 										<lume-gltf-model
-											ref=${(el: GltfModel) => {
-												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
-												disableFrustumCulledOnLoad(el)
-												this.#handleRigging(el, () => item)
-
-												// Track default garment loading
-												if (item.id.startsWith('default-')) {
-													const defaultGarmentId = Symbol(`default-garment-${item.id}`)
-													store.trackModelLoading(defaultGarmentId, el)
-												}
-											}}
+											ref=${(el: GltfModel) => this.#handleBlockModel(el, () => item)}
 											id=${item.id}
 											attr:data-block-id=${() => item.block._id}
 											data-block
@@ -1632,29 +1715,3 @@ function emptyNodeList<T extends Element>() {
 	const emptySelector = '.__empty__' + Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
 	return document.querySelectorAll(emptySelector) as NodeListOf<T>
 }
-
-// <${For} each=${() => this.renderBlocks}>
-// 	${(item: RenderBlock) => html`
-// 		<lume-gltf-model
-// 			ref=${(el: GltfModel) => {
-// 				enableShadowOnModelLoad(el)
-// 				setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
-// 				disableFrustumCulledOnLoad(el)
-// 				this.#handleRigging(el, item)
-
-// 				// Track default garment loading
-// 				if (item.id.startsWith('default-')) {
-// 					const defaultGarmentId = Symbol(`default-garment-${item.id}`)
-// 					store.trackModelLoading(defaultGarmentId, el)
-// 				}
-// 			}}
-// 			id=${item.id}
-// 			attr:data-block-id=${() => item.block._id}
-// 			data-block
-// 			attr:data-default=${() => item.id.startsWith('default-')}
-// 			attr:src=${item.block.modelFile}
-// 			scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
-// 			visible=${() => this.#isGarmentVisible(item, store.selectedTemplates)}
-// 		></lume-gltf-model>
-// 	`}
-// </>

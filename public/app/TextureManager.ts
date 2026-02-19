@@ -237,11 +237,6 @@ class TextureManager {
 		// Configure material properties
 		if (textureSet.baseColor) textureSet.baseColor.colorSpace = THREE.SRGBColorSpace
 
-		material.roughness = 1.4
-		material.metalness = 0.3
-		material.transparent = true
-		material.side = THREE.DoubleSide
-
 		// Ensure GPU-side texture state updates
 		if (material.map) material.map.needsUpdate = true
 		if (material.normalMap) material.normalMap.needsUpdate = true
