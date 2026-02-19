@@ -181,7 +181,7 @@ export class DrippyScene extends Element {
 	 * @param block
 	 * @param obj
 	 */
-	#checkAccessory(block: RenderBlock, obj: THREE.Object3D) {
+	#syncAccessoryWithSkeleton(block: RenderBlock, obj: THREE.Object3D) {
 		if (block.block.category !== 'Accessory') return
 
 		this.avatarSkeleton.createBoneTarget(obj, 'Left_HandIndex_Tip')
@@ -1145,7 +1145,7 @@ export class DrippyScene extends Element {
 			>
 		>
 		const createStencil = (obj: THREE.Mesh, stencilProps: StencilProps, renderOrder?: number) => {
-			if (Array.isArray(obj.material)) throw new Error('Mesh has multiple materials.')
+			if (Array.isArray(obj.material)) throw new Error('Stencil not yet supported with multi materials.')
 
 			// Only reset what we actually might change, since copying/resetting all properties
 			// seems to break the texture.
@@ -1162,8 +1162,6 @@ export class DrippyScene extends Element {
 
 			const originalRenderOrder = obj.renderOrder
 
-			obj.material = obj.material.clone()
-
 			const resetState = () => {
 				Object.assign(obj.material, originalStencilProps)
 
@@ -1171,21 +1169,15 @@ export class DrippyScene extends Element {
 			}
 
 			createEffect(() => {
-				if (this.#stencilEnabled) {
-					// Transparency breaks render order so for now disable it for garment types we
-					// want stencil on.
-					Object.assign(obj.material, {...stencilProps, transparent: false})
+				if (!this.#stencilEnabled) return
 
-					if (renderOrder !== undefined) obj.renderOrder = renderOrder
+				// Transparency breaks render order so for now disable it for garment types we
+				// want stencil on.
+				Object.assign(obj.material, {...stencilProps, transparent: false})
 
-					return
-				}
+				if (renderOrder !== undefined) obj.renderOrder = renderOrder
 
-				resetState()
-
-				onCleanup(() => {
-					resetState()
-				})
+				onCleanup(() => resetState())
 			})
 		}
 
@@ -1223,21 +1215,47 @@ export class DrippyScene extends Element {
 		}
 	}
 
-	#handleRigging(el: GltfModel, block: () => RenderBlock) {
-		const modelLoaded = onModelLoad(el)
+	#handleBlockModel(el: GltfModel, block: () => RenderBlock) {
+		enableShadowOnModelLoad(el)
+		setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
+		disableFrustumCulledOnLoad(el)
 
 		createEffect(() => {
-			if (!this.avatarModel) return
-			const avatarLoaded = onModelLoad(this.avatarModel!)
+			// Track default garment loading
+			if (block().id.startsWith('default-')) {
+				const defaultGarmentId = Symbol(`default-garment-${block().id}`)
+				store.trackModelLoading(defaultGarmentId, el)
+			}
+		})
 
+		whenModelLoaded(el, () => {
 			createEffect(() => {
-				if (!avatarLoaded() || !modelLoaded()) return
+				if (!this.avatarModel) return
+				const avatarLoaded = onModelLoad(this.avatarModel!)
 
-				this.#setupStencil(el, block())
+				createEffect(() => {
+					if (!avatarLoaded()) return
 
-				this.#adoptAvatarSkeleton(el)
-				this.#checkAccessory(block(), el.three)
+					this.#adoptAvatarSkeleton(el)
+					this.#syncAccessoryWithSkeleton(block(), el.three)
+				})
 			})
+
+			el.three.traverse((obj) => {
+				if (!isMesh(obj)) return
+
+				const material = obj.material
+
+				if (Array.isArray(material)) throw new Error('blocks with multi materials not yet supported.')
+				if (!(material instanceof THREE.MeshStandardMaterial)) throw new Error('only blocks with standard PBR materials supported')
+
+				material.roughness = 1.4
+				material.metalness = 0.3
+				material.transparent = true
+				material.side = THREE.DoubleSide
+			})
+
+			this.#setupStencil(el, block())
 		})
 	}
 
@@ -1334,9 +1352,7 @@ export class DrippyScene extends Element {
 								id="stencilEnabled"
 								type="checkbox"
 								checked=${() => this.#stencilEnabled}
-								oninput=${() => {
-									this.#stencilEnabled = !this.#stencilEnabled
-								}}
+								oninput=${() => this.#stencilEnabled = !this.#stencilEnabled}
 							/>
 						</div>
 
@@ -1514,20 +1530,7 @@ export class DrippyScene extends Element {
 
 									return html`
 										<lume-gltf-model
-											ref=${(el: GltfModel) => {
-												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
-												disableFrustumCulledOnLoad(el)
-												this.#handleRigging(el, () => this.block0)
-
-												createEffect(() => {
-													// Track default garment loading
-													if (this.block0.id.startsWith('default-')) {
-														const defaultGarmentId = Symbol(`default-garment-${this.block0.id}`)
-														store.trackModelLoading(defaultGarmentId, el)
-													}
-												})
-											}}
+											ref=${(el: GltfModel) => this.#handleBlockModel(el, () => this.block0)}
 											id=${() => this.block0.id}
 											attr:data-block-id=${() => this.block0.block._id}
 											data-block
@@ -1541,20 +1544,7 @@ export class DrippyScene extends Element {
 								<${() => {
 									return html`
 										<lume-gltf-model
-											ref=${(el: GltfModel) => {
-												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
-												disableFrustumCulledOnLoad(el)
-												this.#handleRigging(el, () => this.block1)
-
-												createEffect(() => {
-													// Track default garment loading
-													if (this.block1.id.startsWith('default-')) {
-														const defaultGarmentId = Symbol(`default-garment-${this.block1.id}`)
-														store.trackModelLoading(defaultGarmentId, el)
-													}
-												})
-											}}
+											ref=${(el: GltfModel) => this.#handleBlockModel(el, () => this.block1)}
 											id=${() => this.block1.id}
 											attr:data-block-id=${() => this.block1.block._id}
 											data-block
@@ -1568,20 +1558,7 @@ export class DrippyScene extends Element {
 								<${() => {
 									return html`
 										<lume-gltf-model
-											ref=${(el: GltfModel) => {
-												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
-												disableFrustumCulledOnLoad(el)
-												this.#handleRigging(el, () => this.block2)
-
-												createEffect(() => {
-													// Track default garment loading
-													if (this.block2.id.startsWith('default-')) {
-														const defaultGarmentId = Symbol(`default-garment-${this.block2.id}`)
-														store.trackModelLoading(defaultGarmentId, el)
-													}
-												})
-											}}
+											ref=${(el: GltfModel) => this.#handleBlockModel(el, () => this.block2)}
 											id=${() => this.block2.id}
 											attr:data-block-id=${() => this.block2.block._id}
 											data-block
@@ -1597,18 +1574,7 @@ export class DrippyScene extends Element {
 								<${For} each=${() => this.renderBlocks.slice(3)}>
 									${(item: RenderBlock) => html`
 										<lume-gltf-model
-											ref=${(el: GltfModel) => {
-												enableShadowOnModelLoad(el)
-												setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
-												disableFrustumCulledOnLoad(el)
-												this.#handleRigging(el, () => item)
-
-												// Track default garment loading
-												if (item.id.startsWith('default-')) {
-													const defaultGarmentId = Symbol(`default-garment-${item.id}`)
-													store.trackModelLoading(defaultGarmentId, el)
-												}
-											}}
+											ref=${(el: GltfModel) => this.#handleBlockModel(el, () => item)}
 											id=${item.id}
 											attr:data-block-id=${() => item.block._id}
 											data-block
@@ -1755,29 +1721,3 @@ function emptyNodeList<T extends Element>() {
 	const emptySelector = '.__empty__' + Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
 	return document.querySelectorAll(emptySelector) as NodeListOf<T>
 }
-
-// <${For} each=${() => this.renderBlocks}>
-// 	${(item: RenderBlock) => html`
-// 		<lume-gltf-model
-// 			ref=${(el: GltfModel) => {
-// 				enableShadowOnModelLoad(el)
-// 				setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
-// 				disableFrustumCulledOnLoad(el)
-// 				this.#handleRigging(el, item)
-
-// 				// Track default garment loading
-// 				if (item.id.startsWith('default-')) {
-// 					const defaultGarmentId = Symbol(`default-garment-${item.id}`)
-// 					store.trackModelLoading(defaultGarmentId, el)
-// 				}
-// 			}}
-// 			id=${item.id}
-// 			attr:data-block-id=${() => item.block._id}
-// 			data-block
-// 			attr:data-default=${() => item.id.startsWith('default-')}
-// 			attr:src=${item.block.modelFile}
-// 			scale=${item.id.endsWith('-mirror') ? '-1 1 1' : '1 1 1'}
-// 			visible=${() => this.#isGarmentVisible(item, store.selectedTemplates)}
-// 		></lume-gltf-model>
-// 	`}
-// </>
