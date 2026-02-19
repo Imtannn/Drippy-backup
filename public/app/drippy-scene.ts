@@ -331,13 +331,11 @@ export class DrippyScene extends Element {
 						const newMats = []
 						for (const mat of materialsOfRenderable(obj)) newMats.push(copyMapsToPhysical(mat))
 						obj.material = newMats
-					} else {
-						obj.material = copyMapsToPhysical(obj.material)
-					}
+					} else obj.material = copyMapsToPhysical(obj.material)
 				}
 
 				if (this.isDamagedWallScene) {
-					if (isMesh(obj))
+					if (isMesh(obj)) {
 						for (const mat of materialsOfRenderable(obj) as Generator<THREE.MeshStandardMaterial>) {
 							mat.envMap = new THREE.TextureLoader().load(this.scene?.env ?? '/images/envs/brown_photostudio_02.jpg')
 							mat.envMap.mapping = THREE.EquirectangularReflectionMapping
@@ -349,6 +347,7 @@ export class DrippyScene extends Element {
 								if (obj.name === 'Plane') mat.envMapIntensity *= 3
 							})
 						}
+					}
 				}
 
 				if (this.isDrippyShop) {
@@ -742,13 +741,9 @@ export class DrippyScene extends Element {
 			// TODO shouldn't need a cast here. Bug on TypeScript: https://github.com/microsoft/TypeScript/issues/32054
 			type = type.toLowerCase() as ShadowMapTypeString
 
-			if (type == 'pcf') {
-				renderer.shadowMap.type = THREE.PCFShadowMap
-			} else if (type == 'pcfsoft') {
-				renderer.shadowMap.type = THREE.PCFSoftShadowMap
-			} else if (type == 'basic') {
-				renderer.shadowMap.type = THREE.BasicShadowMap
-			}
+			if (type == 'pcf') renderer.shadowMap.type = THREE.PCFShadowMap
+			else if (type == 'pcfsoft') renderer.shadowMap.type = THREE.PCFSoftShadowMap
+			else if (type == 'basic') renderer.shadowMap.type = THREE.BasicShadowMap
 		})
 
 		createEffect(() => {
@@ -851,9 +846,7 @@ export class DrippyScene extends Element {
 				if (bgIsEquirectangular) {
 					bgTexture = pmremgen!.fromEquirectangular(tex).texture
 					tex.dispose() // might not be needed, but just in case.
-				} else {
-					bgTexture = tex
-				}
+				} else bgTexture = tex
 
 				cb(bgTexture)
 			})
@@ -1241,13 +1234,14 @@ export class DrippyScene extends Element {
 				})
 			})
 
-			el.three.traverse((obj) => {
+			el.three.traverse(obj => {
 				if (!isMesh(obj)) return
 
 				const material = obj.material
 
 				if (Array.isArray(material)) throw new Error('blocks with multi materials not yet supported.')
-				if (!(material instanceof THREE.MeshStandardMaterial)) throw new Error('only blocks with standard PBR materials supported')
+				if (!(material instanceof THREE.MeshStandardMaterial))
+					throw new Error('only blocks with standard PBR materials supported')
 
 				material.roughness = 1.4
 				material.metalness = 0.3
@@ -1352,7 +1346,7 @@ export class DrippyScene extends Element {
 								id="stencilEnabled"
 								type="checkbox"
 								checked=${() => this.#stencilEnabled}
-								oninput=${() => this.#stencilEnabled = !this.#stencilEnabled}
+								oninput=${() => (this.#stencilEnabled = !this.#stencilEnabled)}
 							/>
 						</div>
 
