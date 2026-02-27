@@ -593,21 +593,6 @@ export class TemplateView extends Element {
 			max-height="100vh"
 			onsnap=${this.#onBottomSheetSnapChange}
 		>
-			<app-buttons-left layout="bottom">
-				<app-buttons-group group-direction="row" custom-class="button-group-spread">
-					<show-when
-						condition=${() => !this.showRemixOverlay}
-						content=${() => html` <buy-button class="align-right" onclick=${this.#onBuyButtonClick}></buy-button> `}
-					></show-when>
-					<show-when
-						condition=${() => this.showRemixOverlay}
-						content=${() => html`
-							<button class="done-button align-right" onclick=${this.#closeRemixOverlay}>Done</button>
-						`}
-					></show-when>
-				</app-buttons-group>
-			</app-buttons-left>
-
 			<show-when
 				condition=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
 				content=${() => html`<div class="template-sheet-overlay" onclick=${this.#closeRemixOverlay}></div>`}

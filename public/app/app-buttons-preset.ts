@@ -247,7 +247,10 @@ export class AppButtonsPreset extends Element {
 					html`
 						<show-on-device device="mobile">
 							<app-buttons-group>
-								${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
+								<div style="display: flex; align-items: center; gap: 5px;">
+									${() => store.view === 'template' && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
+									${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
+								</div>
 								<control-button-group>
 									<undo-button group></undo-button>
 									<redo-button group></redo-button>
@@ -272,7 +275,10 @@ export class AppButtonsPreset extends Element {
 					<show-on-device device="desktop">
 						<div class="tools-buttons-desktop">
 							<app-buttons-group>
-								${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
+								<div style="display: flex; align-items: center; gap: 5px;">
+									${() => store.view === 'template' && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
+									${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
+								</div>
 								<control-button-group>
 									<undo-button group></undo-button>
 									<redo-button group></redo-button>
