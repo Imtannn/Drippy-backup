@@ -1,7 +1,6 @@
 import '../elements/admin-button.js'
 import '../elements/animation-select.js'
 import '../elements/back-button.js'
-import '../elements/control-button-group.js'
 import '../elements/cube-button.js'
 import '../elements/home-button.js'
 import '../elements/logic/show-when.js'
@@ -248,11 +247,6 @@ export class AppButtonsPreset extends Element {
 						<show-on-device device="mobile">
 							<app-buttons-group>
 								${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
-								<control-button-group>
-									<undo-button group></undo-button>
-									<redo-button group></redo-button>
-									<reload-button group></reload-button>
-								</control-button-group>
 								${() =>
 									config.tools &&
 									html`
@@ -273,11 +267,6 @@ export class AppButtonsPreset extends Element {
 						<div class="tools-buttons-desktop">
 							<app-buttons-group>
 								${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
-								<control-button-group>
-									<undo-button group></undo-button>
-									<redo-button group></redo-button>
-									<reload-button group></reload-button>
-								</control-button-group>
 								${() =>
 									config.tools &&
 									html`
