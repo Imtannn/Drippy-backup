@@ -75,6 +75,9 @@ import {blocks} from '../consts/blocks.js'
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
 
+const postprocessingEnabled = false
+const stencilEnabled = false
+
 type Collection = string
 type BlockId = string
 type MaybeMirror = '' | '-mirror'
@@ -680,6 +683,7 @@ export class DrippyScene extends Element {
 
 	@signal accessor #stencilEnabled: boolean = true
 
+	/** A reference to the renderer used for the Lume scene. It will be null until the Lume scene has loaded and instantiated it. */
 	@signal accessor #glRenderer: THREE.WebGLRenderer | null = null
 
 	@effect grabRenderer() {
@@ -689,10 +693,14 @@ export class DrippyScene extends Element {
 		// OLD (re-use lume's renderer) ////////////////////////////////////////
 		// {{
 
-		// if (!lumeScene.glRenderer)  return null
-		// // lumeScene.glRenderer is not reactive, but will be available after a timeout.
-		// // FIXME make lume's renderer glRenderer a signal so we don't need a timeout hack in this consumer code.
-		// setTimeout(() => this.#glRenderer = lumeScene.glRenderer!)
+		if (!stencilEnabled) {
+
+			if (!lumeScene.glRenderer)  return null
+			// lumeScene.glRenderer is not reactive, but will be available after a timeout.
+			// FIXME make lume's renderer glRenderer a signal so we don't need a timeout hack in this consumer code.
+			setTimeout(() => this.#glRenderer = lumeScene.glRenderer!)
+
+		}
 
 		// }}
 
@@ -701,252 +709,256 @@ export class DrippyScene extends Element {
 		// replicate.
 		// {{
 
-		const renderer = new THREE.WebGLRenderer({
-			alpha: true,
-			premultipliedAlpha: true,
-			antialias: true,
-			stencil: true,
-		})
+		else {
 
-		// Recreate lume's renderer setup and re-create the mappings from lume
-		// to the custom renderer (f.e. same stuff any lume-scene features would
-		// map to)
-		renderer.xr.enabled = true
-		renderer.setPixelRatio(globalThis.devicePixelRatio)
-		renderer.shadowMap.enabled = true
-		renderer.shadowMap.type = THREE.PCFSoftShadowMap // default PCFShadowMap
+			const renderer = new THREE.WebGLRenderer({
+				alpha: true,
+				premultipliedAlpha: true,
+				antialias: true,
+				stencil: true,
+			})
 
-		createEffect(() => {
-			renderer.localClippingEnabled = lumeScene.localClipping
-		})
+			// Recreate lume's renderer setup and re-create the mappings from lume
+			// to the custom renderer (f.e. same stuff any lume-scene features would
+			// map to)
+			renderer.xr.enabled = true
+			renderer.setPixelRatio(globalThis.devicePixelRatio)
+			renderer.shadowMap.enabled = true
+			renderer.shadowMap.type = THREE.PCFSoftShadowMap // default PCFShadowMap
 
-		createEffect(() => {
-			renderer.setClearColor(lumeScene.backgroundColor ?? 'white', lumeScene.backgroundOpacity)
-		})
+			createEffect(() => {
+				renderer.localClippingEnabled = lumeScene.localClipping
+			})
 
-		createEffect(() => {
-			renderer.setClearAlpha(lumeScene.backgroundOpacity)
-			lumeScene.needsUpdate()
-		})
+			createEffect(() => {
+				renderer.setClearColor(lumeScene.backgroundColor ?? 'white', lumeScene.backgroundOpacity)
+			})
 
-		createEffect(() => {
-			let type = lumeScene.shadowMode
+			createEffect(() => {
+				renderer.setClearAlpha(lumeScene.backgroundOpacity)
+				lumeScene.needsUpdate()
+			})
 
-			// default
-			if (!type) {
-				renderer.shadowMap.type = THREE.PCFShadowMap
-				return
+			createEffect(() => {
+				let type = lumeScene.shadowMode
+
+				// default
+				if (!type) {
+					renderer.shadowMap.type = THREE.PCFShadowMap
+					return
+				}
+
+				// TODO shouldn't need a cast here. Bug on TypeScript: https://github.com/microsoft/TypeScript/issues/32054
+				type = type.toLowerCase() as ShadowMapTypeString
+
+				if (type == 'pcf') renderer.shadowMap.type = THREE.PCFShadowMap
+				else if (type == 'pcfsoft') renderer.shadowMap.type = THREE.PCFSoftShadowMap
+				else if (type == 'basic') renderer.shadowMap.type = THREE.BasicShadowMap
+			})
+
+			createEffect(() => {
+				const value = lumeScene.physicallyCorrectLights
+				// @ts-expect-error legacy, FIXME legacy mode will be removed and only physical lights will remain, we shall remove this feature.
+				renderer.physicallyCorrectLights = value // <0.150
+				// @ts-expect-error legacy, FIXME legacy mode will be removed and only physical lights will remain, we shall remove this feature.
+				renderer.useLegacyLights = !value // >=0.150
+			})
+
+			function requestFrame(fn: XRFrameRequestCallback) {
+				if (renderer.setAnimationLoop)
+					// >= r94
+					renderer.setAnimationLoop(fn)
+				else if (renderer.animate)
+					// < r94
+					renderer.animate(fn as () => void)
 			}
 
-			// TODO shouldn't need a cast here. Bug on TypeScript: https://github.com/microsoft/TypeScript/issues/32054
-			type = type.toLowerCase() as ShadowMapTypeString
+			function createDefaultVRButton(): HTMLElement {
+				return VRButton.createButton(renderer)
+			}
 
-			if (type == 'pcf') renderer.shadowMap.type = THREE.PCFShadowMap
-			else if (type == 'pcfsoft') renderer.shadowMap.type = THREE.PCFSoftShadowMap
-			else if (type == 'basic') renderer.shadowMap.type = THREE.BasicShadowMap
-		})
+			createEffect(() => {
+				const enable = lumeScene.vr
+				renderer.xr.enabled = enable
 
-		createEffect(() => {
-			const value = lumeScene.physicallyCorrectLights
-			// @ts-expect-error legacy, FIXME legacy mode will be removed and only physical lights will remain, we shall remove this feature.
-			renderer.physicallyCorrectLights = value // <0.150
-			// @ts-expect-error legacy, FIXME legacy mode will be removed and only physical lights will remain, we shall remove this feature.
-			renderer.useLegacyLights = !value // >=0.150
-		})
+				if (lumeScene.vr) {
+					Motor.setFrameRequester(fn => {
+						requestFrame(fn)
 
-		function requestFrame(fn: XRFrameRequestCallback) {
-			if (renderer.setAnimationLoop)
-				// >= r94
-				renderer.setAnimationLoop(fn)
-			else if (renderer.animate)
-				// < r94
-				renderer.animate(fn as () => void)
-		}
+						// Mock rAF return value for Motor.setFrameRequester.
+						return 0
+					})
 
-		function createDefaultVRButton(): HTMLElement {
-			return VRButton.createButton(renderer)
-		}
+					const button = createDefaultVRButton()
+					button.classList.add('vrButton')
 
-		createEffect(() => {
-			const enable = lumeScene.vr
-			renderer.xr.enabled = enable
+					lumeScene._miscLayer!.appendChild(button)
+				} else if ((lumeScene as any).xr) {
+					// TODO
+				} else {
+					// TODO else exit the WebXR headset, return back to normal requestAnimationFrame.
+				}
+			})
 
-			if (lumeScene.vr) {
-				Motor.setFrameRequester(fn => {
-					requestFrame(fn)
+			let bgVersion = 0
+			let bgIsEquirectangular = false
+			let pmremgen: THREE.PMREMGenerator | undefined
+			let hasBg = false
+			let hasEnv = false
+			let bgTexture: THREE.Texture | undefined
 
-					// Mock rAF return value for Motor.setFrameRequester.
-					return 0
+			function enableBackground(
+				scene: Scene,
+				isEquirectangular: boolean,
+				blurAmount: number,
+				cb: (tex: THREE.Texture | undefined) => void,
+			): void {
+				bgVersion += 1
+				bgIsEquirectangular = isEquirectangular
+
+				if (isEquirectangular) {
+					// Load the PMREM machinery only if needed.
+					if (!pmremgen) {
+						pmremgen = new THREE.PMREMGenerator(renderer)
+						pmremgen.compileCubemapShader()
+					}
+				}
+
+				hasBg = true
+				loadBackgroundTexture(scene, blurAmount, cb)
+			}
+			function disableBackground(): void {
+				bgVersion += 1
+
+				if (!hasBg && !hasEnv) {
+					pmremgen?.dispose()
+					pmremgen = undefined
+				}
+
+				bgTexture?.dispose()
+				hasBg = false
+			}
+			function loadBackgroundTexture(scene: Scene, blurAmount: number, cb: (texture: THREE.Texture) => void): void {
+				const version = bgVersion
+
+				new THREE.TextureLoader().load(scene.background ?? '', tex => {
+					// In case state changed during load, ignore a loaded texture that
+					// corresponds to previous state:
+					if (version !== bgVersion) return
+
+					if (blurAmount > 0) {
+						// state.bgTexture = blurTexture(state.renderer, tex, 5) // Faster, but quality is not as good, has a pixelated effect. Perhaps we should provide a Scene attribute to easily pick which blur to use.
+						bgTexture = triangleBlurTexture(renderer, tex, blurAmount, 2)
+						tex.dispose()
+						tex = bgTexture
+					}
+
+					if (bgIsEquirectangular) {
+						bgTexture = pmremgen!.fromEquirectangular(tex).texture
+						tex.dispose() // might not be needed, but just in case.
+					} else bgTexture = tex
+
+					cb(bgTexture)
+				})
+			}
+
+			createEffect(() => {
+				if (!lumeScene.webgl || !lumeScene.background) return
+
+				enableBackground(lumeScene, lumeScene.equirectangularBackground, lumeScene.backgroundBlur, texture => {
+					lumeScene.three.background = texture || null
+					lumeScene.needsUpdate()
 				})
 
-				const button = createDefaultVRButton()
-				button.classList.add('vrButton')
+				onCleanup(() => {
+					disableBackground()
+					lumeScene.needsUpdate()
+				})
+			})
 
-				lumeScene._miscLayer!.appendChild(button)
-			} else if ((lumeScene as any).xr) {
-				// TODO
-			} else {
-				// TODO else exit the WebXR headset, return back to normal requestAnimationFrame.
-			}
-		})
+			let envVersion = 0
+			let envTexture: THREE.Texture | undefined
 
-		let bgVersion = 0
-		let bgIsEquirectangular = false
-		let pmremgen: THREE.PMREMGenerator | undefined
-		let hasBg = false
-		let hasEnv = false
-		let bgTexture: THREE.Texture | undefined
+			function enableEnvironment(scene: Scene, cb: (tex: THREE.Texture) => void): void {
+				envVersion += 1
 
-		function enableBackground(
-			scene: Scene,
-			isEquirectangular: boolean,
-			blurAmount: number,
-			cb: (tex: THREE.Texture | undefined) => void,
-		): void {
-			bgVersion += 1
-			bgIsEquirectangular = isEquirectangular
-
-			if (isEquirectangular) {
 				// Load the PMREM machinery only if needed.
 				if (!pmremgen) {
 					pmremgen = new THREE.PMREMGenerator(renderer)
 					pmremgen.compileCubemapShader()
 				}
+
+				hasEnv = true
+				loadEnvironmentTexture(scene, cb)
 			}
+			function loadEnvironmentTexture(scene: Scene, cb: (texture: THREE.Texture) => void): void {
+				const version = envVersion
 
-			hasBg = true
-			loadBackgroundTexture(scene, blurAmount, cb)
-		}
-		function disableBackground(): void {
-			bgVersion += 1
+				new THREE.TextureLoader().load(scene.environment ?? '', tex => {
+					// In case state changed during load, ignore a loaded texture that
+					// corresponds to previous state:
+					if (version !== envVersion) return
 
-			if (!hasBg && !hasEnv) {
-				pmremgen?.dispose()
-				pmremgen = undefined
+					envTexture = pmremgen!.fromEquirectangular(tex).texture
+					tex.dispose() // might not be needed, but just in case.
+
+					cb(envTexture)
+				})
 			}
+			function disableEnvironment(): void {
+				envVersion += 1
 
-			bgTexture?.dispose()
-			hasBg = false
-		}
-		function loadBackgroundTexture(scene: Scene, blurAmount: number, cb: (texture: THREE.Texture) => void): void {
-			const version = bgVersion
-
-			new THREE.TextureLoader().load(scene.background ?? '', tex => {
-				// In case state changed during load, ignore a loaded texture that
-				// corresponds to previous state:
-				if (version !== bgVersion) return
-
-				if (blurAmount > 0) {
-					// state.bgTexture = blurTexture(state.renderer, tex, 5) // Faster, but quality is not as good, has a pixelated effect. Perhaps we should provide a Scene attribute to easily pick which blur to use.
-					bgTexture = triangleBlurTexture(renderer, tex, blurAmount, 2)
-					tex.dispose()
-					tex = bgTexture
+				if (!hasBg && !hasEnv) {
+					pmremgen?.dispose()
+					pmremgen = undefined
 				}
 
-				if (bgIsEquirectangular) {
-					bgTexture = pmremgen!.fromEquirectangular(tex).texture
-					tex.dispose() // might not be needed, but just in case.
-				} else bgTexture = tex
-
-				cb(bgTexture)
-			})
-		}
-
-		createEffect(() => {
-			if (!lumeScene.webgl || !lumeScene.background) return
-
-			enableBackground(lumeScene, lumeScene.equirectangularBackground, lumeScene.backgroundBlur, texture => {
-				lumeScene.three.background = texture || null
-				lumeScene.needsUpdate()
-			})
-
-			onCleanup(() => {
-				disableBackground()
-				lumeScene.needsUpdate()
-			})
-		})
-
-		let envVersion = 0
-		let envTexture: THREE.Texture | undefined
-
-		function enableEnvironment(scene: Scene, cb: (tex: THREE.Texture) => void): void {
-			envVersion += 1
-
-			// Load the PMREM machinery only if needed.
-			if (!pmremgen) {
-				pmremgen = new THREE.PMREMGenerator(renderer)
-				pmremgen.compileCubemapShader()
+				envTexture?.dispose()
+				hasEnv = false
 			}
 
-			hasEnv = true
-			loadEnvironmentTexture(scene, cb)
-		}
-		function loadEnvironmentTexture(scene: Scene, cb: (texture: THREE.Texture) => void): void {
-			const version = envVersion
+			createEffect(() => {
+				if (!lumeScene.webgl || !lumeScene.environment) return
 
-			new THREE.TextureLoader().load(scene.environment ?? '', tex => {
-				// In case state changed during load, ignore a loaded texture that
-				// corresponds to previous state:
-				if (version !== envVersion) return
+				if (lumeScene.environment.match(/\.(jpg|jpeg|png)$/)) {
+					enableEnvironment(lumeScene, texture => {
+						lumeScene.three.environment = texture
+						lumeScene.needsUpdate()
 
-				envTexture = pmremgen!.fromEquirectangular(tex).texture
-				tex.dispose() // might not be needed, but just in case.
+						// TODO emit env load event.
+					})
 
-				cb(envTexture)
+					onCleanup(() => {
+						disableEnvironment()
+						lumeScene.needsUpdate()
+					})
+				} else {
+					console.warn(
+						`<${lumeScene.tagName.toLowerCase()}> environment attribute ignored, the given image type is not currently supported.`,
+					)
+				}
 			})
+
+			createEffect(() => {
+				const {x, y} = lumeScene.calculatedSize
+				Motor.once(() => renderer.setSize(x, y))
+			})
+
+			setTimeout(() => {
+				// Remove the old canvas
+				const oldRenderer = lumeScene.glRenderer!
+				console.log('remove old canvas', oldRenderer.domElement)
+				oldRenderer.domElement.remove()
+				oldRenderer.dispose()
+
+				// Append the new canvas
+				console.log('add new canvas', renderer.domElement)
+				lumeScene._glLayer!.appendChild(renderer.domElement)
+
+				this.#glRenderer = renderer
+			})
+
 		}
-		function disableEnvironment(): void {
-			envVersion += 1
-
-			if (!hasBg && !hasEnv) {
-				pmremgen?.dispose()
-				pmremgen = undefined
-			}
-
-			envTexture?.dispose()
-			hasEnv = false
-		}
-
-		createEffect(() => {
-			if (!lumeScene.webgl || !lumeScene.environment) return
-
-			if (lumeScene.environment.match(/\.(jpg|jpeg|png)$/)) {
-				enableEnvironment(lumeScene, texture => {
-					lumeScene.three.environment = texture
-					lumeScene.needsUpdate()
-
-					// TODO emit env load event.
-				})
-
-				onCleanup(() => {
-					disableEnvironment()
-					lumeScene.needsUpdate()
-				})
-			} else {
-				console.warn(
-					`<${lumeScene.tagName.toLowerCase()}> environment attribute ignored, the given image type is not currently supported.`,
-				)
-			}
-		})
-
-		createEffect(() => {
-			const {x, y} = lumeScene.calculatedSize
-			Motor.once(() => renderer.setSize(x, y))
-		})
-
-		setTimeout(() => {
-			// Remove the old canvas
-			const oldRenderer = lumeScene.glRenderer!
-			console.log('remove old canvas', oldRenderer.domElement)
-			oldRenderer.domElement.remove()
-			oldRenderer.dispose()
-
-			// Append the new canvas
-			console.log('add new canvas', renderer.domElement)
-			lumeScene._glLayer!.appendChild(renderer.domElement)
-
-			this.#glRenderer = renderer
-		})
 
 		// }}
 	}
@@ -1015,8 +1027,6 @@ export class DrippyScene extends Element {
 
 			// Store original drawScene
 			const originalDrawScene = lumeScene.drawScene.bind(lumeScene)
-
-			const postprocessingEnabled = true
 
 			// Override the render loop to use composer
 			lumeScene.drawScene = () => {
@@ -1162,7 +1172,7 @@ export class DrippyScene extends Element {
 			}
 
 			createEffect(() => {
-				if (!this.#stencilEnabled) return
+				if (!this.#stencilEnabled && !stencilEnabled) return
 
 				// Transparency breaks render order so for now disable it for garment types we
 				// want stencil on.
@@ -1345,7 +1355,7 @@ export class DrippyScene extends Element {
 							<input
 								id="stencilEnabled"
 								type="checkbox"
-								checked=${() => this.#stencilEnabled}
+								checked=${() => this.#stencilEnabled && stencilEnabled}
 								oninput=${() => (this.#stencilEnabled = !this.#stencilEnabled)}
 							/>
 						</div>
