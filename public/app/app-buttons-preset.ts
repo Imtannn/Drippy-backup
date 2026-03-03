@@ -251,11 +251,14 @@ export class AppButtonsPreset extends Element {
 									${() => store.view === 'template' && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
 									${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
 								</div>
-								${/*disabled until we add undo/redo/reload*/false && html`<control-button-group>
-									<undo-button group></undo-button>
-									<redo-button group></redo-button>
-									<reload-button group></reload-button>
-								</control-button-group>`}
+								${
+									/*disabled until we add undo/redo/reload*/ false &&
+									html`<control-button-group>
+										<undo-button group></undo-button>
+										<redo-button group></redo-button>
+										<reload-button group></reload-button>
+									</control-button-group>`
+								}
 								${() =>
 									config.tools &&
 									html`
@@ -279,11 +282,14 @@ export class AppButtonsPreset extends Element {
 									${() => store.view === 'template' && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
 									${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
 								</div>
-								${/*disabled until we add undo/redo*/false && html`<control-button-group>
-									<undo-button group></undo-button>
-									<redo-button group></redo-button>
-									<reload-button group></reload-button>
-								</control-button-group>`}
+								${
+									/*disabled until we add undo/redo*/ false &&
+									html`<control-button-group>
+										<undo-button group></undo-button>
+										<redo-button group></redo-button>
+										<reload-button group></reload-button>
+									</control-button-group>`
+								}
 								${() =>
 									config.tools &&
 									html`

@@ -694,12 +694,10 @@ export class DrippyScene extends Element {
 		// {{
 
 		if (!stencilEnabled) {
-
-			if (!lumeScene.glRenderer)  return null
+			if (!lumeScene.glRenderer) return null
 			// lumeScene.glRenderer is not reactive, but will be available after a timeout.
 			// FIXME make lume's renderer glRenderer a signal so we don't need a timeout hack in this consumer code.
-			setTimeout(() => this.#glRenderer = lumeScene.glRenderer!)
-
+			setTimeout(() => (this.#glRenderer = lumeScene.glRenderer!))
 		}
 
 		// }}
@@ -708,9 +706,7 @@ export class DrippyScene extends Element {
 		// TODO: Expose the renderer internals from Lume so we don't need to
 		// replicate.
 		// {{
-
 		else {
-
 			const renderer = new THREE.WebGLRenderer({
 				alpha: true,
 				premultipliedAlpha: true,
@@ -957,7 +953,6 @@ export class DrippyScene extends Element {
 
 				this.#glRenderer = renderer
 			})
-
 		}
 
 		// }}
