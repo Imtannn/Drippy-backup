@@ -1123,6 +1123,10 @@ export class TemplateView extends Element {
 			width: 100%;
 			height: 100%;
 			flex: 1;
+
+			&:hover {
+				transform: scale(1.02);
+			}
 		}
 
 		@media (min-width: 768px) {

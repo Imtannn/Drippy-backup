@@ -192,10 +192,7 @@ export class ItemCard extends Element {
 			cursor: pointer;
 			position: relative;
 			transition: transform 0.2s ease;
-		}
-
-		.item-card:hover {
-			transform: scale(1.02);
+			height: 100%;
 		}
 
 		@media (max-width: 768px) {
@@ -211,6 +208,8 @@ export class ItemCard extends Element {
 			justify-content: center;
 			position: relative;
 			width: 100%;
+			height: 100%;
+			box-sizing: border-box;
 			aspect-ratio: var(--aspect-ratio);
 			overflow: visible;
 			border-radius: 10px;
