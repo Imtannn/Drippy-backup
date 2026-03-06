@@ -273,8 +273,6 @@ export class FabricSelection extends Element {
 			overflow-y: hidden;
 			scroll-snap-type: x proximity;
 			-webkit-overflow-scrolling: touch;
-			padding-bottom: var(--uiSpacingSmall);
-			padding-top: var(--uiSpacingSmall);
 		}
 		:host([is-remix]) .items-grid::-webkit-scrollbar {
 			display: none;

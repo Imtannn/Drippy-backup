@@ -484,7 +484,6 @@ export class RemixOverlay extends Element {
 
 		tabs-content {
 			padding: var(--uiSpacing);
-			padding-bottom: var(--uiSpacingXxl);
 			padding-top: 0;
 			margin-top: -10px;
 		}
@@ -496,27 +495,34 @@ export class RemixOverlay extends Element {
 		/* Desktop: fixed at bottom, slide up when open */
 		.remix-overlay-desktop {
 			position: fixed;
+			width: 100%;
+
+			/* hide beyond the bottom edge */
 			bottom: 0;
-			left: 0;
-			right: 0;
+			transform: translateY(100%);
+
+			/* It will slide in on top of other content. */
 			z-index: 2001;
+
+			/* Keep the underlying panel visible by at least a certain amount when there is not enough vertical space to fit the whole bottom sheet. */
+			max-height: calc(100% - var(--uiSpacingXxl));
+
 			background: var(--uiColorPrimaryWhite);
 			border-top-left-radius: var(--borderRadiusXl);
 			border-top-right-radius: var(--borderRadiusXl);
-			height: 25vh;
-			max-height: 25vh;
-			transform: translateY(100%);
+			/* FIXME this transition currently doesn't work because height is not explicit, but based on content (translateY(100%) depends on height). We can fix it by translating a 100%x100% outer container instead. */
 			transition: transform 0.3s ease-out;
 			overflow-y: auto;
 			box-shadow:
 				0 -4px 6px -1px rgba(0, 0, 0, 0.1),
 				0 -2px 4px -1px rgba(0, 0, 0, 0.06);
 			pointer-events: none;
-		}
 
-		.remix-overlay-desktop.is-open {
-			transform: translateY(0);
-			pointer-events: auto;
+			/* slide up into view */
+			&.is-open {
+				transform: translateY(0);
+				pointer-events: auto;
+			}
 		}
 
 		@media (max-width: 768px) {
