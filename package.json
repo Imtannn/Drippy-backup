@@ -27,6 +27,7 @@
 		"typecheck:watch": "lume typecheckWatch",
 		"prettier": "prettier --write .",
 		"prettier:check": "prettier --check .",
+		"prettier:watch": "onchange \"**/*.ts\" --exclude-path .prettierignore -- prettier --write {{changed}}",
 		"lint": "eslint",
 		"test": "echo 'TODO write tests!'",
 		"fetch-combined-assets": "chmod +x scripts/run-combined-assets.sh && ./scripts/run-combined-assets.sh"
