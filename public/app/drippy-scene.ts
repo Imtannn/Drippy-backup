@@ -67,7 +67,7 @@ import {
 	whenModelLoaded,
 } from '../utils.js'
 import {AvatarSkeleton} from './avatar-skeleton.js'
-import {store} from './store.js'
+import {isAdmin, store} from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
 import {textureManager} from './TextureManager.js'
 import {blocks} from '../consts/blocks.js'
@@ -676,12 +676,21 @@ export class DrippyScene extends Element {
 		this.animSrc = new URL(anim.src, import.meta.url).href
 	}
 
-	@signal accessor #overallEnvIntensity: number = 1
-	@signal accessor #bloomStrength: number = 0.18
-	@signal accessor #bloomRadius: number = 0
-	@signal accessor #bloomThreshold: number = 0.8
+	@signal accessor #overallEnvIntensity = 1
+	@signal accessor #spotLightIntensity = 7
+	/** in degrees. */
+	@signal accessor #spotLightHorizontalRotation = 72
+	/** in degrees. 90 is directly overhead. */
+	@signal accessor #spotLightVerticalRotation = 72
+	@signal accessor #spotLightDistance = 3.2
+	@signal accessor #spotLightPenumbra = 0.15
+	/** in degrees */
+	@signal accessor #spotLightAngle = 40
+	@signal accessor #bloomStrength = 0.18
+	@signal accessor #bloomRadius = 0
+	@signal accessor #bloomThreshold = 0.8
 
-	@signal accessor #stencilEnabled: boolean = true
+	@signal accessor #stencilEnabled = true
 
 	/** A reference to the renderer used for the Lume scene. It will be null until the Lume scene has loaded and instantiated it. */
 	@signal accessor #glRenderer: THREE.WebGLRenderer | null = null
@@ -1272,8 +1281,6 @@ export class DrippyScene extends Element {
 		const shadowBias = -0.0004
 		const shadowNormalBias = /*0.005*/ 0
 		const shadowMapSize = 2048
-		const penumbra = 0.25
-		const spotAngle = 30
 		const shadowRadius = 6
 		const shadowSamples = 8
 
@@ -1300,6 +1307,92 @@ export class DrippyScene extends Element {
 								step="0.01"
 								prop:value=${() => this.#overallEnvIntensity}
 								oninput=${(e: Event) => (this.#overallEnvIntensity = Number((e.target as HTMLInputElement).value) || 0)}
+							/>
+						</div>
+
+						<div>
+							<p>Spotlight intensity (${() => this.#spotLightIntensity})</p>
+
+							<input
+								id="spotLightIntensity"
+								type="range"
+								min="0"
+								max="30"
+								step="0.01"
+								prop:value=${() => this.#spotLightIntensity}
+								oninput=${(e: Event) => (this.#spotLightIntensity = Number((e.target as HTMLInputElement).value) || 0)}
+							/>
+						</div>
+
+						<div>
+							<p>Spotlight horizontal rotation (${() => this.#spotLightHorizontalRotation})</p>
+
+							<input
+								id="spotLightHorizontalRotation"
+								type="range"
+								min="0"
+								max="360"
+								step="0.01"
+								prop:value=${() => this.#spotLightHorizontalRotation}
+								oninput=${(e: Event) =>
+									(this.#spotLightHorizontalRotation = Number((e.target as HTMLInputElement).value) || 0)}
+							/>
+						</div>
+
+						<div>
+							<p>Spotlight vertical rotation (${() => this.#spotLightVerticalRotation})</p>
+
+							<input
+								id="spotLightVerticalRotation"
+								type="range"
+								min="0"
+								max="${'90' /*90 is straight up above, the light will look down*/}"
+								step="0.01"
+								prop:value=${() => this.#spotLightVerticalRotation}
+								oninput=${(e: Event) =>
+									(this.#spotLightVerticalRotation = Number((e.target as HTMLInputElement).value) || 0)}
+							/>
+						</div>
+
+						<div>
+							<p>Spotlight distance (${() => this.#spotLightDistance})</p>
+
+							<input
+								id="spotLightDistance"
+								type="range"
+								min="0"
+								max="6"
+								step="0.01"
+								prop:value=${() => this.#spotLightDistance}
+								oninput=${(e: Event) => (this.#spotLightDistance = Number((e.target as HTMLInputElement).value) || 0)}
+							/>
+						</div>
+
+						<div>
+							<p>Spotlight penumbra (${() => this.#spotLightPenumbra})</p>
+
+							<input
+								id="spotLightPenumbra"
+								type="range"
+								min="0"
+								max="1"
+								step="0.01"
+								prop:value=${() => this.#spotLightPenumbra}
+								oninput=${(e: Event) => (this.#spotLightPenumbra = Number((e.target as HTMLInputElement).value) || 0)}
+							/>
+						</div>
+
+						<div>
+							<p>Spotlight angle (${() => this.#spotLightAngle})</p>
+
+							<input
+								id="spotLightAngle"
+								type="range"
+								min="0"
+								max="180"
+								step="0.01"
+								prop:value=${() => this.#spotLightAngle}
+								oninput=${(e: Event) => (this.#spotLightAngle = Number((e.target as HTMLInputElement).value) || 0)}
 							/>
 						</div>
 
@@ -1359,7 +1452,9 @@ export class DrippyScene extends Element {
 							#debugUi {
 								position: absolute;
 								top: 1rem;
-								left: 50%;
+								bottom: 1rem;
+								overflow-y: auto;
+								right: calc(var(--bottom-sheet-panel-width) + 150px);
 								z-index: 1000;
 								background: transparent;
 								border-radius: 8px;
@@ -1367,7 +1462,7 @@ export class DrippyScene extends Element {
 								display: flex;
 								flex-direction: column;
 								gap: 20px;
-								width: 150px;
+								width: 250px;
 								backdrop-filter: blur(4px);
 
 								p {
@@ -1388,7 +1483,7 @@ export class DrippyScene extends Element {
 									appearance: none;
 								}
 
-								div:has(input[type='checkbox']) {
+								& div:has(input[type='checkbox']) {
 									display: flex;
 									justify-content: center;
 									flex-direction: column;
@@ -1449,17 +1544,23 @@ export class DrippyScene extends Element {
 							position=${() =>
 								// TODO replace hard-coded scene-specific values
 								// with values from the data models.
-								this.isDrippyShop
-									? (_x: number, _y: number, _z: number, t: number) => [
-											2.4 * Math.sin(t * 0.0001),
-											-4.3,
-											2.4 * Math.cos(t * 0.0001),
-										]
-									: '2 -4.3 2'}
+								(() => {
+									const radius = this.#spotLightDistance
+									const horizontalRadians = (this.#spotLightHorizontalRotation / 180) * Math.PI
+									const verticalRadians = (this.#spotLightVerticalRotation / 180) * Math.PI
+									// Vertical angle tilts from orbit (0deg) to directly above target (90deg).
+									const horizontalRadius = radius * Math.cos(verticalRadians)
+
+									return [
+										horizontalRadius * Math.sin(horizontalRadians),
+										-radius * Math.sin(verticalRadians),
+										horizontalRadius * Math.cos(horizontalRadians),
+									]
+								})()}
 							intensity=${() =>
 								// TODO replace hard-coded scene-specific values
 								// with values from the data models.
-								this.isDrippyShop ? 20 : 3}
+								this.isDrippyShop ? this.#spotLightIntensity : this.#spotLightIntensity}
 							ref=${(el: SpotLight) => {
 								el.three.shadow.focus = 1
 								el.three.shadow.blurSamples = shadowSamples
@@ -1468,15 +1569,23 @@ export class DrippyScene extends Element {
 							shadow-map-height="${shadowMapSize}"
 							shadow-bias="${shadowBias}"
 							shadow-normal-bias="${shadowNormalBias}"
-							penumbra="${penumbra}"
-							angle="${spotAngle}"
+							penumbra="${() => this.#spotLightPenumbra}"
+							angle="${() => this.#spotLightAngle}"
 							shadow-radius="${shadowRadius}"
 						>
 
-							<!-- <lume-sphere size="1 1 1" color="deeppink" has="basic-material"
-								mount-point="0.5 0.5 0.5"
-								cast-shadow="false"
-							></lume-sphere> -->
+						${() =>
+							isAdmin() && store.showAdminContent
+								? html`
+										<lume-sphere
+											size="0.05 0.05 0.05"
+											color="white"
+											has="basic-material"
+											mount-point="0.5 0.5 0.5"
+											cast-shadow="false"
+										></lume-sphere>
+									`
+								: null}
 
 						</lume-spot-light>
 

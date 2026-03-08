@@ -1,4 +1,4 @@
-import {element, eventAttribute, html, type ElementAttributes} from 'lume'
+import {css, element, eventAttribute, html, type ElementAttributes} from 'lume'
 import {IconButton, type IconButtonAttributes} from './icon-button.js'
 import {store} from '../app/store.js'
 
@@ -11,7 +11,7 @@ export class AdminButton extends IconButton {
 	@eventAttribute override onclick: EventListener | null = () => (store.showAdminContent = !store.showAdminContent)
 
 	override defaultContent() {
-		return html` <span>🔒</span> `
+		return html` <span>🐞</span> `
 	}
 
 	// @ts-expect-error this.template is already defined in the parent class
@@ -19,6 +19,24 @@ export class AdminButton extends IconButton {
 
 	override template = () => html`
 		<div style="display: contents">${() => (store.isAdmin ? this.#originalTemplate.call(this) : [])}</div>
+	`
+
+	override css: string = css /*css*/ `
+		${(this as any) /*super css already exists*/.css}
+
+		span {
+			text-shadow:
+				0px 0px 1px white,
+				0px 0px 1px white,
+				0px 0px 1px white,
+				0px 0px 1px white,
+				0px 0px 1px white,
+				0px 0px 1px white,
+				0px 0px 1px white,
+				0px 0px 1px white,
+				0px 0px 1px white,
+				0px 0px 1px white;
+		}
 	`
 }
 
