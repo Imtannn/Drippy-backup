@@ -1,5 +1,4 @@
 import '../elements/admin-button.js'
-import '../elements/animation-select.js'
 import '../elements/back-button.js'
 import '../elements/control-button-group.js'
 import '../elements/cube-button.js'
@@ -39,7 +38,6 @@ type PresetConfig = {
 	right?: {
 		logo?: boolean
 		tools?: boolean
-		animation?: boolean
 		all?: {
 			share?: boolean
 			buy?: boolean
@@ -154,7 +152,6 @@ export class AppButtonsPreset extends Element {
 				right: {
 					logo: true,
 					tools: true,
-					animation: this.showAnimation,
 					mobile: {buy: true},
 				},
 			},
@@ -266,7 +263,6 @@ export class AppButtonsPreset extends Element {
 										<cube-button disabled=${() => this.disableCubeButton}></cube-button>
 									`}
 								<admin-button></admin-button>
-								${() => config.animation && html`<animation-select></animation-select>`}
 							</app-buttons-group>
 						</show-on-device>
 					`}
@@ -297,7 +293,6 @@ export class AppButtonsPreset extends Element {
 										<cube-button disabled=${() => this.disableCubeButton}></cube-button>
 									`}
 								<admin-button></admin-button>
-								${() => config.animation && html`<animation-select></animation-select>`}
 							</app-buttons-group>
 						</div>
 					</show-on-device>

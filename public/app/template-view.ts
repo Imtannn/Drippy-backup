@@ -235,14 +235,12 @@ export class TemplateView extends Element {
 
 	#onPoseClick = (e: CustomEvent) => {
 		const poseValue = e.detail.itemValue.value
-		store.selectedAnimation = poseValue as 'none' | 'walk' | 'dance' | 'idle'
+		store.selectedAnimation = poseValue
 	}
 
 	#onAnimationClick = (e: CustomEvent) => {
-		console.log('onAnimationClick', e.detail.itemValue)
-		const animation = e.detail.itemValue as (typeof animations.female)[number]
-		store.selectedAnimation = animation.type
-		store.selectedAnimationValue = animation.value
+		const animation = e.detail.itemValue
+		store.selectedAnimation = animation.value
 	}
 
 	#getCurrentPosesData = () => {

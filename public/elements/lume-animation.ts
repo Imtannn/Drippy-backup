@@ -106,7 +106,6 @@ export class LumeAnimation extends Element {
 						if (cleaned) return
 						hasLoadedExternalAnimation = true
 						setClips(loadedModel.animations)
-						// console.log('Loaded external animations:', clips().map(c => c.name))
 					})
 
 					onCleanup(() => (cleaned = true))

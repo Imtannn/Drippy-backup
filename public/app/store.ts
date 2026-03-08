@@ -145,8 +145,7 @@ class Store {
 	// FIXME initialize other props from URL params as well
 
 	showAnimationSelect = false
-	selectedAnimation: 'none' | 'walk' | 'dance' | 'idle' = 'idle'
-	selectedAnimationValue: string | null = null
+	selectedAnimation: string | null = 'idle01'
 	selectedTemplates: TemplateMap = {}
 	selectedGarments: SelectedGarments = {}
 	customMeasurement = null as CustomMeasurement | null
@@ -687,7 +686,6 @@ class Store {
 			templateHelpers.getOverridingCategories(templateCategory).forEach(c => conflictingCategories.add(c))
 			templateHelpers.getCategoriesThatOverride(templateCategory).forEach(c => conflictingCategories.add(c))
 			conflictingCategories.add(templateCategory)
-			console.log('conflictingCategories', conflictingCategories)
 		}
 
 		untrack(() => {

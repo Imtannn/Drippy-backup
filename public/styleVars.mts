@@ -80,7 +80,7 @@ const styleVars = {
 	transitionCurveExpo: 'cubic-bezier(0.0, 1.0, 0.0, 1.0)',
 	transitionCurveExpoInOut: 'cubic-bezier(0.8, 0.0, 0.2, 1.0)',
 	transitionTimeFast: '0.3s',
-	transitionTimeSlow: '1.0s',
+	transitionTimeSlow: '0.8s',
 	transitionTimeDefault: 'var(--transitionTimeSlow)',
 	transitionDefaultTimeCurve: 'var(--transitionTimeDefault) var(--transitionCurveExpoInOut)',
 	// TODO delete old transition vars below in favor of new ones above

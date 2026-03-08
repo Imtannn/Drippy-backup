@@ -627,34 +627,40 @@ export function enableFrontsideOnModelLoad(el: GltfModel) {
 	whenModelLoaded(el, () => enableFrontsideRendering(el))
 }
 
-export function setEnvMap(el: Element3D, env: string, intensity = () => 1) {
-	let cleaned = false
+export function setEnvMap(el: Element3D, env: Accessor<string | THREE.Texture | null>, intensity = () => 1) {
+	createEffect(() => {
+		let cleaned = false
+		const en = env()
 
-	if (!env) return
+		if (!en) return
 
-	for (const material of materialsInTree(el.three)) {
-		const mat = material as THREE.MeshPhysicalMaterial
+		for (const material of materialsInTree(el.three)) {
+			const mat = material as THREE.MeshPhysicalMaterial
 
-		mat.envMap = new THREE.TextureLoader().load(env, () => {
-			if (cleaned) return
+			mat.envMap =
+				typeof en === 'string'
+					? new THREE.TextureLoader().load(en, () => {
+							if (cleaned) return
+							mat.needsUpdate = true
+							el.needsUpdate()
+						})
+					: en
+			mat.envMap.mapping = THREE.EquirectangularReflectionMapping
+			mat.envMap.colorSpace = THREE.SRGBColorSpace
+			mat.envMapIntensity = 1
 			mat.needsUpdate = true
-			el.needsUpdate()
-		})
-		mat.envMap.mapping = THREE.EquirectangularReflectionMapping
-		mat.envMap.colorSpace = THREE.SRGBColorSpace
-		mat.envMapIntensity = 1
-		mat.needsUpdate = true
-		createEffect(() => {
-			mat.envMapIntensity = intensity()
-		})
-	}
+			createEffect(() => {
+				mat.envMapIntensity = intensity()
+			})
+		}
 
-	el.needsUpdate()
+		el.needsUpdate()
 
-	onCleanup(() => (cleaned = true))
+		onCleanup(() => (cleaned = true))
+	})
 }
 
-export function setEnvMapOnModelLoad(el: GltfModel, env: string, intensity = () => 1) {
+export function setEnvMapOnModelLoad(el: GltfModel, env: Accessor<string | THREE.Texture | null>, intensity = () => 1) {
 	whenModelLoaded(el, () => setEnvMap(el, env, intensity))
 }
 

@@ -41,7 +41,7 @@ export class PoseSelection extends Element {
 	override connectedCallback() {
 		super.connectedCallback()
 
-		if (!store.selectedAnimation) store.selectedAnimation = poses.poses[0].value as 'none' | 'walk' | 'dance'
+		if (!store.selectedAnimation) store.selectedAnimation = poses.poses[0].value
 
 		this.createEffect(() => {
 			this.selectedTab = 'Poses'
@@ -49,10 +49,8 @@ export class PoseSelection extends Element {
 	}
 
 	#onItemClick = (e: CustomEvent) => {
-		const poseValue = e.detail.itemValue.value as 'none' | 'walk' | 'dance'
-		console.log('poseValue', poseValue)
+		const poseValue = e.detail.itemValue.value
 
-		// Trigger the animation effect directly (same as AnimationSelect)
 		store.selectedAnimation = poseValue
 	}
 

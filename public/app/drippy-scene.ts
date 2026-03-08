@@ -27,7 +27,7 @@ import {
 	type ShadowMapTypeString,
 } from 'lume'
 import type {Accessor} from 'solid-js'
-import {createMemo, untrack} from 'solid-js'
+import {batch, createMemo, untrack} from 'solid-js'
 import * as THREE from 'three'
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
@@ -39,7 +39,6 @@ import {avatars} from '../consts/avatars.js'
 
 import {backgroundScenes} from '../consts/scenes.js'
 import {animations} from '../consts/poses.js'
-import {appAnims} from '../elements/animation-select.js'
 import {pathname} from '../routes.js'
 import type {Block, BlockCategory} from '../types/block.js'
 import type {TemplateCategory} from '../types/template.js'
@@ -129,7 +128,8 @@ export class DrippyScene extends Element {
 
 	// When `false`, disable animations and rigging.
 	@memo private get animsEnabled() {
-		return store.selectedAnimation !== 'none'
+		// return !!store.selectedAnimation
+		return true
 	}
 
 	@signal private animName: string | null = null
@@ -322,7 +322,7 @@ export class DrippyScene extends Element {
 				if (isMesh(obj)) {
 					function copyMapsToPhysical(mat: THREE.Material) {
 						if (mat instanceof THREE.MeshStandardMaterial) return mat
-						console.log('found non-PBR material')
+						console.warn('found non-PBR material')
 						const newMat = new THREE.MeshPhysicalMaterial()
 						for (const key of Object.keys(mat)) {
 							// @ts-expect-error too dymamic for TS, but this is valid
@@ -523,9 +523,15 @@ export class DrippyScene extends Element {
 		return this.garmentModelLoads.every(loaded => loaded())
 	}
 
+	// #fabricsLoading = Symbol()
+
 	// Re-apply materials whenever the selected fabrics change or models mount
 	@effect fabricsLoadingEffect() {
 		if (!this.garmentModelsInSyncAndLoaded) return
+
+		// TODO track fabrics loading for the scene loading screen.
+		// store.addIsDrippySceneLoading(this.#fabricsLoading)
+		// onCleanup(() => store.removeIsDrippySceneLoading(this.#fabricsLoading))
 
 		// Process each model using its data-block-id to find the correct fabric
 		for (const [blockIndex, renderBlock] of this.renderBlocks.entries()) {
@@ -610,6 +616,8 @@ export class DrippyScene extends Element {
 			createEffect(() => {
 				if (!fabricsLoaded()) return
 
+				// store.removeIsDrippySceneLoading(this.#fabricsLoading)
+
 				// Create a map for mesh to meshes key
 				// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
 				const meshToFabricMeshesMap = new Map<string, string>()
@@ -656,24 +664,38 @@ export class DrippyScene extends Element {
 		}
 	}
 
+	// #animationLoading = Symbol()
+	#firstAnimLoaded = false
+
 	@effect animationEffect() {
-		if (store.selectedAnimationValue) {
-			const gender = this.avatarGender
-			const anims = gender === 'male' ? animations.male : animations.female
-			const anim = anims.find(a => a.value === store.selectedAnimationValue)
-			if (anim && anim.src) {
-				this.animName = anim.clipName
-				this.animSrc = new URL(anim.src, import.meta.url).href
-				return
-			}
+		if (!store.selectedAnimation) return
+
+		const gender = this.avatarGender
+		const anims = gender === 'male' ? animations.male : animations.female
+		const anim = anims.find(a => a.value === store.selectedAnimation)
+
+		if (!anim?.src) return
+
+		// Track only the first animation load, so we don't pop up the loading
+		// screen each time.
+		if (!this.#firstAnimLoaded) {
+			this.#firstAnimLoaded = true
+			// TODO animation load tracking
+			// store.addIsDrippySceneLoading(this.#animationLoading)
+			// onCleanup(() => store.removeIsDrippySceneLoading(this.#animationLoading))
 		}
 
-		// Fallback to appAnims for backward compatibility (dropdown selector)
-		const anim = appAnims.find(val => val.id === store.selectedAnimation)
-		if (!anim || !anim.src) return
-
-		this.animName = anim.name
+		this.animName = anim.clipName
 		this.animSrc = new URL(anim.src, import.meta.url).href
+
+		// FIXME small hack: timeout so the lume-animation has time to
+		// process the asset. Make lume-animation provide a loading
+		// signal or event instead.
+		let to = 0
+		onCleanup(() => clearTimeout(to))
+		fetch(this.animSrc).then(() => {
+			// to = window.setTimeout(() => store.removeIsDrippySceneLoading(this.#animationLoading), 2000)
+		})
 	}
 
 	@signal accessor #overallEnvIntensity = 1
@@ -1222,9 +1244,33 @@ export class DrippyScene extends Element {
 		}
 	}
 
+	@signal accessor #envTexture: THREE.Texture | null = null
+	@signal accessor #envTexturePromise = new THREE.TextureLoader().loadAsync(env)
+	#envTextureLoading = Symbol()
+
+	@effect setEnvTexture() {
+		store.addIsDrippySceneLoading(this.#envTextureLoading)
+		onCleanup(() => store.removeIsDrippySceneLoading(this.#envTextureLoading))
+
+		let cleaned = false
+		onCleanup(() => (cleaned = true))
+
+		this.#envTexturePromise.then(tex => {
+			if (cleaned) return
+			batch(() => {
+				store.removeIsDrippySceneLoading(this.#envTextureLoading)
+				this.#envTexture = tex
+			})
+		})
+	}
+
 	#handleBlockModel(el: GltfModel, block: () => RenderBlock) {
 		enableShadowOnModelLoad(el)
-		setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
+		setEnvMapOnModelLoad(
+			el,
+			() => this.#envTexture,
+			() => this.#overallEnvIntensity * 1.8,
+		)
 		disableFrustumCulledOnLoad(el)
 
 		createEffect(() => {
@@ -1620,7 +1666,11 @@ export class DrippyScene extends Element {
 								this.avatarModel = el
 								this.avatarSkeleton.setAvatar(el)
 								enableShadowOnModelLoad(el)
-								setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
+								setEnvMapOnModelLoad(
+									el,
+									() => this.#envTexture,
+									() => this.#overallEnvIntensity * 1.8,
+								)
 								showSkeletonHelper(el, () => store.isAdmin && store.showAdminContent)
 								disableFrustumCulledOnLoad(el)
 							}}
@@ -1720,7 +1770,11 @@ export class DrippyScene extends Element {
 							<lume-gltf-model
 								ref=${(el: GltfModel) => (
 									enableShadowOnModelLoad(el),
-									setEnvMapOnModelLoad(el, env, () => this.#overallEnvIntensity * 1.8)
+									setEnvMapOnModelLoad(
+										el,
+										() => this.#envTexture,
+										() => this.#overallEnvIntensity * 1.8,
+									)
 								)}
 								attr:src=${() => item()}
 								class="extraObjects"
