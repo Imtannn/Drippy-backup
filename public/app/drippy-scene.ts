@@ -136,7 +136,7 @@ export class DrippyScene extends Element {
 	@signal private animSrc: string | null = null
 
 	@signal private loadingProgress = 0
-	@signal private isLoading = false
+	@signal private isLoading = true
 
 	// Camera rig drag state
 	@signal private cameraY = -1
@@ -372,12 +372,10 @@ export class DrippyScene extends Element {
 		store.trackModelLoading(sceneId, backgroundModel)
 	}
 
-	@signal private documentElementMutations = (() => {
-		return createMutationsSignal(document.documentElement, {
-			attributes: true,
-			attributeFilter: ['class'],
-		})
-	})()
+	@signal private documentElementMutations = createMutationsSignal(document.documentElement, {
+		attributes: true,
+		attributeFilter: ['class'],
+	})
 
 	// Watch for panel collapse state changes
 	@effect panelCollapseEffect() {
@@ -386,10 +384,12 @@ export class DrippyScene extends Element {
 		const isPanelCollapsed = document.documentElement.classList.contains('panel-collapsed')
 
 		if (store.view === 'preview') {
-			this.style.setProperty('--sceneTranslateX', 'translateX(0)')
-			this.style.setProperty('--sceneTranslateY', 'translateY(0)')
+			// Ensure in preview mode when no UI is shown, the scene is centered
+			// full window.
+			this.style.setProperty('--sceneTranslateX', '0')
+			this.style.setProperty('--sceneTranslateY', '0')
 		} else {
-			this.style.setProperty('--sceneTranslateY', 'translateY(-100px)')
+			this.style.setProperty('--sceneTranslateY', '-100px')
 
 			const shouldShiftLeft =
 				store.view === 'order' ||
@@ -400,10 +400,9 @@ export class DrippyScene extends Element {
 				store.view === 'share' ||
 				store.view === 'template'
 
-			if (isPanelCollapsed) this.style.setProperty('--sceneTranslateX', 'translateX(0)')
-			else if (shouldShiftLeft)
-				this.style.setProperty('--sceneTranslateX', 'translateX(calc(-1 * var(--sceneDesktopOffset)))')
-			else this.style.setProperty('--sceneTranslateX', 'translateX(var(--sceneDesktopOffset))')
+			if (isPanelCollapsed) this.style.setProperty('--sceneTranslateX', '0')
+			else if (shouldShiftLeft) this.style.setProperty('--sceneTranslateX', 'calc(-1 * var(--sceneDesktopOffset))')
+			else this.style.setProperty('--sceneTranslateX', 'var(--sceneDesktopOffset)')
 		}
 	}
 
@@ -421,6 +420,7 @@ export class DrippyScene extends Element {
 
 			if (loadingCount > 0) {
 				// Delay showing loader for 500ms - skip for fast loads
+				// TODO remove this AI timeout junk
 				if (!this.isLoading && loaderTimeout === undefined) {
 					loaderTimeout = window.setTimeout(() => {
 						if (store.isDrippySceneLoading) {
@@ -1736,65 +1736,39 @@ export class DrippyScene extends Element {
 	override css = css /*css*/ `
 		:host {
 			--sceneDesktopOffset: 15rem;
-			--sceneTranslateX: translateX(0);
-			--sceneTranslateY: translateY(-100px);
+			--sceneTranslateX: 0;
+			--sceneTranslateY: -100px;
 			background: var(--appBackground);
 			width: 600px;
 			height: 400px;
 			touch-action: none;
 			position: relative;
-			/* iOS specific fixes */
-			-webkit-backface-visibility: hidden;
 			backface-visibility: hidden;
-			-webkit-transform: translateZ(0);
-			transform: translateZ(0);
 		}
 
 		#lume-scene-container {
 			width: calc(100% + 2 * var(--sceneDesktopOffset));
 			height: 100%;
-			translate: calc(-1 * var(--sceneDesktopOffset));
-			transition: transform var(--transitionFast);
-			-webkit-transition: transform var(--transitionFast);
-			/* iOS specific fixes */
-			-webkit-backface-visibility: hidden;
+			translate: calc(-1 * var(--sceneDesktopOffset)) 0;
+			transition: translate var(--transitionDefaultTimeCurve);
 			backface-visibility: hidden;
-			-webkit-transform: translateZ(0);
-			transform: translateZ(0);
-		}
-
-		:host-context(.showcase__model-center) lume-scene {
-			transform: unset !important;
-			-webkit-transform: unset !important;
-			transition: unset !important;
-			-webkit-transition: unset !important;
 		}
 
 		lume-scene {
-			transform: var(--sceneTranslateX);
-			-webkit-transform: var(--sceneTranslateX);
-			transition: transform var(--transitionFast);
-			-webkit-transition: transform var(--transitionFast);
-			/* iOS specific fixes */
-			-webkit-backface-visibility: hidden;
-			backface-visibility: hidden;
+			translate: var(--sceneTranslateX);
+			transition: translate var(--transitionDefaultTimeCurve);
 		}
 
 		@media (max-width: 767px) {
-			:host-context(.showcase__model-center) #lume-scene-container {
-				transform: unset !important;
-				-webkit-transform: unset !important;
-			}
-
 			#lume-scene-container {
-				transform: var(--overrideSceneTranslateY, var(--sceneTranslateY)) scale(var(--scene-scale, 1));
-				-webkit-transform: var(--overrideSceneTranslateY, var(--sceneTranslateY)) scale(var(--scene-scale, 1));
+				width: 100%;
+				translate: 0 var(--overrideSceneTranslateY, var(--sceneTranslateY));
 				transform-origin: center center;
+				transition: translate var(--transitionTimeFast) ease-in-out;
 			}
 
 			lume-scene {
-				transform: translateX(0);
-				-webkit-transform: translateX(0);
+				translate: 0;
 			}
 		}
 	`

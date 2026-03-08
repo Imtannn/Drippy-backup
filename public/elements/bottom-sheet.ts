@@ -9,11 +9,6 @@ import {
 	html,
 	onCleanup,
 } from 'lume'
-// import {store} from '../app/store.js'
-
-import '../app/app-buttons.js'
-import './back-button.js'
-import './logic/show-when.js'
 
 // Define snap points in percentages of viewport height
 const SNAP_POINTS = [0.41, 0.6, 0.88]
@@ -32,7 +27,9 @@ type BottomSheetAttributes =
 	| 'panelWidth'
 	| 'onsnap'
 	| 'disabledScroll'
-	| 'scaleScene'
+
+// TODO
+// - logic in here is a little convoluted, some parts duplicating work in more than one way.
 @element
 export class BottomSheet extends Element {
 	static override readonly elementName = 'bottom-sheet'
@@ -52,7 +49,6 @@ export class BottomSheet extends Element {
 	@attribute panelWidth: string | null = null
 	@eventAttribute onsnap: () => void = () => {}
 	@booleanAttribute disabledScroll = false
-	@booleanAttribute scaleScene = false
 
 	private sheetHeight: number | null = null
 	private dragState = {
@@ -62,53 +58,53 @@ export class BottomSheet extends Element {
 	}
 
 	private sheetRef: HTMLElement | null = null
-	private isVisible = false
+	private isVisible = true
 
 	private updateBottomSheetHeightVar() {
 		if (!this.isDesktop && this.sheetHeight) {
 			document.documentElement.style.setProperty('--bottom-sheet-height', `${this.sheetHeight}px`)
-
-			if (this.scaleScene) {
-				// Calculate scene scale: smaller sheet = larger scale
-				// Sheet height ranges from ~41% to ~88% of viewport
-				// Map to scale range: 1.0 (at max) to 1.25 (at min)
-				const viewportHeight = window.innerHeight
-				const snapPoints = this.#getSnapPoints()
-				const minHeightRatio = snapPoints[0]
-				const maxHeightRatio = snapPoints[snapPoints.length - 1]
-				const currentRatio = this.sheetHeight / viewportHeight
-
-				// Normalize: 0 at max height, 1 at min height
-				const normalized = (maxHeightRatio - currentRatio) / (maxHeightRatio - minHeightRatio)
-				const clampedNormalized = Math.max(0, Math.min(1, normalized))
-
-				// Scale: 1.0 at max height (normalized=0), 1.25 at min height (normalized=1)
-				const scale = 1 + clampedNormalized * 0.5
-				document.documentElement.style.setProperty('--scene-scale', scale.toString())
-			}
 		} else {
 			// On desktop, remove the custom property to use the default fallback
 			document.documentElement.style.removeProperty('--bottom-sheet-height')
-			document.documentElement.style.removeProperty('--scene-scale')
 		}
 	}
+
+	#dispatchSnapEvent() {
+		if (!this.sheetRef) throw new Error('cannot dispatch before refs ready')
+		const currentHeight = this.sheetRef.offsetHeight
+		const snapPoint = this.getClosestSnapPoint(currentHeight)
+		const snapPoints = this.#getSnapPoints()
+		const snapIndex = snapPoints.indexOf(snapPoint)
+		this.dispatchEvent(new CustomEvent('snap', {bubbles: true, detail: {snapPoint, snapIndex}}))
+	}
+
 	override connectedCallback() {
 		super.connectedCallback()
 		this.checkDesktop()
 		this.addEventListeners()
 
+		// Fire snap event once initially in case any outside logic needs to
+		// derive initial layout.
+		this.createEffect(() => {
+			if (!this.sheetRef) return
+
+			this.#dispatchSnapEvent()
+
+			// FIXME this is a litle hacky, arbitrary timeout for layout to be
+			// ready in case it hasn't settled yet.
+			setTimeout(() => this.#dispatchSnapEvent(), 1000)
+		})
+
 		this.createEffect(() => {
 			const frame = requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
-					this.handleResize()
-					if (this.animateOnEnter) this.animateIn()
-					else {
-						this.isVisible = true
-						// Update document state to notify the scene
-						document.documentElement.classList.remove('panel-collapsed')
-						document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
-					}
-				})
+				this.handleResize()
+				if (this.animateOnEnter) this.animateIn()
+				else {
+					this.isVisible = true
+					// Update document state to notify the scene
+					document.documentElement.classList.remove('panel-collapsed')
+					document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
+				}
 			})
 
 			onCleanup(() => cancelAnimationFrame(frame))
@@ -157,14 +153,11 @@ export class BottomSheet extends Element {
 		// When switching to mobile, ensure panel is always open
 		if (wasDesktop && !this.isDesktop) {
 			this.isVisible = true
-			if (this.sheetRef) {
-				this.sheetRef.classList.add('is-open')
-				document.documentElement.classList.remove('panel-collapsed')
-				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
-			}
+			if (this.sheetRef) this.#setShowStyle()
 		}
 
 		this.updateBottomSheetHeightVar()
+		this.#dispatchSnapEvent()
 	}
 
 	private handleResize = () => {
@@ -179,12 +172,12 @@ export class BottomSheet extends Element {
 				this.sheetHeight = snapFraction * viewportHeight
 			}
 			this.sheetRef!.style.height = `${this.sheetHeight}px`
-			this.updateBottomSheetHeightVar()
 		} else {
 			this.sheetRef!.style.height = '100vh'
 			this.sheetRef!.style.height = '100dvh'
-			this.updateBottomSheetHeightVar()
 		}
+		this.updateBottomSheetHeightVar()
+		this.#dispatchSnapEvent()
 	}
 
 	#resolveDefaultSnapFraction(): number {
@@ -266,7 +259,7 @@ export class BottomSheet extends Element {
 		this.dragState.startY = y
 		this.dragState.startHeight = this.sheetRef.offsetHeight
 
-		document.body.classList.add('is-dragging')
+		document.documentElement.classList.add('is-dragging')
 		this.sheetRef.classList.add('is-resizing')
 	}
 
@@ -288,13 +281,14 @@ export class BottomSheet extends Element {
 		// Update the CSS custom property during drag
 		this.sheetHeight = constrainedHeight
 		this.updateBottomSheetHeightVar()
+		this.#dispatchSnapEvent()
 	}
 
 	private handleDragEnd = () => {
 		if (!this.dragState.isDragging || !this.sheetRef) return
 
 		this.dragState.isDragging = false
-		document.body.classList.remove('is-dragging')
+		document.documentElement.classList.remove('is-dragging')
 		this.sheetRef.classList.remove('is-resizing')
 
 		const currentHeight = this.sheetRef.offsetHeight
@@ -305,14 +299,11 @@ export class BottomSheet extends Element {
 		if (!this.isDesktop) this.sheetRef.style.height = `${this.sheetHeight}px`
 
 		this.updateBottomSheetHeightVar()
-
-		// Fire onSnap callback
-		const snapPoints = this.#getSnapPoints()
-		const snapIndex = snapPoints.indexOf(snapPoint)
-		this.dispatchEvent(new CustomEvent('snap', {bubbles: true, detail: {snapPoint, snapIndex}}))
+		this.#dispatchSnapEvent()
 	}
 
 	private addEventListeners() {
+		// FIXME use modern pointerevents, not legacy mouse and touch events.
 		document.addEventListener('mousemove', this.handleDragMove)
 		document.addEventListener('touchmove', this.handleDragMove, {passive: false})
 		document.addEventListener('mouseup', this.handleDragEnd)
@@ -327,84 +318,55 @@ export class BottomSheet extends Element {
 		document.removeEventListener('touchend', this.handleDragEnd)
 		window.removeEventListener('resize', this.handleResize)
 		this.dragState.isDragging = false
-		document.body.classList.remove('is-dragging')
+		document.documentElement.classList.remove('is-dragging')
 	}
 
 	private animateIn() {
 		if (!this.sheetRef) return
 
-		this.isVisible = false
-		this.sheetRef.classList.remove('is-open')
-		document.documentElement.classList.add('panel-collapsed')
-		document.documentElement.style.setProperty('--bottom-sheet-panel-width', '0px')
-
-		this.sheetRef.offsetHeight // eslint-disable-line -- Force a reflow to ensure the transform is applied
-
-		requestAnimationFrame(() => {
-			this.isVisible = true
-			this.sheetRef!.classList.add('is-open')
-			document.documentElement.classList.remove('panel-collapsed')
-			document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
-		})
-	}
-
-	public animateOut(callback?: () => void) {
-		if (!this.sheetRef || !this.animateOnExit) {
-			if (callback) callback()
-			return
-		}
-
-		this.isVisible = false
-		this.sheetRef.classList.remove('is-open')
-		document.documentElement.classList.add('panel-collapsed')
-		document.documentElement.style.setProperty('--bottom-sheet-panel-width', '0px')
-
-		// Wait for animation to complete
-		setTimeout(() => {
-			if (callback) callback()
-		}, 300) // Match the CSS transition duration
+		this.isVisible = true
+		this.#setShowStyle()
 	}
 
 	public hide() {
-		this.animateOut()
+		if (!this.sheetRef || !this.animateOnExit) return
+		this.isVisible = false
+		this.#setHideStyle()
+	}
+
+	#setHideStyle() {
+		this.sheetRef!.classList.remove('is-open')
+		document.documentElement.classList.add('panel-collapsed')
+		document.documentElement.style.setProperty('--bottom-sheet-panel-width', '0px')
 	}
 
 	public show() {
 		if (this.animateOnEnter) this.animateIn()
 		else {
 			this.isVisible = true
-			if (this.sheetRef) {
-				this.sheetRef.classList.add('is-open')
-				document.documentElement.classList.remove('panel-collapsed')
-				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
-			}
+			if (this.sheetRef) this.#setShowStyle()
 		}
+	}
+
+	#setShowStyle() {
+		this.sheetRef!.classList.add('is-open')
+		document.documentElement.classList.remove('panel-collapsed')
+		document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
 	}
 
 	public toggleCollapse() {
 		// On mobile, always keep panel open
 		if (!this.isDesktop) {
 			this.isVisible = true
-			if (this.sheetRef) {
-				this.sheetRef.classList.add('is-open')
-				document.documentElement.classList.remove('panel-collapsed')
-				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
-			}
+			if (this.sheetRef) this.#setShowStyle()
 			return
 		}
 
 		// On desktop, allow toggle
 		this.isVisible = !this.isVisible
 		if (this.sheetRef) {
-			if (this.isVisible) {
-				this.sheetRef.classList.add('is-open')
-				document.documentElement.classList.remove('panel-collapsed')
-				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '32rem')
-			} else {
-				this.sheetRef.classList.remove('is-open')
-				document.documentElement.classList.add('panel-collapsed')
-				document.documentElement.style.setProperty('--bottom-sheet-panel-width', '0px')
-			}
+			if (this.isVisible) this.#setShowStyle()
+			else this.#setHideStyle()
 
 			// Update button title based on parent state
 			const button = this.sheetRef.querySelector('.collapse-button')
@@ -416,22 +378,6 @@ export class BottomSheet extends Element {
 		this.handleDragStart(e as MouseEvent | TouchEvent)
 	}
 
-	// #onBackButtonClick = () => {
-	// 	console.log('Back button clicked')
-	// 	// Emit event so parent component can handle the back action
-	// 	// This allows each parent to implement their own back logic
-	// 	this.dispatchEvent(new CustomEvent('back', {bubbles: true, composed: true}))
-	// }
-
-	// #onPreviewButtonClick = () => {
-	// 	// Emit event so parent component can handle the preview action
-	// 	this.dispatchEvent(new CustomEvent('preview', {bubbles: true, composed: true}))
-	// }
-
-	// #onDoneButtonClick = () => {
-	// 	// Emit event so parent component can handle the done action
-	// 	this.dispatchEvent(new CustomEvent('done', {bubbles: true, composed: true}))
-	// }
 	override template = () => {
 		return html`
 			<div
@@ -482,18 +428,6 @@ export class BottomSheet extends Element {
 			pointer-events: none;
 		}
 
-		/* Hide back button and preview button on mobile, show only on desktop */
-		app-buttons-left {
-			display: none;
-		}
-		app-buttons-right {
-			display: none;
-		}
-		body.is-dragging {
-			user-select: none;
-			cursor: ns-resize;
-		}
-
 		.bottom-sheet {
 			position: fixed;
 			bottom: 0;
@@ -501,22 +435,25 @@ export class BottomSheet extends Element {
 			right: 0;
 			z-index: 50;
 			background: var(--uiColorPrimaryWhite);
-			// border-top: 1px solid #e5e7eb;
-			/* box-shadow: 0 -25px 50px -12px rgba(0, 0, 0, 0.25); */
 			border-top-left-radius: var(--borderRadiusXl);
 			border-top-right-radius: var(--borderRadiusXl);
-			transform: translateY(100%);
+			translate: 0px 100%;
 			transition:
-				transform 0.3s ease-out,
-				height 0.3s ease-out;
-			will-change: transform, height;
+				translate var(--transitionTimeFast) ease,
+				height var(--transitionTimeFast) ease;
+			will-change: translate, height;
 			pointer-events: auto;
 			display: flex;
 			flex-direction: column;
 		}
 
 		.bottom-sheet.is-open {
-			transform: translateY(0);
+			translate: 0px 0px;
+		}
+
+		/* Collapsed state - when NOT open (mobile) */
+		.bottom-sheet:not(.is-open) {
+			translate: 0px calc(100% - var(--bottom-sheet-handle-height) - 10px);
 		}
 
 		.bottom-sheet.is-resizing {
@@ -562,11 +499,15 @@ export class BottomSheet extends Element {
 			border: none;
 			cursor: pointer;
 			padding: 0;
+			/* hidden on mobile by default */
 			display: none;
 			align-items: center;
 			justify-content: center;
-			transition: all 0.3s ease;
-			z-index: 100;
+			/* TODO store all z-indexes as variables in a source file so we can
+			   more easily determine how things layer, and how to adjust items,
+			   without having to search all over the code base.
+			 */
+			z-index: 3000;
 		}
 
 		.collapse-button #pill {
@@ -587,7 +528,7 @@ export class BottomSheet extends Element {
 				border-top: 1px solid black;
 				border-right: 1px solid black;
 				border-width: 2px;
-				transition: rotate 0.3s ease;
+				transition: rotate var(--transitionTimeFast) ease-in-out;
 				rotate: 45deg;
 				translate: -1px;
 			}
@@ -595,7 +536,7 @@ export class BottomSheet extends Element {
 
 		/* When panel is closed, expose button more to the left */
 		.bottom-sheet:not(.is-open) .collapse-button {
-			left: -35px;
+			translate: -10px;
 		}
 
 		/* Flip icon when panel is closed */
@@ -612,7 +553,6 @@ export class BottomSheet extends Element {
 			overflow-y: auto;
 			/* Hide scrollbar for Webkit browsers */
 			scrollbar-width: none;
-			-ms-overflow-style: none;
 			border-radius: 1rem;
 		}
 
@@ -624,13 +564,7 @@ export class BottomSheet extends Element {
 			display: none;
 		}
 
-		/* Collapsed state - when NOT open */
-		.bottom-sheet:not(.is-open) {
-			transform: translateY(calc(100% - var(--bottom-sheet-handle-height) - 10px));
-		}
-
 		.bottom-sheet:not(.is-open) .sheet-content {
-			opacity: 0;
 			pointer-events: none;
 		}
 
@@ -662,42 +596,21 @@ export class BottomSheet extends Element {
 				width: var(--bottom-sheet-panel-width, 32rem);
 				max-width: calc(100vw - 3rem);
 				height: 100vh;
-				opacity: 0;
-				transform: translateY(1.25rem);
 				transition:
-					opacity 0.3s ease-out,
-					transform 0.3s ease-out,
-					width 0.3s ease-out;
+					translate var(--transitionDefaultTimeCurve),
+					height var(--transitionDefaultTimeCurve);
 			}
 
-			.bottom-sheet.is-open {
-				opacity: 1;
-				transform: translateY(0);
+			.bottom-sheet:not(.is-open) {
+				translate: 100% 0px;
 			}
 
 			.collapse-button {
 				display: flex;
-			}
-
-			.bottom-sheet:not(.is-open) {
-				width: 0px;
-				transform: translateY(0);
-				opacity: 1;
-			}
-
-			.bottom-sheet:not(.is-open) .drag-handle {
-				display: none;
-			}
-
-			.bottom-sheet:not(.is-open) .sheet-content {
-				display: none;
+				transition: translate var(--transitionDefaultTimeCurve);
 			}
 
 			.drag-handle {
-				display: none;
-			}
-
-			.drag-handle .drag-indicator {
 				display: none;
 			}
 		}

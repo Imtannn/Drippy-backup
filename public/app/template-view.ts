@@ -1,11 +1,11 @@
-import {batch, css, Element, element, html, onCleanup, signal, type ElementAttributes} from 'lume'
+import {batch, css, Element, element, html, memo, onCleanup, signal, type ElementAttributes} from 'lume'
 import {Meteor} from 'meteor/meteor'
 import {getTemplatesByCollection} from '../consts/templates.js'
 import {poses, animations} from '../consts/poses.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {TemplateMap} from '../types/types.js'
-import {getSpaceCollectionSlugs, values} from '../utils.js'
+import {createMutationsSignal, getSpaceCollectionSlugs, values} from '../utils.js'
 import {
 	currentUser,
 	isLoggedIn,
@@ -50,29 +50,35 @@ type AvatarsTab = 'pose' | 'animation'
 export class TemplateView extends Element {
 	static override readonly elementName = 'template-view'
 
-	@signal selectedTab: TemplateCategory | null = null
-	@signal templateCategories: Record<TemplateCategory, Template[]> = {} as Record<TemplateCategory, Template[]>
-	@signal spaceCollection: string | string[] | null = null
-	@signal showLoginDialog = false
-	@signal showAvatarSelection = false
-	@signal showAvatarsSelection = false
-	@signal avatarsSelectedTab: AvatarsTab = 'pose'
-	@signal showPoseSelection = false
-	@signal showRemixOverlay = false
-	@signal showTemplateOverlay: Template | null = null
-	@signal showAvatarSwapSheet = false
-	@signal avatarSwapTemplate: Template | null = null
-	@signal showDetailView = false
-	@signal showBottomNavigation = true
+	@signal private selectedTab: TemplateCategory | null = null
+	@signal private templateCategories: Record<TemplateCategory, Template[]> = {} as Record<TemplateCategory, Template[]>
+	@signal private spaceCollection: string | string[] | null = null
+	@signal private showLoginDialog = false
+	@signal private showAvatarSelection = false
+	@signal private showAvatarsSelection = false
+	@signal private avatarsSelectedTab: AvatarsTab = 'pose'
+	@signal private showPoseSelection = false
+	@signal private showRemixOverlay = false
+	@signal private showTemplateOverlay: Template | null = null
+	@signal private showAvatarSwapSheet = false
+	@signal private avatarSwapTemplate: Template | null = null
+	@signal private showDetailView = false
+	@signal private showBottomNavigation = true
 
-	// Drag scroll state
-	@signal isDragging = false
-	@signal startX = 0
-	@signal override scrollLeft = 0
-
-	@signal disabledScroll = false
-	@signal showWishlistOnly = false
+	@signal private disabledScroll = false
+	@signal private showWishlistOnly = false
 	private isOpeningOverlay = false
+
+	@signal private documentElementMutations = createMutationsSignal(document.documentElement, {
+		attributes: true,
+		attributeFilter: ['class'],
+	})
+
+	@memo private get isDragging() {
+		this.documentElementMutations()
+		return document.documentElement.classList.contains('is-dragging')
+	}
+
 	override connectedCallback() {
 		super.connectedCallback()
 
@@ -531,14 +537,33 @@ export class TemplateView extends Element {
 
 	#onBottomSheetSnapChange = (e: CustomEvent) => {
 		const snapPoint = e.detail.snapPoint
+		let translate = 0
+
+		// FIXME leaking of resposbilities, template-view shouldn't be in
+		// control translation for some other component that has nothing to do
+		// with template-view.
 		const drippyScene = document.querySelector('body')
 		if (snapPoint < 0.1) {
+			translate = 0
 			this.showBottomNavigation = false
-			drippyScene?.style.setProperty('--overrideSceneTranslateY', 'translateY(0)')
+		} else if (snapPoint <= 0.2) {
+			translate = -100
+			this.showBottomNavigation = true
+		} else if (snapPoint <= 0.41) {
+			translate = -200
+			this.showBottomNavigation = true
+		} else if (snapPoint <= 0.6) {
+			translate = -300
+			this.showBottomNavigation = true
+		} else if (snapPoint <= 0.88) {
+			translate = -400
+			this.showBottomNavigation = true
 		} else {
-			drippyScene?.style.setProperty('--overrideSceneTranslateY', 'translateY(-100px)')
+			translate = -500
 			this.showBottomNavigation = true
 		}
+
+		drippyScene?.style.setProperty('--overrideSceneTranslateY', translate + 'px')
 	}
 	override disconnectedCallback() {
 		super.disconnectedCallback()
@@ -568,7 +593,10 @@ export class TemplateView extends Element {
 			</show-on-device>
 		</app-buttons-preset>
 
-		<button class="build-store-button build-store-button-outer" onclick=${this.#onBuildStoreButtonClick}>
+		<button
+			class="${() => 'build-store-button' + (this.isDragging ? ' isDragging' : '')}"
+			onclick=${this.#onBuildStoreButtonClick}
+		>
 			<div class="build-store-button-icon">
 				<div class="build-store-icon-circle">
 					<img src="/images/landing/logo.webp" alt="Drippy logo" />
@@ -583,8 +611,7 @@ export class TemplateView extends Element {
 			show-remix-overlay=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
 			disabled-scroll=${() => this.disabledScroll}
 			float-direction="right"
-			scale-scene
-			default-snap=${() => (this.showDetailView ? '0.88' : '0.41')}
+			default-snap=${() => (this.showDetailView ? '0.88' : '0.41') /*TODO no duplicate magic numbers*/}
 			snap-points="0.02,0.2,0.41,0.6,0.88"
 			max-height="100vh"
 			onsnap=${this.#onBottomSheetSnapChange}
@@ -1003,12 +1030,9 @@ export class TemplateView extends Element {
 			border: none;
 			border-radius: 999px;
 			cursor: pointer;
-			transition: all 0.2s ease;
 			margin: 0 auto;
 			margin-bottom: var(--uiSpacingSmall);
-		}
 
-		.build-store-button-outer {
 			position: fixed;
 			bottom: 2%;
 			left: 2%;
@@ -1054,10 +1078,21 @@ export class TemplateView extends Element {
 		@media (max-width: 767px) {
 			.build-store-button {
 				padding: 7.5px 10px;
-			}
-			.build-store-button-outer {
-				bottom: calc(var(--bottom-sheet-height, 100dvh * 0.41) + 9px);
+				bottom: 9px;
+				translate: 0 calc(-1 * var(--bottom-sheet-height, 100dvh * 0.41));
+
+				transition-property: translate;
+				transition-timing-function: ease-in-out;
+
+				/* transition-duration: var(--transitionTimeFast); */
+				transition-duration: 0; /*FIXME transition disable not working, disable anim for now*/
+
+				will-change: translate;
 				left: 10px;
+
+				&.isDragging {
+					transition-duration: 0;
+				}
 			}
 			.build-store-icon-circle {
 				width: 19px;

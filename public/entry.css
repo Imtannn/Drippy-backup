@@ -14,6 +14,11 @@ html {
 	line-height: 1.4;
 }
 
+html.is-dragging {
+	user-select: none;
+	cursor: ns-resize;
+}
+
 html,
 body,
 #root {

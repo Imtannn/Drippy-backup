@@ -320,13 +320,16 @@ export class AppButtonsPreset extends Element {
 		@media (min-width: 768px) {
 			.tools-buttons-desktop {
 				position: fixed;
-				right: calc(var(--bottom-sheet-panel-left, 7px) + var(--bottom-sheet-panel-width, 32rem) + 20px);
+				right: 0;
+				translate: calc(-1 * calc(var(--bottom-sheet-panel-left, 7px) + var(--bottom-sheet-panel-width, 32rem) + 20px))
+					0px 0.00001px;
 				top: 20px;
 				z-index: 52; /* Above bottom-sheet (z-index: 50) */
 				display: flex;
 				flex-direction: column;
 				gap: 5px;
-				transition: right 0.3s ease-out;
+				transition: translate var(--transitionDefaultTimeCurve);
+				will-change: translate;
 			}
 		}
 	`

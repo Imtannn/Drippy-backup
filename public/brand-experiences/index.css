@@ -235,19 +235,6 @@ p {
 	line-height: var(--lineHeightNormal);
 }
 
-.landing-page-desktop .showcase__container {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	position: relative;
-	align-self: stretch;
-	width: 100%;
-	flex: 0 0 auto;
-	gap: 30px;
-	max-width: 100%;
-	overflow: hidden;
-}
-
 .landing-page-desktop .statistics__grid {
 	display: flex;
 	align-items: center;
@@ -1403,12 +1390,6 @@ p {
 	padding: 0 20px;
 }
 
-.landing-page-desktop .showcase__container {
-	flex-direction: column;
-	gap: 24px;
-	padding: 40px 0 80px 0;
-}
-
 .landing-page-desktop .stop-selling-clothes {
 	max-width: 700px;
 }
@@ -1494,171 +1475,6 @@ p {
 	letter-spacing: 0;
 	line-height: var(--lineHeightRelaxed);
 	margin-top: 10px;
-}
-
-/* ======================================== */
-/* SHOWCASE SECTION - CLEAN & OPTIMIZED     */
-/* ======================================== */
-
-.showcase {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 30px;
-	width: 100%;
-	max-width: 100%;
-	overflow: hidden;
-}
-
-.showcase__item {
-	position: relative;
-	width: 100%;
-	max-width: 660px;
-	height: 682px;
-	flex-shrink: 0;
-	flex: 1;
-}
-
-.showcase__background {
-	position: relative;
-	width: 100%;
-	height: 100%;
-
-	background-color: var(--uiColorPrimaryLightGrey);
-	border-radius: 20px;
-	border: 1px solid var(--uiColorPrimaryLightGrey);
-	box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-
-	overflow: hidden;
-	min-height: 0;
-}
-
-.showcase__item--interactive .showcase__background {
-	backdrop-filter: blur(25px) brightness(100%);
-	-webkit-backdrop-filter: blur(25px) brightness(100%);
-	/* Fallback for iOS */
-	background-color: rgba(246, 246, 246, 0.95);
-}
-
-.showcase__model {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	-webkit-object-fit: cover;
-	border-radius: 20px;
-	display: block;
-	/* iOS specific fixes */
-	-webkit-backface-visibility: hidden;
-	backface-visibility: hidden;
-}
-
-.showcase__controls {
-	position: absolute;
-	top: 18px;
-	right: 16px;
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-	z-index: 7;
-}
-
-.showcase__avatar-option {
-	width: 46px;
-	height: 46px;
-	cursor: pointer;
-	transition: var(--transitionTransform);
-	-webkit-transition: var(--transitionTransform);
-	position: relative;
-	border-radius: 50%;
-	overflow: hidden;
-	padding: 2px;
-	border-color: rgba(255, 255, 255, 0.8);
-}
-.showcase__avatar-option:hover {
-	border: unset;
-	background: linear-gradient(45deg, #e56be8, #495cff);
-}
-
-.showcase__avatar-option.selected {
-	border: 2px solid #8b5cf6;
-	background: linear-gradient(45deg, #8b5cf6, #8b5cf6);
-	box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
-}
-
-.showcase__avatar-option img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	border-radius: 50%;
-	display: block;
-}
-
-.showcase__avatar-option:hover {
-	transform: scale(1.1);
-	-webkit-transform: scale(1.1);
-	border-color: rgba(255, 255, 255, 0.8);
-}
-
-/* Avatar selector styles are now encapsulated in the custom element */
-
-.showcase__model-display {
-	position: absolute;
-	top: 14px;
-	left: 50%;
-	width: 55%;
-	height: 625px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transform: translateX(-50%);
-}
-
-/* New class to fix model centering */
-.showcase__model-center {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	transform: translate(-50%, -50%);
-	-webkit-transform: translate(-50%, -50%);
-	/* iOS specific fixes */
-	-webkit-backface-visibility: hidden;
-	backface-visibility: hidden;
-	will-change: transform;
-}
-
-.showcase__model-center drippy-scene {
-	width: 90%;
-	height: 90%;
-}
-
-.showcase__avatar-model {
-	width: 100%;
-	height: 100%;
-	object-fit: contain;
-	-webkit-object-fit: contain;
-	border-radius: 10px;
-	/* iOS specific fixes */
-	-webkit-backface-visibility: hidden;
-	backface-visibility: hidden;
-}
-
-.showcase__label {
-	position: absolute;
-	bottom: 20px;
-	left: 50%;
-	transform: translateX(-50%);
-	height: 24px;
-	font-weight: var(--fontWeightMedium);
-	color: var(--uiColorPrimaryBlack);
-	text-align: center;
-	letter-spacing: 0;
-	line-height: var(--lineHeightNormal);
-	z-index: 10;
 }
 
 /* ======================================== */
@@ -1985,39 +1801,6 @@ p {
 		height: 90px;
 	}
 
-	.landing-page-desktop .showcase__container {
-		padding: 40px 0 80px 0;
-	}
-	.showcase .showcase__item {
-		position: relative;
-		width: 100%;
-		max-width: 460px;
-		height: 482px;
-		flex-shrink: 0;
-		flex: 1;
-	}
-
-	.showcase .showcase__model-display {
-		top: 50%;
-		left: 50%;
-		width: 125px;
-		height: 400px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transform: translate(-50%, -50%);
-	}
-
-	.showcase .showcase__model-center .showcase__model {
-		transform: scale(1.5);
-		-webkit-transform: scale(1.5);
-	}
-
-	.showcase .showcase__avatar-option {
-		width: 45px;
-		height: 45px;
-	}
-
 	.landing-page-desktop .section-drippy .drippy-is-the-new {
 		height: unset;
 	}
@@ -2269,18 +2052,6 @@ p {
 /* ======================================== */
 
 @media (max-width: 620px) {
-	.landing-page-desktop .showcase {
-		flex-direction: column;
-	}
-	.landing-page-desktop .showcase__item {
-		flex: unset;
-		max-width: 450px;
-		height: 600px;
-	}
-	.showcase .showcase__model-display {
-		width: 150px;
-		height: 450px;
-	}
 	.landing-page-desktop .how-it-works__step {
 		min-height: 510px;
 	}
@@ -2367,10 +2138,6 @@ p {
 		width: 100%;
 	}
 
-	.showcase .showcase__item {
-		height: 600px;
-	}
-
 	/* Features responsive for mobile - single column */
 	.landing-page-desktop .features__grid {
 		display: flex;
@@ -2420,35 +2187,6 @@ p {
 
 	.brands__logo {
 		height: 95px;
-	}
-
-	.landing-page-desktop .showcase__container {
-		padding: 0 0 70px 0;
-	}
-
-	.showcase {
-		flex-direction: column;
-	}
-
-	.showcase .showcase__model-display {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 50%;
-		transform: translate(-50%, 0%);
-		-webkit-transform: translate(-50%, 0%);
-		will-change: transform;
-		-webkit-backface-visibility: hidden;
-		backface-visibility: hidden;
-	}
-
-	.showcase .showcase__model {
-		-webkit-backface-visibility: hidden;
-		backface-visibility: hidden;
-	}
-	.showcase__label {
-		bottom: 30px;
 	}
 
 	.landing-page-desktop .cta__cone-image--4 {
@@ -2615,10 +2353,7 @@ p {
 		user-select: none;
 	}
 	.carousel-item {
-		transition:
-			transform 0.4s ease,
-			opacity 0.4s ease,
-			filter 0.4s ease;
+		transition: transform 0.4s ease, opacity 0.4s ease, filter 0.4s ease;
 		transform: scale(0.8);
 		opacity: 0.6;
 		-webkit-user-select: none;
@@ -2704,12 +2439,6 @@ p {
 		height: 200px;
 	}
 }
-@supports (-webkit-touch-callout: none) {
-	.showcase__model-center {
-		transform: translate3d(-50%, -40%, 0) !important;
-		-webkit-transform: translate3d(-50%, -40%, 0) !important;
-	}
-}
 
 /* Mobile carousel items - full width and centered on small screens */
 @media (max-width: 480px) {
@@ -2760,9 +2489,7 @@ p {
 		height: 8px;
 		border-radius: 50%;
 		background-color: rgba(0, 0, 0, 0.2);
-		transition:
-			background-color 0.3s ease,
-			transform 0.3s ease;
+		transition: background-color 0.3s ease, transform 0.3s ease;
 		cursor: pointer;
 	}
 
