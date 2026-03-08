@@ -348,10 +348,6 @@ export class TemplateView extends Element {
 		`
 	}
 
-	#onBuyButtonClick = () => {
-		store.view = 'order-items'
-	}
-
 	#onBackButtonClick = () => {
 		batch(() => {
 			// FIXME This logic is "go back to home" logic, however it is inaccessible
