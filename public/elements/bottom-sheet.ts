@@ -444,9 +444,11 @@ export class BottomSheet extends Element {
 				style="${!this.isDesktop && this.sheetHeight ? `height: ${this.sheetHeight}px` : ''}"
 			>
 				${this.collapseButton
-					? html`<button class="collapse-button" onclick="${() => this.toggleCollapse()}" title="Collapse panel">
-							<img src="/images/collapse-icon.svg" alt="Collapse" />
-						</button>`
+					? html`
+							<button class="collapse-button" onclick="${() => this.toggleCollapse()}" title="Collapse panel">
+								<div id="pill"></div>
+							</button>
+						`
 					: ''}
 				<div class="sheet-content">
 					<div
@@ -550,6 +552,8 @@ export class BottomSheet extends Element {
 		}
 
 		.collapse-button {
+			width: 45px;
+			height: 73px;
 			position: absolute;
 			left: -25px;
 			top: 50%;
@@ -565,10 +569,28 @@ export class BottomSheet extends Element {
 			z-index: 100;
 		}
 
-		.collapse-button img {
-			width: 45px;
-			height: 73px;
-			transition: transform 0.3s ease;
+		.collapse-button #pill {
+			width: 23px;
+			height: 55px;
+			border-radius: 12px;
+			background: white;
+			box-shadow: 0px 0px 6px -3px #000f;
+
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			&::before {
+				content: '';
+				width: 6px;
+				height: 6px;
+				border-top: 1px solid black;
+				border-right: 1px solid black;
+				border-width: 2px;
+				transition: rotate 0.3s ease;
+				rotate: 45deg;
+				translate: -1px;
+			}
 		}
 
 		/* When panel is closed, expose button more to the left */
@@ -577,8 +599,9 @@ export class BottomSheet extends Element {
 		}
 
 		/* Flip icon when panel is closed */
-		.bottom-sheet:not(.is-open) .collapse-button img {
-			transform: scaleX(-1);
+		.bottom-sheet:not(.is-open) .collapse-button #pill::before {
+			rotate: -135deg;
+			translate: 1px;
 		}
 
 		.sheet-content {
