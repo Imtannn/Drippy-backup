@@ -344,7 +344,7 @@ export class RemixOverlay extends Element {
 	`
 	override template = () => html`
 		<!-- Mobile: wrap in bottom-sheet -->
-		<show-on-device device="mobile">
+		<show-on-device mobile>
 			<bottom-sheet
 				class="remix-overlay-sheet"
 				default-snap=${() => (this.pieceSelections.length > 1 ? '0.25' : '0.20')}
@@ -359,7 +359,7 @@ export class RemixOverlay extends Element {
 		</show-on-device>
 
 		<!-- Desktop: render directly without bottom-sheet wrapper -->
-		<show-on-device device="desktop">
+		<show-on-device desktop>
 			<div class="remix-overlay-desktop" classList=${{'is-open': () => this.disabledScroll}}>
 				${this.#renderContent()}
 			</div>

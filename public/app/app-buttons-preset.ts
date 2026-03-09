@@ -200,9 +200,8 @@ export class AppButtonsPreset extends Element {
 
 		return html`
 			${() => config.all && renderButtons(config.all)}
-			${() =>
-				config.desktop && html`<show-on-device device="desktop">${renderButtons(config.desktop)}</show-on-device>`}
-			${() => config.mobile && html`<show-on-device device="mobile">${renderButtons(config.mobile)}</show-on-device>`}
+			${() => config.desktop && html`<show-on-device desktop>${renderButtons(config.desktop)}</show-on-device>`}
+			${() => config.mobile && html`<show-on-device mobile>${renderButtons(config.mobile)}</show-on-device>`}
 		`
 	}
 
@@ -227,9 +226,8 @@ export class AppButtonsPreset extends Element {
 
 		return html`
 			${() => config.all && renderButtons(config.all)}
-			${() =>
-				config.desktop && html`<show-on-device device="desktop">${renderButtons(config.desktop)}</show-on-device>`}
-			${() => config.mobile && html`<show-on-device device="mobile">${renderButtons(config.mobile)}</show-on-device>`}
+			${() => config.desktop && html`<show-on-device desktop>${renderButtons(config.desktop)}</show-on-device>`}
+			${() => config.mobile && html`<show-on-device mobile>${renderButtons(config.mobile)}</show-on-device>`}
 		`
 	}
 
@@ -242,7 +240,7 @@ export class AppButtonsPreset extends Element {
 				${() =>
 					(config.logo || config.tools) &&
 					html`
-						<show-on-device device="mobile">
+						<show-on-device mobile>
 							<app-buttons-group>
 								<div style="display: flex; align-items: center; gap: 5px;">
 									${() => store.view === 'template' && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
@@ -271,7 +269,7 @@ export class AppButtonsPreset extends Element {
 			${() =>
 				(config.logo || config.tools) &&
 				html`
-					<show-on-device device="desktop">
+					<show-on-device desktop>
 						<div class="tools-buttons-desktop">
 							<app-buttons-group>
 								<div style="display: flex; align-items: center; gap: 5px;">

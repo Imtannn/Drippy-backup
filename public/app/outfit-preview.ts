@@ -45,7 +45,7 @@ export class OutfitPreview extends Element {
 	override template = () => html`
 		<app-buttons-preset preset="preview-flow"></app-buttons-preset>
 
-		<show-on-device device="mobile">
+		<show-on-device mobile>
 			<div class="bottom-buttons" classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}>
 				<button class="buy-button" onclick=${this.#onBuyItClick}>${this.buyIcon()} Buy it!</button>
 			</div>

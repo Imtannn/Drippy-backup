@@ -577,7 +577,7 @@ export class TemplateView extends Element {
 			disable-cube-button=${false}
 			on:backclick=${this.#onBackButtonClick}
 		>
-			<show-on-device device="mobile">
+			<show-on-device mobile>
 				<show-when
 					condition=${() => this.showRemixOverlay}
 					content=${() => html`
@@ -619,7 +619,7 @@ export class TemplateView extends Element {
 				content=${() => html`<div class="template-sheet-overlay" onclick=${this.#closeRemixOverlay}></div>`}
 			></show-when>
 
-			<show-on-device device="desktop">
+			<show-on-device desktop>
 				<show-when
 					condition=${() => !(this.showRemixOverlay && store.remixOverlayTemplate !== null)}
 					content=${() => html`
@@ -833,7 +833,7 @@ export class TemplateView extends Element {
 					></remix-overlay>
 				`}
 			></show-when>
-			<show-on-device device="mobile">
+			<show-on-device mobile>
 				<nav-bar
 					position="bottom"
 					classList=${() => ({
