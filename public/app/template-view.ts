@@ -620,67 +620,62 @@ export class TemplateView extends Element {
 			></show-when>
 
 			<show-on-device desktop>
-				<show-when
-					condition=${() => !(this.showRemixOverlay && store.remixOverlayTemplate !== null)}
-					content=${() => html`
-						<div class="template-view-buttons">
-							<nav-bar
-								position="top"
-								classList=${() => ({
-									hidden: this.showDetailView,
-								})}
-							>
-								<div
-									class="template-info"
-									classList=${() => {
-										const templates = values(store.selectedTemplates)
-										return {hidden: templates.length === 0 || true}
-									}}
-								>
-									${() => {
-										// TODO why only the first template? Seems wrong.
-										const templates = values(store.selectedTemplates)
-										const selectedTemplate = templates[0]!
-										if (!selectedTemplate) return ''
-										return html`
-											<div class="template-image-wrapper">
-												<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
-											</div>
-											<div class="template-details">
-												<div class="template-name">${selectedTemplate.name}</div>
-												<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
-											</div>
-										`
-									}}
-								</div>
-								<button
-									class="view-details-btn"
-									classList=${() => {
-										const templates = values(store.selectedTemplates)
-										return {hidden: templates.length === 0 || true}
-									}}
-									disabled
-								>
-									View details
-								</button>
-								<div
-									class="default-nav"
-									classList=${() => {
-										const templates = values(store.selectedTemplates)
-										return {hidden: templates.length > 0 && false}
-									}}
-								>
-									<avatar-dropdown
-										open=${() => this.showAvatarSelection}
-										show-popup
-										onavatar-dropdown-click=${this.#onAvatarDropdownClick}
-									></avatar-dropdown>
-									<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
-								</div>
-							</nav-bar>
+				<div class="template-view-buttons">
+					<nav-bar
+						position="top"
+						classList=${() => ({
+							hidden: this.showDetailView,
+						})}
+					>
+						<div
+							class="template-info"
+							classList=${() => {
+								const templates = values(store.selectedTemplates)
+								return {hidden: templates.length === 0 || true}
+							}}
+						>
+							${() => {
+								// TODO why only the first template? Seems wrong.
+								const templates = values(store.selectedTemplates)
+								const selectedTemplate = templates[0]!
+								if (!selectedTemplate) return ''
+								return html`
+									<div class="template-image-wrapper">
+										<img src=${selectedTemplate.thumb} alt=${selectedTemplate.name} class="template-image" />
+									</div>
+									<div class="template-details">
+										<div class="template-name">${selectedTemplate.name}</div>
+										<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
+									</div>
+								`
+							}}
 						</div>
-					`}
-				></show-when>
+						<button
+							class="view-details-btn"
+							classList=${() => {
+								const templates = values(store.selectedTemplates)
+								return {hidden: templates.length === 0 || true}
+							}}
+							disabled
+						>
+							View details
+						</button>
+						<div
+							class="default-nav"
+							classList=${() => {
+								const templates = values(store.selectedTemplates)
+								return {hidden: templates.length > 0 && false}
+							}}
+						>
+							<avatar-dropdown
+								open=${() => this.showAvatarSelection}
+								show-popup
+								onavatar-dropdown-click=${this.#onAvatarDropdownClick}
+							></avatar-dropdown>
+							<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+						</div>
+					</nav-bar>
+				</div>
 			</show-on-device>
 			<show-when
 				condition=${() => this.showDetailView}
@@ -722,42 +717,37 @@ export class TemplateView extends Element {
 							this.selectedTab = e.detail.value as TemplateCategory
 						}}
 					>
-						<show-when
-							condition=${() => !(this.showRemixOverlay && store.remixOverlayTemplate !== null)}
-							content=${() => html`
-								<bottom-sheet-header>
-									<div class="tabs-container">
-										<div class="tabs-action-buttons">
-											<heart-button
-												active=${() => this.showWishlistOnly}
-												onclick=${this.#onHeartButtonClick}
-											></heart-button>
-											<search-button></search-button>
-										</div>
-										<tabs-list>
-											<show-when
-												condition=${() => this.showAvatarsSelection}
-												content=${() => html`
-													<tabs-trigger selected-value="pose">Pose</tabs-trigger>
-													<tabs-trigger selected-value="animation">Animation</tabs-trigger>
+						<bottom-sheet-header>
+							<div class="tabs-container">
+								<div class="tabs-action-buttons">
+									<heart-button
+										active=${() => this.showWishlistOnly}
+										onclick=${this.#onHeartButtonClick}
+									></heart-button>
+									<search-button></search-button>
+								</div>
+								<tabs-list>
+									<show-when
+										condition=${() => this.showAvatarsSelection}
+										content=${() => html`
+											<tabs-trigger selected-value="pose">Pose</tabs-trigger>
+											<tabs-trigger selected-value="animation">Animation</tabs-trigger>
+										`}
+									></show-when>
+									<show-when
+										condition=${() => !this.showAvatarsSelection}
+										content=${() => html`
+											<for-each
+												items=${() => Object.keys(this.templateCategories)}
+												content=${() => (category: TemplateCategory) => html`
+													<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
 												`}
-											></show-when>
-											<show-when
-												condition=${() => !this.showAvatarsSelection}
-												content=${() => html`
-													<for-each
-														items=${() => Object.keys(this.templateCategories)}
-														content=${() => (category: TemplateCategory) => html`
-															<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
-														`}
-													></for-each>
-												`}
-											></show-when>
-										</tabs-list>
-									</div>
-								</bottom-sheet-header>
-							`}
-						></show-when>
+											></for-each>
+										`}
+									></show-when>
+								</tabs-list>
+							</div>
+						</bottom-sheet-header>
 
 						<div class="tabs-content-container">
 							<!-- Show avatars selection (poses and animations) when avatars tab is active -->
