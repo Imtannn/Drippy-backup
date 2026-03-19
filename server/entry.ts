@@ -50,13 +50,33 @@ const allowedOrigins = [...remoteOrigins, ...localhostOrigins]
 WebApp.rawHandlers.use(
 	/*'/public',*/
 	async function (req, res, next) {
-		// Proxy any requests to /static/<path> to ASSET_SERVER/<path>, to work around CORS blockage from our enabling of cross-origin isolation below in Safari, Opera, and Firefox (when we update to COEP credentialless mode for those browsers we won't need to proxy).
-		const ASSET_SERVER = 'https://d1e6s1h8cqcr26.cloudfront.net'
+		// Proxy any requests to /static/<path> to ASSET_SERVER/<path>, to work
+		// around CORS blockage from our enabling of cross-origin isolation
+		// below in Safari, Opera, and Firefox (when we update to COEP
+		// credentialless mode for those browsers we won't need to proxy).
 		if (req.url?.startsWith('/static/')) {
-			const assetUrl = new URL(ASSET_SERVER + req.url.replace('/static', ''))
+			// TODO: We're using a temporary cloudflare R2 public dev URL here,
+			// which is not optimized for production. Switch to R2 API, or
+			// domain, for proudction.
+			const ASSET_SERVER = 'https://pub-23f7a93d7b24472bbae1eb84b1bd8452.r2.dev'
+			proxyAsset(new URL(ASSET_SERVER + req.url.replace('/static', '').replaceAll('+', '%20')))
+			return
+		}
+		// TODO this is temporary, hand maintained assets on GitHub, until we
+		// have the new assets-via-DB setup with upload connected to CloudFlare.
+		if (req.url?.startsWith('/static-gh/')) {
+			const GH_ASSET_SERVER = 'https://rawcdn.githack.com/drippy3d/assets'
+			proxyAsset(new URL(GH_ASSET_SERVER + req.url.replace('/static-gh', '')))
+			return
+		}
 
+		// TODO handle 301 redirects (raw.githack uses that for some URLs), so
+		// that the client is not redirected but we proxy to the redirect. The
+		// client should only ever receive the final response directly from the
+		// server.
+		function proxyAsset(url: string | URL) {
 			https
-				.get(assetUrl, assetRes => {
+				.get(url, assetRes => {
 					res.statusCode = assetRes.statusCode || 200
 
 					// Forward all headers from the response
@@ -66,9 +86,7 @@ WebApp.rawHandlers.use(
 					// Forward the response stream directly to the client
 					assetRes.pipe(res)
 				})
-				.on('error', e => failure(res, 'Failed to fetch from static asset:', assetUrl.toString(), e))
-
-			return
+				.on('error', e => failure(res, 'Failed to fetch from static asset:', url.toString(), e))
 		}
 
 		///////////////////////////////////////////////////////////////////////////
