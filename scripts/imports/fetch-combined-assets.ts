@@ -49,302 +49,50 @@ const s3 = new S3Client({
 type CollectionConfig = {collection: string; rootFolderId: string; gender?: 'male' | 'female'}
 type CollectionConfigs = CollectionConfig[]
 
-// collection configurations with Google Drive folder IDs
-const COLLECTION_CONFIGS: CollectionConfigs = [
-	// {
-	// 	collection: 'essence-of-her',
-	// 	rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
-	// },
-	// {
-	// 	collection: 'movement',
-	// 	rootFolderId: '1-_x-GVUxGBn4S1VDI6t3dFN990IG-VWu',
-	// },
-	// {
-	// 	collection: 'shadow-grace',
-	// 	rootFolderId: '1Numw3ThiF4y2kcADnzKf2T9xaYqPMute',
-	// },
-	// {
-	// 	collection: 'duality-in-radiance',
-	// 	rootFolderId: '1hAUwnocS029C_Jvep_-3NdQMxfppwg7r',
-	// },
-	// {
-	// 	collection: '9heure19heure',
-	// 	rootFolderId: '1k2wrq4CUoLBhKMww0JEWU66DjLIzucsB',
-	// },
-	// {
-	// 	collection: 'the-soul',
-	// 	rootFolderId: '19Oq6abu1SnMTLSJHS0VY_GT1pAvpdU0T',
-	// },
-	// {
-	// 	collection: 'gap',
-	// 	rootFolderId: '11fS4TFpvw2EGraj1Dp3IbbVhlxEXwdC-',
-	// },
-	// {
-	// 	collection: 'emwear',
-	// 	rootFolderId: '15zHjnYVfII_Z2cr17_6Vp7kscWm9UIAU',
-	// },
-	// {
-	// 	collection: 'fige-dans-le-temps',
-	// 	rootFolderId: '17aBfgFcD7Liq9fB_KC57rl5S2w-O4LYf',
-	// },
-	// {
-	// 	collection: 'one-thousand-poets',
-	// 	rootFolderId: '1T3jYEVfYb0JtROoVAFJDGQEWxOmyDVpT',
-	// },
-	// {
-	// 	collection: 'zove',
-	// 	rootFolderId: '1XlxaOIFxxh-8xCmmM6XrDOW6iqq7xNhw',
-	// },
-	// {
-	// 	collection: 'ja-seng-bu',
-	// 	rootFolderId: '1BO4szN8246Y0V-AhL9zDyXzJ6rZLL7U8',
-	// },
-	// {
-	// 	collection: 'mss-park',
-	// 	rootFolderId: '1uUtAmMj_4gV1P3xuJKWGPbATJcv63GcJ',
-	// },
-	// {
-	// 	collection: 'imzad-man',
-	// 	rootFolderId: '1fsA2JrL5ibuWrC_Fp_IDubvZuQj5bwpa',
-	// },
-	// {
-	// 	collection: 'imzad-woman',
-	// 	rootFolderId: '1p_yCV5X8RCCPzSvQmnhL_aAtcOw8zvl7',
-	// },
-	// {
-	// 	collection: 'changes',
-	// 	rootFolderId: '1yficP672jh2jmHwfmHqKN5f3ca1Hd5rm',
-	// },
-	// {
-	// 	collection: 'metamorphosis',
-	// 	rootFolderId: '1skW21QjedKwrGWVfRlHShth4Zcg4oT4v',
-	// },
-	// {
-	// 	collection: 'anyshape',
-	// 	rootFolderId: '1k8GM9DJdR4q9emW9pGEPU1o2UYHiRog0',
-	// },
-	// {
-	// 	collection: 'baum-und-pferdgarten',
-	// 	rootFolderId: '14dd0YvtPvanr8owwpG9RMRl-yo4QT44x',
-	// },
-	// {
-	// 	collection: 'bloom.womenswear',
-	// 	rootFolderId: '1Fsyv0mcFup0raVjvv4gXIW6SWVRlgALR',
-	// },
-	// {
-	// 	collection: 'cecilie-bahnsen',
-	// 	rootFolderId: '1oLq3zGmjacJx7cA3UNp6cb2py4k9LBx9',
-	// },
-	// {
-	// 	collection: 'crescent',
-	// 	rootFolderId: '1-_ccZhTYm9pV2fBQjKhjcpjOtGgE2t2f',
-	// },
-	// {
-	// 	collection: 'dario-mittmann',
-	// 	rootFolderId: '1dgfABw4Pv9hch85BPz4So1OeSuPwAO5w',
-	// },
-	// {
-	// 	collection: 'david-black',
-	// 	rootFolderId: '1p6FtdSkIGIA3JxB_sVhccD-zjnoyPhZw',
-	// },
-	// {
-	// 	collection: 'diane',
-	// 	rootFolderId: '1wJWNQbh-tmmKtHH0GGrB1AsGHz5nTniJ',
-	// },
-	// {
-	// 	collection: 'dico',
-	// 	rootFolderId: '1C76QlH0zqGBYLvRXi6AYoLyB6y2uJAiR',
-	// },
-	// {
-	// 	collection: 'dottie',
-	// 	rootFolderId: '1W-68fRdrKAUOKwBDAxc0WaofwqQo6nMJ',
-	// },
-	// {
-	// 	collection: 'erroris.ltd',
-	// 	rootFolderId: '1h1Mt2eq3xx8SQzb06t8E2nqEzBKZ4f_R',
-	// },
-	// {
-	// 	collection: 'gola',
-	// 	rootFolderId: '1ZBcsModfRLPD1tNn_cTSvV-nS7mUyo21',
-	// },
-	// {
-	// 	collection: 'vinaygaia',
-	// 	gender: 'male',
-	// 	rootFolderId: '1NeHJayR6MLvM__3OteVveMPnpUIydF6T',
-	// },
-	// {
-	// 	collection: 'h2b',
-	// 	rootFolderId: '1JCfZOMtSp4EfYLuH4HcBzRItb8_GFLLR',
-	// },
-	// {
-	// 	collection: 'joie-des-roses',
-	// 	rootFolderId: '1zP_KfpEqRx3az3_03DSGWEGRXn6oc3Cm',
-	// },
-	// {
-	// 	collection: 'jubin-studio',
-	// 	rootFolderId: '19faN1x2OpK3d2ftk0YV8WtOTU3sZU6ok',
-	// },
-	// {
-	// 	collection: 'julian-prohaska',
-	// 	rootFolderId: '1BNbvcSYavMSqXUhff7NG3aHbTSSzhNpv',
-	// },
-	// {
-	// 	collection: 'kido',
-	// 	rootFolderId: '1ye_JXheFecOOh9Lbb3EobxEEK3aCdpTD',
-	// },
-	// {
-	// 	collection: 'levents',
-	// 	rootFolderId: '1ML--cFFm0RB3FYjqGcSy5XM3FwZPL16q',
-	// },
-	// {
-	// 	collection: 'lider',
-	// 	gender: 'male',
-	// 	rootFolderId: '1nQWCTO2_NloTlB5QR2A5s4j2TP-l1QkZ',
-	// },
-	// {
-	// 	collection: 'ononmm',
-	// 	rootFolderId: '1kzK8olqVK3iRg84DaA4Juf3YQ_zVns61',
-	// },
-	// {
-	// 	collection: 'paradise-saigon',
-	// 	gender: 'male',
-	// 	rootFolderId: '1O-rlxQgP6s6NIqGhmK-u-QL-SKi9tq0c',
-	// },
-	// {
-	// 	collection: 'pindiga-ranjith-kumar',
-	// 	rootFolderId: '1TXY8y2y98IcqHSDgfNq_MZWkDJZ3rZau',
-	// },
-	// {
-	// 	collection: 'pradies',
-	// 	rootFolderId: '1JrDxYfDyX5wqupUclec_G-5H1QSQxNnH',
-	// },
-	// {
-	// 	collection: 'bad-habits',
-	// 	rootFolderId: '1FAKJMS1jOzgj67wkF4AdEbSMbBhXyCS2',
-	// },
-	// {
-	// 	collection: 'beachclub.official',
-	// 	rootFolderId: '1ytfrGzgnqbUkNdBnlDW5vYlS7i7j7_Ws',
-	// },
-	// {
-	// 	collection: 'cara-club',
-	// 	rootFolderId: '1hRNAjkt6tZo7uwCpqYpfis2i_pNZ98dg',
-	// },
-	// {
-	// 	collection: 'demobaza',
-	// 	rootFolderId: '1IkyPU9RC-JifFB85UwIhOpI2IzmuuqDX',
-	// },
-	// {
-	// 	collection: 'diane',
-	// 	rootFolderId: '1wJWNQbh-tmmKtHH0GGrB1AsGHz5nTniJ',
-	// },
-	// {
-	// 	collection: 'hani',
-	// 	rootFolderId: '1PxEkZMy9MQFyLaTh8AHtig6FHpRHqY6K',
-	// },
-	// {
-	// 	collection: 'huelley-rose',
-	// 	rootFolderId: '1WOmwiamcARAb2Ekv9c6lvulOZMovGycg',
-	// },
-	// {
-	// 	collection: 'hurricane-b',
-	// 	rootFolderId: '195Xq3sSGNpH8OjIhCrElTT75JVSpWyet',
-	// },
-	// {
-	// 	collection: 'fig.cool-leather',
-	// 	rootFolderId: '17m4VfaxlIDCGc7SoyZSdR9IrhjMncs_l',
-	// },
-	// {
-	// 	collection: 'libeworkshop',
-	// 	rootFolderId: '1czCRQ8e2ePgt7_8I8Gfr3SZSwZDywniy',
-	// },
-	// {
-	// 	collection: 'mono-talk',
-	// 	rootFolderId: '1unt9_hNsGPTmP2WHDCfTxAOwg8UM1xFf',
-	// },
-	// {
-	// 	collection: 'naked',
-	// 	rootFolderId: '15aIsaHcRgYhfyeW9FS6EPI0HLRupQFtd',
-	// },
-	// {
-	// 	collection: 'push-push',
-	// 	rootFolderId: '1-fau_i6mV_klgqfacZ0i16SQrclIKTmC',
-	// },
-	// {
-	// 	collection: 'raxada',
-	// 	rootFolderId: '1cMrawDMvRgJizl3Pu0xNNkEfqQjFPTlu',
-	// },
-	// {
-	// 	collection: 'rechick',
-	// 	rootFolderId: '1LovuBDt4IwTv59d3ArRLTkQmQllxalvM',
-	// },
-	// {
-	// 	collection: 'ridkid',
-	// 	rootFolderId: '1mxxBri7-XxksDP1q-t-76znSzYMDmqp5',
-	// },
-	// {
-	// 	collection: 'rotate',
-	// 	rootFolderId: '1Y3fMNntJa0EG5jud2IRPHLwXK_YggwLM',
-	// },
-	// {
-	// 	collection: 'salteye',
-	// 	rootFolderId: '1N0_WSy5WMAGrPHeDFIByNxmcwxAjmuzu',
-	// },
-	// {
-	// 	collection: 'skall',
-	// 	rootFolderId: '1pXn8hYMnuAkzlw0V2MUjwv5Lo-XKuNVK',
-	// },
-	// {
-	// 	collection: 'so-vintage-official',
-	// 	rootFolderId: '1EVxpiETahCKoptqWeatw8au75HW3roJ7',
-	// },
-	// {
-	// 	collection: 'sora.m_design',
-	// 	rootFolderId: '1WnsQ3NilG9GekJCvOrgz2UeX8wePiC4s',
-	// },
-	// {
-	// 	collection: 'ssdslsns',
-	// 	rootFolderId: '1G-v--BLmR45yFD3_8jDT3i2C9xrS_lSe',
-	// },
-	// {
-	// 	collection: 'stevie-crowne',
-	// 	rootFolderId: '1T9fJat8V3WjWWZA5DHRlNVMjI6p_Oxlz',
-	// },
-	// {
-	// 	collection: 'tsun',
-	// 	rootFolderId: '1yvocRU162iKy-pAxxrTmFPhftUN1RNbX',
-	// },
-	// {
-	// 	collection: 'tubycatu',
-	// 	rootFolderId: '1feRlmMnv0HNC4Ueo2WxmroEIQK7hRly_',
-	// },
-	// {
-	// 	collection: 'whiteplan',
-	// 	rootFolderId: '17W6ps3OJpG401byGCdu254araCssbwB-',
-	// },
-	// {
-	// 	collection: 'zd-eye-of-the-storm',
-	// 	rootFolderId: '1TL9_8zSUQN3NBwVljZq1uwb7ybgLZnc4',
-	// },
-	// {
-	// 	collection: 'katalog-1811',
-	// 	rootFolderId: '1nmtMpL2qYOx096pPK98Zeo2mOpD_FTqz',
-	// },
-	// {
-	// 	collection: 'h&m',
-	// 	rootFolderId: '1nnIx4ArdruYT5XPsqZ8uihFETv_n15pa',
-	// },
+const COLLECTION_PARENT_FOLDER_IDS = (process.env.COLLECTION_PARENT_FOLDER_IDS || '')
+	.split(',')
+	.map(id => id.trim())
+	.filter(Boolean)
 
-	// new stuff
-	{
-		collection: 'b.club',
-		rootFolderId: '1hzcxeZZVdZJ9Ofeoc9OeTO3BPVvyjqAG',
-	},
-	{
-		collection: 'bohee',
-		rootFolderId: '1uJCZw9o9XIalBxIDmPObMF4S4HjjkCWD',
-	},
-]
+// Build collection configs from direct child folders of the given parent folders.
+async function buildCollectionConfigsFromParentFolders(parentFolderIds: string[]): Promise<CollectionConfigs> {
+	const collectionConfigs: CollectionConfigs = []
+
+	for (const parentFolderId of parentFolderIds) {
+		let nextPageToken: string | undefined
+
+		do {
+			const response = await withRetry(async () => {
+				return drive.files.list({
+					q: `'${parentFolderId}' in parents and trashed=false and mimeType='application/vnd.google-apps.folder'`,
+					fields: 'nextPageToken,files(id,name)',
+					pageSize: 1000,
+					pageToken: nextPageToken,
+				})
+			})
+
+			const subfolders = response.data.files || []
+			for (const folder of subfolders) {
+				const isMaleCollection = folder.name!.trim().startsWith('(MALE)')
+				const normalizedFolderName = folder
+					.name!.replace(/^\(MALE\)/, '')
+					.trim()
+					.replaceAll(' ', '_')
+					.toLowerCase()
+
+				collectionConfigs.push({
+					collection: normalizedFolderName,
+					rootFolderId: folder.id!,
+					...(isMaleCollection && {gender: 'male'}),
+				})
+			}
+
+			nextPageToken = response.data.nextPageToken || undefined
+		} while (nextPageToken)
+	}
+
+	return collectionConfigs
+}
 
 const rootMaterials: Map<string, TODO> = new Map() // materialName -> material data
 const categoryMaterialAssignments: Map<string, Set<string>> = new Map() // categoryName -> Set of materialNames
@@ -1498,10 +1246,22 @@ async function main(): Promise<void> {
 
 		console.log(`📦 Using S3 bucket: ${S3_BUCKET}`)
 		console.log(`🌍 S3 region: ${S3_REGION}`)
+
+		if (COLLECTION_PARENT_FOLDER_IDS.length === 0) {
+			console.log(
+				'⚠️  No collection parent folders configured. Set COLLECTION_PARENT_FOLDER_IDS to a comma-separated list of Google Drive parent folder IDs.',
+			)
+			return
+		}
+
+		const collectionConfigs = await buildCollectionConfigsFromParentFolders(COLLECTION_PARENT_FOLDER_IDS)
+		if (collectionConfigs.length === 0) {
+			console.log('⚠️  No collection folders found under the configured parent folders.')
+			return
+		}
+
 		console.log(
-			`🏷️  Processing ${COLLECTION_CONFIGS.length} collections: ${COLLECTION_CONFIGS.map(c => c.collection).join(
-				', ',
-			)}`,
+			`🏷️  Processing ${collectionConfigs.length} collections: ${collectionConfigs.map(c => c.collection).join(', ')}`,
 		)
 
 		// Initialize combined data structures
@@ -1511,7 +1271,7 @@ async function main(): Promise<void> {
 		const allUnsucceeded: TODO[] = []
 
 		// Process each collection
-		for (const collectionConfig of COLLECTION_CONFIGS) {
+		for (const collectionConfig of collectionConfigs) {
 			const {collection, rootFolderId, gender = 'female'} = collectionConfig
 			console.log(`\n🏢 Processing collection: ${collection}`)
 			console.log(`🗂️  Root folder ID: ${rootFolderId}`)
@@ -1620,7 +1380,7 @@ async function main(): Promise<void> {
 		console.log(`❌ Unsucceeded: ${allUnsucceeded.length} items`)
 
 		console.log(`\n📁 Assets organized as:`)
-		COLLECTION_CONFIGS.forEach(({collection}) => {
+		collectionConfigs.forEach(({collection}) => {
 			console.log(`   ${collection} Template Images: images/${collection}/templates/{category}/`)
 			console.log(`   ${collection} Template Materials: materials/${collection}/templates/{category}/{templateName}/`)
 			console.log(`   ${collection} Block Images: images/${collection}/blocks/{category}/{blockType}/`)
