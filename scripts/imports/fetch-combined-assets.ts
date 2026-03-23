@@ -1,5 +1,11 @@
 // FIXME this is currently broken, we're gonna switch to uploads via backend
-import {ObjectCannedACL, PutObjectCommand, S3Client, type PutObjectCommandInput} from '@aws-sdk/client-s3'
+import {
+	HeadObjectCommand,
+	ObjectCannedACL,
+	PutObjectCommand,
+	S3Client,
+	type PutObjectCommandInput,
+} from '@aws-sdk/client-s3'
 import {randomUUID as uuidv4} from 'crypto'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -124,6 +130,7 @@ async function uploadToS3(
 	buffer: Buffer,
 	key: string,
 	contentType: string,
+	modifiedTime: string,
 	lossless: boolean = false,
 	toWebp: boolean = true,
 ): Promise<string> {
@@ -152,9 +159,43 @@ async function uploadToS3(
 		}
 	}
 
+	const sourceModifiedAt = new Date(modifiedTime)
+	const isValidSourceModifiedAt = !Number.isNaN(sourceModifiedAt.getTime())
+	const normalizedKey = uploadKey.replace(/ /g, '_')
+
+	if (isValidSourceModifiedAt) {
+		try {
+			const headResponse = await s3.send(
+				new HeadObjectCommand({
+					Bucket: S3_BUCKET,
+					Key: normalizedKey,
+				}),
+			)
+
+			if (headResponse.LastModified && sourceModifiedAt.getTime() <= headResponse.LastModified.getTime()) {
+				console.log(
+					`⏭️  Skipping upload (not newer): ${normalizedKey} | Drive: ${sourceModifiedAt.toISOString()} <= S3: ${headResponse.LastModified.toISOString()}`,
+				)
+				return `${S3_URL}/${normalizedKey}`
+			}
+		} catch (error) {
+			const maybeError = error as {name?: string; $metadata?: {httpStatusCode?: number}}
+			const statusCode = maybeError.$metadata?.httpStatusCode
+			const name = maybeError.name
+			const objectMissing = statusCode === 404 || name === 'NotFound' || name === 'NoSuchKey'
+
+			if (!objectMissing) {
+				console.error('Error checking existing S3 object metadata:', error)
+				throw error
+			}
+
+			// If the object is missing, we proceed with the upload as normal.
+		}
+	}
+
 	const params: PutObjectCommandInput = {
 		Bucket: S3_BUCKET,
-		Key: uploadKey.replace(/ /g, '_'),
+		Key: normalizedKey,
 		Body: uploadBuffer,
 		ContentType: uploadContentType,
 		ACL: ObjectCannedACL.public_read,
@@ -181,7 +222,7 @@ async function fetchFolderContents(folderId: string): Promise<TODO[]> {
 	try {
 		const response = await drive.files.list({
 			q: `'${folderId}' in parents and trashed=false`,
-			fields: 'files(id,name,mimeType,parents)',
+			fields: 'files(id,name,mimeType,parents,modifiedTime)',
 		})
 		return response.data.files || []
 	} catch (error) {
@@ -323,6 +364,7 @@ async function processOptionBlocks(
 						pngBuffer,
 						`images/${collection}/options/${templateCategory}/${blockCategory}/${blockFolder.name}.png`,
 						'image/png',
+						pngFile.modifiedTime,
 					),
 					uploadToS3(
 						gltfBuffer,
@@ -330,6 +372,7 @@ async function processOptionBlocks(
 							gltfFile.name,
 						)}`,
 						'model/gltf+json',
+						gltfFile.modifiedTime,
 					),
 				])
 
@@ -446,6 +489,7 @@ async function processTemplateFolder(
 		templateThumbnailBuffer,
 		`images/${collection}/templates/${category}/${templateFolder.name}.png`,
 		'image/png',
+		templateThumbnail.modifiedTime,
 	)
 
 	// Process material references if they exist
@@ -579,6 +623,7 @@ async function processTemplateFolder(
 							pngBuffer,
 							`images/${collection}/blocks/${category}/${blockTypeFolder.name}/${baseName}.png`,
 							'image/png',
+							matchingPng.modifiedTime,
 						),
 						uploadToS3(
 							gltfBuffer,
@@ -586,6 +631,7 @@ async function processTemplateFolder(
 								gltfFile.name,
 							)}`,
 							'model/gltf+json',
+							gltfFile.modifiedTime,
 						),
 					])
 
@@ -983,6 +1029,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 					thumbBuffer,
 					`fabrics/${collection}/root/${materialFolder.name}/${thumbnailFile.name}`,
 					'image/png',
+					thumbnailFile.modifiedTime,
 				)
 
 				console.log(`     ✅ Uploaded thumbnail ${thumbnailFile.name}`)
@@ -1010,6 +1057,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 					fileBuffer,
 					`fabrics/${collection}/root/${materialFolder.name}/${file.name}`,
 					contentType,
+					file.modifiedTime,
 					true,
 					false,
 				)
