@@ -20,15 +20,15 @@ name(s) and local dev ports.
 
 # drippy-app
 
-This repository is dedicated to managing all tasks for all repos, as well as
-hosting full stack code for the new app.
+The Drippy app, v2.
 
-- This repo: new app in a single repo built with Meteor + Solid + Lume.
+# secret files
 
-- [drippy-app-frontend]: Frontend application repository built with Next + React.
+We have files that currently hold private keys, committed into the repo. This is
+ok for now, as we're a tiny team. Less to manage for now, but we'll need
+something more secure later so tha we don't share all keys with everyone in the
+org.
 
-- [drippy-app-backend]: Backend application repository built with Nest.js
-
-- [drippy-app-deployment]: Deployment configurations and infrastructure repository.
-
-Check out our [latest release](https://app.drippy3d.com/) to explore.
+- private/env.json
+- scripts/.env
+- scripts/google-service-account.json

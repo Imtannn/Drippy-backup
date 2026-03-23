@@ -18,3 +18,4 @@ website.tar.gz
 drippy-app-3D
 
 .env
+!scripts/**/.env

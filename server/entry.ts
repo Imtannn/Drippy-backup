@@ -58,7 +58,7 @@ WebApp.rawHandlers.use(
 			// TODO: We're using a temporary cloudflare R2 public dev URL here,
 			// which is not optimized for production. Switch to R2 API, or
 			// domain, for proudction.
-			const ASSET_SERVER = 'https://pub-23f7a93d7b24472bbae1eb84b1bd8452.r2.dev'
+			const ASSET_SERVER = 'https://pub-23f7a93d7b24472bbae1eb84b1bd8452.r2.dev' // TODO get from process.env env.json
 			proxyAsset(new URL(ASSET_SERVER + req.url.replace('/static', '').replaceAll('+', '%20')))
 			return
 		}

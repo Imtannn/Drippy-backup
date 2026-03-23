@@ -1,5 +1,5 @@
 // FIXME this is currently broken, we're gonna switch to uploads via backend
-import * as AWS from 'aws-sdk'
+import {ObjectCannedACL, PutObjectCommand, S3Client, type PutObjectCommandInput} from '@aws-sdk/client-s3'
 import {randomUUID as uuidv4} from 'crypto'
 import * as fs from 'fs'
 import * as path from 'path'
@@ -8,7 +8,7 @@ import * as THREE from 'three'
 import {google} from 'googleapis'
 
 const auth = new google.auth.GoogleAuth({
-	keyFile: path.join(__dirname, '../../service-account.json'), // path to your JSON
+	keyFile: path.join(__dirname, '../google-service-account.json'),
 	scopes: ['https://www.googleapis.com/auth/drive.readonly'],
 })
 const drive = google.drive({version: 'v3', auth})
@@ -19,24 +19,38 @@ type TODO = any
 const API_KEY = process.env.GOOGLE_API_KEY || 'GOOGLE_API_KEY'
 
 // AWS S3 Configuration
-const S3_BUCKET = process.env.S3_BUCKET || 'your-bucket-name'
-const S3_REGION = process.env.S3_REGION || 'us-east-1'
-const S3_ACCESS_KEY = process.env.AWS_ACCESS_KEY_ID
-const S3_SECRET_KEY = process.env.AWS_SECRET_ACCESS_KEY
-const CLOUDFRONT_URL = 'https://d1e6s1h8cqcr26.cloudfront.net'
-const S3_URL = 'https://drippy3d-prod-eu.s3.eu-west-3.amazonaws.com'
+// const S3_BUCKET = process.env.S3_BUCKET || 'your-bucket-name'
+// const S3_REGION = process.env.S3_REGION || 'us-east-1'
+// const S3_ACCESS_KEY = process.env.AWS_ACCESS_KEY_ID
+// const S3_SECRET_KEY = process.env.AWS_SECRET_ACCESS_KEY
+// const S3_URL = '/static'
+// const S3_ENDPOINT = // not used with AWS, it creates it automatically
+// Cloudflare S3 Configuration
+const S3_BUCKET = process.env.CLOUDFLARE_S3_BUCKET || 'your-bucket-name'
+const S3_REGION = 'auto'
+const S3_ACCESS_KEY = process.env.CLOUDFLARE_ACCESS_KEY_ID
+const S3_SECRET_KEY = process.env.CLOUDFLARE_SECRET_ACCESS_KEY
+const S3_URL = '/static'
+const S3_ENDPOINT = 'https://4109b23870ac503947ce4596eddfa656.eu.r2.cloudflarestorage.com/drippy-assets'
 
-// Configure AWS
-AWS.config.update({
-	accessKeyId: S3_ACCESS_KEY,
-	secretAccessKey: S3_SECRET_KEY,
+const s3 = new S3Client({
 	region: S3_REGION,
+	endpoint: S3_ENDPOINT,
+	...(S3_ACCESS_KEY && S3_SECRET_KEY
+		? {
+				credentials: {
+					accessKeyId: S3_ACCESS_KEY,
+					secretAccessKey: S3_SECRET_KEY,
+				},
+			}
+		: {}),
 })
 
-const s3 = new AWS.S3()
+type CollectionConfig = {collection: string; rootFolderId: string; gender?: 'male' | 'female'}
+type CollectionConfigs = CollectionConfig[]
 
 // collection configurations with Google Drive folder IDs
-const COLLECTION_CONFIGS: {collection: string; rootFolderId: string; gender?: 'male' | 'female'}[] = [
+const COLLECTION_CONFIGS: CollectionConfigs = [
 	// {
 	// 	collection: 'essence-of-her',
 	// 	rootFolderId: '1BlQcj37sCkY7PhQijHP5HjC0jyrlmzWt',
@@ -316,9 +330,19 @@ const COLLECTION_CONFIGS: {collection: string; rootFolderId: string; gender?: 'm
 	// 	collection: 'katalog-1811',
 	// 	rootFolderId: '1nmtMpL2qYOx096pPK98Zeo2mOpD_FTqz',
 	// },
+	// {
+	// 	collection: 'h&m',
+	// 	rootFolderId: '1nnIx4ArdruYT5XPsqZ8uihFETv_n15pa',
+	// },
+
+	// new stuff
 	{
-		collection: 'h&m',
-		rootFolderId: '1nnIx4ArdruYT5XPsqZ8uihFETv_n15pa',
+		collection: 'b.club',
+		rootFolderId: '1hzcxeZZVdZJ9Ofeoc9OeTO3BPVvyjqAG',
+	},
+	{
+		collection: 'bohee',
+		rootFolderId: '1uJCZw9o9XIalBxIDmPObMF4S4HjjkCWD',
 	},
 ]
 
@@ -380,18 +404,17 @@ async function uploadToS3(
 		}
 	}
 
-	const params = {
+	const params: PutObjectCommandInput = {
 		Bucket: S3_BUCKET,
 		Key: uploadKey.replace(/ /g, '_'),
 		Body: uploadBuffer,
 		ContentType: uploadContentType,
-		ACL: 'public-read',
+		ACL: ObjectCannedACL.public_read,
 	}
 
 	try {
-		const result = await s3.upload(params).promise()
-		// Return CloudFront URL instead of S3 URL
-		return result.Location.replace(S3_URL, CLOUDFRONT_URL)
+		await s3.send(new PutObjectCommand(params))
+		return `${S3_URL}/${params.Key}`
 	} catch (error) {
 		console.error('Error uploading to S3:', error)
 		throw error

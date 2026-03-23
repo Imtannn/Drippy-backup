@@ -46,9 +46,43 @@ AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
 4. Search for "Google Drive API" and enable it
 5. Go to "APIs & Services" > "Credentials"
 6. Click "Create Credentials" > "API Key"
-7. Copy the API key to your `.env` file
+7. Give the key a name.
+8. Under "API Restrictions" select "Restrict key" > "Google Drive API"
+9. Hit "Create"
+10. Copy the API key to your `.env` file
 
-### 4. Configure AWS Credentials
+### 4. Create Service Account Credentials (for private Drive folders)
+
+If the Google Drive folders are **not** publicly shared, you need a service account JSON file instead of (or in addition to) an API key.
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Select your project (or create one)
+3. Navigate to **IAM & Admin → Service Accounts**
+4. Click **Create Service Account**, give it a name, give it Viewer permission, click **Done**
+5. Click the service account you just created → **Keys** tab → **Add Key → Create new key → JSON**
+6. Download the JSON file and place it at `service-account.json` in the `scripts/` folder.
+7. Share each Google Drive folder (or a parent folder of them all) with the service account's `client_email` address, or with the user of the service account, (just like sharing with a regular user), granting **Viewer** access.
+
+The downloaded file looks like:
+
+```json
+{
+  "type": "service_account",
+  "project_id": "your-project-id",
+  "private_key_id": "abc123...",
+  "private_key": "-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----\n",
+  "client_email": "your-service-account@your-project-id.iam.gserviceaccount.com",
+  "client_id": "123456789",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/..."
+}
+```
+
+> **Important:** Add `service-account.json` to `.gitignore` to avoid committing credentials.
+
+### 5. Configure AWS Credentials
 
 1. Get your AWS Access Key ID and Secret Access Key from AWS IAM
 2. Ensure the credentials have read/write access to the S3 bucket
@@ -216,10 +250,12 @@ Add your avatar configuration to `public/consts/avatars.ts`:
 ### Common Issues
 
 1. **Google Drive API Errors**
+
    - Verify API key is correct and has Drive API enabled
    - Check folder permissions (should be publicly accessible)
 
 2. **S3 Upload Failures**
+
    - Verify AWS credentials have proper permissions
    - Check bucket name and region configuration
    - Ensure files don't exceed size limits
