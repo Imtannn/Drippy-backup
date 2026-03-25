@@ -59,7 +59,16 @@ WebApp.rawHandlers.use(
 			// which is not optimized for production. Switch to R2 API, or
 			// domain, for proudction.
 			const ASSET_SERVER = 'https://pub-23f7a93d7b24472bbae1eb84b1bd8452.r2.dev' // TODO get from process.env env.json
-			proxyAsset(new URL(ASSET_SERVER + req.url.replace('/static', '').replaceAll('+', '%20')))
+
+			// TODO isOldAssets is temporary: new assets uploads are under the
+			// drippy-assets/ prefix, but we will replace this with an automated
+			// format once we switch to DB.
+			const isOldAssets =
+				req.url.includes('/metamorphosis/') || req.url.includes('/h%26m/') || req.url.includes('/drippy-app/')
+
+			proxyAsset(
+				new URL(ASSET_SERVER + req.url.replace('/static', isOldAssets ? '' : '/drippy-assets').replaceAll('+', '%20')),
+			)
 			return
 		}
 		// TODO this is temporary, hand maintained assets on GitHub, until we
