@@ -4,7 +4,7 @@ const loadingImageUrl = new URL('../images/loading.webp', import.meta.url).href
 
 @element
 export class ImageLoading extends Element {
-	static override elementName = 'image-loading'
+	static override readonly elementName = 'image-loading'
 
 	@signal private imageError = false
 

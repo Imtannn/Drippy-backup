@@ -19,7 +19,7 @@ import {getSpaceThumbnail} from '../utils.js'
 
 @element
 export class SpacesSelection extends Element {
-	static override elementName = 'spaces-selection'
+	static override readonly elementName = 'spaces-selection'
 
 	@signal filteredSpace: Space[] = []
 	@signal showLoginDialog = false

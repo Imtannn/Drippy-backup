@@ -25,7 +25,7 @@ import {entries, size} from '../utils.js'
 
 @element
 export class DrippyApp extends Element {
-	static override elementName = 'drippy-app'
+	static override readonly elementName = 'drippy-app'
 
 	@signal appLoaded = false
 

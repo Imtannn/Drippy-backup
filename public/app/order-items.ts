@@ -10,7 +10,7 @@ import {store} from './store.js'
 
 @element
 export class OrderItems extends Element {
-	static override elementName = 'order-items'
+	static override readonly elementName = 'order-items'
 
 	// Load existing selections when component connects
 	override connectedCallback() {

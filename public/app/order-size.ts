@@ -9,7 +9,7 @@ import {entries} from '../utils.js'
 
 @element
 export class OrderSize extends Element {
-	static override elementName = 'order-size'
+	static override readonly elementName = 'order-size'
 
 	#onNextClick = () => {
 		store.view = 'order'

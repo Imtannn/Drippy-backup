@@ -34,7 +34,8 @@
 	},
 	"overrides": {
 		"@lume/element": "$@lume/element",
-		"classy-solid": "$classy-solid"
+		"classy-solid": "$classy-solid",
+		"typescript": "$typescript"
 	},
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.983.0",

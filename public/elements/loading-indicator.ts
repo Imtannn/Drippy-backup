@@ -4,7 +4,7 @@ type LoadingIndicatorAttributes = 'isVisible'
 
 @element
 export class LoadingIndicator extends Element {
-	static override elementName = 'loading-indicator'
+	static override readonly elementName = 'loading-indicator'
 
 	@booleanAttribute isVisible = false
 	override connectedCallback() {

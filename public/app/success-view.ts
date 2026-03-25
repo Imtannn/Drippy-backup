@@ -5,7 +5,7 @@ import {store} from './store.js'
 
 @element
 export class SuccessView extends Element {
-	static override elementName = 'success-view'
+	static override readonly elementName = 'success-view'
 
 	#onDripAnotherDesignClick = () => {
 		store.goBackHomeAndResetState()

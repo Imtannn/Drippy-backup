@@ -851,7 +851,7 @@ function generateTemplatesFileContent(templates: TODO): string {
 									`\t\t\t{\n\t\t\t\tcategory: '${option.category}',\n\t\t\t\tblocks: [\n${option.blocks
 										.map(
 											(block: TODO) =>
-												`\t\t\t\t\t{\n\t\t\t\t\t\t_id: '${block._id}',\n\t\t\t\t\t\tthumb: '${block.thumbUrl}',\n\t\t\t\t\t\tmodelFile: '${block.modelUrl}',\n\t\t\t\t\t\tblockName: '${block.blockName}',\n\t\t\t\t\t\tavatar: '${block.avatar}',\n\t\t\t\t\t\tcategory: '${block.category}',\n\t\t\t\t\t\ttemplateCategory: '${block.templateCategory}'\n\t\t\t\t\t}`,
+												`\t\t\t\t\t{\n\t\t\t\t\t\t_id: '${block._id}',\n\t\t\t\t\t\tthumb: '${block.thumbUrl}',\n\t\t\t\t\t\tmodelFile: '${block.modelUrl}',\n\t\t\t\t\t\tblockName: '${block.blockName}',\n\t\t\t\t\t\tavatar: '${block.avatar}',\n\t\t\t\t\t\tcategory: '${block.category}',\n\t\t\t\t\t\tcollection: '${template.collection}',\n\t\t\t\t\t\ttemplateCategory: '${block.templateCategory}'\n\t\t\t\t\t}`,
 										)
 										.join(',\n')}\n\t\t\t\t]\n\t\t\t}`,
 							)

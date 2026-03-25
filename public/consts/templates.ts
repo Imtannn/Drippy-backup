@@ -283,6 +283,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Jacket',
+							collection: 'coor_official',
 						},
 						{
 							_id: '7546864f-4528-43b9-ab94-872c6444d5ba',
@@ -292,6 +293,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Jacket',
+							collection: 'coor_official',
 						},
 						{
 							_id: '2703d34a-d07b-45c5-befe-b2241d653cc8',
@@ -301,6 +303,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Jacket',
+							collection: 'coor_official',
 						},
 					],
 				},
@@ -315,6 +318,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Jacket',
+							collection: 'coor_official',
 						},
 						{
 							_id: '0e6b8960-34e6-4960-a2ab-35588a5afa33',
@@ -324,6 +328,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Jacket',
+							collection: 'coor_official',
 						},
 						{
 							_id: '8277f666-3a6a-4d0d-8a69-b6b48fb277aa',
@@ -333,6 +338,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Jacket',
+							collection: 'coor_official',
 						},
 					],
 				},
@@ -393,6 +399,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'massimodutti',
 						},
 						{
 							_id: '5a8eca84-863b-4153-8c75-366364fdd767',
@@ -402,6 +409,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'massimodutti',
 						},
 						{
 							_id: 'ddaa644b-f52a-41c9-af62-be873e6ca3e2',
@@ -411,6 +419,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'massimodutti',
 						},
 					],
 				},
@@ -445,6 +454,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'meanblvd',
 						},
 						{
 							_id: '32b100a1-cb37-4b95-ad7e-594b07563220',
@@ -454,6 +464,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'meanblvd',
 						},
 						{
 							_id: '16701b3f-9222-4d3c-acc9-5e39afda3a33',
@@ -463,6 +474,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'meanblvd',
 						},
 					],
 				},
@@ -509,6 +521,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'céleste_studio',
 						},
 						{
 							_id: '13c43e73-fb15-4314-8312-daf23d4311f3',
@@ -518,6 +531,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'céleste_studio',
 						},
 						{
 							_id: 'eeee48f7-cd4f-4d2b-9898-cb845c6de083',
@@ -527,6 +541,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'céleste_studio',
 						},
 						{
 							_id: '2cd88ffe-5db3-4c8a-bba5-2b0c6cc65b10',
@@ -536,6 +551,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'céleste_studio',
 						},
 						{
 							_id: 'afe84112-74a1-45c3-ae8f-f04d9558a0ce',
@@ -545,6 +561,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'céleste_studio',
 						},
 					],
 				},
@@ -559,6 +576,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'céleste_studio',
 						},
 						{
 							_id: 'e3d3fd2d-dadf-444b-8cf4-a436d766e2e0',
@@ -568,6 +586,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'céleste_studio',
 						},
 						{
 							_id: '19f184fa-93af-42ad-b64f-e67f0ce5aada',
@@ -577,6 +596,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'céleste_studio',
 						},
 						{
 							_id: '5f6d4133-dd2a-4d17-9f38-2b2ba5ff0ae3',
@@ -586,6 +606,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'céleste_studio',
 						},
 						{
 							_id: 'f4934e35-3e3c-406a-9a8d-d8a34bc39151',
@@ -595,6 +616,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'céleste_studio',
 						},
 					],
 				},
@@ -623,6 +645,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'call_me_ari',
 						},
 						{
 							_id: 'a923b34e-c9df-4c8d-8542-1be52222b2e1',
@@ -632,6 +655,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'call_me_ari',
 						},
 						{
 							_id: '4fc0c3c2-cb11-40ca-8968-c6614e2f508f',
@@ -641,6 +665,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'call_me_ari',
 						},
 						{
 							_id: 'a3720067-08fd-4066-af11-c3e7f1b305a8',
@@ -650,6 +675,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'call_me_ari',
 						},
 						{
 							_id: '96ac56fe-79f9-410d-a84e-025da3fc047c',
@@ -659,6 +685,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'call_me_ari',
 						},
 					],
 				},
@@ -673,6 +700,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'call_me_ari',
 						},
 						{
 							_id: 'c257c77d-bded-4e4d-8ff0-79836a82c5e0',
@@ -682,6 +710,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'call_me_ari',
 						},
 						{
 							_id: '50370013-dbe0-445b-a4e6-8095107a4201',
@@ -691,6 +720,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'call_me_ari',
 						},
 						{
 							_id: '2cdd7d73-9e29-42e9-b8ab-60f71d647145',
@@ -700,6 +730,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'call_me_ari',
 						},
 						{
 							_id: '154ea828-e1a7-4e4b-bece-fbab7fe61d1a',
@@ -709,6 +740,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'call_me_ari',
 						},
 					],
 				},
@@ -743,6 +775,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'celine',
 						},
 						{
 							_id: 'd199aead-ee1d-47ae-a47d-1e660bbc99fc',
@@ -752,6 +785,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'celine',
 						},
 						{
 							_id: 'a286c6aa-ec58-46b7-bc56-4ace81d99ddf',
@@ -761,6 +795,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'celine',
 						},
 					],
 				},
@@ -775,6 +810,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'celine',
 						},
 						{
 							_id: 'f7560b4e-9087-4cd5-83a5-b8a3c21e6f5b',
@@ -784,6 +820,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'celine',
 						},
 					],
 				},
@@ -812,6 +849,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'poxi',
 						},
 						{
 							_id: '33183f35-78bc-46a7-87d5-33483a2cac9e',
@@ -821,6 +859,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'poxi',
 						},
 						{
 							_id: '1eae8b44-acb6-4b1a-8593-9447f8f23395',
@@ -830,6 +869,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'poxi',
 						},
 					],
 				},
@@ -844,6 +884,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'poxi',
 						},
 						{
 							_id: '5fe35791-7e88-4efe-ad95-f51f586be116',
@@ -853,6 +894,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'poxi',
 						},
 					],
 				},
@@ -867,6 +909,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'poxi',
 						},
 						{
 							_id: 'dea5e070-c037-430c-b42b-9140383b3658',
@@ -876,6 +919,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'poxi',
 						},
 						{
 							_id: '2f586fe4-13c5-4b8a-b1dc-a26545563874',
@@ -885,6 +929,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'poxi',
 						},
 					],
 				},
@@ -929,6 +974,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'ayarabbim',
 						},
 						{
 							_id: 'adba08a6-c91e-4be2-8419-d26db936c505',
@@ -938,6 +984,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'ayarabbim',
 						},
 						{
 							_id: '68c9a70e-6e0b-42c2-a1e3-a6b829c49fd8',
@@ -947,6 +994,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'ayarabbim',
 						},
 					],
 				},
@@ -961,6 +1009,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'ayarabbim',
 						},
 						{
 							_id: 'b0828033-d379-488c-a142-3750c5fe3a15',
@@ -970,6 +1019,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'ayarabbim',
 						},
 						{
 							_id: 'df23c42a-04a5-49fe-8026-c518ad41460f',
@@ -979,6 +1029,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'ayarabbim',
 						},
 					],
 				},
@@ -1019,6 +1070,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'salteyestudio',
 						},
 						{
 							_id: '0668d467-7087-4773-94c4-b76682267d7f',
@@ -1028,6 +1080,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'salteyestudio',
 						},
 						{
 							_id: '91e782f4-562a-43db-bd0f-be425da866f4',
@@ -1037,6 +1090,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'salteyestudio',
 						},
 					],
 				},
@@ -1075,6 +1129,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'nakedandfamousdenim',
 						},
 						{
 							_id: 'ff54c041-d22f-4288-afa0-676945d2fc4f',
@@ -1084,6 +1139,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'nakedandfamousdenim',
 						},
 						{
 							_id: '2d2e9825-95a8-4566-8899-52cff00f1983',
@@ -1093,6 +1149,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'nakedandfamousdenim',
 						},
 					],
 				},
@@ -1107,6 +1164,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'nakedandfamousdenim',
 						},
 						{
 							_id: '2d4833ca-6cb6-4847-8d17-b37f8375a707',
@@ -1116,6 +1174,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'nakedandfamousdenim',
 						},
 						{
 							_id: 'a64acc52-ff98-49e8-b152-7538c6d4965c',
@@ -1125,6 +1184,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'nakedandfamousdenim',
 						},
 					],
 				},
@@ -1151,6 +1211,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'nakedandfamousdenim',
 						},
 						{
 							_id: 'e8c4e6c6-938a-4903-8bca-c2d3a9a393da',
@@ -1160,6 +1221,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'nakedandfamousdenim',
 						},
 						{
 							_id: '3490fa3d-5c61-4658-8a03-64e447ac45c7',
@@ -1169,6 +1231,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'nakedandfamousdenim',
 						},
 					],
 				},
@@ -1207,6 +1270,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'givenchy',
 						},
 						{
 							_id: '8a0f9118-e45e-4977-9f26-6f7c333d9fa1',
@@ -1216,6 +1280,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'givenchy',
 						},
 						{
 							_id: 'ca376b74-6c96-4640-8ddc-43d989aa8f44',
@@ -1225,6 +1290,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'givenchy',
 						},
 						{
 							_id: '6d2ff83e-3af5-4e62-bd01-ae51a2dfaffd',
@@ -1234,6 +1300,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'givenchy',
 						},
 						{
 							_id: 'b942e10c-0bd1-4f68-94e3-b450fd41df54',
@@ -1243,6 +1310,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'givenchy',
 						},
 					],
 				},
@@ -1257,6 +1325,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'givenchy',
 						},
 						{
 							_id: '3572bfcf-2bb2-4730-a014-a26278fcbc55',
@@ -1266,6 +1335,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'givenchy',
 						},
 						{
 							_id: '2a98b589-c590-4c43-860a-e1595ee91134',
@@ -1275,6 +1345,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'givenchy',
 						},
 						{
 							_id: 'a8ce7b42-504f-4076-b9f4-bfbd148fb161',
@@ -1284,6 +1355,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'givenchy',
 						},
 						{
 							_id: '675de947-501b-42bd-a769-4075484cb5be',
@@ -1293,6 +1365,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'givenchy',
 						},
 					],
 				},
@@ -1321,6 +1394,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'eye_of_the_storm',
 						},
 						{
 							_id: '70023705-be2d-4f84-b65b-661e7530914a',
@@ -1330,6 +1404,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'eye_of_the_storm',
 						},
 						{
 							_id: 'a8ac4275-15bc-4703-b334-8742b85f9e82',
@@ -1339,6 +1414,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'eye_of_the_storm',
 						},
 					],
 				},
@@ -1353,6 +1429,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'eye_of_the_storm',
 						},
 						{
 							_id: 'cb58e560-b9d1-4b5e-ac67-6ed8be08331c',
@@ -1362,6 +1439,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'eye_of_the_storm',
 						},
 						{
 							_id: '69711575-e555-4b88-b402-1f176f7b6baa',
@@ -1371,6 +1449,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'eye_of_the_storm',
 						},
 					],
 				},
@@ -1397,6 +1476,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'eye_of_the_storm',
 						},
 						{
 							_id: '1043727e-d987-4b0e-9bfb-800a54c66354',
@@ -1406,6 +1486,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'eye_of_the_storm',
 						},
 						{
 							_id: 'a9ac6443-1967-4d00-819c-3765e235af46',
@@ -1415,6 +1496,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'eye_of_the_storm',
 						},
 					],
 				},
@@ -1443,6 +1525,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'berta',
 						},
 						{
 							_id: '6bd0fc5d-4223-439e-9b5d-019dee26c8a2',
@@ -1452,6 +1535,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'berta',
 						},
 						{
 							_id: '56f0b18c-74ee-4820-a05b-e64efa6242e0',
@@ -1461,6 +1545,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'berta',
 						},
 					],
 				},
@@ -1475,6 +1560,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'berta',
 						},
 						{
 							_id: 'aff40a17-fc40-4cbc-b40c-6f847dae9f4b',
@@ -1484,6 +1570,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'berta',
 						},
 						{
 							_id: '2ffbd164-3307-4b16-aeaa-937b37d5e587',
@@ -1493,6 +1580,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'berta',
 						},
 					],
 				},
@@ -1545,6 +1633,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'milkwhite',
 						},
 						{
 							_id: '17571d07-0fe8-4ecc-aee6-51e44af60c51',
@@ -1554,6 +1643,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'milkwhite',
 						},
 						{
 							_id: '89fa1349-ff05-46bc-936a-5af321f9259e',
@@ -1563,6 +1653,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'milkwhite',
 						},
 						{
 							_id: '84fa9fa7-78d4-4df6-b572-7329f3a8bb8f',
@@ -1572,6 +1663,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'milkwhite',
 						},
 						{
 							_id: 'e2861b5f-7a5d-4d59-8f68-98254469a213',
@@ -1581,6 +1673,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'milkwhite',
 						},
 					],
 				},
@@ -1607,6 +1700,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'milkwhite',
 						},
 						{
 							_id: '06678b72-639e-46fb-a754-ae15c9778917',
@@ -1616,6 +1710,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'milkwhite',
 						},
 						{
 							_id: '70cae413-18ad-432f-bb3b-502850621187',
@@ -1625,6 +1720,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'milkwhite',
 						},
 						{
 							_id: '6e0ae272-6f9d-4ff9-8443-a6c8e641b80f',
@@ -1634,6 +1730,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'milkwhite',
 						},
 						{
 							_id: '0d81a324-cc17-4f68-a5b5-324417c8cc9c',
@@ -1643,6 +1740,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'milkwhite',
 						},
 					],
 				},
@@ -1657,6 +1755,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'milkwhite',
 						},
 						{
 							_id: 'e1e26c51-c996-4c03-a79f-33b221522b05',
@@ -1666,6 +1765,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'milkwhite',
 						},
 						{
 							_id: '2e9b3f90-fa9a-41b2-abc7-d8fcc5169540',
@@ -1675,6 +1775,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'milkwhite',
 						},
 						{
 							_id: '61c87dbf-7bb3-406b-8cea-0bdef4f5d306',
@@ -1684,6 +1785,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'milkwhite',
 						},
 						{
 							_id: '0badc7a4-09c0-4355-aeb0-7cb12947b2fe',
@@ -1693,6 +1795,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'milkwhite',
 						},
 					],
 				},
@@ -1757,6 +1860,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: '7499bf7e-2d47-4069-b492-538df8ece2d1',
@@ -1766,6 +1870,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: '748aa0d6-ff31-4a09-9c2f-f9766599f666',
@@ -1775,6 +1880,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: '4276317f-8279-4ead-8608-d65abd9cec68',
@@ -1784,6 +1890,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: '021768e9-3115-43de-86dc-2fe2264467be',
@@ -1793,6 +1900,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 					],
 				},
@@ -1807,6 +1915,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: 'f13ac978-c36e-4c00-a571-496cdcd71abc',
@@ -1816,6 +1925,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: 'a3a570e5-7684-43cf-a3ee-3a78210802f9',
@@ -1825,6 +1935,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: '34e271b2-c977-49b6-9c37-f8027fdea8c0',
@@ -1834,6 +1945,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: '240410f1-303a-48f9-81d0-fd90621b2626',
@@ -1843,6 +1955,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 					],
 				},
@@ -1857,6 +1970,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: 'b95b7278-6c3c-4304-a9c3-5bbeb240f9e6',
@@ -1866,6 +1980,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: 'e9b0ffeb-0523-4c37-b57f-143cba0d0917',
@@ -1875,6 +1990,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: 'd215d4fe-1351-4b79-afb5-977f43444f9f',
@@ -1884,6 +2000,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 						{
 							_id: '428b5487-7d2c-4798-abe7-340e3a5841cb',
@@ -1893,6 +2010,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: '𝐶𝑂𝐿𝐼𝑁ⓡ',
 						},
 					],
 				},
@@ -1933,6 +2051,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'just_etro.gang',
 						},
 						{
 							_id: 'ed679893-7cd0-4919-82ff-13122c508ed5',
@@ -1942,6 +2061,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'just_etro.gang',
 						},
 						{
 							_id: 'ce3e8eaa-461f-4e29-81fb-265187e98377',
@@ -1951,6 +2071,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'just_etro.gang',
 						},
 					],
 				},
@@ -1977,6 +2098,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'just_etro.gang',
 						},
 						{
 							_id: '29537ebf-acf7-4642-a2d9-a3a5b40e6819',
@@ -1986,6 +2108,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'just_etro.gang',
 						},
 						{
 							_id: '3dc32714-d7ab-4599-9899-483d880b58b2',
@@ -1995,6 +2118,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'just_etro.gang',
 						},
 					],
 				},
@@ -2009,6 +2133,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'just_etro.gang',
 						},
 						{
 							_id: '5afd632d-df99-4a59-a212-7847a192978a',
@@ -2018,6 +2143,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'just_etro.gang',
 						},
 						{
 							_id: 'ee39b28e-650a-4ce0-80f5-7dd77b8021ea',
@@ -2027,6 +2153,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'just_etro.gang',
 						},
 					],
 				},
@@ -2073,6 +2200,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'xipi',
 						},
 						{
 							_id: '4661699c-a7f3-46bd-8c9e-92760814cca8',
@@ -2082,6 +2210,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'xipi',
 						},
 						{
 							_id: '5641548c-c03c-40b7-967e-f199e7ffa0e7',
@@ -2091,6 +2220,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'xipi',
 						},
 					],
 				},
@@ -2105,6 +2235,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'xipi',
 						},
 						{
 							_id: '2849a2c7-7408-4bbc-8d77-91dd3d378126',
@@ -2114,6 +2245,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'xipi',
 						},
 						{
 							_id: '982c3b65-1d0f-44be-a123-c51cc2a8184f',
@@ -2123,6 +2255,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'xipi',
 						},
 						{
 							_id: 'd27eadb1-a5bf-4775-b973-c22dd6c416f0',
@@ -2132,6 +2265,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'xipi',
 						},
 					],
 				},
@@ -2206,6 +2340,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'liniss_official',
 						},
 						{
 							_id: '2451c078-3982-4425-8fbf-1791c27785da',
@@ -2215,6 +2350,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'liniss_official',
 						},
 						{
 							_id: 'c1ac9cc0-84a1-4763-9ca6-0e38d2705e77',
@@ -2224,6 +2360,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'liniss_official',
 						},
 						{
 							_id: 'a28bf62c-f925-420c-ae00-2fe20248bfe0',
@@ -2233,6 +2370,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'liniss_official',
 						},
 						{
 							_id: 'e5b28145-064e-444c-bfa5-d30634b8d995',
@@ -2242,6 +2380,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'liniss_official',
 						},
 					],
 				},
@@ -2278,6 +2417,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'liniss_official',
 						},
 						{
 							_id: 'dc440275-0e38-47f7-a3ed-504c50b6bf56',
@@ -2287,6 +2427,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'liniss_official',
 						},
 						{
 							_id: '67c3b857-054f-4cde-9a1d-947ed78d6ad9',
@@ -2296,6 +2437,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'liniss_official',
 						},
 						{
 							_id: '32e13c5c-885f-4d74-8519-713918fcfeb4',
@@ -2305,6 +2447,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'liniss_official',
 						},
 						{
 							_id: '4813447b-0b9a-4443-8085-fac2e3113c3a',
@@ -2314,6 +2457,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'liniss_official',
 						},
 					],
 				},
@@ -2492,6 +2636,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'hurricane_b',
 						},
 						{
 							_id: '670aba78-cb66-4cfa-9cd6-f997a03648b9',
@@ -2501,6 +2646,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'hurricane_b',
 						},
 						{
 							_id: 'cd6c3ca3-e3a5-486a-9b2b-c6a1901888fc',
@@ -2510,6 +2656,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'hurricane_b',
 						},
 						{
 							_id: 'b1f11ed1-a35a-4688-9d9a-cafa05854fb0',
@@ -2519,6 +2666,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'hurricane_b',
 						},
 						{
 							_id: '03e8e894-5178-4f5c-91bb-c8d52cbd1341',
@@ -2528,6 +2676,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'hurricane_b',
 						},
 					],
 				},
@@ -2568,6 +2717,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'skall',
 						},
 						{
 							_id: 'ea9a1dad-8d42-45eb-98bb-21c88073d3ba',
@@ -2577,6 +2727,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'skall',
 						},
 						{
 							_id: 'aa10982c-d54b-490e-bb46-22f8816244c5',
@@ -2586,6 +2737,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'skall',
 						},
 						{
 							_id: '0e061a01-6947-4e5d-91e7-2f88c86d8774',
@@ -2595,6 +2747,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'skall',
 						},
 						{
 							_id: '122b2a10-20bb-4990-a267-ffc17fe870b9',
@@ -2604,6 +2757,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'skall',
 						},
 					],
 				},
@@ -2630,6 +2784,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'skall',
 						},
 						{
 							_id: '568741fd-2df2-4929-981c-d48e8d9abf29',
@@ -2639,6 +2794,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'skall',
 						},
 						{
 							_id: 'a5fa938a-977f-4e93-9b08-9c43eee6bbae',
@@ -2648,6 +2804,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'skall',
 						},
 						{
 							_id: 'ea5d013b-9286-4682-949a-6f8362281b9d',
@@ -2657,6 +2814,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'skall',
 						},
 						{
 							_id: '449ee00e-1ca5-4f2c-a916-0a0d7867f033',
@@ -2666,6 +2824,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'skall',
 						},
 					],
 				},
@@ -2680,6 +2839,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'skall',
 						},
 						{
 							_id: '9d6565bc-bfe4-48c9-b4a9-8ad25fdd9a7f',
@@ -2689,6 +2849,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'skall',
 						},
 						{
 							_id: '264cc4d2-4646-49f5-8f24-5a00db0861a9',
@@ -2698,6 +2859,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'skall',
 						},
 						{
 							_id: '124bcfc1-719f-4adc-ab6e-0316e522cca8',
@@ -2707,6 +2869,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'skall',
 						},
 						{
 							_id: '1182ec45-6564-4703-8025-2d364352e850',
@@ -2716,6 +2879,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'skall',
 						},
 					],
 				},
@@ -2744,6 +2908,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'cara_club',
 						},
 						{
 							_id: '4e123622-c044-4198-a07b-68432e04a66d',
@@ -2753,6 +2918,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'cara_club',
 						},
 						{
 							_id: '61564cdf-32d5-4e19-8da3-617813d55df4',
@@ -2762,6 +2928,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'cara_club',
 						},
 						{
 							_id: '2845ef76-02e5-46d5-8f87-51c5363e6955',
@@ -2771,6 +2938,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'cara_club',
 						},
 						{
 							_id: '42c12589-a9fa-409f-8e1d-806ff9e378a7',
@@ -2780,6 +2948,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'cara_club',
 						},
 					],
 				},
@@ -2808,6 +2977,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'stevie_crowne',
 						},
 						{
 							_id: '5f400634-a4cf-42a3-ab80-7c30274d5177',
@@ -2817,6 +2987,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'stevie_crowne',
 						},
 						{
 							_id: 'e28fa7a1-b509-412c-bb56-9b84777876b6',
@@ -2826,6 +2997,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'stevie_crowne',
 						},
 					],
 				},
@@ -2840,6 +3012,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'stevie_crowne',
 						},
 						{
 							_id: 'a88c04a3-d984-41d5-99bc-c88bc9c05747',
@@ -2849,6 +3022,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'stevie_crowne',
 						},
 						{
 							_id: 'a94ce207-f560-4a65-9d77-2e892056a98e',
@@ -2858,6 +3032,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'stevie_crowne',
 						},
 					],
 				},
@@ -2886,6 +3061,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'fig._cool_leather',
 						},
 						{
 							_id: '55ac3ccb-654b-4ce1-bcdb-ce5d0340db14',
@@ -2895,6 +3071,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'fig._cool_leather',
 						},
 						{
 							_id: '12dce6cc-5494-47c3-ac23-97899b309818',
@@ -2904,6 +3081,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'fig._cool_leather',
 						},
 					],
 				},
@@ -2930,6 +3108,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'fig._cool_leather',
 						},
 						{
 							_id: '3bcf40db-bac2-4b6c-a7bf-5cbe53c1660f',
@@ -2939,6 +3118,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'fig._cool_leather',
 						},
 						{
 							_id: '0847c644-006a-4982-ace6-40689787017f',
@@ -2948,6 +3128,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'fig._cool_leather',
 						},
 					],
 				},
@@ -2982,6 +3163,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'hani',
 						},
 						{
 							_id: '73bd4630-31f3-457f-ab4c-a6003f02ec56',
@@ -2991,6 +3173,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'hani',
 						},
 						{
 							_id: '08e1e0f3-dda4-4934-a567-54f7d1e4c823',
@@ -3000,6 +3183,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'hani',
 						},
 					],
 				},
@@ -3014,6 +3198,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'hani',
 						},
 						{
 							_id: 'a003f803-8067-4b68-99ca-a0de69a18914',
@@ -3023,6 +3208,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'hani',
 						},
 						{
 							_id: '341ac888-792e-4544-8d99-e3c775592031',
@@ -3032,6 +3218,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'hani',
 						},
 					],
 				},
@@ -3046,6 +3233,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'hani',
 						},
 						{
 							_id: 'd9c80590-21a8-4407-a8e7-0c8214f41112',
@@ -3055,6 +3243,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'hani',
 						},
 						{
 							_id: 'f62485c8-c314-4dd2-9e80-987cc2dbec6d',
@@ -3064,6 +3253,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'hani',
 						},
 					],
 				},
@@ -3110,6 +3300,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'beachclub.official',
 						},
 						{
 							_id: 'a8314a15-4b0e-4100-b7f6-1a6f555fa73b',
@@ -3119,6 +3310,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'beachclub.official',
 						},
 						{
 							_id: '85378ed0-01f9-4404-9f8b-e50b8121f51c',
@@ -3128,6 +3320,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'beachclub.official',
 						},
 						{
 							_id: '7312797d-7952-4db9-a09e-dd11192d088e',
@@ -3137,6 +3330,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'beachclub.official',
 						},
 						{
 							_id: 'df9a45b7-4fdb-4577-b811-d1084381274d',
@@ -3146,6 +3340,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'beachclub.official',
 						},
 					],
 				},
@@ -3178,6 +3373,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'beachclub.official',
 						},
 						{
 							_id: 'fa769499-27c3-4b4b-a5ef-4052388512ff',
@@ -3187,6 +3383,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'beachclub.official',
 						},
 						{
 							_id: '2687f7ab-1bdb-4e48-9c4f-0ba82bc57b8e',
@@ -3196,6 +3393,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'beachclub.official',
 						},
 						{
 							_id: 'a441b53a-e59d-4c29-942f-8b469c251828',
@@ -3205,6 +3403,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'beachclub.official',
 						},
 						{
 							_id: '646b4a84-cc6c-47ad-9008-78bedaa213f5',
@@ -3214,6 +3413,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'beachclub.official',
 						},
 					],
 				},
@@ -3252,6 +3452,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'ushatava',
 						},
 						{
 							_id: '4abf59f0-b0c1-4ea1-b7b0-184be2e75fa4',
@@ -3261,6 +3462,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'ushatava',
 						},
 						{
 							_id: 'c30246af-52ba-44c2-9983-2a84d49687e5',
@@ -3270,6 +3472,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'ushatava',
 						},
 					],
 				},
@@ -3298,6 +3501,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'naked',
 						},
 						{
 							_id: '46a035d7-1f7e-439b-b2b5-81852df6205a',
@@ -3307,6 +3511,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'naked',
 						},
 						{
 							_id: 'b74e44d2-5ff1-4647-85f9-d28414529601',
@@ -3316,6 +3521,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'naked',
 						},
 					],
 				},
@@ -3342,6 +3548,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'naked',
 						},
 						{
 							_id: 'd15798fc-b221-4793-9928-f3f9c8139eb0',
@@ -3351,6 +3558,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'naked',
 						},
 						{
 							_id: '9ebb0e5c-c286-4767-b826-46b60d06dd72',
@@ -3360,6 +3568,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'naked',
 						},
 					],
 				},
@@ -3374,6 +3583,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'naked',
 						},
 						{
 							_id: '0a869f1f-58f3-4754-a526-17054defaa10',
@@ -3383,6 +3593,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'naked',
 						},
 						{
 							_id: 'bfcb2fcf-a629-49ba-bc11-11cfb79ca60d',
@@ -3392,6 +3603,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'naked',
 						},
 					],
 				},
@@ -3430,6 +3642,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: 'f2719cb9-4b26-4cb2-88ae-485bec234c98',
@@ -3439,6 +3652,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: '30e7c098-573f-4a2b-84c6-943bfd3ac66f',
@@ -3448,6 +3662,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: 'aff9f0d2-aec8-45e9-b207-06df475fc0ab',
@@ -3457,6 +3672,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: '22af5b34-e50c-4f2b-a6eb-539d5250c5b5',
@@ -3466,6 +3682,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 					],
 				},
@@ -3480,6 +3697,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: '76cc5278-62d8-4636-9532-0ceab57df635',
@@ -3489,6 +3707,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: 'f6d24f4c-4bbb-45e0-b27f-041f278827f8',
@@ -3498,6 +3717,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: 'c6d18ff9-16b0-4310-8129-d82dab8a5666',
@@ -3507,6 +3727,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: 'cffa2621-5282-4c66-9a25-9c0fcc9dc937',
@@ -3516,6 +3737,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 					],
 				},
@@ -3542,6 +3764,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: '9c9312b1-6954-4a8c-8f18-883a233912cd',
@@ -3551,6 +3774,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: '9593c500-7690-48bf-ac12-2fe6cd046727',
@@ -3560,6 +3784,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: 'a5dc979c-e4af-4306-902e-938cd7c1731e',
@@ -3569,6 +3794,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: '01bbef42-49c1-425c-831c-fb30e1a00f50',
@@ -3578,6 +3804,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 					],
 				},
@@ -3592,6 +3819,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: '2a1749dd-8ed7-4685-a7e3-163e9ed7798e',
@@ -3601,6 +3829,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: 'f4ca6254-9b19-49ad-9824-99e87984a981',
@@ -3610,6 +3839,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: '084ba7f3-c007-4880-a0a1-81e247bf0209',
@@ -3619,6 +3849,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 						{
 							_id: '2e0e3e59-e9ba-422a-8c45-db79c783d46f',
@@ -3628,6 +3859,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'demobaza',
 						},
 					],
 				},
@@ -3662,6 +3894,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'libeworkshop',
 						},
 						{
 							_id: '7c0612ac-cec2-4fce-ac98-f329ec4fc18c',
@@ -3671,6 +3904,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'libeworkshop',
 						},
 						{
 							_id: '1938eafc-0057-4c1b-987e-cf7c9fb9bc00',
@@ -3680,6 +3914,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'libeworkshop',
 						},
 					],
 				},
@@ -3718,6 +3953,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'mono_talk',
 						},
 						{
 							_id: '89940bc3-3346-4de4-8ea3-7da9b96a5df0',
@@ -3727,6 +3963,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'mono_talk',
 						},
 						{
 							_id: '2740f6e7-026d-42a0-a428-5fe16f6f3381',
@@ -3736,6 +3973,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'mono_talk',
 						},
 					],
 				},
@@ -3750,6 +3988,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'mono_talk',
 						},
 						{
 							_id: '27bd6c3b-bd96-4234-8943-60a5a2f85f54',
@@ -3759,6 +3998,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'mono_talk',
 						},
 						{
 							_id: '9a7c9b19-8575-447d-9da3-601aa63b3657',
@@ -3768,6 +4008,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'mono_talk',
 						},
 					],
 				},
@@ -3794,6 +4035,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'mono_talk',
 						},
 						{
 							_id: '494b2231-97c7-4fc7-9067-37dd2788165f',
@@ -3803,6 +4045,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'mono_talk',
 						},
 						{
 							_id: 'f865c7db-3ab5-476c-b005-13cbd834bf9f',
@@ -3812,6 +4055,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'mono_talk',
 						},
 					],
 				},
@@ -3846,6 +4090,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'whiteplan',
 						},
 						{
 							_id: '907303da-e10c-4e23-9a4b-f350c4ec90fc',
@@ -3855,6 +4100,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'whiteplan',
 						},
 						{
 							_id: '1933def2-e125-45c4-a0a5-8cd43928b91f',
@@ -3864,6 +4110,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'whiteplan',
 						},
 						{
 							_id: '619515ab-b84d-452d-850d-b04712e36d78',
@@ -3873,6 +4120,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'whiteplan',
 						},
 						{
 							_id: '855f85d3-cacb-4aa4-9c79-03da74b7706a',
@@ -3882,6 +4130,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'whiteplan',
 						},
 					],
 				},
@@ -3896,6 +4145,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'whiteplan',
 						},
 						{
 							_id: 'f2821415-4f19-4533-bed7-c2fcee0cf4db',
@@ -3905,6 +4155,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'whiteplan',
 						},
 						{
 							_id: 'ffbbe7a1-d640-4be3-9106-fff2adccdac4',
@@ -3914,6 +4165,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'whiteplan',
 						},
 						{
 							_id: 'bff361bd-b06e-41a5-8239-0502d87fd20f',
@@ -3923,6 +4175,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'whiteplan',
 						},
 						{
 							_id: 'c3a4ef4f-8bc5-43aa-84df-b250a87a8bd3',
@@ -3932,6 +4185,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'whiteplan',
 						},
 					],
 				},
@@ -3972,6 +4226,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'erroris.ltd',
 						},
 						{
 							_id: '4ef16e61-176b-4476-8762-b7b02012224b',
@@ -3981,6 +4236,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'erroris.ltd',
 						},
 						{
 							_id: '1542eb42-64bd-47f9-b924-319ff5ec06df',
@@ -3990,6 +4246,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'erroris.ltd',
 						},
 						{
 							_id: '6cca44e5-7fdd-4121-863a-cd6efb64c985',
@@ -3999,6 +4256,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'erroris.ltd',
 						},
 						{
 							_id: 'b43fec7b-05ea-4637-8bd3-58bfc18b9666',
@@ -4008,6 +4266,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'erroris.ltd',
 						},
 					],
 				},
@@ -4046,6 +4305,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'dottie',
 						},
 						{
 							_id: '4e07cc41-a395-4b6c-8100-d10a639675d5',
@@ -4055,6 +4315,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'dottie',
 						},
 						{
 							_id: 'a30d0fd8-6b1b-4845-b89d-e71a5a80fa7d',
@@ -4064,6 +4325,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'dottie',
 						},
 						{
 							_id: '32b42e26-dc51-4629-bdc6-d892100d8764',
@@ -4073,6 +4335,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'dottie',
 						},
 						{
 							_id: '1bd69726-ecbc-4503-be59-7025b45d5cfb',
@@ -4082,6 +4345,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'dottie',
 						},
 					],
 				},
@@ -4120,6 +4384,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'tubycatu',
 						},
 						{
 							_id: 'fa216d89-66a1-44b9-a687-37fffe99ee6f',
@@ -4129,6 +4394,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'tubycatu',
 						},
 						{
 							_id: 'b91d0f45-edbf-4f2c-9854-0f2c5ed6eea9',
@@ -4138,6 +4404,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'tubycatu',
 						},
 					],
 				},
@@ -4176,6 +4443,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: '96334998-f40a-427b-abf6-04c05437eff6',
@@ -4185,6 +4453,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: '81cd668f-56ac-4309-b893-38ef24ee69d7',
@@ -4194,6 +4463,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: '890dbb3f-0979-4821-82dd-64a2452be20c',
@@ -4203,6 +4473,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: '48422933-6e5f-45cc-940b-1e0454b791c6',
@@ -4212,6 +4483,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 					],
 				},
@@ -4226,6 +4498,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: 'ba4492a3-eb98-4b4d-86e5-30c3cae49965',
@@ -4235,6 +4508,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: '355248c8-9897-435c-b5f4-5a37fbff6422',
@@ -4244,6 +4518,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: 'ecd3546d-652e-4e78-ba67-166b32d26036',
@@ -4253,6 +4528,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: '8a12d5af-301a-407f-acea-80e0da3ef76c',
@@ -4262,6 +4538,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 					],
 				},
@@ -4276,6 +4553,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: '623af5df-89b1-44ea-9881-5a4574a4627e',
@@ -4285,6 +4563,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: 'b2861314-3eb0-40b7-ae38-3dfdcb1c48b8',
@@ -4294,6 +4573,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: '3fb6aef0-8468-4346-bc8d-a3cee7b9c935',
@@ -4303,6 +4583,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 						{
 							_id: '9e922c4c-9afc-4d07-a991-e0601b8790d2',
@@ -4312,6 +4593,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'baum_und_pferdgarten',
 						},
 					],
 				},
@@ -4340,6 +4622,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'pradies',
 						},
 						{
 							_id: '76e1e19a-a775-4ba1-8118-8206dd7b6aef',
@@ -4349,6 +4632,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'pradies',
 						},
 						{
 							_id: '7f972bdc-f3f5-4be1-a5eb-02edd632db6b',
@@ -4358,6 +4642,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'pradies',
 						},
 						{
 							_id: '65ad81f0-49ca-468e-a0d7-29a3984c8ef8',
@@ -4367,6 +4652,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'pradies',
 						},
 						{
 							_id: 'c14f4164-e657-49ef-9a0f-102fde2ce59d',
@@ -4376,6 +4662,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'pradies',
 						},
 					],
 				},
@@ -4432,6 +4719,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'bad_habits',
 						},
 						{
 							_id: 'f7b0b957-0a0f-456b-abeb-011febce2f24',
@@ -4441,6 +4729,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'bad_habits',
 						},
 						{
 							_id: '85a67e12-7c1c-498d-8c32-eea1a543cb16',
@@ -4450,6 +4739,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'bad_habits',
 						},
 					],
 				},
@@ -4464,6 +4754,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'bad_habits',
 						},
 						{
 							_id: '1d99ac92-dee3-4b40-9436-c894d8530241',
@@ -4473,6 +4764,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'bad_habits',
 						},
 						{
 							_id: '9fc55aef-9ee7-497a-bf65-c17d1c69c228',
@@ -4482,6 +4774,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'bad_habits',
 						},
 					],
 				},
@@ -4508,6 +4801,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'bad_habits',
 						},
 						{
 							_id: '99c7cede-4434-4dc2-b729-efa30665e485',
@@ -4517,6 +4811,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'bad_habits',
 						},
 						{
 							_id: '19042895-f687-439d-b36a-17f4f703be73',
@@ -4526,6 +4821,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'bad_habits',
 						},
 						{
 							_id: '9326b11d-22e1-4962-a978-61d58645f190',
@@ -4535,6 +4831,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'bad_habits',
 						},
 						{
 							_id: 'c7ad8d22-86ce-4347-b26e-05af27a65fe7',
@@ -4544,6 +4841,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'bad_habits',
 						},
 					],
 				},
@@ -4572,6 +4870,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'levents',
 						},
 						{
 							_id: '1e7b6b4d-cfe9-49ee-82e5-7e71977f22f2',
@@ -4581,6 +4880,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'levents',
 						},
 						{
 							_id: '0fb43f57-ce90-4de2-ad13-8e8ac8efb7ec',
@@ -4590,6 +4890,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'levents',
 						},
 					],
 				},
@@ -4604,6 +4905,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'levents',
 						},
 						{
 							_id: 'd1865ee7-3b13-4504-a969-b3a2ef785e37',
@@ -4613,6 +4915,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'levents',
 						},
 						{
 							_id: '0b8e4e1a-a9f9-4d5b-b3ab-79b6c86722c2',
@@ -4622,6 +4925,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'levents',
 						},
 					],
 				},
@@ -4648,6 +4952,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'levents',
 						},
 						{
 							_id: '860b54b6-d005-45d6-a499-c151595401fd',
@@ -4657,6 +4962,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'levents',
 						},
 						{
 							_id: '5e937212-3248-4db7-9203-b8e058e0bfc9',
@@ -4666,6 +4972,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'levents',
 						},
 						{
 							_id: 'f2d2a2db-0cc6-489a-bff9-1e5f16d139b8',
@@ -4675,6 +4982,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'levents',
 						},
 						{
 							_id: '876ee7ff-81af-4f46-9963-85c5fda39105',
@@ -4684,6 +4992,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'levents',
 						},
 					],
 				},
@@ -4716,6 +5025,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Jacket',
+							collection: 'levents',
 						},
 						{
 							_id: '05007801-1e74-4b1a-9649-6da6a8abadbe',
@@ -4725,6 +5035,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Jacket',
+							collection: 'levents',
 						},
 						{
 							_id: '47220e7c-bbce-4d52-b845-c58d464205d4',
@@ -4734,6 +5045,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Jacket',
+							collection: 'levents',
 						},
 					],
 				},
@@ -4748,6 +5060,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Jacket',
+							collection: 'levents',
 						},
 						{
 							_id: '4ff539ca-37fe-4819-a8a4-f74613ca20ee',
@@ -4757,6 +5070,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Jacket',
+							collection: 'levents',
 						},
 					],
 				},
@@ -4825,6 +5139,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'rotate',
 						},
 						{
 							_id: 'dd109441-fc9c-40bf-86cb-23f70d210e6f',
@@ -4834,6 +5149,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'rotate',
 						},
 						{
 							_id: '574f242c-4ea7-421c-a519-dbadc6d9e27d',
@@ -4843,6 +5159,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'rotate',
 						},
 						{
 							_id: '6cd811ab-1e95-4f55-bc2e-5e9a8463d831',
@@ -4852,6 +5169,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'rotate',
 						},
 						{
 							_id: '6a600095-db21-4dfd-903d-54148d1075bf',
@@ -4861,6 +5179,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'rotate',
 						},
 					],
 				},
@@ -4875,6 +5194,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'rotate',
 						},
 						{
 							_id: '092c5db3-91fb-4cc6-8dbe-b66a195acb66',
@@ -4884,6 +5204,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'rotate',
 						},
 						{
 							_id: 'f496959b-dd1e-4fe1-93fe-f82db6d1de58',
@@ -4893,6 +5214,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'rotate',
 						},
 						{
 							_id: '935bc731-9ae7-4cbf-b205-8eb1f47407a6',
@@ -4902,6 +5224,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Full Body',
 							templateCategory: 'Dress',
+							collection: 'rotate',
 						},
 					],
 				},
@@ -4930,6 +5253,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'kido',
 						},
 						{
 							_id: 'd058674e-5f20-4475-a0e7-655872e47674',
@@ -4939,6 +5263,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'kido',
 						},
 						{
 							_id: '3e995c5c-f1c1-41cd-bd17-cdf882e229b3',
@@ -4948,6 +5273,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'kido',
 						},
 					],
 				},
@@ -4962,6 +5288,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'kido',
 						},
 						{
 							_id: 'c052db06-9e25-4027-934b-1de6f1b349bd',
@@ -4971,6 +5298,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'kido',
 						},
 						{
 							_id: 'bf17288c-d45d-439a-a1c1-adc4fb1f5f8b',
@@ -4980,6 +5308,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'kido',
 						},
 					],
 				},
@@ -5008,6 +5337,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'rechic',
 						},
 						{
 							_id: '956d3631-e3ef-46af-9fb0-5bda5925cdce',
@@ -5017,6 +5347,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'rechic',
 						},
 						{
 							_id: '5983bb8a-c51c-42be-b779-bbcd8c1884c6',
@@ -5026,6 +5357,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'rechic',
 						},
 					],
 				},
@@ -5064,6 +5396,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'dico®',
 						},
 						{
 							_id: 'acdc9a8e-15e6-4980-a5ab-87d25b4dfe92',
@@ -5073,6 +5406,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'dico®',
 						},
 						{
 							_id: '6bded1fb-ba61-4ba9-aafe-19b932c5f0fb',
@@ -5082,6 +5416,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'dico®',
 						},
 					],
 				},
@@ -5108,6 +5443,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'dico®',
 						},
 						{
 							_id: '65987823-451b-46cc-bab4-ee3800c3bfdc',
@@ -5117,6 +5453,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'dico®',
 						},
 					],
 				},
@@ -5131,6 +5468,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'dico®',
 						},
 						{
 							_id: '07497b30-5420-47e5-b63a-335a100ca885',
@@ -5140,6 +5478,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'dico®',
 						},
 						{
 							_id: 'f7839149-d021-4bcd-8bee-2c228ebdc990',
@@ -5149,6 +5488,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'dico®',
 						},
 					],
 				},
@@ -5187,6 +5527,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'dario_mittmann',
 						},
 						{
 							_id: '3e602616-af3a-473f-85e4-1dc97b22aa93',
@@ -5196,6 +5537,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'dario_mittmann',
 						},
 						{
 							_id: '2d0bf86c-f23d-4018-820f-9b30b44bde27',
@@ -5205,6 +5547,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'dario_mittmann',
 						},
 						{
 							_id: 'bef01b0e-fb85-4f35-ac66-f9769147605e',
@@ -5214,6 +5557,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'dario_mittmann',
 						},
 					],
 				},
@@ -5240,6 +5584,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'dario_mittmann',
 						},
 						{
 							_id: '37d293fd-204f-4f6e-97fb-fdc77f95d44c',
@@ -5249,6 +5594,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'dario_mittmann',
 						},
 						{
 							_id: '82c634d9-9868-448e-af5c-4fb080faebe8',
@@ -5258,6 +5604,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'dario_mittmann',
 						},
 					],
 				},
@@ -5272,6 +5619,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'dario_mittmann',
 						},
 						{
 							_id: 'e4f01c54-ab51-4ae5-bd70-9900daf39ca4',
@@ -5281,6 +5629,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'dario_mittmann',
 						},
 						{
 							_id: 'a89e4444-1b52-4861-9fd1-82a96f905565',
@@ -5290,6 +5639,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'dario_mittmann',
 						},
 					],
 				},
@@ -5336,6 +5686,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'tsun',
 						},
 						{
 							_id: 'd8fc806f-aa3b-4da4-9da8-34b185ae8b38',
@@ -5345,6 +5696,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'tsun',
 						},
 						{
 							_id: '81ca2d84-9b91-4ad4-8beb-5fa4e28774c9',
@@ -5354,6 +5706,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'tsun',
 						},
 					],
 				},
@@ -5402,6 +5755,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: '𝐉𝐎𝐈𝐄_𝐃𝐄𝐒_𝐑𝐎𝐒𝐄𝐒',
 						},
 						{
 							_id: 'e143b684-08b9-4342-a4c3-49fda78b9259',
@@ -5411,6 +5765,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: '𝐉𝐎𝐈𝐄_𝐃𝐄𝐒_𝐑𝐎𝐒𝐄𝐒',
 						},
 					],
 				},
@@ -5425,6 +5780,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: '𝐉𝐎𝐈𝐄_𝐃𝐄𝐒_𝐑𝐎𝐒𝐄𝐒',
 						},
 						{
 							_id: '81218b5d-ca36-42a5-ae24-d8b534d68000',
@@ -5434,6 +5790,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: '𝐉𝐎𝐈𝐄_𝐃𝐄𝐒_𝐑𝐎𝐒𝐄𝐒',
 						},
 						{
 							_id: 'b52de668-eb23-4b66-8fca-d71e1b11c7e0',
@@ -5443,6 +5800,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: '𝐉𝐎𝐈𝐄_𝐃𝐄𝐒_𝐑𝐎𝐒𝐄𝐒',
 						},
 						{
 							_id: '7a8d5ca1-9d7a-470e-9e7d-7d067a366a62',
@@ -5452,6 +5810,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: '𝐉𝐎𝐈𝐄_𝐃𝐄𝐒_𝐑𝐎𝐒𝐄𝐒',
 						},
 						{
 							_id: '5355fe58-84c5-4352-935f-6974f99144a6',
@@ -5461,6 +5820,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: '𝐉𝐎𝐈𝐄_𝐃𝐄𝐒_𝐑𝐎𝐒𝐄𝐒',
 						},
 					],
 				},
@@ -5505,6 +5865,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 						{
 							_id: '11da677f-be8c-4074-9c1e-6f019cdf2609',
@@ -5514,6 +5875,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 						{
 							_id: '7250a6a2-eb77-4c05-896d-383bafba5249',
@@ -5523,6 +5885,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 						{
 							_id: '1cdcbc9b-851e-478e-8ec9-e0b0627c6d1a',
@@ -5532,6 +5895,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 					],
 				},
@@ -5546,6 +5910,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 						{
 							_id: '8cb2dd17-d653-4531-9239-529a21c8aa0b',
@@ -5555,6 +5920,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 						{
 							_id: 'fbdf668f-840b-4812-9af0-7c4bab613cc3',
@@ -5564,6 +5930,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 						{
 							_id: 'f219fcd9-a2ef-43be-8274-aa7cb1f93311',
@@ -5573,6 +5940,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 					],
 				},
@@ -5587,6 +5955,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 						{
 							_id: '63680c67-ece5-45a2-9093-58a7cebd2d9e',
@@ -5596,6 +5965,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 						{
 							_id: 'bde0cbe2-bc78-4b56-9247-5bc3a342af36',
@@ -5605,6 +5975,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 						{
 							_id: 'f529b108-a935-4969-a35b-c72b51ad807e',
@@ -5614,6 +5985,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 						{
 							_id: 'f460d477-1a94-4bab-8ea2-799f288f52f1',
@@ -5623,6 +5995,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'sora.m_design',
 						},
 					],
 				},
@@ -5671,6 +6044,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'bloom.womenswear',
 						},
 						{
 							_id: '7e56efbb-4a3b-480d-8540-88e46d687b5a',
@@ -5680,6 +6054,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'bloom.womenswear',
 						},
 						{
 							_id: '7ce2d862-2cb9-47f6-95cf-50f4b99900ea',
@@ -5689,6 +6064,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'bloom.womenswear',
 						},
 					],
 				},
@@ -5743,6 +6119,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'salteye',
 						},
 						{
 							_id: 'adb701c2-78b1-43e9-9d07-c560e346b6ef',
@@ -5752,6 +6129,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'salteye',
 						},
 						{
 							_id: '89b0b528-e8f6-4961-bac1-07b4fbbb060e',
@@ -5761,6 +6139,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'salteye',
 						},
 					],
 				},
@@ -5775,6 +6154,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'salteye',
 						},
 						{
 							_id: 'c2e8b669-eabb-4f8d-ab25-4f5284f892aa',
@@ -5784,6 +6164,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'salteye',
 						},
 						{
 							_id: 'fa4edbd6-312d-4a8e-8e4c-d17a35d708d4',
@@ -5793,6 +6174,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'salteye',
 						},
 					],
 				},
@@ -5819,6 +6201,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'salteye',
 						},
 						{
 							_id: '467a9264-22e9-4165-8523-e9d5103ce2d1',
@@ -5828,6 +6211,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'salteye',
 						},
 						{
 							_id: '9124509a-4423-401b-9ceb-474369ccbd7b',
@@ -5837,6 +6221,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'salteye',
 						},
 					],
 				},
@@ -5871,6 +6256,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'ridkid',
 						},
 						{
 							_id: '4d4c7c48-266b-4abd-9918-fa03875d5d84',
@@ -5880,6 +6266,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'ridkid',
 						},
 						{
 							_id: 'c4bcb949-248f-4009-827f-1599b828edfd',
@@ -5889,6 +6276,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'ridkid',
 						},
 						{
 							_id: '8bcaec46-8c09-48ca-9d51-1ba8fc89c5cf',
@@ -5898,6 +6286,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'ridkid',
 						},
 						{
 							_id: '59f14f09-2917-4a5c-a304-a2b2045a5ed5',
@@ -5907,6 +6296,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'ridkid',
 						},
 					],
 				},
@@ -5947,6 +6337,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'push_push',
 						},
 						{
 							_id: '7b21f222-5989-4422-b581-b63e43b4f756',
@@ -5956,6 +6347,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'push_push',
 						},
 						{
 							_id: '2faf3455-dba5-4a5e-8dfe-2781be7ba889',
@@ -5965,6 +6357,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'push_push',
 						},
 					],
 				},
@@ -5979,6 +6372,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'push_push',
 						},
 						{
 							_id: '4adc3a6a-628e-40f7-acd1-9aa718f127f4',
@@ -5988,6 +6382,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'push_push',
 						},
 						{
 							_id: '819f1e7b-ef75-4b30-a057-a8e7232c8e2d',
@@ -5997,6 +6392,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'push_push',
 						},
 					],
 				},
@@ -6023,6 +6419,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'push_push',
 						},
 						{
 							_id: '9e7e720f-3869-44ec-8b23-129367a49c87',
@@ -6032,6 +6429,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'push_push',
 						},
 						{
 							_id: 'b8952e91-dd45-4eb4-a72e-e383a8725023',
@@ -6041,6 +6439,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Skirt',
 							templateCategory: 'Skirt',
+							collection: 'push_push',
 						},
 					],
 				},
@@ -6069,6 +6468,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'procode',
 						},
 						{
 							_id: '48d0e83c-2ff8-439d-bc9a-987d3462b746',
@@ -6078,6 +6478,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'procode',
 						},
 						{
 							_id: 'ccfbf652-48c3-4553-babf-ce6ebe4f3093',
@@ -6087,6 +6488,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'procode',
 						},
 					],
 				},
@@ -6101,6 +6503,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'procode',
 						},
 						{
 							_id: '41def1a0-5419-461d-a0f4-32f7b76991cc',
@@ -6110,6 +6513,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'procode',
 						},
 						{
 							_id: 'dde7f50d-c4b6-4512-985d-41ee08fd3939',
@@ -6119,6 +6523,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'procode',
 						},
 					],
 				},
@@ -6147,6 +6552,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'pindiga_ranjith_kumar',
 						},
 						{
 							_id: '7268842d-7c71-473b-b5cd-c70bc6fab505',
@@ -6156,6 +6562,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'pindiga_ranjith_kumar',
 						},
 						{
 							_id: 'a11d6055-0076-4f17-9221-2404e3539f83',
@@ -6165,6 +6572,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Dress',
+							collection: 'pindiga_ranjith_kumar',
 						},
 					],
 				},
@@ -6193,6 +6601,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: '976a86c2-b685-45be-9e85-1d0feb3740a7',
@@ -6202,6 +6611,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: 'f9e0c054-e51d-480a-a929-ac23b68d3b37',
@@ -6211,6 +6621,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: '7c670c58-7be5-4278-b0b3-58e86bb28030',
@@ -6220,6 +6631,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: '3df5f0e1-a993-4a8d-9a03-2d34e00b168f',
@@ -6229,6 +6641,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'monroe_the_label',
 						},
 					],
 				},
@@ -6261,6 +6674,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: '482f068c-e6e9-4ffb-bb3f-11fdaa691ac8',
@@ -6270,6 +6684,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: 'a256752b-c460-4328-bca9-cdcea4b9dcec',
@@ -6279,6 +6694,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: '48e09914-7980-44fc-8139-efbf92f8cfc2',
@@ -6288,6 +6704,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: 'b9152951-59f6-40ca-8c27-5cf84d241cad',
@@ -6297,6 +6714,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'monroe_the_label',
 						},
 					],
 				},
@@ -6311,6 +6729,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: '5842879e-37d1-42ff-b99c-0dba9f3c582c',
@@ -6320,6 +6739,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: '5e39cb7e-f0c6-451e-9ad1-daa411443982',
@@ -6329,6 +6749,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: 'a0e6a71a-d883-4ec3-adc5-04ebce221a30',
@@ -6338,6 +6759,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'monroe_the_label',
 						},
 						{
 							_id: '99f70cd5-94fe-424b-9db7-c1e0922a8e66',
@@ -6347,6 +6769,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Sleeves',
 							templateCategory: 'Top',
+							collection: 'monroe_the_label',
 						},
 					],
 				},
@@ -6375,6 +6798,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'h2b_à_la_mode',
 						},
 						{
 							_id: '596bffde-e9c7-423a-b21d-69fb5784d134',
@@ -6384,6 +6808,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'h2b_à_la_mode',
 						},
 						{
 							_id: '2b22488a-7f2c-4c0c-9482-6b6084591cbd',
@@ -6393,6 +6818,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'h2b_à_la_mode',
 						},
 						{
 							_id: '3ae54720-7579-490a-b5cd-926069330d0c',
@@ -6402,6 +6828,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'h2b_à_la_mode',
 						},
 						{
 							_id: '84ebc026-f7e1-4d22-985f-ad0468c80a87',
@@ -6411,6 +6838,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Pants',
 							templateCategory: 'Pants',
+							collection: 'h2b_à_la_mode',
 						},
 					],
 				},
@@ -6459,6 +6887,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'diane',
 						},
 						{
 							_id: 'd15ba913-e668-469e-b846-ddb157222d95',
@@ -6468,6 +6897,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'diane',
 						},
 						{
 							_id: '6307a552-5a26-4d3b-bcc1-c08319e30715',
@@ -6477,6 +6907,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 							avatar: 'female',
 							category: 'Bodice',
 							templateCategory: 'Top',
+							collection: 'diane',
 						},
 					],
 				},

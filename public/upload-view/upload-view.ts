@@ -72,7 +72,7 @@ const BLOCK_CATEGORIES: BlockCategory[] = [
 
 @element
 export class UploadView extends Element {
-	static override elementName = 'upload-view'
+	static override readonly elementName = 'upload-view'
 
 	// Reactive properties
 	@signal selectedTab: string = BLOCK_CATEGORIES[0]

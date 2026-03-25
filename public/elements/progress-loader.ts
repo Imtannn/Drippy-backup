@@ -4,7 +4,7 @@ type ProgressLoaderAttributes = 'isVisible' | 'progress'
 
 @element
 export class ProgressLoader extends Element {
-	static override elementName = 'progress-loader'
+	static override readonly elementName = 'progress-loader'
 
 	@booleanAttribute isVisible = false
 	@attribute progress = 0

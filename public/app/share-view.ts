@@ -5,7 +5,7 @@ type ShareViewAttributes = keyof object // no attributes yet
 
 @element
 export class ShareView extends Element {
-	static override elementName = 'share-view'
+	static override readonly elementName = 'share-view'
 
 	@signal shareUrl = window.location.href
 	@signal isCopied = false

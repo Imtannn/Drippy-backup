@@ -7,7 +7,7 @@ import {store} from './store.js'
 
 @element
 export class CustomMeasurement extends Element {
-	static override elementName = 'custom-measurement'
+	static override readonly elementName = 'custom-measurement'
 
 	@signal bust = 0
 	@signal waist = 0

@@ -21,7 +21,7 @@ type LumeAutoRiggerAttributes = keyof object // no attributes yet
  */
 @element
 export class LumeAutoRigger extends Element {
-	static override elementName = 'lume-auto-rigger'
+	static override readonly elementName = 'lume-auto-rigger'
 
 	/**
 	 * Array of bone names to exclude from rigging. All children of the bones are excluded as well.

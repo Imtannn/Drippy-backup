@@ -25,7 +25,7 @@ const gltfLoader = new GLTFLoader()
  */
 @element
 export class LumeAnimation extends Element {
-	static override elementName = 'lume-animation'
+	static override readonly elementName = 'lume-animation'
 
 	/**
 	 * Optional file to load animation from. If not set, the parent Lume element's animations will

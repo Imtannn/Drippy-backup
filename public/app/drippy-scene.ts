@@ -106,7 +106,7 @@ const defaultMaleBlocks = defaultRenderBlocks.filter(b => b.block.avatar === 'ma
 
 @element
 export class DrippyScene extends Element {
-	static override elementName = 'drippy-scene'
+	static override readonly elementName = 'drippy-scene'
 
 	@attribute selectedSpace: Space | null = null
 	@attribute selectedAvatar: string | null = null

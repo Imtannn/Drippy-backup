@@ -8,7 +8,7 @@ const elementName = 'nav-bar'
 
 @element
 export class NavBar extends Element {
-	static override elementName = elementName
+	static override readonly elementName = elementName
 
 	/** The position of the nav bar: 'top' or 'bottom' */
 	@attribute position: NavBarPosition = 'top'
