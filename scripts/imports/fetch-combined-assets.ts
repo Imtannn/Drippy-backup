@@ -125,12 +125,52 @@ async function withRetry<T>(operation: () => Promise<T>, maxRetries: number = 3,
 	throw lastError!
 }
 
+function getFinalS3Key(key: string, contentType: string, toWebp: boolean = true): string {
+	let finalKey = key
+
+	if (contentType.startsWith('image/') && toWebp)
+		finalKey = path.extname(finalKey) ? finalKey.replace(/\.[^./]+$/, '.webp') : `${finalKey}.webp`
+
+	return finalKey.replace(/ /g, '_')
+}
+
+async function shouldDownloadAndUploadToS3(key: string, modifiedTime: string): Promise<boolean> {
+	const sourceModifiedAt = new Date(modifiedTime)
+
+	try {
+		const headResponse = await s3.send(
+			new HeadObjectCommand({
+				Bucket: S3_BUCKET,
+				Key: key,
+			}),
+		)
+
+		if (headResponse.LastModified && sourceModifiedAt.getTime() <= headResponse.LastModified.getTime()) {
+			console.log(
+				`⏭️  Skipping transfer (not newer): ${key} | Drive: ${sourceModifiedAt.toISOString()} <= S3: ${headResponse.LastModified.toISOString()}`,
+			)
+			return false
+		}
+
+		return true
+	} catch (error) {
+		const maybeError = error as {name?: string; $metadata?: {httpStatusCode?: number}}
+		const statusCode = maybeError.$metadata?.httpStatusCode
+		const name = maybeError.name
+		const objectMissing = statusCode === 404 || name === 'NotFound' || name === 'NoSuchKey'
+
+		if (objectMissing) return true
+
+		console.error('Error checking existing S3 object metadata:', error)
+		throw error
+	}
+}
+
 // Upload buffer to S3 and return the public URL
 async function uploadToS3(
 	buffer: Buffer,
 	key: string,
 	contentType: string,
-	modifiedTime: string,
 	lossless: boolean = false,
 	toWebp: boolean = true,
 ): Promise<string> {
@@ -159,39 +199,7 @@ async function uploadToS3(
 		}
 	}
 
-	const sourceModifiedAt = new Date(modifiedTime)
-	const isValidSourceModifiedAt = !Number.isNaN(sourceModifiedAt.getTime())
-	const normalizedKey = uploadKey.replace(/ /g, '_')
-
-	if (isValidSourceModifiedAt) {
-		try {
-			const headResponse = await s3.send(
-				new HeadObjectCommand({
-					Bucket: S3_BUCKET,
-					Key: normalizedKey,
-				}),
-			)
-
-			if (headResponse.LastModified && sourceModifiedAt.getTime() <= headResponse.LastModified.getTime()) {
-				console.log(
-					`⏭️  Skipping upload (not newer): ${normalizedKey} | Drive: ${sourceModifiedAt.toISOString()} <= S3: ${headResponse.LastModified.toISOString()}`,
-				)
-				return `${S3_URL}/${normalizedKey}`
-			}
-		} catch (error) {
-			const maybeError = error as {name?: string; $metadata?: {httpStatusCode?: number}}
-			const statusCode = maybeError.$metadata?.httpStatusCode
-			const name = maybeError.name
-			const objectMissing = statusCode === 404 || name === 'NotFound' || name === 'NoSuchKey'
-
-			if (!objectMissing) {
-				console.error('Error checking existing S3 object metadata:', error)
-				throw error
-			}
-
-			// If the object is missing, we proceed with the upload as normal.
-		}
-	}
+	const normalizedKey = getFinalS3Key(uploadKey, uploadContentType, toWebp)
 
 	const params: PutObjectCommandInput = {
 		Bucket: S3_BUCKET,
@@ -350,31 +358,44 @@ async function processOptionBlocks(
 			const pngFile = pngFiles[0]
 
 			try {
-				console.log(`        📥 Processing option block: ${blockFolder.name}`)
+				const blockThumbKey = `images/${collection}/options/${templateCategory}/${blockCategory}/${blockFolder.name}.png`
+				const blockModelKey = `models/${collection}/options/${templateCategory}/${blockCategory}/${blockFolder.name}${path.extname(
+					gltfFile.name,
+				)}`
+				const normalizedBlockThumbKey = getFinalS3Key(blockThumbKey, 'image/png')
+				const normalizedBlockModelKey = getFinalS3Key(blockModelKey, 'model/gltf+json')
 
-				// Download block files
-				const [pngBuffer, gltfBuffer] = await Promise.all([
-					downloadFromDrive(pngFile.id),
-					downloadFromDrive(gltfFile.id),
+				const [shouldTransferThumb, shouldTransferModel] = await Promise.all([
+					shouldDownloadAndUploadToS3(normalizedBlockThumbKey, pngFile.modifiedTime),
+					shouldDownloadAndUploadToS3(normalizedBlockModelKey, gltfFile.modifiedTime),
 				])
 
-				// Upload to S3
-				const [blockThumbS3Url, blockModelS3Url] = await Promise.all([
-					uploadToS3(
-						pngBuffer,
-						`images/${collection}/options/${templateCategory}/${blockCategory}/${blockFolder.name}.png`,
-						'image/png',
-						pngFile.modifiedTime,
-					),
-					uploadToS3(
-						gltfBuffer,
-						`models/${collection}/options/${templateCategory}/${blockCategory}/${blockFolder.name}${path.extname(
-							gltfFile.name,
-						)}`,
-						'model/gltf+json',
-						gltfFile.modifiedTime,
-					),
-				])
+				if (shouldTransferThumb || shouldTransferModel)
+					console.log(`        📥 Processing option block: ${blockFolder.name}`)
+
+				let blockThumbS3Url = `${S3_URL}/${normalizedBlockThumbKey}`
+				let blockModelS3Url = `${S3_URL}/${normalizedBlockModelKey}`
+				const transferOps: Promise<void>[] = []
+
+				if (shouldTransferThumb) {
+					transferOps.push(
+						(async () => {
+							const pngBuffer = await downloadFromDrive(pngFile.id)
+							blockThumbS3Url = await uploadToS3(pngBuffer, blockThumbKey, 'image/png')
+						})(),
+					)
+				}
+
+				if (shouldTransferModel) {
+					transferOps.push(
+						(async () => {
+							const gltfBuffer = await downloadFromDrive(gltfFile.id)
+							blockModelS3Url = await uploadToS3(gltfBuffer, blockModelKey, 'model/gltf+json')
+						})(),
+					)
+				}
+
+				await Promise.all(transferOps)
 
 				categoryBlocks.push({
 					_id: uuidv4(),
@@ -386,7 +407,8 @@ async function processOptionBlocks(
 					avatar: avatarGender,
 				})
 
-				console.log(`        ✅ Uploaded option block ${blockFolder.name}`)
+				if (shouldTransferThumb || shouldTransferModel)
+					console.log(`        ✅ Uploaded option block ${blockFolder.name}`)
 			} catch (error) {
 				console.error(`        ❌ Failed to process option block ${blockFolder.name}:`, error)
 			}
@@ -483,14 +505,19 @@ async function processTemplateFolder(
 	if (materialReferenceFolders.length > 0)
 		console.log(`    Found ${materialReferenceFolders.length} material reference folders`)
 
-	// Download template thumbnail
-	const templateThumbnailBuffer = await downloadFromDrive(templateThumbnail.id)
-	const templateS3Url = await uploadToS3(
-		templateThumbnailBuffer,
-		`images/${collection}/templates/${category}/${templateFolder.name}.png`,
-		'image/png',
+	const templateThumbKey = `images/${collection}/templates/${category}/${templateFolder.name}.png`
+	const normalizedTemplateThumbKey = getFinalS3Key(templateThumbKey, 'image/png')
+	const shouldTransferTemplateThumb = await shouldDownloadAndUploadToS3(
+		normalizedTemplateThumbKey,
 		templateThumbnail.modifiedTime,
 	)
+
+	let templateS3Url = `${S3_URL}/${normalizedTemplateThumbKey}`
+	if (shouldTransferTemplateThumb) {
+		// Download template thumbnail
+		const templateThumbnailBuffer = await downloadFromDrive(templateThumbnail.id)
+		templateS3Url = await uploadToS3(templateThumbnailBuffer, templateThumbKey, 'image/png')
+	}
 
 	// Process material references if they exist
 	let materialKey: string | null = null
@@ -608,32 +635,44 @@ async function processTemplateFolder(
 			const matchingPng = pngFiles[0]
 
 			if (matchingPng) {
-				console.log(`      📥 Processing block: ${baseName}`)
-
 				try {
-					// Download block files
-					const [pngBuffer, gltfBuffer] = await Promise.all([
-						downloadFromDrive(matchingPng.id),
-						downloadFromDrive(gltfFile.id),
+					const blockThumbKey = `images/${collection}/blocks/${category}/${blockTypeFolder.name}/${baseName}.png`
+					const blockModelKey = `models/${collection}/blocks/${category}/${blockTypeFolder.name}/${baseName}${path.extname(
+						gltfFile.name,
+					)}`
+					const normalizedBlockThumbKey = getFinalS3Key(blockThumbKey, 'image/png')
+					const normalizedBlockModelKey = getFinalS3Key(blockModelKey, 'model/gltf+json')
+
+					const [shouldTransferThumb, shouldTransferModel] = await Promise.all([
+						shouldDownloadAndUploadToS3(normalizedBlockThumbKey, matchingPng.modifiedTime),
+						shouldDownloadAndUploadToS3(normalizedBlockModelKey, gltfFile.modifiedTime),
 					])
 
-					// Upload to S3
-					const [blockThumbS3Url, blockModelS3Url] = await Promise.all([
-						uploadToS3(
-							pngBuffer,
-							`images/${collection}/blocks/${category}/${blockTypeFolder.name}/${baseName}.png`,
-							'image/png',
-							matchingPng.modifiedTime,
-						),
-						uploadToS3(
-							gltfBuffer,
-							`models/${collection}/blocks/${category}/${blockTypeFolder.name}/${baseName}${path.extname(
-								gltfFile.name,
-							)}`,
-							'model/gltf+json',
-							gltfFile.modifiedTime,
-						),
-					])
+					if (shouldTransferThumb || shouldTransferModel) console.log(`      📥 Processing block: ${baseName}`)
+
+					let blockThumbS3Url = `${S3_URL}/${normalizedBlockThumbKey}`
+					let blockModelS3Url = `${S3_URL}/${normalizedBlockModelKey}`
+					const transferOps: Promise<void>[] = []
+
+					if (shouldTransferThumb) {
+						transferOps.push(
+							(async () => {
+								const pngBuffer = await downloadFromDrive(matchingPng.id)
+								blockThumbS3Url = await uploadToS3(pngBuffer, blockThumbKey, 'image/png')
+							})(),
+						)
+					}
+
+					if (shouldTransferModel) {
+						transferOps.push(
+							(async () => {
+								const gltfBuffer = await downloadFromDrive(gltfFile.id)
+								blockModelS3Url = await uploadToS3(gltfBuffer, blockModelKey, 'model/gltf+json')
+							})(),
+						)
+					}
+
+					await Promise.all(transferOps)
 
 					allBlocks.push({
 						blockName: normalizeName(baseName),
@@ -646,7 +685,7 @@ async function processTemplateFolder(
 						avatar: avatarGender, // Include avatar gender from template
 					})
 
-					console.log(`      ✅ Uploaded block ${baseName}`)
+					if (shouldTransferThumb || shouldTransferModel) console.log(`      ✅ Uploaded block ${baseName}`)
 				} catch (error) {
 					console.error(`      ❌ Failed to process block ${baseName}:`, error)
 				}
@@ -1022,17 +1061,22 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 		const thumbnailFile = materialFiles.find(file => file.name.toLowerCase().includes('render'))
 		if (thumbnailFile) {
 			try {
-				console.log(`    📸 Processing thumbnail: ${thumbnailFile.name}`)
-
-				const thumbBuffer = await downloadFromDrive(thumbnailFile.id)
-				thumbUrl = await uploadToS3(
-					thumbBuffer,
-					`fabrics/${collection}/root/${materialFolder.name}/${thumbnailFile.name}`,
-					'image/png',
+				const thumbnailKey = `fabrics/${collection}/root/${materialFolder.name}/${thumbnailFile.name}`
+				const normalizedThumbnailKey = getFinalS3Key(thumbnailKey, 'image/png')
+				const shouldTransferThumbnail = await shouldDownloadAndUploadToS3(
+					normalizedThumbnailKey,
 					thumbnailFile.modifiedTime,
 				)
 
-				console.log(`     ✅ Uploaded thumbnail ${thumbnailFile.name}`)
+				if (shouldTransferThumbnail) {
+					console.log(`    📸 Processing thumbnail: ${thumbnailFile.name}`)
+					const thumbBuffer = await downloadFromDrive(thumbnailFile.id)
+					thumbUrl = await uploadToS3(thumbBuffer, thumbnailKey, 'image/png')
+				} else {
+					thumbUrl = `${S3_URL}/${normalizedThumbnailKey}`
+				}
+
+				if (shouldTransferThumbnail) console.log(`     ✅ Uploaded thumbnail ${thumbnailFile.name}`)
 			} catch (error) {
 				console.error(`     ❌ Failed to process thumbnail ${thumbnailFile.name}:`, error)
 			}
@@ -1043,9 +1087,6 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 			if (file.name.toLowerCase().includes('render')) continue
 
 			try {
-				console.log(`    📥 Processing texture: ${file.name}`)
-
-				const fileBuffer = await downloadFromDrive(file.id)
 				const extension = path.extname(file.name).toLowerCase()
 				let contentType = 'application/octet-stream'
 
@@ -1053,14 +1094,16 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 				else if (extension === '.png') contentType = 'image/png'
 				else if (extension === '.webp') contentType = 'image/webp'
 
-				const fileS3Url = await uploadToS3(
-					fileBuffer,
-					`fabrics/${collection}/root/${materialFolder.name}/${file.name}`,
-					contentType,
-					file.modifiedTime,
-					true,
-					false,
-				)
+				const textureKey = `fabrics/${collection}/root/${materialFolder.name}/${file.name}`
+				const normalizedTextureKey = getFinalS3Key(textureKey, contentType, false)
+				const shouldTransferTexture = await shouldDownloadAndUploadToS3(normalizedTextureKey, file.modifiedTime)
+
+				let fileS3Url = `${S3_URL}/${normalizedTextureKey}`
+				if (shouldTransferTexture) {
+					console.log(`    📥 Processing texture: ${file.name}`)
+					const fileBuffer = await downloadFromDrive(file.id)
+					fileS3Url = await uploadToS3(fileBuffer, textureKey, contentType, true, false)
+				}
 
 				// Map files based on name
 				const fileName = path.basename(file.name, path.extname(file.name)).toLowerCase()
@@ -1070,7 +1113,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 				else if (fileName.includes('rough')) textureUrls.roughness = fileS3Url
 				else if (fileName.includes('alpha')) textureUrls.alpha = fileS3Url
 
-				console.log(`     ✅ Uploaded texture ${file.name}`)
+				if (shouldTransferTexture) console.log(`     ✅ Uploaded texture ${file.name}`)
 			} catch (error) {
 				console.error(`     ❌ Failed to process texture ${file.name}:`, error)
 			}
