@@ -1533,6 +1533,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			materialId: '',
 		},
 	],
+
 	coor_official: [
 		{
 			_id: 'c54649df-8ed3-450b-a4e4-ba5d879c83b7',

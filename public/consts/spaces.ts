@@ -47,6 +47,12 @@ export const legacySpaces: Space[] = [
 			'metamorphosis',
 			'h&m',
 
+			///////////////////////////////////////////////////////
+			'môi_điên',
+			'emwear',
+			'the_soul',
+			'bohee',
+			'b.club',
 			'coor_official',
 			'highway',
 			'massimodutti',

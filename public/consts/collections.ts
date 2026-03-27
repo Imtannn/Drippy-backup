@@ -17,6 +17,13 @@ export const legacyCollections: Collection[] = [
 		gender: 'female',
 	},
 
+	///////////////////////////////////////////////////////
+
+	{name: 'môi_điên', slug: 'môi_điên', logo: '', gender: 'female'},
+	{name: 'emwear', slug: 'emwear', logo: '', gender: 'female'},
+	{name: 'the_soul', slug: 'the_soul', logo: '', gender: 'female'},
+	{name: 'bohee', slug: 'bohee', logo: '', gender: 'female'},
+	{name: 'b.club', slug: 'b.club', logo: '', gender: 'female'},
 	{name: 'coor_official', slug: 'coor_official', logo: '', gender: 'female'},
 	{name: 'highway', slug: 'highway', logo: '', gender: 'male'},
 	{name: 'massimodutti', slug: 'massimodutti', logo: '', gender: 'female'},
