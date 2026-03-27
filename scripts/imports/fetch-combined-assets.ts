@@ -54,6 +54,7 @@ const s3 = new S3Client({
 
 type CollectionConfig = {collection: string; rootFolderId: string; gender?: 'male' | 'female'}
 type CollectionConfigs = CollectionConfig[]
+type CollectionUploadTracker = {hasUploadedContent: boolean}
 
 const COLLECTION_PARENT_FOLDER_IDS = (process.env.COLLECTION_PARENT_FOLDER_IDS || '')
 	.split(',')
@@ -317,6 +318,7 @@ async function processOptionBlocks(
 	templateCategory: string,
 	collection: string,
 	avatarGender: string,
+	uploadTracker: CollectionUploadTracker,
 ): Promise<{category: string; blocks: TODO[]}[]> {
 	const blockOptions: {category: string; blocks: TODO[]}[] = []
 
@@ -372,6 +374,8 @@ async function processOptionBlocks(
 
 				if (shouldTransferThumb || shouldTransferModel)
 					console.log(`        📥 Processing option block: ${blockFolder.name}`)
+
+				if (shouldTransferThumb || shouldTransferModel) uploadTracker.hasUploadedContent = true
 
 				let blockThumbS3Url = `${S3_URL}/${normalizedBlockThumbKey}`
 				let blockModelS3Url = `${S3_URL}/${normalizedBlockModelKey}`
@@ -431,6 +435,7 @@ async function processTemplateFolder(
 	category: string,
 	collection: string,
 	defaultGender: 'male' | 'female' = 'female',
+	uploadTracker: CollectionUploadTracker,
 ): Promise<{template: TODO; blocks: TODO[]; optionBlocks: TODO[]; unsucceeded: TODO[]}> {
 	console.log(`  📂 Processing template: ${templateFolder.name}`)
 
@@ -584,7 +589,7 @@ async function processTemplateFolder(
 	let blockOptions: {category: string; blocks: TODO[]}[] = []
 	if (optionBlockFolders.length > 0) {
 		console.log(`    📁 Processing option blocks`)
-		blockOptions = await processOptionBlocks(optionBlockFolders, category, collection, avatarGender)
+		blockOptions = await processOptionBlocks(optionBlockFolders, category, collection, avatarGender, uploadTracker)
 	}
 
 	const template = {
@@ -649,6 +654,7 @@ async function processTemplateFolder(
 					])
 
 					if (shouldTransferThumb || shouldTransferModel) console.log(`      📥 Processing block: ${baseName}`)
+					if (shouldTransferThumb || shouldTransferModel) uploadTracker.hasUploadedContent = true
 
 					let blockThumbS3Url = `${S3_URL}/${normalizedBlockThumbKey}`
 					let blockModelS3Url = `${S3_URL}/${normalizedBlockModelKey}`
@@ -988,7 +994,11 @@ async function updateFabricsFile(content: string): Promise<void> {
 }
 
 // Process root Materials folder and store all materials
-async function processRootMaterials(rootMaterialsFolder: TODO, collection: string): Promise<void> {
+async function processRootMaterials(
+	rootMaterialsFolder: TODO,
+	collection: string,
+	uploadTracker: CollectionUploadTracker,
+): Promise<void> {
 	console.log(`📁 Processing root Materials folder`)
 
 	const materialsContents = await fetchFolderContents(rootMaterialsFolder.id)
@@ -1070,6 +1080,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 
 				if (shouldTransferThumbnail) {
 					console.log(`    📸 Processing thumbnail: ${thumbnailFile.name}`)
+					uploadTracker.hasUploadedContent = true
 					const thumbBuffer = await downloadFromDrive(thumbnailFile.id)
 					thumbUrl = await uploadToS3(thumbBuffer, thumbnailKey, 'image/png')
 				} else {
@@ -1101,6 +1112,7 @@ async function processRootMaterials(rootMaterialsFolder: TODO, collection: strin
 				let fileS3Url = `${S3_URL}/${normalizedTextureKey}`
 				if (shouldTransferTexture) {
 					console.log(`    📥 Processing texture: ${file.name}`)
+					uploadTracker.hasUploadedContent = true
 					const fileBuffer = await downloadFromDrive(file.id)
 					fileS3Url = await uploadToS3(fileBuffer, textureKey, contentType, true, false)
 				}
@@ -1366,6 +1378,7 @@ async function main(): Promise<void> {
 			const {collection, rootFolderId, gender = 'female'} = collectionConfig
 			console.log(`\n🏢 Processing collection: ${collection}`)
 			console.log(`🗂️  Root folder ID: ${rootFolderId}`)
+			const collectionUploadTracker: CollectionUploadTracker = {hasUploadedContent: false}
 
 			// Reset data for this collection
 			rootMaterials.clear()
@@ -1384,7 +1397,7 @@ async function main(): Promise<void> {
 			console.log(`📁 Found ${categoryFolders.length} category folders`)
 
 			// Step 1: Process root Materials folder
-			if (rootMaterialsFolder) await processRootMaterials(rootMaterialsFolder, collection)
+			if (rootMaterialsFolder) await processRootMaterials(rootMaterialsFolder, collection, collectionUploadTracker)
 			else console.warn(`⚠️  No root Materials folder found for collection ${collection}`)
 
 			const collectionProcessedData: TODO[] = []
@@ -1408,7 +1421,13 @@ async function main(): Promise<void> {
 
 				// Step 2b: Process each template in this category
 				for (const templateFolder of templateFolders) {
-					const processedTemplate = await processTemplateFolder(templateFolder, categoryFolder.name, collection, gender)
+					const processedTemplate = await processTemplateFolder(
+						templateFolder,
+						categoryFolder.name,
+						collection,
+						gender,
+						collectionUploadTracker,
+					)
 					if (processedTemplate.template) collectionProcessedData.push(processedTemplate)
 
 					allUnsucceeded.push(...processedTemplate.unsucceeded)
@@ -1437,11 +1456,14 @@ async function main(): Promise<void> {
 			const collectionFabricsData = generateFabricData(collection)
 
 			// Merge with combined data
-			Object.assign(allTemplates, collectionTemplates)
-			Object.assign(allBlocks, collectionBlocks)
-			Object.assign(allCombinedFabrics, collectionFabricsData)
-
-			console.log(`✅ Completed processing collection: ${collection}`)
+			if (collectionUploadTracker.hasUploadedContent) {
+				Object.assign(allTemplates, collectionTemplates)
+				Object.assign(allBlocks, collectionBlocks)
+				Object.assign(allCombinedFabrics, collectionFabricsData)
+				console.log(`✅ Completed processing collection: ${collection}`)
+			} else {
+				console.log(`⏭️  Skipping generated output for collection ${collection} because no assets were uploaded`)
+			}
 		}
 
 		console.log(`\n📊 Generated ${Object.keys(allTemplates).length} template collections`)
