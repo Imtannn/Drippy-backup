@@ -13,6 +13,7 @@ import {
 } from 'lume'
 
 import {fabrics, getFabricsByCollection} from '../consts/fabrics.js'
+import {pushHistory} from './history.js'
 import '../elements/bottom-sheet.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
@@ -28,7 +29,6 @@ import {store, updateGarmentsSelectionInUrl} from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
 import {size, values} from '../utils.js'
 
-const STYLE_TAB = 'style'
 const FABRICS_TAB = 'fabrics'
 
 type RemixOverlayAttributes = 'selectedTemplate' | 'onclose' | 'disabledScroll'
@@ -40,7 +40,7 @@ export class RemixOverlay extends Element {
 	@attribute selectedTemplate: Template | null = null
 	@booleanAttribute disabledScroll = false
 
-	@signal activeTab: typeof STYLE_TAB | typeof FABRICS_TAB | null = null
+	@signal activeTab: typeof FABRICS_TAB | null = null
 	@signal spaceCollection: string | string[] | null = null
 	@signal availableBlocks: Block[] = []
 	@signal blocksCategories: string[] = []
@@ -219,6 +219,7 @@ export class RemixOverlay extends Element {
 	#onBlockSelect = (block: Block) => {
 		if (!this.selectedTemplate) return
 
+		pushHistory()
 		store.setSelectedBlocks({
 			block,
 			templateCategory: this.selectedTemplate.category,
@@ -272,16 +273,6 @@ export class RemixOverlay extends Element {
 						default-value=${() => this.activeTab || FABRICS_TAB}
 						ontabchange=${(e: CustomEvent) => (this.activeTab = e.detail.value)}
 					>
-						<div class="tabs-list-container">
-							<tabs-list>
-								<tabs-trigger selected-value=${FABRICS_TAB}>Fabrics</tabs-trigger>
-								<show-when
-									condition=${() => this.blocksCategories.length > 0}
-									content=${() => html`<tabs-trigger selected-value=${STYLE_TAB}>Style</tabs-trigger>`}
-								></show-when>
-							</tabs-list>
-						</div>
-
 						<tabs-content selected-value=${FABRICS_TAB}>
 							<div class="scroll-content"></div>
 
@@ -293,49 +284,6 @@ export class RemixOverlay extends Element {
 							></fabric-selection>
 						</tabs-content>
 
-						<tabs-content selected-value=${STYLE_TAB}>
-							<div class="scroll-content"></div>
-							<show-when
-								condition=${() => this.blocksCategories.length > 0}
-								content=${() => html`
-									<tabs-provider default-value=${() => this.selectedSubTab} ontabchange=${this.#onSubTabChange}>
-										<div class="category-tabs">
-											<for-each
-												items=${() => this.blocksCategories}
-												content=${() => (blockCategory: BlockCategory) => html`
-													<show-when
-														condition=${() => this.selectedSubTab === blockCategory}
-														content=${() => html`
-															<div class="items-grid">
-																<for-each
-																	items=${() => this.#filteredBlocksByCategory(blockCategory)}
-																	content=${() => (block: Block) => html`
-																		<div class="item-card-container">
-																			<item-card
-																				item-active=${() => this.#getIsBlockActive(block)}
-																				item-src=${() => block.thumb}
-																				item-alt=${() => block.blockName}
-																				item-value=${() => block}
-																				oncardselected=${() => this.#onBlockSelect(block)}
-																			></item-card>
-																			<show-when
-																				condition=${() => this.#isBlockLoading(block)}
-																				content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
-																			></show-when>
-																		</div>
-																	`}
-																></for-each>
-															</div>
-														`}
-													></show-when>
-												`}
-											></for-each>
-										</div>
-									</tabs-provider>
-								`}
-								fallback=${() => html`<div class="empty-state">No variations available.</div>`}
-							></show-when>
-						</tabs-content>
 					</tabs-provider>
 				`}
 			>
@@ -460,7 +408,9 @@ export class RemixOverlay extends Element {
 			right: 0;
 			left: 0;
 			z-index: 100;
-			background: var(--uiColorPrimaryWhite);
+			background: rgba(255, 255, 255, 0.06);
+			backdrop-filter: blur(4px);
+			-webkit-backdrop-filter: blur(4px);
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -483,9 +433,10 @@ export class RemixOverlay extends Element {
 		}
 
 		tabs-content {
-			padding: var(--uiSpacing);
-			padding-top: 0;
-			margin-top: -10px;
+			padding: 0 var(--uiSpacing);
+			padding-top: 10px;
+			padding-bottom: 10px;
+			margin-top: 0;
 		}
 
 		.remix-overlay-sheet {
@@ -507,7 +458,9 @@ export class RemixOverlay extends Element {
 			/* Keep the underlying panel visible by at least a certain amount when there is not enough vertical space to fit the whole bottom sheet. */
 			max-height: calc(100% - var(--uiSpacingXxl));
 
-			background: var(--uiColorPrimaryWhite);
+			background: rgba(255, 255, 255, 0.1);
+			backdrop-filter: blur(4px);
+			-webkit-backdrop-filter: blur(4px);
 			border-top-left-radius: var(--borderRadiusXl);
 			border-top-right-radius: var(--borderRadiusXl);
 			/* FIXME this transition currently doesn't work because height is not explicit, but based on content (translateY(100%) depends on height). We can fix it by translating a 100%x100% outer container instead. */

@@ -6,6 +6,7 @@ import type {Fabric, FabricCategory, FabricsByCategory} from '../types/fabric.js
 import type {TemplateCategory} from '../types/template.js'
 import './loading-spinner-overlay.js'
 import {store} from './store.js'
+import {pushHistory} from './history.js'
 import {entries, size, values} from '../utils.js'
 import type {PieceFabricsMap} from '../types/types.js'
 
@@ -21,6 +22,7 @@ export class FabricSelection extends Element {
 	@booleanAttribute isRemix = false
 
 	@signal selectedCategoryTab: FabricCategory | 'All' = 'All'
+	@signal private fabricThumbValidity: Record<string, boolean> = {}
 
 	override connectedCallback() {
 		super.connectedCallback()
@@ -84,6 +86,8 @@ export class FabricSelection extends Element {
 		const fabric = e.detail.itemValue
 		if (!this.selectedTemplateCategory) return
 
+		pushHistory()
+
 		// Get ALL actually selected block categories for this template (not just the editable ones)
 		const templateSelection = store.getTemplateSelection(this.selectedTemplateCategory)
 		if (!templateSelection) return
@@ -125,11 +129,33 @@ export class FabricSelection extends Element {
 		return categories.length > 1 ? ['All', ...categories] : ['All']
 	}
 
-	#getFilteredFabrics = (): Fabric[] => {
-		const fabrics = this.availableFabrics[store.selectingPiece || 'default'] || []
-		if (this.selectedCategoryTab === 'All') return fabrics
+	#validateFabricThumb = (fabric: Fabric) => {
+		if (!fabric._id || !fabric.thumb) return
+		if (this.fabricThumbValidity[fabric._id] !== undefined) return
+		// Mark as pending immediately to avoid repeated Image() creation on rerenders.
+		this.fabricThumbValidity = {...this.fabricThumbValidity, [fabric._id]: false}
 
-		return fabrics.filter(fabric => fabric.category === this.selectedCategoryTab)
+		const img = new Image()
+		img.onload = () => {
+			this.fabricThumbValidity = {...this.fabricThumbValidity, [fabric._id]: true}
+		}
+		img.onerror = () => {
+			this.fabricThumbValidity = {...this.fabricThumbValidity, [fabric._id]: false}
+		}
+		img.src = fabric.thumb
+	}
+
+	#getFilteredFabrics = (): Fabric[] => {
+		const fabrics = (this.availableFabrics[store.selectingPiece || 'default'] || []).filter(
+			fabric => typeof fabric.thumb === 'string' && fabric.thumb.trim().length > 0,
+		)
+
+		for (const fabric of fabrics) this.#validateFabricThumb(fabric)
+
+		const visibleFabrics = fabrics.filter(fabric => this.fabricThumbValidity[fabric._id] === true)
+		if (this.selectedCategoryTab === 'All') return visibleFabrics
+
+		return visibleFabrics.filter(fabric => fabric.category === this.selectedCategoryTab)
 	}
 
 	#onCategoryTabChange = (e: CustomEvent) => {
@@ -269,6 +295,8 @@ export class FabricSelection extends Element {
 			grid-auto-flow: column;
 			grid-auto-columns: calc((100% - (var(--uiGap) * 4)) / 4.5);
 			gap: 8px;
+			padding-top: 6px;
+			padding-bottom: 6px;
 			overflow-x: auto;
 			overflow-y: hidden;
 			scroll-snap-type: x proximity;
@@ -279,6 +307,17 @@ export class FabricSelection extends Element {
 		}
 		:host([is-remix]) .items-grid > * {
 			scroll-snap-align: start;
+		}
+
+		:host([is-remix]) item-card {
+			--item-preview-border: 0;
+			--item-preview-shadow: none;
+			--item-preview-hover-border-color: transparent;
+			--item-preview-active-border-color: transparent;
+			--item-preview-active-shadow:
+				0 0 0 3px #ffffff,
+				0 0 0 5px var(--uiColorAccentViolet),
+				0 0 14px rgba(165, 115, 255, 0.5);
 		}
 
 		@media (min-width: 768px) {

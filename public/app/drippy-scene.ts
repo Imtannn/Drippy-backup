@@ -22,19 +22,11 @@ import {
 	effect,
 	SpotLight,
 	type Sphere,
-	Motor,
-	triangleBlurTexture,
-	type ShadowMapTypeString,
 } from 'lume'
 import type {Accessor} from 'solid-js'
-import {batch, createMemo, untrack} from 'solid-js'
+import {batch, createMemo} from 'solid-js'
 import * as THREE from 'three'
-import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer.js'
-import {OutlinePass} from 'three/examples/jsm/postprocessing/OutlinePass.js'
-import {OutputPass} from 'three/examples/jsm/postprocessing/OutputPass.js'
-import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass.js'
-import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
-import {VRButton} from 'three/examples/jsm/webxr/VRButton.js'
+import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 import {avatars} from '../consts/avatars.js'
 
 import {backgroundScenes} from '../consts/scenes.js'
@@ -66,6 +58,7 @@ import {
 	whenModelLoaded,
 } from '../utils.js'
 import {AvatarSkeleton} from './avatar-skeleton.js'
+import {isCoveredByOuterGarment, SLOT_PRIORITY} from './clothing-slots.js'
 import {isAdmin, store} from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
 import {textureManager} from './TextureManager.js'
@@ -73,9 +66,6 @@ import {blocks} from '../consts/blocks.js'
 
 // TODO Use the env specified for each space.
 const env = '/images/envs/brown_photostudio_02.jpg'
-
-const postprocessingEnabled = false
-const stencilEnabled = false
 
 type Collection = string
 type BlockId = string
@@ -115,6 +105,11 @@ export class DrippyScene extends Element {
 
 	#docMutations = createMutationsSignal(document.documentElement, {attributes: true, attributeFilter: ['data-theme']})
 
+	/** True on phones/tablets — used to scale down render quality for performance. */
+	private get isMobile(): boolean {
+		return window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window && window.innerWidth < 1024)
+	}
+
 	// @ts-expect-error TODO use this to implement dark mode
 	@memo private get isDark() {
 		this.#docMutations()
@@ -134,6 +129,7 @@ export class DrippyScene extends Element {
 
 	@signal private animName: string | null = null
 	@signal private animSrc: string | null = null
+	@signal private animTrimStart = 0
 
 	@signal private loadingProgress = 0
 	@signal private isLoading = true
@@ -149,6 +145,15 @@ export class DrippyScene extends Element {
 		return getSceneBySlug(backgroundScenes(), defaultSceneSlug)
 	}
 
+	// Persist the last valid scene src so navigating to home (selectedSpace=null)
+	// doesn't set src="" which causes the model to reload and get stuck loading.
+	@signal private _lastSceneSrc = ''
+
+	@effect persistSceneSrc() {
+		const src = this.scene?.scene
+		if (src) this._lastSceneSrc = src
+	}
+
 	// TODO this is a temporary hack. Scenes should have specific features saved in the DB once we migrate to DB.
 	@memo private get isDamagedWallScene() {
 		return !!this.scene?.scene.includes('Damaged%20wall')
@@ -157,10 +162,16 @@ export class DrippyScene extends Element {
 	@memo private get isDrippyShop() {
 		return this.selectedSpace?.slug === 'drippy-shop'
 	}
+	// TODO this is a temporary hack. Scenes should have specific features saved in the DB once we migrate to DB.
+	@memo private get isMetamorphosis() {
+		return this.selectedSpace?.slug === 'metamorphosis'
+	}
+	// TODO this is a temporary hack. Scenes should have specific features saved in the DB once we migrate to DB.
+	@memo private get isHM() {
+		return this.selectedSpace?.slug === 'h&m'
+	}
 
-	// Post-processing for outline effect
-	private composer: EffectComposer | null = null
-	private outlinePass: OutlinePass | null = null
+
 
 	// TODO Move to `lume-block`
 	/**
@@ -190,9 +201,12 @@ export class DrippyScene extends Element {
 		this.avatarSkeleton.createBoneTarget(obj, 'Left_HandIndex_Tip')
 	}
 
-	/** Check if a default garment should be visible based on user selections */
+	/** Check if a garment should be visible based on user selections and outer garment masking */
 	#isGarmentVisible(item: RenderBlock, selectedTemplates: TemplateMap): boolean {
-		if (!item.id.startsWith('default-')) return true
+		if (!item.id.startsWith('default-')) {
+			// Hide non-default garment pieces covered by a higher-priority outer garment
+			return !isCoveredByOuterGarment(item.block.category, item.templateCategory, selectedTemplates)
+		}
 
 		const overriddenBy = templateHelpers.getCategoriesThatOverride(item.templateCategory)
 
@@ -205,30 +219,22 @@ export class DrippyScene extends Element {
 		return !overriddenBy.some(cat => selectedTemplates[cat])
 	}
 
-	#handlePointerDown = (e: PointerEvent) => {
-		const isMobile = !isDesktop()
-
-		// Mobile: always enable vertical drag, Desktop: only with shift key
-		if (isMobile || e.shiftKey) {
-			this.isVerticalPan = true
-			if (!isMobile) e.stopImmediatePropagation()
-		}
+	#handlePointerDown = (_e: PointerEvent) => {
+		this.isVerticalPan = true
 	}
 
 	#handlePointerMove = (e: PointerEvent) => {
-		const isMobile = !isDesktop()
 		if (!this.isVerticalPan) return
-		// Scale the movement - dragging down increases Y (looks up), dragging up decreases Y (looks down)
 		this.cameraY -= e.movementY / 200
 		this.cameraY = clamp(this.cameraY, -2, 0)
-		if (!isMobile) e.stopImmediatePropagation()
 	}
 
-	#handlePointerUp = (e: PointerEvent) => {
-		const isMobile = !isDesktop()
-		if (this.isVerticalPan && !isMobile) e.stopImmediatePropagation()
-
+	#handlePointerUp = (_e: PointerEvent) => {
 		this.isVerticalPan = false
+	}
+
+	#onHiddenItemsClick = () => {
+		document.dispatchEvent(new CustomEvent('open-hidden-items'))
 	}
 
 	@memo private get avatar() {
@@ -290,10 +296,12 @@ export class DrippyScene extends Element {
 		return this.extraObjectSignal ? this.extraObjectSignal() : emptyNodeList<GltfModel>()
 	}
 
-	// Reset camera to default when space changes
+	// Reset camera to default when space changes or re-center is requested
 	@effect cameraEffect() {
+		store.cameraResetTick // reactive dependency for re-center button
 		const space = this.selectedSpace
-		if (!space || !this.cameraRig) return
+		if (!this.cameraRig) return
+		if (!space && !store.cameraResetTick) return
 
 		this.cameraRig.distance = isDesktop() ? 2.5 : 4
 		this.cameraRig.verticalAngle = 0
@@ -307,12 +315,66 @@ export class DrippyScene extends Element {
 		const {backgroundModel} = this
 		if (!backgroundModel) return
 
-		disableFrustumCulledOnLoad(backgroundModel)
 		enableFrontsideOnModelLoad(backgroundModel)
-		enableShadowOnModelLoad(backgroundModel)
+		if (!this.isMobile) enableShadowOnModelLoad(backgroundModel)
 		// setEnvMapOnModelLoad(backgroundModel, env)
 		setMaterialsVisibleOnModelLoad(backgroundModel, () => store.isShowScene)
 		whenModelLoaded(backgroundModel, () => {
+			// Apply space-specific material adjustments
+			if (this.isDrippyShop) {
+				// Darken Drippy Shop scene materials for its moody aesthetic
+				backgroundModel.three.traverse(obj => {
+					if (!isMesh(obj)) return
+					const isLogo = obj.parent?.name.includes('Drippy_Shop_-_Logo') || obj.name === 'Pattern_21273'
+					if (isLogo) return
+					for (const mat of materialsOfRenderable(obj) as Generator<THREE.MeshStandardMaterial>) {
+						mat.color.multiplyScalar(0.05)
+						mat.needsUpdate = true
+					}
+				})
+			} else if (this.isMetamorphosis) {
+				// Metamorphosis: bright white-silver, slightly cool, metallic
+				backgroundModel.three.traverse(obj => {
+					if (!isMesh(obj)) return
+					const isLogo =
+						obj.name.toLowerCase().includes('logo') ||
+						obj.parent?.name.toLowerCase().includes('logo') ||
+						obj.name.toLowerCase().includes('oofya')
+					if (isLogo) {
+						// Keep the Oofya logo black
+						for (const mat of materialsOfRenderable(obj) as Generator<THREE.MeshStandardMaterial>) {
+							mat.color.set('#000000')
+							mat.metalness = 0
+							mat.roughness = 0.8
+							mat.needsUpdate = true
+						}
+						return
+					}
+					for (const mat of materialsOfRenderable(obj) as Generator<THREE.MeshStandardMaterial>) {
+						// Chrome: near-mirror metal, minimal color influence
+						mat.color.lerp(new THREE.Color(0.9, 0.92, 0.95), 0.85)
+						// Full metalness, near-zero roughness for mirror reflections
+						mat.metalness = 0.3
+						mat.roughness = 0.15
+						mat.needsUpdate = true
+					}
+				})
+			} else if (this.isHM) {
+				// H&M: concrete walls, everything else untouched
+				backgroundModel.three.traverse(obj => {
+					if (!isMesh(obj)) return
+					const name = (obj.name + ' ' + (obj.parent?.name ?? '')).toLowerCase()
+					const isWall = name.includes('wall') || name.includes('ceiling') || name.includes('floor') || name.includes('ground')
+					if (!isWall) return
+					for (const mat of materialsOfRenderable(obj) as Generator<THREE.MeshStandardMaterial>) {
+						mat.color.lerp(new THREE.Color(0.42, 0.40, 0.38), 0.55)
+						mat.metalness = 0
+						mat.roughness = 0.92
+						mat.needsUpdate = true
+					}
+				})
+			}
+
 			backgroundModel.three.traverse(obj => {
 				obj.castShadow = true
 
@@ -354,15 +416,18 @@ export class DrippyScene extends Element {
 				}
 
 				if (this.isDrippyShop) {
-					// Remove baked lighting from metallic logo, let the dynamic
-					// env map reflections take over.
+					// Fluid chrome logo — highly reflective, iridescent metal
 					if ((obj.parent?.name.includes('Drippy_Shop_-_Logo') || obj.name === 'Pattern_21273') && isMesh(obj)) {
-						const mat = obj.material as THREE.MeshStandardMaterial
-						// mat.color.set('#ccc')
-						mat.map = null
-						mat.metalness = 1
-						mat.roughness = 0.15
-						mat.needsUpdate = true
+						const fluidMat = new THREE.MeshPhysicalMaterial()
+						fluidMat.map = null
+						fluidMat.color.set('#ffffff')
+						fluidMat.metalness = 1.0
+						fluidMat.roughness = 0.02
+						fluidMat.iridescence = 1.0
+						fluidMat.iridescenceIOR = 1.8
+						fluidMat.iridescenceThicknessRange = [200, 600]
+						fluidMat.needsUpdate = true
+						obj.material = fluidMat
 					}
 				}
 			})
@@ -687,6 +752,7 @@ export class DrippyScene extends Element {
 
 		this.animName = anim.clipName
 		this.animSrc = new URL(anim.src, import.meta.url).href
+		this.animTrimStart = anim.trimStart ?? 0
 
 		// FIXME small hack: timeout so the lume-animation has time to
 		// process the asset. Make lume-animation provide a loading
@@ -698,8 +764,128 @@ export class DrippyScene extends Element {
 		})
 	}
 
+	@effect animationAutoplayEffect() {
+		if (!store.autoplayAnimations) return
+
+		const gender = this.avatarGender
+		const anims = gender === 'male' ? animations.male : animations.female
+		if (anims.length === 0) return
+
+		const advance = () => {
+			const currentIndex = anims.findIndex(a => a.value === store.selectedAnimation)
+			const nextIndex = (currentIndex + 1) % anims.length
+			store.selectedAnimation = anims[nextIndex]!.value
+		}
+
+		const id = window.setInterval(advance, 20000)
+		onCleanup(() => window.clearInterval(id))
+	}
+
+	#musicCtx: AudioContext | null = null
+	#musicScheduler: ReturnType<typeof setInterval> | null = null
+
+	startBackgroundMusic() {
+		if (this.#musicCtx) return
+		const ctx = new AudioContext()
+		this.#musicCtx = ctx
+		void ctx.resume()
+
+		const master = ctx.createGain()
+		master.gain.value = 0.4
+		master.connect(ctx.destination)
+
+		const bpm = 78
+		const beat = 60 / bpm
+		const bar = beat * 4
+
+		// Low drone — always-on bass rumble with slow LFO wobble
+		const drone = ctx.createOscillator()
+		const droneGain = ctx.createGain()
+		const droneFilter = ctx.createBiquadFilter()
+		drone.type = 'sawtooth'
+		drone.frequency.value = 55 // A1
+		droneFilter.type = 'lowpass'
+		droneFilter.frequency.value = 120
+		droneGain.gain.value = 0.5
+		const lfo = ctx.createOscillator()
+		const lfoGain = ctx.createGain()
+		lfo.frequency.value = 0.2
+		lfoGain.gain.value = 8
+		lfo.connect(lfoGain).connect(drone.frequency)
+		drone.connect(droneFilter).connect(droneGain).connect(master)
+		drone.start()
+		lfo.start()
+
+		// Schedule each bar: bass stab + pad chord + kick
+		const scheduleBar = (t: number) => {
+			// Bass stabs — A minor pattern: A2 A2 G2 E2
+			const bassNotes = [110, 110, 98, 82.4]
+			bassNotes.forEach((freq, i) => {
+				const osc = ctx.createOscillator()
+				const filt = ctx.createBiquadFilter()
+				const g = ctx.createGain()
+				osc.type = 'sawtooth'
+				osc.frequency.value = freq
+				filt.type = 'lowpass'
+				filt.frequency.value = 400
+				const nt = t + i * beat
+				g.gain.setValueAtTime(0, nt)
+				g.gain.linearRampToValueAtTime(0.35, nt + 0.02)
+				g.gain.exponentialRampToValueAtTime(0.001, nt + beat * 0.75)
+				osc.connect(filt).connect(g).connect(master)
+				osc.start(nt); osc.stop(nt + beat)
+			})
+
+			// Pad — A minor chord (A3 C4 E4) slow attack/release over whole bar
+			;[220, 261.6, 329.6, 440].forEach((freq, i) => {
+				const osc = ctx.createOscillator()
+				const g = ctx.createGain()
+				osc.type = 'sine'
+				osc.frequency.value = freq * (1 + (i % 2 === 0 ? 0.002 : -0.002))
+				g.gain.setValueAtTime(0, t)
+				g.gain.linearRampToValueAtTime(0.06, t + bar * 0.3)
+				g.gain.setValueAtTime(0.06, t + bar * 0.7)
+				g.gain.linearRampToValueAtTime(0, t + bar + 0.05)
+				osc.connect(g).connect(master)
+				osc.start(t); osc.stop(t + bar + 0.1)
+			})
+
+			// Kick — subtle low thump on beat 1 and 3
+			;[0, beat * 2].forEach(offset => {
+				const osc = ctx.createOscillator()
+				const g = ctx.createGain()
+				osc.type = 'sine'
+				osc.frequency.setValueAtTime(160, t + offset)
+				osc.frequency.exponentialRampToValueAtTime(40, t + offset + 0.08)
+				g.gain.setValueAtTime(0.5, t + offset)
+				g.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.15)
+				osc.connect(g).connect(master)
+				osc.start(t + offset); osc.stop(t + offset + 0.2)
+			})
+		}
+
+		// Web Audio lookahead scheduler
+		let nextBar = ctx.currentTime + 0.1
+		scheduleBar(nextBar)
+		nextBar += bar
+
+		this.#musicScheduler = setInterval(() => {
+			while (nextBar < ctx.currentTime + bar * 2) {
+				scheduleBar(nextBar)
+				nextBar += bar
+			}
+		}, bar * 500)
+	}
+
+	stopBackgroundMusic() {
+		if (this.#musicScheduler) clearInterval(this.#musicScheduler)
+		this.#musicCtx?.close()
+		this.#musicCtx = null
+		this.#musicScheduler = null
+	}
+
 	@signal accessor #overallEnvIntensity = 1
-	@signal accessor #spotLightIntensity = 7
+	@signal accessor #spotLightIntensity = 5
 	/** in degrees. */
 	@signal accessor #spotLightHorizontalRotation = 72
 	/** in degrees. 90 is directly overhead. */
@@ -708,540 +894,102 @@ export class DrippyScene extends Element {
 	@signal accessor #spotLightPenumbra = 0.15
 	/** in degrees */
 	@signal accessor #spotLightAngle = 40
-	@signal accessor #bloomStrength = 0.18
-	@signal accessor #bloomRadius = 0
-	@signal accessor #bloomThreshold = 0.8
-
-	@signal accessor #stencilEnabled = true
-
 	/** A reference to the renderer used for the Lume scene. It will be null until the Lume scene has loaded and instantiated it. */
 	@signal accessor #glRenderer: THREE.WebGLRenderer | null = null
+
+	@effect autoStartMusic() {
+		if (!this.isDrippyShop) return
+		onCleanup(() => {
+			this.stopBackgroundMusic()
+		})
+	}
 
 	@effect grabRenderer() {
 		const lumeScene = this.lumeScene
 		if (!lumeScene) return null
 
-		// OLD (re-use lume's renderer) ////////////////////////////////////////
-		// {{
-
-		if (!stencilEnabled) {
-			if (!lumeScene.glRenderer) return null
-			// lumeScene.glRenderer is not reactive, but will be available after a timeout.
-			// FIXME make lume's renderer glRenderer a signal so we don't need a timeout hack in this consumer code.
-			setTimeout(() => (this.#glRenderer = lumeScene.glRenderer!))
-		}
-
-		// }}
-
-		// NEW (custom renderer) ///////////////////////////////////////////////
-		// TODO: Expose the renderer internals from Lume so we don't need to
-		// replicate.
-		// {{
-		else {
-			const renderer = new THREE.WebGLRenderer({
-				alpha: true,
-				premultipliedAlpha: true,
-				antialias: true,
-				stencil: true,
-			})
-
-			// Recreate lume's renderer setup and re-create the mappings from lume
-			// to the custom renderer (f.e. same stuff any lume-scene features would
-			// map to)
-			renderer.xr.enabled = true
-			renderer.setPixelRatio(globalThis.devicePixelRatio)
-			renderer.shadowMap.enabled = true
-			renderer.shadowMap.type = THREE.PCFSoftShadowMap // default PCFShadowMap
-
-			createEffect(() => {
-				renderer.localClippingEnabled = lumeScene.localClipping
-			})
-
-			createEffect(() => {
-				renderer.setClearColor(lumeScene.backgroundColor ?? 'white', lumeScene.backgroundOpacity)
-			})
-
-			createEffect(() => {
-				renderer.setClearAlpha(lumeScene.backgroundOpacity)
-				lumeScene.needsUpdate()
-			})
-
-			createEffect(() => {
-				let type = lumeScene.shadowMode
-
-				// default
-				if (!type) {
-					renderer.shadowMap.type = THREE.PCFShadowMap
-					return
-				}
-
-				// TODO shouldn't need a cast here. Bug on TypeScript: https://github.com/microsoft/TypeScript/issues/32054
-				type = type.toLowerCase() as ShadowMapTypeString
-
-				if (type == 'pcf') renderer.shadowMap.type = THREE.PCFShadowMap
-				else if (type == 'pcfsoft') renderer.shadowMap.type = THREE.PCFSoftShadowMap
-				else if (type == 'basic') renderer.shadowMap.type = THREE.BasicShadowMap
-			})
-
-			createEffect(() => {
-				const value = lumeScene.physicallyCorrectLights
-				// @ts-expect-error legacy, FIXME legacy mode will be removed and only physical lights will remain, we shall remove this feature.
-				renderer.physicallyCorrectLights = value // <0.150
-				// @ts-expect-error legacy, FIXME legacy mode will be removed and only physical lights will remain, we shall remove this feature.
-				renderer.useLegacyLights = !value // >=0.150
-			})
-
-			function requestFrame(fn: XRFrameRequestCallback) {
-				if (renderer.setAnimationLoop)
-					// >= r94
-					renderer.setAnimationLoop(fn)
-				else if (renderer.animate)
-					// < r94
-					renderer.animate(fn as () => void)
-			}
-
-			function createDefaultVRButton(): HTMLElement {
-				return VRButton.createButton(renderer)
-			}
-
-			createEffect(() => {
-				const enable = lumeScene.vr
-				renderer.xr.enabled = enable
-
-				if (lumeScene.vr) {
-					Motor.setFrameRequester(fn => {
-						requestFrame(fn)
-
-						// Mock rAF return value for Motor.setFrameRequester.
-						return 0
-					})
-
-					const button = createDefaultVRButton()
-					button.classList.add('vrButton')
-
-					lumeScene._miscLayer!.appendChild(button)
-				} else if ((lumeScene as any).xr) {
-					// TODO
-				} else {
-					// TODO else exit the WebXR headset, return back to normal requestAnimationFrame.
-				}
-			})
-
-			let bgVersion = 0
-			let bgIsEquirectangular = false
-			let pmremgen: THREE.PMREMGenerator | undefined
-			let hasBg = false
-			let hasEnv = false
-			let bgTexture: THREE.Texture | undefined
-
-			function enableBackground(
-				scene: Scene,
-				isEquirectangular: boolean,
-				blurAmount: number,
-				cb: (tex: THREE.Texture | undefined) => void,
-			): void {
-				bgVersion += 1
-				bgIsEquirectangular = isEquirectangular
-
-				if (isEquirectangular) {
-					// Load the PMREM machinery only if needed.
-					if (!pmremgen) {
-						pmremgen = new THREE.PMREMGenerator(renderer)
-						pmremgen.compileCubemapShader()
-					}
-				}
-
-				hasBg = true
-				loadBackgroundTexture(scene, blurAmount, cb)
-			}
-			function disableBackground(): void {
-				bgVersion += 1
-
-				if (!hasBg && !hasEnv) {
-					pmremgen?.dispose()
-					pmremgen = undefined
-				}
-
-				bgTexture?.dispose()
-				hasBg = false
-			}
-			function loadBackgroundTexture(scene: Scene, blurAmount: number, cb: (texture: THREE.Texture) => void): void {
-				const version = bgVersion
-
-				new THREE.TextureLoader().load(scene.background ?? '', tex => {
-					// In case state changed during load, ignore a loaded texture that
-					// corresponds to previous state:
-					if (version !== bgVersion) return
-
-					if (blurAmount > 0) {
-						// state.bgTexture = blurTexture(state.renderer, tex, 5) // Faster, but quality is not as good, has a pixelated effect. Perhaps we should provide a Scene attribute to easily pick which blur to use.
-						bgTexture = triangleBlurTexture(renderer, tex, blurAmount, 2)
-						tex.dispose()
-						tex = bgTexture
-					}
-
-					if (bgIsEquirectangular) {
-						bgTexture = pmremgen!.fromEquirectangular(tex).texture
-						tex.dispose() // might not be needed, but just in case.
-					} else bgTexture = tex
-
-					cb(bgTexture)
-				})
-			}
-
-			createEffect(() => {
-				if (!lumeScene.webgl || !lumeScene.background) return
-
-				enableBackground(lumeScene, lumeScene.equirectangularBackground, lumeScene.backgroundBlur, texture => {
-					lumeScene.three.background = texture || null
-					lumeScene.needsUpdate()
-				})
-
-				onCleanup(() => {
-					disableBackground()
-					lumeScene.needsUpdate()
-				})
-			})
-
-			let envVersion = 0
-			let envTexture: THREE.Texture | undefined
-
-			function enableEnvironment(scene: Scene, cb: (tex: THREE.Texture) => void): void {
-				envVersion += 1
-
-				// Load the PMREM machinery only if needed.
-				if (!pmremgen) {
-					pmremgen = new THREE.PMREMGenerator(renderer)
-					pmremgen.compileCubemapShader()
-				}
-
-				hasEnv = true
-				loadEnvironmentTexture(scene, cb)
-			}
-			function loadEnvironmentTexture(scene: Scene, cb: (texture: THREE.Texture) => void): void {
-				const version = envVersion
-
-				new THREE.TextureLoader().load(scene.environment ?? '', tex => {
-					// In case state changed during load, ignore a loaded texture that
-					// corresponds to previous state:
-					if (version !== envVersion) return
-
-					envTexture = pmremgen!.fromEquirectangular(tex).texture
-					tex.dispose() // might not be needed, but just in case.
-
-					cb(envTexture)
-				})
-			}
-			function disableEnvironment(): void {
-				envVersion += 1
-
-				if (!hasBg && !hasEnv) {
-					pmremgen?.dispose()
-					pmremgen = undefined
-				}
-
-				envTexture?.dispose()
-				hasEnv = false
-			}
-
-			createEffect(() => {
-				if (!lumeScene.webgl || !lumeScene.environment) return
-
-				if (lumeScene.environment.match(/\.(jpg|jpeg|png)$/)) {
-					enableEnvironment(lumeScene, texture => {
-						lumeScene.three.environment = texture
-						lumeScene.needsUpdate()
-
-						// TODO emit env load event.
-					})
-
-					onCleanup(() => {
-						disableEnvironment()
-						lumeScene.needsUpdate()
-					})
-				} else {
-					console.warn(
-						`<${lumeScene.tagName.toLowerCase()}> environment attribute ignored, the given image type is not currently supported.`,
-					)
-				}
-			})
-
-			createEffect(() => {
-				const {x, y} = lumeScene.calculatedSize
-				Motor.once(() => renderer.setSize(x, y))
-			})
-
-			setTimeout(() => {
-				// Remove the old canvas
-				const oldRenderer = lumeScene.glRenderer!
-				console.log('remove old canvas', oldRenderer.domElement)
-				oldRenderer.domElement.remove()
-				oldRenderer.dispose()
-
-				// Append the new canvas
-				console.log('add new canvas', renderer.domElement)
-				lumeScene._glLayer!.appendChild(renderer.domElement)
-
-				this.#glRenderer = renderer
-			})
-		}
-
-		// }}
+		if (!lumeScene.glRenderer) return null
+		// lumeScene.glRenderer is not reactive, but will be available after a timeout.
+		// FIXME make lume's renderer glRenderer a signal so we don't need a timeout hack in this consumer code.
+		setTimeout(() => (this.#glRenderer = lumeScene.glRenderer!))
 	}
 
 	@effect updateEnvIntensity() {
 		const lumeScene = this.lumeScene
 		if (!lumeScene) return
-		lumeScene.three.environmentIntensity = this.#overallEnvIntensity
+		lumeScene.three.environmentIntensity = this.#overallEnvIntensity * (this.isHM ? 0.65 : 1)
 		lumeScene.needsUpdate()
+	}
+
+	@effect loadHdrEnvironment() {
+		const lumeScene = this.lumeScene
+		const renderer = this.#glRenderer
+		if (!lumeScene || !renderer) return
+
+		if (this.isMobile) {
+			// Reuse the already-loaded env texture instead of fetching the same file twice
+			const texture = this.#envTexture
+			if (!texture) return // re-runs reactively once #envTexture is set
+			texture.mapping = THREE.EquirectangularReflectionMapping
+			texture.colorSpace = THREE.SRGBColorSpace
+			const pmrem = new THREE.PMREMGenerator(renderer)
+			lumeScene.three.environment = pmrem.fromEquirectangular(texture).texture
+			pmrem.dispose()
+			lumeScene.needsUpdate()
+			return
+		}
+
+		const pmremGenerator = new THREE.PMREMGenerator(renderer)
+		pmremGenerator.compileEquirectangularShader()
+
+		new RGBELoader().load('/images/envs/studio_small_08_1k.hdr', texture => {
+			const envMap = pmremGenerator.fromEquirectangular(texture).texture
+			pmremGenerator.dispose()
+			texture.dispose()
+
+			lumeScene.three.environment = envMap
+			lumeScene.needsUpdate()
+		})
 	}
 
 	@effect setShadowType() {
 		if (!this.#glRenderer) return
-		this.#glRenderer.shadowMap.type = THREE.VSMShadowMap
+		this.#glRenderer.shadowMap.type = THREE.PCFSoftShadowMap
 	}
 
 	@effect postprocessing() {
-		const lumeScene = this.lumeScene
 		const renderer = this.#glRenderer
+		const lumeScene = this.lumeScene
 		if (!renderer || !lumeScene) return
 
 		renderer.toneMapping = THREE.ACESFilmicToneMapping
-
-		const threeScene = lumeScene.three
-		const camera = lumeScene.threeCamera
-
-		// Wait for valid size before initializing composer
-		const size = new THREE.Vector2()
-		renderer.getSize(size)
-
-		// Create composer if not exists
-		if (!this.composer) {
-			const pixelRatio = renderer.getPixelRatio()
-			// Required for stencil to work with EffectComposer.
-			const renderTarget = new THREE.WebGLRenderTarget(size.x * pixelRatio, size.y * pixelRatio, {
-				depthBuffer: true,
-				stencilBuffer: true,
-			})
-
-			this.composer = new EffectComposer(renderer, renderTarget)
-
-			// Set up post-processing for outline effect
-			const renderPass = new RenderPass(threeScene, camera)
-			this.composer.addPass(renderPass)
-
-			const bloomPass = untrack(
-				() => new UnrealBloomPass(size, this.#bloomStrength, this.#bloomRadius, this.#bloomThreshold),
-			)
-			createEffect(() => {
-				bloomPass.strength = this.#bloomStrength
-				bloomPass.radius = this.#bloomRadius
-				bloomPass.threshold = this.#bloomThreshold
-				lumeScene.needsUpdate()
-			})
-			this.composer.addPass(bloomPass)
-
-			this.outlinePass = new OutlinePass(size, threeScene, camera)
-			this.outlinePass.edgeStrength = 10
-			this.outlinePass.edgeGlow = 0
-			this.outlinePass.edgeThickness = 4
-			this.outlinePass.visibleEdgeColor.set(0x9b59b6) // purple accent
-			this.composer.addPass(this.outlinePass)
-
-			const outputPass = new OutputPass()
-			this.composer.addPass(outputPass)
-
-			// Store original drawScene
-			const originalDrawScene = lumeScene.drawScene.bind(lumeScene)
-
-			// Override the render loop to use composer
-			lumeScene.drawScene = () => {
-				if (postprocessingEnabled) {
-					// Update cameras to current frame's camera
-					const currentCamera = lumeScene.threeCamera!
-
-					if (renderPass) renderPass.camera = currentCamera
-
-					if (this.outlinePass) {
-						// Only use outline pass if we have objects to outline AND selectingPiece is set
-						if (store.selectingPiece && this.outlinePass.selectedObjects.length > 0) {
-							this.outlinePass.enabled = true
-							this.outlinePass.renderCamera = currentCamera
-						} else this.outlinePass.enabled = false
-					}
-
-					this.composer!.render()
-				}
-				// Fall back to original rendering when no outline needed
-				else originalDrawScene()
-			}
-
-			// Handle resize
-			const resizeObserver = new ResizeObserver(() => {
-				if (!lumeScene || !this.composer) return
-				const newSize = new THREE.Vector2()
-				renderer.getSize(newSize)
-				if (newSize.x > 0 && newSize.y > 0) this.composer.setSize(newSize.x, newSize.y)
-			})
-			resizeObserver.observe(lumeScene)
-			onCleanup(() => resizeObserver.disconnect())
-		}
-	}
-
-	/** To prevent same values from triggering */
-	@memo private get selectingPiece() {
-		return store.selectingPiece
-	}
-
-	/**
-	 * Update outline selection based on store.selectingPiece
-	 */
-	@effect updateOutlineSelection() {
-		const lumeScene = this.lumeScene
-		const outlinePass = this.outlinePass
-		const selectingPiece = this.selectingPiece
-		if (!outlinePass || !lumeScene || !selectingPiece) return
-		if (!this.garmentModelsInSyncAndLoaded) return
-
-		const models = this.garmentModels
-		if (models.length === 0) return
-
-		// "default" means all meshes in the garment for the currently selected template only
-		const isDefault = selectingPiece === 'default'
-		const pieceNames = isDefault ? [] : selectingPiece.split('-')
-		const selectedMeshes: THREE.Object3D[] = []
-
-		// Get the template category being edited (from remix overlay)
-		const editingTemplateCategory = store.remixOverlayTemplate?.category
-
-		// Process models in chunks to avoid long blocking
-		for (const [i, garmentModel] of models.entries()) {
-			const rb = this.renderBlocks[i]
-
-			// For "default", only outline models belonging to the selected template
-			if (isDefault && editingTemplateCategory) if (rb.block.templateCategory !== editingTemplateCategory) continue
-
-			garmentModel.three.traverse(obj => {
-				if (!(obj as THREE.Mesh).isMesh) return
-
-				if (isDefault) selectedMeshes.push(obj)
-				else {
-					for (const pieceName of pieceNames) {
-						if (hasAncestorWithName(obj, pieceName)) {
-							selectedMeshes.push(obj)
-							break
-						}
-					}
-				}
-			})
-		}
-
-		outlinePass.selectedObjects = selectedMeshes
-		// Trigger re-render after updating outline selection
-		lumeScene.needsUpdate()
-
-		onCleanup(() => {
-			outlinePass.selectedObjects = []
-			lumeScene.needsUpdate()
-		})
+		renderer.toneMappingExposure = 0.85
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.isMobile ? 1.5 : 2))
 	}
 
 	@effect avatarModelEffect() {
 		const {avatarModel} = this
 		if (!avatarModel) return
 
-		// Track selected avatar loading state
+		// Show the loading screen only on the initial avatar load, not on
+		// subsequent avatar switches (the user shouldn't see a full loading
+		// screen just because they picked a different avatar).
 		const avatarId = Symbol('avatar')
-		store.trackModelLoading(avatarId, avatarModel)
+		const modelLoaded = onModelLoad(avatarModel)
+		let hasLoadedOnce = false
+		createEffect(() => {
+			if (modelLoaded()) {
+				hasLoadedOnce = true
+				return
+			}
+			if (hasLoadedOnce) return
+			store.addIsDrippySceneLoading(avatarId)
+			onCleanup(() => store.removeIsDrippySceneLoading(avatarId))
+		})
 
 		whenModelLoaded(avatarModel, () => {
 			store.showAnimationSelect = !!getArmatureObject(avatarModel.three)
 		})
-	}
-
-	#setupStencil(el: GltfModel, block: RenderBlock) {
-		type StencilProps = Partial<
-			Pick<
-				THREE.Material,
-				| 'stencilWrite'
-				| 'stencilFunc'
-				| 'stencilRef'
-				| 'stencilFuncMask'
-				| 'stencilFail'
-				| 'stencilZFail'
-				| 'stencilZPass'
-				| 'transparent'
-			>
-		>
-		const createStencil = (obj: THREE.Mesh, stencilProps: StencilProps, renderOrder?: number) => {
-			if (Array.isArray(obj.material)) throw new Error('Stencil not yet supported with multi materials.')
-
-			// Only reset what we actually might change, since copying/resetting all properties
-			// seems to break the texture.
-			const originalStencilProps = {
-				stencilWrite: obj.material.stencilWrite,
-				stencilFunc: obj.material.stencilFunc,
-				stencilFuncMask: obj.material.stencilFuncMask,
-				stencilRef: obj.material.stencilRef,
-				stencilFail: obj.material.stencilFail,
-				stencilZFail: obj.material.stencilZFail,
-				stencilZPass: obj.material.stencilZPass,
-				transparent: obj.material.transparent,
-			}
-
-			const originalRenderOrder = obj.renderOrder
-
-			const resetState = () => {
-				Object.assign(obj.material, originalStencilProps)
-
-				obj.renderOrder = originalRenderOrder
-			}
-
-			createEffect(() => {
-				if (!this.#stencilEnabled && !stencilEnabled) return
-
-				// Transparency breaks render order so for now disable it for garment types we
-				// want stencil on.
-				Object.assign(obj.material, {...stencilProps, transparent: false})
-
-				if (renderOrder !== undefined) obj.renderOrder = renderOrder
-
-				onCleanup(() => resetState())
-			})
-		}
-
-		if (block.templateCategory === 'Pants' || block.templateCategory === 'Skirt') {
-			el.three.traverse(obj => {
-				if (!(obj instanceof THREE.Mesh)) return
-
-				createStencil(
-					obj,
-					{
-						stencilWrite: true,
-						stencilRef: 1,
-						stencilFunc: THREE.NotEqualStencilFunc,
-					},
-					3,
-				)
-			})
-		} else if (block.templateCategory === 'Top') {
-			el.three.traverse(obj => {
-				// Don't write stencil on sleeves (for now).
-				if (!(obj instanceof THREE.Mesh) || obj.name.includes('Sleeves')) return
-
-				createStencil(
-					obj,
-					{
-						stencilWrite: true,
-						stencilRef: 1,
-						stencilZPass: THREE.ReplaceStencilOp,
-					},
-					2,
-				)
-			})
-		} else if (block.templateCategory === 'Jacket') {
-			// TODO
-		}
 	}
 
 	@signal accessor #envTexture: THREE.Texture | null = null
@@ -1294,6 +1042,15 @@ export class DrippyScene extends Element {
 				})
 			})
 
+			// Priority determines both polygon offset and render order.
+			// Lower priority number = outer layer = more aggressive depth offset = higher renderOrder.
+			// Pants/Skirt (3) → offset -1, renderOrder 1
+			// Shirt/Top   (2) → offset -2, renderOrder 2  ← wins over bottoms at waist
+			// Jacket etc  (1) → offset -3, renderOrder 3  ← wins over everything
+			const priority = SLOT_PRIORITY[block().templateCategory]
+			const polygonOffsetFactor = priority !== undefined ? -(4 - priority) : 0
+			const renderOrder = priority !== undefined ? 4 - priority : 0
+
 			el.three.traverse(obj => {
 				if (!isMesh(obj)) return
 
@@ -1303,13 +1060,29 @@ export class DrippyScene extends Element {
 				if (!(material instanceof THREE.MeshStandardMaterial))
 					throw new Error('only blocks with standard PBR materials supported')
 
-				material.roughness = 1.4
-				material.metalness = 0.3
 				material.transparent = true
 				material.side = THREE.DoubleSide
+
+				const maps = [material.map, material.normalMap, material.roughnessMap, material.metalnessMap, material.aoMap]
+				for (const map of maps) if (map) map.anisotropy = 4
+
+				if (polygonOffsetFactor !== 0) {
+					material.polygonOffset = true
+					material.polygonOffsetFactor = polygonOffsetFactor
+					material.polygonOffsetUnits = polygonOffsetFactor * 4
+				}
+
+				// Pants and Skirt don't write to the depth buffer so that upper-body
+				// garments (Top, Shirt) always composite on top at the waist overlap.
+				// The avatar body still provides the depth wall for background occlusion.
+				const cat = block().templateCategory
+				if (cat === 'Pants' || cat === 'Skirt') material.depthWrite = false
+
+				obj.renderOrder = renderOrder
+
+
 			})
 
-			this.#setupStencil(el, block())
 		})
 	}
 
@@ -1326,9 +1099,9 @@ export class DrippyScene extends Element {
 	override template = () => {
 		const shadowBias = -0.0004
 		const shadowNormalBias = /*0.005*/ 0
-		const shadowMapSize = 2048
-		const shadowRadius = 6
-		const shadowSamples = 8
+		const shadowMapSize = this.isMobile ? 512 : 2048
+		const shadowRadius = this.isMobile ? 3 : 4
+		const shadowSamples = this.isMobile ? 8 : 16
 
 		return html`
 			<show-when
@@ -1442,58 +1215,6 @@ export class DrippyScene extends Element {
 							/>
 						</div>
 
-						<div>
-							<p>Light glow strength (${() => this.#bloomStrength})</p>
-
-							<input
-								id="bloomStrength"
-								type="range"
-								min="0"
-								max="1.5"
-								step="0.01"
-								prop:value=${() => this.#bloomStrength}
-								oninput=${(e: Event) => (this.#bloomStrength = Number((e.target as HTMLInputElement).value) || 0)}
-							/>
-						</div>
-
-						<div>
-							<p>Light glow radius (${() => this.#bloomRadius})</p>
-
-							<input
-								id="bloomRadius"
-								type="range"
-								min="0"
-								max="3"
-								step="0.01"
-								prop:value=${() => this.#bloomRadius}
-								oninput=${(e: Event) => (this.#bloomRadius = Number((e.target as HTMLInputElement).value) || 0)}
-							/>
-						</div>
-
-						<div>
-							<p>Light glow threshold (${() => this.#bloomThreshold})</p>
-
-							<input
-								id="bloomThreshold"
-								type="range"
-								min="0"
-								max="3"
-								step="0.01"
-								prop:value=${() => this.#bloomThreshold}
-								oninput=${(e: Event) => (this.#bloomThreshold = Number((e.target as HTMLInputElement).value) || 0)}
-							/>
-						</div>
-
-						<div>
-							<p>Stencil</p>
-							<input
-								id="stencilEnabled"
-								type="checkbox"
-								checked=${() => this.#stencilEnabled && stencilEnabled}
-								oninput=${() => (this.#stencilEnabled = !this.#stencilEnabled)}
-							/>
-						</div>
-
 						<style>
 							#debugUi {
 								position: absolute;
@@ -1540,6 +1261,23 @@ export class DrippyScene extends Element {
 				`}
 			></show-when>
 
+			<show-when
+				condition=${() => store.view === 'template'}
+				content=${() => html`
+					<button id="hidden-items-toggle" onclick=${this.#onHiddenItemsClick} title="Manage hidden items">
+						Hidden
+					</button>
+				`}
+			></show-when>
+
+			<button
+				id="music-toggle"
+				onclick=${() => this.#musicCtx ? this.stopBackgroundMusic() : this.startBackgroundMusic()}
+				title="Toggle background music"
+			>${() => this.#musicCtx ? '🔇' : '🎵'}</button>
+
+			<div id="vignette"></div>
+
 			<div id="lume-scene-container">
 				<lume-scene
 					ref=${(el: Scene) => (this.lumeScene = el)}
@@ -1547,8 +1285,7 @@ export class DrippyScene extends Element {
 					webgl
 					perspective="800"
 					physically-correct-lights
-					shadow-mode="vsm"
-					attr:environment=${() => /*TODO webp: this.scene?.env ??*/ '/images/envs/brown_photostudio_02.jpg'}
+					shadow-mode="pcfsoft"
 					attr:environment-intensity=${() => this.#overallEnvIntensity}
 					oncapture:pointerdown=${this.#handlePointerDown}
 					oncapture:pointermove=${this.#handlePointerMove}
@@ -1556,7 +1293,24 @@ export class DrippyScene extends Element {
 
 				>
 					<lume-element3d align-point="0.5 0.5 0.5">
-						<lume-ambient-light visible="false" intensity="0.7" color="white"></lume-ambient-light>
+						<!-- Ambient: low-level fill so shadow sides aren't pure black -->
+					<lume-ambient-light visible="true" intensity="0.05" color="white"></lume-ambient-light>
+
+					<!-- Fill light: opposite side of key, no shadow, softens contrast -->
+					<lume-directional-light
+						visible=${() => !this.isMobile}
+						position="-1.5 -2 0.8"
+						intensity="0.8"
+						color="#b0c8ff"
+					></lume-directional-light>
+
+					<!-- Rim/back light: from behind and above, adds depth separation -->
+					<lume-directional-light
+						visible=${() => !this.isMobile}
+						position="0 -1.5 -2"
+						intensity="1.0"
+						color="#ffe8d0"
+					></lume-directional-light>
 
 						<!-- a sphere to debug/visualize the env map -->
 						<lume-sphere ref=${(el: Sphere) => {
@@ -1606,7 +1360,7 @@ export class DrippyScene extends Element {
 							intensity=${() =>
 								// TODO replace hard-coded scene-specific values
 								// with values from the data models.
-								this.isDrippyShop ? this.#spotLightIntensity : this.#spotLightIntensity}
+								this.isDrippyShop ? this.#spotLightIntensity : this.isHM ? this.#spotLightIntensity * 0.65 : this.#spotLightIntensity}
 							ref=${(el: SpotLight) => {
 								el.three.shadow.focus = 1
 								el.three.shadow.blurSamples = shadowSamples
@@ -1750,6 +1504,7 @@ export class DrippyScene extends Element {
 								attr:src=${() => this.animSrc}
 								clip-name=${() => this.animName}
 								stopped=${() => !this.animsEnabled}
+								trim-start=${() => this.animTrimStart}
 							></lume-animation>
 						</lume-gltf-model>
 
@@ -1757,7 +1512,7 @@ export class DrippyScene extends Element {
 					<lume-gltf-model
 						ref=${(el: GltfModel) => (this.backgroundModel = el)}
 						id="scene"
-						attr:src=${() => this.scene?.scene ?? ''}
+						attr:src=${() => this._lastSceneSrc}
 					></lume-gltf-model>
 
 					<!-- Background scene extra objects -->
@@ -1800,6 +1555,62 @@ export class DrippyScene extends Element {
 			backface-visibility: hidden;
 		}
 
+		#vignette {
+			position: absolute;
+			inset: 0;
+			pointer-events: none;
+			z-index: 10;
+			background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.75) 100%);
+		}
+
+		#music-toggle {
+			position: absolute;
+			bottom: 16px;
+			right: 16px;
+			z-index: 3200;
+			background: rgba(0,0,0,0.5);
+			border: 1px solid rgba(255,255,255,0.15);
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			font-size: 18px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			backdrop-filter: blur(8px);
+			transition: background 0.2s;
+		}
+
+		#hidden-items-toggle {
+			position: absolute;
+			bottom: 16px;
+			right: 64px;
+			z-index: 3200;
+			border: 1px solid rgba(255, 255, 255, 0.24);
+			background: rgba(0, 0, 0, 0.5);
+			color: #fff;
+			border-radius: 999px;
+			height: 40px;
+			padding: 0 12px;
+			font-size: 11px;
+			font-weight: 700;
+			cursor: pointer;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
+		}
+
+		:host-context(.panel-collapsed) #hidden-items-toggle {
+			display: none;
+		}
+
+		#music-toggle:hover {
+			background: rgba(255,255,255,0.15);
+		}
+
 		#lume-scene-container {
 			width: calc(100% + 2 * var(--sceneDesktopOffset));
 			height: 100%;
@@ -1825,6 +1636,7 @@ export class DrippyScene extends Element {
 				translate: 0;
 			}
 		}
+
 	`
 }
 

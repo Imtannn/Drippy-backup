@@ -1,7 +1,7 @@
-import {attribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {attribute, css, Element, element, html, type ElementAttributes} from 'lume'
 import type {Template} from '../types/template.js'
-import {templateHelpers} from './TemplateHelpers.js'
 import {store} from './store.js'
+import {pushHistory} from './history.js'
 
 type TemplateItemOverlayAttributes = 'selectedTemplate'
 
@@ -10,26 +10,8 @@ export class TemplateItemOverlay extends Element {
 	static override readonly elementName = 'template-item-overlay'
 
 	@attribute selectedTemplate: Template | null = null
-
-	@signal isRemixAvailable = false
 	override connectedCallback() {
 		super.connectedCallback()
-
-		// Check if remix is available for this template
-		this.createEffect(() => {
-			if (!this.selectedTemplate) {
-				this.isRemixAvailable = false
-				return
-			}
-
-			const {available} = templateHelpers.isRemixAvailableForTemplate(this.selectedTemplate, {
-				selectedGarments: store.selectedGarments,
-				selectedSpace: store.getEffectiveSpace(),
-				sourceCollection: store.getEffectiveCollection(),
-			})
-
-			this.isRemixAvailable = available
-		})
 
 		this.createEffect(() => {
 			void this.selectedTemplate
@@ -37,22 +19,34 @@ export class TemplateItemOverlay extends Element {
 		})
 	}
 
-	#onUnselectClick = () => {
+	#onUnselectClick = (e: Event) => {
+		e.preventDefault()
+		e.stopPropagation()
 		if (!this.selectedTemplate) return
 
-		// Unselect the template
+		pushHistory()
 		store.unselectTemplate = this.selectedTemplate
-
-		// Dispatch close event
 		this.dispatchEvent(new CustomEvent('close', {bubbles: true}))
 	}
 
-	#onRemixClick = () => {
+	#onViewItemClick = () => {
 		if (!this.selectedTemplate) return
 
-		// Open remix overlay
 		this.dispatchEvent(
-			new CustomEvent('remix', {
+			new CustomEvent('viewitem', {
+				detail: {template: this.selectedTemplate},
+				bubbles: true,
+			}),
+		)
+	}
+
+	#onHideClick = (e: Event) => {
+		e.preventDefault()
+		e.stopPropagation()
+		if (!this.selectedTemplate) return
+
+		this.dispatchEvent(
+			new CustomEvent('hideitem', {
 				detail: {template: this.selectedTemplate},
 				bubbles: true,
 			}),
@@ -61,10 +55,8 @@ export class TemplateItemOverlay extends Element {
 	override template = () => html`
 		<div class="overlay-container">
 			<button class="overlay-button unselect-button" onclick=${this.#onUnselectClick}>Unselect</button>
-			${() =>
-				this.isRemixAvailable
-					? html`
-							<button class="overlay-button remix-button" onclick=${this.#onRemixClick}>
+			<button class="overlay-button hide-button" onclick=${this.#onHideClick}>Hide item</button>
+			<button class="overlay-button remix-button" onclick=${this.#onViewItemClick}>
 								<svg width="13" height="10" viewBox="0 0 13 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<mask
 										id="mask0_23200_10107"
@@ -88,10 +80,8 @@ export class TemplateItemOverlay extends Element {
 										fill="white"
 									/>
 								</svg>
-								Options
+								View item
 							</button>
-						`
-					: null}
 		</div>
 	`
 	override css = css /*css*/ `
@@ -144,6 +134,12 @@ export class TemplateItemOverlay extends Element {
 			font-weight: var(--fontWeightSemiBold);
 			background: var(--uiColorAccentViolet);
 			color: var(--uiColorPrimaryWhite);
+		}
+
+		.hide-button {
+			background: rgba(0, 0, 0, 0.82);
+			color: #fff;
+			border: 1px solid rgba(255, 255, 255, 0.24);
 		}
 	`
 }

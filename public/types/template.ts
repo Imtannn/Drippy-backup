@@ -33,4 +33,6 @@ export type Template = {
 	blockOptions?: {category: BlockCategory; blocks: Block[]}[]
 	collection: string
 	productUrl?: string
+	/** When false, selecting this garment locks out conflicting slots (e.g. long tops block bottoms). Absent = true. */
+	layerable?: boolean
 }

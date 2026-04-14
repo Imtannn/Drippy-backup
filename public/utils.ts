@@ -673,7 +673,6 @@ export function setEnvMapOnModelLoad(el: GltfModel, env: Accessor<string | THREE
 export function setMaterialsVisible(el: Element3D, visible: boolean, ...skip: Element3D[]) {
 	for (const material of materialsInTree(el.three, ...skip.map(s => s.three))) {
 		material.visible = visible
-		material.needsUpdate = true
 	}
 
 	el.needsUpdate()

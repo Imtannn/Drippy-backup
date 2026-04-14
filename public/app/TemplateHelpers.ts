@@ -46,14 +46,14 @@ class TemplateHelpers {
 	}
 
 	private readonly overridingCategoriesMapping: Record<string, TemplateCategory[]> = {
-		Dress: ['Shirt', 'Top', 'Pants', 'Skirt', 'Jumpsuit', 'Jacket'],
-		Top: ['Dress', 'Jacket'],
-		Shirt: ['Dress', 'Jumpsuit', 'Jacket'],
-		Jacket: ['Coat', 'Shirt', 'Top', 'Jumpsuit', 'Dress'],
-		Skirt: ['Pants', 'Dress', 'Jumpsuit'],
-		Pants: ['Skirt', 'Dress'],
+		Dress: ['Shirt', 'Top', 'Jumpsuit', 'Pants', 'Skirt'],
+		Top: ['Dress'],
+		Shirt: ['Dress', 'Jumpsuit'],
+		Jacket: ['Coat', 'Jumpsuit'],
+		Skirt: ['Pants', 'Jumpsuit'],
+		Pants: ['Skirt'],
 		Coat: ['Dress', 'Shirt', 'Top', 'Pants', 'Skirt', 'Jacket'],
-		Jumpsuit: ['Dress', 'Shirt', 'Skirt', 'Jacket'],
+		Jumpsuit: ['Dress', 'Shirt', 'Skirt', 'Jacket', 'Pants'],
 	}
 
 	/**

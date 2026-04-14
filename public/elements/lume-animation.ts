@@ -7,6 +7,7 @@ import {
 	element,
 	Element3D,
 	GltfModel,
+	numberAttribute,
 	onCleanup,
 	stringAttribute,
 	type ElementAttributes,
@@ -15,7 +16,7 @@ import * as THREE from 'three'
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {getArmatureObject, onModelLoad} from '../utils.js'
 
-type LumeAnimationAttributes = 'src' | 'clipName' | 'additive' | 'paused'
+type LumeAnimationAttributes = 'src' | 'clipName' | 'additive' | 'paused' | 'trimStart'
 
 const gltfLoader = new GLTFLoader()
 
@@ -52,6 +53,12 @@ export class LumeAnimation extends Element {
 	 * If `true`, animations will be stopped.
 	 */
 	@booleanAttribute stopped = false
+
+	/**
+	 * Seconds to skip at the start of the clip. The clip will loop from this
+	 * point, effectively removing an intro pose.
+	 */
+	@numberAttribute trimStart = 0
 
 	// TODO: Add attributes like `blending`, `time`, `mixer`, etc.
 
@@ -97,6 +104,10 @@ export class LumeAnimation extends Element {
 						return
 					}
 
+					// Capture trimStart now (synchronously) so the async callback below
+					// always uses the correct value, even if the attribute updates later.
+					const trimSeconds = this.trimStart
+
 					let cleaned = false
 
 					// Clear clips before loading new animation to stop old animation
@@ -105,7 +116,13 @@ export class LumeAnimation extends Element {
 					gltfLoader.load(this.src, loadedModel => {
 						if (cleaned) return
 						hasLoadedExternalAnimation = true
-						setClips(loadedModel.animations)
+						const anims =
+							trimSeconds > 0
+								? loadedModel.animations.map(c =>
+										THREE.AnimationUtils.subclip(c, c.name, trimSeconds, Infinity, 1),
+									)
+								: loadedModel.animations
+						setClips(anims)
 					})
 
 					onCleanup(() => (cleaned = true))
@@ -129,17 +146,21 @@ export class LumeAnimation extends Element {
 						const clock = new THREE.Clock()
 
 						let frame = 0
+						const isMobile = window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window && window.innerWidth < 1024)
+						const targetInterval = isMobile ? 1000 / 30 : 1000 / 60 // 30fps on mobile, 60fps on desktop
+						let lastTime = 0
 
-						const anim = () => {
+						const anim = (time: number) => {
+							frame = requestAnimationFrame(anim)
+							if (targetInterval > 0 && time - lastTime < targetInterval) return
+							lastTime = time
+
 							const delta = clock.getDelta()
-
 							mixer.update(delta)
 
 							const parent = this.parentElement as Element3D
 							parent.needsUpdate()
 							parent.scene!.needsUpdate()
-
-							frame = requestAnimationFrame(anim)
 						}
 
 						// Start/stop animation loop when `paused` or `stopped` changes.

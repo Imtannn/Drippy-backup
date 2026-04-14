@@ -16,6 +16,7 @@ import './template-view.js'
 import {batch, css, Element, element, html, signal, effect} from 'lume'
 import '../routes.js' // track page visits
 import {hasBrandParam, isPreview, pushState, searchParams} from '../routes.js'
+import {isRestoringHistory} from './history.js'
 import type {BlockCategory} from '../types/block.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {BlockFabricsMap, TemplateBlocksMap, TemplateFabricsMap, TemplateMap} from '../types/types.js'
@@ -39,7 +40,7 @@ export class DrippyApp extends Element {
 	@effect loadParamsEffect() {
 		try {
 			// Load garments and fabrics from URL parameters if present
-			if (store.selectedSpace) this.#loadFromUrlParameters()
+			if (store.selectedSpace && !isRestoringHistory) this.#loadFromUrlParameters()
 
 			if (store.isPreview || isPreview() === 'true') {
 				store.view = 'preview'

@@ -89,11 +89,11 @@ export class NavBar extends Element {
 
 		/* Bottom navigation styles */
 		.nav-bottom {
-			background: rgba(255, 255, 255, 0.8);
-			backdrop-filter: blur(20px);
+			background: rgba(18, 19, 22, 0.22);
+			backdrop-filter: blur(12px);
 			border-radius: var(--borderRadiusPill);
-			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-			border: 1px solid rgba(255, 255, 255, 0.2);
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+			border: 1px solid rgba(255, 255, 255, 0.14);
 			padding: 2px 4px;
 		}
 	`

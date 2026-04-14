@@ -1,5 +1,6 @@
 import {attribute, booleanAttribute, element, Element, html, type ElementAttributes} from 'lume'
 import './icon-button.js'
+import {canRedo, redo} from '../app/history.js'
 
 type RedoButtonAttributes = 'disabled' | 'group'
 
@@ -9,6 +10,8 @@ export class RedoButton extends Element {
 
 	@booleanAttribute disabled = false
 	@attribute group: string | null = null
+
+	#onClick = () => redo()
 
 	icon = () => html`
 		<svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +24,13 @@ export class RedoButton extends Element {
 		</svg>
 	`
 	override template = () =>
-		html`<icon-button disabled=${() => this.disabled} group=${() => this.group}>${() => this.icon()}</icon-button>`
+		html`<icon-button
+			onclick=${this.#onClick}
+			disabled=${() => this.disabled || !canRedo()}
+			group=${() => this.group}
+			title="Redo (Ctrl+Shift+Z)"
+			>${() => this.icon()}</icon-button
+		>`
 }
 
 declare module 'solid-js' {

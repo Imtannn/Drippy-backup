@@ -213,7 +213,8 @@ export class ItemCard extends Element {
 			aspect-ratio: var(--aspect-ratio);
 			overflow: visible;
 			border-radius: 10px;
-			border: 2px solid transparent;
+			border: var(--item-preview-border, 2px solid transparent);
+			box-shadow: var(--item-preview-shadow, none);
 			transition: border-color 0.2s ease;
 		}
 
@@ -223,11 +224,12 @@ export class ItemCard extends Element {
 		}
 
 		.item-card:hover .item-preview {
-			border-color: var(--uiColorAccentViolet);
+			border-color: var(--item-preview-hover-border-color, var(--uiColorAccentViolet));
 		}
 
 		.item-card.active .item-preview {
-			border-color: var(--uiColorAccentViolet);
+			border-color: var(--item-preview-active-border-color, var(--uiColorAccentViolet));
+			box-shadow: var(--item-preview-active-shadow, var(--item-preview-shadow, none));
 		}
 
 		.item-preview img {

@@ -415,6 +415,14 @@ export class BottomSheet extends Element {
 			--bottom-sheet-float-direction: flex-start;
 			--bottom-sheet-panel-width: 32rem;
 			--bottom-sheet-panel-left: 7px;
+			--bottom-sheet-bg: var(--uiColorPrimaryWhite);
+			--bottom-sheet-border-color: #e5e7eb;
+			--bottom-sheet-panel-shadow:
+				0 -4px 6px -1px rgba(0, 0, 0, 0.1),
+				0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+			--bottom-sheet-panel-backdrop-filter: none;
+			--bottom-sheet-handle-bg: var(--uiColorPrimaryWhite);
+			--bottom-sheet-handle-indicator-bg: #d1d5db;
 		}
 
 		:host {
@@ -434,9 +442,12 @@ export class BottomSheet extends Element {
 			left: 0;
 			right: 0;
 			z-index: 50;
-			background: var(--uiColorPrimaryWhite);
+			background: var(--bottom-sheet-bg);
 			border-top-left-radius: var(--borderRadiusXl);
 			border-top-right-radius: var(--borderRadiusXl);
+			backdrop-filter: var(--bottom-sheet-panel-backdrop-filter);
+			-webkit-backdrop-filter: var(--bottom-sheet-panel-backdrop-filter);
+			box-shadow: var(--bottom-sheet-panel-shadow);
 			translate: 0px 100%;
 			transition:
 				translate var(--transitionTimeFast) ease,
@@ -474,7 +485,7 @@ export class BottomSheet extends Element {
 			position: sticky;
 			z-index: 10;
 			top: 0;
-			background: var(--uiColorPrimaryWhite);
+			background: var(--bottom-sheet-handle-bg);
 		}
 
 		.drag-handle:active {
@@ -484,7 +495,7 @@ export class BottomSheet extends Element {
 		.drag-indicator {
 			width: 45px;
 			height: 5px;
-			background: #d1d5db;
+			background: var(--bottom-sheet-handle-indicator-bg);
 			border-radius: 9999px;
 		}
 
@@ -514,8 +525,11 @@ export class BottomSheet extends Element {
 			width: 23px;
 			height: 55px;
 			border-radius: 12px;
-			background: white;
-			box-shadow: 0px 0px 6px -3px #000f;
+			background: rgba(18, 19, 22, 0.72);
+			border: 1px solid rgba(255, 255, 255, 0.3);
+			backdrop-filter: blur(24px) saturate(1.1);
+			-webkit-backdrop-filter: blur(24px) saturate(1.1);
+			box-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
 
 			display: flex;
 			justify-content: center;
@@ -525,8 +539,8 @@ export class BottomSheet extends Element {
 				content: '';
 				width: 6px;
 				height: 6px;
-				border-top: 1px solid black;
-				border-right: 1px solid black;
+				border-top: 1px solid rgba(255, 255, 255, 0.92);
+				border-right: 1px solid rgba(255, 255, 255, 0.92);
 				border-width: 2px;
 				transition: rotate var(--transitionTimeFast) ease-in-out;
 				rotate: 45deg;
@@ -553,7 +567,7 @@ export class BottomSheet extends Element {
 			overflow-y: auto;
 			/* Hide scrollbar for Webkit browsers */
 			scrollbar-width: none;
-			border-radius: 1rem;
+			border-radius: var(--bottom-sheet-content-radius, 1rem);
 		}
 
 		.bottom-sheet.disable-scroll .sheet-content {
@@ -589,16 +603,35 @@ export class BottomSheet extends Element {
 				bottom: auto;
 				left: 7px;
 				right: auto;
-				border-top-left-radius: var(--borderRadiusXl);
-				border-bottom-left-radius: var(--borderRadiusXl);
+				border-top-left-radius: var(--bottom-sheet-panel-desktop-left-radius, var(--borderRadiusXl));
+				border-bottom-left-radius: var(--bottom-sheet-panel-desktop-left-radius, var(--borderRadiusXl));
 				border-top-right-radius: 0;
-				border: 1px solid #e5e7eb;
+				border: 1px solid var(--bottom-sheet-border-color);
 				width: var(--bottom-sheet-panel-width, 32rem);
 				max-width: calc(100vw - 3rem);
 				height: 100vh;
 				transition:
 					translate var(--transitionDefaultTimeCurve),
 					height var(--transitionDefaultTimeCurve);
+			}
+
+			.sheet-content {
+				border-top-left-radius: var(
+					--bottom-sheet-content-desktop-top-left-radius,
+					var(--bottom-sheet-content-desktop-radius, var(--bottom-sheet-content-radius, 1rem))
+				);
+				border-bottom-left-radius: var(
+					--bottom-sheet-content-desktop-bottom-left-radius,
+					var(--bottom-sheet-content-desktop-radius, var(--bottom-sheet-content-radius, 1rem))
+				);
+				border-top-right-radius: var(
+					--bottom-sheet-content-desktop-top-right-radius,
+					var(--bottom-sheet-content-desktop-radius, var(--bottom-sheet-content-radius, 1rem))
+				);
+				border-bottom-right-radius: var(
+					--bottom-sheet-content-desktop-bottom-right-radius,
+					var(--bottom-sheet-content-desktop-radius, var(--bottom-sheet-content-radius, 1rem))
+				);
 			}
 
 			.bottom-sheet:not(.is-open) {

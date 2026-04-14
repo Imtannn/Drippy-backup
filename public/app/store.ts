@@ -146,11 +146,13 @@ class Store {
 
 	showAnimationSelect = false
 	selectedAnimation: string | null = 'idle01'
+	autoplayAnimations = true
 	selectedTemplates: TemplateMap = {}
 	selectedGarments: SelectedGarments = {}
 	customMeasurement = null as CustomMeasurement | null
 	isShowAvatar = true
 	isShowScene = true
+	cameraResetTick = 0
 
 	// Loading states tracked by unique values
 	drippySceneLoads: symbol[] = []
@@ -329,21 +331,23 @@ class Store {
 	set selectSpace(space: Space | null) {
 		batch(() => {
 			this.selectedSpace = space
-			// Initialize collection and scene when selecting a space
-			if (space) {
-				// Check URL params first, otherwise use primary
-				const collectionParam = searchParams().get('collection')
-				const sceneParam = searchParams().get('scene')
-
-				if (collectionParam && space.collections.includes(collectionParam)) this.selectedCollection = collectionParam
-				else
-					// For multi-collection spaces, default to null (show all)
-					// For single-collection spaces, use primary
-					this.selectedCollection = spaceHasMultipleCollections(space) ? null : getSpacePrimaryCollection(space)
-
-				if (sceneParam && space.scenes.includes(sceneParam)) this.selectedScene = sceneParam
-				else this.selectedScene = getSpaceDefaultScene(space)
+			if (!space) {
+				this.selectedCollection = null
+				this.selectedScene = null
+				return
 			}
+			const collectionParam = searchParams().get('collection')
+			const sceneParam = searchParams().get('scene')
+
+			if (collectionParam && space.collections.includes(collectionParam)) this.selectedCollection = collectionParam
+			else
+				this.selectedCollection = spaceHasMultipleCollections(space) ? null : getSpacePrimaryCollection(space)
+
+			if (sceneParam && space.scenes.includes(sceneParam)) this.selectedScene = sceneParam
+			else this.selectedScene = getSpaceDefaultScene(space)
+
+			// Reset animation to idle01 on every space change
+			this.selectedAnimation = 'idle01'
 		})
 	}
 

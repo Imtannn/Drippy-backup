@@ -243,6 +243,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			category: 'Skirt',
 			collection: 'h&m',
 			materialId: '9081c423-d6c7-4c16-8190-ac7c0317d6ed',
+			layerable: false,
 		},
 		{
 			_id: '72dbbde8-ceb9-4d2c-ba99-8f4f3615243f',
@@ -417,6 +418,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			avatar: 'female',
 			category: 'Top',
 			collection: 'môi_điên',
+			layerable: false,
 			materialId: 'f55f6b08-2e66-461a-ad62-d49631412391',
 		},
 		{
@@ -724,6 +726,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			category: 'Pants',
 			collection: 'the_soul',
 			materialId: 'edaaf508-9caa-4c01-b769-780b84201f20',
+			layerable: false,
 		},
 		{
 			_id: '0185a29b-8140-4f0c-a4e4-e960a9df9b59',
@@ -753,6 +756,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			avatar: 'female',
 			category: 'Top',
 			collection: 'the_soul',
+			layerable: false,
 			materialId: 'a187dc45-73dd-4773-944e-a67e7a13670d',
 		},
 		{
@@ -763,6 +767,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			avatar: 'female',
 			category: 'Top',
 			collection: 'the_soul',
+			layerable: false,
 			materialId: 'edaaf508-9caa-4c01-b769-780b84201f20',
 		},
 		{
@@ -850,7 +855,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			name: 'Skirt CV118',
 			price: 'N/A',
 			avatar: 'female',
-			category: 'Skirt',
+			category: 'Top',
 			collection: 'bohee',
 			materialId: '',
 			blockOptions: [
@@ -897,7 +902,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			name: 'Skirt CV128',
 			price: 'N/A',
 			avatar: 'female',
-			category: 'Skirt',
+			category: 'Top',
 			collection: 'bohee',
 			materialId: '',
 			blockOptions: [
@@ -4054,6 +4059,7 @@ export const legacyTemplates: Record<string, Template[]> = {
 			avatar: 'female',
 			category: 'Top',
 			collection: 'skall',
+			layerable: false,
 			materialId: 'd7edbc5d-4e94-4540-9f3f-397fd1b6cf43',
 			blockOptions: [
 				{

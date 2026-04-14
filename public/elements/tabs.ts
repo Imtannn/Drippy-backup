@@ -309,11 +309,11 @@ export class TabsList extends Element {
 		}
 
 		.active-indicator {
-			background: #121316;
+			background: var(--tabs-active-indicator-bg, #121316);
 		}
 
 		.hover-indicator {
-			background: rgba(255, 255, 255, 0.1);
+			background: var(--tabs-hover-indicator-bg, rgba(255, 255, 255, 0.1));
 			opacity: 0;
 			transition:
 				opacity 0.2s ease,
@@ -413,7 +413,7 @@ export class TabsTrigger extends Element {
 			border: none;
 			border-radius: 16px;
 			font-size: var(--fontSizeTextXs);
-			color: #424347;
+			color: var(--tabs-trigger-color, #424347);
 			cursor: pointer;
 			transition:
 				color 0.2s ease,
@@ -429,12 +429,12 @@ export class TabsTrigger extends Element {
 		}
 
 		.tab.active {
-			color: #ffffff;
+			color: var(--tabs-trigger-active-color, #ffffff);
 			font-weight: var(--fontWeightSemiBold);
 		}
 
 		.tab:not(.active) {
-			background: #e9e9ea;
+			background: var(--tabs-trigger-inactive-bg, #e9e9ea);
 			padding: 8px 17px;
 		}
 

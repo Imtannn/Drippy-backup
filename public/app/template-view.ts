@@ -1,10 +1,11 @@
 import {batch, css, Element, element, html, memo, onCleanup, signal, type ElementAttributes} from 'lume'
 import {Meteor} from 'meteor/meteor'
-import {getTemplatesByCollection} from '../consts/templates.js'
-import {poses, animations} from '../consts/poses.js'
+import {getTemplatesByCollection, templates} from '../consts/templates.js'
+import {collections} from '../consts/collections.js'
+import {animations} from '../consts/poses.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
-import type {TemplateMap} from '../types/types.js'
+import type {Avatar, TemplateMap} from '../types/types.js'
 import {createMutationsSignal, getSpaceCollectionSlugs, values} from '../utils.js'
 import {
 	currentUser,
@@ -15,6 +16,7 @@ import {
 	updateGarmentsSelectionInUrl,
 	wishlist,
 } from './store.js'
+import {pushHistory} from './history.js'
 import {templateHelpers} from './TemplateHelpers.js'
 
 import {avatars} from '../consts/avatars.js'
@@ -34,17 +36,16 @@ import '../elements/tabs.js'
 import './app-buttons-preset.js'
 import './app-buttons.js'
 import './avatar-selection.js'
-import './buy-button.js'
 import './item-card.js'
 import './loading-spinner-overlay.js'
-import './pose-selection.js'
 import './remix-overlay.js'
 import './template-detail-view.js'
 import './template-item-overlay.js'
 
 type TemplateViewAttributes = keyof object // no attributes yet
 
-type AvatarsTab = 'pose' | 'animation'
+type AvatarsTab = 'character' | 'animation'
+const HIDDEN_TEMPLATE_IDS_KEY = 'hiddenTemplateIds'
 
 @element
 export class TemplateView extends Element {
@@ -55,18 +56,21 @@ export class TemplateView extends Element {
 	@signal private spaceCollection: string | string[] | null = null
 	@signal private showLoginDialog = false
 	@signal private showAvatarSelection = false
-	@signal private showAvatarsSelection = false
-	@signal private avatarsSelectedTab: AvatarsTab = 'pose'
-	@signal private showPoseSelection = false
-	@signal private showRemixOverlay = false
+	@signal private avatarsSelectedTab: AvatarsTab = 'character'
+@signal private showRemixOverlay = false
 	@signal private showTemplateOverlay: Template | null = null
+	@signal private hoveredTemplateId: string | null = null
 	@signal private showAvatarSwapSheet = false
 	@signal private avatarSwapTemplate: Template | null = null
 	@signal private showDetailView = false
+	@signal private detailTemplate: Template | null = null
 	@signal private showBottomNavigation = true
+	@signal private hiddenTemplateIds: string[] = []
+	@signal private showHiddenItemsView = false
 
 	@signal private disabledScroll = false
 	@signal private showWishlistOnly = false
+	@signal private selectedBrandFilter: string | null = null
 	private isOpeningOverlay = false
 
 	@signal private documentElementMutations = createMutationsSignal(document.documentElement, {
@@ -79,8 +83,38 @@ export class TemplateView extends Element {
 		return document.documentElement.classList.contains('is-dragging')
 	}
 
+	@memo private get hiddenTemplates() {
+		const hiddenIds = new Set(this.hiddenTemplateIds)
+		return templates().filter(template => hiddenIds.has(template._id))
+	}
+
+	@memo private get visibleGridTemplates() {
+		if (this.showHiddenItemsView) return this.hiddenTemplates
+		if (this.showWishlistOnly) return this.#filterByBrand(this.templateCategories.All ?? [])
+		if (!this.selectedTab) return []
+		const selectedItems =
+			this.selectedTab === 'All' ? (this.templateCategories.All ?? []) : (this.templateCategories[this.selectedTab] ?? [])
+		return this.#filterByBrand(selectedItems)
+	}
+
+	@memo private get visibleItemCount() {
+		return this.visibleGridTemplates.length
+	}
+
 	override connectedCallback() {
 		super.connectedCallback()
+
+		if (typeof window !== 'undefined') {
+			const raw = localStorage.getItem(HIDDEN_TEMPLATE_IDS_KEY)
+			if (raw) {
+				try {
+					const parsed = JSON.parse(raw) as string[]
+					if (Array.isArray(parsed)) this.hiddenTemplateIds = parsed
+				} catch {
+					this.hiddenTemplateIds = []
+				}
+			}
+		}
 
 		// Add click handler to close overlay when clicking outside
 		document.addEventListener('click', this.#onDocumentClick)
@@ -88,6 +122,7 @@ export class TemplateView extends Element {
 		this.addEventListener('close', this.#onDetailViewClose)
 		// Listen for show-login event on document to catch events from nested components
 		document.addEventListener('show-login', this.#onShowLogin as EventListener)
+		document.addEventListener('open-hidden-items', this.#onOpenHiddenItems as EventListener)
 
 		this.createEffect(() => {
 			const effectiveCollection = store.getEffectiveCollection()
@@ -121,6 +156,10 @@ export class TemplateView extends Element {
 				}
 				collectionTemplates = collectionTemplates.filter(template => wishlistTemplateIds.has(template._id))
 			}
+
+			// Hide templates with problematic thumbnails until assets are replaced.
+			collectionTemplates = collectionTemplates.filter(template => template.name !== 'Dress V127')
+			collectionTemplates = collectionTemplates.filter(template => !this.hiddenTemplateIds.includes(template._id))
 
 			const orderedTemplates: Template[] = []
 			// FIXME stop using Maps unless they solve a problem such as a static cache or iteration speed
@@ -211,31 +250,108 @@ export class TemplateView extends Element {
 		})
 	}
 
+	#audioCtx: AudioContext | null = null
+
+	#brainrotPhrases = [
+		'Bombardiro Crocodilo',
+		'Tralalero Tralala',
+		'Bombombini Gusini',
+		'Skibidi',
+		'No cap fr fr',
+		'Sigma',
+		'Ohio',
+		'W rizz',
+		'Bussin',
+		'It is giving',
+		'Bro is so cooked',
+		'Slay',
+		'Based',
+		'Bro fell off',
+		'Lil bro is cooked no cap',
+	]
+
+	#playBrainrot() {
+		// 1 in 4 chance
+		if (Math.random() > 0.25) return
+		if (!window.speechSynthesis) return
+
+		const phrase = this.#brainrotPhrases[Math.floor(Math.random() * this.#brainrotPhrases.length)]!
+		const utter = new SpeechSynthesisUtterance(phrase)
+		utter.pitch = 0.5 + Math.random() * 1.5   // random pitch 0.5–2.0
+		utter.rate = 1.0
+		utter.volume = 0.7
+		window.speechSynthesis.cancel()
+		window.speechSynthesis.speak(utter)
+	}
+
+	#playEquipSound() {
+		this.#audioCtx ??= new AudioContext()
+		const ctx = this.#audioCtx
+
+		// Two-tone "equip" blip: a quick high sweep + soft body
+		const now = ctx.currentTime
+
+		const osc1 = ctx.createOscillator()
+		const osc2 = ctx.createOscillator()
+		const gain1 = ctx.createGain()
+		const gain2 = ctx.createGain()
+
+		osc1.type = 'sine'
+		osc1.frequency.setValueAtTime(520, now)
+		osc1.frequency.exponentialRampToValueAtTime(880, now + 0.08)
+		gain1.gain.setValueAtTime(0.18, now)
+		gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.15)
+
+		osc2.type = 'sine'
+		osc2.frequency.setValueAtTime(880, now + 0.06)
+		osc2.frequency.exponentialRampToValueAtTime(1200, now + 0.14)
+		gain2.gain.setValueAtTime(0.0, now)
+		gain2.gain.setValueAtTime(0.12, now + 0.06)
+		gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.22)
+
+		osc1.connect(gain1).connect(ctx.destination)
+		osc2.connect(gain2).connect(ctx.destination)
+
+		osc1.start(now); osc1.stop(now + 0.15)
+		osc2.start(now + 0.06); osc2.stop(now + 0.22)
+	}
+
 	#onItemClick = async (e: CustomEvent) => {
 		const template = e.detail.itemValue as Template
+		// Prevent document click-away handler from closing immediately on the same click.
+		this.isOpeningOverlay = true
+		this.showTemplateOverlay = template
 
 		const isAlreadySelected =
 			store.selectedTemplates[template.category] && store.selectedTemplates[template.category]!._id === template._id
 
-		if (!isAlreadySelected) {
-			store.setLoadingTemplate(template._id, template.category)
-			this.#selectTemplate(template)
+		if (isAlreadySelected) {
 			setTimeout(() => {
 				this.isOpeningOverlay = false
 			}, 0)
+			return
 		}
 
-		this.showTemplateOverlay = template
-		this.isOpeningOverlay = true
+		this.#playEquipSound()
+		this.#playBrainrot()
+		store.setLoadingTemplate(template._id, template.category)
+		this.#selectTemplate(template)
+		setTimeout(() => {
+			this.isOpeningOverlay = false
+		}, 0)
+
+		const {fabrics} = templateHelpers.isRemixAvailableForTemplate(template, {
+			selectedGarments: store.selectedGarments,
+			selectedSpace: store.getEffectiveSpace(),
+			sourceCollection: store.getEffectiveCollection(),
+		})
+		const hasFabricOptions = values(fabrics).some(fabricOptions => fabricOptions.length > 1)
+
+		if (hasFabricOptions) this.#handleTemplateOverlayRemix(template)
 	}
 
 	#isTemplateActive = (template: Template) => {
 		return store.selectedTemplates[template.category]?._id === template._id
-	}
-
-	#onPoseClick = (e: CustomEvent) => {
-		const poseValue = e.detail.itemValue.value
-		store.selectedAnimation = poseValue
 	}
 
 	#onAnimationClick = (e: CustomEvent) => {
@@ -243,56 +359,72 @@ export class TemplateView extends Element {
 		store.selectedAnimation = animation.value
 	}
 
-	#getCurrentPosesData = () => {
-		const currentAvatar = avatars().find(a => a.name === store.selectedAvatar)
-		return currentAvatar?.gender === 'male' ? poses.male : poses.female
-	}
-
 	#getCurrentAnimationsData = () => {
 		const currentAvatar = avatars().find(a => a.name === store.selectedAvatar)
 		return currentAvatar?.gender === 'male' ? animations.male : animations.female
 	}
 
-	#renderPoseItem = (pose: (typeof poses.female)[number]) => {
+	#renderCharacterItem = (avatar: Avatar) => {
 		return html`
-			<item-card
-				class=${() => (store.selectedAnimation === pose.value ? 'item-preview' : '')}
-				item-active=${() => store.selectedAnimation === pose.value}
-				item-src=${pose.thumbnail}
-				item-alt=${pose.name}
-				item-value=${pose}
-				oncardselected=${this.#onPoseClick}
-				object-fit="cover"
-				object-position="center"
-				aspect-ratio="0.79"
-				image-style="width: 79px; height: 141px;margin: 0 auto;"
-				item-name=${pose.name}
-			></item-card>
+			<div style="min-width:0; overflow:hidden;">
+				<item-card
+					class=${() => (store.selectedAvatar === avatar.name ? 'item-preview' : '')}
+					item-active=${() => store.selectedAvatar === avatar.name}
+					item-src=${avatar.thumbnail}
+					item-alt=${avatar.name}
+					item-value=${avatar.name}
+					oncardselected=${(e: CustomEvent) => (store.selectedAvatar = e.detail.itemValue)}
+					object-fit="cover"
+					object-position="top"
+					aspect-ratio="0.79"
+					image-style="scale: 2; top: 42%;"
+					style="
+						--appBackground: rgba(255, 255, 255, 0.12);
+						--item-preview-border: 1px solid rgba(255, 255, 255, 0.22);
+						--item-preview-hover-border-color: rgba(255, 255, 255, 0.4);
+						--item-preview-active-border-color: #b28aff;
+						--item-preview-active-shadow: 0 0 0 2px rgba(178, 138, 255, 0.35);
+					"
+				></item-card>
+			</div>
 		`
 	}
 
 	#renderAnimationItem = (animation: (typeof animations.female)[number]) => {
 		return html`
-			<item-card
-				class=${() => (store.selectedAnimation === animation.value ? 'item-preview' : '')}
-				item-active=${() => store.selectedAnimation === animation.value}
-				item-src=${animation.thumbnail}
-				item-alt=${animation.name}
-				item-value=${animation}
-				oncardselected=${this.#onAnimationClick}
-				object-fit="cover"
-				object-position="center"
-				aspect-ratio="0.79"
-				image-style="width: 79px; height: 141px;margin: 0 auto;"
-				item-name=${animation.name}
-			></item-card>
+			<div style="min-width:0; overflow:hidden;">
+				<item-card
+					class=${() => (store.selectedAnimation === animation.value ? 'item-preview' : '')}
+					item-active=${() => store.selectedAnimation === animation.value}
+					item-src=${animation.thumbnail}
+					item-alt=${animation.name}
+					item-value=${animation}
+					oncardselected=${this.#onAnimationClick}
+					object-fit="contain"
+					object-position="center"
+					aspect-ratio="0.79"
+					style="
+						--appBackground: rgba(255, 255, 255, 0.12);
+						--item-preview-border: 1px solid rgba(255, 255, 255, 0.22);
+						--item-preview-hover-border-color: rgba(255, 255, 255, 0.4);
+						--item-preview-active-border-color: #b28aff;
+						--item-preview-active-shadow: 0 0 0 2px rgba(178, 138, 255, 0.35);
+					"
+				></item-card>
+			</div>
 		`
 	}
 
 	#renderTemplateItem = (template: Template) => {
+		const brandName = this.#getTemplateBrandName(template)
+
 		return html`
 			<div
 				class="template-item"
+				onmouseenter=${() => (this.hoveredTemplateId = template._id)}
+				onmouseleave=${() => {
+					if (this.hoveredTemplateId === template._id) this.hoveredTemplateId = null
+				}}
 				classList=${() => ({
 					'item-active':
 						this.showRemixOverlay &&
@@ -324,12 +456,16 @@ export class TemplateView extends Element {
 						data-show-wishlist="true"
 					></item-card>
 					<show-when
-						condition=${() => this.showTemplateOverlay?._id === template._id && !store.isTemplateLoading(template._id)}
+						condition=${() =>
+							this.#isTemplateActive(template) &&
+							(this.showTemplateOverlay?._id === template._id || this.hoveredTemplateId === template._id)}
 						content=${() => html`
 							<template-item-overlay
 								selected-template=${() => template}
 								onclose=${this.#onTemplateOverlayClose}
 								onremix=${this.#onTemplateOverlayRemix}
+								onviewitem=${this.#onTemplateOverlayViewItem}
+								onhideitem=${this.#onTemplateOverlayHideItem}
 							></template-item-overlay>
 						`}
 					></show-when>
@@ -338,18 +474,62 @@ export class TemplateView extends Element {
 						content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
 					></show-when>
 				</div>
-				<div class="template-product-name">${template.name}</div>
-				<div class="template-product-price-container" classList=${() => ({viewOnly: store.selectedSpace?.viewOnly})}>
-					<div class="template-product-price" classList=${() => ({wholesale: store.selectedSpace?.isWholesale})}>
-						${() => (template.price !== 'N/A' ? 'EU ' + template.price : 'N/A')}
-					</div>
-					<show-when
-						condition=${() => store.selectedSpace?.isWholesale}
-						content=${() => html`<div class="template-product-wholesale">MOQ: 5pcs</div>`}
-					></show-when>
+				<div class="template-item-meta">
+					<div class="template-product-name">${template.name}</div>
+					<div class="template-brand-name">${brandName}</div>
 				</div>
 			</div>
 		`
+	}
+
+	#renderHiddenTemplateItem = (template: Template) => {
+		const brandName = this.#getTemplateBrandName(template)
+		return html`
+			<div class="template-item">
+				<div class="template-item-container">
+					<item-card
+						item-active=${false}
+						item-src=${template.thumb}
+						item-alt=${template.name}
+						item-value=${template}
+						object-fit="contain"
+						object-position="center"
+						aspect-ratio="0.79"
+						data-show-wishlist="false"
+					></item-card>
+				</div>
+				<div class="template-item-meta">
+					<div class="template-product-name">${template.name}</div>
+					<div class="template-brand-name">${brandName}</div>
+					<button class="hidden-grid-restore-btn" onclick=${() => this.#restoreHiddenTemplate(template._id)}>Restore</button>
+				</div>
+			</div>
+		`
+	}
+
+	#getTemplateBrandName = (template: Template) => {
+		return collections().find(collection => collection.slug === template.collection)?.name ?? template.collection
+	}
+
+	#getBrandOptions = () => {
+		const source = this.templateCategories.All ?? []
+		const seen = new Set<string>()
+		const brands: Array<{slug: string; name: string}> = []
+		for (const template of source) {
+			if (seen.has(template.collection)) continue
+			seen.add(template.collection)
+			brands.push({slug: template.collection, name: this.#getTemplateBrandName(template)})
+		}
+		return brands
+	}
+
+	#onBrandChipClick = (brandSlug: string) => {
+		this.selectedBrandFilter = this.selectedBrandFilter === brandSlug ? null : brandSlug
+	}
+
+	#filterByBrand = (items: Template[]) => {
+		if (!this.selectedBrandFilter) return items
+		return items.filter(template => template.collection === this.selectedBrandFilter)
 	}
 
 	#onBackButtonClick = () => {
@@ -360,7 +540,6 @@ export class TemplateView extends Element {
 
 			// Reset UI state
 			this.showAvatarSelection = false
-			this.showPoseSelection = false
 			this.showLoginDialog = false
 			this.showRemixOverlay = false
 			store.setSelectingPiece = null
@@ -368,45 +547,34 @@ export class TemplateView extends Element {
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
+			this.showHiddenItemsView = false
 		})
 	}
 
 	#onAvatarDropdownClick = () => {
 		batch(() => {
 			this.showAvatarSelection = !this.showAvatarSelection
-			this.showPoseSelection = false
 			this.showRemixOverlay = false
 			store.setSelectingPiece = null
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
+			this.showHiddenItemsView = false
 		})
 	}
 
-	#onNavTabChange = (e: CustomEvent) => {
+	#onNavTabChange = (_e: CustomEvent) => {
 		batch(() => {
-			const tab = e.detail.tab
-			if (tab === 'pose') {
-				this.showPoseSelection = true
-				this.showAvatarSelection = false
-				this.showAvatarsSelection = false
-			} else if (tab === 'avatars') {
-				this.showPoseSelection = false
-				this.showAvatarSelection = false
-				this.showAvatarsSelection = true
-				this.avatarsSelectedTab = 'pose' // Default to pose tab
-			} else {
-				this.showPoseSelection = false
-				this.showAvatarSelection = false
-				this.showAvatarsSelection = false
-			}
+			this.showAvatarSelection = false
 			this.showRemixOverlay = false
 			store.setSelectingPiece = null
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
+			this.showHiddenItemsView = false
 		})
 	}
+
 
 	#closeRemixOverlay = () => {
 		batch(() => {
@@ -439,6 +607,53 @@ export class TemplateView extends Element {
 		this.#handleTemplateOverlayRemix(template)
 	}
 
+	#onTemplateOverlayViewItem = (e: CustomEvent<{template: Template}>) => {
+		const template = e.detail?.template
+		if (!template) return
+		batch(() => {
+			this.showTemplateOverlay = null
+			this.showRemixOverlay = false
+			store.setSelectingPiece = null
+			store.setRemixOverlayTemplate = null
+			this.disabledScroll = false
+			this.detailTemplate = template
+			this.showDetailView = true
+		})
+	}
+
+	#onTemplateOverlayHideItem = (e: CustomEvent<{template: Template}>) => {
+		const template = e.detail?.template
+		if (!template) return
+
+		const next = [...new Set([...this.hiddenTemplateIds, template._id])]
+		this.hiddenTemplateIds = next
+		if (typeof window !== 'undefined') localStorage.setItem(HIDDEN_TEMPLATE_IDS_KEY, JSON.stringify(next))
+		this.showTemplateOverlay = null
+	}
+
+	#onOpenHiddenItems = () => {
+		batch(() => {
+			this.showAvatarSelection = false
+			this.showRemixOverlay = false
+			store.setSelectingPiece = null
+			this.showTemplateOverlay = null
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
+			this.showHiddenItemsView = !this.showHiddenItemsView
+		})
+	}
+
+	#restoreHiddenTemplate = (templateId: string) => {
+		const next = this.hiddenTemplateIds.filter(id => id !== templateId)
+		this.hiddenTemplateIds = next
+		if (typeof window !== 'undefined') localStorage.setItem(HIDDEN_TEMPLATE_IDS_KEY, JSON.stringify(next))
+	}
+
+	#restoreAllHiddenTemplates = () => {
+		this.hiddenTemplateIds = []
+		if (typeof window !== 'undefined') localStorage.setItem(HIDDEN_TEMPLATE_IDS_KEY, '[]')
+	}
+
 	#onAvatarSwapped = () => {
 		// Close the avatar swap sheet
 		batch(() => {
@@ -457,6 +672,7 @@ export class TemplateView extends Element {
 
 	#onDetailViewClose = () => {
 		this.showDetailView = false
+		this.detailTemplate = null
 	}
 
 	#onShowLogin = (e: Event) => {
@@ -471,6 +687,7 @@ export class TemplateView extends Element {
 	#onHeartButtonClick = () => {
 		const newWishlistState = !this.showWishlistOnly
 		this.showWishlistOnly = newWishlistState
+		this.selectedBrandFilter = null
 
 		// Set tab to "wishlist" when wishlist filter is activated, so tabs-content can display
 		if (newWishlistState) this.selectedTab = 'wishlist' as TemplateCategory
@@ -491,6 +708,7 @@ export class TemplateView extends Element {
 		const effectiveSpace = store.getEffectiveSpace()
 		if (!effectiveSpace) return
 
+		pushHistory()
 		const newTemplates: TemplateMap = {...store.selectedTemplates}
 		let nextSelection = templateHelpers.cloneSelectedGarments(store.selectedGarments)
 
@@ -524,13 +742,28 @@ export class TemplateView extends Element {
 	#onDocumentClick = (e: Event) => {
 		// Skip the first click that originated from opening the overlay
 		if (this.isOpeningOverlay) return
+		const clickPath = e.composedPath()
+		const clickedInsideBottomSheet = clickPath.some(
+			target =>
+				target instanceof HTMLElement &&
+				(target.tagName === 'BOTTOM-SHEET' ||
+					target.tagName === 'REMIX-OVERLAY' ||
+					target.closest?.('bottom-sheet, remix-overlay')),
+		)
+
+		// Close fabric/options overlay when clicking outside the side panel (e.g. 3D viewport)
+		if (this.showRemixOverlay && !clickedInsideBottomSheet) {
+			this.#closeRemixOverlay()
+			return
+		}
 
 		// Close overlay when clicking outside
 		if (
 			this.showTemplateOverlay &&
-			!e.composedPath().some(el => el instanceof Element && el.tagName === 'TEMPLATE-ITEM-OVERLAY')
-		)
+			!clickPath.some(el => el instanceof HTMLElement && el.tagName === 'TEMPLATE-ITEM-OVERLAY')
+		) {
 			this.showTemplateOverlay = null
+		}
 	}
 
 	#onBottomSheetSnapChange = (e: CustomEvent) => {
@@ -567,6 +800,7 @@ export class TemplateView extends Element {
 		super.disconnectedCallback()
 		document.removeEventListener('click', this.#onDocumentClick)
 		document.removeEventListener('show-login', this.#onShowLogin as EventListener)
+		document.removeEventListener('open-hidden-items', this.#onOpenHiddenItems as EventListener)
 	}
 	override template = () => html`
 		<app-buttons-preset
@@ -591,19 +825,6 @@ export class TemplateView extends Element {
 			</show-on-device>
 		</app-buttons-preset>
 
-		<button
-			class="${() => 'build-store-button' + (this.isDragging ? ' isDragging' : '')}"
-			onclick=${this.#onBuildStoreButtonClick}
-		>
-			<div class="build-store-button-icon">
-				<div class="build-store-icon-circle">
-					<img src="/images/landing/logo.webp" alt="Drippy logo" />
-				</div>
-			</div>
-			<span class="build-store-button-text">Build your own 3D store</span>
-			<span class="build-store-button-emoji">🔥</span>
-			<span class="build-store-button-arrow">→</span>
-		</button>
 
 		<bottom-sheet
 			show-remix-overlay=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
@@ -613,6 +834,18 @@ export class TemplateView extends Element {
 			snap-points="0.02,0.2,0.41,0.6,0.88"
 			max-height="100vh"
 			onsnap=${this.#onBottomSheetSnapChange}
+			style="
+				--bottom-sheet-bg: rgba(18, 19, 22, 0.22);
+				--bottom-sheet-border-color: rgba(255, 255, 255, 0.12);
+				--bottom-sheet-panel-backdrop-filter: blur(10px) saturate(1.04);
+				--bottom-sheet-panel-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+				--bottom-sheet-panel-desktop-left-radius: var(--borderRadiusXl);
+				--bottom-sheet-content-desktop-radius: 0;
+				--bottom-sheet-content-desktop-top-left-radius: var(--borderRadiusXl);
+				--bottom-sheet-content-desktop-bottom-left-radius: var(--borderRadiusXl);
+				--bottom-sheet-content-desktop-top-right-radius: 0;
+				--bottom-sheet-content-desktop-bottom-right-radius: 0;
+			"
 		>
 			<show-when
 				condition=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
@@ -620,12 +853,9 @@ export class TemplateView extends Element {
 			></show-when>
 
 			<show-on-device desktop>
-				<div class="template-view-buttons">
+				<div class="template-view-buttons" classList=${() => ({hidden: this.showDetailView})}>
 					<nav-bar
 						position="top"
-						classList=${() => ({
-							hidden: this.showDetailView,
-						})}
 					>
 						<div
 							class="template-info"
@@ -645,7 +875,6 @@ export class TemplateView extends Element {
 									</div>
 									<div class="template-details">
 										<div class="template-name">${selectedTemplate.name}</div>
-										<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
 									</div>
 								`
 							}}
@@ -673,6 +902,7 @@ export class TemplateView extends Element {
 								onavatar-dropdown-click=${this.#onAvatarDropdownClick}
 							></avatar-dropdown>
 							<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+							<div class="item-count-badge">${() => `${this.visibleItemCount} items`}</div>
 						</div>
 					</nav-bar>
 				</div>
@@ -681,136 +911,202 @@ export class TemplateView extends Element {
 				condition=${() => this.showDetailView}
 				content=${() => html`
 					<template-detail-view
-						selected-template=${() => values(store.selectedTemplates)[0] || null}
+						selected-template=${() => this.detailTemplate}
 						onclose=${this.#onDetailViewClose}
 					></template-detail-view>
 				`}
 			></show-when>
 			<show-when
 				condition=${() => this.showAvatarSelection}
-				content=${() => html`<avatar-selection content-only></avatar-selection>`}
-			></show-when>
-			<show-when
-				condition=${() => this.showPoseSelection}
-				content=${() => html`<pose-selection content-only></pose-selection>`}
+				content=${() => html`
+					<tabs-provider
+						selected-value=${() => this.avatarsSelectedTab}
+						default-value="character"
+						ontabchange=${(e: CustomEvent) => (this.avatarsSelectedTab = e.detail.value as AvatarsTab)}
+					>
+						<bottom-sheet-header>
+							<div class="tabs-container avatar-tabs-container">
+								<tabs-list>
+									<tabs-trigger selected-value="character">Characters</tabs-trigger>
+									<tabs-trigger selected-value="animation">Animations</tabs-trigger>
+								</tabs-list>
+							</div>
+						</bottom-sheet-header>
+						<div style="padding: 0 20px 60px; box-sizing: border-box;">
+							<tabs-content selected-value="character">
+								<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; overflow:hidden;">
+									<for-each
+										items=${() => avatars().filter((a: Avatar) => a.gender === 'female')}
+										content=${() => (avatar: Avatar) => this.#renderCharacterItem(avatar)}
+									></for-each>
+								</div>
+							</tabs-content>
+							<tabs-content selected-value="animation">
+								<div style="display:flex; justify-content:flex-end; margin-bottom:12px;">
+									<button
+										onclick=${() => (store.autoplayAnimations = !store.autoplayAnimations)}
+										style=${() => `
+											padding: 7px 14px;
+											border-radius: 999px;
+											border: 1px solid ${store.autoplayAnimations ? 'rgba(178, 138, 255, 0.65)' : 'rgba(255, 255, 255, 0.3)'};
+											background: ${store.autoplayAnimations ? 'rgba(178, 138, 255, 0.2)' : 'rgba(255, 255, 255, 0.08)'};
+											backdrop-filter: blur(6px);
+											-webkit-backdrop-filter: blur(6px);
+											color: white;
+											font-size: 11px;
+											font-weight: 700;
+											cursor: pointer;
+											letter-spacing: 0.04em;
+											display: inline-flex;
+											align-items: center;
+											gap: 6px;
+											box-shadow: ${store.autoplayAnimations ? '0 0 0 1px rgba(178, 138, 255, 0.35) inset' : 'none'};
+										`}
+									>${() => (store.autoplayAnimations ? '● AUTOPLAY ON' : '○ AUTOPLAY OFF')}</button>
+								</div>
+								<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; overflow:hidden;">
+									<for-each
+										items=${() => this.#getCurrentAnimationsData()}
+										content=${() => (animation: (typeof animations.female)[number]) =>
+											this.#renderAnimationItem(animation)}
+									></for-each>
+								</div>
+							</tabs-content>
+						</div>
+					</tabs-provider>
+				`}
 			></show-when>
 			<show-when
 				condition=${() =>
 					!this.showAvatarSelection &&
-					!this.showPoseSelection &&
 					!this.showDetailView &&
-					(this.showAvatarsSelection || this.selectedTab !== null || this.showWishlistOnly)}
+					(this.showHiddenItemsView || this.selectedTab !== null || this.showWishlistOnly)}
 				content=${() => html`
-					<tabs-provider
-						selected-value=${() => {
-							if (this.showAvatarsSelection) return this.avatarsSelectedTab
-							return this.showWishlistOnly ? 'wishlist' : this.selectedTab || ''
-						}}
-						default-value=${() => {
-							if (this.showAvatarsSelection) return this.avatarsSelectedTab
-							return this.selectedTab || ''
-						}}
-						ontabchange=${(e: CustomEvent) => {
-							// Disable wishlist filter when a tab is selected (not wishlist)
-							if (e.detail.value !== 'wishlist') this.showWishlistOnly = false
-
-							this.selectedTab = e.detail.value as TemplateCategory
-						}}
-					>
-						<bottom-sheet-header>
-							<div class="tabs-container">
-								<div class="tabs-action-buttons">
-									<heart-button
-										active=${() => this.showWishlistOnly}
-										onclick=${this.#onHeartButtonClick}
-									></heart-button>
-									<search-button></search-button>
+					<show-when
+						condition=${() => this.showHiddenItemsView}
+						content=${() => html`
+							<bottom-sheet-header class="hidden-grid-header-shell">
+								<div class="tabs-container template-tabs-container hidden-grid-header">
+									<div class="hidden-grid-title">Hidden items (${() => this.hiddenTemplates.length})</div>
+									<div class="hidden-grid-actions">
+										<button class="hidden-grid-header-btn" onclick=${this.#restoreAllHiddenTemplates}>
+											Restore all
+										</button>
+										<button class="hidden-grid-header-btn" onclick=${this.#onOpenHiddenItems}>Done</button>
+									</div>
 								</div>
-								<tabs-list>
-									<show-when
-										condition=${() => this.showAvatarsSelection}
-										content=${() => html`
-											<tabs-trigger selected-value="pose">Pose</tabs-trigger>
-											<tabs-trigger selected-value="animation">Animation</tabs-trigger>
-										`}
-									></show-when>
-									<show-when
-										condition=${() => !this.showAvatarsSelection}
-										content=${() => html`
+							</bottom-sheet-header>
+							<div class="tabs-content-container">
+								<show-when
+									condition=${() => this.hiddenTemplates.length > 0}
+									content=${() => html`
+										<div class="items-grid">
+											<for-each
+												items=${() => this.hiddenTemplates}
+												content=${() => (template: Template) => this.#renderHiddenTemplateItem(template)}
+											></for-each>
+										</div>
+									`}
+								></show-when>
+								<show-when
+									condition=${() => this.hiddenTemplates.length === 0}
+									content=${() => html`<div class="hidden-items-empty">No hidden items.</div>`}
+								></show-when>
+							</div>
+						`}
+					></show-when>
+					<show-when
+						condition=${() => !this.showHiddenItemsView}
+						content=${() => html`
+							<tabs-provider
+								selected-value=${() => (this.showWishlistOnly ? 'wishlist' : this.selectedTab || '')}
+								default-value=${() => this.selectedTab || ''}
+								ontabchange=${(e: CustomEvent) => {
+									// Disable wishlist filter when a tab is selected (not wishlist)
+									if (e.detail.value !== 'wishlist') this.showWishlistOnly = false
+
+									this.selectedTab = e.detail.value as TemplateCategory
+								}}
+							>
+								<bottom-sheet-header>
+									<div class="tabs-container template-tabs-container">
+										<div class="tabs-action-buttons">
+											<heart-button
+												active=${() => this.showWishlistOnly}
+												onclick=${this.#onHeartButtonClick}
+											></heart-button>
+										</div>
+										<tabs-list>
 											<for-each
 												items=${() => Object.keys(this.templateCategories)}
 												content=${() => (category: TemplateCategory) => html`
-													<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
+													<tabs-trigger
+														selected-value=${category}
+													>${category}</tabs-trigger>
 												`}
 											></for-each>
-										`}
-									></show-when>
-								</tabs-list>
-							</div>
-						</bottom-sheet-header>
+										</tabs-list>
+									</div>
+								</bottom-sheet-header>
 
-						<div class="tabs-content-container">
-							<!-- Show avatars selection (poses and animations) when avatars tab is active -->
-							<show-when
-								condition=${() => this.showAvatarsSelection}
-								content=${() => html`
-									<tabs-content selected-value="pose">
-										<div class="items-grid">
-											<for-each
-												items=${() => this.#getCurrentPosesData()}
-												content=${() => (pose: (typeof poses.female)[number]) => this.#renderPoseItem(pose)}
-											></for-each>
-										</div>
-									</tabs-content>
-									<tabs-content selected-value="animation">
-										<div class="items-grid">
-											<for-each
-												items=${() => this.#getCurrentAnimationsData()}
-												content=${() => (animation: (typeof animations.female)[number]) =>
-													this.#renderAnimationItem(animation)}
-											></for-each>
-										</div>
-									</tabs-content>
-								`}
-							></show-when>
-							<!-- Show wishlist items when wishlist filter is active -->
-							<show-when
-								condition=${() => this.showWishlistOnly && !this.showAvatarsSelection}
-								content=${() => html`
-									<tabs-content selected-value="wishlist">
-										<div class="items-grid">
-											<for-each
-												items=${() => this.templateCategories.All ?? []}
-												content=${() => (template: Template) => this.#renderTemplateItem(template)}
-											></for-each>
-										</div>
-									</tabs-content>
-								`}
-							></show-when>
-							<!-- Show category tabs when wishlist is not active and avatars selection is not active -->
-							<show-when
-								condition=${() => !this.showWishlistOnly && !this.showAvatarsSelection}
-								content=${() => html`
-									<for-each
-										items=${() => Object.keys(this.templateCategories)}
-										content=${() => (category: TemplateCategory) => html`
-											<tabs-content selected-value=${category}>
+								<div class="tabs-content-container">
+									<div class="brands-strip">
+										<for-each
+											items=${this.#getBrandOptions}
+											content=${() => (brand: {slug: string; name: string}) => html`
+												<button
+													class="brand-logo-chip"
+													classList=${() => ({active: this.selectedBrandFilter === brand.slug})}
+													onclick=${() => this.#onBrandChipClick(brand.slug)}
+												>
+													<div class="brand-logo-mark">${brand.name.slice(0, 2).toUpperCase()}</div>
+													<div class="brand-logo-label">${brand.name}</div>
+												</button>
+											`}
+										></for-each>
+									</div>
+									<!-- Show wishlist items when wishlist filter is active -->
+									<show-when
+										condition=${() => this.showWishlistOnly}
+										content=${() => html`
+											<tabs-content selected-value="wishlist">
 												<div class="items-grid">
 													<for-each
-														items=${() =>
-															category === 'All'
-																? (this.templateCategories.All ?? [])
-																: this.templateCategories[category]}
+														items=${() => this.#filterByBrand(this.templateCategories.All ?? [])}
 														content=${() => (template: Template) => this.#renderTemplateItem(template)}
 													></for-each>
 												</div>
 											</tabs-content>
 										`}
-									></for-each>
-								`}
-							></show-when>
-						</div>
-					</tabs-provider>
+									></show-when>
+									<!-- Show category tabs when wishlist is not active -->
+									<show-when
+										condition=${() => !this.showWishlistOnly}
+										content=${() => html`
+											<for-each
+												items=${() => Object.keys(this.templateCategories)}
+												content=${() => (category: TemplateCategory) => html`
+													<tabs-content selected-value=${category}>
+														<div class="items-grid">
+															<for-each
+																items=${() =>
+															this.#filterByBrand(
+																category === 'All'
+																	? (this.templateCategories.All ?? [])
+																	: this.templateCategories[category],
+															)}
+																content=${() => (template: Template) => this.#renderTemplateItem(template)}
+															></for-each>
+														</div>
+													</tabs-content>
+												`}
+											></for-each>
+										`}
+									></show-when>
+								</div>
+							</tabs-provider>
+						`}
+					></show-when>
 				`}
 			></show-when>
 			<show-when
@@ -851,7 +1147,6 @@ export class TemplateView extends Element {
 								</div>
 								<div class="template-details">
 									<div class="template-name">${selectedTemplate.name}</div>
-									<div class="template-price">€ ${selectedTemplate.price || '125.00'}</div>
 								</div>
 							`
 						}}
@@ -953,23 +1248,29 @@ export class TemplateView extends Element {
 				top: 0;
 				display: flex;
 				align-items: center;
-				background: var(--uiColorPrimaryWhite);
+				background: rgba(18, 19, 22, 0.56);
+				backdrop-filter: blur(16px);
+				-webkit-backdrop-filter: blur(16px);
 				z-index: 1000;
 				width: 100%;
 				min-height: 52px;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 			}
 
 			tabs-provider bottom-sheet-header {
 				position: sticky;
 				top: 52px;
 				z-index: 10;
-				background: var(--uiColorPrimaryWhite);
-				border-top: var(--borderWidth) solid var(--uiColorBorderColor);
-				padding-top: var(--uiSpacingMedium);
+				background: rgba(18, 19, 22, 0.56);
+				backdrop-filter: blur(16px);
+				-webkit-backdrop-filter: blur(16px);
+				border-top: none;
+				padding-top: 0;
 			}
 
 			tabs-provider .tabs-container {
-				border-bottom: none;
+				background: rgba(18, 19, 22, 0.56) !important;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 			}
 			.template-sheet-overlay {
 				border-top-left-radius: 1rem;
@@ -987,18 +1288,71 @@ export class TemplateView extends Element {
 			align-items: center;
 			gap: var(--uiSpacingSmall);
 			padding: var(--uiSpacing);
-			padding-top: 0;
+			padding-top: 10px;
 			padding-bottom: var(--uiSpacingSmall);
-			background: var(--uiColorPrimaryWhite);
-			border-bottom: var(--borderWidth) solid var(--uiColorBorderColor);
+			background: rgba(18, 19, 22, 0.14);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+			--tabs-active-indicator-bg: rgba(18, 19, 22, 0.72);
+			--tabs-hover-indicator-bg: rgba(255, 255, 255, 0.12);
+			--tabs-trigger-inactive-bg: rgba(255, 255, 255, 0.2);
+			--tabs-trigger-color: rgba(255, 255, 255, 0.9);
+			--tabs-trigger-active-color: #ffffff;
+		}
+
+		.template-tabs-container tabs-trigger {
+			font-family: 'Anton', sans-serif;
+			font-weight: 700;
+			text-transform: uppercase;
+			line-height: 0.98;
+			text-shadow: none;
+			-webkit-text-stroke: 0;
+			font-synthesis: none;
+		}
+
+		.avatar-tabs-container tabs-trigger {
+			font-family: 'Poppins', sans-serif;
+			font-weight: 600;
+			text-transform: none;
+			line-height: 1.1;
+			text-shadow: none;
+			-webkit-text-stroke: 0;
+			font-synthesis: none;
 		}
 
 		/* Remove tab-container boder-bottom on mobile */
 		@media (max-width: 768px) {
+			bottom-sheet {
+				--bottom-sheet-bg: rgba(18, 19, 22, 0.22) !important;
+				--bottom-sheet-border-color: rgba(255, 255, 255, 0.1) !important;
+				--bottom-sheet-panel-backdrop-filter: blur(12px) saturate(1.04) !important;
+				--bottom-sheet-panel-shadow: 0 8px 24px rgba(0, 0, 0, 0.14) !important;
+				--bottom-sheet-handle-bg: rgba(18, 19, 22, 0.18) !important;
+				--bottom-sheet-handle-indicator-bg: rgba(255, 255, 255, 0.35) !important;
+			}
+
+			tabs-provider bottom-sheet-header {
+				position: sticky;
+				top: var(--bottom-sheet-handle-height, 15px);
+				z-index: 11;
+				background: rgba(18, 19, 22, 0.5);
+				backdrop-filter: blur(16px);
+				-webkit-backdrop-filter: blur(16px);
+				padding-top: 0;
+			}
+
 			.tabs-container {
-				border-bottom: none;
-				padding-top: var(--uiSpacingSmall);
+				border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+				padding-top: 4px;
 				padding-bottom: var(--uiSpacingMedium);
+				background: rgba(18, 19, 22, 0.5);
+			}
+
+			.tabs-content-container {
+				background: transparent;
+			}
+
+			.template-item-container item-card {
+				--appBackground: rgba(255, 255, 255, 0.12);
 			}
 		}
 
@@ -1009,101 +1363,133 @@ export class TemplateView extends Element {
 			border: none;
 		}
 
-		.build-store-button {
+		.hidden-grid-header {
 			display: flex;
 			align-items: center;
-			gap: 6px;
-			padding: 8px 16px;
-			background: rgba(18, 19, 22, 0.15);
-			border: none;
-			border-radius: 999px;
-			cursor: pointer;
-			margin: 0 auto;
-			margin-bottom: var(--uiSpacingSmall);
-
-			position: fixed;
-			bottom: 2%;
-			left: 2%;
-			z-index: 1000;
-			margin: 0;
+			justify-content: space-between;
+			gap: 12px;
+			background: rgba(0, 0, 0, 0.14);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+			backdrop-filter: blur(6px);
+			-webkit-backdrop-filter: blur(6px);
 		}
 
-		.build-store-button-icon {
-			display: flex;
-			align-items: center;
-			justify-content: center;
+		.hidden-grid-header-shell {
+			position: sticky;
+			top: 52px;
+			z-index: 11;
+			background: transparent !important;
+			border: none !important;
+			box-shadow: none !important;
 		}
 
-		.build-store-icon-circle {
-			width: 24px;
-			height: 24px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-		.build-store-icon-circle img {
-			height: 100%;
-			margin-top: 0 !important;
+		@media (max-width: 768px) {
+			.hidden-grid-header-shell {
+				top: 0;
+			}
 		}
 
-		.build-store-button-text {
-			color: white;
-			font-size: var(--fontSizeTextSm);
-			font-weight: var(--fontWeightSemiBold);
+		.hidden-grid-title {
+			font-family: 'Anton', sans-serif;
+			font-size: 16px;
+			text-transform: uppercase;
+			line-height: 0.98;
+			color: rgba(255, 255, 255, 0.92);
 			white-space: nowrap;
 		}
 
-		.build-store-button-emoji {
-			font-size: 14px;
+		.hidden-grid-actions {
+			display: flex;
+			align-items: center;
+			gap: 8px;
 		}
 
-		.build-store-button-arrow {
-			color: white;
-			font-size: 14px;
-			font-weight: var(--fontWeightSemiBold);
+		.hidden-grid-header-btn,
+		.hidden-grid-restore-btn {
+			border: 1px solid rgba(255, 255, 255, 0.22);
+			background: rgba(178, 138, 255, 0.18);
+			color: rgba(255, 255, 255, 0.96);
+			border-radius: 999px;
+			padding: 6px 12px;
+			font-size: 11px;
+			font-weight: 700;
+			cursor: pointer;
+			white-space: nowrap;
+			backdrop-filter: blur(6px);
+			-webkit-backdrop-filter: blur(6px);
+			box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 		}
 
-		@media (max-width: 767px) {
-			.build-store-button {
-				padding: 7.5px 10px;
-				bottom: 9px;
-				translate: 0 calc(-1 * var(--bottom-sheet-height, 100dvh * 0.41));
-
-				transition-property: translate;
-				transition-timing-function: ease-in-out;
-
-				/* transition-duration: var(--transitionTimeFast); */
-				transition-duration: 0; /*FIXME transition disable not working, disable anim for now*/
-
-				will-change: translate;
-				left: 10px;
-
-				&.isDragging {
-					transition-duration: 0;
-				}
-			}
-			.build-store-icon-circle {
-				width: 19px;
-				height: 19px;
-			}
-			.build-store-button-text {
-				font-size: var(--fontSizeTextXs);
-			}
-
-			.build-store-button-emoji {
-				font-size: var(--fontSizeTextXs);
-			}
-
-			.build-store-button-arrow {
-				font-size: var(--fontSizeTextXs);
-			}
+		.hidden-grid-restore-btn {
+			margin-top: 6px;
+			width: 100%;
 		}
+
+		.hidden-items-empty {
+			padding: 16px 0 6px;
+			font-size: 13px;
+			opacity: 0.8;
+		}
+
+
 
 		.tabs-content-container {
 			padding: var(--uiSpacing);
 			padding-top: 0;
 			padding-bottom: var(--uiSpacingXxl);
-			background: var(--uiColorPrimaryWhite);
+			background: transparent;
+		}
+
+		.brands-strip {
+			display: flex;
+			gap: 8px;
+			overflow-x: auto;
+			overflow-y: hidden;
+			padding: 10px 0 12px;
+			margin-bottom: 4px;
+			scrollbar-width: none;
+		}
+
+		.brands-strip::-webkit-scrollbar {
+			display: none;
+		}
+
+		.brand-logo-chip {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			background: rgba(18, 19, 22, 0.22);
+			color: rgba(255, 255, 255, 0.95);
+			border-radius: 999px;
+			padding: 6px 10px 6px 6px;
+			cursor: pointer;
+			flex: 0 0 auto;
+		}
+
+		.brand-logo-chip.active {
+			background: rgba(178, 138, 255, 0.28);
+			border-color: rgba(178, 138, 255, 0.65);
+		}
+
+		.brand-logo-mark {
+			width: 24px;
+			height: 24px;
+			border-radius: 999px;
+			background: #000;
+			color: #fff;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 10px;
+			font-weight: 700;
+			letter-spacing: 0.02em;
+		}
+
+		.brand-logo-label {
+			font-size: 11px;
+			font-weight: 500;
+			white-space: nowrap;
 		}
 		.items-grid {
 			display: grid;
@@ -1125,7 +1511,7 @@ export class TemplateView extends Element {
 			padding: var(--uiSpacing);
 			padding-top: 0;
 			padding-bottom: 5px;
-			background: var(--uiColorPrimaryWhite);
+			background: transparent;
 		}
 
 		.template-item {
@@ -1133,8 +1519,14 @@ export class TemplateView extends Element {
 			width: 100%;
 			display: flex;
 			flex-direction: column;
-			gap: var(--uiSpacingTiny);
+			gap: 10px;
 			position: relative;
+		}
+
+		.template-item-meta {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
 		}
 
 		.template-item-container {
@@ -1142,6 +1534,10 @@ export class TemplateView extends Element {
 			width: 100%;
 			height: 100%;
 			flex: 1;
+
+			item-card {
+				--appBackground: rgba(18, 19, 22, 0.22);
+			}
 
 			&:hover {
 				transform: scale(1.02);
@@ -1157,45 +1553,35 @@ export class TemplateView extends Element {
 
 		.template-product-name {
 			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightSemiBold);
-			color: #424347;
+			font-weight: 700;
+			color: #ffffff;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
-			height: 20px;
+			height: auto;
+			margin: 0;
 			text-align: center;
+			font-family: 'Anton', sans-serif;
+			text-transform: uppercase;
+			line-height: 0.98;
+			text-shadow: none;
+			-webkit-text-stroke: 0;
+			font-synthesis: none;
 		}
 
-		.template-product-price-container {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
-			flex-wrap: nowrap;
-		}
-
-		.template-product-price-container.viewOnly {
-			display: none;
-		}
-
-		.template-product-price {
-			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightMedium);
-			color: #424347;
+		.template-brand-name {
+			font-size: 11px;
+			font-weight: 400;
+			color: #ffffff;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 			text-align: center;
-			width: 100%;
+			font-family: 'Poppins', sans-serif;
+			line-height: 1.2;
+			margin: 0;
 		}
 
-		.template-product-price.wholesale {
-			font-size: var(--fontSizeTextXxs);
-		}
-
-		.template-product-wholesale {
-			font-size: var(--fontSizeTextXxs);
-			font-weight: var(--fontWeightNormal);
-			color: #424347;
-			word-wrap: break-word;
-		}
 
 		/* Done button styles */
 		.done-button {
@@ -1253,15 +1639,15 @@ export class TemplateView extends Element {
 
 		.template-name {
 			font-size: 10px;
-			font-weight: var(--fontWeightSemiBold);
+			font-weight: 700;
 			color: var(--uiColorPrimaryBlack);
 			margin: 0;
-		}
-
-		.template-price {
-			font-size: 12px;
-			color: #424347;
-			margin: 0;
+			font-family: 'Anton', sans-serif;
+			text-transform: uppercase;
+			line-height: 0.98;
+			text-shadow: none;
+			-webkit-text-stroke: 0;
+			font-synthesis: none;
 		}
 
 		.view-details-btn {
@@ -1287,6 +1673,18 @@ export class TemplateView extends Element {
 
 		.default-nav {
 			display: contents;
+		}
+
+		.item-count-badge {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			margin-left: 8px;
+			color: rgba(255, 255, 255, 0.9);
+			font-size: 12px;
+			font-weight: 500;
+			letter-spacing: 0.02em;
+			white-space: nowrap;
 		}
 
 		.hidden {

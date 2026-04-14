@@ -1,22 +1,29 @@
 import '../elements/admin-button.js'
 import '../elements/back-button.js'
+import '../elements/clear-garments-button.js'
 import '../elements/control-button-group.js'
 import '../elements/cube-button.js'
 import '../elements/home-button.js'
+import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/logo-button.js'
 import '../elements/person-button.js'
+import '../elements/recenter-button.js'
 import '../elements/redo-button.js'
-import '../elements/reload-button.js'
 import '../elements/show-on-device.js'
 import '../elements/undo-button.js'
 import './app-buttons.js'
-import './buy-button.js'
 import './share-button.js'
 
-import {attribute, batch, booleanAttribute, css, Element, element, html, type ElementAttributes} from 'lume'
+import {attribute, batch, booleanAttribute, css, Element, element, html, signal, type ElementAttributes} from 'lume'
+import {avatars} from '../consts/avatars.js'
+import {getTemplatesByCollection} from '../consts/templates.js'
+import {spaces} from '../consts/spaces.js'
 import {pushState, searchParams} from '../routes.js'
-import {isAdmin, store} from './store.js'
+import {store} from './store.js'
+import {templateHelpers} from './TemplateHelpers.js'
+import type {Template, TemplateCategory} from '../types/template.js'
+import type {Avatar, Space, TemplateMap} from '../types/types.js'
 
 type LayoutPreset = 'order-flow' | 'template-flow' | 'preview-flow' | 'simple-flow' | 'custom'
 
@@ -40,26 +47,17 @@ type PresetConfig = {
 		tools?: boolean
 		all?: {
 			share?: boolean
-			buy?: boolean
 		}
 		desktop?: {
 			share?: boolean
-			buy?: boolean
 		}
 		mobile?: {
 			share?: boolean
-			buy?: boolean
 		}
 	}
 }
 
-type AppButtonsPresetAttributes =
-	| 'preset'
-	| 'brandName'
-	| 'showTools'
-	| 'showAnimation'
-	| 'disablePersonButton'
-	| 'disableCubeButton'
+type AppButtonsPresetAttributes = 'preset' | 'brandName' | 'showTools' | 'showAnimation' | 'disablePersonButton' | 'disableCubeButton'
 
 @element
 export class AppButtonsPreset extends Element {
@@ -72,6 +70,25 @@ export class AppButtonsPreset extends Element {
 	@booleanAttribute showAnimation = false
 	@booleanAttribute disablePersonButton = true
 	@booleanAttribute disableCubeButton = true
+	@signal private randomVisitorsCount = 0
+	#randomVisitorsTimer: ReturnType<typeof setInterval> | null = null
+
+	override connectedCallback() {
+		super.connectedCallback()
+		this.#randomizeVisitors()
+		this.#randomVisitorsTimer = setInterval(() => {
+			this.#randomizeVisitors()
+		}, 7000)
+	}
+
+	override disconnectedCallback() {
+		super.disconnectedCallback()
+		if (this.#randomVisitorsTimer) clearInterval(this.#randomVisitorsTimer)
+	}
+
+	#randomizeVisitors = () => {
+		this.randomVisitorsCount = Math.floor(Math.random() * 61) + 5 // 5..65
+	}
 
 	#onBackClick = () => {
 		switch (this.preset) {
@@ -129,50 +146,145 @@ export class AppButtonsPreset extends Element {
 		store.view = 'order-items'
 	}
 
+	#visibleSpaces = () => spaces().filter(s => !s.isHidden)
+
+	#navigateToSpace = (space: Space) => {
+		searchParams().set('space', space.slug)
+		batch(() => {
+			pushState()
+			store.clearSelectedGarments()
+			store.selectSpace = space
+			store.view = 'template'
+		})
+		this.#equipDefaultTemplate(space)
+	}
+
+	#equipDefaultTemplate = (space: Space) => {
+		const collection = space.collections[0]
+		if (!collection) return
+		const spaceTemplates = getTemplatesByCollection(collection)
+
+		const findFirst = (categories: TemplateCategory[]) => {
+			for (const cat of categories) {
+				const t = spaceTemplates.find(t => t.category === cat)
+				if (t) return t
+			}
+			return undefined
+		}
+
+		const topTemplate = findFirst(['Shirt', 'Top', 'Dress', 'Jumpsuit'])
+		const coversBottom = topTemplate?.category === 'Dress' || topTemplate?.category === 'Jumpsuit'
+		const bottomTemplate = coversBottom ? undefined : findFirst(['Pants', 'Skirt'])
+
+		let garments = {}
+		const newTemplates: TemplateMap = {}
+
+		for (const template of [topTemplate, bottomTemplate]) {
+			if (!template) continue
+			const blockData = templateHelpers.convertTemplateToBlockData(template, collection)
+			const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
+				blockData,
+				collection,
+			)
+			const selection = templateHelpers.buildTemplateSelectionFromMaps(newBlocksMap, newFabricsMap)
+			garments = templateHelpers.withTemplateSelection(garments, template.category, selection)
+			newTemplates[template.category] = template
+		}
+
+		batch(() => {
+			store.selectedGarments = garments
+			store.selectedTemplates = newTemplates
+		})
+	}
+
+	#renderSpaceNav = () => {
+		const all = this.#visibleSpaces()
+		const idx = all.findIndex(s => s.slug === store.selectedSpace?.slug)
+		if (idx < 0) return ''
+		const next = all[(idx + 1) % all.length]
+		return html`
+			<button class="space-nav-next" onclick=${() => this.#navigateToSpace(next)}>
+				Next Space
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+					<polyline points="9 18 15 12 9 6"/>
+				</svg>
+			</button>
+		`
+	}
+
+	#getSpaceAvatars = (): Avatar[] => {
+		const selectedSpaceGender = store.selectedSpace?.gender
+		const available = avatars().filter(avatar => (selectedSpaceGender ? avatar.gender === selectedSpaceGender : true))
+		const selected = store.selectedAvatar
+		return [...available].sort((a, b) => {
+			if (a.name === selected) return -1
+			if (b.name === selected) return 1
+			return 0
+		})
+	}
+
+	#renderSpaceAvatars = () => {
+		if (this.preset !== 'template-flow') return ''
+		return html`
+			<div class="space-avatars" aria-label="Avatars in this space">
+				<div class="space-avatars-count" title="Visitors online">
+					<span class="dot"></span>
+					${() => `${this.randomVisitorsCount} online`}
+				</div>
+				<for-each
+					items=${() => this.#getSpaceAvatars().slice(0, 5)}
+					content=${() => (avatar: Avatar) => html`
+						<div class="space-avatar" classList=${() => ({active: avatar.name === store.selectedAvatar})} title=${avatar.name}>
+							<img src=${avatar.thumbnail} alt=${avatar.name} />
+						</div>
+					`}
+				></for-each>
+			</div>
+		`
+	}
+
 	#presetConfig = (): PresetConfig => {
 		const presets: Record<LayoutPreset, PresetConfig> = {
 			'order-flow': {
 				left: {
 					all: {
 						back: true,
-						home: isAdmin() && store.showAdminContent, // disabled for now, re-enable when spaces page is ready
+						home: true,
 					},
 				},
 				right: {
 					logo: true,
-					desktop: {share: true, buy: true},
+					desktop: {share: true},
 				},
 			},
 			'template-flow': {
 				left: {
 					all: {
-						back: isAdmin() && store.showAdminContent, // disabled for now, re-enable when spaces page is ready
+						home: true,
 					},
 				},
 				right: {
-					logo: true,
 					tools: true,
-					mobile: {buy: true},
 				},
 			},
 			'preview-flow': {
 				left: {
 					all: {
 						back: true,
-						home: isAdmin() && store.showAdminContent, // disabled for now, re-enable when spaces page is ready
+						home: true,
 					},
 				},
 				right: {
 					logo: true,
 					tools: true,
-					desktop: {buy: true, share: true},
+					desktop: {share: true},
 				},
 			},
 			'simple-flow': {
 				left: {
 					all: {
 						back: true,
-						home: isAdmin() && store.showAdminContent, // disabled for now, re-enable when spaces page is ready
+						home: true,
 					},
 				},
 				right: {logo: true},
@@ -208,17 +320,12 @@ export class AppButtonsPreset extends Element {
 	#renderActionButtons = (config: PresetConfig['right']) => {
 		if (!config) return ''
 
-		const renderButtons = (buttons: {share?: boolean; buy?: boolean} | undefined) => {
+		const renderButtons = (buttons: {share?: boolean} | undefined) => {
 			if (!buttons) return ''
 			return html`
 				<app-buttons-right layout="bottom" style="top: 20px;">
 					<app-buttons-group custom-style="gap: 34px; align-items: center;margin-top: -3px;" group-direction="row">
 						${() => buttons.share && html`<share-button onclick=${this.#onShareClick}></share-button>`}
-						${() =>
-							buttons.buy &&
-							store.view === 'template' &&
-							!store.remixOverlayTemplate &&
-							html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
 					</app-buttons-group>
 				</app-buttons-right>
 			`
@@ -243,17 +350,14 @@ export class AppButtonsPreset extends Element {
 						<show-on-device mobile>
 							<app-buttons-group>
 								<div style="display: flex; align-items: center; gap: 5px;">
-									${() => store.view === 'template' && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
 									${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
 								</div>
-								${
-									/*disabled until we add undo/redo/reload*/ false &&
-									html`<control-button-group>
-										<undo-button group></undo-button>
-										<redo-button group></redo-button>
-										<reload-button group></reload-button>
-									</control-button-group>`
-								}
+								<control-button-group>
+									<undo-button group></undo-button>
+									<redo-button group></redo-button>
+									<recenter-button group></recenter-button>
+									<clear-garments-button group></clear-garments-button>
+								</control-button-group>
 								${() =>
 									config.tools &&
 									html`
@@ -272,18 +376,13 @@ export class AppButtonsPreset extends Element {
 					<show-on-device desktop>
 						<div class="tools-buttons-desktop">
 							<app-buttons-group>
-								<div style="display: flex; align-items: center; gap: 5px;">
-									${() => store.view === 'template' && html`<buy-button onclick=${this.#onBuyClick}></buy-button>`}
-									${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
-								</div>
-								${
-									/*disabled until we add undo/redo*/ false &&
-									html`<control-button-group>
-										<undo-button group></undo-button>
-										<redo-button group></redo-button>
-										<reload-button group></reload-button>
-									</control-button-group>`
-								}
+								${() => config.logo && html`<logo-button brand-name=${() => this.brandName}></logo-button>`}
+								<control-button-group>
+									<undo-button group></undo-button>
+									<redo-button group></redo-button>
+									<recenter-button group></recenter-button>
+									<clear-garments-button group></clear-garments-button>
+								</control-button-group>
 								${() =>
 									config.tools &&
 									html`
@@ -301,12 +400,115 @@ export class AppButtonsPreset extends Element {
 
 	override template = () => html`
 		${() => this.#presetConfig().left && this.#renderLeft()} ${() => this.#presetConfig().right && this.#renderRight()}
+		${() => this.#renderSpaceNav()} ${() => this.#renderSpaceAvatars()}
 		<slot></slot>
 	`
 
 	override css = css /*css*/ `
 		:host {
 			display: contents;
+		}
+
+		.space-nav-next {
+			display: none;
+		}
+
+		@media (min-width: 768px) {
+			.space-nav-next {
+				position: fixed;
+				bottom: 2%;
+				right: 0;
+				translate: calc(-1 * calc(var(--bottom-sheet-panel-left, 7px) + var(--bottom-sheet-panel-width, 32rem) + 20px)) 0 0.00001px;
+				z-index: 3100;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				background: rgba(0, 0, 0, 0.5);
+				backdrop-filter: blur(10px);
+				-webkit-backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.15);
+				border-radius: 999px;
+				padding: 8px 16px;
+				color: white;
+				font-size: 13px;
+				font-weight: 500;
+				letter-spacing: 0.03em;
+				cursor: pointer;
+				transition: background 0.15s, border-color 0.15s, translate var(--transitionDefaultTimeCurve);
+				will-change: translate;
+				user-select: none;
+			}
+
+			:host-context(.panel-collapsed) .space-nav-next {
+				/* Push farther left when panel is collapsed so music toggle remains visible */
+				translate: calc(-1 * calc(var(--bottom-sheet-panel-left, 7px) + var(--bottom-sheet-panel-width, 32rem) + 60px)) 0 0.00001px;
+			}
+
+			.space-nav-next:hover {
+				background: rgba(0, 0, 0, 0.7);
+				border-color: rgba(255, 255, 255, 0.3);
+			}
+
+			.space-avatars {
+				position: fixed;
+				left: 20px;
+				bottom: 2%;
+				z-index: 3100;
+				display: flex;
+				align-items: center;
+				gap: 4px;
+				padding: 7px 10px;
+				border-radius: 999px;
+				background: rgba(0, 0, 0, 0.35);
+				backdrop-filter: blur(10px);
+				-webkit-backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.18);
+			}
+
+			.space-avatar {
+				width: 30px;
+				height: 30px;
+				border-radius: 999px;
+				overflow: hidden;
+				border: 1px solid rgba(255, 255, 255, 0.4);
+				opacity: 0.8;
+				transition: all 0.2s ease;
+
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+					object-position: center top;
+					transform-origin: center top;
+					transform: translateY(-2px) scale(1.75);
+				}
+			}
+
+			.space-avatar.active {
+				opacity: 1;
+				border-color: #b28aff;
+				box-shadow: 0 0 0 2px rgba(178, 138, 255, 0.35);
+			}
+
+			.space-avatars-count {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				margin-right: 2px;
+				padding-right: 4px;
+				color: rgba(255, 255, 255, 0.92);
+				font-size: 12px;
+				font-weight: 500;
+				white-space: nowrap;
+			}
+
+			.space-avatars-count .dot {
+				width: 7px;
+				height: 7px;
+				border-radius: 999px;
+				background: #4ade80;
+				box-shadow: 0 0 8px rgba(74, 222, 128, 0.7);
+			}
 		}
 
 		/* Desktop: Position tools buttons beside the bottom-sheet panel */

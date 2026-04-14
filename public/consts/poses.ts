@@ -11,6 +11,8 @@ type AnimationItem = {
 	src: string | null
 	type: 'none' | 'walk' | 'dance' | 'idle'
 	clipName: string | null
+	/** Seconds to skip at the start of the clip before looping (e.g. to cut an intro pose). */
+	trimStart?: number
 }
 
 export const poses = {
@@ -48,6 +50,7 @@ export const animations = {
 			src: '/models/Idle01.glb',
 			type: 'idle',
 			clipName: 'Animation',
+			trimStart: 2,
 		},
 		{
 			thumbnail: '/images/avatars/animations/Idle02.webp',
@@ -56,6 +59,7 @@ export const animations = {
 			src: '/models/Idle_F02.glb',
 			type: 'idle',
 			clipName: 'Animation',
+			trimStart: 2,
 		},
 		{
 			thumbnail: '/images/avatars/animations/Idle03.webp',
@@ -64,6 +68,7 @@ export const animations = {
 			src: '/models/Idle_F03.glb',
 			type: 'idle',
 			clipName: 'Animation',
+			trimStart: 2,
 		},
 		{
 			thumbnail: '/images/avatars/animations/Idle04.webp',
@@ -72,6 +77,7 @@ export const animations = {
 			src: '/models/Idle_F04.glb',
 			type: 'idle',
 			clipName: 'Animation',
+			trimStart: 2,
 		},
 	] as AnimationItem[],
 	male: [] as AnimationItem[],

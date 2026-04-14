@@ -1,6 +1,6 @@
 import {batch, css, Element, element, html, signal} from 'lume'
 import type {Accessor} from 'solid-js'
-import {countItemsInSpace, spaces} from '../consts/spaces.js'
+import {spaces} from '../consts/spaces.js'
 import '../elements/avatar-dropdown.js'
 import '../elements/placeholder-image.js'
 import {pushState, searchParams} from '../routes.js'
@@ -9,11 +9,9 @@ import {currentUser, isLoggedIn, store} from './store.js'
 
 import '../elements/dialog-element.js'
 import '../elements/heart-button.js'
-import '../elements/logic/for-each.js'
 import '../elements/logic/index-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/login-ui.js'
-import '../elements/tabs.js'
 import './item-card.js'
 import {getSpaceThumbnail} from '../utils.js'
 
@@ -23,7 +21,6 @@ export class SpacesSelection extends Element {
 
 	@signal filteredSpace: Space[] = []
 	@signal showLoginDialog = false
-	@signal selectedTab: string = 'All'
 
 	override connectedCallback() {
 		super.connectedCallback()
@@ -36,9 +33,7 @@ export class SpacesSelection extends Element {
 
 		// Show all spaces regardless of gender
 		this.createEffect(() => {
-			let filteredSpaces = store.isAdmin
-				? spaces().filter(space => !space.isHidden)
-				: spaces().filter(space => !space.isWorkInProgress && !space.isHidden)
+			let filteredSpaces = spaces().filter(space => !space.isHidden)
 
 			// Filter by brand if brand query parameter exists
 			const brandParam = searchParams().get('brand')
@@ -53,17 +48,6 @@ export class SpacesSelection extends Element {
 			if (isLoggedIn(currentUser()) && this.showLoginDialog) this.showLoginDialog = false
 		})
 
-		// Ensure selectedTab is always set to a valid value
-		this.createEffect(() => {
-			const tabs = ['All', 'Space', 'Items']
-			if (!this.selectedTab || !tabs.includes(this.selectedTab)) this.selectedTab = 'All'
-		})
-
-		// Sync selectedTab with tabs-provider on mount
-		this.createEffect(() => {
-			// Ensure selectedTab is set before tabs-provider initializes
-			if (!this.selectedTab) this.selectedTab = 'All'
-		})
 	}
 
 	fadeOut(callback?: () => void) {
@@ -125,54 +109,6 @@ export class SpacesSelection extends Element {
 				`}
 			></show-when>
 
-			<!-- Main Title and Description -->
-			<show-when
-				condition=${() => !searchParams().has('brand')}
-				content=${() => html`
-					<div class="header">
-						<h1 class="main-title">Discover & immerse.</h1>
-						<p class="description">Step into the space of each curated collection.</p>
-						<p class="description">Remix, customize, and shop the drip.</p>
-					</div>
-					<div class="tab-container">
-						<div class="search-container">
-							<div class="search-bar">
-								<img src="/images/action-buttons/search-button.svg" alt="Search" class="search-icon" />
-								<input type="text" placeholder="Search all" class="search-input" />
-							</div>
-						</div>
-						<tabs-provider
-							selected-value=${() => this.selectedTab || 'All'}
-							default-value=${() => this.selectedTab || 'All'}
-							ontabchange=${(e: CustomEvent) => {
-								this.selectedTab = e.detail.value
-								console.log('selectedTab changed to:', this.selectedTab)
-							}}
-						>
-							<div class="tabs-container">
-								<tabs-list>
-									<for-each
-										items=${() => ['All', 'Space', 'Items']}
-										content=${() => (tab: string) => html` <tabs-trigger selected-value=${tab}>${tab}</tabs-trigger> `}
-									></for-each>
-								</tabs-list>
-								<div class="tabs-action-buttons">
-									<img src="/images/icons/heart.svg" alt="Heart" />
-								</div>
-							</div>
-
-							<!-- Hidden until content is ready -->
-							<for-each
-								items=${() => ['All', 'Space', 'Items']}
-								content=${() => (tab: string) => html`
-									<tabs-content selected-value=${tab} style="display: none; visibility: hidden;"></tabs-content>
-								`}
-							></for-each>
-						</tabs-provider>
-					</div>
-				`}
-			></show-when>
-
 			<!-- Space Cards -->
 			<show-when
 				condition=${() => !searchParams().has('brand')}
@@ -190,7 +126,6 @@ export class SpacesSelection extends Element {
 								<div class="scene-placeholder" onclick=${() => this.#onSpaceSelected(space())}>
 									<placeholder-image src=${getSpaceThumbnail(space())} alt=${space().name} object-fit="cover" />
 								</div>
-								<div class="garments-count">${countItemsInSpace(space())} garments</div>
 							</div>
 							<div class="card-content">
 								<div class="text-content">
@@ -388,104 +323,6 @@ export class SpacesSelection extends Element {
 			}
 		}
 
-		.header {
-			text-align: center;
-			margin-bottom: 2rem;
-		}
-
-		.main-title {
-			font-size: 28px;
-			font-weight: var(--fontWeightSemiBold);
-			color: var(--uiColorPrimaryBlack);
-			margin-bottom: 1rem;
-
-			:host-context([data-theme='dark']) & {
-				color: var(--uiColorPrimaryWhite);
-			}
-		}
-
-		.description {
-			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightNormal);
-			line-height: var(--lineHeightLoose);
-			margin: 0 auto;
-
-			:host-context([data-theme='dark']) & {
-				color: #ccc;
-			}
-		}
-		.tab-container {
-			max-width: 400px;
-			margin: 0 auto;
-		}
-
-		.search-container {
-			padding: 0 20px 15px 20px;
-		}
-
-		.search-bar {
-			display: flex;
-			align-items: center;
-			gap: 0.5rem;
-			padding: 5px 20px;
-			background: var(--uiColorPrimaryLightGrey);
-			border-radius: 100px;
-			width: 100%;
-			box-sizing: border-box;
-		}
-
-		.search-icon {
-			width: 25px;
-			height: 25px;
-			flex-shrink: 0;
-		}
-
-		.search-input {
-			flex: 1;
-			border: none;
-			background: transparent;
-			outline: none;
-			font-size: var(--fontSizeTextXs);
-			color: var(--uiColorPrimaryBlack);
-			font-weight: var(--fontWeightNormal);
-		}
-
-		.search-input::placeholder {
-			color: #666;
-		}
-
-		:host-context([data-theme='dark']) .search-bar {
-			background: #333;
-		}
-
-		:host-context([data-theme='dark']) .search-input {
-			color: var(--uiColorPrimaryWhite);
-		}
-
-		:host-context([data-theme='dark']) .search-input::placeholder {
-			color: #999;
-		}
-
-		.tabs-container {
-			display: flex;
-			align-items: center;
-			gap: var(--uiSpacingSmall);
-			padding: 0 20px var(--uiSpacingSmall) 20px;
-			background: var(--uiColorPrimaryWhite);
-			position: relative;
-			justify-content: space-between;
-
-			:host-context([data-theme='dark']) & {
-				background: #1a1a1a;
-			}
-		}
-
-		.tabs-action-buttons {
-			display: flex;
-			gap: var(--uiSpacingSmall);
-			height: 13px;
-		}
-
 		.cards-container {
 			display: grid;
 			grid-template-columns: 1fr;
@@ -512,16 +349,21 @@ export class SpacesSelection extends Element {
 
 		.featured-collections-title {
 			font-size: var(--fontSizeTextMdTablet);
-			font-weight: var(--fontWeightSemiBold);
+			font-weight: 700;
 			color: var(--uiColorPrimaryBlack);
 			margin-bottom: 1rem;
+			font-family: 'Anton', sans-serif;
+			text-transform: uppercase;
+			line-height: 0.98;
+			text-shadow: none;
+			-webkit-text-stroke: 0;
+			font-synthesis: none;
 		}
 
 		.space-card {
+			position: relative;
 			background: var(--uiColorPrimaryWhite);
 			border-radius: var(--borderRadiusLarge);
-			border-bottom-left-radius: 0;
-			border-bottom-right-radius: 0;
 			overflow: hidden;
 			width: 100%;
 
@@ -535,6 +377,21 @@ export class SpacesSelection extends Element {
 			width: 100%;
 			height: var(--cardHeightMobile);
 			overflow: hidden;
+		}
+
+		.scene-preview::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(to top, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.42) 45%, rgba(0, 0, 0, 0.18) 100%);
+			pointer-events: none;
+			opacity: 0;
+			transition: opacity 0.2s ease;
+		}
+
+		.space-card:hover .scene-preview::after,
+		.space-card:focus-within .scene-preview::after {
+			opacity: 1;
 		}
 
 		.scene-placeholder {
@@ -562,25 +419,29 @@ export class SpacesSelection extends Element {
 			cursor: pointer;
 		}
 
-		.garments-count {
-			position: absolute;
-			top: var(--uiGap);
-			right: var(--uiGap);
-			background: rgba(0, 0, 0, 0.3);
-			color: var(--uiColorPrimaryWhite);
-			padding: 4px var(--uiSpacingSmall);
-			border-radius: 15px;
-			font-size: 0.8rem;
-			backdrop-filter: blur(50px);
-		}
-
 		.card-content {
-			padding-top: 15px;
-			padding-left: 0;
-			padding-right: 0;
+			position: absolute;
+			left: 20px;
+			right: 20px;
+			bottom: 20px;
 			display: flex;
 			justify-content: space-between;
-			align-items: center;
+			align-items: flex-end;
+			gap: 1rem;
+			z-index: 2;
+			opacity: 0;
+			transform: translateY(8px);
+			pointer-events: none;
+			transition:
+				opacity 0.2s ease,
+				transform 0.2s ease;
+		}
+
+		.space-card:hover .card-content,
+		.space-card:focus-within .card-content {
+			opacity: 1;
+			transform: translateY(0);
+			pointer-events: auto;
 		}
 		.card-content_block {
 			padding-top: 15px;
@@ -598,13 +459,15 @@ export class SpacesSelection extends Element {
 
 		.card-title {
 			font-size: var(--fontSizeTextXsTablet);
-			font-weight: var(--fontWeightSemiBold);
-			color: var(--uiColorPrimaryBlack);
+			font-weight: 700;
+			color: var(--uiColorPrimaryWhite);
 			margin: 0;
-
-			:host-context([data-theme='dark']) & {
-				color: var(--uiColorPrimaryBlack);
-			}
+			font-family: 'Anton', sans-serif;
+			text-transform: uppercase;
+			line-height: 0.98;
+			text-shadow: none;
+			-webkit-text-stroke: 0;
+			font-synthesis: none;
 		}
 		.card-title_block {
 			font-size: var(--fontSizeTextXsTablet);
@@ -619,23 +482,25 @@ export class SpacesSelection extends Element {
 
 		.card-subtitle {
 			font-size: var(--fontSizeTextXs);
-			font-weight: var(--fontWeightNormal);
-			color: #666;
-			text-decoration: underline;
+			font-weight: 300;
+			color: rgba(255, 255, 255, 0.92);
+			text-decoration: none;
 			margin: 0;
 			display: block;
 			cursor: pointer;
-
-			:host-context([data-theme='dark']) & {
-				color: #666;
-			}
+			font-family: 'Poppins', sans-serif;
+			text-transform: none;
+			line-height: 1.2;
+			text-shadow: none;
+			-webkit-text-stroke: 0;
+			font-synthesis: none;
 		}
 
 		.explore-button {
 			font-size: var(--fontSizeTextXs);
-			padding: 0.5rem 1rem;
-			background: var(--uiColorPrimaryBlack);
-			border: 2px solid var(--uiColorPrimaryBlack);
+			padding: 0.7rem 1.7rem;
+			background: #0d1322;
+			border: 1px solid rgba(255, 255, 255, 0.12);
 			border-radius: var(--borderRadiusPill);
 			cursor: pointer;
 			font-weight: var(--fontWeightSemiBold);
@@ -682,10 +547,6 @@ export class SpacesSelection extends Element {
 				gap: 0.5rem;
 			}
 
-			.description {
-				padding: 0 1rem;
-			}
-
 			.cards-container {
 				display: flex;
 				flex-direction: row;
@@ -713,12 +574,9 @@ export class SpacesSelection extends Element {
 			}
 
 			.card-content {
-				gap: 1rem;
-				position: absolute;
-				bottom: 5%;
-				width: 95%;
-				left: 50%;
-				transform: translate(-50%, 0%);
+				left: 16px;
+				right: 16px;
+				bottom: 16px;
 			}
 			.card-content_block {
 				gap: 1rem;
@@ -730,12 +588,6 @@ export class SpacesSelection extends Element {
 
 			.text-content {
 				margin-right: 0;
-			}
-			.card-title {
-				color: var(--uiColorPrimaryWhite);
-			}
-			.card-subtitle {
-				color: var(--uiColorPrimaryWhite);
 			}
 		}
 
