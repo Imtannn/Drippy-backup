@@ -423,6 +423,11 @@ export class BottomSheet extends Element {
 			--bottom-sheet-panel-backdrop-filter: none;
 			--bottom-sheet-handle-bg: var(--uiColorPrimaryWhite);
 			--bottom-sheet-handle-indicator-bg: #d1d5db;
+			--bottom-sheet-collapse-pill-bg: rgba(255, 255, 255, 0.7);
+			--bottom-sheet-collapse-pill-border: rgba(255, 255, 255, 0.82);
+			--bottom-sheet-collapse-pill-backdrop: blur(8px) saturate(1.08);
+			--bottom-sheet-collapse-pill-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+			--bottom-sheet-collapse-pill-arrow: rgba(0, 0, 0, 0.92);
 		}
 
 		:host {
@@ -525,11 +530,11 @@ export class BottomSheet extends Element {
 			width: 23px;
 			height: 55px;
 			border-radius: 12px;
-			background: rgba(18, 19, 22, 0.72);
-			border: 1px solid rgba(255, 255, 255, 0.3);
-			backdrop-filter: blur(24px) saturate(1.1);
-			-webkit-backdrop-filter: blur(24px) saturate(1.1);
-			box-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
+			background: var(--bottom-sheet-collapse-pill-bg);
+			border: 1px solid var(--bottom-sheet-collapse-pill-border);
+			backdrop-filter: var(--bottom-sheet-collapse-pill-backdrop);
+			-webkit-backdrop-filter: var(--bottom-sheet-collapse-pill-backdrop);
+			box-shadow: var(--bottom-sheet-collapse-pill-shadow);
 
 			display: flex;
 			justify-content: center;
@@ -539,8 +544,8 @@ export class BottomSheet extends Element {
 				content: '';
 				width: 6px;
 				height: 6px;
-				border-top: 1px solid rgba(255, 255, 255, 0.92);
-				border-right: 1px solid rgba(255, 255, 255, 0.92);
+				border-top: 1px solid var(--bottom-sheet-collapse-pill-arrow);
+				border-right: 1px solid var(--bottom-sheet-collapse-pill-arrow);
 				border-width: 2px;
 				transition: rotate var(--transitionTimeFast) ease-in-out;
 				rotate: 45deg;

@@ -28,6 +28,17 @@ export class NavBar extends Element {
 	override css = css /*css*/ `
 		:host {
 			display: block;
+			--nav-bottom-bg: rgba(255, 255, 255, 0.8);
+			--nav-bottom-backdrop: blur(20px);
+			--nav-bottom-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+			--nav-bottom-border: rgba(255, 255, 255, 0.2);
+		}
+
+		:host-context([data-theme='dark']) {
+			--nav-bottom-bg: rgba(18, 19, 22, 0.22);
+			--nav-bottom-backdrop: blur(12px);
+			--nav-bottom-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+			--nav-bottom-border: rgba(255, 255, 255, 0.14);
 		}
 
 		/* Mobile positioning */
@@ -89,11 +100,11 @@ export class NavBar extends Element {
 
 		/* Bottom navigation styles */
 		.nav-bottom {
-			background: rgba(18, 19, 22, 0.22);
-			backdrop-filter: blur(12px);
+			background: var(--nav-bottom-bg);
+			backdrop-filter: var(--nav-bottom-backdrop);
 			border-radius: var(--borderRadiusPill);
-			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-			border: 1px solid rgba(255, 255, 255, 0.14);
+			box-shadow: var(--nav-bottom-shadow);
+			border: 1px solid var(--nav-bottom-border);
 			padding: 2px 4px;
 		}
 	`

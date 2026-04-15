@@ -835,16 +835,23 @@ export class TemplateView extends Element {
 			max-height="100vh"
 			onsnap=${this.#onBottomSheetSnapChange}
 			style="
-				--bottom-sheet-bg: rgba(18, 19, 22, 0.22);
-				--bottom-sheet-border-color: rgba(255, 255, 255, 0.12);
-				--bottom-sheet-panel-backdrop-filter: blur(10px) saturate(1.04);
-				--bottom-sheet-panel-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+				--bottom-sheet-bg: var(--panel-sheet-bg);
+				--bottom-sheet-border-color: var(--panel-sheet-border);
+				--bottom-sheet-panel-backdrop-filter: var(--panel-sheet-backdrop);
+				--bottom-sheet-panel-shadow: var(--panel-sheet-shadow);
 				--bottom-sheet-panel-desktop-left-radius: var(--borderRadiusXl);
 				--bottom-sheet-content-desktop-radius: 0;
 				--bottom-sheet-content-desktop-top-left-radius: var(--borderRadiusXl);
 				--bottom-sheet-content-desktop-bottom-left-radius: var(--borderRadiusXl);
 				--bottom-sheet-content-desktop-top-right-radius: 0;
 				--bottom-sheet-content-desktop-bottom-right-radius: 0;
+				--bottom-sheet-handle-bg: var(--panel-handle-bg);
+				--bottom-sheet-handle-indicator-bg: var(--panel-handle-indicator);
+				--bottom-sheet-collapse-pill-bg: var(--panel-collapse-pill-bg);
+				--bottom-sheet-collapse-pill-border: var(--panel-collapse-pill-border);
+				--bottom-sheet-collapse-pill-backdrop: var(--panel-collapse-pill-backdrop);
+				--bottom-sheet-collapse-pill-shadow: var(--panel-collapse-pill-shadow);
+				--bottom-sheet-collapse-pill-arrow: var(--panel-collapse-pill-arrow);
 			"
 		>
 			<show-when
@@ -1207,6 +1214,49 @@ export class TemplateView extends Element {
 		${onboardingStyles}
 		:host {
 			display: contents;
+			--panel-sheet-bg: rgba(255, 255, 255, 0.2);
+			--panel-sheet-border: rgba(255, 255, 255, 0.18);
+			--panel-sheet-backdrop: blur(5px) saturate(1.04);
+			--panel-sheet-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+			--panel-handle-bg: rgba(255, 255, 255, 0.9);
+			--panel-handle-indicator: rgba(140, 140, 140, 0.45);
+			--panel-top-bg-desktop: rgba(255, 255, 255, 0.14);
+			--panel-top-bg-mobile: rgba(255, 255, 255, 0.12);
+			--panel-top-border: rgba(255, 255, 255, 0.1);
+			--panel-tabs-bg: rgba(255, 255, 255, 0.08);
+			--panel-tabs-trigger-inactive-bg: rgba(255, 255, 255, 0.36);
+			--panel-tabs-trigger-color: rgba(18, 19, 22, 0.86);
+			--panel-item-card-bg: rgba(255, 255, 255, 0.14);
+			--panel-brand-chip-bg: rgba(255, 255, 255, 0.08);
+			--panel-brand-chip-border: rgba(255, 255, 255, 0.2);
+			--panel-collapse-pill-bg: rgba(255, 255, 255, 0.7);
+			--panel-collapse-pill-border: rgba(255, 255, 255, 0.82);
+			--panel-collapse-pill-backdrop: blur(8px) saturate(1.08);
+			--panel-collapse-pill-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+			--panel-collapse-pill-arrow: rgba(0, 0, 0, 0.92);
+		}
+
+		:host-context([data-theme='dark']) {
+			--panel-sheet-bg: rgba(18, 19, 22, 0.22);
+			--panel-sheet-border: rgba(255, 255, 255, 0.12);
+			--panel-sheet-backdrop: blur(10px) saturate(1.04);
+			--panel-sheet-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+			--panel-handle-bg: rgba(18, 19, 22, 0.18);
+			--panel-handle-indicator: rgba(255, 255, 255, 0.35);
+			--panel-top-bg-desktop: rgba(18, 19, 22, 0.56);
+			--panel-top-bg-mobile: rgba(18, 19, 22, 0.5);
+			--panel-top-border: rgba(255, 255, 255, 0.12);
+			--panel-tabs-bg: rgba(18, 19, 22, 0.5);
+			--panel-tabs-trigger-inactive-bg: rgba(255, 255, 255, 0.2);
+			--panel-tabs-trigger-color: rgba(255, 255, 255, 0.9);
+			--panel-item-card-bg: rgba(18, 19, 22, 0.22);
+			--panel-brand-chip-bg: rgba(18, 19, 22, 0.22);
+			--panel-brand-chip-border: rgba(255, 255, 255, 0.16);
+			--panel-collapse-pill-bg: rgba(18, 19, 22, 0.72);
+			--panel-collapse-pill-border: rgba(255, 255, 255, 0.3);
+			--panel-collapse-pill-backdrop: blur(24px) saturate(1.1);
+			--panel-collapse-pill-shadow: 0 8px 22px rgba(0, 0, 0, 0.32);
+			--panel-collapse-pill-arrow: rgba(255, 255, 255, 0.92);
 		}
 
 		app-buttons-left {
@@ -1248,20 +1298,20 @@ export class TemplateView extends Element {
 				top: 0;
 				display: flex;
 				align-items: center;
-				background: rgba(18, 19, 22, 0.56);
+				background: var(--panel-top-bg-desktop);
 				backdrop-filter: blur(16px);
 				-webkit-backdrop-filter: blur(16px);
 				z-index: 1000;
 				width: 100%;
 				min-height: 52px;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+				border-bottom: 1px solid var(--panel-top-border);
 			}
 
 			tabs-provider bottom-sheet-header {
 				position: sticky;
 				top: 52px;
 				z-index: 10;
-				background: rgba(18, 19, 22, 0.56);
+				background: var(--panel-top-bg-desktop);
 				backdrop-filter: blur(16px);
 				-webkit-backdrop-filter: blur(16px);
 				border-top: none;
@@ -1269,8 +1319,8 @@ export class TemplateView extends Element {
 			}
 
 			tabs-provider .tabs-container {
-				background: rgba(18, 19, 22, 0.56) !important;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+				background: var(--panel-top-bg-desktop) !important;
+				border-bottom: 1px solid var(--panel-top-border);
 			}
 			.template-sheet-overlay {
 				border-top-left-radius: 1rem;
@@ -1290,12 +1340,12 @@ export class TemplateView extends Element {
 			padding: var(--uiSpacing);
 			padding-top: 10px;
 			padding-bottom: var(--uiSpacingSmall);
-			background: rgba(18, 19, 22, 0.14);
-			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+			background: var(--panel-tabs-bg);
+			border-bottom: 1px solid var(--panel-top-border);
 			--tabs-active-indicator-bg: rgba(18, 19, 22, 0.72);
 			--tabs-hover-indicator-bg: rgba(255, 255, 255, 0.12);
-			--tabs-trigger-inactive-bg: rgba(255, 255, 255, 0.2);
-			--tabs-trigger-color: rgba(255, 255, 255, 0.9);
+			--tabs-trigger-inactive-bg: var(--panel-tabs-trigger-inactive-bg);
+			--tabs-trigger-color: var(--panel-tabs-trigger-color);
 			--tabs-trigger-active-color: #ffffff;
 		}
 
@@ -1322,29 +1372,29 @@ export class TemplateView extends Element {
 		/* Remove tab-container boder-bottom on mobile */
 		@media (max-width: 768px) {
 			bottom-sheet {
-				--bottom-sheet-bg: rgba(18, 19, 22, 0.22) !important;
-				--bottom-sheet-border-color: rgba(255, 255, 255, 0.1) !important;
-				--bottom-sheet-panel-backdrop-filter: blur(12px) saturate(1.04) !important;
-				--bottom-sheet-panel-shadow: 0 8px 24px rgba(0, 0, 0, 0.14) !important;
-				--bottom-sheet-handle-bg: rgba(18, 19, 22, 0.18) !important;
-				--bottom-sheet-handle-indicator-bg: rgba(255, 255, 255, 0.35) !important;
+				--bottom-sheet-bg: var(--panel-sheet-bg) !important;
+				--bottom-sheet-border-color: var(--panel-sheet-border) !important;
+				--bottom-sheet-panel-backdrop-filter: var(--panel-sheet-backdrop) !important;
+				--bottom-sheet-panel-shadow: var(--panel-sheet-shadow) !important;
+				--bottom-sheet-handle-bg: var(--panel-handle-bg) !important;
+				--bottom-sheet-handle-indicator-bg: var(--panel-handle-indicator) !important;
 			}
 
 			tabs-provider bottom-sheet-header {
 				position: sticky;
 				top: var(--bottom-sheet-handle-height, 15px);
 				z-index: 11;
-				background: rgba(18, 19, 22, 0.5);
+				background: var(--panel-top-bg-mobile);
 				backdrop-filter: blur(16px);
 				-webkit-backdrop-filter: blur(16px);
 				padding-top: 0;
 			}
 
 			.tabs-container {
-				border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+				border-bottom: 1px solid var(--panel-top-border);
 				padding-top: 4px;
 				padding-bottom: var(--uiSpacingMedium);
-				background: rgba(18, 19, 22, 0.5);
+				background: var(--panel-top-bg-mobile);
 			}
 
 			.tabs-content-container {
@@ -1352,7 +1402,7 @@ export class TemplateView extends Element {
 			}
 
 			.template-item-container item-card {
-				--appBackground: rgba(255, 255, 255, 0.12);
+				--appBackground: var(--panel-item-card-bg);
 			}
 		}
 
@@ -1458,8 +1508,8 @@ export class TemplateView extends Element {
 			display: inline-flex;
 			align-items: center;
 			gap: 8px;
-			border: 1px solid rgba(255, 255, 255, 0.16);
-			background: rgba(18, 19, 22, 0.22);
+			border: 1px solid var(--panel-brand-chip-border);
+			background: var(--panel-brand-chip-bg);
 			color: rgba(255, 255, 255, 0.95);
 			border-radius: 999px;
 			padding: 6px 10px 6px 6px;
@@ -1536,7 +1586,7 @@ export class TemplateView extends Element {
 			flex: 1;
 
 			item-card {
-				--appBackground: rgba(18, 19, 22, 0.22);
+				--appBackground: var(--panel-item-card-bg);
 			}
 
 			&:hover {
