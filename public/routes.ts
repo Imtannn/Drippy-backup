@@ -82,7 +82,9 @@ effect(() => {
 })
 
 // debugging
-const win = window as any
+const win = window as Window & {
+	routes?: {url: typeof url; replaceState: typeof replaceState; pushState: typeof pushState}
+}
 win.routes = {url, replaceState, pushState}
 
 // App-specific features ///////////////////////////////////////////////////////

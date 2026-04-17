@@ -1,7 +1,7 @@
 // TODO improve type defs for this, to avoid error-prone manual type casting.
 const styleVars = {
 	// Example: this results in 0.8 when used in JS, and 80% when used in CSS.
-	logoWidth: '5%' as any as number,
+	logoWidth: '5%' as unknown as number,
 	fontFamilyPrimary: 'Poppins',
 	// Soft blue in light mode, and dark blue in dark mode.
 	appBackground: '#f6f6f6',

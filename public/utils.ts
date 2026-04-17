@@ -86,7 +86,7 @@ interface AnimateValueOptions {
  * @param b - Second signal value
  * @param setB - Setter for the second signal
  */
-export function syncSignals(a: any, setA: (val: any) => void, b: any, setB: (val: any) => void) {
+export function syncSignals<T>(a: () => T, setA: (val: T) => void, b: () => T, setB: (val: T) => void) {
 	createEffect(() => {
 		// Any time a changes, update b
 		a()
@@ -521,7 +521,7 @@ export function getArmatureObject(avatarRoot: THREE.Object3D) {
 
 	// If there's an issue because of an avatar not having a skinned mesh named "body_", just
 	// do the above method instead.
-	return findInTree(avatarRoot, (obj: any) => {
+	return findInTree(avatarRoot, (obj: THREE.Object3D) => {
 		return obj.skeleton && obj.name.indexOf('body_') == 0
 	}) as THREE.SkinnedMesh | null
 }
@@ -671,9 +671,8 @@ export function setEnvMapOnModelLoad(el: GltfModel, env: Accessor<string | THREE
  * @param skip Optional Element3Ds to skip (including their descendants).
  */
 export function setMaterialsVisible(el: Element3D, visible: boolean, ...skip: Element3D[]) {
-	for (const material of materialsInTree(el.three, ...skip.map(s => s.three))) {
+	for (const material of materialsInTree(el.three, ...skip.map(s => s.three)))
 		material.visible = visible
-	}
 
 	el.needsUpdate()
 }
@@ -714,13 +713,32 @@ export function showSkeletonHelper(el: GltfModel, show: () => boolean) {
  * @param lumeScene - The lume scene element
  * @returns THREE.Box3 - Bounding box containing all visible garments of the category
  */
-function calculateGarmentBoundingBox(category: string, lumeScene: any): THREE.Box3 {
+type ClothModelElement = Element & {
+	three?: THREE.Object3D
+	getAttribute(name: string): string | null
+}
+
+type LumeSceneLike = Element & {
+	glRenderer?: THREE.WebGLRenderer
+	_glRenderer?: THREE.WebGLRenderer
+	renderer?: THREE.WebGLRenderer
+	three?: THREE.Scene
+	querySelector(selectors: string): (Element & {three?: THREE.Object3D}) | null
+	querySelectorAll(selectors: string): NodeListOf<Element>
+}
+
+type DrippySceneLike = Element & {
+	avatarModel?: {three: THREE.Object3D}
+}
+
+function calculateGarmentBoundingBox(category: string, lumeScene: LumeSceneLike): THREE.Box3 {
 	const boundingBox = new THREE.Box3()
 
 	// Get all garment models for this category
 	const clothModels = lumeScene.querySelectorAll('lume-gltf-model[data-cloth]')
 
-	clothModels.forEach((model: any) => {
+	clothModels.forEach(modelEl => {
+		const model = modelEl as ClothModelElement
 		const modelId = model.getAttribute('id') || ''
 		const shouldInclude = modelId.includes(category + '-')
 
@@ -788,17 +806,18 @@ function calculateCameraFromBoundingBox(boundingBox: THREE.Box3, fov: number = 5
  * @returns Promise<string> - Base64 data URL of the screenshot
  */
 export async function captureGarmentScreenshot(category: string): Promise<string> {
-	const drippyScene = querySelectorDeep(document, 'drippy-scene') as any
+	const drippyScene = querySelectorDeep(document, 'drippy-scene') as DrippySceneLike | null
 	if (!drippyScene) return ''
 
-	const lumeScene = querySelectorDeep(document, 'lume-scene') as any
+	const lumeScene = querySelectorDeep(document, 'lume-scene') as LumeSceneLike | null
 	if (!lumeScene) return ''
 
 	const clothModels = querySelectorAllDeep(document, 'lume-gltf-model[data-cloth]')
-	const visibilityStates: {obj: any; originalVisible: boolean}[] = []
+	const visibilityStates: {obj: THREE.Object3D; originalVisible: boolean}[] = []
 
 	// Collect all objects and their visibility states
-	clothModels.forEach((model: any) => {
+	clothModels.forEach(modelEl => {
+		const model = modelEl as ClothModelElement
 		const modelId = model.getAttribute('id') || ''
 		const shouldKeep = modelId.includes(category + '-')
 
@@ -807,7 +826,7 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 
 	// Use drippy-scene's avatarModel property to collect avatar parts
 	if (drippyScene && drippyScene.avatarModel) {
-		drippyScene.avatarModel.three.children.forEach((child: any) => {
+		drippyScene.avatarModel.three.children.forEach(child => {
 			const childName = child.name || ''
 			const isGarment = childName.includes('LUME-ELEMENT3D')
 
@@ -821,7 +840,8 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 
 	// Collect shoes and any other non-cloth models
 	const allOtherModels = lumeScene.querySelectorAll('lume-gltf-model:not([data-cloth])')
-	allOtherModels.forEach((model: any) => {
+	allOtherModels.forEach(modelEl => {
+		const model = modelEl as ClothModelElement
 		const modelId = model.getAttribute('id') || 'unnamed'
 		if (model.three && modelId !== 'avatar' && modelId !== 'scene')
 			visibilityStates.push({obj: model.three, originalVisible: model.three.visible})
