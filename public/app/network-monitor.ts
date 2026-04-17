@@ -9,6 +9,20 @@ export interface NetworkStatus {
 	rtt: number | null
 }
 
+type BrowserConnection = {
+	effectiveType?: string
+	downlink?: number
+	rtt?: number
+	addEventListener?: (type: string, listener: EventListenerOrEventListenerObject) => void
+	removeEventListener?: (type: string, listener: EventListenerOrEventListenerObject) => void
+}
+
+type NavigatorWithConnection = Navigator & {
+	connection?: BrowserConnection
+	mozConnection?: BrowserConnection
+	webkitConnection?: BrowserConnection
+}
+
 // Track image loading failures from AWS
 const FAILURE_WINDOW_MS = 60000 // Track failures in last 60 seconds
 const FAILURE_THRESHOLD = 3 // If 3+ failures in window, connection is slow
@@ -16,7 +30,7 @@ const FAILURE_THRESHOLD = 3 // If 3+ failures in window, connection is slow
 interface LoadFailure {
 	timestamp: number
 	url: string
-	error?: any
+	error?: unknown
 }
 
 let imageLoadFailures: LoadFailure[] = []
@@ -40,7 +54,7 @@ function hasRecentFailures(): boolean {
 /**
  * Report an image load failure (call this from texture-manager or anywhere images fail)
  */
-export function reportImageLoadFailure(url: string, error?: any) {
+export function reportImageLoadFailure(url: string, error?: unknown) {
 	imageLoadFailures.push({
 		timestamp: Date.now(),
 		url,
@@ -59,8 +73,8 @@ export function reportImageLoadSuccess() {
 }
 
 export function getNetworkStatus(): NetworkStatus {
-	const connection =
-		(navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection
+	const nav = navigator as NavigatorWithConnection
+	const connection = nav.connection || nav.mozConnection || nav.webkitConnection
 
 	return {
 		isOnline: navigator.onLine,
@@ -94,8 +108,8 @@ export async function getConnectionQuality(status: NetworkStatus): Promise<Conne
 }
 
 export function createNetworkMonitor(callback: (status: ConnectionStatus) => void) {
-	const connection =
-		(navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection
+	const nav = navigator as NavigatorWithConnection
+	const connection = nav.connection || nav.mozConnection || nav.webkitConnection
 
 	// Initial check
 	const initialStatus = getNetworkStatus()

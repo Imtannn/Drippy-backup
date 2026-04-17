@@ -80,7 +80,7 @@ interface RenderBlock {
 
 const defaultRenderBlocks: RenderBlock[] = blocks()
 	.filter(block => block.collection === 'default')
-	?.map(block => {
+	.map(block => {
 		if ((block.category as BlockCategory) === 'Sleeves')
 			throw new Error('Separate sleeves not currently supported for default garments.')
 
@@ -758,14 +758,9 @@ export class DrippyScene extends Element {
 		this.animSrc = new URL(anim.src, import.meta.url).href
 		this.animTrimStart = anim.trimStart ?? 0
 
-		// FIXME small hack: timeout so the lume-animation has time to
-		// process the asset. Make lume-animation provide a loading
-		// signal or event instead.
-		let to = 0
-		onCleanup(() => clearTimeout(to))
-		fetch(this.animSrc).then(() => {
-			// to = window.setTimeout(() => store.removeIsDrippySceneLoading(this.#animationLoading), 2000)
-		})
+		// FIXME small hack: fetch triggers initial animation asset warm-up.
+		// Make lume-animation provide a loading signal or event instead.
+		void fetch(this.animSrc)
 	}
 
 	@effect animationAutoplayEffect() {
