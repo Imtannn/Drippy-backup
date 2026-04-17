@@ -16,7 +16,10 @@ import './imports/upload-service.js'
 type WebAppLike = typeof WebApp & {
 	addHtmlAttributeHook?: (hook: () => Record<string, string>) => void
 	rawHandlers?: {
-		use: (path: string | ((req: IncomingMessage, res: ServerResponse, next: () => void) => void), handler?: (req: IncomingMessage, res: ServerResponse, next: () => void) => void) => void
+		use: (
+			path: string | ((req: IncomingMessage, res: ServerResponse, next: () => void) => void),
+			handler?: (req: IncomingMessage, res: ServerResponse, next: () => void) => void,
+		) => void
 	}
 }
 
@@ -358,7 +361,8 @@ const makeAdminPromises = [] as Promise<unknown>[]
 // Make all existing users with a known admin email admins.
 for (const email of admins) {
 	const user = await Accounts.findUserByEmail(email)
-	if (user) makeAdminPromises.push(Meteor.users.updateAsync(user._id, {$set: {profile: {...user.profile, isAdmin: true}}}))
+	if (user)
+		makeAdminPromises.push(Meteor.users.updateAsync(user._id, {$set: {profile: {...user.profile, isAdmin: true}}}))
 }
 
 // Migration: ensure previous Visits documents have their host fields renamed to origin.

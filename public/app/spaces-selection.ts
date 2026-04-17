@@ -47,7 +47,6 @@ export class SpacesSelection extends Element {
 			// FIXME: STOP making duplicate auth code. See the duplication in template-view.ts
 			if (isLoggedIn(currentUser()) && this.showLoginDialog) this.showLoginDialog = false
 		})
-
 	}
 
 	fadeOut(callback?: () => void) {

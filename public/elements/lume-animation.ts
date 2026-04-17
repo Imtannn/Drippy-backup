@@ -118,9 +118,7 @@ export class LumeAnimation extends Element {
 						hasLoadedExternalAnimation = true
 						const anims =
 							trimSeconds > 0
-								? loadedModel.animations.map(c =>
-										THREE.AnimationUtils.subclip(c, c.name, trimSeconds, Infinity, 1),
-									)
+								? loadedModel.animations.map(c => THREE.AnimationUtils.subclip(c, c.name, trimSeconds, Infinity, 1))
 								: loadedModel.animations
 						setClips(anims)
 					})
@@ -146,7 +144,8 @@ export class LumeAnimation extends Element {
 						const clock = new THREE.Clock()
 
 						let frame = 0
-						const isMobile = window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window && window.innerWidth < 1024)
+						const isMobile =
+							window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window && window.innerWidth < 1024)
 						const targetInterval = isMobile ? 1000 / 30 : 1000 / 60 // 30fps on mobile, 60fps on desktop
 						let lastTime = 0
 

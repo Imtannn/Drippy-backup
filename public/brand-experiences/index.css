@@ -2353,7 +2353,10 @@ p {
 		user-select: none;
 	}
 	.carousel-item {
-		transition: transform 0.4s ease, opacity 0.4s ease, filter 0.4s ease;
+		transition:
+			transform 0.4s ease,
+			opacity 0.4s ease,
+			filter 0.4s ease;
 		transform: scale(0.8);
 		opacity: 0.6;
 		-webkit-user-select: none;
@@ -2489,7 +2492,9 @@ p {
 		height: 8px;
 		border-radius: 50%;
 		background-color: rgba(0, 0, 0, 0.2);
-		transition: background-color 0.3s ease, transform 0.3s ease;
+		transition:
+			background-color 0.3s ease,
+			transform 0.3s ease;
 		cursor: pointer;
 	}
 

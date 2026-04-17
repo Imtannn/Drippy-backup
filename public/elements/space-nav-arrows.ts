@@ -53,8 +53,17 @@ export class SpaceNavArrows extends Element {
 						onclick=${() => this.#navigateTo(prev)}
 						title=${() => prev?.name ?? ''}
 					>
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-							<polyline points="15 18 9 12 15 6"/>
+						<svg
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<polyline points="15 18 9 12 15 6" />
 						</svg>
 					</button>
 
@@ -71,8 +80,17 @@ export class SpaceNavArrows extends Element {
 						onclick=${() => this.#navigateTo(next)}
 						title=${() => next?.name ?? ''}
 					>
-						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-							<polyline points="9 18 15 12 9 6"/>
+						<svg
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<polyline points="9 18 15 12 9 6" />
 						</svg>
 					</button>
 				</div>
@@ -80,7 +98,7 @@ export class SpaceNavArrows extends Element {
 		}}
 	`
 
-	override css = css/*css*/`
+	override css = css /*css*/ `
 		:host {
 			display: contents;
 		}
@@ -114,7 +132,9 @@ export class SpaceNavArrows extends Element {
 			justify-content: center;
 			padding: 4px;
 			border-radius: 50%;
-			transition: background 0.15s, opacity 0.15s;
+			transition:
+				background 0.15s,
+				opacity 0.15s;
 			opacity: 0.9;
 		}
 
@@ -154,7 +174,9 @@ export class SpaceNavArrows extends Element {
 			height: 5px;
 			border-radius: 50%;
 			background: rgba(255, 255, 255, 0.35);
-			transition: background 0.2s, transform 0.2s;
+			transition:
+				background 0.2s,
+				transform 0.2s;
 		}
 
 		.dot--active {

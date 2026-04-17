@@ -145,8 +145,8 @@ export class TemplateDetailView extends Element {
 				<div class="section">
 					<div class="text-section-label">Description</div>
 					<div class="text-section-body">
-						A striking garment with a sculpted silhouette and playful details. Features a deep V-neckline and
-						elegantly pleated shoulder sleeves that create a voluminous, architectural upper body.
+						A striking garment with a sculpted silhouette and playful details. Features a deep V-neckline and elegantly
+						pleated shoulder sleeves that create a voluminous, architectural upper body.
 					</div>
 				</div>
 

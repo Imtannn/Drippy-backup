@@ -234,7 +234,6 @@ export class RemixOverlay extends Element {
 								selected-template-category=${() => this.selectedTemplate?.category ?? ''}
 							></fabric-selection>
 						</tabs-content>
-
 					</tabs-provider>
 				`}
 			>

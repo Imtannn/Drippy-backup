@@ -7,9 +7,7 @@ export class NavItems extends Element {
 	static override readonly elementName = 'nav-items'
 
 	@signal activeTab = 'items'
-	override template = () => html`
-		<div class="nav-items-container"></div>
-	`
+	override template = () => html` <div class="nav-items-container"></div> `
 	override css = css /*css*/ `
 		:host {
 			display: flex;

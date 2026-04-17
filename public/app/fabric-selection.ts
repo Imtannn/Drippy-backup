@@ -315,9 +315,7 @@ export class FabricSelection extends Element {
 			--item-preview-hover-border-color: transparent;
 			--item-preview-active-border-color: transparent;
 			--item-preview-active-shadow:
-				0 0 0 3px #ffffff,
-				0 0 0 5px var(--uiColorAccentViolet),
-				0 0 14px rgba(165, 115, 255, 0.5);
+				0 0 0 3px #ffffff, 0 0 0 5px var(--uiColorAccentViolet), 0 0 14px rgba(165, 115, 255, 0.5);
 		}
 
 		@media (min-width: 768px) {

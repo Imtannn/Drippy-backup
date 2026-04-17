@@ -671,8 +671,7 @@ export function setEnvMapOnModelLoad(el: GltfModel, env: Accessor<string | THREE
  * @param skip Optional Element3Ds to skip (including their descendants).
  */
 export function setMaterialsVisible(el: Element3D, visible: boolean, ...skip: Element3D[]) {
-	for (const material of materialsInTree(el.three, ...skip.map(s => s.three)))
-		material.visible = visible
+	for (const material of materialsInTree(el.three, ...skip.map(s => s.three))) material.visible = visible
 
 	el.needsUpdate()
 }

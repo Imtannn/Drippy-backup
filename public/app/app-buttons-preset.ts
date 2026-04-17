@@ -55,7 +55,13 @@ type PresetConfig = {
 	}
 }
 
-type AppButtonsPresetAttributes = 'preset' | 'brandName' | 'showTools' | 'showAnimation' | 'disablePersonButton' | 'disableCubeButton'
+type AppButtonsPresetAttributes =
+	| 'preset'
+	| 'brandName'
+	| 'showTools'
+	| 'showAnimation'
+	| 'disablePersonButton'
+	| 'disableCubeButton'
 const HIDDEN_TEMPLATE_IDS_KEY = 'hiddenTemplateIds'
 
 @element
@@ -309,8 +315,10 @@ export class AppButtonsPreset extends Element {
 		osc1.connect(gain1).connect(ctx.destination)
 		osc2.connect(gain2).connect(ctx.destination)
 
-		osc1.start(now); osc1.stop(now + 0.16)
-		osc2.start(now + 0.06); osc2.stop(now + 0.24)
+		osc1.start(now)
+		osc1.stop(now + 0.16)
+		osc2.start(now + 0.06)
+		osc2.stop(now + 0.24)
 	}
 
 	#playBrainrotOccasionally() {
@@ -442,8 +450,20 @@ export class AppButtonsPreset extends Element {
 				💡
 			</button>
 			<div class="light-control-popover" classList=${() => ({open: this.lightControlsOpen})}>
-				<button class="light-intensity-button" onclick=${this.#decreaseSceneLight} aria-label="Decrease light intensity">−</button>
-				<button class="light-intensity-button" onclick=${this.#increaseSceneLight} aria-label="Increase light intensity">+</button>
+				<button
+					class="light-intensity-button"
+					onclick=${this.#decreaseSceneLight}
+					aria-label="Decrease light intensity"
+				>
+					−
+				</button>
+				<button
+					class="light-intensity-button"
+					onclick=${this.#increaseSceneLight}
+					aria-label="Increase light intensity"
+				>
+					+
+				</button>
 			</div>
 		</div>
 	`
@@ -507,8 +527,17 @@ export class AppButtonsPreset extends Element {
 		return html`
 			<button class="space-nav-next" onclick=${() => this.#navigateToSpace(next)}>
 				Next Space
-				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-					<polyline points="9 18 15 12 9 6"/>
+				<svg
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<polyline points="9 18 15 12 9 6" />
 				</svg>
 			</button>
 		`
@@ -517,7 +546,11 @@ export class AppButtonsPreset extends Element {
 	#renderSpaceAvatars = () => {
 		if (this.preset !== 'template-flow') return ''
 		return html`
-			<div class="space-avatars" classList=${() => ({expanded: this.visitorsExpanded})} aria-label="Avatars in this space">
+			<div
+				class="space-avatars"
+				classList=${() => ({expanded: this.visitorsExpanded})}
+				aria-label="Avatars in this space"
+			>
 				<button
 					class="space-avatars-count"
 					title="Visitors online"
@@ -659,10 +692,8 @@ export class AppButtonsPreset extends Element {
 								${() =>
 									config.tools &&
 									html`
-										${() => this.#renderAnimationToggleButton()}
-										${() => this.#renderRandomizeButton()}
-										${() => this.#renderMusicToggleButton()}
-										${() => this.#renderLightControlButtons()}
+										${() => this.#renderAnimationToggleButton()} ${() => this.#renderRandomizeButton()}
+										${() => this.#renderMusicToggleButton()} ${() => this.#renderLightControlButtons()}
 									`}
 								<admin-button></admin-button>
 							</app-buttons-group>
@@ -686,10 +717,8 @@ export class AppButtonsPreset extends Element {
 								${() =>
 									config.tools &&
 									html`
-										${() => this.#renderAnimationToggleButton()}
-										${() => this.#renderRandomizeButton()}
-										${() => this.#renderMusicToggleButton()}
-										${() => this.#renderLightControlButtons()}
+										${() => this.#renderAnimationToggleButton()} ${() => this.#renderRandomizeButton()}
+										${() => this.#renderMusicToggleButton()} ${() => this.#renderLightControlButtons()}
 									`}
 								<admin-button></admin-button>
 							</app-buttons-group>
@@ -815,7 +844,8 @@ export class AppButtonsPreset extends Element {
 				position: fixed;
 				bottom: 2%;
 				right: 0;
-				translate: calc(-1 * calc(var(--bottom-sheet-panel-left, 7px) + var(--bottom-sheet-panel-width, 32rem) + 20px)) 0 0.00001px;
+				translate: calc(-1 * calc(var(--bottom-sheet-panel-left, 7px) + var(--bottom-sheet-panel-width, 32rem) + 20px))
+					0 0.00001px;
 				z-index: 3100;
 				display: flex;
 				align-items: center;
@@ -831,14 +861,18 @@ export class AppButtonsPreset extends Element {
 				font-weight: 500;
 				letter-spacing: 0.03em;
 				cursor: pointer;
-				transition: background 0.15s, border-color 0.15s, translate var(--transitionDefaultTimeCurve);
+				transition:
+					background 0.15s,
+					border-color 0.15s,
+					translate var(--transitionDefaultTimeCurve);
 				will-change: translate;
 				user-select: none;
 			}
 
 			:host-context(.panel-collapsed) .space-nav-next {
 				/* Push farther left when panel is collapsed so music toggle remains visible */
-				translate: calc(-1 * calc(var(--bottom-sheet-panel-left, 7px) + var(--bottom-sheet-panel-width, 32rem) + 60px)) 0 0.00001px;
+				translate: calc(-1 * calc(var(--bottom-sheet-panel-left, 7px) + var(--bottom-sheet-panel-width, 32rem) + 60px))
+					0 0.00001px;
 			}
 
 			.space-nav-next:hover {
@@ -950,7 +984,6 @@ export class AppButtonsPreset extends Element {
 				will-change: translate;
 			}
 		}
-
 	`
 }
 

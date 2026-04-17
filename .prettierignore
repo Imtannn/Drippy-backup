@@ -3,3 +3,4 @@ node_modules/
 private/email-templates/
 
 *.gltf
+scripts/google-service-account.json

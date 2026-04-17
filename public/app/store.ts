@@ -343,8 +343,7 @@ class Store {
 			const sceneParam = searchParams().get('scene')
 
 			if (collectionParam && space.collections.includes(collectionParam)) this.selectedCollection = collectionParam
-			else
-				this.selectedCollection = spaceHasMultipleCollections(space) ? null : getSpacePrimaryCollection(space)
+			else this.selectedCollection = spaceHasMultipleCollections(space) ? null : getSpacePrimaryCollection(space)
 
 			if (sceneParam && space.scenes.includes(sceneParam)) this.selectedScene = sceneParam
 			else this.selectedScene = getSpaceDefaultScene(space)

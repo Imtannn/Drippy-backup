@@ -35,10 +35,7 @@ export class AvatarDropdown extends Element {
 	}
 	override template = () => html`
 		<div class="avatar-wrapper">
-			<div
-				class="avatar-container"
-				onclick=${() => (!this.hideChevron ? this.#onAvatarDropdownClick() : null)}
-			>
+			<div class="avatar-container" onclick=${() => (!this.hideChevron ? this.#onAvatarDropdownClick() : null)}>
 				<div class="avatar-image-wrapper">
 					<img src=${() => this.currentAvatarThumbnail} alt="Avatar" class="avatar-image" />
 				</div>
@@ -87,7 +84,7 @@ export class AvatarDropdown extends Element {
 			transition: border-color 0.3s ease;
 		}
 
-.avatar-image {
+		.avatar-image {
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
@@ -115,7 +112,6 @@ export class AvatarDropdown extends Element {
 		.avatar-dropdown-btn.active img {
 			filter: none;
 		}
-
 	`
 }
 

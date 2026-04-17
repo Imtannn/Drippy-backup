@@ -417,9 +417,7 @@ export class BottomSheet extends Element {
 			--bottom-sheet-panel-left: 7px;
 			--bottom-sheet-bg: var(--uiColorPrimaryWhite);
 			--bottom-sheet-border-color: #e5e7eb;
-			--bottom-sheet-panel-shadow:
-				0 -4px 6px -1px rgba(0, 0, 0, 0.1),
-				0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+			--bottom-sheet-panel-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
 			--bottom-sheet-panel-backdrop-filter: none;
 			--bottom-sheet-handle-bg: var(--uiColorPrimaryWhite);
 			--bottom-sheet-handle-indicator-bg: #d1d5db;

@@ -57,7 +57,7 @@ export class TemplateView extends Element {
 	@signal private showLoginDialog = false
 	@signal private showAvatarSelection = false
 	@signal private avatarsSelectedTab: AvatarsTab = 'character'
-@signal private showRemixOverlay = false
+	@signal private showRemixOverlay = false
 	@signal private showTemplateOverlay: Template | null = null
 	@signal private hoveredTemplateId: string | null = null
 	@signal private showAvatarSwapSheet = false
@@ -83,7 +83,9 @@ export class TemplateView extends Element {
 		if (this.showWishlistOnly) return this.#filterByBrand(this.templateCategories.All ?? [])
 		if (!this.selectedTab) return []
 		const selectedItems =
-			this.selectedTab === 'All' ? (this.templateCategories.All ?? []) : (this.templateCategories[this.selectedTab] ?? [])
+			this.selectedTab === 'All'
+				? (this.templateCategories.All ?? [])
+				: (this.templateCategories[this.selectedTab] ?? [])
 		return this.#filterByBrand(selectedItems)
 	}
 
@@ -271,7 +273,7 @@ export class TemplateView extends Element {
 
 		const phrase = this.#brainrotPhrases[Math.floor(Math.random() * this.#brainrotPhrases.length)]!
 		const utter = new SpeechSynthesisUtterance(phrase)
-		utter.pitch = 0.5 + Math.random() * 1.5   // random pitch 0.5–2.0
+		utter.pitch = 0.5 + Math.random() * 1.5 // random pitch 0.5–2.0
 		utter.rate = 1.0
 		utter.volume = 0.7
 		window.speechSynthesis.cancel()
@@ -306,8 +308,10 @@ export class TemplateView extends Element {
 		osc1.connect(gain1).connect(ctx.destination)
 		osc2.connect(gain2).connect(ctx.destination)
 
-		osc1.start(now); osc1.stop(now + 0.15)
-		osc2.start(now + 0.06); osc2.stop(now + 0.22)
+		osc1.start(now)
+		osc1.stop(now + 0.15)
+		osc2.start(now + 0.06)
+		osc2.stop(now + 0.22)
 	}
 
 	#onItemClick = async (e: CustomEvent) => {
@@ -339,7 +343,7 @@ export class TemplateView extends Element {
 			selectedSpace: store.getEffectiveSpace(),
 			sourceCollection: store.getEffectiveCollection(),
 		})
-		const hasFabricOptions = (Object.values(fabrics as Record<string, unknown[] | undefined>)).some(
+		const hasFabricOptions = Object.values(fabrics as Record<string, unknown[] | undefined>).some(
 			fabricOptions => (fabricOptions?.length ?? 0) > 1,
 		)
 
@@ -497,7 +501,9 @@ export class TemplateView extends Element {
 				<div class="template-item-meta">
 					<div class="template-product-name">${template.name}</div>
 					<div class="template-brand-name">${brandName}</div>
-					<button class="hidden-grid-restore-btn" onclick=${() => this.#restoreHiddenTemplate(template._id)}>Restore</button>
+					<button class="hidden-grid-restore-btn" onclick=${() => this.#restoreHiddenTemplate(template._id)}>
+						Restore
+					</button>
 				</div>
 			</div>
 		`
@@ -572,7 +578,6 @@ export class TemplateView extends Element {
 			this.showHiddenItemsView = false
 		})
 	}
-
 
 	#closeRemixOverlay = () => {
 		batch(() => {
@@ -821,7 +826,6 @@ export class TemplateView extends Element {
 			</show-on-device>
 		</app-buttons-preset>
 
-
 		<bottom-sheet
 			show-remix-overlay=${() => this.showRemixOverlay && store.remixOverlayTemplate !== null}
 			disabled-scroll=${() => this.disabledScroll}
@@ -857,9 +861,7 @@ export class TemplateView extends Element {
 
 			<show-on-device desktop>
 				<div class="template-view-buttons" classList=${() => ({hidden: this.showDetailView})}>
-					<nav-bar
-						position="top"
-					>
+					<nav-bar position="top">
 						<div
 							class="template-info"
 							classList=${() => {
@@ -965,7 +967,9 @@ export class TemplateView extends Element {
 											gap: 6px;
 											box-shadow: ${store.autoplayAnimations ? '0 0 0 1px rgba(178, 138, 255, 0.35) inset' : 'none'};
 										`}
-									>${() => (store.autoplayAnimations ? '● AUTOPLAY ON' : '○ AUTOPLAY OFF')}</button>
+									>
+										${() => (store.autoplayAnimations ? '● AUTOPLAY ON' : '○ AUTOPLAY OFF')}
+									</button>
 								</div>
 								<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; overflow:hidden;">
 									<for-each
@@ -1043,9 +1047,7 @@ export class TemplateView extends Element {
 											<for-each
 												items=${() => Object.keys(this.templateCategories)}
 												content=${() => (category: TemplateCategory) => html`
-													<tabs-trigger
-														selected-value=${category}
-													>${category}</tabs-trigger>
+													<tabs-trigger selected-value=${category}>${category}</tabs-trigger>
 												`}
 											></for-each>
 										</tabs-list>
@@ -1098,11 +1100,11 @@ export class TemplateView extends Element {
 														<div class="items-grid">
 															<for-each
 																items=${() =>
-															this.#filterByBrand(
-																category === 'All'
-																	? (this.templateCategories.All ?? [])
-																	: this.templateCategories[category],
-															)}
+																	this.#filterByBrand(
+																		category === 'All'
+																			? (this.templateCategories.All ?? [])
+																			: this.templateCategories[category],
+																	)}
 																content=${() => (template: Template) => this.#renderTemplateItem(template)}
 															></for-each>
 														</div>
@@ -1482,8 +1484,6 @@ export class TemplateView extends Element {
 			opacity: 0.8;
 		}
 
-
-
 		.tabs-content-container {
 			padding: var(--uiSpacing);
 			padding-top: 0;
@@ -1632,7 +1632,6 @@ export class TemplateView extends Element {
 			line-height: 1.2;
 			margin: 0;
 		}
-
 
 		/* Done button styles */
 		.done-button {

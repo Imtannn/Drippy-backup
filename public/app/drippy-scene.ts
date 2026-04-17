@@ -170,8 +170,6 @@ export class DrippyScene extends Element {
 		return this.selectedSpace?.slug === 'h&m'
 	}
 
-
-
 	// TODO Move to `lume-block`
 	/**
 	 * Checks if the model is rigged, if so, sets the skeleton to the avatar's.
@@ -395,10 +393,11 @@ export class DrippyScene extends Element {
 				backgroundModel.three.traverse(obj => {
 					if (!isMesh(obj)) return
 					const name = (obj.name + ' ' + (obj.parent?.name ?? '')).toLowerCase()
-					const isWall = name.includes('wall') || name.includes('ceiling') || name.includes('floor') || name.includes('ground')
+					const isWall =
+						name.includes('wall') || name.includes('ceiling') || name.includes('floor') || name.includes('ground')
 					if (!isWall) return
 					for (const mat of materialsOfRenderable(obj) as Generator<THREE.MeshStandardMaterial>) {
-						mat.color.lerp(new THREE.Color(0.42, 0.40, 0.38), 0.55)
+						mat.color.lerp(new THREE.Color(0.42, 0.4, 0.38), 0.55)
 						mat.metalness = 0
 						mat.roughness = 0.92
 						mat.needsUpdate = true
@@ -857,7 +856,8 @@ export class DrippyScene extends Element {
 				g.gain.linearRampToValueAtTime(0.35, nt + 0.02)
 				g.gain.exponentialRampToValueAtTime(0.001, nt + beat * 0.75)
 				osc.connect(filt).connect(g).connect(master)
-				osc.start(nt); osc.stop(nt + beat)
+				osc.start(nt)
+				osc.stop(nt + beat)
 			})
 
 			// Pad — A minor chord (A3 C4 E4) slow attack/release over whole bar
@@ -871,7 +871,8 @@ export class DrippyScene extends Element {
 				g.gain.setValueAtTime(0.06, t + bar * 0.7)
 				g.gain.linearRampToValueAtTime(0, t + bar + 0.05)
 				osc.connect(g).connect(master)
-				osc.start(t); osc.stop(t + bar + 0.1)
+				osc.start(t)
+				osc.stop(t + bar + 0.1)
 			})
 
 			// Kick — subtle low thump on beat 1 and 3
@@ -884,7 +885,8 @@ export class DrippyScene extends Element {
 				g.gain.setValueAtTime(0.5, t + offset)
 				g.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.15)
 				osc.connect(g).connect(master)
-				osc.start(t + offset); osc.stop(t + offset + 0.2)
+				osc.start(t + offset)
+				osc.stop(t + offset + 0.2)
 			})
 		}
 
@@ -951,7 +953,8 @@ export class DrippyScene extends Element {
 	@effect updateEnvIntensity() {
 		const lumeScene = this.lumeScene
 		if (!lumeScene) return
-		lumeScene.three.environmentIntensity = this.#overallEnvIntensity * store.sceneLightIntensity * (this.isHM ? 0.65 : 1)
+		lumeScene.three.environmentIntensity =
+			this.#overallEnvIntensity * store.sceneLightIntensity * (this.isHM ? 0.65 : 1)
 		lumeScene.needsUpdate()
 	}
 
@@ -1152,10 +1155,7 @@ export class DrippyScene extends Element {
 				}
 
 				obj.renderOrder = renderOrder
-
-
 			})
-
 		})
 	}
 
@@ -1396,7 +1396,9 @@ export class DrippyScene extends Element {
 										mat.envMap.mapping = THREE.EquirectangularReflectionMapping
 										mat.envMap.colorSpace = THREE.SRGBColorSpace
 										mat.envMapRotation = new THREE.Euler(0, Math.PI / 2, 0)
-										createEffect(() => (mat.envMapIntensity = 10 * this.#overallEnvIntensity * store.sceneLightIntensity))
+										createEffect(
+											() => (mat.envMapIntensity = 10 * this.#overallEnvIntensity * store.sceneLightIntensity),
+										)
 										mat.needsUpdate = true
 									} else {
 										mat.envMap = null
@@ -1632,7 +1634,7 @@ export class DrippyScene extends Element {
 			inset: 0;
 			pointer-events: none;
 			z-index: 10;
-			background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.75) 100%);
+			background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.75) 100%);
 		}
 
 		#hidden-items-toggle {
@@ -1685,7 +1687,6 @@ export class DrippyScene extends Element {
 				translate: 0;
 			}
 		}
-
 	`
 }
 

@@ -106,8 +106,7 @@ export class UserProfile extends Element {
 									id="turnOffSettingsInSpace"
 									type="checkbox"
 									checked=${() => turnOffSettingsInSpace()}
-									oninput="${(ev: Event) =>
-										(this.turnOffSettingsInSpace = (ev.target as HTMLInputElement).checked)}"
+									oninput="${(ev: Event) => (this.turnOffSettingsInSpace = (ev.target as HTMLInputElement).checked)}"
 								/>
 							</div>
 							<div>
@@ -116,8 +115,7 @@ export class UserProfile extends Element {
 									id="hideAnimationSelection"
 									type="checkbox"
 									checked=${() => hideAnimationSelection()}
-									oninput="${(ev: Event) =>
-										(this.hideAnimationSelection = (ev.target as HTMLInputElement).checked)}"
+									oninput="${(ev: Event) => (this.hideAnimationSelection = (ev.target as HTMLInputElement).checked)}"
 								/>
 							</div>
 							<div>
