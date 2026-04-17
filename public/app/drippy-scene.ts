@@ -223,7 +223,22 @@ export class DrippyScene extends Element {
 		return !overriddenBy.some(cat => selectedTemplates[cat])
 	}
 
-	#handlePointerDown = () => {
+	#isInteractivePointerTarget(e: PointerEvent) {
+		const path = e.composedPath()
+		for (const node of path) {
+			if (!(node instanceof HTMLElement)) continue
+			if (
+				node.matches('button, a, input, textarea, select, label, [role="button"], [data-no-scene-drag]') ||
+				node.closest('#hidden-items-toggle, #music-toggle')
+			)
+				return true
+		}
+		return false
+	}
+
+	#handlePointerDown = (e: PointerEvent) => {
+		if (e.button !== 0) return
+		if (this.#isInteractivePointerTarget(e)) return
 		this.isVerticalPan = true
 	}
 
@@ -235,6 +250,19 @@ export class DrippyScene extends Element {
 
 	#handlePointerUp = () => {
 		this.isVerticalPan = false
+	}
+
+	override connectedCallback() {
+		super.connectedCallback()
+		const resetVerticalPan = () => {
+			this.isVerticalPan = false
+		}
+		window.addEventListener('pointerup', resetVerticalPan)
+		window.addEventListener('pointercancel', resetVerticalPan)
+		this.addCleanup(() => {
+			window.removeEventListener('pointerup', resetVerticalPan)
+			window.removeEventListener('pointercancel', resetVerticalPan)
+		})
 	}
 
 	#onHiddenItemsClick = () => {
@@ -411,7 +439,7 @@ export class DrippyScene extends Element {
 							mat.envMap.colorSpace = THREE.SRGBColorSpace
 							mat.envMapRotation = new THREE.Euler(0, Math.PI / 2, 0)
 							createEffect(() => {
-								mat.envMapIntensity = 30 * this.#overallEnvIntensity
+								mat.envMapIntensity = 30 * this.#overallEnvIntensity * store.sceneLightIntensity
 								if (obj.name === 'MatShape_1988') mat.envMapIntensity *= 3
 								if (obj.name === 'Plane') mat.envMapIntensity *= 3
 							})
@@ -924,7 +952,7 @@ export class DrippyScene extends Element {
 	@effect updateEnvIntensity() {
 		const lumeScene = this.lumeScene
 		if (!lumeScene) return
-		lumeScene.three.environmentIntensity = this.#overallEnvIntensity * (this.isHM ? 0.65 : 1)
+		lumeScene.three.environmentIntensity = this.#overallEnvIntensity * store.sceneLightIntensity * (this.isHM ? 0.65 : 1)
 		lumeScene.needsUpdate()
 	}
 
@@ -1326,21 +1354,22 @@ export class DrippyScene extends Element {
 					perspective="800"
 					physically-correct-lights
 					shadow-mode="pcfsoft"
-					attr:environment-intensity=${() => this.#overallEnvIntensity}
+					attr:environment-intensity=${() => this.#overallEnvIntensity * store.sceneLightIntensity}
 					oncapture:pointerdown=${this.#handlePointerDown}
 					oncapture:pointermove=${this.#handlePointerMove}
 					oncapture:pointerup=${this.#handlePointerUp}
+					oncapture:pointercancel=${this.#handlePointerUp}
 
 				>
 					<lume-element3d align-point="0.5 0.5 0.5">
 						<!-- Ambient: low-level fill so shadow sides aren't pure black -->
-					<lume-ambient-light visible="true" intensity="0.05" color="white"></lume-ambient-light>
+					<lume-ambient-light visible="true" intensity=${() => 0.05 * store.sceneLightIntensity} color="white"></lume-ambient-light>
 
 					<!-- Fill light: opposite side of key, no shadow, softens contrast -->
 					<lume-directional-light
 						visible=${() => !this.isMobile}
 						position="-1.5 -2 0.8"
-						intensity="0.8"
+						intensity=${() => 0.8 * store.sceneLightIntensity}
 						color="#b0c8ff"
 					></lume-directional-light>
 
@@ -1348,7 +1377,7 @@ export class DrippyScene extends Element {
 					<lume-directional-light
 						visible=${() => !this.isMobile}
 						position="0 -1.5 -2"
-						intensity="1.0"
+						intensity=${() => 1.0 * store.sceneLightIntensity}
 						color="#ffe8d0"
 					></lume-directional-light>
 
@@ -1368,7 +1397,7 @@ export class DrippyScene extends Element {
 										mat.envMap.mapping = THREE.EquirectangularReflectionMapping
 										mat.envMap.colorSpace = THREE.SRGBColorSpace
 										mat.envMapRotation = new THREE.Euler(0, Math.PI / 2, 0)
-										createEffect(() => (mat.envMapIntensity = 10 * this.#overallEnvIntensity))
+										createEffect(() => (mat.envMapIntensity = 10 * this.#overallEnvIntensity * store.sceneLightIntensity))
 										mat.needsUpdate = true
 									} else {
 										mat.envMap = null
@@ -1400,7 +1429,11 @@ export class DrippyScene extends Element {
 							intensity=${() =>
 								// TODO replace hard-coded scene-specific values
 								// with values from the data models.
-								this.isDrippyShop ? this.#spotLightIntensity : this.isHM ? this.#spotLightIntensity * 0.65 : this.#spotLightIntensity}
+								this.isDrippyShop
+									? this.#spotLightIntensity * store.sceneLightIntensity
+									: this.isHM
+										? this.#spotLightIntensity * 0.65 * store.sceneLightIntensity
+										: this.#spotLightIntensity * store.sceneLightIntensity}
 							ref=${(el: SpotLight) => {
 								el.three.shadow.focus = 1
 								el.three.shadow.blurSamples = shadowSamples
@@ -1463,7 +1496,7 @@ export class DrippyScene extends Element {
 								setEnvMapOnModelLoad(
 									el,
 									() => this.#envTexture,
-									() => this.#overallEnvIntensity * 1.8,
+									() => this.#overallEnvIntensity * store.sceneLightIntensity * 1.8,
 								)
 								showSkeletonHelper(el, () => store.isAdmin && store.showAdminContent)
 								disableFrustumCulledOnLoad(el)
@@ -1543,7 +1576,7 @@ export class DrippyScene extends Element {
 							<lume-animation
 								attr:src=${() => this.animSrc}
 								clip-name=${() => this.animName}
-								stopped=${() => !this.animsEnabled}
+								paused=${() => !this.animsEnabled}
 								trim-start=${() => this.animTrimStart}
 							></lume-animation>
 						</lume-gltf-model>
@@ -1568,7 +1601,7 @@ export class DrippyScene extends Element {
 									setEnvMapOnModelLoad(
 										el,
 										() => this.#envTexture,
-										() => this.#overallEnvIntensity * 1.8,
+										() => this.#overallEnvIntensity * store.sceneLightIntensity * 1.8,
 									)
 								)}
 								attr:src=${() => item()}

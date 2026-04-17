@@ -14,7 +14,7 @@ const Counts: {
 	publish(
 		context: import('meteor/meteor').Subscription,
 		name: CountName,
-		cursor: import('meteor/mongo').Mongo.Cursor<any>,
+		cursor: import('meteor/mongo').Mongo.Cursor<unknown>,
 		options?: {
 			noReady?: boolean
 			nonReactive?: boolean

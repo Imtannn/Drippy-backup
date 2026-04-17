@@ -38,11 +38,12 @@ export class TemplateDetailView extends Element {
 		})
 
 		const unique = new Map<string, Fabric>()
-		for (const list of Object.values(fabrics))
+		for (const list of Object.values(fabrics)) {
 			for (const fabric of list) {
 				if (!fabric?._id || !fabric.thumb) continue
 				if (!unique.has(fabric._id)) unique.set(fabric._id, fabric)
 			}
+		}
 		return [...unique.values()]
 	}
 

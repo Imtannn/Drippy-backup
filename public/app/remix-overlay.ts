@@ -13,13 +13,12 @@ import {
 } from 'lume'
 
 import {fabrics, getFabricsByCollection} from '../consts/fabrics.js'
-import {pushHistory} from './history.js'
 import '../elements/bottom-sheet.js'
 import '../elements/logic/for-each.js'
 import '../elements/logic/show-when.js'
 import '../elements/show-on-device.js'
 import '../elements/tabs.js'
-import type {Block, BlockCategory} from '../types/block.js'
+import type {Block} from '../types/block.js'
 import type {Fabric, FabricsByCategory} from '../types/fabric.js'
 import type {Template} from '../types/template.js'
 import './fabric-selection.js'
@@ -214,54 +213,6 @@ export class RemixOverlay extends Element {
 	override disconnectedCallback() {
 		super.disconnectedCallback()
 		this.removeEventListener('cardselected', this.#onFabricCardSelected)
-	}
-
-	#onBlockSelect = (block: Block) => {
-		if (!this.selectedTemplate) return
-
-		pushHistory()
-		store.setSelectedBlocks({
-			block,
-			templateCategory: this.selectedTemplate.category,
-		})
-
-		this.#scheduleUrlSync()
-	}
-
-	#getIsBlockActive = (block: Block) => {
-		if (!this.selectedTemplate) return false
-		const selection = store.getBlockSelection(this.selectedTemplate.category, block.category)
-		return selection?.block?._id === block._id
-	}
-
-	#isBlockLoading = (block: Block) => {
-		if (!this.selectedTemplate) return false
-
-		// Check if the block model itself is still loading
-		if (store.isBlockLoading(block._id)) return true
-
-		// Only check fabrics if this block is actually the selected one
-		const selection = store.getBlockSelection(this.selectedTemplate.category, block.category)
-		if (selection?.block?._id !== block._id) return false // Not the selected block
-
-		// Check if any fabrics for this selected block are loading
-		if (!selection?.fabrics) return false
-		return values(selection.fabrics).some(fabric => store.isFabricLoading(fabric._id))
-	}
-
-	#filteredBlocksByCategory = (category: BlockCategory) => {
-		// If using template blockOptions, filter from the specific category's blocks
-		if (this.selectedTemplate?.blockOptions && this.selectedTemplate.blockOptions.length > 0) {
-			const categoryOption = this.selectedTemplate.blockOptions.find(option => option.category === category)
-			return categoryOption?.blocks || []
-		}
-
-		// Otherwise use the general available blocks
-		return this.availableBlocks.filter(block => block.category === category)
-	}
-
-	#onSubTabChange = (e: CustomEvent) => {
-		this.selectedSubTab = e.detail.value
 	}
 
 	#renderContent = () => html`

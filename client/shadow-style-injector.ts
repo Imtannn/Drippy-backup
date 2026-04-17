@@ -23,10 +23,10 @@ Element.prototype.attachShadow = function (init: ShadowRootInit): ShadowRoot {
 // Inject into already existing *open* shadow roots
 function injectIntoExistingShadows() {
 	document.querySelectorAll<HTMLElement>('*').forEach(el => {
-		if ((el as any).shadowRoot) {
+		if (el.shadowRoot) {
 			const style = document.createElement('style')
 			style.textContent = shadowCSS
-			;(el as any).shadowRoot.appendChild(style)
+			el.shadowRoot.appendChild(style)
 		}
 	})
 }

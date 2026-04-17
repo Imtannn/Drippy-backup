@@ -149,6 +149,7 @@ class Store {
 	animationsEnabled = true
 	autoplayAnimations = true
 	backgroundMusicEnabled = false
+	sceneLightIntensity = 1
 	selectedTemplates: TemplateMap = {}
 	selectedGarments: SelectedGarments = {}
 	customMeasurement = null as CustomMeasurement | null

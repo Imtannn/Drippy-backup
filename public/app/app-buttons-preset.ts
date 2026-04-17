@@ -73,8 +73,26 @@ export class AppButtonsPreset extends Element {
 	@signal private visitorAvatars: Array<{name: string; thumbnail: string; avatarName?: string}> = []
 	@signal private visitorSpaceSlug = ''
 	@signal private visitorsExpanded = false
+	#audioCtx: AudioContext | null = null
 	#randomVisitorsTimer: ReturnType<typeof setTimeout> | null = null
 	static readonly #VISITOR_STATE_KEY = 'drippyVisitorStateBySpace'
+	#brainrotPhrases = [
+		'Bombardiro Crocodilo',
+		'Tralalero Tralala',
+		'Bombombini Gusini',
+		'Skibidi',
+		'No cap fr fr',
+		'Sigma',
+		'Ohio',
+		'W rizz',
+		'Bussin',
+		'It is giving',
+		'Bro is so cooked',
+		'Slay',
+		'Based',
+		'Bro fell off',
+		'Lil bro is cooked no cap',
+	]
 
 	override connectedCallback() {
 		super.connectedCallback()
@@ -252,6 +270,49 @@ export class AppButtonsPreset extends Element {
 		return templates[Math.floor(Math.random() * templates.length)] ?? null
 	}
 
+	#playRandomizeSound() {
+		this.#audioCtx ??= new AudioContext()
+		const ctx = this.#audioCtx
+		const now = ctx.currentTime
+
+		const osc1 = ctx.createOscillator()
+		const osc2 = ctx.createOscillator()
+		const gain1 = ctx.createGain()
+		const gain2 = ctx.createGain()
+
+		osc1.type = 'triangle'
+		osc1.frequency.setValueAtTime(360, now)
+		osc1.frequency.exponentialRampToValueAtTime(690, now + 0.09)
+		gain1.gain.setValueAtTime(0.14, now)
+		gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.16)
+
+		osc2.type = 'sine'
+		osc2.frequency.setValueAtTime(690, now + 0.06)
+		osc2.frequency.exponentialRampToValueAtTime(980, now + 0.18)
+		gain2.gain.setValueAtTime(0.0, now)
+		gain2.gain.setValueAtTime(0.1, now + 0.06)
+		gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.24)
+
+		osc1.connect(gain1).connect(ctx.destination)
+		osc2.connect(gain2).connect(ctx.destination)
+
+		osc1.start(now); osc1.stop(now + 0.16)
+		osc2.start(now + 0.06); osc2.stop(now + 0.24)
+	}
+
+	#playBrainrotOccasionally() {
+		if (Math.random() > 0.25) return
+		if (!window.speechSynthesis) return
+
+		const phrase = this.#brainrotPhrases[Math.floor(Math.random() * this.#brainrotPhrases.length)]!
+		const utter = new SpeechSynthesisUtterance(phrase)
+		utter.pitch = 0.5 + Math.random() * 1.5
+		utter.rate = 1.0
+		utter.volume = 0.7
+		window.speechSynthesis.cancel()
+		window.speechSynthesis.speak(utter)
+	}
+
 	#onRandomizeOutfit = () => {
 		const selectedSpace = store.selectedSpace
 		if (!selectedSpace) return
@@ -317,6 +378,8 @@ export class AppButtonsPreset extends Element {
 			store.selectedGarments = garments
 			store.selectedTemplates = newTemplates
 		})
+		this.#playRandomizeSound()
+		this.#playBrainrotOccasionally()
 	}
 
 	#renderRandomizeButton = () => html`
@@ -341,6 +404,21 @@ export class AppButtonsPreset extends Element {
 		>
 			${() => (store.backgroundMusicEnabled ? '🔇' : '🎵')}
 		</button>
+	`
+
+	#increaseSceneLight = () => {
+		store.sceneLightIntensity = Math.min(2, Number((store.sceneLightIntensity + 0.1).toFixed(2)))
+	}
+
+	#decreaseSceneLight = () => {
+		store.sceneLightIntensity = Math.max(0.5, Number((store.sceneLightIntensity - 0.1).toFixed(2)))
+	}
+
+	#renderLightControlButtons = () => html`
+		<div class="light-control-group" title=${() => `Light ${Math.round(store.sceneLightIntensity * 100)}%`}>
+			<button class="light-intensity-button" onclick=${this.#decreaseSceneLight} aria-label="Decrease light intensity">−</button>
+			<button class="light-intensity-button" onclick=${this.#increaseSceneLight} aria-label="Increase light intensity">+</button>
+		</div>
 	`
 
 	#visibleSpaces = () => spaces().filter(s => !s.isHidden)
@@ -557,6 +635,7 @@ export class AppButtonsPreset extends Element {
 										${() => this.#renderAnimationToggleButton()}
 										${() => this.#renderRandomizeButton()}
 										${() => this.#renderMusicToggleButton()}
+										${() => this.#renderLightControlButtons()}
 									`}
 								<admin-button></admin-button>
 							</app-buttons-group>
@@ -583,6 +662,7 @@ export class AppButtonsPreset extends Element {
 										${() => this.#renderAnimationToggleButton()}
 										${() => this.#renderRandomizeButton()}
 										${() => this.#renderMusicToggleButton()}
+										${() => this.#renderLightControlButtons()}
 									`}
 								<admin-button></admin-button>
 							</app-buttons-group>
@@ -636,6 +716,29 @@ export class AppButtonsPreset extends Element {
 			-webkit-backdrop-filter: blur(10px);
 			cursor: pointer;
 			font-size: 14px;
+			line-height: 1;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.light-control-group {
+			display: inline-flex;
+			flex-direction: column;
+			gap: 6px;
+		}
+
+		.light-intensity-button {
+			width: 36px;
+			height: 36px;
+			border-radius: 999px;
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			background: rgba(18, 19, 22, 0.22);
+			color: #fff;
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			cursor: pointer;
+			font-size: 18px;
 			line-height: 1;
 			display: inline-flex;
 			align-items: center;

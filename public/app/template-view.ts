@@ -569,7 +569,7 @@ export class TemplateView extends Element {
 		})
 	}
 
-	#onNavTabChange = (_e: CustomEvent) => {
+	#onNavTabChange = () => {
 		batch(() => {
 			this.showAvatarSelection = false
 			this.showRemixOverlay = false
@@ -707,10 +707,6 @@ export class TemplateView extends Element {
 		if (!this.#shouldShowBrandFilter()) this.selectedBrandFilter = null
 	}
 
-	#onBuildStoreButtonClick = () => {
-		window.location.href = '/brand-experiences'
-	}
-
 	// FIXME too much mapping (see selectTemplate in brand-view.ts)
 	// too much duplication (see brand-view.ts)
 	#selectTemplate = (template: Template) => {
@@ -770,9 +766,8 @@ export class TemplateView extends Element {
 		if (
 			this.showTemplateOverlay &&
 			!clickPath.some(el => el instanceof HTMLElement && el.tagName === 'TEMPLATE-ITEM-OVERLAY')
-		) {
+		)
 			this.showTemplateOverlay = null
-		}
 	}
 
 	#onBottomSheetSnapChange = (e: CustomEvent) => {
