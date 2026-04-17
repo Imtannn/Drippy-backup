@@ -1,7 +1,7 @@
 import {Meteor} from 'meteor/meteor'
 import {getEnvConfig} from './load-env.js'
 
-import {DeleteObjectCommand, S3Client} from '@aws-sdk/client-s3'
+import {DeleteObjectCommand, S3Client, type DeleteObjectCommandInput, type PutObjectCommandInput} from '@aws-sdk/client-s3'
 import {Upload} from '@aws-sdk/lib-storage' // For multipart upload support like v2 upload()
 
 /**
@@ -25,7 +25,7 @@ const s3Client = new S3Client({
 // backwards-compatible API wrapper
 // TODO we will replace this with cloudflare's API.
 const s3 = {
-	upload: (params: any) => {
+	upload: (params: PutObjectCommandInput) => {
 		// AWS SDK v2 upload supports multipart uploads and progress events.
 		// In v3, use @aws-sdk/lib-storage Upload class for similar functionality.
 		const upload = new Upload({client: s3Client, params})
@@ -35,7 +35,7 @@ const s3 = {
 		}
 	},
 
-	deleteObject: (params: any) => {
+	deleteObject: (params: DeleteObjectCommandInput) => {
 		const command = new DeleteObjectCommand(params)
 		return {promise: () => s3Client.send(command)}
 	},

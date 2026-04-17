@@ -21,13 +21,13 @@ if (SENDGRID_API_KEY) sgMail.setApiKey(SENDGRID_API_KEY)
 export interface HandlebarsTemplateOptions {
 	to: string | string[]
 	templateName: string
-	templateData?: Record<string, any>
+	templateData?: Record<string, unknown>
 	subject: string
 	from?: string
 }
 
 export class EmailService {
-	private static templateCache = new Map<string, HandlebarsTemplateDelegate<any>>()
+	private static templateCache = new Map<string, HandlebarsTemplateDelegate<unknown>>()
 
 	/**
 	 * Get template path for a given template name
@@ -39,7 +39,7 @@ export class EmailService {
 	/**
 	 * Load and compile Handlebars template with caching
 	 */
-	private static async loadTemplate(templateName: string): Promise<HandlebarsTemplateDelegate<any>> {
+	private static async loadTemplate(templateName: string): Promise<HandlebarsTemplateDelegate<unknown>> {
 		// Check cache first
 		if (this.templateCache.has(templateName)) return this.templateCache.get(templateName)!
 
@@ -61,7 +61,7 @@ export class EmailService {
 	/**
 	 * Render Handlebars template with data
 	 */
-	private static async renderTemplate(templateName: string, data: Record<string, any> = {}): Promise<string> {
+	private static async renderTemplate(templateName: string, data: Record<string, unknown> = {}): Promise<string> {
 		const template = await this.loadTemplate(templateName)
 
 		// Add common template data
@@ -98,10 +98,10 @@ export class EmailService {
 	/**
 	 * Send email using SendGrid API with fallback to Meteor Email
 	 */
-	static async send(options: any): Promise<void> {
+	static async send(options: {to: string | string[]; subject: string; html: string; from?: string}): Promise<void> {
 		if (SENDGRID_API_KEY) {
 			try {
-				const msg: any = {
+				const msg = {
 					to: options.to,
 					from: options.from || SENDGRID_FROM_EMAIL,
 					subject: options.subject,

@@ -19,7 +19,7 @@ const auth = new google.auth.GoogleAuth({
 })
 const drive = google.drive({version: 'v3', auth})
 
-type TODO = any
+type TODO = unknown
 
 // Google Drive API Key (you can get this from Google Cloud Console for free)
 const API_KEY = process.env.GOOGLE_API_KEY || 'GOOGLE_API_KEY'
@@ -1083,9 +1083,7 @@ async function processRootMaterials(
 					uploadTracker.hasUploadedContent = true
 					const thumbBuffer = await downloadFromDrive(thumbnailFile.id)
 					thumbUrl = await uploadToS3(thumbBuffer, thumbnailKey, 'image/png')
-				} else {
-					thumbUrl = `${S3_URL}/${normalizedThumbnailKey}`
-				}
+				} else thumbUrl = `${S3_URL}/${normalizedThumbnailKey}`
 
 				if (shouldTransferThumbnail) console.log(`     ✅ Uploaded thumbnail ${thumbnailFile.name}`)
 			} catch (error) {
@@ -1461,9 +1459,7 @@ async function main(): Promise<void> {
 				Object.assign(allBlocks, collectionBlocks)
 				Object.assign(allCombinedFabrics, collectionFabricsData)
 				console.log(`✅ Completed processing collection: ${collection}`)
-			} else {
-				console.log(`⏭️  Skipping generated output for collection ${collection} because no assets were uploaded`)
-			}
+			} else console.log(`⏭️  Skipping generated output for collection ${collection} because no assets were uploaded`)
 		}
 
 		console.log(`\n📊 Generated ${Object.keys(allTemplates).length} template collections`)
