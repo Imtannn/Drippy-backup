@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import type {ServerResponse} from 'http'
+import type {IncomingMessage, ServerResponse} from 'http'
 import * as https from 'https'
 import {Accounts} from 'meteor/accounts-base'
 import {Meteor} from 'meteor/meteor'
@@ -13,7 +13,15 @@ import './imports/oauth-config.js'
 import './imports/order-service.js'
 import './imports/upload-service.js'
 
-WebApp.addHtmlAttributeHook(() => ({lang: 'en', prefix: 'og: http://ogp.me/ns#'}))
+type WebAppLike = typeof WebApp & {
+	addHtmlAttributeHook?: (hook: () => Record<string, string>) => void
+	rawHandlers?: {
+		use: (path: string | ((req: IncomingMessage, res: ServerResponse, next: () => void) => void), handler?: (req: IncomingMessage, res: ServerResponse, next: () => void) => void) => void
+	}
+}
+
+const webApp = WebApp as WebAppLike
+webApp.addHtmlAttributeHook?.(() => ({lang: 'en', prefix: 'og: http://ogp.me/ns#'}))
 
 // TODO update this with the primary app domain name. This should be the domain
 // under which the Meteor app is served.
@@ -47,9 +55,9 @@ const allowedOrigins = [...remoteOrigins, ...localhostOrigins]
 // Allow only certain domains to access content from the server (for example
 // domains that we have not authorized will not be able to authenticate using
 // the app domain via iframe).
-WebApp.rawHandlers.use(
+webApp.rawHandlers?.use(
 	/*'/public',*/
-	async function (req, res, next) {
+	async function (req: IncomingMessage, res: ServerResponse, next: () => void) {
 		// Proxy any requests to /static/<path> to ASSET_SERVER/<path>, to work
 		// around CORS blockage from our enabling of cross-origin isolation
 		// below in Safari, Opera, and Firefox (when we update to COEP
@@ -181,8 +189,9 @@ WebApp.rawHandlers.use(
 			res.setHeader('Vary', 'Origin')
 		} else return getCoffee(res)
 
-		if (req.url !== req.originalUrl) {
-			console.error('url and originalUrl do not match, needs handling:', req.url, req.originalUrl)
+		const originalUrl = (req as IncomingMessage & {originalUrl?: string}).originalUrl
+		if (originalUrl && req.url !== originalUrl) {
+			console.error('url and originalUrl do not match, needs handling:', req.url, originalUrl)
 			process.exit(1)
 		}
 
@@ -348,11 +357,8 @@ const makeAdminPromises = [] as Promise<unknown>[]
 
 // Make all existing users with a known admin email admins.
 for (const email of admins) {
-	makeAdminPromises.push(
-		Accounts.findUserByEmail(email).then(user => {
-			if (user) return Meteor.users.updateAsync(user._id, {$set: {profile: {...user.profile, isAdmin: true}}})
-		}),
-	)
+	const user = await Accounts.findUserByEmail(email)
+	if (user) makeAdminPromises.push(Meteor.users.updateAsync(user._id, {$set: {profile: {...user.profile, isAdmin: true}}}))
 }
 
 // Migration: ensure previous Visits documents have their host fields renamed to origin.

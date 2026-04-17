@@ -254,15 +254,14 @@ export class DrippyScene extends Element {
 
 	override connectedCallback() {
 		super.connectedCallback()
-		const resetVerticalPan = () => {
-			this.isVerticalPan = false
-		}
-		window.addEventListener('pointerup', resetVerticalPan)
-		window.addEventListener('pointercancel', resetVerticalPan)
-		this.addCleanup(() => {
-			window.removeEventListener('pointerup', resetVerticalPan)
-			window.removeEventListener('pointercancel', resetVerticalPan)
-		})
+		window.addEventListener('pointerup', this.#handlePointerUp)
+		window.addEventListener('pointercancel', this.#handlePointerUp)
+	}
+
+	override disconnectedCallback() {
+		super.disconnectedCallback()
+		window.removeEventListener('pointerup', this.#handlePointerUp)
+		window.removeEventListener('pointercancel', this.#handlePointerUp)
 	}
 
 	#onHiddenItemsClick = () => {

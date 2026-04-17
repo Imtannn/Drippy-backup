@@ -61,7 +61,7 @@ export class SpaceNavArrows extends Element {
 					<div class="space-label">
 						<span class="space-name">${() => store.selectedSpace?.name ?? ''}</span>
 						<span class="space-dots">
-							${() => all.map((s, i) => html`<span class=${`dot ${i === idx ? 'dot--active' : ''}`}></span>`)}
+							${() => all.map((_, i) => html`<span class=${`dot ${i === idx ? 'dot--active' : ''}`}></span>`)}
 						</span>
 					</div>
 

@@ -1,7 +1,13 @@
 import {Meteor} from 'meteor/meteor'
 import {getEnvConfig} from './load-env.js'
 
-import {DeleteObjectCommand, S3Client, type DeleteObjectCommandInput, type PutObjectCommandInput} from '@aws-sdk/client-s3'
+import {
+	DeleteObjectCommand,
+	ObjectCannedACL,
+	S3Client,
+	type DeleteObjectCommandInput,
+	type PutObjectCommandInput,
+} from '@aws-sdk/client-s3'
 import {Upload} from '@aws-sdk/lib-storage' // For multipart upload support like v2 upload()
 
 /**
@@ -93,7 +99,7 @@ async function uploadFileToS3(fileData: UploadFileData): Promise<UploadResult> {
 			Key: key,
 			Body: buffer,
 			ContentType: fileData.contentType,
-			ACL: 'public-read',
+			ACL: 'public-read' as ObjectCannedACL,
 		}
 
 		const result = await s3.upload(params).promise()

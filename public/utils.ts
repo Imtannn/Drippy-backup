@@ -522,7 +522,7 @@ export function getArmatureObject(avatarRoot: THREE.Object3D) {
 	// If there's an issue because of an avatar not having a skinned mesh named "body_", just
 	// do the above method instead.
 	return findInTree(avatarRoot, (obj: THREE.Object3D) => {
-		return obj.skeleton && obj.name.indexOf('body_') == 0
+		return obj instanceof THREE.SkinnedMesh && !!obj.skeleton && obj.name.indexOf('body_') == 0
 	}) as THREE.SkinnedMesh | null
 }
 
@@ -835,7 +835,7 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 	}
 
 	// Collect scene/background
-	const sceneModel = lumeScene.querySelector('#scene')
+	const sceneModel = lumeScene.querySelector('#scene') as (Element & {three?: THREE.Object3D}) | null
 	if (sceneModel?.three) visibilityStates.push({obj: sceneModel.three, originalVisible: sceneModel.three.visible})
 
 	// Collect shoes and any other non-cloth models
@@ -855,7 +855,7 @@ export async function captureGarmentScreenshot(category: string): Promise<string
 	const mainRenderer = lumeScene.glRenderer || lumeScene._glRenderer || lumeScene.renderer
 	if (!mainRenderer) return ''
 
-	const threeScene = lumeScene.three || mainRenderer.scene
+	const threeScene = lumeScene.three
 	if (!threeScene) return ''
 
 	// Create offscreen canvas for screenshot

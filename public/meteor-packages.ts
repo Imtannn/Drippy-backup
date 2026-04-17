@@ -2,7 +2,16 @@
 // See the importmap in public/index.html.
 const global = globalThis as typeof globalThis & {
 	Meteor: unknown
-	Package: Record<string, unknown>
+	Package: {
+		tracker: {Tracker: unknown}
+		mongo: {Mongo: unknown}
+		session: {Session: unknown}
+		'reactive-var': {ReactiveVar: unknown}
+		blaze: {Blaze: unknown}
+		templating: {Template: unknown}
+		'accounts-base': {Accounts: unknown}
+		check: {check: unknown; Match: unknown}
+	}
 }
 export const Meteor = global.Meteor
 export const Tracker = global.Package.tracker.Tracker

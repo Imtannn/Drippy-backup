@@ -70,7 +70,11 @@ export class DrippyApp extends Element {
 		super.connectedCallback()
 		setDefaultSpaceAndAvatar()
 		document.addEventListener('click', this.#onDocumentClick)
-		this.addCleanup(() => document.removeEventListener('click', this.#onDocumentClick))
+	}
+
+	override disconnectedCallback() {
+		super.disconnectedCallback()
+		document.removeEventListener('click', this.#onDocumentClick)
 	}
 
 	// FIXME this needs re-work, currently can cause an infinite loop (the

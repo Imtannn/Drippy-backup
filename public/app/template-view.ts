@@ -6,7 +6,7 @@ import {animations} from '../consts/poses.js'
 import {onboardingStyles} from '../styles/onboarding-styles.js'
 import type {Template, TemplateCategory} from '../types/template.js'
 import type {Avatar, TemplateMap} from '../types/types.js'
-import {createMutationsSignal, getSpaceCollectionSlugs, values} from '../utils.js'
+import {getSpaceCollectionSlugs, values} from '../utils.js'
 import {
 	currentUser,
 	isLoggedIn,
@@ -72,16 +72,6 @@ export class TemplateView extends Element {
 	@signal private showWishlistOnly = false
 	@signal private selectedBrandFilter: string | null = null
 	private isOpeningOverlay = false
-
-	@signal private documentElementMutations = createMutationsSignal(document.documentElement, {
-		attributes: true,
-		attributeFilter: ['class'],
-	})
-
-	@memo private get isDragging() {
-		this.documentElementMutations()
-		return document.documentElement.classList.contains('is-dragging')
-	}
 
 	@memo private get hiddenTemplates() {
 		const hiddenIds = new Set(this.hiddenTemplateIds)
@@ -349,7 +339,9 @@ export class TemplateView extends Element {
 			selectedSpace: store.getEffectiveSpace(),
 			sourceCollection: store.getEffectiveCollection(),
 		})
-		const hasFabricOptions = values(fabrics).some(fabricOptions => fabricOptions.length > 1)
+		const hasFabricOptions = (Object.values(fabrics as Record<string, unknown[] | undefined>)).some(
+			fabricOptions => (fabricOptions?.length ?? 0) > 1,
+		)
 
 		if (hasFabricOptions) this.#handleTemplateOverlayRemix(template)
 	}
