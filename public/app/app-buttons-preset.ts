@@ -247,10 +247,6 @@ export class AppButtonsPreset extends Element {
 		alert('Link copied to clipboard')
 	}
 
-	#onBuyClick = () => {
-		store.view = 'order-items'
-	}
-
 	#pickRandomTemplate = (templates: Template[]) => {
 		if (templates.length === 0) return null
 		return templates[Math.floor(Math.random() * templates.length)] ?? null
@@ -429,7 +425,7 @@ export class AppButtonsPreset extends Element {
 				<div class="space-avatars-list">
 					<for-each
 						items=${() => this.visitorAvatars.slice(0, this.randomVisitorsCount)}
-						content=${() => avatar => html`
+						content=${() => (avatar: {name: string; thumbnail: string}) => html`
 							<div class="space-avatar" title=${avatar.name}>
 								<img src=${avatar.thumbnail} alt=${avatar.name} />
 							</div>

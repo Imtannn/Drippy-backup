@@ -134,12 +134,12 @@ export function createNetworkMonitor(callback: (status: ConnectionStatus) => voi
 	window.addEventListener('online', handleOnline)
 	window.addEventListener('offline', handleOffline)
 
-	if (connection) connection.addEventListener('change', handleConnectionChange)
+	if (connection) connection.addEventListener?.('change', handleConnectionChange)
 
 	return () => {
 		window.removeEventListener('online', handleOnline)
 		window.removeEventListener('offline', handleOffline)
-		if (connection) connection.removeEventListener('change', handleConnectionChange)
+		if (connection) connection.removeEventListener?.('change', handleConnectionChange)
 	}
 }
 

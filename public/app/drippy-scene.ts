@@ -223,7 +223,7 @@ export class DrippyScene extends Element {
 		return !overriddenBy.some(cat => selectedTemplates[cat])
 	}
 
-	#handlePointerDown = (_e: PointerEvent) => {
+	#handlePointerDown = () => {
 		this.isVerticalPan = true
 	}
 
@@ -233,7 +233,7 @@ export class DrippyScene extends Element {
 		this.cameraY = clamp(this.cameraY, -2, 0)
 	}
 
-	#handlePointerUp = (_e: PointerEvent) => {
+	#handlePointerUp = () => {
 		this.isVerticalPan = false
 	}
 
@@ -302,7 +302,7 @@ export class DrippyScene extends Element {
 
 	// Reset camera to default when space changes or re-center is requested
 	@effect cameraEffect() {
-		store.cameraResetTick // reactive dependency for re-center button
+		void store.cameraResetTick // reactive dependency for re-center button
 		const space = this.selectedSpace
 		if (!this.cameraRig) return
 		if (!space && !store.cameraResetTick) return
@@ -747,12 +747,10 @@ export class DrippyScene extends Element {
 
 		// Track only the first animation load, so we don't pop up the loading
 		// screen each time.
-		if (!this.#firstAnimLoaded) {
-			this.#firstAnimLoaded = true
-			// TODO animation load tracking
-			// store.addIsDrippySceneLoading(this.#animationLoading)
-			// onCleanup(() => store.removeIsDrippySceneLoading(this.#animationLoading))
-		}
+		if (!this.#firstAnimLoaded) this.#firstAnimLoaded = true
+		// TODO animation load tracking
+		// store.addIsDrippySceneLoading(this.#animationLoading)
+		// onCleanup(() => store.removeIsDrippySceneLoading(this.#animationLoading))
 
 		this.animName = anim.clipName
 		this.animSrc = new URL(anim.src, import.meta.url).href
