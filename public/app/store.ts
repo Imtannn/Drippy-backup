@@ -146,7 +146,9 @@ class Store {
 
 	showAnimationSelect = false
 	selectedAnimation: string | null = 'idle01'
+	animationsEnabled = true
 	autoplayAnimations = true
+	backgroundMusicEnabled = false
 	selectedTemplates: TemplateMap = {}
 	selectedGarments: SelectedGarments = {}
 	customMeasurement = null as CustomMeasurement | null

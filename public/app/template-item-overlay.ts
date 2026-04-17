@@ -55,7 +55,11 @@ export class TemplateItemOverlay extends Element {
 	override template = () => html`
 		<div class="overlay-container">
 			<button class="overlay-button unselect-button" onclick=${this.#onUnselectClick}>Unselect</button>
-			<button class="overlay-button hide-button" onclick=${this.#onHideClick}>Hide item</button>
+			<show-when
+				condition=${() => store.isAdmin}
+				content=${() =>
+					html`<button class="overlay-button hide-button" onclick=${this.#onHideClick}>Hide item</button>`}
+			></show-when>
 			<button class="overlay-button remix-button" onclick=${this.#onViewItemClick}>
 								<svg width="13" height="10" viewBox="0 0 13 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<mask

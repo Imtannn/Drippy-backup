@@ -123,8 +123,7 @@ export class DrippyScene extends Element {
 
 	// When `false`, disable animations and rigging.
 	@memo private get animsEnabled() {
-		// return !!store.selectedAnimation
-		return true
+		return store.animationsEnabled
 	}
 
 	@signal private animName: string | null = null
@@ -204,6 +203,11 @@ export class DrippyScene extends Element {
 	/** Check if a garment should be visible based on user selections and outer garment masking */
 	#isGarmentVisible(item: RenderBlock, selectedTemplates: TemplateMap): boolean {
 		if (!item.id.startsWith('default-')) {
+			// Keep non-default blocks hidden while any block of the same template
+			// category is still loading, so garments appear as one complete set
+			// (bodice/sleeves/etc) instead of popping in one by one.
+			if (anyBlockIsLoadingInTemplateCategory(this.renderBlocks, item.templateCategory)) return false
+
 			// Hide non-default garment pieces covered by a higher-priority outer garment
 			return !isCoveredByOuterGarment(item.block.category, item.templateCategory, selectedTemplates)
 		}
@@ -765,7 +769,7 @@ export class DrippyScene extends Element {
 	}
 
 	@effect animationAutoplayEffect() {
-		if (!store.autoplayAnimations) return
+		if (!store.autoplayAnimations || !store.animationsEnabled) return
 
 		const gender = this.avatarGender
 		const anims = gender === 'male' ? animations.male : animations.female
@@ -902,6 +906,16 @@ export class DrippyScene extends Element {
 		onCleanup(() => {
 			this.stopBackgroundMusic()
 		})
+	}
+
+	@effect syncBackgroundMusic() {
+		if (!this.isDrippyShop) {
+			this.stopBackgroundMusic()
+			return
+		}
+
+		if (store.backgroundMusicEnabled) this.startBackgroundMusic()
+		else this.stopBackgroundMusic()
 	}
 
 	@effect grabRenderer() {
@@ -1050,6 +1064,10 @@ export class DrippyScene extends Element {
 			const priority = SLOT_PRIORITY[block().templateCategory]
 			const polygonOffsetFactor = priority !== undefined ? -(4 - priority) : 0
 			const renderOrder = priority !== undefined ? 4 - priority : 0
+			const hasJacketSelected = Boolean(store.selectedTemplates.Jacket)
+			const hasLowerOuterwearSelected = Boolean(
+				store.selectedTemplates.Skirt || store.selectedTemplates.Dress || store.selectedTemplates.Jumpsuit,
+			)
 
 			el.three.traverse(obj => {
 				if (!isMesh(obj)) return
@@ -1072,11 +1090,46 @@ export class DrippyScene extends Element {
 					material.polygonOffsetUnits = polygonOffsetFactor * 4
 				}
 
+				const cat = block().templateCategory
+				const isInnerLayerUnderJacket = cat === 'Top' || cat === 'Shirt' || cat === 'Dress' || cat === 'Jumpsuit'
+
 				// Pants and Skirt don't write to the depth buffer so that upper-body
 				// garments (Top, Shirt) always composite on top at the waist overlap.
 				// The avatar body still provides the depth wall for background occlusion.
-				const cat = block().templateCategory
 				if (cat === 'Pants' || cat === 'Skirt') material.depthWrite = false
+
+				// Stage-1 jacket overlap fix: when jacket is equipped, let inner upper-body
+				// layers avoid depth writes and render just behind jacket to reduce flicker.
+				if (hasJacketSelected && isInnerLayerUnderJacket) {
+					// Category-specific depth bias: dresses/jumpsuits usually share more surface
+					// area with jackets, so they get a stronger bias than tops/shirts.
+					const jacketOverlapOffsetByCategory: Partial<Record<TemplateCategory, number>> = {
+						Top: -2.2,
+						Shirt: -2.2,
+						Dress: -3.2,
+						Jumpsuit: -3.2,
+					}
+					const overlapOffset = jacketOverlapOffsetByCategory[cat] ?? -2.5
+
+					material.depthWrite = false
+					material.polygonOffset = true
+					material.polygonOffsetFactor = Math.min(material.polygonOffsetFactor ?? 0, overlapOffset)
+					material.polygonOffsetUnits = (material.polygonOffsetFactor ?? overlapOffset) * 4
+					obj.renderOrder = Math.max(0, renderOrder - 1)
+					return
+				}
+
+				// Stage-1 skirt/dress vs shoes fix: when lower outerwear is equipped,
+				// push shoes slightly behind to reduce hem intersection flicker.
+				if (hasLowerOuterwearSelected && cat === 'Shoes') {
+					material.depthWrite = false
+					material.polygonOffset = true
+					const shoesUnderHemOffset = -0.9
+					material.polygonOffsetFactor = Math.max(material.polygonOffsetFactor ?? 0, shoesUnderHemOffset)
+					material.polygonOffsetUnits = (material.polygonOffsetFactor ?? shoesUnderHemOffset) * 4
+					obj.renderOrder = Math.max(0, renderOrder - 3)
+					return
+				}
 
 				obj.renderOrder = renderOrder
 
@@ -1262,19 +1315,13 @@ export class DrippyScene extends Element {
 			></show-when>
 
 			<show-when
-				condition=${() => store.view === 'template'}
+				condition=${() => store.view === 'template' && store.isAdmin}
 				content=${() => html`
 					<button id="hidden-items-toggle" onclick=${this.#onHiddenItemsClick} title="Manage hidden items">
 						Hidden
 					</button>
 				`}
 			></show-when>
-
-			<button
-				id="music-toggle"
-				onclick=${() => this.#musicCtx ? this.stopBackgroundMusic() : this.startBackgroundMusic()}
-				title="Toggle background music"
-			>${() => this.#musicCtx ? '🔇' : '🎵'}</button>
 
 			<div id="vignette"></div>
 
@@ -1563,25 +1610,6 @@ export class DrippyScene extends Element {
 			background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.75) 100%);
 		}
 
-		#music-toggle {
-			position: absolute;
-			bottom: 16px;
-			right: 16px;
-			z-index: 3200;
-			background: rgba(0,0,0,0.5);
-			border: 1px solid rgba(255,255,255,0.15);
-			border-radius: 50%;
-			width: 40px;
-			height: 40px;
-			font-size: 18px;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			backdrop-filter: blur(8px);
-			transition: background 0.2s;
-		}
-
 		#hidden-items-toggle {
 			position: absolute;
 			bottom: 16px;
@@ -1605,10 +1633,6 @@ export class DrippyScene extends Element {
 
 		:host-context(.panel-collapsed) #hidden-items-toggle {
 			display: none;
-		}
-
-		#music-toggle:hover {
-			background: rgba(255,255,255,0.15);
 		}
 
 		#lume-scene-container {

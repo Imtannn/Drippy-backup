@@ -200,6 +200,10 @@ export class TemplateView extends Element {
 				this.selectedTab = 'wishlist' as TemplateCategory
 		})
 
+		this.createEffect(() => {
+			if (!this.#shouldShowBrandFilter() && this.selectedBrandFilter) this.selectedBrandFilter = null
+		})
+
 		// Close login dialog and auto-favorite pending template when user successfully logs in
 		this.createEffect(() => {
 			// FIXME: STOP making duplicate auth code. See the duplication in spaces-selection.ts
@@ -532,6 +536,8 @@ export class TemplateView extends Element {
 		return items.filter(template => template.collection === this.selectedBrandFilter)
 	}
 
+	#shouldShowBrandFilter = () => this.#getBrandOptions().length > 1
+
 	#onBackButtonClick = () => {
 		batch(() => {
 			// FIXME This logic is "go back to home" logic, however it is inaccessible
@@ -696,6 +702,9 @@ export class TemplateView extends Element {
 			const categories = Object.keys(this.templateCategories)
 			if (categories.length > 0) this.selectedTab = categories[0] as TemplateCategory
 		}
+
+		// Hide/clear brand filtering when only one brand is available.
+		if (!this.#shouldShowBrandFilter()) this.selectedBrandFilter = null
 	}
 
 	#onBuildStoreButtonClick = () => {
@@ -1057,21 +1066,26 @@ export class TemplateView extends Element {
 								</bottom-sheet-header>
 
 								<div class="tabs-content-container">
-									<div class="brands-strip">
-										<for-each
-											items=${this.#getBrandOptions}
-											content=${() => (brand: {slug: string; name: string}) => html`
-												<button
-													class="brand-logo-chip"
-													classList=${() => ({active: this.selectedBrandFilter === brand.slug})}
-													onclick=${() => this.#onBrandChipClick(brand.slug)}
-												>
-													<div class="brand-logo-mark">${brand.name.slice(0, 2).toUpperCase()}</div>
-													<div class="brand-logo-label">${brand.name}</div>
-												</button>
-											`}
-										></for-each>
-									</div>
+									<show-when
+										condition=${() => this.#shouldShowBrandFilter()}
+										content=${() => html`
+											<div class="brands-strip">
+												<for-each
+													items=${this.#getBrandOptions}
+													content=${() => (brand: {slug: string; name: string}) => html`
+														<button
+															class="brand-logo-chip"
+															classList=${() => ({active: this.selectedBrandFilter === brand.slug})}
+															onclick=${() => this.#onBrandChipClick(brand.slug)}
+														>
+															<div class="brand-logo-mark">${brand.name.slice(0, 2).toUpperCase()}</div>
+															<div class="brand-logo-label">${brand.name}</div>
+														</button>
+													`}
+												></for-each>
+											</div>
+										`}
+									></show-when>
 									<!-- Show wishlist items when wishlist filter is active -->
 									<show-when
 										condition=${() => this.showWishlistOnly}
