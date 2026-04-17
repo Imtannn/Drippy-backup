@@ -10,7 +10,7 @@ import {findInTree} from '../../utils.js'
 function getChildBoneNames(name: string, root: THREE.Bone) {
 	const boneNames: string[] = []
 
-	root.getObjectByName(name)?.traverse((child: any) => {
+	root.getObjectByName(name)?.traverse((child: Object3D) => {
 		boneNames.push(child.name)
 	})
 

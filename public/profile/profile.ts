@@ -94,7 +94,7 @@ export class UserProfile extends Element {
 							id="username"
 							type="text"
 							value=${() => username()}
-							oninput="${(ev: any) => (this.username = ev.target.value)}"
+							oninput="${(ev: Event) => (this.username = (ev.target as HTMLInputElement).value)}"
 						/>
 					</div>
 					<show-when
@@ -106,7 +106,8 @@ export class UserProfile extends Element {
 									id="turnOffSettingsInSpace"
 									type="checkbox"
 									checked=${() => turnOffSettingsInSpace()}
-									oninput="${(ev: any) => (this.turnOffSettingsInSpace = ev.target.checked)}"
+									oninput="${(ev: Event) =>
+										(this.turnOffSettingsInSpace = (ev.target as HTMLInputElement).checked)}"
 								/>
 							</div>
 							<div>
@@ -115,7 +116,8 @@ export class UserProfile extends Element {
 									id="hideAnimationSelection"
 									type="checkbox"
 									checked=${() => hideAnimationSelection()}
-									oninput="${(ev: any) => (this.hideAnimationSelection = ev.target.checked)}"
+									oninput="${(ev: Event) =>
+										(this.hideAnimationSelection = (ev.target as HTMLInputElement).checked)}"
 								/>
 							</div>
 							<div>

@@ -1,6 +1,9 @@
 // This file is used in the importmap to export the Meteor global APIs from "meteor/*" packages.
 // See the importmap in public/index.html.
-const global = globalThis as any
+const global = globalThis as typeof globalThis & {
+	Meteor: unknown
+	Package: Record<string, unknown>
+}
 export const Meteor = global.Meteor
 export const Tracker = global.Package.tracker.Tracker
 export const Mongo = global.Package.mongo.Mongo

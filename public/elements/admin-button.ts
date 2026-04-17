@@ -22,7 +22,7 @@ export class AdminButton extends IconButton {
 	`
 
 	override css: string = css /*css*/ `
-		${(this as any) /*super css already exists*/.css}
+		${(this as unknown as {css: string}) /*super css already exists*/.css}
 
 		span {
 			text-shadow:

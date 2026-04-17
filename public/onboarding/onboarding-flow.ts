@@ -128,12 +128,13 @@ export class OnboardingFlow extends Element {
 				})
 
 				this.#nextStep()
-			} catch (error: any) {
+			} catch (error: unknown) {
 				console.error('Error saving profile:', error)
 
-				if (error.error === 'username-taken')
+				if ((error as {error?: string}).error === 'username-taken')
 					this.errorMessage = 'This username is already taken. Please choose a different one.'
-				else if (error.error === 'invalid-username') this.errorMessage = error.reason || 'Invalid username format.'
+				else if ((error as {error?: string}).error === 'invalid-username')
+					this.errorMessage = (error as {reason?: string}).reason || 'Invalid username format.'
 				else this.errorMessage = 'Failed to save profile. Please try again.'
 			}
 		} else this.errorMessage = 'Please enter both username and date of birth.'

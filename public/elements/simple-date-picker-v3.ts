@@ -121,7 +121,7 @@ export function createDatePicker(options: {
 	`
 
 	// Function to create a wheel column
-	function createWheelColumn(items: any[], onSelect: (index: number) => void) {
+	function createWheelColumn(items: Array<string | number>, onSelect: (index: number) => void) {
 		const column = document.createElement('div')
 		column.style.cssText = `
 			flex: 1;

@@ -1,4 +1,4 @@
-import {css, Element, element, html, signal} from 'lume'
+import {css, Element, element, html, signal, type ElementAttributes} from 'lume'
 
 const loadingImageUrl = new URL('../images/loading.webp', import.meta.url).href
 
@@ -147,7 +147,7 @@ export class ImageLoading extends Element {
 declare module 'solid-js' {
 	namespace JSX {
 		interface IntrinsicElements {
-			[ImageLoading.elementName]: any
+			[ImageLoading.elementName]: ElementAttributes<ImageLoading, never>
 		}
 	}
 }

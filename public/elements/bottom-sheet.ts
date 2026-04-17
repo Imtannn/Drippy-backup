@@ -61,9 +61,9 @@ export class BottomSheet extends Element {
 	private isVisible = true
 
 	private updateBottomSheetHeightVar() {
-		if (!this.isDesktop && this.sheetHeight) {
+		if (!this.isDesktop && this.sheetHeight)
 			document.documentElement.style.setProperty('--bottom-sheet-height', `${this.sheetHeight}px`)
-		} else {
+		else {
 			// On desktop, remove the custom property to use the default fallback
 			document.documentElement.style.removeProperty('--bottom-sheet-height')
 		}
