@@ -73,6 +73,7 @@ export class AppButtonsPreset extends Element {
 	@signal private visitorAvatars: Array<{name: string; thumbnail: string; avatarName?: string}> = []
 	@signal private visitorSpaceSlug = ''
 	@signal private visitorsExpanded = false
+	@signal private lightControlsOpen = false
 	#audioCtx: AudioContext | null = null
 	#randomVisitorsTimer: ReturnType<typeof setTimeout> | null = null
 	static readonly #VISITOR_STATE_KEY = 'drippyVisitorStateBySpace'
@@ -96,6 +97,7 @@ export class AppButtonsPreset extends Element {
 
 	override connectedCallback() {
 		super.connectedCallback()
+		document.addEventListener('pointerdown', this.#onDocumentPointerDown)
 		this.createEffect(() => {
 			const nextSpaceSlug = store.selectedSpace?.slug || ''
 			if (nextSpaceSlug === this.visitorSpaceSlug) return
@@ -108,7 +110,18 @@ export class AppButtonsPreset extends Element {
 
 	override disconnectedCallback() {
 		super.disconnectedCallback()
+		document.removeEventListener('pointerdown', this.#onDocumentPointerDown)
 		if (this.#randomVisitorsTimer) clearTimeout(this.#randomVisitorsTimer)
+	}
+
+	#onDocumentPointerDown = (e: Event) => {
+		if (!this.lightControlsOpen) return
+		const clickedInsideLightControls = e.composedPath().some(node => {
+			if (!(node instanceof HTMLElement)) return false
+			return node.classList.contains('light-control-container')
+		})
+		if (clickedInsideLightControls) return
+		this.lightControlsOpen = false
 	}
 
 	#startVisitorSession = () => {
@@ -414,10 +427,24 @@ export class AppButtonsPreset extends Element {
 		store.sceneLightIntensity = Math.max(0.5, Number((store.sceneLightIntensity - 0.1).toFixed(2)))
 	}
 
+	#toggleLightControls = () => {
+		this.lightControlsOpen = !this.lightControlsOpen
+	}
+
 	#renderLightControlButtons = () => html`
-		<div class="light-control-group" title=${() => `Light ${Math.round(store.sceneLightIntensity * 100)}%`}>
-			<button class="light-intensity-button" onclick=${this.#decreaseSceneLight} aria-label="Decrease light intensity">−</button>
-			<button class="light-intensity-button" onclick=${this.#increaseSceneLight} aria-label="Increase light intensity">+</button>
+		<div class="light-control-container">
+			<button
+				class="light-toggle-button"
+				onclick=${this.#toggleLightControls}
+				title=${() => `Lighting ${Math.round(store.sceneLightIntensity * 100)}%`}
+				aria-label="Toggle light controls"
+			>
+				💡
+			</button>
+			<div class="light-control-popover" classList=${() => ({open: this.lightControlsOpen})}>
+				<button class="light-intensity-button" onclick=${this.#decreaseSceneLight} aria-label="Decrease light intensity">−</button>
+				<button class="light-intensity-button" onclick=${this.#increaseSceneLight} aria-label="Increase light intensity">+</button>
+			</div>
 		</div>
 	`
 
@@ -722,10 +749,48 @@ export class AppButtonsPreset extends Element {
 			justify-content: center;
 		}
 
-		.light-control-group {
+		.light-control-container {
+			position: relative;
 			display: inline-flex;
-			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.light-toggle-button {
+			width: 36px;
+			height: 36px;
+			border-radius: 999px;
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			background: rgba(18, 19, 22, 0.22);
+			color: #fff;
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			cursor: pointer;
+			font-size: 15px;
+			line-height: 1;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.light-control-popover {
+			position: absolute;
+			right: calc(100% + 8px);
+			top: 50%;
+			translate: 0 -50%;
+			display: none;
+			flex-direction: row;
 			gap: 6px;
+			padding: 6px;
+			border-radius: 999px;
+			background: rgba(18, 19, 22, 0.35);
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+		}
+
+		.light-control-popover.open {
+			display: inline-flex;
 		}
 
 		.light-intensity-button {

@@ -1099,7 +1099,7 @@ export class DrippyScene extends Element {
 				if (!(material instanceof THREE.MeshStandardMaterial))
 					throw new Error('only blocks with standard PBR materials supported')
 
-				material.transparent = true
+				if (!material.alphaMap && material.alphaTest > 0) material.alphaTest = 0
 				material.side = THREE.DoubleSide
 
 				const maps = [material.map, material.normalMap, material.roughnessMap, material.metalnessMap, material.aoMap]

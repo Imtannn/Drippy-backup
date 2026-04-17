@@ -29,10 +29,48 @@ export class DrippyApp extends Element {
 	static override readonly elementName = 'drippy-app'
 
 	@signal appLoaded = false
+	#uiAudioCtx: AudioContext | null = null
+
+	#playUiClickSound = () => {
+		this.#uiAudioCtx ??= new AudioContext()
+		const ctx = this.#uiAudioCtx
+		const now = ctx.currentTime
+
+		const osc = ctx.createOscillator()
+		const gain = ctx.createGain()
+		osc.type = 'triangle'
+		osc.frequency.setValueAtTime(640, now)
+		osc.frequency.exponentialRampToValueAtTime(980, now + 0.06)
+		gain.gain.setValueAtTime(0.08, now)
+		gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1)
+		osc.connect(gain).connect(ctx.destination)
+		osc.start(now)
+		osc.stop(now + 0.1)
+	}
+
+	#isButtonClick = (e: Event) => {
+		const path = e.composedPath()
+		for (const node of path) {
+			if (!(node instanceof HTMLElement)) continue
+			if (node.matches('button, icon-button, [role="button"]')) {
+				if (node.getAttribute('aria-disabled') === 'true') return false
+				if (node instanceof HTMLButtonElement && node.disabled) return false
+				return true
+			}
+		}
+		return false
+	}
+
+	#onDocumentClick = (e: Event) => {
+		if (!this.#isButtonClick(e)) return
+		this.#playUiClickSound()
+	}
 
 	override connectedCallback() {
 		super.connectedCallback()
 		setDefaultSpaceAndAvatar()
+		document.addEventListener('click', this.#onDocumentClick)
+		this.addCleanup(() => document.removeEventListener('click', this.#onDocumentClick))
 	}
 
 	// FIXME this needs re-work, currently can cause an infinite loop (the

@@ -16,6 +16,25 @@ export const DEFAULT_TEXTURE_CONFIG: TextureConfig = {
 	rotate: 0,
 }
 
+// Prevent alpha-map fabrics from becoming overly see-through.
+const ALPHA_MAP_OPACITY_FLOOR_TEST = 0.2
+const ALPHA_OPACITY_FLOOR = 0.45
+
+function applyAlphaOpacityFloor(material: THREE.MeshPhysicalMaterial, alphaFloor: number) {
+	// Remap alpha from [0..1] -> [alphaFloor..1] so fabrics keep translucency
+	// but never become excessively see-through.
+	material.onBeforeCompile = shader => {
+		shader.fragmentShader = shader.fragmentShader.replace(
+			'#include <alphatest_fragment>',
+			`
+				diffuseColor.a = mix(${alphaFloor.toFixed(2)}, 1.0, diffuseColor.a);
+				#include <alphatest_fragment>
+			`,
+		)
+	}
+	material.customProgramCacheKey = () => `alpha-floor-${alphaFloor.toFixed(2)}`
+}
+
 export interface TextureSet {
 	baseColor?: THREE.Texture
 	normal?: THREE.Texture
@@ -234,6 +253,28 @@ class TextureManager {
 		material.roughnessMap = textureSet.roughness || null
 		material.alphaMap = textureSet.alpha || null
 
+		// Tune transparency behavior so alpha-map garments keep detail
+		// without becoming excessively transparent.
+		if (material.alphaMap) {
+			// Respect original material intent. Some assets include alpha maps
+			// that are not authored for full translucent rendering (e.g. shoes).
+			// Only apply transparency tuning when the material is already marked
+			// transparent by the source asset.
+			if (material.transparent) {
+				material.alphaTest = ALPHA_MAP_OPACITY_FLOOR_TEST
+				material.depthWrite = true
+				material.opacity = 1
+				applyAlphaOpacityFloor(material, ALPHA_OPACITY_FLOOR)
+			}
+		} else {
+			// Keep existing transparency state for materials that rely on the
+			// base color texture's embedded alpha channel (e.g. logo decals).
+			material.alphaTest = 0
+			material.opacity = 1
+			material.onBeforeCompile = () => {}
+			material.customProgramCacheKey = () => 'alpha-floor-none'
+		}
+
 		// Configure material properties
 		if (textureSet.baseColor) textureSet.baseColor.colorSpace = THREE.SRGBColorSpace
 
@@ -252,6 +293,10 @@ class TextureManager {
 		material.normalMap = null
 		material.roughnessMap = null
 		material.alphaMap = null
+		material.alphaTest = 0
+		material.opacity = 1
+		material.onBeforeCompile = () => {}
+		material.customProgramCacheKey = () => 'alpha-floor-none'
 
 		material.needsUpdate = true
 	}
