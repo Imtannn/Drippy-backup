@@ -262,7 +262,10 @@ class TextureManager {
 			// transparent by the source asset.
 			if (material.transparent) {
 				material.alphaTest = ALPHA_MAP_OPACITY_FLOOR_TEST
-				material.depthWrite = true
+				// Do NOT force depthWrite here. THREE.js defaults to depthWrite=true so this
+				// was redundant in the normal case, but it was also stomping the depthWrite=false
+				// set by the jacket-overlap fix in drippy-scene.ts when fabric changes while a
+				// jacket is equipped, which re-introduced Z-fighting on fabric swaps.
 				material.opacity = 1
 				applyAlphaOpacityFloor(material, ALPHA_OPACITY_FLOOR)
 			}
@@ -276,7 +279,14 @@ class TextureManager {
 		}
 
 		// Configure material properties
+		// Base color is an sRGB image (authored in a color-managed tool).
 		if (textureSet.baseColor) textureSet.baseColor.colorSpace = THREE.SRGBColorSpace
+		// Normal, roughness, and alpha maps are data textures — not color images.
+		// They must stay in linear space so THREE.js doesn't gamma-correct them,
+		// which would distort lighting and surface detail.
+		if (textureSet.normal) textureSet.normal.colorSpace = THREE.NoColorSpace
+		if (textureSet.roughness) textureSet.roughness.colorSpace = THREE.NoColorSpace
+		if (textureSet.alpha) textureSet.alpha.colorSpace = THREE.NoColorSpace
 
 		// Ensure GPU-side texture state updates
 		if (material.map) material.map.needsUpdate = true

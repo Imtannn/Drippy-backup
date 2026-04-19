@@ -20,7 +20,7 @@ import {spaces} from '../consts/spaces.js'
 import {pushState, searchParams} from '../routes.js'
 import {store} from './store.js'
 import {templateHelpers} from './TemplateHelpers.js'
-import type {Template, TemplateCategory} from '../types/template.js'
+import type {Template} from '../types/template.js'
 import type {Avatar, Space, TemplateMap} from '../types/types.js'
 
 type LayoutPreset = 'order-flow' | 'template-flow' | 'preview-flow' | 'simple-flow' | 'custom'
@@ -477,45 +477,6 @@ export class AppButtonsPreset extends Element {
 			store.clearSelectedGarments()
 			store.selectSpace = space
 			store.view = 'template'
-		})
-		this.#equipDefaultTemplate(space)
-	}
-
-	#equipDefaultTemplate = (space: Space) => {
-		const collection = space.collections[0]
-		if (!collection) return
-		const spaceTemplates = getTemplatesByCollection(collection)
-
-		const findFirst = (categories: TemplateCategory[]) => {
-			for (const cat of categories) {
-				const t = spaceTemplates.find(t => t.category === cat)
-				if (t) return t
-			}
-			return undefined
-		}
-
-		const topTemplate = findFirst(['Shirt', 'Top', 'Dress', 'Jumpsuit'])
-		const coversBottom = topTemplate?.category === 'Dress' || topTemplate?.category === 'Jumpsuit'
-		const bottomTemplate = coversBottom ? undefined : findFirst(['Pants', 'Skirt'])
-
-		let garments = {}
-		const newTemplates: TemplateMap = {}
-
-		for (const template of [topTemplate, bottomTemplate]) {
-			if (!template) continue
-			const blockData = templateHelpers.convertTemplateToBlockData(template, collection)
-			const {newBlocksMap, newFabricsMap} = templateHelpers.getBlocksAndFabricsMapFromTemplateData(
-				blockData,
-				collection,
-			)
-			const selection = templateHelpers.buildTemplateSelectionFromMaps(newBlocksMap, newFabricsMap)
-			garments = templateHelpers.withTemplateSelection(garments, template.category, selection)
-			newTemplates[template.category] = template
-		}
-
-		batch(() => {
-			store.selectedGarments = garments
-			store.selectedTemplates = newTemplates
 		})
 	}
 

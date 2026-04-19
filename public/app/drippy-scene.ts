@@ -917,7 +917,7 @@ export class DrippyScene extends Element {
 	/** in degrees. 90 is directly overhead. */
 	@signal accessor #spotLightVerticalRotation = 72
 	@signal accessor #spotLightDistance = 3.2
-	@signal accessor #spotLightPenumbra = 0.15
+	@signal accessor #spotLightPenumbra = 0.4
 	/** in degrees */
 	@signal accessor #spotLightAngle = 40
 	/** A reference to the renderer used for the Lume scene. It will be null until the Lume scene has loaded and instantiated it. */
@@ -1001,6 +1001,7 @@ export class DrippyScene extends Element {
 
 		renderer.toneMapping = THREE.ACESFilmicToneMapping
 		renderer.toneMappingExposure = 0.85
+		renderer.outputColorSpace = THREE.SRGBColorSpace
 		renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.isMobile ? 1.5 : 2))
 	}
 
@@ -1054,7 +1055,7 @@ export class DrippyScene extends Element {
 		setEnvMapOnModelLoad(
 			el,
 			() => this.#envTexture,
-			() => this.#overallEnvIntensity * 1.8,
+			() => this.#overallEnvIntensity * 2.2,
 		)
 		disableFrustumCulledOnLoad(el)
 
@@ -1087,10 +1088,11 @@ export class DrippyScene extends Element {
 			const priority = SLOT_PRIORITY[block().templateCategory]
 			const polygonOffsetFactor = priority !== undefined ? -(4 - priority) : 0
 			const renderOrder = priority !== undefined ? 4 - priority : 0
-			const hasJacketSelected = Boolean(store.selectedTemplates.Jacket)
-			const hasLowerOuterwearSelected = Boolean(
-				store.selectedTemplates.Skirt || store.selectedTemplates.Dress || store.selectedTemplates.Jumpsuit,
-			)
+			const cat = block().templateCategory
+			const isInnerLayerUnderJacket = cat === 'Top' || cat === 'Shirt' || cat === 'Dress' || cat === 'Jumpsuit'
+
+			// Collect meshes for one-time setup and later reactive depth updates.
+			const garmentMeshes: Array<{obj: THREE.Mesh; material: THREE.MeshStandardMaterial}> = []
 
 			el.three.traverse(obj => {
 				if (!isMesh(obj)) return
@@ -1102,10 +1104,14 @@ export class DrippyScene extends Element {
 					throw new Error('only blocks with standard PBR materials supported')
 
 				if (!material.alphaMap && material.alphaTest > 0) material.alphaTest = 0
-				material.side = THREE.DoubleSide
+				material.dithering = true
+				if (material.aoMap) material.aoMapIntensity = 1.8
 
+				const maxAnisotropy = this.#glRenderer
+					? Math.min(this.#glRenderer.capabilities.getMaxAnisotropy(), this.isMobile ? 4 : 8)
+					: 4
 				const maps = [material.map, material.normalMap, material.roughnessMap, material.metalnessMap, material.aoMap]
-				for (const map of maps) if (map) map.anisotropy = 4
+				for (const map of maps) if (map) map.anisotropy = maxAnisotropy
 
 				if (polygonOffsetFactor !== 0) {
 					material.polygonOffset = true
@@ -1113,48 +1119,69 @@ export class DrippyScene extends Element {
 					material.polygonOffsetUnits = polygonOffsetFactor * 4
 				}
 
-				const cat = block().templateCategory
-				const isInnerLayerUnderJacket = cat === 'Top' || cat === 'Shirt' || cat === 'Dress' || cat === 'Jumpsuit'
+				// Jackets must render front-faces only. With depthWrite=false on inner garments,
+				// the depth buffer only has avatar-body depth when the jacket renders. DoubleSide
+				// would cause the jacket's interior back-faces to pass the depth test and overwrite
+				// the inner-garment pixels, making the shirt look transparent.
+				material.side = cat === 'Jacket' ? THREE.FrontSide : THREE.DoubleSide
 
-				// Pants and Skirt don't write to the depth buffer so that upper-body
-				// garments (Top, Shirt) always composite on top at the waist overlap.
-				// The avatar body still provides the depth wall for background occlusion.
-				if (cat === 'Pants' || cat === 'Skirt') material.depthWrite = false
+				garmentMeshes.push({obj, material})
+			})
 
-				// Stage-1 jacket overlap fix: when jacket is equipped, let inner upper-body
-				// layers avoid depth writes and render just behind jacket to reduce flicker.
-				if (hasJacketSelected && isInnerLayerUnderJacket) {
-					// Category-specific depth bias: dresses/jumpsuits usually share more surface
-					// area with jackets, so they get a stronger bias than tops/shirts.
-					const jacketOverlapOffsetByCategory: Partial<Record<TemplateCategory, number>> = {
-						Top: -2.2,
-						Shirt: -2.2,
-						Dress: -3.2,
-						Jumpsuit: -3.2,
+			// Reactive: re-apply depth/renderOrder settings whenever jacket or lower
+			// outerwear selection changes. This must be a createEffect so that adding
+			// or removing a jacket after the inner garment has already loaded correctly
+			// updates the inner garment's depthWrite and renderOrder.
+			createEffect(() => {
+				const hasJacketSelected = Boolean(store.selectedTemplates.Jacket)
+				const hasLowerOuterwearSelected = Boolean(
+					store.selectedTemplates.Skirt || store.selectedTemplates.Dress || store.selectedTemplates.Jumpsuit,
+				)
+
+				for (const {obj, material} of garmentMeshes) {
+					// Reset to defaults before re-applying rules.
+					material.depthWrite = true
+					obj.renderOrder = renderOrder
+
+					// Pants and Skirt don't write to the depth buffer so that upper-body
+					// garments (Top, Shirt) always composite on top at the waist overlap.
+					if (cat === 'Pants' || cat === 'Skirt') {
+						material.depthWrite = false
+						continue
 					}
-					const overlapOffset = jacketOverlapOffsetByCategory[cat] ?? -2.5
 
-					material.depthWrite = false
-					material.polygonOffset = true
-					material.polygonOffsetFactor = Math.min(material.polygonOffsetFactor ?? 0, overlapOffset)
-					material.polygonOffsetUnits = (material.polygonOffsetFactor ?? overlapOffset) * 4
-					obj.renderOrder = Math.max(0, renderOrder - 1)
-					return
+					// Jacket overlap fix: inner upper-body layers avoid depth writes and
+					// render just behind the jacket to prevent the shirt looking transparent.
+					if (hasJacketSelected && isInnerLayerUnderJacket) {
+						const jacketOverlapOffsetByCategory: Partial<Record<TemplateCategory, number>> = {
+							Top: -2.2,
+							Shirt: -2.2,
+							Dress: -3.2,
+							Jumpsuit: -3.2,
+						}
+						const overlapOffset = jacketOverlapOffsetByCategory[cat] ?? -2.5
+
+						material.depthWrite = false
+						material.polygonOffset = true
+						material.polygonOffsetFactor = Math.min(material.polygonOffsetFactor ?? 0, overlapOffset)
+						material.polygonOffsetUnits = (material.polygonOffsetFactor ?? overlapOffset) * 4
+						obj.renderOrder = Math.max(0, renderOrder - 1)
+						continue
+					}
+
+					// Skirt/dress vs shoes fix: push shoes behind hem to reduce flicker.
+					if (hasLowerOuterwearSelected && cat === 'Shoes') {
+						material.depthWrite = false
+						material.polygonOffset = true
+						const shoesUnderHemOffset = -0.9
+						material.polygonOffsetFactor = Math.max(material.polygonOffsetFactor ?? 0, shoesUnderHemOffset)
+						material.polygonOffsetUnits = (material.polygonOffsetFactor ?? shoesUnderHemOffset) * 4
+						obj.renderOrder = Math.max(0, renderOrder - 3)
+						continue
+					}
 				}
 
-				// Stage-1 skirt/dress vs shoes fix: when lower outerwear is equipped,
-				// push shoes slightly behind to reduce hem intersection flicker.
-				if (hasLowerOuterwearSelected && cat === 'Shoes') {
-					material.depthWrite = false
-					material.polygonOffset = true
-					const shoesUnderHemOffset = -0.9
-					material.polygonOffsetFactor = Math.max(material.polygonOffsetFactor ?? 0, shoesUnderHemOffset)
-					material.polygonOffsetUnits = (material.polygonOffsetFactor ?? shoesUnderHemOffset) * 4
-					obj.renderOrder = Math.max(0, renderOrder - 3)
-					return
-				}
-
-				obj.renderOrder = renderOrder
+				el.needsUpdate()
 			})
 		})
 	}
@@ -1171,7 +1198,7 @@ export class DrippyScene extends Element {
 
 	override template = () => {
 		const shadowBias = -0.0004
-		const shadowNormalBias = /*0.005*/ 0
+		const shadowNormalBias = 0.002
 		const shadowMapSize = this.isMobile ? 512 : 2048
 		const shadowRadius = this.isMobile ? 3 : 4
 		const shadowSamples = this.isMobile ? 8 : 16
@@ -1634,7 +1661,7 @@ export class DrippyScene extends Element {
 			inset: 0;
 			pointer-events: none;
 			z-index: 10;
-			background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.75) 100%);
+			background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.45) 100%);
 		}
 
 		#hidden-items-toggle {

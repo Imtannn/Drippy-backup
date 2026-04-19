@@ -67,6 +67,7 @@ export class TemplateView extends Element {
 	@signal private showBottomNavigation = true
 	@signal private hiddenTemplateIds: string[] = []
 	@signal private showHiddenItemsView = false
+	@signal private showSelectedItemsView = false
 
 	@signal private disabledScroll = false
 	@signal private showWishlistOnly = false
@@ -76,6 +77,10 @@ export class TemplateView extends Element {
 	@memo private get hiddenTemplates() {
 		const hiddenIds = new Set(this.hiddenTemplateIds)
 		return templates().filter(template => hiddenIds.has(template._id))
+	}
+
+	@memo private get selectedTemplatesList() {
+		return values(store.selectedTemplates).filter((template): template is Template => Boolean(template))
 	}
 
 	@memo private get visibleGridTemplates() {
@@ -509,6 +514,55 @@ export class TemplateView extends Element {
 		`
 	}
 
+	#renderSelectedTemplateItem = (template: Template) => {
+		const brandName = this.#getTemplateBrandName(template)
+		return html`
+			<div
+				class="template-item"
+				onmouseenter=${() => (this.hoveredTemplateId = template._id)}
+				onmouseleave=${() => {
+					if (this.hoveredTemplateId === template._id) this.hoveredTemplateId = null
+				}}
+			>
+				<div class="template-item-container">
+					<item-card
+						item-active=${true}
+						item-src=${template.thumb}
+						item-alt=${template.name}
+						item-value=${template}
+						oncardselected=${this.#onItemClick}
+						object-fit="contain"
+						object-position="center"
+						aspect-ratio="0.79"
+						data-show-wishlist="false"
+					></item-card>
+					<show-when
+						condition=${() =>
+							this.#isTemplateActive(template) &&
+							(this.showTemplateOverlay?._id === template._id || this.hoveredTemplateId === template._id)}
+						content=${() => html`
+							<template-item-overlay
+								selected-template=${() => template}
+								onclose=${this.#onTemplateOverlayClose}
+								onremix=${this.#onTemplateOverlayRemix}
+								onviewitem=${this.#onTemplateOverlayViewItem}
+								onhideitem=${this.#onTemplateOverlayHideItem}
+							></template-item-overlay>
+						`}
+					></show-when>
+					<show-when
+						condition=${() => store.isTemplateLoading(template._id)}
+						content=${() => html` <loading-spinner-overlay></loading-spinner-overlay> `}
+					></show-when>
+				</div>
+				<div class="template-item-meta">
+					<div class="template-product-name">${template.name}</div>
+					<div class="template-brand-name">${brandName}</div>
+				</div>
+			</div>
+		`
+	}
+
 	#getTemplateBrandName = (template: Template) => {
 		return collections().find(collection => collection.slug === template.collection)?.name ?? template.collection
 	}
@@ -564,6 +618,7 @@ export class TemplateView extends Element {
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
 			this.showHiddenItemsView = false
+			this.showSelectedItemsView = false
 		})
 	}
 
@@ -576,6 +631,7 @@ export class TemplateView extends Element {
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
 			this.showHiddenItemsView = false
+			this.showSelectedItemsView = false
 		})
 	}
 
@@ -642,7 +698,21 @@ export class TemplateView extends Element {
 			this.showTemplateOverlay = null
 			this.showAvatarSwapSheet = false
 			this.avatarSwapTemplate = null
+			this.showSelectedItemsView = false
 			this.showHiddenItemsView = !this.showHiddenItemsView
+		})
+	}
+
+	#onOpenSelectedItems = () => {
+		batch(() => {
+			this.showAvatarSelection = false
+			this.showRemixOverlay = false
+			store.setSelectingPiece = null
+			this.showTemplateOverlay = null
+			this.showAvatarSwapSheet = false
+			this.avatarSwapTemplate = null
+			this.showHiddenItemsView = false
+			this.showSelectedItemsView = !this.showSelectedItemsView
 		})
 	}
 
@@ -655,6 +725,16 @@ export class TemplateView extends Element {
 	#restoreAllHiddenTemplates = () => {
 		this.hiddenTemplateIds = []
 		if (typeof window !== 'undefined') localStorage.setItem(HIDDEN_TEMPLATE_IDS_KEY, '[]')
+	}
+
+	#clearAllSelectedTemplates = () => {
+		pushHistory()
+		batch(() => {
+			store.selectedGarments = {}
+			store.selectedTemplates = {}
+			this.showSelectedItemsView = false
+			this.showTemplateOverlay = null
+		})
 	}
 
 	#onAvatarSwapped = () => {
@@ -907,6 +987,27 @@ export class TemplateView extends Element {
 								onavatar-dropdown-click=${this.#onAvatarDropdownClick}
 							></avatar-dropdown>
 							<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+							<button
+								class="selected-items-toggle"
+								onclick=${this.#onOpenSelectedItems}
+								classList=${() => ({active: this.showSelectedItemsView})}
+								title=${() => `Selected items (${this.selectedTemplatesList.length})`}
+							>
+								<svg
+									width="14"
+									height="14"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2.2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<path d="M4 7h16" />
+									<path d="M4 12h16" />
+									<path d="M4 17h10" />
+								</svg>
+							</button>
 							<div class="item-count-badge">${() => `${this.visibleItemCount} items`}</div>
 						</div>
 					</nav-bar>
@@ -987,10 +1088,46 @@ export class TemplateView extends Element {
 				condition=${() =>
 					!this.showAvatarSelection &&
 					!this.showDetailView &&
-					(this.showHiddenItemsView || this.selectedTab !== null || this.showWishlistOnly)}
+					(this.showHiddenItemsView ||
+						this.showSelectedItemsView ||
+						this.selectedTab !== null ||
+						this.showWishlistOnly)}
 				content=${() => html`
 					<show-when
-						condition=${() => this.showHiddenItemsView}
+						condition=${() => this.showSelectedItemsView}
+						content=${() => html`
+							<bottom-sheet-header class="hidden-grid-header-shell">
+								<div class="tabs-container template-tabs-container hidden-grid-header">
+									<div class="hidden-grid-title">Selected items (${() => this.selectedTemplatesList.length})</div>
+									<div class="hidden-grid-actions">
+										<button class="hidden-grid-header-btn" onclick=${this.#clearAllSelectedTemplates}>
+											Unselect all
+										</button>
+										<button class="hidden-grid-header-btn" onclick=${this.#onOpenSelectedItems}>Done</button>
+									</div>
+								</div>
+							</bottom-sheet-header>
+							<div class="tabs-content-container selected-items-content">
+								<show-when
+									condition=${() => this.selectedTemplatesList.length > 0}
+									content=${() => html`
+										<div class="items-grid">
+											<for-each
+												items=${() => this.selectedTemplatesList}
+												content=${() => (template: Template) => this.#renderSelectedTemplateItem(template)}
+											></for-each>
+										</div>
+									`}
+								></show-when>
+								<show-when
+									condition=${() => this.selectedTemplatesList.length === 0}
+									content=${() => html`<div class="hidden-items-empty">No selected items.</div>`}
+								></show-when>
+							</div>
+						`}
+					></show-when>
+					<show-when
+						condition=${() => !this.showSelectedItemsView && this.showHiddenItemsView}
 						content=${() => html`
 							<bottom-sheet-header class="hidden-grid-header-shell">
 								<div class="tabs-container template-tabs-container hidden-grid-header">
@@ -1023,7 +1160,7 @@ export class TemplateView extends Element {
 						`}
 					></show-when>
 					<show-when
-						condition=${() => !this.showHiddenItemsView}
+						condition=${() => !this.showSelectedItemsView && !this.showHiddenItemsView}
 						content=${() => html`
 							<tabs-provider
 								selected-value=${() => (this.showWishlistOnly ? 'wishlist' : this.selectedTab || '')}
@@ -1184,6 +1321,13 @@ export class TemplateView extends Element {
 							onavatar-dropdown-click=${this.#onAvatarDropdownClick}
 						></avatar-dropdown>
 						<nav-items ontab-change=${this.#onNavTabChange}></nav-items>
+						<button
+							class="selected-items-toggle"
+							onclick=${this.#onOpenSelectedItems}
+							classList=${() => ({active: this.showSelectedItemsView})}
+						>
+							Selected (${() => this.selectedTemplatesList.length})
+						</button>
 					</div>
 				</nav-bar>
 			</show-on-device>
@@ -1414,6 +1558,32 @@ export class TemplateView extends Element {
 			gap: var(--uiSpacingSmall);
 			margin-right: var(--uiSpacingSmall);
 			border: none;
+		}
+
+		.selected-items-toggle {
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			background: rgba(18, 19, 22, 0.22);
+			color: rgba(255, 255, 255, 0.95);
+			border-radius: 999px;
+			width: 32px;
+			height: 32px;
+			font-weight: 700;
+			cursor: pointer;
+			backdrop-filter: blur(8px);
+			-webkit-backdrop-filter: blur(8px);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0;
+		}
+
+		.selected-items-toggle.active {
+			background: rgba(178, 138, 255, 0.24);
+			border-color: rgba(178, 138, 255, 0.65);
+		}
+
+		.tabs-content-container.selected-items-content {
+			padding-top: 24px !important;
 		}
 
 		.hidden-grid-header {

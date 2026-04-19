@@ -323,6 +323,10 @@ class Store {
 		batch(() => {
 			delete this.selectedTemplates[template.category]
 			delete this.selectedGarments[template.category]
+
+			// Clear URL before any effect can re-run `#loadFromUrlParameters` with an empty store
+			// but stale `blocks`/`fabrics` params (same order as clear-garments-button).
+			updateGarmentsSelectionInUrl(this.selectedGarments)
 		})
 	}
 	set setRemixOverlayTemplate(template: Template | null) {
@@ -333,7 +337,19 @@ class Store {
 	}
 	set selectSpace(space: Space | null) {
 		batch(() => {
+			const previousSpace = this.selectedSpace
 			this.selectedSpace = space
+
+			// When explicitly switching to a different space, reset garment selections so each
+			// space always starts fresh. Direct URL navigation (shared links with ?blocks=...)
+			// is unaffected because that path sets selectedSpace directly, not via this setter.
+			if (space?.slug !== previousSpace?.slug) {
+				this.selectedTemplates = {}
+				this.selectedGarments = {}
+				untrack(searchParams).delete('blocks')
+				untrack(searchParams).delete('fabrics')
+			}
+
 			if (!space) {
 				this.selectedCollection = null
 				this.selectedScene = null
